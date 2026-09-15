@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_MEM_TELEMETRY": "false"
+  },
   "enabledPlugins": {
     "ui-ux-pro-max@ui-ux-pro-max-skill": false,
     "claude-mem@thedotmack": true

@@ -31,6 +31,10 @@ Thumbs.db
 # local AI tool state (never commit)
 .claude/settings.local.json
 
+# Tailwind docs snapshot: licensed for local use only, never commit (D-024)
+.claude/skills/tailwind-4-docs/references/docs/
+.claude/skills/tailwind-4-docs/references/docs-index.tsx
+
 # misc
 *.tsbuildinfo
 next-env.d.ts

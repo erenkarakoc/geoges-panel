@@ -50,7 +50,7 @@ Decided by the owner in a four-round question session.
 
 ## Change requests
 
-### CHG-001 — Early preview of authentication screens and application shell (PROPOSED)
+### CHG-001 — Early preview of authentication screens and application shell (RESOLVED)
 
 - **Requested change:** Owner wants to see a first usable screen early — authentication pages and the general panel structure (navigation, layout) — without breaking the roadmap.
 - **Reason:** Visibility and early feedback on look & feel before the long design phases finish.
@@ -66,4 +66,13 @@ Decided by the owner in a four-round question session.
   2. **Clickable prototype after Phase 02:** same scope, but built after UX flows are designed (less rework, later visibility).
   3. **Walking skeleton after Phase 00:** real Supabase Auth login + app shell on staging. Earliest real system, highest risk of premature auth/infra decisions.
 - **Recommended approach:** Option 1, recorded as a new Phase 00B ("Early UI Preview") with its own exit criteria; ADR-007 amended rather than replaced.
-- **Status:** PROPOSED — awaiting owner decision.
+- **Owner decision (2026-09-15):** No early preview. The first screen is shown after the critical infrastructure is complete — "no rush". Implemented as Milestone M1 at the end of Phase 07 (real authentication + application shell on staging). ADR-007 unchanged; roadmap approved with this milestone.
+- **Status:** RESOLVED
+
+## Further decisions (2026-09-15)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-023 | Roadmap approved, including Milestone M1 in Phase 07 | `ai/MASTER_ROADMAP.md`, CHG-001 |
+| D-024 | Tailwind docs snapshot: owner accepts the Tailwind docs license for local use on this machine only; snapshot is never committed or pushed | OQ-008, `ai/AI_SKILLS.md` |
+| D-025 | claude-mem telemetry declined | OQ-009 |

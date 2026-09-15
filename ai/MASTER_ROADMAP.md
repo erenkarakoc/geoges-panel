@@ -1,6 +1,6 @@
 # MASTER ROADMAP
 
-Status: DRAFT — awaiting owner approval (OQ-001) · Last updated: 2026-09-15
+Status: APPROVED by owner (2026-09-15, incl. CHG-001 resolution) · Last updated: 2026-09-15
 
 Strategy (ADR-007): **design everything first → validate risky assumptions with spikes → build foundation → deliver vertical module slices, each piloted.**
 Security, tests, accessibility and documentation are part of every phase's Definition of Done; there is no separate "add security later" phase.
@@ -64,12 +64,13 @@ Slice order is a proposal based on data dependencies (`docs/architecture/MODULE_
 - [x] UI/UX design-system, COSS and devl.dev rules
 - [x] Glossary skeleton with proposed terms
 - [x] Skill audit (sources identified, risks noted)
-- [ ] Owner approval of roadmap (OQ-001)
-- [ ] Skill installation approved and completed, versions pinned in `ai/AI_SKILLS.md` (OQ-003…OQ-006)
-- [ ] `ui-ux-pro-max` disabled for this project (TASK-0009)
-- [ ] claude-mem installed for this project in local-only mode (OQ-004, TASK-0010)
-- [ ] Initial commit pushed to GitHub (OQ-002)
-- [ ] Session handoff updated
+- [x] Owner approval of roadmap (OQ-001)
+- [x] Skills vendored at pinned commits and registered in `ai/AI_SKILLS.md` (TASK-0008)
+- [x] `ui-ux-pro-max` disabled for this project (TASK-0009)
+- [ ] claude-mem enabled for this project in local-only mode, telemetry declined, verified in a new session (TASK-0010)
+- [ ] Tailwind docs snapshot initialized locally, excluded from Git (TASK-0016)
+- [x] Initial commit pushed to GitHub (`deb14ef`)
+- [ ] Session handoff updated after final Phase 00 tasks
 
 ---
 
@@ -127,7 +128,8 @@ Slice order is a proposal based on data dependencies (`docs/architecture/MODULE_
 
 - **Scope:** repository scaffold (Next.js, TypeScript, COSS, Tailwind, lint/format/boundary rules, test setup), CI pipeline, environments, design tokens and app shell, IAM (auth, 2FA, roles, delegation, visibility), audit & history, revision request mechanism core, documents/storage, outbox & jobs, notifications & tasks core, catalogs & custom fields, currency & calendar, deployment to staging.
 - **Dependencies:** Phase 06.
-- **Acceptance:** foundation features pass T1 gates; staging deploy with rollback proven.
+- **Milestone M1 — first visible screen (CHG-001):** once the critical foundation (IAM with real authentication, audit, design tokens, app shell) passes its gates, the owner reviews the authentication pages and the application shell (left navigation, top bar, light/dark mode, empty module pages) on staging.
+- **Acceptance:** foundation features pass T1 gates; staging deploy with rollback proven; M1 review done with owner feedback recorded.
 
 ## PHASE 08 — Workflow Engine & Visual Designer
 

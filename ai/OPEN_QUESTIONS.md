@@ -6,15 +6,15 @@ Last updated: 2026-09-15 · Format: `OQ-NNN` · Blocking = blocks the stated pha
 
 | ID | Category | Question | Proposed answer | Blocks |
 |---|---|---|---|---|
-| OQ-001 | Roadmap | Approve `ai/MASTER_ROADMAP.md`? Owner asked for an early usable screen (auth + app shell) without breaking the roadmap → decide CHG-001 first. | Approve together with CHG-001 option | Phase 00 exit |
 | OQ-007 | Domain | Confirm or correct proposed canonical English terms in `docs/domain/GLOSSARY.md` (işveren, hakediş, zayi vs fire vs hurda, götürü, cari hesap, teminat). | Review at Phase 01 kickoff | Phase 01 exit |
-| OQ-008 | Skills / license | Tailwind docs snapshot requires accepting the Tailwind CSS documentation license (source-available, not open source) before `sync_tailwind_docs.py` downloads `tailwindlabs/tailwindcss.com` docs. Consent? | Owner reviews license, then consents | TASK-0016 |
-| OQ-009 | AI memory | claude-mem telemetry consent is undecided on this machine. Decline telemetry? | Decline | TASK-0010 |
 
 ## Phase 00 — answered (2026-09-15)
 
 | ID | Answer |
 |---|---|
+| OQ-001 | Roadmap approved. CHG-001 resolved: first screen after critical infrastructure (Milestone M1, Phase 07). |
+| OQ-008 | Download Tailwind docs snapshot on this machine only, accepting the license for local use; never commit (D-024). |
+| OQ-009 | Decline claude-mem telemetry (D-025). |
 | OQ-002 | Commit + push approved. |
 | OQ-003 | Supabase, COSS, Vercel React, Cloudflare (without MCP) approved. |
 | OQ-004 | claude-mem local-only approved. |
