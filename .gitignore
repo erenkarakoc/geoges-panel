@@ -1,0 +1,36 @@
+# dependencies
+node_modules/
+
+# build output
+.next/
+out/
+dist/
+build/
+coverage/
+
+# environment and secrets
+.env
+.env.*
+!.env.example
+
+# supabase local
+supabase/.temp/
+supabase/.branches/
+
+# logs
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# local AI tool state (never commit)
+.claude/settings.local.json
+
+# misc
+*.tsbuildinfo
+next-env.d.ts
