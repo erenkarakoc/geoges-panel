@@ -8,7 +8,7 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 
 | ID | Category | Question | Proposed answer | Blocks |
 |---|---|---|---|---|
-| OQ-007 | Domain | Confirm or correct proposed canonical English terms in `docs/domain/GLOSSARY.md` (işveren, hakediş, zayi vs fire vs hurda, götürü, cari hesap, teminat). | Review at Phase 01 kickoff | Phase 01 exit |
+| OQ-007 | Domain | Confirm or correct proposed canonical English terms in `docs/domain/GLOSSARY.md`. Rounds 1–2 answered 2026-09-15 (D-027…D-034); no OPEN terms remain. Remaining PROPOSED terms are reviewed per module during Phase 01 requirement rounds. | Continue in Phase 01 question rounds | Phase 01 exit |
 
 ## Phase 00 — answered (2026-09-15)
 

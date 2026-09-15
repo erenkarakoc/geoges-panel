@@ -77,3 +77,21 @@ Decided by the owner in a four-round question session.
 | D-024 | Tailwind docs snapshot: owner accepts the Tailwind docs license for local use on this machine only; snapshot is never committed or pushed | OQ-008, `ai/AI_SKILLS.md` |
 | D-025 | claude-mem telemetry declined | OQ-009 |
 | D-026 | UI label for the `SIT` (Site Operations) module and the site concept is "Şantiye" (not "Saha"); code term stays `site` | Owner 2026-09-15, `docs/domain/GLOSSARY.md` |
+
+## PHASE 01 — glossary round 1 (2026-09-15, OQ-007 partial)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-027 | One company record (`Party`) per real-world firm with roles (`client`, `customer`, `supplier`, …); client of application work and product-sales customer are the same record when it is the same firm; party account balance is per party | Scope §5.3, §6.9, §22.6 |
+| D-028 | Loss concepts confirmed as distinct record types: Process Loss (fire) = measured in/out quantity difference in factory processing, galvanizing or shipment (weighed); Damaged Unit (zayi) = unusable panel/product (quantity + reason + photo mandatory); Scrap (hurda) = sellable material separated from process loss or damaged units | Scope §10.8, §18.6, §20.1 |
+| D-029 | Guarantees take three forms, all tracked: letter of guarantee, retention deducted from client progress payments, cash guarantee | Scope §16.1, §24.1, §24.7 |
+| D-030 | Subcontractor payment methods: unit rate (approved quantity × unit price), lump sum (fixed agreed total for work or a part), day rate (days or person-days). Extends scope §15.1/§16.4 wording, which described unit rate only; requirements must cover all three | Scope §15.1, §16.4 |
+
+## PHASE 01 — glossary round 2 (2026-09-15, OQ-007 open terms closed)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-031 | "Kademe" = the course (horizontal row / height level) a panel sits in on the wall (1st course, 2nd course…); panel type definitions may state which course(s) they are used in | Scope §10.1, §36.1 |
+| D-032 | Lug is a single standard item tracked by quantity (no lug types) | Scope §17.4, §18.1 |
+| D-033 | A party with several roles (e.g. client and supplier) has one net party account balance; receivables and payables offset automatically | Scope §22.6, D-027 |
+| D-034 | Party account balances are kept per currency (e.g. EUR balance), each shown with its current TRY equivalent; exchange differences are calculated separately. Combined with D-033: one net balance per party per currency | Scope §22.5, §22.6 |
