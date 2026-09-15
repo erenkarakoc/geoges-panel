@@ -7,20 +7,20 @@ PROJECT STATUS:      BOOTSTRAP
 CURRENT PHASE:       PHASE 00 — Project Bootstrap & AI Infrastructure
 CURRENT SUBPHASE:    PROJECT BOOTSTRAP (closing)
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0010 Verify claude-mem in a new session
-STATUS:              TESTING
+CURRENT TASK:        Phase 00 owner review; TASK-0018 claude-mem login expiry safeguard
+STATUS:              REVIEW
 ```
 
 ## LAST COMPLETED TASK
-TASK-0016 Tailwind docs snapshot (local, git-ignored); TASK-0004 roadmap approved; TASK-0017 CHG-001 resolved.
+TASK-0010 DONE (2026-09-15): fresh-session verification passed — SessionStart context injected, worker healthy, observations #325–#328 stored, 0 auth errors, telemetry off, no cloud sync. Phase 00 completion report written in `ai/MASTER_ROADMAP.md` (NOT COMPLETE pending owner review only).
 
 ## NEXT TASK
-1. Owner approval to commit & push the Phase 00 closing changes
-2. TASK-0010 verify claude-mem in a fresh session (plugin loads, local worker, telemetry off)
-3. Close Phase 00 (completion report) → Phase 01 Requirements & Domain Analysis question round
+1. Owner chooses TASK-0018 safeguard (long-lived token and/or scheduled reminder) before 2026-10-15
+2. Owner review of REVIEW tasks (TASK-0002, 0003, 0005, 0006, 0012, 0013) → Phase 00 DONE
+3. Phase 01 Requirements & Domain Analysis question round
 
 ## BLOCKED BY
-None (Phase 00 closing tasks only).
+Owner review (Phase 00 closure).
 
 ## OPEN QUESTIONS
 See `ai/OPEN_QUESTIONS.md` (OQ-007 for Phase 01; OQ-010…OQ-024 later phases).
@@ -34,7 +34,11 @@ DEF-001 Data import · DEF-002 Offline entry · DEF-003 Native mobile app · DEF
 
 ## KNOWN ISSUES
 - Git reports LF→CRLF conversion warnings on Windows; a `.gitattributes` policy is not yet defined (propose in Phase 07 scaffold).
-- claude-mem project enablement not yet verified in a fresh session.
+- claude-mem summarization depends on the Claude Code CLI login in `~/.claude/.credentials.json` (refresh token valid until 2026-10-15). If it lapses, observations silently stop with `OAuth session expired`; fix = owner re-login via CLI. On Windows the worker reads Windows Credential Manager first (absent, expected WARN), then falls back to the `CLAUDE_CODE_OAUTH_TOKEN` environment variable (v13.11.0 source). Safeguard tracked in TASK-0018.
+- Do not force-stop the claude-mem worker: its uvx/chroma-mcp children inherit and hold port 37777, blocking respawn. Prefer fully restarting the Claude app or Windows.
+- `Desktop\test\app` (out of scope) still pins claude-mem v12.3.6; running it against the shared DB reproduces `no such column: failed_at_epoch` errors.
+- claude-mem v13.11.0 ships a `cloud-sync` skill; it must never be invoked (ADR-013).
+- `~/.claude-mem/telemetry.json` has an empty `decidedAt`; telemetry stays off via settings, but the plugin may prompt again.
 
 ## ACTIVE RISKS
 
