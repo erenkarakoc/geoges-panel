@@ -16,7 +16,7 @@ Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 00
 
 ## NEXT TASK
 1. Phase 01 kickoff on a working branch (branches mandatory from Phase 01): question round, starting with OQ-007 glossary terms
-2. TASK-0018: after next Windows restart, verify the worker uses the long-lived token (new PID, observations stored, 0 auth errors)
+2. After next Windows restart: TASK-0018 (worker uses long-lived token: new PID, observations stored, 0 auth errors) and TASK-0019 (no console window flashes)
 
 ## BLOCKED BY
 None.
@@ -37,6 +37,7 @@ DEF-001 Data import · DEF-002 Offline entry · DEF-003 Native mobile app · DEF
 - Do not force-stop the claude-mem worker: its uvx/chroma-mcp children inherit and hold port 37777, blocking respawn. Prefer fully restarting the Claude app or Windows.
 - `Desktop\test\app` (out of scope) still pins claude-mem v12.3.6; running it against the shared DB reproduces `no such column: failed_at_epoch` errors.
 - claude-mem v13.11.0 ships a `cloud-sync` skill; it must never be invoked (ADR-013).
+- claude-mem v13.11.0 cache is locally patched (`windowsHide` on git calls, TASK-0019) to stop console window flashes. A plugin update overwrites the patch; re-check for flashes after any update and re-apply or drop the patch if upstream fixed it.
 - `~/.claude-mem/telemetry.json` has an empty `decidedAt`; telemetry stays off via settings, but the plugin may prompt again.
 
 ## ACTIVE RISKS

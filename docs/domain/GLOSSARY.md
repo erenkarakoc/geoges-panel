@@ -13,7 +13,7 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | İşveren | Client | Bizi işe alan ana firma/idare | Employer (sözleşme metinlerinde) | customer, company | OPEN | FIDIC "Employer" kullanır; ürün satışı müşterisiyle aynı varlık mı ayrı mı Phase 01'de netleşir |
 | Kurum / İdare | Authority | Projeyi onaylayan kamu kurumu | — | institution | PROPOSED | |
 | Proje | Project | Sözleşmeli iş; 1..N şantiye | — | job | PROPOSED | |
-| Şantiye | Site | Projenin fiziksel uygulama yeri | — | construction_site, workplace | PROPOSED | |
+| Şantiye | Site | Projenin fiziksel uygulama yeri | — | construction_site, workplace | PROPOSED | Arayüzde modül ve menü adı "Şantiye" (D-026) |
 | Duvar | Wall | Proje içindeki duvar birimi | — | structure | PROPOSED | |
 | Toprakarme | Reinforced Earth (MSE wall) | Çelik şerit donatılı zemin duvarı | mechanically stabilized earth | — | PROPOSED | Kodda `mse` kısaltması kullanılmaz |
 | Panel tipi | Panel Type | C4, C5… gibi tanımlı panel ölçüsü | — | panel_model | PROPOSED | |

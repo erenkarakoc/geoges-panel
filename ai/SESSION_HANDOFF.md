@@ -22,8 +22,8 @@ PHASE 01 · Requirements & Domain Analysis · NOT_STARTED
 
 ## Open Questions
 OQ-007 (Phase 01); OQ-010…OQ-017, OQ-020…OQ-024 (later phases).
-- Owner asked whether there will be a "Şantiye" section: answered — `SIT` (Site Operations) is the şantiye module; glossary maps Şantiye = Site; Turkish menu labels are decided in Phase 02.
-- Owner reported brief console window flashes during tool use: likely claude-mem hook processes (`bun`/`powershell.exe` per tool call). Not investigated yet; do not modify the plugin without owner approval.
+- "Şantiye" question resolved: `SIT` is the şantiye module; owner chose UI label "Şantiye" (D-026, glossary note).
+- Console window flashes: root-caused by process trace (worker `git` spawns without `windowsHide` → Windows Terminal). Owner-approved local patch applied to the plugin cache (TASK-0019); verify after Windows restart. Uncommitted repo changes: `ai/DECISIONS.md`, `docs/domain/GLOSSARY.md`, `ai/TASKS.md`, `ai/CURRENT_STATE.md`, `ai/AI_SKILLS.md`, `ai/CHANGELOG.md`, `ai/SESSION_HANDOFF.md` — commit on a branch (Phase 01 rule) only with owner approval.
 
 ## New Decisions
 - Git: branches mandatory from Phase 01; Phase 00 direct-to-`main` commits recorded as exception.

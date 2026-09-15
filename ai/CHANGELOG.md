@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-15 — Şantiye label, claude-mem window flash fix (uncommitted)
+
+- D-026: UI label for `SIT` / site concept is "Şantiye"; glossary note added.
+- TASK-0019: process trace showed the detached claude-mem worker spawning `git rev-parse` without `windowsHide`, each followed by a Windows Terminal launch (visible flash). Owner-approved local patch adds `windowsHide:!0` to 4 git calls across 3 plugin scripts; backups taken, `node --check` passed. Effective after Windows restart.
+
 ## 2026-09-15 — Phase 00 closed
 
 - Owner approved TASK-0002, TASK-0003, TASK-0005, TASK-0006, TASK-0012, TASK-0013 → DONE; added to `ai/COMPLETED.md` (TASK-0010 row added too).
