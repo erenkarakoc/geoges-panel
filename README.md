@@ -2,7 +2,7 @@
 
 GEOGES A.Ş.'nin (donatılı zemin duvarları, çelik şerit donatılı toprakarme, geosentetik, gabion, korkuluk) bütün şirket işleyişini tek sistemde toplayan yönetim yazılımı.
 
-> Proje şu an **Phase 00 — Project Bootstrap** aşamasındadır. Uygulama kodu henüz yazılmamıştır.
+> Phase 00 — Project Bootstrap tamamlandı. Proje şu an **Phase 01 — Requirements & Domain Analysis** başlangıcındadır. Uygulama kodu henüz yazılmamıştır.
 > Güncel durum: [`ai/CURRENT_STATE.md`](ai/CURRENT_STATE.md)
 
 ## Nereden başlanır?

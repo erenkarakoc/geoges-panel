@@ -46,7 +46,7 @@ Slice order is a proposal based on data dependencies (`docs/architecture/MODULE_
 - **Dependencies:** none.
 - **Deliverables:** `AGENTS.md`, `ai/*`, `docs/standards/*`, `docs/decisions/ADR-001…013`, `docs/architecture/MODULE_MAP.md`, `docs/ui-ux/DESIGN_SYSTEM_RULES.md`, `docs/domain/GLOSSARY.md`, installed & registered skills, first push to GitHub.
 - **Risks:** skill supply-chain risk (RISK-004); process overhead for a single owner (RISK-003).
-- **Status:** REVIEW (all exit criteria met; owner review of REVIEW tasks pending)
+- **Status:** DONE (2026-09-15, owner approved)
 
 **ENTRY CRITERIA**
 - [x] Initial scope documents available
@@ -90,11 +90,11 @@ Tests                    PASS (claude-mem fresh-session verification, TASK-0010)
 Documentation            PASS
 Project State Updated    PASS
 
-Remaining Issues:
-- Owner review pending: TASK-0002, TASK-0003, TASK-0005, TASK-0006, TASK-0012, TASK-0013 (status REVIEW)
-- TASK-0014 glossary terms confirmed in Phase 01 (OQ-007)
-- TASK-0018 claude-mem login expiry safeguard awaiting owner choice (login valid until 2026-10-15)
-STATUS: NOT COMPLETE (exit criteria met; becomes DONE after owner review of REVIEW tasks)
+Remaining Issues (carried forward, non-blocking for Phase 00):
+- TASK-0014 glossary term confirmation in Phase 01 (OQ-007)
+- TASK-0018 long-lived token set by owner; verification after Windows restart
+Owner approved all REVIEW tasks on 2026-09-15; stale records corrected (ADR-013, AI_SKILLS, GIT_WORKFLOW exception, OQ numbering note).
+STATUS: DONE
 ```
 
 ---

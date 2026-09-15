@@ -1,30 +1,32 @@
 # SESSION HANDOFF
 
-Session date: 2026-09-15 · Model: Claude Opus 5 (Claude Code desktop) · Focus: TASK-0010 final verification, Phase 00 completion report
+Session date: 2026-09-15 · Model: Claude Opus 5 (Claude Code desktop) · Focus: TASK-0010 verification, login safeguard, Phase 00 closure
 
 ## Completed
-- TASK-0010 fresh-session verification **PASSED**: SessionStart context injected; worker healthy (v13.11.0, PID 9652, `127.0.0.1:37777`); observations #325–#328 stored for `geoges-panel`; 0 error/auth lines after 17:34; telemetry `false`; Chroma `local`; no cloud sync. TASK-0010 → DONE.
-- Investigated login permanence (read-only, plugin source): on Windows the worker reads Windows Credential Manager (absent), then falls back to the `CLAUDE_CODE_OAUTH_TOKEN` environment variable. Added TASK-0018.
-- Phase 00 completion report added to `ai/MASTER_ROADMAP.md`: all exit criteria met, STATUS NOT COMPLETE pending owner review of REVIEW tasks.
-- Owner-approved single commit & push of all records (previous session's changes included).
+- TASK-0010 fresh-session verification PASSED → DONE (observations #325–#328, 0 auth errors, telemetry off, no cloud sync).
+- TASK-0018 option 1: owner created a long-lived token (`claude setup-token`) and set user env var `CLAUDE_CODE_OAUTH_TOKEN`; presence/format checked, value never read. Worker v13.11.0 reads this env var as a fallback after Windows Credential Manager.
+- Owner review: TASK-0002, 0003, 0005, 0006, 0012, 0013 approved → DONE. Phase 00 DONE.
+- Stale records corrected: ADR-013, `ai/AI_SKILLS.md`, `docs/standards/GIT_WORKFLOW.md` (Phase 00 direct-to-`main` exception), `ai/OPEN_QUESTIONS.md` (OQ-018/019 gap), README.
+- Commits `15902fb` and the Phase 00 closing commit pushed to `origin/main` (owner approved).
 
 ## Partially Completed
-- TASK-0018 (login expiry safeguard): options presented, awaiting owner choice.
-- TASK-0014 glossary (proposed terms, confirmed in Phase 01).
+- TASK-0018: worker (PID 9652, started 17:30) has not restarted since the token was set; owner deferred verification.
+- TASK-0014 glossary: term confirmation in Phase 01 (OQ-007).
 
 ## Current State
-PHASE 00 · PROJECT BOOTSTRAP · REVIEW (owner review pending)
+PHASE 01 · Requirements & Domain Analysis · NOT_STARTED
 
 ## Next Task
-1. TASK-0018: owner picks safeguard before 2026-10-15 — (a) owner runs `claude setup-token` and sets the long-lived token as user env var `CLAUDE_CODE_OAUTH_TOKEN` (AI must never handle the token), and/or (b) scheduled reminder/check a week before expiry.
-2. Owner review of TASK-0002, 0003, 0005, 0006, 0012, 0013 → Phase 00 DONE.
-3. Phase 01 question round.
+1. Phase 01 kickoff on a branch (e.g. `docs/phase-01-requirements`); first question round incl. OQ-007.
+2. After next Windows restart: verify new worker PID, observations stored, 0 auth errors (TASK-0018).
 
 ## Open Questions
-OQ-007 (Phase 01); OQ-010…OQ-024 (later phases); TASK-0018 option choice.
+OQ-007 (Phase 01); OQ-010…OQ-017, OQ-020…OQ-024 (later phases).
+- Owner asked whether there will be a "Şantiye" section: answered — `SIT` (Site Operations) is the şantiye module; glossary maps Şantiye = Site; Turkish menu labels are decided in Phase 02.
+- Owner reported brief console window flashes during tool use: likely claude-mem hook processes (`bun`/`powershell.exe` per tool call). Not investigated yet; do not modify the plugin without owner approval.
 
 ## New Decisions
-None.
+- Git: branches mandatory from Phase 01; Phase 00 direct-to-`main` commits recorded as exception.
 
 ## Deferred Items
 DEF-001…DEF-005.
@@ -35,11 +37,8 @@ None (no application code). Line-ending policy (`.gitattributes`) to define at P
 ## Known Bugs
 - Out of scope: `Desktop\test\app` still pins claude-mem v12.3.6 and will reproduce schema errors if used.
 
-## Files Changed
-`ai/CHANGELOG.md`, `ai/CURRENT_STATE.md`, `ai/MASTER_ROADMAP.md`, `ai/SESSION_HANDOFF.md`, `ai/TASKS.md`.
-
 ## Tests Run
-Read-only: worker `/api/health`, `~/.claude-mem/settings.json`, claude-mem log scan (errors, auth, STORED), memory search for new observations, plugin source inspection for token lookup.
+Read-only: worker `/api/health`, claude-mem logs, env var presence (no value), plugin source for token lookup.
 
 ## Important Context
 - Owner is not a developer; explain choices in plain Turkish; **never take an action without asking** (owner instruction 2026-09-15).
@@ -47,3 +46,4 @@ Read-only: worker `/api/health`, `~/.claude-mem/settings.json`, claude-mem log s
 - UI: COSS + Tailwind only; ask before any custom element. Auth/onboarding inspiration: https://www.devl.dev/c/auth/onboarding
 - Never enable claude-mem Cloud Sync; never invoke the plugin's `cloud-sync` skill. Never commit the Tailwind docs snapshot.
 - Never force-stop the claude-mem worker; restart the Claude app or Windows instead.
+- Never read or handle the `CLAUDE_CODE_OAUTH_TOKEN` value.

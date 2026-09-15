@@ -28,13 +28,13 @@ Last updated: 2026-09-15
 
 | Guidance | Source | Status |
 |---|---|---|
-| Next.js version-matched docs | Bundled in the `next` package at `node_modules/next/dist/docs/`; `next dev` maintains a pointer block in `AGENTS.md`. The former `next-best-practices` skill (`vercel/nextjs-skills`) has been emptied upstream in favor of this. | PLANNED — active when the app is scaffolded (Phase 07 or CHG-001) |
+| Next.js version-matched docs | Bundled in the `next` package at `node_modules/next/dist/docs/`; `next dev` maintains a pointer block in `AGENTS.md`. The former `next-best-practices` skill (`vercel/nextjs-skills`) has been emptied upstream in favor of this. | PLANNED — active when the app is scaffolded (Phase 07; CHG-001 resolved without an early preview) |
 
 ## Plugins (Claude Code)
 
 | Plugin | Scope | Setting | Notes | Status |
 |---|---|---|---|---|
-| claude-mem@thedotmack | project (`.claude/settings.json`) | enabled | Helper memory only (ADR-013). Existing `~/.claude-mem/settings.json`: local Chroma, worker on 127.0.0.1, provider via Claude CLI auth, no cloud sync token. **Cloud Sync (cmem.ai) must never be enabled** — it uploads prompts and observation narratives. Telemetry disabled (D-025) via `CLAUDE_MEM_TELEMETRY=false` in project `.claude/settings.json` env and in `~/.claude-mem/settings.json` (the worker is shared across projects). Worker and database are shared across all projects on this machine. | ENABLED (takes effect next session) |
+| claude-mem@thedotmack | project (`.claude/settings.json`) | enabled | Helper memory only (ADR-013). Installed v13.11.0 (`f5633c1`) at project scope. `~/.claude-mem/settings.json`: local Chroma, worker on 127.0.0.1, provider via Claude CLI auth (Windows: Credential Manager, then `CLAUDE_CODE_OAUTH_TOKEN` env fallback; long-lived token set by owner, TASK-0018), no cloud sync token. **Cloud Sync (cmem.ai) must never be enabled** — it uploads prompts and observation narratives. Telemetry disabled (D-025) via `CLAUDE_MEM_TELEMETRY=false` in project `.claude/settings.json` env and in `~/.claude-mem/settings.json` (the worker is shared across projects). Worker and database are shared across all projects on this machine. | ENABLED — verified in a fresh session 2026-09-15 (TASK-0010) |
 | ui-ux-pro-max@ui-ux-pro-max-skill | project (`.claude/settings.json`) | disabled | Conflicts with COSS-only design authority (ADR-009). Remains enabled for other projects at user scope. | DISABLED for this project |
 
 ## Project-specific skills (to create as the project matures)

@@ -2,6 +2,8 @@
 
 Last updated: 2026-09-15 · Format: `OQ-NNN` · Blocking = blocks the stated phase
 
+IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no missing records).
+
 ## Phase 00 — open
 
 | ID | Category | Question | Proposed answer | Blocks |

@@ -3,7 +3,7 @@
 Durum: Kabul edildi · 2026-09-15
 
 - Uzak repo: `github.com/erenkarakoc/geoges-panel` (private). Varsayılan dal: `main`.
-- `main` her zaman dağıtılabilir durumdadır; doğrudan geliştirme `main` üzerinde yapılmaz (Phase 00 başlangıç commit'i hariç).
+- `main` her zaman dağıtılabilir durumdadır; doğrudan geliştirme `main` üzerinde yapılmaz. İstisna: Phase 00 kurulum ve doküman commit'leri (`deb14ef`, `50492e9`, `15902fb` ve Phase 00 kapanış commit'i) sahip onayıyla doğrudan `main`'e yazılmıştır. Phase 01'den itibaren her iş kendi dalında yapılır (sahip kararı, 2026-09-15).
 - Dal önekleri: `feature/`, `fix/`, `refactor/`, `infra/`, `docs/`, `test/`, `spike/`. Örnek: `feature/sit-daily-log-casting`.
 - `spike/` dalları hiçbir zaman `main`'e birleştirilmez; bulgular `docs/architecture/spikes/` altına yazılır.
 - Commit mesajı: Conventional Commits + ilgili ID. Örnek: `feat(inv): record weighbridge ticket (TASK-0214)`. Türler: `feat, fix, refactor, docs, test, chore, infra, spike`.

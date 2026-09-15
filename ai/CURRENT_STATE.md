@@ -4,23 +4,22 @@ Last updated: 2026-09-15
 
 ```text
 PROJECT STATUS:      BOOTSTRAP
-CURRENT PHASE:       PHASE 00 — Project Bootstrap & AI Infrastructure
-CURRENT SUBPHASE:    PROJECT BOOTSTRAP (closing)
+CURRENT PHASE:       PHASE 01 — Requirements & Domain Analysis
+CURRENT SUBPHASE:    DISCOVER (not started)
 CURRENT FEATURE:     —
-CURRENT TASK:        Phase 00 owner review; TASK-0018 claude-mem login expiry safeguard
-STATUS:              REVIEW
+CURRENT TASK:        Phase 01 kickoff question round
+STATUS:              NOT_STARTED
 ```
 
 ## LAST COMPLETED TASK
-TASK-0010 DONE (2026-09-15): fresh-session verification passed — SessionStart context injected, worker healthy, observations #325–#328 stored, 0 auth errors, telemetry off, no cloud sync. Phase 00 completion report written in `ai/MASTER_ROADMAP.md` (NOT COMPLETE pending owner review only).
+Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Owner chooses TASK-0018 safeguard (long-lived token and/or scheduled reminder) before 2026-10-15
-2. Owner review of REVIEW tasks (TASK-0002, 0003, 0005, 0006, 0012, 0013) → Phase 00 DONE
-3. Phase 01 Requirements & Domain Analysis question round
+1. Phase 01 kickoff on a working branch (branches mandatory from Phase 01): question round, starting with OQ-007 glossary terms
+2. TASK-0018: after next Windows restart, verify the worker uses the long-lived token (new PID, observations stored, 0 auth errors)
 
 ## BLOCKED BY
-Owner review (Phase 00 closure).
+None.
 
 ## OPEN QUESTIONS
 See `ai/OPEN_QUESTIONS.md` (OQ-007 for Phase 01; OQ-010…OQ-024 later phases).
