@@ -17,11 +17,7 @@ export default async function TwoFactorPage() {
   // A cleared session lands on the management view; sign-in sends the user straight to the
   // dashboard afterwards, so this is only reached by opening the page deliberately.
   const mode =
-    session.currentLevel === "aal2"
-      ? "manage"
-      : session.nextLevel === "aal2"
-        ? "verify"
-        : "setup";
+    session.currentLevel === "aal2" ? "manage" : session.nextLevel === "aal2" ? "verify" : "setup";
 
   return <TwoFactorForm mode={mode} />;
 }
