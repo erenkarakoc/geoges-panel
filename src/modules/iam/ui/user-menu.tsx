@@ -1,6 +1,13 @@
 "use client";
 
-import { CompassIcon, LogOutIcon, NetworkIcon, ShieldCheckIcon, UserIcon } from "lucide-react";
+import {
+  CompassIcon,
+  LayoutPanelLeftIcon,
+  LogOutIcon,
+  NetworkIcon,
+  ShieldCheckIcon,
+  UserIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { useTransition } from "react";
 
@@ -40,10 +47,16 @@ export function UserMenu({ email }: { email: string | null }) {
           </MenuLinkItem>
           {/* Development-only structure presentation (D-052); hidden in production builds. */}
           {process.env.NODE_ENV === "development" ? (
-            <MenuLinkItem render={<Link href="/presentation" />}>
-              <NetworkIcon aria-hidden="true" />
-              Yapı sunumu
-            </MenuLinkItem>
+            <>
+              <MenuLinkItem render={<Link href="/presentation" />}>
+                <NetworkIcon aria-hidden="true" />
+                Yapı sunumu
+              </MenuLinkItem>
+              <MenuLinkItem render={<Link href="/navigation" />}>
+                <LayoutPanelLeftIcon aria-hidden="true" />
+                Gezinme prototipi
+              </MenuLinkItem>
+            </>
           ) : null}
         </MenuGroup>
         <MenuSeparator />
