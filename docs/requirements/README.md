@@ -4,11 +4,11 @@ Durum: Phase 01'de doldurulacak · 2026-09-15
 
 ## Kaynaklar
 
-- `Geoges Panel Özellik Yapısı.md` (fonksiyonel kapsam, birincil kaynak)
-- `Geoges Panel Mimari.md` (mimari ilkeler)
-- Phase 00 kararları (`ai/DECISIONS.md`)
+- `docs/sources/functional-scope.md` (fonksiyonel kapsam, birincil kaynak; "Özellik Yapısı §N")
+- `docs/sources/architecture-principles.md` (mimari ilkeler; "Mimari §N")
+- Phase 00 ve Phase 01 kararları (`ai/DECISIONS.md`)
 
-Bu dosyalar ayrıştırılıp REQ kayıtlarına dönüştükten sonra kök dizindeki orijinaller kaldırılabilir. Kaldırmadan önce `ai/REQUIREMENTS.md` kapsama tablosunda her bölümün tamamlandığı doğrulanır.
+Bu dosyalar ayrıştırılıp REQ kayıtlarına dönüştükten sonra `docs/sources/` klasörü silinir (TASK-0027). Kaldırmadan önce `ai/REQUIREMENTS.md` kapsama tablosunda her bölümün tamamlandığı doğrulanır.
 
 ## Dosya düzeni
 

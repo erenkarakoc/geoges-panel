@@ -27,9 +27,11 @@ Excel, WhatsApp and Drive are not used as record systems; the panel replaces the
 
 | File | Role |
 |---|---|
-| `Geoges Panel Özellik Yapısı.md` | Functional scope (46 sections) — primary requirement source |
-| `Geoges Panel Mimari.md` | Architectural principles (single source of truth, event-centric, workflow engine, audit, permissions) |
-| `AI_Destekli_Proje_Gelistirme_Ana_Promptu.md` | Engineering protocol, revised into `ai/PROJECT_RULES.md` |
+| `docs/sources/functional-scope.md` (was `Geoges Panel Özellik Yapısı.md`) | Functional scope (46 sections) — primary requirement source |
+| `docs/sources/architecture-principles.md` (was `Geoges Panel Mimari.md`) | Architectural principles (single source of truth, event-centric, workflow engine, audit, permissions) |
+| `docs/sources/ai-development-protocol.md` (was `AI_Destekli_Proje_Gelistirme_Ana_Promptu.md`) | Engineering protocol, revised into `ai/PROJECT_RULES.md` |
+
+These sources are temporary and are removed at Phase 01 exit once fully decomposed (TASK-0027, `docs/sources/README.md`).
 
 Older attempts in `../eski/` were analyzed to extract missed requirements (already merged into the functional scope). **Their code is out of scope and must not be reused** (ADR-007).
 

@@ -18,8 +18,8 @@ GEOGES A.Ş.'nin (donatılı zemin duvarları, çelik şerit donatılı toprakar
 
 ## Başlangıç girdileri
 
-Aşağıdaki dosyalar projenin ilk kapsam ve protokol kaynağıdır. `/ai` ve `/docs` bunlardan türetilmiştir; içerikleri Phase 01'de gereksinim kayıtlarına aktarıldıktan sonra kaldırılabilir.
+Projenin ilk kapsam ve protokol dosyaları [`docs/sources/`](docs/sources/) klasöründedir. `/ai` ve `/docs` bunlardan türetilmiştir; içerikleri Phase 01'de gereksinim kayıtlarına aktarıldıktan sonra klasör silinir (TASK-0027).
 
-- `Geoges Panel Mimari.md`
-- `Geoges Panel Özellik Yapısı.md`
-- `AI_Destekli_Proje_Gelistirme_Ana_Promptu.md`
+- [`docs/sources/functional-scope.md`](docs/sources/functional-scope.md) — fonksiyonel kapsam (eski adı: Geoges Panel Özellik Yapısı)
+- [`docs/sources/architecture-principles.md`](docs/sources/architecture-principles.md) — mimari ilkeler (eski adı: Geoges Panel Mimari)
+- [`docs/sources/ai-development-protocol.md`](docs/sources/ai-development-protocol.md) — mühendislik protokolü (eski adı: AI_Destekli_Proje_Gelistirme_Ana_Promptu)

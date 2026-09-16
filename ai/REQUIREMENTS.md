@@ -6,7 +6,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 
 ## Source → module mapping (to be decomposed into REQs in Phase 01)
 
-| Module | Source sections (`Geoges Panel Özellik Yapısı.md`) | REQ file | REQ count |
+| Module | Source sections (`docs/sources/functional-scope.md`; "Mimari §" = `docs/sources/architecture-principles.md`) | REQ file | REQ count |
 |---|---|---|---|
 | IAM | §2 | `docs/requirements/REQ-IAM.md` | — |
 | RPT (cockpit, reports) | §3, §14, §34 | `docs/requirements/REQ-RPT.md` | — |
