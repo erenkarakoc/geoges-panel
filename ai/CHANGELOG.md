@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2026-09-16 — Navigation rethought: icon rail, header as a toolbar (CHG-004, TASK-0031)
+
+- Owner direction: the left menu must stop being a list of 28 modules stacked underneath one another, the panel must not look like a standard dashboard, and each role should get a flowing path of its own. The diagnosis that drove the design: the menu holds nouns while people work in verbs, and the same structure is asked to serve an owner who sees everything, field roles who see three rows, and coordinators who do not browse at all — they drain queues.
+- Four patterns were weighed (command-palette-first, icon rail, role workspace, object-first) and the rail was chosen; then four rail variants were weighed for what its second panel should hold. The owner took the second panel out of the sidebar entirely: its job moves into the header, so the existing shell, `--layout-gap`, `--frame-inset` and the 16:9 frame stay untouched.
+- Decided (D-054…D-056): a two-region rail (work layer with badges on top, module groups below a separator); a three-zone toolbar — left is where you are, middle is where you go, right is what you do — with a second row that renders only while an object is open; and "Bugün" as every role's entry screen, composed per role, with the cockpit as the owner's variant rather than a competing entry.
+- Prototype built in the development-only sandbox, reachable from the account menu in development. A role switcher shows the same skeleton from four seats: the owner keeps nine rail entries, the subcontractor crew lead keeps three, and nothing about the frame changes between them. Queue mode (approve pulls in the next record) and the empty state that means finished work are shown as demonstrations — those flow methods are still open (OQ-027).
+- Module lists never occupy a column: a rail group icon opens its modules as a flyout, and the same entries are reachable from the ⌘K palette.
+- Found while verifying: Base UI's Autocomplete reports the input value on every keystroke, so a typed fragment was navigating on its own; selection now requires a value that names an entry, compared without case. The toolbar keeps its context selection in local state, so it is keyed by role and starts fresh when the role changes.
+- No product code beyond one development-only menu entry. The real route redirects signed-out visitors to sign-in and returns 404 in production.
+
+
 ## 2026-09-16 — Presentation redesigned as one cross-section
 
 - The first build stacked five sections and read as clutter. Owner direction: simplifying means conveying the same information legibly, not showing less. So the page became a single pan/zoom cross-section with a reading panel beside it: one horizontal band per group, stacked so the stack itself carries the architecture — platform at the bottom because everything rests on it, analysis at the top because it summarises what happens below. A constellation version was built first and dropped: on a flat sky the layering that MODULE_MAP.md describes was not visible.

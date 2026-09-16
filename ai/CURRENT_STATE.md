@@ -10,15 +10,16 @@ CURRENT FEATURE:     —
 CURRENT TASK:        TASK-0020 Glossary confirmation rounds (OQ-007)
 STATUS:              QUESTIONS_PENDING
 BRANCH:              docs/phase-01-requirements (M0 merged into main via PR #1, 2026-09-16)
-PARALLEL TRACK:      Milestone M0 early first screen (CHG-002) — DONE 2026-09-16 (TASK-0022…TASK-0026, owner approved)
-CODE ALLOWED:        None — M0 closed; product code resumes in Phase 07 (ADR-007) or via an approved change request
+PARALLEL TRACK:      Milestone M0 (CHG-002) DONE 2026-09-16 · sandboxes: TASK-0030 presentation (CHG-003), TASK-0031 navigation prototype (CHG-004) — both REVIEW
+CODE ALLOWED:        Development-only sandboxes (D-052, CHG-004) · no product code — resumes in Phase 07 (ADR-007) or via an approved change request
 ```
 
 ## LAST COMPLETED TASK
 Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Phase 01 per-module requirement rounds (TASK-0020 PROPOSED glossary terms per module, TASK-0021 slice 1 REQ extraction). OQ-021…OQ-025 answered (D-048…D-051).
+1. Owner reviews the navigation prototype at `/navigation` (TASK-0031) and answers OQ-027 (which flow methods are adopted).
+2. Phase 01 per-module requirement rounds (TASK-0020 PROPOSED glossary terms per module, TASK-0021 slice 1 REQ extraction). OQ-021…OQ-025 answered (D-048…D-051).
 2. M0 merged into `main` (PR #1, 2026-09-16).
 3. TASK-0018: re-check after 2026-10-15 that the worker keeps storing observations via the `CLAUDE_CODE_OAUTH_TOKEN` fallback (restart verified 2026-09-15; fallback not yet exercised). TASK-0019 DONE.
 
@@ -29,6 +30,7 @@ None.
 See `ai/OPEN_QUESTIONS.md` (OQ-007 for Phase 01; OQ-010…OQ-024 later phases).
 
 ## RECENT DECISIONS
+- D-054…D-056 (2026-09-16, CHG-004): icon rail with a work layer, header as a three-zone toolbar with a conditional context row, "Bugün" as every role's entry screen
 - D-048…D-051 (2026-09-16): pilot on sample data, no target date, no KVKK legal review (RISK-001 open), Projects and CRM added to the menu
 - Owner rule (2026-09-16): a primary logo is never used in dark mode (`docs/ui-ux/DESIGN_SYSTEM_RULES.md` §4)
 - D-046, D-047 (2026-09-16): devl.dev auth design adopted as the actual design and rebuilt with COSS; `ParticleField` approved as the first custom element
