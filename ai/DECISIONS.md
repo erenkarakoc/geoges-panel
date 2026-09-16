@@ -95,6 +95,16 @@ Decided by the owner in a four-round question session.
 - **Implications recorded:** auth work is T1 (owner approval of auth rules, tests, documented self-review). No domain tables are created; only Supabase Auth is used. Public sign-up is disabled (accounts are created by authorized admins). The owner creates the Supabase account/project and places keys in the local env file (AI never handles secrets). Onboarding content is static until roles are designed (Phase 01/04). Provisional choices (package manager, folder layout, data-access for auth via `@supabase/ssr`) are re-reviewed in Phase 03/07 (OQ-017, OQ-020).
 - **Status:** APPROVED — Milestone M0 track (TASK-0022…TASK-0026).
 
+### CHG-003 — Development-only structure presentation page (APPROVED)
+
+- **Requested change (owner, 2026-09-16):** a presentation page, reachable from the account menu, that summarizes the whole application structure and its connections, visualization first, not detailed.
+- **Conflicts (stated explicitly):** code is closed after M0 (ADR-007); UI is COSS-only with owner approval for custom elements (ADR-009).
+- **Owner decisions:** approved in parallel with Phase 01; content = module map and connections, end-to-end flows, roles and visibility, daily log approval cycle; visible to all signed-in users; COSS-style cards with SVG connector lines; built as an isolated sandbox with its own styles and scripts, used only during development (D-052).
+- **Affected:** no requirements, database, APIs or permissions. New route `/presentation`, account menu (development only), ESLint boundaries.
+- **Risks:** content drifting from the docs — data is sourced from `docs/architecture/MODULE_MAP.md`, scope §2/§9/§13/§45 and decisions, and must be updated when those change; roles show scope facts only.
+- **Rollback:** delete `src/sandbox/presentation`, `src/app/(sandbox)`, the menu item and the sandbox ESLint element.
+- **Status:** APPROVED — TASK-0030.
+
 ## Further decisions (2026-09-15)
 
 | ID | Decision | Ref |
@@ -152,4 +162,6 @@ Decided by the owner in a four-round question session.
 | D-048 | The first pilot runs on **sample data**, not a real site with real staff. No pilot site or pilot user group is named yet (answers OQ-021) | Owner 2026-09-16; ADR-007 vertical slices |
 | D-049 | No target date is set for design completion or the pilot; the project is not schedule-driven (answers OQ-022). Sizing and sequencing still come from the roadmap | Owner 2026-09-16 |
 | D-050 | No KVKK legal review is commissioned (answers OQ-024). Combined with D-048 the pilot processes no real personal data, so the exposure starts only when real HR records are entered. RISK-001 stays open and must be raised again before that point | Owner 2026-09-16; RISK-001 |
+| D-052 | Development-only presentation page (CHG-003): a self-contained sandbox in `src/sandbox/presentation/` with its own CSS Modules styles, data and scripts, exempt from the COSS-only UI rule because it never ships (production returns 404). Its palette, radius and fonts read the app's global CSS custom properties so the page speaks the product's visual language (owner 2026-09-16); that is inheritance, not an import, so the code isolation stands. It visualizes the module map and connections, end-to-end flows (§45), roles and visibility (scope facts only), and the daily log approval cycle. Visible to every signed-in user in development, linked from the account menu in development only. Diagram shapes and SVG connector lines approved as sandbox-only custom elements. The sandbox may import the COSS UI layer (owner 2026-09-16: shared elements are the product's, not hand-made) but nothing from modules or platform, and nothing may import it (ESLint boundaries) | Owner 2026-09-16; CHG-003; TASK-0030 |
+| D-053 | The presentation sandbox draws its map with `@xyflow/react` 12.11.6 (MIT, exact-pinned). Only its engine is used — viewport, pan/zoom, node and edge plumbing; every node and link is our own component and stylesheet, so none of the library's default look reaches the screen. Chosen over Mermaid, which owns its rendering and would have fixed the visual style. Scoped to the development-only sandbox (D-052), so it never ships to production | Owner 2026-09-16; CHG-003; TASK-0030 |
 | D-051 | Left menu adds two scope modules missing from §40.1: "Projeler" (PRJ) directly above "Şantiyeler" in "Şantiye & Günlük" (sites belong to a project), and "Talepler & Müşteriler" (CRM) first in "Ticari" (sales flow lead → quote → finance). Answers OQ-025 | Owner 2026-09-16; scope §5, §7–§8, §40.1 |
