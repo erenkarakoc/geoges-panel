@@ -128,6 +128,18 @@ export function createSupabaseAuthProvider(client: SupabaseClient): AuthProvider
       return error ? toFailure(error) : ok(undefined);
     },
 
+    async disableTwoFactor() {
+      const factorId = await findTotpFactorId();
+
+      if (!factorId) {
+        return fail("not_authenticated");
+      }
+
+      const { error } = await client.auth.mfa.unenroll({ factorId });
+
+      return error ? toFailure(error) : ok(undefined);
+    },
+
     async requestPasswordReset({ email, redirectTo }) {
       const { error } = await client.auth.resetPasswordForEmail(email, { redirectTo });
 

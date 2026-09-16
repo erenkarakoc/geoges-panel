@@ -8,6 +8,7 @@ import type {
   PasswordResetState,
   SignInState,
   TwoFactorEnrollmentState,
+  TwoFactorRemovalState,
 } from "@/modules/iam/application/auth-form-state";
 import { authFailureMessage } from "@/modules/iam/application/auth-messages";
 import {
@@ -57,6 +58,35 @@ export async function signOutAction(): Promise<void> {
   await auth.signOut();
 
   redirect(signInRoute);
+}
+
+export async function disableTwoFactorAction(
+  previous: TwoFactorRemovalState,
+): Promise<TwoFactorRemovalState> {
+  // Already gone; a second submit would only fail on a factor that no longer exists.
+  if (previous.removed) {
+    return previous;
+  }
+
+  const auth = await authProvider();
+  const session = await auth.getSession();
+
+  if (!session) {
+    return { error: authFailureMessage("not_authenticated"), removed: false };
+  }
+
+  // Supabase rejects this below `aal2`; checking here keeps the reason understandable.
+  if (session.currentLevel !== "aal2") {
+    return { error: authFailureMessage("two_factor_required"), removed: false };
+  }
+
+  const result = await auth.disableTwoFactor();
+
+  if (!result.ok) {
+    return { error: authFailureMessage(result.code), removed: false };
+  }
+
+  return { error: null, removed: true };
 }
 
 export async function requestPasswordResetAction(

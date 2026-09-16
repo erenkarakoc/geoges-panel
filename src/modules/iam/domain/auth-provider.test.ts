@@ -42,6 +42,15 @@ function createFakeAuthProvider(options: { password: string; totpCode?: string }
 
       return { ok: true, data: undefined };
     },
+    async disableTwoFactor() {
+      if (session?.currentLevel !== "aal2") {
+        return { ok: false, code: "two_factor_required" };
+      }
+
+      session = { ...session, currentLevel: "aal1", nextLevel: "aal1" };
+
+      return { ok: true, data: undefined };
+    },
     async requestPasswordReset() {
       return { ok: true, data: undefined };
     },
@@ -87,6 +96,26 @@ describe("AuthProvider contract", () => {
 
     expect((await auth.getSession())?.currentLevel).toBe("aal2");
     expect(resolvePostSignInRoute(await auth.getSession())).toBe("/dashboard");
+  });
+
+  it("refuses to remove the second factor before it has been cleared", async () => {
+    const auth = createFakeAuthProvider({ password: "dogruparola", totpCode: "123456" });
+
+    await auth.signInWithPassword({ email: "a@b.com", password: "dogruparola" });
+
+    expect(await auth.disableTwoFactor()).toEqual({ ok: false, code: "two_factor_required" });
+    expect((await auth.getSession())?.nextLevel).toBe("aal2");
+  });
+
+  it("removes the second factor once the session is at aal2", async () => {
+    const auth = createFakeAuthProvider({ password: "dogruparola", totpCode: "123456" });
+
+    await auth.signInWithPassword({ email: "a@b.com", password: "dogruparola" });
+    await auth.verifyTwoFactorCode({ code: "123456" });
+    await auth.disableTwoFactor();
+
+    expect(resolvePostSignInRoute(await auth.getSession())).toBe("/dashboard");
+    expect((await auth.getSession())?.nextLevel).toBe("aal1");
   });
 
   it("drops the session on sign-out", async () => {

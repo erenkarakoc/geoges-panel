@@ -3,6 +3,7 @@ import type { AuthSession } from "@/modules/iam/domain/auth-provider";
 export const signInRoute = "/sign-in";
 export const twoFactorRoute = "/two-factor";
 export const updatePasswordRoute = "/update-password";
+export const onboardingRoute = "/onboarding";
 export const dashboardRoute = "/dashboard";
 
 /** The user has a second factor but the session has not cleared it yet. */

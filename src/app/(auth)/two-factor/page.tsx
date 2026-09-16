@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { dashboardRoute, signInRoute } from "@/modules/iam/application/auth-routing";
+import { signInRoute } from "@/modules/iam/application/auth-routing";
 import { readAuthSession } from "@/modules/iam/application/auth-session";
 import { TwoFactorForm } from "@/modules/iam/ui/two-factor-form";
 
@@ -14,9 +14,14 @@ export default async function TwoFactorPage() {
     redirect(signInRoute);
   }
 
-  if (session.currentLevel === "aal2") {
-    redirect(dashboardRoute);
-  }
+  // A cleared session lands on the management view; sign-in sends the user straight to the
+  // dashboard afterwards, so this is only reached by opening the page deliberately.
+  const mode =
+    session.currentLevel === "aal2"
+      ? "manage"
+      : session.nextLevel === "aal2"
+        ? "verify"
+        : "setup";
 
-  return <TwoFactorForm mode={session.nextLevel === "aal2" ? "verify" : "setup"} />;
+  return <TwoFactorForm mode={mode} />;
 }

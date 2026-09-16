@@ -50,6 +50,11 @@ export interface AuthProvider {
   startTwoFactorEnrollment(): Promise<AuthOutcome<TwoFactorEnrollment>>;
   /** Verifies a TOTP code; on success the session is raised to `aal2`. */
   verifyTwoFactorCode(input: { code: string }): Promise<AuthOutcome>;
+  /**
+   * Removes the enrolled second factor. Lowers the account's protection, so the session must
+   * already be at `aal2` — the provider rejects it otherwise.
+   */
+  disableTwoFactor(): Promise<AuthOutcome>;
   /** Sends a password reset link to `email`. */
   requestPasswordReset(input: { email: string; redirectTo: string }): Promise<AuthOutcome>;
   updatePassword(input: { password: string }): Promise<AuthOutcome>;
