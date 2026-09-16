@@ -29,7 +29,13 @@ export function AppSidebar({ visibleItemIds }: { visibleItemIds: readonly string
 
   return (
     <Sidebar
-      className="md:p-(--layout-gap) md:pe-2 md:group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+var(--layout-gap)+0.5rem+2px)]"
+      className={[
+        "md:p-(--layout-gap) md:pe-2",
+        "md:group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+var(--layout-gap)+0.5rem+2px)]",
+        // COSS pins the sidebar to the viewport (`fixed h-svh`). From `2xl` the shell is a
+        // centred 16:9 frame, so the sidebar has to stay inside that frame instead.
+        "2xl:absolute 2xl:h-full",
+      ].join(" ")}
       collapsible="icon"
       variant="inset"
     >

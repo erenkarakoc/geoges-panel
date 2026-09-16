@@ -25,7 +25,9 @@ export function ModulePlaceholder({ item }: { item: NavigationItem }) {
           {item.label}
         </EmptyTitle>
         <EmptyDescription>{item.description}</EmptyDescription>
-        <Badge variant="outline">Henüz geliştirilmedi</Badge>
+        <Badge className="mt-4" variant="outline">
+          Henüz geliştirilmedi
+        </Badge>
       </EmptyHeader>
       <EmptyContent>
         <Button render={<Link href="/dashboard" />} variant="outline">

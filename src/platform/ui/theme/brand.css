@@ -10,19 +10,21 @@
   /* Logo color: brand blue on light surfaces, owner-provided light gray on dark surfaces. */
   --brand-logo: var(--brand-blue);
 
+  /* `--ring` (focus outline) is deliberately not overridden: COSS's neutral grey stays. */
   --primary: var(--brand-blue);
   --primary-foreground: var(--color-white);
   --sidebar-primary: var(--brand-blue);
   --sidebar-primary-foreground: var(--color-white);
-  --ring: color-mix(in srgb, var(--brand-blue) 60%, var(--color-white));
 }
 
 .dark {
   --brand-logo: #efefef;
-  /* Lightened brand blue keeps WCAG AA contrast on dark surfaces. */
-  --primary: color-mix(in srgb, var(--brand-blue) 45%, var(--color-white));
-  --primary-foreground: var(--color-neutral-950);
-  --sidebar-primary: color-mix(in srgb, var(--brand-blue) 45%, var(--color-white));
-  --sidebar-primary-foreground: var(--color-neutral-950);
-  --ring: color-mix(in srgb, var(--brand-blue) 55%, var(--color-white));
+  /*
+   * Owner choice (2026-09-16): the same brand blue in both themes, instead of the lightened
+   * tone COSS's dark theme expects (light primary, dark label). White on #0F4C81 is 8.8:1.
+   */
+  --primary: var(--brand-blue);
+  --primary-foreground: var(--color-white);
+  --sidebar-primary: var(--brand-blue);
+  --sidebar-primary-foreground: var(--color-white);
 }

@@ -16,10 +16,21 @@ import { ThemeToggle } from "@/platform/ui/theme/theme-toggle";
  * Deviations from COSS defaults — see docs/ui-ux/DESIGN_SYSTEM_RULES.md §4.1.
  * Change the values here to resize every outer margin at once.
  */
-const layoutClassName = [
+// Fixed viewport height: the page itself never scrolls, the app card scrolls inside.
+// From `2xl` the whole shell becomes a centred 16:9 frame, matching the auth screens.
+// `--frame-inset` is the distance from the frame to the viewport edge; `--layout-gap` (below)
+// is the gutter inside it. Both live here so every outer spacing is changed in one place.
+const outerClassName = [
+  "[--frame-inset:1.5rem] h-svh overflow-hidden",
+  "2xl:flex 2xl:h-auto 2xl:min-h-svh 2xl:items-center 2xl:justify-center 2xl:overflow-visible",
+  "2xl:p-(--frame-inset)",
+].join(" ");
+
+const frameClassName = [
   "[--layout-gap:0.5rem] md:[--layout-gap:1.5rem] xl:[--layout-gap:2.5rem]",
-  // Fixed viewport height: the page itself never scrolls, the app card scrolls inside.
-  "h-svh overflow-hidden",
+  "relative mx-auto h-full w-full",
+  "2xl:aspect-[16/9] 2xl:h-auto 2xl:min-h-0 2xl:w-[min(94vw,calc(92svh*16/9))] 2xl:max-w-none",
+  "2xl:overflow-hidden 2xl:rounded-2xl 2xl:border 2xl:border-border/70 2xl:shadow-[0_25px_80px_-24px_rgb(0_0_0/0.5)]",
 ].join(" ");
 
 // COSS sets --sidebar-width to 16rem including 0.5rem padding on each side. Keep the usable
@@ -50,22 +61,24 @@ export function AppShell({ access, headerActions, children }: AppShellProps) {
   );
 
   return (
-    <SidebarProvider className={layoutClassName} style={sidebarWidthStyle}>
-      <AppSidebar visibleItemIds={visibleItemIds} />
-      {/* Inset variant: on desktop the app sits in a bordered, rounded card of fixed height. */}
-      <SidebarInset className={appCardClassName}>
-        <header className="flex h-14 shrink-0 items-center gap-2 border-b bg-background px-4">
-          <SidebarTrigger aria-label="Menüyü aç veya kapat" className="-ms-1" />
-          <div className="ms-auto flex items-center gap-1">
-            <ThemeToggle />
-            {headerActions}
-          </div>
-        </header>
-        {/* Page-specific functional footer is planned for Phase 02 (TASK-0028). */}
-        <ScrollArea className="min-h-0 flex-1">
-          <div className="flex flex-col gap-6 p-4 md:p-6">{children}</div>
-        </ScrollArea>
-      </SidebarInset>
-    </SidebarProvider>
+    <div className={outerClassName}>
+      <SidebarProvider className={frameClassName} style={sidebarWidthStyle}>
+        <AppSidebar visibleItemIds={visibleItemIds} />
+        {/* Inset variant: on desktop the app sits in a bordered, rounded card of fixed height. */}
+        <SidebarInset className={appCardClassName}>
+          <header className="flex h-14 shrink-0 items-center gap-2 border-b bg-background px-4">
+            <SidebarTrigger aria-label="Menüyü aç veya kapat" className="-ms-1" />
+            <div className="ms-auto flex items-center gap-1">
+              <ThemeToggle />
+              {headerActions}
+            </div>
+          </header>
+          {/* Page-specific functional footer is planned for Phase 02 (TASK-0028). */}
+          <ScrollArea className="min-h-0 flex-1">
+            <div className="flex flex-col gap-6 p-4 md:p-6">{children}</div>
+          </ScrollArea>
+        </SidebarInset>
+      </SidebarProvider>
+    </div>
   );
 }

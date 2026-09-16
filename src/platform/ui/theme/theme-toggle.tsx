@@ -1,45 +1,28 @@
 "use client";
 
-import { SunMoonIcon } from "lucide-react";
+import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
-import {
-  Menu,
-  MenuGroup,
-  MenuGroupLabel,
-  MenuPopup,
-  MenuRadioGroup,
-  MenuRadioItem,
-  MenuTrigger,
-} from "@/components/ui/menu";
 
-const themeOptions = [
-  { value: "light", label: "Açık" },
-  { value: "dark", label: "Koyu" },
-  { value: "system", label: "Sistem" },
-] as const;
-
+/**
+ * Switches straight between light and dark on click (owner request 2026-09-16).
+ * The icons are swapped with the `dark:` variant rather than from state, so the button renders
+ * the same on the server and the client.
+ */
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
 
   return (
-    <Menu>
-      <MenuTrigger render={<Button aria-label="Görünümü değiştir" size="icon" variant="ghost" />}>
-        <SunMoonIcon aria-hidden="true" />
-      </MenuTrigger>
-      <MenuPopup align="end">
-        <MenuGroup>
-          <MenuGroupLabel>Görünüm</MenuGroupLabel>
-          <MenuRadioGroup onValueChange={(value) => setTheme(String(value))} value={theme}>
-            {themeOptions.map((option) => (
-              <MenuRadioItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuRadioItem>
-            ))}
-          </MenuRadioGroup>
-        </MenuGroup>
-      </MenuPopup>
-    </Menu>
+    <Button
+      aria-label="Açık ve koyu görünüm arasında geçiş yap"
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+      size="icon"
+      type="button"
+      variant="ghost"
+    >
+      <SunIcon aria-hidden="true" className="hidden dark:block" />
+      <MoonIcon aria-hidden="true" className="dark:hidden" />
+    </Button>
   );
 }
