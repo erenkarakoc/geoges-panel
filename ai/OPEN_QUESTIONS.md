@@ -8,7 +8,7 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 
 | ID | Category | Question | Proposed answer | Blocks |
 |---|---|---|---|---|
-| OQ-007 | Domain | Confirm or correct proposed canonical English terms in `docs/domain/GLOSSARY.md` (işveren, hakediş, zayi vs fire vs hurda, götürü, cari hesap, teminat). | Review at Phase 01 kickoff | Phase 01 exit |
+| OQ-007 | Domain | Confirm or correct proposed canonical English terms in `docs/domain/GLOSSARY.md`. Rounds 1–2 answered 2026-09-15 (D-027…D-034); no OPEN terms remain. Remaining PROPOSED terms are reviewed per module during Phase 01 requirement rounds. | Continue in Phase 01 question rounds | Phase 01 exit |
 
 ## Phase 00 — answered (2026-09-15)
 
@@ -23,6 +23,12 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 | OQ-005 | Tailwind: Lombiq `tailwind-4-docs` (best available; no official skill). |
 | OQ-006 | Next.js: no separate skill exists anymore; version-matched bundled docs + `AGENTS.md` pointer used when app is scaffolded. Vercel `composition-patterns` added. Skills vendored from pinned commits (no CLI). |
 
+## Phase 01/02 — UI structure
+
+| ID | Category | Question | Proposed answer | Blocks |
+|---|---|---|---|---|
+| OQ-025 | UI/UX | ANSWERED 2026-09-16 → D-051: "Projeler" above "Şantiyeler" in "Şantiye & Günlük"; "Talepler & Müşteriler" first in "Ticari". Implemented in the navigation registry. | — | — |
+
 ## Infrastructure & operations — non-blocking until Phase 05
 
 | ID | Question |
@@ -34,14 +40,15 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 | OQ-014 | Error tracking & monitoring tool. |
 | OQ-015 | Email: provider of `info@` mailbox and transactional sender; which domain (`geoges.com` vs `geogespanel.com`)? |
 | OQ-016 | Web push notifications in the first (online-only) release? |
-| OQ-017 | Package manager and runtime: npm (installed) vs pnpm/bun; Node 24 LTS? |
+| OQ-017 | Package manager and runtime: npm (installed) vs pnpm/bun; Node 24 LTS? — Provisional for M0 (2026-09-16): npm 11 + Node 24 (`engines.node >=24`), exact-pinned versions and committed lockfile; final decision in Phase 05/07. |
 
 ## Product — non-blocking until Phase 01/02
 
 | ID | Question |
 |---|---|
 | OQ-020 | Data access approach: supabase-js/PostgREST vs direct Postgres client/ORM — decided in Phase 03 after spike. |
-| OQ-021 | Pilot: which site and which users for Slice 1? |
-| OQ-022 | Target dates or constraints for design completion and first pilot? |
-| OQ-023 | Who approves business rules when owner is unavailable? |
-| OQ-024 | Legal review of KVKK obligations before entering real HR data (RISK-001)? |
+| OQ-021 | ANSWERED 2026-09-16 → D-048: first pilot runs on sample data; no pilot site or user group named yet. |
+| OQ-022 | ANSWERED 2026-09-16 → D-049: no target date; not schedule-driven. |
+| OQ-023 | ANSWERED 2026-09-15 → D-041: owner-designated delegate for an owner-defined period; all actions reported to the owner. |
+| OQ-024 | ANSWERED 2026-09-16 → D-050: no legal review commissioned; RISK-001 stays open and is raised again before real HR data is entered. |
+| OQ-026 | Password policy (minimum length, complexity, expiry) and account lockout after repeated failures (scope §2.8). M0 uses a provisional 8-character minimum in `auth-schemas.ts`; Supabase enforces its own project policy on top. Decide in Phase 03 security design and align the Supabase project setting with it. |

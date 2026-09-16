@@ -37,6 +37,8 @@ RISK-002 kapsam büyüklüğü; pilot geri bildirimi tasarımı değiştirebilir
 ## Geçiş (Migration) Notları
 Pilot bulguları CHG kayıtlarıyla tasarıma geri işlenir.
 
+**Değişiklik (CHG-002, 2026-09-15, sahip onaylı):** Phase 01 ile paralel yürüyen **Milestone M0** eklendi. M0'da gerçek Supabase girişiyle çalışan giriş ekranları ve boş kart iskeletli dashboard yerelde gösterilir. Kod atılmaz; Phase 07 temelinin ilk parçası olarak kalite kapılarıyla kurulur. Diğer tüm maddeler geçerlidir.
+
 ## Tarih
 2026-09-15
 

@@ -1,49 +1,56 @@
 # SESSION HANDOFF
 
-Session date: 2026-09-15 · Model: Claude Opus 5 (Claude Code desktop) · Focus: TASK-0010 verification, login safeguard, Phase 00 closure
+Session date: 2026-09-16 · Model: Claude Opus 5 (Claude Code desktop) · Focus: TASK-0024 verification and TASK-0025 auth screens in the devl.dev design
 
 ## Completed
-- TASK-0010 fresh-session verification PASSED → DONE (observations #325–#328, 0 auth errors, telemetry off, no cloud sync).
-- TASK-0018 option 1: owner created a long-lived token (`claude setup-token`) and set user env var `CLAUDE_CODE_OAUTH_TOKEN`; presence/format checked, value never read. Worker v13.11.0 reads this env var as a fallback after Windows Credential Manager.
-- Owner review: TASK-0002, 0003, 0005, 0006, 0012, 0013 approved → DONE. Phase 00 DONE.
-- Stale records corrected: ADR-013, `ai/AI_SKILLS.md`, `docs/standards/GIT_WORKFLOW.md` (Phase 00 direct-to-`main` exception), `ai/OPEN_QUESTIONS.md` (OQ-018/019 gap), README.
-- Commits `15902fb` and the Phase 00 closing commit pushed to `origin/main` (owner approved).
+- TASK-0024 DONE: owner created the Supabase dev project (EU Frankfurt) and `.env.local`. Verified without reading key values — both variables set, key is `sb_publishable_`, file git-ignored, public sign-up disabled, TOTP MFA enabled.
+- TASK-0025 implemented (status REVIEW):
+  - `AuthProvider` port + Supabase adapter; provider error codes mapped to stable failure codes with Turkish messages.
+  - Server actions for sign-in, sign-out, password reset request, new password, TOTP enrollment and verification.
+  - `src/proxy.ts` refreshes session cookies and redirects signed-out visitors; `getClaims` for access decisions; `aal2` gate re-checked in `(app)/layout.tsx` and `/onboarding`; `/auth/confirm` with in-app-only redirect target.
+  - Screens: sign-in, two-factor (verify + setup with QR), reset-password, update-password, header user menu with sign-out; onboarding restyled to the same design.
+  - 19 new unit tests; `npm run check` and `npm run build` pass.
+- D-046 (devl.dev auth design adopted as the actual design, rebuilt with COSS) and D-047 (`ParticleField` approved as the first custom element) recorded; DESIGN_SYSTEM_RULES §3.2 and deviation rows 9–11 added.
 
 ## Partially Completed
-- TASK-0018: worker (PID 9652, started 17:30) has not restarted since the token was set; owner deferred verification.
-- TASK-0014 glossary: term confirmation in Phase 01 (OQ-007).
+- TASK-0025 verification: real sign-in, TOTP setup/verification, password reset e-mail and the onboarding screen's new look are **not verified** — they need the owner's own account. Everything reachable without credentials was verified in the browser.
+- TASK-0026 still REVIEW: awaiting the owner's visual approval of the app shell.
+- TASK-0021 remaining questions: OQ-021 pilot, OQ-022 dates, OQ-024 KVKK legal review, OQ-025 menu entries.
 
 ## Current State
-PHASE 01 · Requirements & Domain Analysis · NOT_STARTED
+PHASE 01 (QUESTIONS_PENDING) + Milestone M0 on branch `feature/m0-early-first-screen`. Nothing committed this session; the working tree holds the auth work.
 
 ## Next Task
-1. Phase 01 kickoff on a branch (e.g. `docs/phase-01-requirements`); first question round incl. OQ-007.
-2. After next Windows restart: verify new worker PID, observations stored, 0 auth errors (TASK-0018).
+1. Owner signs in with their own account and checks: sign-in → TOTP → dashboard → sign-out, password reset e-mail, onboarding screen.
+2. Owner approves the auth rules (T1 gate) and the app shell (TASK-0026).
+3. Answer OQ-021, OQ-022, OQ-024, OQ-025; OQ-026 (password policy) waits for Phase 03.
 
 ## Open Questions
-OQ-007 (Phase 01); OQ-010…OQ-017, OQ-020…OQ-024 (later phases).
-- Owner asked whether there will be a "Şantiye" section: answered — `SIT` (Site Operations) is the şantiye module; glossary maps Şantiye = Site; Turkish menu labels are decided in Phase 02.
-- Owner reported brief console window flashes during tool use: likely claude-mem hook processes (`bun`/`powershell.exe` per tool call). Not investigated yet; do not modify the plugin without owner approval.
+OQ-007, OQ-010…OQ-017, OQ-020…OQ-022, OQ-024, OQ-025, OQ-026.
 
 ## New Decisions
-- Git: branches mandatory from Phase 01; Phase 00 direct-to-`main` commits recorded as exception.
+D-046, D-047.
 
 ## Deferred Items
 DEF-001…DEF-005.
 
 ## Technical Debt
-None (no application code). Line-ending policy (`.gitattributes`) to define at Phase 07 scaffold.
+- ESLint 9.39.5 deprecation warning (tied to `eslint-config-next` 16.3.5) — revisit Phase 07.
+- Vendored COSS sidebar: English screen-reader strings; Cookie Store API browser support not verified.
+- M0 `previewAccessPolicy` allows everything — must be replaced by the IAM policy before real data.
+- No account lockout, no 2FA recovery method, no audit log yet (Phase 03/07; OQ-026).
 
 ## Known Bugs
-- Out of scope: `Desktop\test\app` still pins claude-mem v12.3.6 and will reproduce schema errors if used.
+- Out of scope: `Desktop\test\app` still pins claude-mem v12.3.6.
 
 ## Tests Run
-Read-only: worker `/api/health`, claude-mem logs, env var presence (no value), plugin source for token lookup.
+`npm run check` (typecheck, lint with boundaries, 28 unit tests, format) and `npm run build` pass. Browser: signed-out redirect to `/sign-in`, wrong-credentials error with preserved e-mail, light/dark, mobile, no page-load console errors.
 
 ## Important Context
-- Owner is not a developer; explain choices in plain Turkish; **never take an action without asking** (owner instruction 2026-09-15).
-- Old code in `../eski/` must not be reused (ADR-007).
-- UI: COSS + Tailwind only; ask before any custom element. Auth/onboarding inspiration: https://www.devl.dev/c/auth/onboarding
-- Never enable claude-mem Cloud Sync; never invoke the plugin's `cloud-sync` skill. Never commit the Tailwind docs snapshot.
-- Never force-stop the claude-mem worker; restart the Claude app or Windows instead.
-- Never read or handle the `CLAUDE_CODE_OAUTH_TOKEN` value.
+- Owner is not a developer; explain choices in plain Turkish; never take an action without asking.
+- Do not re-ask answered questions; admin-configurable settings need no default values (D-040).
+- Auth screens follow the devl.dev design 1:1 but are rebuilt with COSS in the project's own layers (D-046). `npx shadcn add` must not be run for devl.dev registry items.
+- `ParticleField` is the only approved custom element (D-047); any further custom element needs a new owner approval.
+- `src/components/ui`, `src/lib`, `src/hooks` are COSS CLI-managed; do not edit by hand.
+- Before writing Next.js code, read the relevant guide in `node_modules/next/dist/docs/`. Next 16 renamed middleware to `proxy.ts`.
+- Never handle secrets (Supabase keys, `CLAUDE_CODE_OAUTH_TOKEN`). Never enable claude-mem Cloud Sync. Never force-stop the claude-mem worker.

@@ -1,0 +1,73 @@
+/*
+ * GEOGES brand tokens (functional scope §40.5, docs/ui-ux/DESIGN_SYSTEM_RULES.md §4).
+ * Kept separate from globals.css, which the COSS CLI manages, so COSS updates do not
+ * overwrite brand choices. Status colors (success/warning/destructive) stay COSS defaults.
+ */
+
+:root {
+  --brand-blue: #0f4c81;
+  --brand-gray: #dddbdb;
+  /*
+   * Owner rule (2026-09-16): the panel never paints pure white. `--brand-light` replaces it
+   * everywhere, including the light surfaces COSS defines as `--color-white`. The two values
+   * are also the ink colours of the brand artwork, so a logo can be tinted to match a plate.
+   */
+  --brand-light: #efefef;
+  --brand-dark: #111111;
+
+  /* Default logo ink: brand blue on light surfaces, the light tone on dark ones. */
+  --brand-logo: var(--brand-blue);
+
+  /* `--ring` (focus outline) is deliberately not overridden: COSS's neutral grey stays. */
+  --primary: var(--brand-blue);
+  --primary-foreground: var(--brand-light);
+  --sidebar-primary: var(--brand-blue);
+  --sidebar-primary-foreground: var(--brand-light);
+}
+
+/*
+ * Light-theme surfaces COSS paints pure white. Scoped with `:not(.dark)` on purpose: this file
+ * loads after globals.css, and a plain `:root` rule has the same specificity as COSS's `.dark`
+ * block, so it would win there too and leave the dark theme with light surfaces.
+ */
+:root:not(.dark) {
+  --background: var(--brand-light);
+  --card: var(--brand-light);
+  --popover: var(--brand-light);
+  --code: var(--brand-light);
+
+  /*
+   * COSS keeps the sidebar backdrop a few steps below the card (white vs. `neutral-50`). With the
+   * card at `--brand-light` that order flipped, so the backdrop is stepped down to ~#EAEAEA to
+   * restore it. Derived, so it follows `--brand-light` if that changes. COSS's own
+   * `--sidebar-foreground` mixes against this value and therefore adjusts on its own.
+   */
+  --sidebar: color-mix(in srgb, var(--brand-light) 98%, black);
+}
+
+.dark {
+  --brand-logo: var(--brand-light);
+
+  /*
+   * Dark-theme ink. COSS derives this whole family from `--color-neutral-100`; we swap the value
+   * for the brand tone and keep every token and relationship as COSS defines them — including the
+   * mix behind `--sidebar-foreground` — so a COSS update still lines up. `--muted-foreground`
+   * stays untouched: it is a grey of its own, not the primary ink.
+   */
+  --foreground: var(--brand-light);
+  --card-foreground: var(--brand-light);
+  --popover-foreground: var(--brand-light);
+  --accent-foreground: var(--brand-light);
+  --secondary-foreground: var(--brand-light);
+  --sidebar-accent-foreground: var(--brand-light);
+  --sidebar-foreground: color-mix(in srgb, var(--brand-light) 64%, var(--sidebar));
+
+  /*
+   * Owner choice (2026-09-16): the same brand blue in both themes, instead of the lightened
+   * tone COSS's dark theme expects (light primary, dark label). #EFEFEF on #0F4C81 is 8.1:1.
+   */
+  --primary: var(--brand-blue);
+  --primary-foreground: var(--brand-light);
+  --sidebar-primary: var(--brand-blue);
+  --sidebar-primary-foreground: var(--brand-light);
+}

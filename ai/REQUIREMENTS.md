@@ -6,7 +6,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 
 ## Source → module mapping (to be decomposed into REQs in Phase 01)
 
-| Module | Source sections (`Geoges Panel Özellik Yapısı.md`) | REQ file | REQ count |
+| Module | Source sections (`docs/sources/functional-scope.md`; "Mimari §" = `docs/sources/architecture-principles.md`) | REQ file | REQ count |
 |---|---|---|---|
 | IAM | §2 | `docs/requirements/REQ-IAM.md` | — |
 | RPT (cockpit, reports) | §3, §14, §34 | `docs/requirements/REQ-RPT.md` | — |
@@ -35,6 +35,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | AUD (audit, revision requests) | §38, §37.1 | `docs/requirements/REQ-AUD.md` | — |
 | MIG (data import — DEFERRED) | §36.5, §33.4 import part | `docs/requirements/REQ-MIG.md` | — |
 | NFR (UI standards, alerts, platform) | §1, §39–§43, §40.2, §45, §46 | `docs/requirements/REQ-NFR.md` | — |
+| NFR / platform — site-wide search (owner decision, no scope section) | D-044 | `docs/requirements/REQ-NFR.md` | — |
 
 ## Coverage rule
 

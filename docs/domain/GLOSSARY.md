@@ -10,21 +10,23 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Rol | Role | Yetki ve sorumluluk seti | — | position (farklı kavram) | PROPOSED | |
 | Vekâlet | Role Delegation | Belirli süreli rol ataması | — | proxy, deputy | PROPOSED | |
 | İşlem yapılan rol | Acting Role | Çoklu rolü olan kullanıcının işlemi yaptığı rol | — | current_role | PROPOSED | |
-| İşveren | Client | Bizi işe alan ana firma/idare | Employer (sözleşme metinlerinde) | customer, company | OPEN | FIDIC "Employer" kullanır; ürün satışı müşterisiyle aynı varlık mı ayrı mı Phase 01'de netleşir |
+| Firma | Party | Şirketin iş yaptığı her firma/kurum için tek kayıt; rolleri olur (işveren, müşteri, tedarikçi…) | — | company, firm, organization | CONFIRMED | D-027; aynı firma için ikinci kart açılmaz |
+| İşveren | Client | Bizi uygulama işine alan firma/idare; Party rolü `client` | Employer (sözleşme metinlerinde) | company | CONFIRMED | D-027; FIDIC "Employer" kullanır |
+| Müşteri (ürün satışı) | Customer | Ürün satışı yaptığımız firma; Party rolü `customer` | — | client (uygulama işi için ayrılmış) | CONFIRMED | D-027; işverenle aynı firma olabilir |
 | Kurum / İdare | Authority | Projeyi onaylayan kamu kurumu | — | institution | PROPOSED | |
 | Proje | Project | Sözleşmeli iş; 1..N şantiye | — | job | PROPOSED | |
-| Şantiye | Site | Projenin fiziksel uygulama yeri | — | construction_site, workplace | PROPOSED | |
+| Şantiye | Site | Projenin fiziksel uygulama yeri | — | construction_site, workplace | PROPOSED | Arayüzde modül ve menü adı "Şantiye" (D-026) |
 | Duvar | Wall | Proje içindeki duvar birimi | — | structure | PROPOSED | |
 | Toprakarme | Reinforced Earth (MSE wall) | Çelik şerit donatılı zemin duvarı | mechanically stabilized earth | — | PROPOSED | Kodda `mse` kısaltması kullanılmaz |
 | Panel tipi | Panel Type | C4, C5… gibi tanımlı panel ölçüsü | — | panel_model | PROPOSED | |
-| Kademe (panel sırası) | Panel Rank | Komşu panel tipi sırası | — | level, grade | OPEN | |
+| Kademe (panel sırası) | Panel Course | Panelin duvarda alttan üste yer aldığı sıra/yükseklik (1. kademe, 2. kademe…) | — | level, grade, rank | CONFIRMED | D-031 |
 | Panel dökümü | Panel Casting | Sahada panelin kalıpta dökülmesi | — | pouring, production | PROPOSED | |
 | Döküm seansı | Casting Session | Aynı gün içindeki ayrı döküm | — | batch | PROPOSED | Çift döküm = birden fazla session |
 | Priz | Curing | Betonun sertleşme süreci | — | — | PROPOSED | |
 | Montaj | Panel Installation | Panelin duvara yerleştirilmesi | erection | assembly, mounting | PROPOSED | |
 | Çelik şerit | Steel Strip | Galvaniz kaplı donatı şeridi | reinforcing strip | band, belt | PROPOSED | |
 | Şerit montajı | Strip Installation | Şeritlerin serilip lug'a bağlanması | — | strip_laying | PROPOSED | |
-| Lug | Tie Strip Lug | Panele gömülen bağlantı elemanı | lug | — | OPEN | Sektörde "lug / tie strip" |
+| Lug | Tie Strip Lug | Panele gömülen, şeridin bağlandığı bağlantı elemanı; tek standart tip, adetle izlenir | lug | — | CONFIRMED | D-032 |
 | Harpuşta | Coping | Duvar üst başlığı | — | cap | PROPOSED | |
 | Dolgu | Backfill | İşverenin serip sıkıştırdığı dolgu | — | fill_material | PROPOSED | |
 | Teslim-tesellüm | Handover | Alanın işverene/işverenden teslimi | — | delivery | PROPOSED | `handover_to_client`, `handover_from_client` |
@@ -33,7 +35,8 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Puantaj | Timesheet | Bordro amaçlı çalışma günü/saat kaydı | attendance | — | PROPOSED | |
 | Faaliyet süresi | Activity Time Entry | Performans amaçlı iş başlangıç-bitiş kaydı | — | work_hours | PROPOSED | Puantajdan ayrıdır |
 | Taşeron | Subcontractor | Götürü işçilik yapan ekip | — | contractor | PROPOSED | |
-| Götürü işçilik | Unit-Rate Labor | m² vb. birim fiyatla verilen işçilik | — | lump_sum (farklı anlam) | OPEN | |
+| Götürü işçilik | Subcontracted Labor | Taşeron ekibe verilen işçilik işi | — | unit_rate_labor | CONFIRMED | D-030; ödeme yöntemi ayrı alandır |
+| Taşeron ödeme yöntemi | Subcontractor Payment Method | `unit_rate` (onaylı miktar × birim fiyat), `lump_sum` (sabit toplam bedel), `day_rate` (gün / kişi-gün) | — | payment_type | CONFIRMED | D-030 |
 | Öz kaynak | In-House Crew | Şirket bordrolu ekip | self-performed | own_resource | PROPOSED | |
 | İş modeli (şantiye) | Labor Model | `subcontracted` / `in_house` | — | work_model | PROPOSED | |
 | Hakediş (işveren) | Client Progress Payment | Dönemsel yapılan iş bedeli talebi | interim payment certificate | invoice | PROPOSED | |
@@ -43,7 +46,10 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Birim fiyat | Unit Price | Birim başına fiyat | — | rate | PROPOSED | |
 | Kesinti | Deduction | Hakedişten düşülen tutar | — | cut | PROPOSED | |
 | Stopaj | Withholding Tax | — | — | — | PROPOSED | |
-| Teminat | Performance Guarantee | Sözleşme teminatı | retention (kesinti şeklindeyse) | deposit | OPEN | Teminat mektubu vs nakit kesinti ayrımı |
+| Teminat | Guarantee | Sözleşme teminatı; türü `letter_of_guarantee`, `retention`, `cash_guarantee` | performance guarantee | deposit | CONFIRMED | D-029; üç tür de takip edilir |
+| Teminat mektubu | Letter of Guarantee | Bankadan alınan teminat mektubu; tutar, süre, iade takibi | — | bank_letter | CONFIRMED | D-029 |
+| Teminat kesintisi | Retention | Hakedişten teminat olarak kesilen tutar; iş sonunda iade | — | deduction (genel kesinti ayrıdır) | CONFIRMED | D-029 |
+| Nakit teminat | Cash Guarantee | İş başında yatırılan nakit teminat | — | cash_deposit | CONFIRMED | D-029 |
 | Teklif | Quote | Fiyat teklifi | — | offer, proposal, bid | PROPOSED | |
 | İhale | Tender | — | — | auction | PROPOSED | |
 | Talep (satış) | Lead | Gelen iş talebi/fırsat | — | request, opportunity | PROPOSED | |
@@ -63,11 +69,11 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Teorik ağırlık | Theoretical Weight | Ölçülerden hesaplanan ağırlık | — | — | PROPOSED | |
 | Stok sayımı | Stock Count | Fiziki sayım | — | inventory_check | PROPOSED | |
 | Açılış stoku | Opening Stock | Başlangıç bakiyesi | — | initial_stock | PROPOSED | |
-| Fire | Process Loss | İşleme/sevkiyat sırasında oluşan malzeme kaybı | — | waste (belirsiz) | OPEN | Zayi ve hurdadan ayrılmalı |
-| Zayi (panel) | Damaged Unit | Kullanılamaz hale gelen panel/ürün | — | waste (belirsiz) | OPEN | Foto + neden zorunlu |
-| Hurda | Scrap | Satılabilir hurda malzeme | — | — | PROPOSED | |
+| Fire | Process Loss | Fabrika işleme, galvaniz veya sevkiyatta giren-çıkan miktar farkı; tartılır | — | waste (belirsiz) | CONFIRMED | D-028 |
+| Zayi (panel) | Damaged Unit | Kırılan/kullanılamaz hale gelen panel veya ürün; adet + neden + fotoğraf zorunlu | — | waste (belirsiz) | CONFIRMED | D-028 |
+| Hurda | Scrap | Fire veya zayiden ayrılıp satılabilen malzeme | — | — | CONFIRMED | D-028 |
 | Yan gelir | Ancillary Income | Ana sözleşme dışı gelir | — | side_income, extra | PROPOSED | |
-| Cari hesap | Party Account | İşveren/tedarikçi yürüyen bakiyesi | account ledger | current_account | OPEN | |
+| Cari hesap | Party Account | Firmanın para birimi bazında tek net yürüyen bakiyesi (alacak ve borç netleşir), TL karşılığıyla | account ledger | current_account | CONFIRMED | D-033, D-034 |
 | Tahsilat | Collection | — | receipt | — | PROPOSED | |
 | Döviz kuru | Exchange Rate | — | — | currency_rate, kur | PROPOSED | |
 | Dönem kapanışı | Period Close | Aylık kapanış | — | month_end | PROPOSED | |

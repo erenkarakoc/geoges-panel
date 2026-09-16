@@ -2,13 +2,13 @@
 
 Status: ACTIVE · Owner: project owner · Last updated: 2026-09-15
 
-These rules are a working protocol, not advice. Source: `AI_Destekli_Proje_Gelistirme_Ana_Promptu.md`, revised by the Phase 00 decision round (see `ai/DECISIONS.md`). Where this file and the original prompt differ, this file wins.
+These rules are a working protocol, not advice. Source: `docs/sources/ai-development-protocol.md` (originally `AI_Destekli_Proje_Gelistirme_Ana_Promptu.md`), revised by the Phase 00 decision round (see `ai/DECISIONS.md`). Where this file and the original prompt differ, this file wins.
 
 ---
 
 ## 1. Scope protection
 
-- Everything agreed in `Geoges Panel Özellik Yapısı.md`, `Geoges Panel Mimari.md` and recorded decisions is in scope.
+- Everything agreed in `docs/sources/functional-scope.md`, `docs/sources/architecture-principles.md` and recorded decisions is in scope. After these sources are removed (TASK-0027), the REQ records, ADRs and `docs/` are the scope of record.
 - No agreed feature may be silently removed, simplified, changed, deferred or substituted.
 - Deferral is allowed only as a recorded `DEFERRED` item (`ai/DEFERRED.md`) with reason, revisit phase and dependencies.
 - "Let's do it this way for now / we'll fix it later" is not allowed without a `DEFERRED` or `OPEN_QUESTIONS` record.
@@ -141,6 +141,7 @@ Code, database, API, events, env vars, storage keys, logs, tests and infrastruct
 - Default branch `main`; remote `github.com/erenkarakoc/geoges-panel` (private).
 - Branch prefixes: `feature/ fix/ refactor/ infra/ docs/ test/ spike/`.
 - Commits and pushes happen only when the user asks or a recorded task explicitly includes them.
+- Never add AI attribution to commit messages or PR descriptions: no `Co-Authored-By: Claude …` trailer and no "Generated with …" line, from any AI tool (owner decision 2026-09-16; history cleaned on all branches the same day).
 - Never commit secrets, `.env` files or real personal data.
 - Details: `docs/standards/GIT_WORKFLOW.md`.
 

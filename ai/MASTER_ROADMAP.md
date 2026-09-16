@@ -11,8 +11,8 @@ Module codes: see `docs/architecture/MODULE_MAP.md`.
 
 | Phase | Name | Stage | Status |
 |---|---|---|---|
-| 00 | Project Bootstrap & AI Infrastructure | Setup | QUESTIONS_PENDING |
-| 01 | Requirements & Domain Analysis | Design | NOT_STARTED |
+| 00 | Project Bootstrap & AI Infrastructure | Setup | DONE |
+| 01 | Requirements & Domain Analysis | Design | QUESTIONS_PENDING |
 | 02 | UX, Information Architecture & User Flows | Design | NOT_STARTED |
 | 03 | System Architecture | Design | NOT_STARTED |
 | 04 | Database Architecture | Design | NOT_STARTED |
@@ -31,6 +31,8 @@ Module codes: see `docs/architecture/MODULE_MAP.md`.
 | 17 | Slice 9 — Performance, KPI, Bonus | Build + Pilot | NOT_STARTED |
 | 18 | Slice 10 — Intelligence, Optimization, Strategy | Build + Pilot | NOT_STARTED |
 | 19 | Production Readiness & Company-wide Rollout | Release | NOT_STARTED |
+
+**Milestone M0 — early first screen (CHG-002, approved 2026-09-15) — DONE 2026-09-16, owner approved:** runs in parallel with Phase 01. Real Supabase Auth (sign-in, 2FA, password reset), new-role onboarding, app shell and empty dashboard skeleton, local only. Built as the first part of the Phase 07 foundation, not throwaway. Plan: `docs/features/m0-early-first-screen-plan.md`; tasks TASK-0022…TASK-0026.
 
 Deferred (not in this roadmap until reactivated): data import, offline entry, native mobile, self-hosted Supabase migration — see `ai/DEFERRED.md`.
 

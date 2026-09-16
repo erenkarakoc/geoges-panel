@@ -15,3 +15,4 @@
 | `workflows/` | İş akışı tanımları, onay zincirleri | Phase 01, 08 |
 | `ui-ux/` | Tasarım sistemi kuralları, ekran ve akış spesifikasyonları | Phase 00, 02 |
 | `standards/` | ID, isimlendirme, kalite kapısı, git kuralları | Phase 00 |
+| `sources/` | Geçici kaynak girdiler (fonksiyonel kapsam, mimari ilkeler, protokol); Phase 01 sonunda silinir | Phase 00 → Phase 01 |
