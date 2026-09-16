@@ -12,6 +12,8 @@ const boundaryElements = [
   // Vendored COSS UI layer, managed by the shadcn CLI (`@coss/*`). Do not edit by hand.
   { type: "coss-ui", pattern: "src/components" },
   { type: "coss-support", pattern: "src/{lib,hooks}" },
+  // Development-only presentation sandbox (D-052): fully self-contained, removable as one folder.
+  { type: "sandbox", pattern: "src/sandbox/*", capture: ["sandboxName"] },
 ];
 
 const cossLayers = ["coss-ui", "coss-support"];
@@ -41,7 +43,29 @@ const eslintConfig = defineConfig([
             {
               from: { element: { type: "app" } },
               allow: {
-                to: { element: { types: { anyOf: ["app", "module", "platform", ...cossLayers] } } },
+                to: {
+                  element: {
+                    types: { anyOf: ["app", "module", "platform", "sandbox", ...cossLayers] },
+                  },
+                },
+              },
+            },
+            {
+              // A sandbox only uses its own files; nothing else may depend on a sandbox.
+              // A sandbox may use its own files and the COSS UI layer (owner request: shared
+              // elements should be the product's, not hand-made). It still may not reach into
+              // modules or platform, and nothing may depend on a sandbox.
+              from: { element: { type: "sandbox" } },
+              allow: {
+                to: [
+                  {
+                    element: {
+                      type: "sandbox",
+                      captured: { sandboxName: "{{from.element.captured.sandboxName}}" },
+                    },
+                  },
+                  { element: { types: { anyOf: cossLayers } } },
+                ],
               },
             },
             {
