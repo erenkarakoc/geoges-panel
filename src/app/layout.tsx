@@ -5,7 +5,7 @@ import "./globals.css";
 import "@/platform/ui/theme/brand.css";
 import { ToastProvider } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
-import { brandIconUrls } from "@/platform/ui/brand/brand-logo";
+import { brandTileUrls } from "@/platform/ui/brand/brand-logo";
 import { ThemeProvider } from "@/platform/ui/theme/theme-provider";
 
 // Owner choice: Geist everywhere (COSS default is Inter). latin-ext is required for Turkish
@@ -21,13 +21,8 @@ export const metadata: Metadata = {
   },
   description: "GEOGES şirket yönetim paneli",
   robots: { index: false, follow: false },
-  // Brand icon from public/assets/brand; light variant for dark browser themes.
-  icons: {
-    icon: [
-      { url: brandIconUrls.primary, type: "image/svg+xml" },
-      { url: brandIconUrls.light, type: "image/svg+xml", media: "(prefers-color-scheme: dark)" },
-    ],
-  },
+  // The brand-blue tile in every browser theme: its own plate carries the contrast.
+  icons: { icon: { url: brandTileUrls.primary, type: "image/svg+xml" } },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

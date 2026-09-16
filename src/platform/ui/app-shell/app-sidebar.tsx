@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/sidebar";
 import { navigationRegistry, pickNavigationItems } from "@/platform/navigation/navigation-registry";
 import { SidebarDragRail } from "@/platform/ui/app-shell/sidebar-drag-rail";
-import { BrandLogo } from "@/platform/ui/brand/brand-logo";
+import { BrandLogo, BrandTile } from "@/platform/ui/brand/brand-logo";
 
 /** `visibleItemIds` is decided on the server by the access policy. */
 export function AppSidebar({ visibleItemIds }: { visibleItemIds: readonly string[] }) {
@@ -47,14 +47,24 @@ export function AppSidebar({ visibleItemIds }: { visibleItemIds: readonly string
           onClick={closeMobileDrawer}
         >
           <BrandLogo className="h-12 group-data-[collapsible=icon]:hidden" variant="long" />
-          <BrandLogo className="hidden h-6 group-data-[collapsible=icon]:block" variant="icon" />
+          <BrandTile
+            className="hidden size-8 group-data-[collapsible=icon]:block"
+            variant="theme"
+          />
         </Link>
       </SidebarHeader>
       <SidebarContent>
         <nav aria-label="Modüller">
           {groups.map((group) => (
             <SidebarGroup key={group.id}>
-              <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+              {/*
+               * Collapsed, COSS hides the label with `-mt-8 opacity-0`: invisible but still in
+               * the layout, sitting exactly on the group's first menu item and swallowing its
+               * clicks. Ignoring the pointer there gives the item back.
+               */}
+              <SidebarGroupLabel className="group-data-[collapsible=icon]:pointer-events-none">
+                {group.label}
+              </SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   {group.items.map((item) => {

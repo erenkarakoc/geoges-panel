@@ -4,7 +4,7 @@ import { createContext, type ReactNode, type RefObject, useContext, useRef } fro
 
 import { AuthSplitLayout } from "@/platform/ui/auth/auth-split-layout";
 import { ParticleField } from "@/platform/ui/auth/particle-field";
-import { BrandLogo, brandStackedLogoUrl } from "@/platform/ui/brand/brand-logo";
+import { BrandTile, brandStackedLogoUrl } from "@/platform/ui/brand/brand-logo";
 
 const TypingImpulseContext = createContext<RefObject<number> | null>(null);
 
@@ -38,7 +38,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
               }}
             />
             <div className="pointer-events-none absolute inset-0 flex max-w-md flex-col justify-between p-12">
-              <BrandLogo className="h-12 w-fit" variant="long" />
+              <BrandTile className="size-12" />
               <p className="mt-6 font-heading text-xl leading-snug md:text-2xl">
                 Kurum içi iş, süreç ve organizasyon paneli.
               </p>
@@ -47,7 +47,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
         }
       >
         <div className="absolute top-6 left-6 lg:hidden">
-          <BrandLogo className="h-7" variant="long" />
+          <BrandTile className="size-10" />
         </div>
         {children}
       </AuthSplitLayout>
