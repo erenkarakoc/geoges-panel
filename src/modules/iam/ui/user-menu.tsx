@@ -7,8 +7,10 @@ import {
   NetworkIcon,
   ShieldCheckIcon,
   UserIcon,
+  UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -19,15 +21,43 @@ import {
   MenuItem,
   MenuLinkItem,
   MenuPopup,
+  MenuRadioGroup,
+  MenuRadioItem,
   MenuSeparator,
+  MenuSub,
+  MenuSubPopup,
+  MenuSubTrigger,
   MenuTrigger,
 } from "@/components/ui/menu";
 import { signOutAction } from "@/modules/iam/application/auth-actions";
 import { onboardingRoute, twoFactorRoute } from "@/modules/iam/application/auth-routing";
+import { type PreviewRoleId, rememberPreviewRole } from "@/platform/access/preview-roles";
 
-/** Top-bar account menu (§40.3). Roles and profile land here once IAM is designed. */
-export function UserMenu({ email }: { email: string | null }) {
+type RoleSwitcher = {
+  currentRoleId: PreviewRoleId;
+  roles: readonly { id: PreviewRoleId; label: string }[];
+};
+
+/**
+ * Top-bar account menu (§40.3). Roles and profile land here once IAM is designed.
+ * `roleSwitcher` is passed only in development (D-061): it views the shell from a sample seat.
+ */
+export function UserMenu({
+  email,
+  roleSwitcher,
+}: {
+  email: string | null;
+  roleSwitcher?: RoleSwitcher;
+}) {
+  const router = useRouter();
   const [signingOut, startSignOut] = useTransition();
+
+  const switchRole = (roleId: PreviewRoleId) => {
+    rememberPreviewRole(roleId);
+    // Every seat starts on "Bugün" (D-056); the refresh re-renders the shell for the new seat.
+    router.push("/dashboard");
+    router.refresh();
+  };
 
   return (
     <Menu>
@@ -59,6 +89,32 @@ export function UserMenu({ email }: { email: string | null }) {
             </>
           ) : null}
         </MenuGroup>
+        {roleSwitcher ? (
+          <>
+            <MenuSeparator />
+            <MenuSub>
+              <MenuSubTrigger>
+                <UsersIcon aria-hidden="true" />
+                Rol olarak görüntüle
+              </MenuSubTrigger>
+              <MenuSubPopup>
+                <MenuGroup>
+                  <MenuGroupLabel>Geliştirme · örnek roller</MenuGroupLabel>
+                  <MenuRadioGroup
+                    onValueChange={(value: PreviewRoleId) => switchRole(value)}
+                    value={roleSwitcher.currentRoleId}
+                  >
+                    {roleSwitcher.roles.map((role) => (
+                      <MenuRadioItem key={role.id} value={role.id}>
+                        {role.label}
+                      </MenuRadioItem>
+                    ))}
+                  </MenuRadioGroup>
+                </MenuGroup>
+              </MenuSubPopup>
+            </MenuSub>
+          </>
+        ) : null}
         <MenuSeparator />
         <MenuItem
           closeOnClick={false}

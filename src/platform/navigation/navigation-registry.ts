@@ -76,6 +76,13 @@ export type NavigationItem = PermissionGuarded & {
   moduleCode: ModuleCode;
   /** Short Turkish explanation shown on the module's placeholder page. */
   description: string;
+  /**
+   * The page works inside one site, so the header shows the site selector (D-062). Only pages
+   * that declare it get one; the chosen site is remembered across them.
+   */
+  scope?: "site";
+  /** The page's own primary action in the header; without one the role's action is shown. */
+  primaryAction?: string;
 };
 
 export type NavigationGroup = {
@@ -153,6 +160,8 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         requiredPermission: "sit.daily-site-log.view",
         description:
           "Şantiyenin günlük ana kaydı: döküm, montaj, şerit, puantaj, zayi ve harcamalar.",
+        scope: "site",
+        primaryAction: "Günü kaydet",
       },
       {
         // Not in scope §40.1; placed here by owner decision D-051 (OQ-025).
@@ -190,6 +199,7 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         moduleCode: "RPT",
         requiredPermission: "rpt.daily-report.view",
         description: "Onaylı günlük kayıtlardan üretilen resmi günlük raporlar.",
+        scope: "site",
       },
     ],
   },
@@ -215,6 +225,7 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         moduleCode: "PUR",
         requiredPermission: "pur.purchase-order.view",
         description: "Tedarikçiler, siparişler ve satın alma talepleri.",
+        primaryAction: "Talep oluştur",
       },
       {
         id: "equipment",
@@ -259,6 +270,7 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         moduleCode: "QTE",
         requiredPermission: "qte.quote.view",
         description: "Teklifler, marj hesabı ve teklif belgeleri.",
+        primaryAction: "Teklif hazırla",
       },
       {
         id: "finance",
@@ -347,6 +359,7 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         moduleCode: "SUP",
         requiredPermission: "sup.ticket.view",
         description: "İç destek talepleri ve yönlendirme.",
+        primaryAction: "Destek talebi aç",
       },
     ],
   },
@@ -441,4 +454,12 @@ export function findNavigationItemByHref(
   href: string,
 ): NavigationItem | undefined {
   return allNavigationItems(groups).find((item) => item.href === href);
+}
+
+/** The group a module belongs to; work-layer items have none. Used for the header path. */
+export function findNavigationGroupOfItem(
+  groups: readonly NavigationGroup[],
+  itemId: string,
+): NavigationGroup | undefined {
+  return groups.find((group) => group.items.some((item) => item.id === itemId));
 }

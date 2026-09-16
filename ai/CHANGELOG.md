@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-17 — CHG-004 transfer, step 2: three-zone header (TASK-0033)
+
+- Owner decisions D-061 (development role switcher with four sample seats), D-062 (page name + path, page-declared site selector, wide centred search in COSS's Command layout, page-or-seat primary action), D-063 (sample notifications behind the bell).
+- New: `app-header.tsx`, `command-palette.tsx`, `preview-roles.ts`, `site-scope-preference.ts`, `search-text.ts`, `sample-notifications.ts`; registry items may declare `scope` and `primaryAction`; the app layout reads the seat cookie in development only; the account menu gained "Rol olarak görüntüle".
+- Found while verifying: the left zone collapsed under the search at narrower widths (now the search gives way first, grid only from `xl`); "gorev" did not find "Görevler" (Turkish-insensitive filter added); the chosen site would reset after visiting a page without a selector (state lifted into the header). Deviation rows 14a–14c. 45 tests.
+
 ## 2026-09-16/17 — CHG-004 transfer, step 1: rail in the product sidebar (TASK-0032)
 
 - Owner decision: transfer the approved navigation skeleton into the product shell in five steps without breaking the layout (TASK-0032…TASK-0036). CHG-004 status amended; decisions D-057 (collapsed rail, group flyouts, multiple open groups remembered, logo at head, `/dashboard` = "Bugün"), D-058 ("Onay"/"Görevler" out of the module list; "Genel Bakış" group gone → 5 groups), D-059 (sample badge counts in one place, marked "örnek veri", with a recorded objection), D-060 (next steps: dev role switcher under the account menu, ⌘K in COSS's own Command design, COSS `Frame` where needed).

@@ -117,6 +117,9 @@ Sahip isteği (2026-09-16): COSS UI / Tailwind varsayılanlarının dışına ç
 | 13b | Daraltılmış halde modül grupları | Daraltılmış sidebar öğeleri yalnız ikon + ipucu gösterir | Grup ikonu, grubun modüllerini COSS `Menu` ile açılır menüde listeler | D-054, D-057: grup başına tek ikon | `app-sidebar.tsx` |
 | 13c | Genişletilmiş halde gruplar | — | Gruplar COSS `Collapsible` ile açılır; birden fazlası açık kalabilir, açık gruplar çerezde hatırlanır ve sunucuda açık render edilir | D-057 | `app-sidebar.tsx`, `sidebar-group-preference.ts` |
 | 13d | Daraltılmış halde rozet | COSS ikon halinde `SidebarMenuBadge`'i gizler | Rozet yerine küçük bir nokta; sayı ipucunda kalır ("örnek veri" işaretiyle) | Bekleyen iş sinyali ikon halinde de görünsün (D-059) | `app-sidebar.tsx` |
+| 14a | Üst çubuk yerleşimi | COSS'ta hazır üst çubuk yok; örnekler tek sıra `flex` | `xl` ve üstünde üç sütunlu ızgara (arama tam ortada); altında arama önce daralır | D-062: arama ortada ve geniş | `app-header.tsx` |
+| 14b | Komut paleti arama süzgeci | Base UI'ın varsayılan süzgeci (harf duyarlı eşleşme) | Türkçe harfleri sadeleştiren süzgeç ("gorev" → "Görevler"); görünüm COSS örneğiyle birebir aynı | Sahada Türkçe karakter olmadan yazılıyor | `command-palette.tsx`, `search-text.ts` |
+| 14c | Bildirim rozeti | `Badge` akış içinde durur | Zil düğmesinin sağ üst köşesine konumlanır | Sayı ikonla birlikte okunur (D-063) | `app-header.tsx` |
 
 Bilinen, henüz giderilmemiş fark: COSS sidebar'ın mobil başlığı ("Sidebar") ve kenar çubuğu ipucu ("Toggle Sidebar") İngilizce kalır; COSS dosyası değiştirilmeden düzeltilemez.
 

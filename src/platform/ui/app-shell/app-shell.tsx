@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import type { CSSProperties, ReactNode } from "react";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { type AccessPolicy, filterByPermission } from "@/platform/access/access-policy";
 import {
   getVisibleNavigation,
@@ -13,6 +13,8 @@ import {
   parseOpenGroups,
   SIDEBAR_GROUPS_COOKIE,
 } from "@/platform/navigation/sidebar-group-preference";
+import { resolveSiteScope, SITE_SCOPE_COOKIE } from "@/platform/navigation/site-scope-preference";
+import { AppHeader, type HeaderSeat } from "@/platform/ui/app-shell/app-header";
 import { AppSidebar } from "@/platform/ui/app-shell/app-sidebar";
 import { ThemeToggle } from "@/platform/ui/theme/theme-toggle";
 
@@ -56,12 +58,14 @@ const appCardClassName = [
 
 type AppShellProps = {
   access: AccessPolicy;
-  /** Right side of the top bar (user menu, notifications, role switcher — §40.3). */
+  /** The current seat's header data: primary action fallback, sites, notification count. */
+  seat: HeaderSeat;
+  /** Right end of the top bar (account menu with the role switcher — §40.3). */
   headerActions?: ReactNode;
   children: ReactNode;
 };
 
-export async function AppShell({ access, headerActions, children }: AppShellProps) {
+export async function AppShell({ access, seat, headerActions, children }: AppShellProps) {
   const visibleItemIds = getVisibleNavigation(navigationRegistry, access).flatMap((group) =>
     group.items.map((item) => item.id),
   );
@@ -73,6 +77,7 @@ export async function AppShell({ access, headerActions, children }: AppShellProp
   const cookieStore = await cookies();
   const sidebarOpen = cookieStore.get("sidebar_state")?.value === "true";
   const openGroupIds = parseOpenGroups(cookieStore.get(SIDEBAR_GROUPS_COOKIE)?.value);
+  const initialSite = resolveSiteScope(cookieStore.get(SITE_SCOPE_COOKIE)?.value, seat.sites);
 
   return (
     <div className={outerClassName}>
@@ -88,13 +93,18 @@ export async function AppShell({ access, headerActions, children }: AppShellProp
         />
         {/* Inset variant: on desktop the app sits in a bordered, rounded card of fixed height. */}
         <SidebarInset className={appCardClassName}>
-          <header className="flex h-14 shrink-0 items-center gap-2 border-b bg-background px-4">
-            <SidebarTrigger aria-label="Menüyü aç veya kapat" className="-ms-1" />
-            <div className="ms-auto flex items-center gap-1">
-              <ThemeToggle />
-              {headerActions}
-            </div>
-          </header>
+          <AppHeader
+            actions={
+              <>
+                <ThemeToggle />
+                {headerActions}
+              </>
+            }
+            initialSite={initialSite}
+            seat={seat}
+            visibleItemIds={visibleItemIds}
+            visibleWorkIds={visibleWorkIds}
+          />
           {/* Page-specific functional footer is planned for Phase 02 (TASK-0028). */}
           <ScrollArea className="min-h-0 flex-1">
             <div className="flex flex-col gap-6 p-4 md:p-6">{children}</div>
