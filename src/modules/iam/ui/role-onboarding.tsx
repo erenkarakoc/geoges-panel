@@ -6,16 +6,12 @@ import { useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardPanel,
-  CardTitle,
-} from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { dashboardRoute } from "@/modules/iam/application/auth-routing";
+import { AuthFormHeader } from "@/modules/iam/ui/auth-form-header";
 
 type OnboardingStep = {
+  eyebrow: string;
   title: string;
   description: string;
   points: readonly string[];
@@ -28,7 +24,8 @@ type OnboardingStep = {
  */
 const sampleSteps: readonly OnboardingStep[] = [
   {
-    title: "Yeni rolünüz: Saha Mühendisi",
+    eyebrow: "Yeni rolünüz",
+    title: "Saha Mühendisi",
     description: "Size bu rol atandı. Birkaç adımda neler yapacağınızı gösterelim.",
     points: [
       "Sorumlu olduğunuz şantiyeleri görürsünüz.",
@@ -36,8 +33,9 @@ const sampleSteps: readonly OnboardingStep[] = [
     ],
   },
   {
-    title: "Temel sorumluluklarınız",
-    description: "Bu rolün her gün yaptığı işler.",
+    eyebrow: "Sorumluluklarınız",
+    title: "Her gün yapacaklarınız",
+    description: "Bu rolün günlük işleri.",
     points: [
       "Şantiyenin günlük kaydını girip koordinatör onayına göndermek.",
       "Zayi kayıtlarında neden ve fotoğraf eklemek.",
@@ -45,7 +43,8 @@ const sampleSteps: readonly OnboardingStep[] = [
     ],
   },
   {
-    title: "İlk yapmanız gerekenler",
+    eyebrow: "İlk adımlar",
+    title: "Şimdi ne yapmalısınız?",
     description: "Kullanacağınız ekranlar ve zorunlu ilk görevler.",
     points: [
       "Şantiye Kaydı ekranından bugünün kaydını açın.",
@@ -57,34 +56,37 @@ const sampleSteps: readonly OnboardingStep[] = [
 export function RoleOnboarding() {
   const [stepIndex, setStepIndex] = useState(0);
   const step = sampleSteps[stepIndex];
-  const stepNumber = stepIndex + 1;
-  const isFirst = stepIndex === 0;
-  const isLast = stepNumber === sampleSteps.length;
 
   if (!step) {
     return null;
   }
 
+  const isFirst = stepIndex === 0;
+  const isLast = stepIndex === sampleSteps.length - 1;
+
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader>
-        <div className="flex items-center justify-between gap-2">
-          <p aria-live="polite" className="text-sm text-muted-foreground">
-            Adım {String(stepNumber).padStart(2, "0")} / {sampleSteps.length}
-          </p>
-          <Badge variant="warning">Örnek içerik</Badge>
-        </div>
-        <CardTitle render={<h1 />}>{step.title}</CardTitle>
-        <CardDescription>{step.description}</CardDescription>
-      </CardHeader>
-      <CardPanel>
-        <ul className="flex list-disc flex-col gap-2 ps-5 text-sm">
-          {step.points.map((point) => (
-            <li key={point}>{point}</li>
-          ))}
-        </ul>
-      </CardPanel>
-      <CardFooter className="flex justify-between gap-2">
+    <div className="w-full max-w-lg">
+      <div className="flex items-center justify-between gap-2">
+        <Stepper count={sampleSteps.length} index={stepIndex} />
+        <Badge variant="warning">Örnek içerik</Badge>
+      </div>
+
+      <div className="mt-8">
+        <AuthFormHeader description={step.description} eyebrow={step.eyebrow} title={step.title} />
+      </div>
+
+      <ul className="mt-6 flex flex-col gap-2">
+        {step.points.map((point) => (
+          <li
+            className="rounded-md border border-border/70 bg-background/40 px-3 py-2 text-sm"
+            key={point}
+          >
+            {point}
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-8 flex items-center justify-between gap-2">
         <Button
           disabled={isFirst}
           onClick={() => setStepIndex((index) => index - 1)}
@@ -95,17 +97,40 @@ export function RoleOnboarding() {
           Geri
         </Button>
         {isLast ? (
-          <Button render={<Link href="/dashboard" />}>
+          <Button render={<Link href={dashboardRoute} />} size="lg">
             Panele git
             <ArrowRightIcon aria-hidden="true" />
           </Button>
         ) : (
-          <Button onClick={() => setStepIndex((index) => index + 1)} type="button">
+          <Button onClick={() => setStepIndex((index) => index + 1)} size="lg" type="button">
             İleri
             <ArrowRightIcon aria-hidden="true" />
           </Button>
         )}
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
+  );
+}
+
+function Stepper({ count, index }: { count: number; index: number }) {
+  return (
+    <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
+      <span aria-live="polite">
+        Adım {String(index + 1).padStart(2, "0")} / {count}
+      </span>
+      <span className="flex items-center gap-1.5">
+        {sampleSteps.map((step, position) => (
+          <span
+            aria-hidden="true"
+            className={cn(
+              "h-1.5 rounded-full transition-all",
+              position === index ? "w-5 bg-foreground" : "w-1.5",
+              position < index ? "bg-foreground/70" : position > index ? "bg-foreground/20" : "",
+            )}
+            key={step.title}
+          />
+        ))}
+      </span>
+    </div>
   );
 }
