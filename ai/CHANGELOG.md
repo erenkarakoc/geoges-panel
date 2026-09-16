@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 2026-09-16 — Two-factor removal, onboarding entry in the account menu
+
+- The second factor can now be removed. Supabase only allows this from an `aal2` session, so the action checks the level itself before calling and gives a plain reason when it is not met. `/two-factor` gained a third mode: a verified session now lands on a management view instead of being redirected to the dashboard (sign-in still goes straight there). Removal is confirmed in an `AlertDialog` (§1.1) and reported as a toast (§13); the screen falls back to the setup view afterwards.
+- Two contract tests added: removal is refused before the factor has been cleared, and accepted once the session is at `aal2`.
+- The account menu links to the role onboarding screen.
+
+## 2026-09-16 — Brand tiles, no pure white, collapsed-menu click fix
+
+- Square brand tiles (`icon_rectangle_light/dark/primary`) added by the owner. They carry two colours of their own, so they must not go through the `currentColor` swap that serves the monochrome logos: `BrandTile` renders them as images. Used for the favicon, on the auth screens (decoration panel and mobile) and as the collapsed sidebar mark.
+- Logo colour is no longer baked into the component: `BrandLogo` takes a `tone` (`theme`, `brand`, `light`, `dark`, `inherit`), default unchanged.
+- Owner rule: the panel never paints pure white. `--brand-light` (`#EFEFEF`) replaces it on the light surfaces COSS paints white and on the button label; in dark mode the whole primary ink family uses it too, keeping COSS's own token relationships (`--muted-foreground` stays its own grey).
+- Fixed while doing that: the first version wrote the surface tokens on a plain `:root`. Because `brand.css` loads after `globals.css` and both selectors have the same specificity, it also won inside the dark theme, leaving dark mode with light surfaces. The rule is now scoped to `:root:not(.dark)`.
+- Fixed: with the sidebar collapsed, the first item of every group could not be clicked. COSS hides the group label with `-mt-8 opacity-0`, which leaves an invisible element sitting exactly on that item and swallowing the click. The label now ignores the pointer while collapsed.
+- The auth particle figure is painted heavier in the light theme (dots and opacity ×1.6): brand blue on a light surface reads far weaker than light ink on a dark one. Applied while drawing, so switching theme does not rebuild the field.
+
 ## 2026-09-16 — Auth screens and real Supabase sign-in (TASK-0024, TASK-0025)
 
 - TASK-0024 DONE: owner created the Supabase dev project and `.env.local`. Verified without reading key values — both variables set, publishable (not secret) key, file git-ignored, public sign-up disabled, TOTP MFA enabled.
