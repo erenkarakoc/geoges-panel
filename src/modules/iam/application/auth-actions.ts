@@ -93,10 +93,11 @@ export async function requestPasswordResetAction(
   _previous: PasswordResetState,
   formData: FormData,
 ): Promise<PasswordResetState> {
-  const parsed = passwordResetRequestSchema.safeParse({ email: formData.get("email") });
+  const email = String(formData.get("email") ?? "");
+  const parsed = passwordResetRequestSchema.safeParse({ email });
 
   if (!parsed.success) {
-    return { error: firstIssueMessage(parsed.error), sentTo: null };
+    return { error: firstIssueMessage(parsed.error), sentTo: null, email };
   }
 
   const origin = (await headers()).get("origin") ?? "";
@@ -107,10 +108,10 @@ export async function requestPasswordResetAction(
   });
 
   if (!result.ok) {
-    return { error: authFailureMessage(result.code), sentTo: null };
+    return { error: authFailureMessage(result.code), sentTo: null, email };
   }
 
-  return { error: null, sentTo: parsed.data.email };
+  return { error: null, sentTo: parsed.data.email, email };
 }
 
 export async function updatePasswordAction(

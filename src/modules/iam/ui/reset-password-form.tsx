@@ -58,8 +58,9 @@ export function ResetPasswordForm({ linkExpired = false }: { linkExpired?: boole
           <FieldLabel htmlFor="email">E-posta</FieldLabel>
           <Input
             autoComplete="email"
-            defaultValue={state.sentTo ?? undefined}
+            defaultValue={state.email}
             id="email"
+            key={state.email}
             name="email"
             placeholder="eposta@geoges.com"
             required
