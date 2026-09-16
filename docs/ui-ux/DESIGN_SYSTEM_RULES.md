@@ -57,7 +57,20 @@ Kullanım alanları: uygulama kabuğu, dashboard, navigasyon, ayarlar, formlar, 
 
 | Alan | Referans | Not |
 |---|---|---|
-| Auth / onboarding | https://www.devl.dev/c/auth/onboarding | Her ekranda tek karar, adım göstergesi (Adım 01 / 3). Giriş, 2FA, parola sıfırlama ve yeni rol yönlendirmesi (§2.7) için ilham. |
+| Auth / onboarding | https://www.devl.dev/c/auth/onboarding | Her ekranda tek karar, adım göstergesi (Adım 01 / 3). Yeni rol yönlendirmesi (§2.7) bu düzeni kullanır. |
+| Giriş ekranı | https://www.devl.dev/c/auth/login | Tüm kimlik doğrulama ekranlarının tasarımı (D-046). |
+
+### 3.2. Auth ekranları: tasarımın birebir alınması (D-046)
+
+Sahip kararı (2026-09-16): devl.dev auth ekranlarının tasarımı **ilham değil, uygulanan tasarımdır**; yalnızca projeye uyarlanır.
+
+**Alınan:** ikiye bölünmüş yerleşim (solda partikül figürü, sağda tek sütunlu form), `2xl` üstünde ortalanmış 16:9 kart çerçevesi, mono-büyük harf-geniş harf aralıklı üst etiket + başlık + açıklama düzeni, adım göstergesi, yazarken ve gönderirken figürün tepki vermesi.
+
+**Uyarlanan:** bileşenler projenin kendi katmanlarında COSS ile kurulur (`@coss/button`, `@coss/input`, `@coss/label` zaten onların da bağımlılığı), metinler Türkçe, renkler marka token'larından, tema projenin mevcut sağlayıcısından gelir. Partikül figürünün kaynağı GEOGES logosudur.
+
+**Alınmayan:** kendi tema sistemleri (`lib/themes`), figür PNG'leri (kayıtta yok ve lisansı belirsiz), sihirli bağlantı ile giriş ve Google/Apple düğmeleri (bizde e-posta + parola + TOTP; D-036, D-043).
+
+`npx shadcn add` komutu bilerek çalıştırılmadı: dosya düzeni ve ikinci bir tema yığını projeye girmesin diye kayıt içerikleri okunup yeniden kuruldu.
 
 ## 4. Marka ve tasarım token'ları
 
@@ -75,16 +88,24 @@ Sahip isteği (2026-09-16): COSS UI / Tailwind varsayılanlarının dışına ç
 
 | # | Yer | COSS varsayılanı | Projede | Neden | Dosya |
 |---|---|---|---|---|---|
-| 1 | Renk token'ları | `--primary`, `--sidebar-primary`, `--ring` nötr gri | Marka mavisi `#0F4C81`; koyu modda açık tonu | Kurumsal kimlik (§40.5) | `src/platform/ui/theme/brand.css` |
+| 1 | Renk token'ları | `--primary`, `--sidebar-primary` nötr gri (açıkta koyu gri, koyuda beyaza yakın) | Her iki temada da marka mavisi `#0F4C81`, üzerinde beyaz yazı (sahip tercihi 2026-09-16; önceki hâli koyu modda açık maviydi). Yalnızca bu iki token değiştirilir: `--ring` (odak halkası), `--input`, `--border` ve `--background` COSS varsayılanında bırakılmıştır — sahip isteği 2026-09-16, marka rengi yalnızca birincil eylemlerde | Kurumsal kimlik (§40.5) | `src/platform/ui/theme/brand.css` |
 | 2 | Logo rengi | — | `--brand-logo`: açıkta `#0F4C81`, koyuda `#EFEFEF` | Sahibin logo dosyaları | `brand.css`, `brand-logo.tsx` |
-| 3 | Uygulama kartı kenarlığı | `inset` kartında yalnızca gölge | Masaüstünde 1px kenarlık | Sahip isteği: kenarlıklı kart | `app-shell.tsx` |
-| 4 | Dış yerleşim boşluğu (`--layout-gap`) | Kart `m-2`, sidebar `p-2` (0,5rem) | `md` ≥: 1,5rem, `xl` ≥: 2,5rem; sidebar üst/sol/alt ve kart üst/sağ/alt kenarlarında. Sidebar ile kart arası COSS varsayılanında kalır (açık 8px, daraltılmış 14px) | Sahip isteği: geniş dış kenar boşluğu | `app-shell.tsx`, `app-sidebar.tsx` |
+| 3 | Uygulama kartı kenarlığı | `inset` kartında yalnızca gölge | Masaüstünde 1px kenarlık, her boyutta (2026-09-16: `2xl`'de kaldırılması denendi, sahip isteğiyle geri alındı — çerçeveyle iç içe iki kenarlık tercih edildi) | Sahip isteği: kenarlıklı kart | `app-shell.tsx` |
+| 4 | Dış yerleşim boşluğu (`--layout-gap`) | Kart `m-2`, sidebar `p-2` (0,5rem) | `md` ≥: 1,5rem, `xl` ≥: 2,5rem (`2xl`'de de aynı kalır); sidebar üst/sol/alt ve kart üst/sağ/alt kenarlarında. Sidebar ile kart arası COSS varsayılanında kalır (açık 8px, daraltılmış 14px) | Sahip isteği: geniş dış kenar boşluğu | `app-shell.tsx`, `app-sidebar.tsx` |
 | 4a | Sidebar genişliği | `--sidebar-width` 16rem, daraltılmış `ikon + 1rem + 2px` | `15rem + --layout-gap + 0,5rem` (menü içeriği COSS ile aynı 15rem kalır); daraltılmış `ikon + --layout-gap + 0,5rem + 2px`; kart daraltılmışta `--layout-gap` kadar kaydırılır | 4. maddedeki boşluğun menü alanını daraltmaması | `app-shell.tsx`, `app-sidebar.tsx` |
 | 5 | Sabit yükseklik, kart içi kaydırma | Sayfa (pencere) kayar; kabuk `min-h-svh` | Kabuk `h-svh`; pencere kaymaz, uygulama kartı sabit yükseklikte, içerik COSS `ScrollArea` içinde kayar; üst bar kartın tepesinde sabit | Sahip isteği | `app-shell.tsx` |
 | 5a | Sidebar kenar çubuğu (rail) | Yalnızca tıklamayla aç/kapat | Tıklamaya ek olarak sürükleme: 32px sola daraltır, sağa genişletir; sürükleme sonrası tıklama yok sayılır | Sahip isteği | `sidebar-drag-rail.tsx` |
 | 6 | Yazı tipi | Gövde ve başlık Inter, kod Geist Mono; alt küme `latin` | Gövde, başlık ve kod Geist / Geist Mono (COSS değişkenleri `--font-sans`, `--font-heading`, `--font-mono` korunur); alt küme `latin` + `latin-ext` | Sahip tercihi; Türkçe karakterler | `src/app/layout.tsx` |
 | 7 | Kurulum bağımlılıkları | `@coss/style` `radix-ui` ve `cn` ekler | Kaldırıldı (kullanılmıyor) | Yalnızca Base UI (ADR-009) | `package.json` |
 | 8 | Menü tetikleyici erişilebilir adı | "Toggle Sidebar" | "Menüyü aç veya kapat" (`aria-label`) | Türkçe arayüz (ADR-011) | `app-shell.tsx` |
+| 9 | Partikül figürü (özgün element) | COSS'ta dekoratif canvas bileşeni yok | `ParticleField`: görüntüyü örnekleyip yaya bağlı noktalar olarak çizen canvas; imleçten kaçar, yazarken titreşir | Sahip onayı D-047, auth tasarımının imza öğesi (D-046) | `platform/ui/auth/particle-field.tsx` |
+| 9a | Partikül figürünün kaynağı ve rengi | devl.dev: PNG figürler, sabit beyaz/siyah nokta rengi | GEOGES logosu (`logo_light.svg`); nokta rengi `--brand-logo` token'ından | Marka kimliği; orijinal figürler kayıtta yok ve lisansı belirsiz | `auth-shell.tsx`, `particle-field.tsx` |
+| 9b | Partikül hareketi | devl.dev: dikey sürüklenme yatayın 10 katı; hareket azaltma tercihi dikkate alınmıyor | Yatay ve dikey sürüklenme eşit (keskin logoyu bulanıklaştırmaması için); `prefers-reduced-motion` açıkken figür tek seferde çizilir, animasyon yok | Logo okunabilirliği; WCAG 2.2 hareket tercihi | `particle-field.tsx` |
+| 10 | Auth ekranı yerleşimi | COSS'ta hazır auth yerleşimi yok | İkiye bölünmüş yerleşim; `2xl` üstünde ortalanmış 16:9 kart, `lg` altında tek sütun | devl.dev auth tasarımı (D-046) | `platform/ui/auth/auth-split-layout.tsx` |
+| 11 | 2FA karekodu | — | Supabase'in ürettiği SVG, `data:` URL'li `<img>` ile gösterilir (`next/image` değil) | Satır içi veri URL'sinde optimize edilecek bir şey yok | `two-factor-form.tsx` |
+| 12 | Uygulama kabuğu dış çerçevesi | Kabuk ekranı doldurur (`min-h-svh`) | `2xl` üstünde tüm kabuk ortalanmış 16:9 çerçeveye girer: `rounded-2xl`, kenarlık, gölge, `min(94vw, 92svh×16/9)` genişlik. Auth ekranlarıyla aynı çerçeve (D-046). Çerçevenin ekran kenarına uzaklığı `--frame-inset` token'ından gelir (1,5rem); içerideki oluk ise 4. maddedeki `--layout-gap`. İki dış boşluk da `app-shell.tsx` başında tanımlıdır | Sahip isteği 2026-09-16: auth yerleşimi uygulama genelinde de kullanılsın | `app-shell.tsx` |
+| 11a | Tema değiştirici | — | Menü yerine tek tıkla açık/koyu geçişi; "Sistem" seçeneği arayüzden kaldırıldı (ilk ziyarette işletim sistemi tercihi yine geçerli, ilk manuel geçişten sonra seçim hatırlanır) | Sahip isteği 2026-09-16 | `theme-toggle.tsx` |
+| 12a | Sidebar konumlanması | COSS sidebar'ı ekrana sabitler (`fixed h-svh`) | `2xl`'de `absolute h-full`: menü, 12. maddedeki çerçevenin içinde kalır | `fixed` ekrana göre konumlanır ve çerçeveden taşardı; COSS dosyası değiştirilmeden proje katmanından geçildi | `app-sidebar.tsx` |
 
 Bilinen, henüz giderilmemiş fark: COSS sidebar'ın mobil başlığı ("Sidebar") ve kenar çubuğu ipucu ("Toggle Sidebar") İngilizce kalır; COSS dosyası değiştirilmeden düzeltilemez.
 
@@ -119,3 +140,19 @@ Liste (başlık, Yeni, arama, hızlı filtre, özet, satır/kart görünümü, s
 ## 12. Metinler
 
 Arayüz metinleri Türkçe ve bileşen içinde yazılır (ADR-011). Dil sade, kurumsal ve yönlendiricidir; internal durum değerleri kullanıcıya Türkçe karşılığıyla gösterilir.
+
+## 13. Geri bildirim: toast zorunlu (sahip kuralı, 2026-09-16)
+
+Hata, uyarı ve başarı mesajları **bileşenin içine yazılmaz**; COSS `Toast` ile gösterilir.
+
+| Ne | Nerede |
+|---|---|
+| Form düzeyi hata (ör. "E-posta veya parola hatalı") | Toast, `type: "error"` |
+| Başarı bildirimi (ör. "Bağlantı gönderildi") | Toast, `type: "success"` |
+| Uyarı ve bilgilendirme | Toast, `type: "warning"` / `"info"` |
+| **İstisna:** alan düzeyi doğrulama | Girdinin hemen altında (`FieldError`) — sektör standardı, özellikle giriş formlarında |
+
+- `ToastProvider` kök yerleşimdedir (`src/app/layout.tsx`), tüm ekranları kapsar.
+- Sunucu eylemlerinin sonucu `useActionToast` ile toast'a çevrilir (`platform/ui/feedback/use-action-toast.ts`). Kanca, `useActionState`'in her gönderimde yeni nesne döndürmesine dayanır; böylece kullanıcı aynı hatayı iki kez alırsa toast yeniden görünür.
+- Kullanıcının onaylaması gereken, akışı durduran durumlar toast değildir: `AlertDialog` kullanılır.
+- Kalıcı ve bağlama gömülü bir durum anlatımı gerekiyorsa (ör. bir kaydın "taslak" olduğu bilgisi) bu bir mesaj değil, durum göstergesidir; `Badge` veya `Alert` uygundur.

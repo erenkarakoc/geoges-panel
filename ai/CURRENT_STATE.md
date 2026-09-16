@@ -1,6 +1,6 @@
 # CURRENT STATE
 
-Last updated: 2026-09-15
+Last updated: 2026-09-16
 
 ```text
 PROJECT STATUS:      BOOTSTRAP
@@ -10,7 +10,7 @@ CURRENT FEATURE:     —
 CURRENT TASK:        TASK-0020 Glossary confirmation rounds (OQ-007)
 STATUS:              QUESTIONS_PENDING
 BRANCH:              docs/phase-01-kickoff
-PARALLEL TRACK:      Milestone M0 early first screen (CHG-002) — TASK-0022, TASK-0023 DONE; TASK-0026 REVIEW (owner visual review); TASK-0024/0025 need owner's Supabase project
+PARALLEL TRACK:      Milestone M0 early first screen (CHG-002) — TASK-0022, TASK-0023, TASK-0024 DONE; TASK-0025 and TASK-0026 REVIEW (owner review; real sign-in needs the owner's own account)
 CODE ALLOWED:        Only for M0 tasks (TASK-0023…TASK-0026), on branch feature/m0-early-first-screen
 ```
 
@@ -28,6 +28,7 @@ None.
 See `ai/OPEN_QUESTIONS.md` (OQ-007 for Phase 01; OQ-010…OQ-024 later phases).
 
 ## RECENT DECISIONS
+- D-046, D-047 (2026-09-16): devl.dev auth design adopted as the actual design and rebuilt with COSS; `ParticleField` approved as the first custom element
 - ADR-001…ADR-013 (2026-09-15)
 - D-019…D-025: skill vendoring, skill set, Next.js guidance, plugin settings, roadmap approval with Milestone M1, Tailwind docs local-only, claude-mem telemetry off
 

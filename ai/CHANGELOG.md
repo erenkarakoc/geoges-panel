@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 2026-09-16 — Auth screens and real Supabase sign-in (TASK-0024, TASK-0025)
+
+- TASK-0024 DONE: owner created the Supabase dev project and `.env.local`. Verified without reading key values — both variables set, publishable (not secret) key, file git-ignored, public sign-up disabled, TOTP MFA enabled.
+- `AuthProvider` port (`modules/iam/domain`) with a Supabase adapter; provider error codes are mapped to stable failure codes and Turkish messages in the application layer. Screens depend on the port only, so replacing Supabase does not touch the UI (ADR-002).
+- Server actions: sign-in, sign-out, password reset request, new password, TOTP enrollment and verification. `src/proxy.ts` (Next 16's renamed middleware) refreshes session cookies and redirects signed-out visitors; access decisions use `getClaims`, never `getSession`. The `aal2` step is enforced again in `(app)/layout.tsx` and on `/onboarding`, because proxy checks are optimistic only.
+- `/auth/confirm` exchanges the password-reset `token_hash` for a session; the `next` target is restricted to in-app paths so the link cannot redirect elsewhere.
+- D-046: the devl.dev auth design is adopted as the actual design, rebuilt with COSS in the project's own layers — `npx shadcn add` was deliberately not run, so no foreign file layout or second theme stack entered the repo. Their magic-link and Google/Apple sign-in were not taken over (we use e-mail + password + TOTP).
+- D-047: `ParticleField` approved as the first custom element (COSS has no decorative canvas). Source image is the GEOGES logo, dot colour follows `--brand-logo`, and `prefers-reduced-motion` paints it once without animation. Deviation register rows 9, 9a, 9b, 10, 11 added.
+- 19 new unit tests (port contract with a fake adapter, routing rules, form validation). `npm run check` and `npm run build` pass.
+- Browser-verified: signed-out visitor redirected to `/sign-in`, wrong credentials show "E-posta veya parola hatalı." with the e-mail preserved, light/dark and mobile layouts, no page-load console errors. Real sign-in, TOTP and the reset e-mail still need the owner's own account.
+- OQ-026 opened: password policy and account lockout (M0 uses a provisional 8-character minimum).
+- Feedback rule (owner, 2026-09-16): errors, warnings and success messages are never rendered inside a component — they go to a COSS `Toast`. Field-level validation under an input stays. `ToastProvider` sits in the root layout; `useActionToast` turns a server-action result into a toast. Inline `Alert`s removed from the auth forms. Rules written to `docs/ui-ux/DESIGN_SYSTEM_RULES.md` §13.
+- Fixed: the 2FA QR code rendered as a broken image. The running Supabase API returns `totp.qr_code` as a complete data URL while the typings describe a bare SVG, so the code prefixed it twice. The adapter now normalises both shapes and the screen gets a ready-to-use URL.
+- Theme control (owner, 2026-09-16): switches light/dark straight on click instead of opening a menu. This drops the explicit "Sistem" option — the first visit still follows the operating system, but after one manual switch the choice is remembered. Say so if the option should come back (e.g. as a long-press or a settings entry).
+- Security correction: assurance levels no longer come from `getAuthenticatorAssuranceLevel()`, which reads the user object out of the cookie (Supabase logs a warning that this must not drive access decisions). `currentLevel` now comes from the verified `aal` claim and `nextLevel` from `listFactors()`. An `aal2` session skips the factor call.
+
 ## 2026-09-16 — Owner notes: COSS surfaces, site-wide search
 
 - D-045: COSS `Frame`, `Drawer`, `Dialog`, `Menu`, `Sheet` used wherever needed; usage table in `docs/ui-ux/DESIGN_SYSTEM_RULES.md` §1.1.

@@ -51,3 +51,4 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 | OQ-022 | Target dates or constraints for design completion and first pilot? |
 | OQ-023 | ANSWERED 2026-09-15 → D-041: owner-designated delegate for an owner-defined period; all actions reported to the owner. |
 | OQ-024 | Legal review of KVKK obligations before entering real HR data (RISK-001)? |
+| OQ-026 | Password policy (minimum length, complexity, expiry) and account lockout after repeated failures (scope §2.8). M0 uses a provisional 8-character minimum in `auth-schemas.ts`; Supabase enforces its own project policy on top. Decide in Phase 03 security design and align the Supabase project setting with it. |
