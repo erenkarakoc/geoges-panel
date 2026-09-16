@@ -25,8 +25,9 @@ export function AppShell({ access, headerActions, children }: AppShellProps) {
   return (
     <SidebarProvider>
       <AppSidebar visibleItemIds={visibleItemIds} />
-      <SidebarInset>
-        <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur">
+      {/* Inset variant: on desktop the app sits in a bordered, rounded card with a margin. */}
+      <SidebarInset className="md:border">
+        <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur md:rounded-t-xl">
           <SidebarTrigger aria-label="Menüyü aç veya kapat" className="-ms-1" />
           <div className="ms-auto flex items-center gap-1">
             <ThemeToggle />
