@@ -9,19 +9,19 @@ CURRENT SUBPHASE:    DISCOVER / QUESTION
 CURRENT FEATURE:     —
 CURRENT TASK:        TASK-0020 Glossary confirmation rounds (OQ-007)
 STATUS:              QUESTIONS_PENDING
-BRANCH:              docs/phase-01-requirements (M0 merged into main via PR #1, 2026-09-16)
-PARALLEL TRACK:      Milestone M0 (CHG-002) DONE 2026-09-16 · sandboxes: TASK-0030 presentation (CHG-003), TASK-0031 navigation prototype (CHG-004) — both REVIEW
-CODE ALLOWED:        Development-only sandboxes (D-052, CHG-004) · no product code — resumes in Phase 07 (ADR-007) or via an approved change request
+BRANCH:              feature/presentation-sandbox (M0 merged into main via PR #1, 2026-09-16)
+PARALLEL TRACK:      CHG-004 product transfer, 5 steps (TASK-0032…TASK-0036) — step 1 REVIEW · sandboxes TASK-0030, TASK-0031 REVIEW
+CODE ALLOWED:        Development-only sandboxes (D-052) and the CHG-004 shell transfer (TASK-0032…TASK-0036, owner approved) · other product code resumes in Phase 07 (ADR-007) or via an approved change request
 ```
 
 ## LAST COMPLETED TASK
 Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Owner reviews the navigation prototype at `/navigation` (TASK-0031) and answers OQ-027 (which flow methods are adopted).
-2. Phase 01 per-module requirement rounds (TASK-0020 PROPOSED glossary terms per module, TASK-0021 slice 1 REQ extraction). OQ-021…OQ-025 answered (D-048…D-051).
-2. M0 merged into `main` (PR #1, 2026-09-16).
-3. TASK-0018: re-check after 2026-10-15 that the worker keeps storing observations via the `CLAUDE_CODE_OAUTH_TOKEN` fallback (restart verified 2026-09-15; fallback not yet exercised). TASK-0019 DONE.
+1. Owner reviews CHG-004 step 1 (TASK-0032), then step 2 decisions by question and answer (TASK-0033: header zones, ⌘K palette in COSS's design, dev role switcher).
+2. OQ-027 (flow methods) still open.
+3. Phase 01 per-module requirement rounds (TASK-0020, TASK-0021).
+4. TASK-0018: re-check after 2026-10-15 that the worker keeps storing observations via the `CLAUDE_CODE_OAUTH_TOKEN` fallback (restart verified 2026-09-15; fallback not yet exercised). TASK-0019 DONE.
 
 ## BLOCKED BY
 None.

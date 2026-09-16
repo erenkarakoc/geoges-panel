@@ -113,6 +113,10 @@ Sahip isteği (2026-09-16): COSS UI / Tailwind varsayılanlarının dışına ç
 | 10c | Sidebar zemini (açık tema) | `--sidebar: neutral-50` (`#FAFAFA`), karttan (beyaz) 5 ton koyu | `#EAEAEA` (`--brand-light`'tan türetilir), karttan yine 5 ton koyu | 10b sonrası kart `#EFEFEF` olunca sidebar karttan açık kalıyor, katman sırası tersine dönüyordu. COSS'un `--sidebar-foreground` karışımı bu değere bağlı olduğu için kendini yeniden hesaplar | `brand.css` |
 | 11a | Tema değiştirici | — | Menü yerine tek tıkla açık/koyu geçişi; "Sistem" seçeneği arayüzden kaldırıldı (ilk ziyarette işletim sistemi tercihi yine geçerli, ilk manuel geçişten sonra seçim hatırlanır) | Sahip isteği 2026-09-16 | `theme-toggle.tsx` |
 | 12a | Sidebar konumlanması | COSS sidebar'ı ekrana sabitler (`fixed h-svh`) | `2xl`'de `absolute h-full`: menü, 12. maddedeki çerçevenin içinde kalır | `fixed` ekrana göre konumlanır ve çerçeveden taşardı; COSS dosyası değiştirilmeden proje katmanından geçildi | `app-sidebar.tsx` |
+| 13a | Sidebar açılış hali | Varsayılan açık (`defaultOpen = true`) | Varsayılan daraltılmış (ikon rayı); kullanıcının son tercihi COSS çereziyle hatırlanır | Sahip kararı D-057 | `app-shell.tsx` |
+| 13b | Daraltılmış halde modül grupları | Daraltılmış sidebar öğeleri yalnız ikon + ipucu gösterir | Grup ikonu, grubun modüllerini COSS `Menu` ile açılır menüde listeler | D-054, D-057: grup başına tek ikon | `app-sidebar.tsx` |
+| 13c | Genişletilmiş halde gruplar | — | Gruplar COSS `Collapsible` ile açılır; birden fazlası açık kalabilir, açık gruplar çerezde hatırlanır ve sunucuda açık render edilir | D-057 | `app-sidebar.tsx`, `sidebar-group-preference.ts` |
+| 13d | Daraltılmış halde rozet | COSS ikon halinde `SidebarMenuBadge`'i gizler | Rozet yerine küçük bir nokta; sayı ipucunda kalır ("örnek veri" işaretiyle) | Bekleyen iş sinyali ikon halinde de görünsün (D-059) | `app-sidebar.tsx` |
 
 Bilinen, henüz giderilmemiş fark: COSS sidebar'ın mobil başlığı ("Sidebar") ve kenar çubuğu ipucu ("Toggle Sidebar") İngilizce kalır; COSS dosyası değiştirilmeden düzeltilemez.
 

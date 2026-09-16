@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import {
+  allNavigationItems,
   findNavigationItemByHref,
   navigationRegistry,
 } from "@/platform/navigation/navigation-registry";
@@ -13,8 +14,7 @@ const ownRoutes = new Set(["/dashboard"]);
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return navigationRegistry
-    .flatMap((group) => group.items)
+  return allNavigationItems()
     .filter((item) => !ownRoutes.has(item.href))
     .map((item) => ({ moduleSlug: item.href.slice(1) }));
 }

@@ -1,12 +1,18 @@
+import { cookies } from "next/headers";
 import type { CSSProperties, ReactNode } from "react";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import type { AccessPolicy } from "@/platform/access/access-policy";
+import { type AccessPolicy, filterByPermission } from "@/platform/access/access-policy";
 import {
   getVisibleNavigation,
   navigationRegistry,
+  workNavigation,
 } from "@/platform/navigation/navigation-registry";
+import {
+  parseOpenGroups,
+  SIDEBAR_GROUPS_COOKIE,
+} from "@/platform/navigation/sidebar-group-preference";
 import { AppSidebar } from "@/platform/ui/app-shell/app-sidebar";
 import { ThemeToggle } from "@/platform/ui/theme/theme-toggle";
 
@@ -55,15 +61,31 @@ type AppShellProps = {
   children: ReactNode;
 };
 
-export function AppShell({ access, headerActions, children }: AppShellProps) {
+export async function AppShell({ access, headerActions, children }: AppShellProps) {
   const visibleItemIds = getVisibleNavigation(navigationRegistry, access).flatMap((group) =>
     group.items.map((item) => item.id),
   );
+  const visibleWorkIds = filterByPermission(workNavigation, access).map((item) => item.id);
+
+  // The rail starts collapsed (D-054) unless the user opened it before; COSS keeps that choice
+  // in `sidebar_state`. Open module groups are remembered separately, so the server can render
+  // them already open instead of flashing closed.
+  const cookieStore = await cookies();
+  const sidebarOpen = cookieStore.get("sidebar_state")?.value === "true";
+  const openGroupIds = parseOpenGroups(cookieStore.get(SIDEBAR_GROUPS_COOKIE)?.value);
 
   return (
     <div className={outerClassName}>
-      <SidebarProvider className={frameClassName} style={sidebarWidthStyle}>
-        <AppSidebar visibleItemIds={visibleItemIds} />
+      <SidebarProvider
+        className={frameClassName}
+        defaultOpen={sidebarOpen}
+        style={sidebarWidthStyle}
+      >
+        <AppSidebar
+          defaultOpenGroupIds={openGroupIds}
+          visibleItemIds={visibleItemIds}
+          visibleWorkIds={visibleWorkIds}
+        />
         {/* Inset variant: on desktop the app sits in a bordered, rounded card of fixed height. */}
         <SidebarInset className={appCardClassName}>
           <header className="flex h-14 shrink-0 items-center gap-2 border-b bg-background px-4">

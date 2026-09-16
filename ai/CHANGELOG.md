@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-16/17 — CHG-004 transfer, step 1: rail in the product sidebar (TASK-0032)
+
+- Owner decision: transfer the approved navigation skeleton into the product shell in five steps without breaking the layout (TASK-0032…TASK-0036). CHG-004 status amended; decisions D-057 (collapsed rail, group flyouts, multiple open groups remembered, logo at head, `/dashboard` = "Bugün"), D-058 ("Onay"/"Görevler" out of the module list; "Genel Bakış" group gone → 5 groups), D-059 (sample badge counts in one place, marked "örnek veri", with a recorded objection), D-060 (next steps: dev role switcher under the account menu, ⌘K in COSS's own Command design, COSS `Frame` where needed).
+- Step 1 code: work layer and group icons in `navigation-registry.ts`; rail with flyouts and collapsible groups in `app-sidebar.tsx`; open groups cookie in `sidebar-group-preference.ts`; `app-shell.tsx` reads both cookies on the server. Registry tests extended (35 tests).
+- Session interrupted by a usage limit mid-verification; resumed: chevron rotation bug fixed (`group-data-[panel-open]/collapsible` never matched; the trigger itself carries `data-panel-open`), "örnek veri" added to badge tooltip and title, temporary signed-out probe page deleted. Verified in the browser: collapsed rail, flyout, two groups open, open set survives reload. Deviation rows 13a–13d added.
+
 ## 2026-09-16 — Navigation rethought: icon rail, header as a toolbar (CHG-004, TASK-0031)
 
 - Owner direction: the left menu must stop being a list of 28 modules stacked underneath one another, the panel must not look like a standard dashboard, and each role should get a flowing path of its own. The diagnosis that drove the design: the menu holds nouns while people work in verbs, and the same structure is asked to serve an owner who sees everything, field roles who see three rows, and coordinators who do not browse at all — they drain queues.
