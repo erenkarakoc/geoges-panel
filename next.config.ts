@@ -10,6 +10,27 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  turbopack: {
+    rules: {
+      // `import Logo from "./logo.svg?svgr"` renders the SVG inline as a React component.
+      // The brand blue fill becomes currentColor so the logo follows the theme.
+      "*": {
+        condition: {
+          all: [{ not: "foreign" }, { path: "*.svg" }, { query: /[?&]svgr(?=&|$)/ }],
+        },
+        loaders: [
+          {
+            loader: "@svgr/webpack",
+            options: {
+              dimensions: false,
+              replaceAttrValues: { "#0F4C81": "currentColor", "#0f4c81": "currentColor" },
+            },
+          },
+        ],
+        as: "*.js",
+      },
+    },
+  },
 };
 
 export default nextConfig;

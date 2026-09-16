@@ -87,6 +87,7 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Project documentation and AI tooling are not application code.
     ".claude/**",
+    ".agents/**",
     "ai/**",
     "docs/**",
   ]),

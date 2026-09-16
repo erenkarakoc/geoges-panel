@@ -15,3 +15,4 @@ src/hooks/use-media-query.ts
 node_modules/
 package-lock.json
 next-env.d.ts
+.agents/

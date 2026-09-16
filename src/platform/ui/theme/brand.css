@@ -7,6 +7,8 @@
 :root {
   --brand-blue: #0f4c81;
   --brand-gray: #dddbdb;
+  /* Logo color: brand blue on light surfaces, owner-provided light gray on dark surfaces. */
+  --brand-logo: var(--brand-blue);
 
   --primary: var(--brand-blue);
   --primary-foreground: var(--color-white);
@@ -16,6 +18,7 @@
 }
 
 .dark {
+  --brand-logo: #efefef;
   /* Lightened brand blue keeps WCAG AA contrast on dark surfaces. */
   --primary: color-mix(in srgb, var(--brand-blue) 45%, var(--color-white));
   --primary-foreground: var(--color-neutral-950);

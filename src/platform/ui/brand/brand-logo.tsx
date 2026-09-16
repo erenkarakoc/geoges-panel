@@ -1,16 +1,21 @@
-import Image from "next/image";
+import type { FC, SVGProps } from "react";
 
 import { cn } from "@/lib/utils";
 
+import LogoIcon from "../../../../public/assets/brand/icon_primary.svg?svgr";
+import LogoLong from "../../../../public/assets/brand/logo_long_primary.svg?svgr";
+import LogoStacked from "../../../../public/assets/brand/logo_primary.svg?svgr";
+
 /**
- * GEOGES brand assets in `public/assets/brand`. `primary` (brand blue) is shown in light mode,
- * `light` (#EFEFEF) in dark mode. Replace files there to update the logo everywhere.
+ * GEOGES logos from `public/assets/brand`, rendered inline as SVG. The brand fill is replaced
+ * with currentColor at build time, so one file serves both themes via `--brand-logo`
+ * (brand.css). Replace the `*_primary.svg` files there to update the logo everywhere.
  */
-const brandAssets = {
-  icon: { name: "icon", width: 137, height: 135 },
-  stacked: { name: "logo", width: 415, height: 290 },
-  long: { name: "logo_long", width: 826, height: 290 },
-} as const;
+const logos: Record<"icon" | "stacked" | "long", FC<SVGProps<SVGSVGElement>>> = {
+  icon: LogoIcon,
+  stacked: LogoStacked,
+  long: LogoLong,
+};
 
 export const brandIconUrls = {
   primary: "/assets/brand/icon_primary.svg",
@@ -18,30 +23,19 @@ export const brandIconUrls = {
 } as const;
 
 type BrandLogoProps = {
-  variant: keyof typeof brandAssets;
-  /** Set the height (e.g. `h-8`); width follows the logo's aspect ratio. */
+  variant: keyof typeof logos;
+  /** Set the height (e.g. `h-12`); width follows the logo's aspect ratio. */
   className?: string;
 };
 
 export function BrandLogo({ variant, className }: BrandLogoProps) {
-  const asset = brandAssets[variant];
-  const imageProps = { width: asset.width, height: asset.height, className: "h-full w-auto" };
+  const Logo = logos[variant];
 
   return (
-    <span className={cn("inline-flex shrink-0", className)}>
-      <Image
-        {...imageProps}
-        alt="GEOGES"
-        className={cn(imageProps.className, "dark:hidden")}
-        src={`/assets/brand/${asset.name}_primary.svg`}
-      />
-      <Image
-        {...imageProps}
-        alt=""
-        aria-hidden="true"
-        className={cn(imageProps.className, "hidden dark:block")}
-        src={`/assets/brand/${asset.name}_light.svg`}
-      />
-    </span>
+    <Logo
+      aria-label="GEOGES"
+      className={cn("w-auto shrink-0 text-(--brand-logo)", className)}
+      role="img"
+    />
   );
 }

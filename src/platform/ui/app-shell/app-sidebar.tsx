@@ -32,15 +32,12 @@ export function AppSidebar({ visibleItemIds }: { visibleItemIds: readonly string
       <SidebarHeader>
         <Link
           aria-label="GEOGES Panel ana sayfa"
-          className="flex h-12 items-center rounded-lg px-2 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+          className="flex h-14 items-center rounded-lg px-2 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
           href="/dashboard"
           onClick={closeMobileDrawer}
         >
-          <BrandLogo className="h-7 group-data-[collapsible=icon]:hidden" variant="long" />
-          <BrandLogo
-            className="hidden h-6 group-data-[collapsible=icon]:inline-flex"
-            variant="icon"
-          />
+          <BrandLogo className="h-12 group-data-[collapsible=icon]:hidden" variant="long" />
+          <BrandLogo className="hidden h-6 group-data-[collapsible=icon]:block" variant="icon" />
         </Link>
       </SidebarHeader>
       <SidebarContent>
