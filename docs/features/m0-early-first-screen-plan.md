@@ -44,6 +44,8 @@ src/
   modules/
     iam/  application/ domain/ infrastructure/supabase/ ui/
     rpt/  ui/dashboard/
+  components/ui/  COSS UI temel bileşenleri (shadcn CLI `@coss/*` ile yönetilir, elle değiştirilmez)
+  lib/, hooks/    COSS'un yardımcı dosyaları (CLI yönetir)
   platform/
     ui/        COSS sarmalayıcıları, app-shell, tema
     config/    navigation-registry.ts, dashboard-widget-registry.ts

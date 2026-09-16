@@ -10,7 +10,7 @@ CURRENT FEATURE:     —
 CURRENT TASK:        TASK-0020 Glossary confirmation rounds (OQ-007)
 STATUS:              QUESTIONS_PENDING
 BRANCH:              docs/phase-01-kickoff
-PARALLEL TRACK:      Milestone M0 early first screen (CHG-002) — TASK-0022 plan IN_PROGRESS
+PARALLEL TRACK:      Milestone M0 early first screen (CHG-002) — TASK-0022, TASK-0023 DONE; next TASK-0026 shell, TASK-0024/0025 need owner's Supabase project
 CODE ALLOWED:        Only for M0 tasks (TASK-0023…TASK-0026), on branch feature/m0-early-first-screen
 ```
 

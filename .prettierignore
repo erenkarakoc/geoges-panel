@@ -1,0 +1,17 @@
+# Project documentation and AI tooling (formatted by hand)
+ai/
+docs/
+.claude/
+*.md
+
+# Vendored COSS UI layer (managed by the shadcn CLI)
+src/components/ui/
+src/lib/utils.ts
+src/lib/segmented-control.ts
+src/hooks/use-media-query.ts
+
+# Generated and dependency files
+.next/
+node_modules/
+package-lock.json
+next-env.d.ts

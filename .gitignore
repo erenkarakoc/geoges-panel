@@ -38,3 +38,13 @@ Thumbs.db
 # misc
 *.tsbuildinfo
 next-env.d.ts
+
+# Next.js / tooling (from create-next-app)
+/.pnp
+.pnp.*
+/.next/
+*.pem
+.vercel
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
