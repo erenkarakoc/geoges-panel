@@ -21,8 +21,13 @@ export const metadata: Metadata = {
   },
   description: "GEOGES şirket yönetim paneli",
   robots: { index: false, follow: false },
-  // The brand-blue tile in every browser theme: its own plate carries the contrast.
-  icons: { icon: { url: brandTileUrls.primary, type: "image/svg+xml" } },
+  // Primary tile for light browser themes; never the primary logo in dark mode (owner rule).
+  icons: {
+    icon: [
+      { url: brandTileUrls.primary, type: "image/svg+xml" },
+      { url: brandTileUrls.light, type: "image/svg+xml", media: "(prefers-color-scheme: dark)" },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

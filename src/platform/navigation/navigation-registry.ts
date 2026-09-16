@@ -10,7 +10,9 @@ import {
   FileClockIcon,
   FileSearchIcon,
   FileTextIcon,
+  FolderKanbanIcon,
   GaugeIcon,
+  HandshakeIcon,
   HardHatIcon,
   LandmarkIcon,
   LifeBuoyIcon,
@@ -123,6 +125,16 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         description: "Yetkinize göre bekleyen tüm onayların toplandığı onay merkezi.",
       },
       {
+        // Not in scope §40.1; placed here by owner decision D-051 (OQ-025).
+        id: "projects",
+        label: "Projeler",
+        href: "/projects",
+        icon: FolderKanbanIcon,
+        moduleCode: "PRJ",
+        requiredPermission: "prj.project.view",
+        description: "Proje kartı, duvarlar, iş programı, tedarik matrisi ve teknik ofis takibi.",
+      },
+      {
         id: "sites",
         label: "Şantiyeler",
         href: "/sites",
@@ -206,6 +218,16 @@ export const navigationRegistry: readonly NavigationGroup[] = [
     id: "commercial",
     label: "Ticari",
     items: [
+      {
+        // Not in scope §40.1; placed here by owner decision D-051 (OQ-025).
+        id: "leads-clients",
+        label: "Talepler & Müşteriler",
+        href: "/leads-clients",
+        icon: HandshakeIcon,
+        moduleCode: "CRM",
+        requiredPermission: "crm.lead.view",
+        description: "Gelen iş talepleri, işveren kartları ve karneleri, ihale takibi.",
+      },
       {
         id: "quotes",
         label: "Teklif",

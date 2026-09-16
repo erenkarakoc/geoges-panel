@@ -27,7 +27,7 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 
 | ID | Category | Question | Proposed answer | Blocks |
 |---|---|---|---|---|
-| OQ-025 | UI/UX | The proposed left menu in functional scope §40.1 has no entries for Projects (PRJ, §7–§8) or Leads & Clients (CRM, §5), although both are scope modules. Where should they appear? | Add "Projeler" under "Şantiye & Günlük" and "Talepler & Müşteriler" under "Ticari"; confirm in Phase 02 | Phase 02 exit (M0 menu follows §40.1 as written until answered) |
+| OQ-025 | UI/UX | ANSWERED 2026-09-16 → D-051: "Projeler" above "Şantiyeler" in "Şantiye & Günlük"; "Talepler & Müşteriler" first in "Ticari". Implemented in the navigation registry. | — | — |
 
 ## Infrastructure & operations — non-blocking until Phase 05
 

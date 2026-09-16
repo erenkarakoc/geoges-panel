@@ -82,6 +82,7 @@ Sahip kararı (2026-09-16): devl.dev auth ekranlarının tasarımı **ilham değ
 - Açık ve koyu mod desteklenir; kontrast WCAG 2.2 AA'yı sağlar.
 - Renk, spacing, radius, tipografi, gölge, z-index, breakpoint ve motion değerleri merkezi token'lardan gelir; bileşen içinde rastgele değer yazılmaz.
 - Doğru GEOGES logo dosyaları Phase 02'de sahipten alınır.
+- **Logo ve koyu mod (sahip kuralı, 2026-09-16):** koyu modda `primary` (marka mavisi) logo **asla** kullanılmaz; her zaman `light` logo kullanılır. Bu kural logo, kare logo (tile), favicon ve logodan türetilen görseller için geçerlidir. Kodda varsayılanlar temaya uyar (`BrandLogo tone="theme"`, `BrandTile variant="theme"`); sabit `primary`/`brand` yalnızca rengi temayla değişmeyen açık bir yüzeyde kullanılabilir.
 - **Yazı tipi (sahip tercihi, 2026-09-16):** arayüzün tamamı Geist; kod alanları Geist Mono.
 - **Finansal sayılar (sahip tercihi, 2026-09-16):** tüm finansal sayılar Geist Mono (`font-mono`) ve eşit genişlikli rakamlarla (`tabular-nums`) gösterilir. Kapsam: para tutarları (hakediş, gelir-gider, kâr-zarar, cari bakiye, teklif/fatura/ödeme tutarları, bütçe), döviz kurları ve finansal oranlar (marj, kâr yüzdesi). Tutarlar tek bir ortak biçimlendirme bileşeninden/fonksiyonundan geçer (para birimi, binlik ayırıcı, TL karşılığı); ekranlarda elle biçimlendirilmez. Bileşen, ilk finansal ekranla birlikte (Phase 02 tasarımı, uygulama FIN/RPT dilimleri) oluşturulur.
 

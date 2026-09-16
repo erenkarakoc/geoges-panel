@@ -21,3 +21,8 @@ Only items whose quality gate passed are listed here.
 | 2026-09-15 | TASK-0012 | Module map & dependency graph (draft, finalized in Phase 03) | T2 PASS (owner approved) |
 | 2026-09-15 | TASK-0013 | UI/UX design-system, COSS and devl.dev rules | T2 PASS (owner approved) |
 | 2026-09-15 | TASK-0019 | claude-mem console window flashes stopped via local `windowsHide` patch | T2 PASS (process trace after restart: 0 terminal launches) |
+| 2026-09-16 | TASK-0022 | M0 implementation plan (`docs/features/m0-early-first-screen-plan.md`) | T1 PASS (owner approved) |
+| 2026-09-16 | TASK-0023 | Next.js 16 scaffold with COSS UI, pinned dependencies, module-boundary lint, tests, formatting, noindex | T2 PASS (check + build) |
+| 2026-09-16 | TASK-0024 | Supabase dev project (EU Frankfurt), sign-up disabled, local env set by owner | T1 PASS (verified without reading key values) |
+| 2026-09-16 | TASK-0025 | Real Supabase authentication: sign-in, password reset, two-factor (TOTP), session protection | T1 PASS (owner tested and approved) |
+| 2026-09-16 | TASK-0026 | App shell, cockpit skeleton, role onboarding, brand logos, layout | T2 PASS (owner approved) |

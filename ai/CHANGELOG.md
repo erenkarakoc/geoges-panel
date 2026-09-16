@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-16 — Milestone M0 closed; Projects and CRM in the menu
+
+- Owner approved TASK-0025 (real sign-in, password reset, two-factor) and TASK-0026 (app shell) → DONE. Milestone M0 closed. TASK-0022…TASK-0026 added to `ai/COMPLETED.md`. Code track closed until Phase 07 or an approved change request.
+- D-051 (OQ-025): "Projeler" added above "Şantiyeler", "Talepler & Müşteriler" added first in "Ticari"; their placeholder pages are generated from the registry.
+- Owner rule: a primary logo is never used in dark mode. Auth screens showed the brand-blue tile in dark mode (`BrandTile` defaulted to `primary`); default is now `theme`, auth shell passes it explicitly, favicon gains a dark-scheme light tile. Rule added to `docs/ui-ux/DESIGN_SYSTEM_RULES.md` §4. Verified in rendered `/sign-in` HTML: no primary tile without `dark:hidden`.
+- `ai/CURRENT_STATE.md` stale lines refreshed (branch, next tasks, recent decisions, resolved `.gitattributes` note).
+
 ## 2026-09-16 — Pilot, schedule and KVKK answers
 
 - D-048 pilot on sample data (OQ-021), D-049 no target date (OQ-022), D-050 no KVKK legal review with RISK-001 kept open (OQ-024). `ai/OPEN_QUESTIONS.md` rows marked answered; TASK-0021 notes updated. OQ-025 (menu placement of Projects and CRM) re-explained to the owner.

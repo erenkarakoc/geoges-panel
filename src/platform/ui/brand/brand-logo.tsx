@@ -37,6 +37,7 @@ export const brandTileUrls = {
 /**
  * Ink of the logo. `theme` follows `--brand-logo` (brand blue on light, light tone on dark);
  * the others are fixed, for placing a logo on a surface whose colour the theme does not control.
+ * Never use `brand` on a theme-following surface: a primary logo must not appear in dark mode.
  */
 const tones = {
   theme: "text-(--brand-logo)",
@@ -69,11 +70,14 @@ export function BrandLogo({ variant, tone = "theme", className }: BrandLogoProps
  * Square GEOGES tile. Set the size with `className` (e.g. `size-12`).
  *
  * The tile is an image, so — unlike `BrandLogo` — the page's CSS cannot reach inside it and
- * `text-*` classes have no effect on it. Use `variant="theme"` to follow the theme: that swaps
- * the file itself — the brand-blue plate on light surfaces, the light plate on dark ones.
+ * `text-*` classes have no effect on it. The default `variant="theme"` follows the theme: that
+ * swaps the file itself — the brand-blue plate on light surfaces, the light plate on dark ones.
+ *
+ * Rule (owner, 2026-09-16): a primary logo is never shown in dark mode. Use a fixed variant only
+ * on a surface whose colour does not change with the theme.
  */
 export function BrandTile({
-  variant = "primary",
+  variant = "theme",
   className,
 }: {
   variant?: keyof typeof brandTileUrls | "theme";

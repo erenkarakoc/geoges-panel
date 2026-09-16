@@ -38,7 +38,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
               }}
             />
             <div className="pointer-events-none absolute inset-0 flex max-w-md flex-col justify-between p-12">
-              <BrandTile className="size-12" />
+              <BrandTile className="size-12" variant="theme" />
               <p className="mt-6 font-heading text-xl leading-snug md:text-2xl">
                 Kurum içi iş, süreç ve organizasyon paneli.
               </p>
@@ -47,7 +47,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
         }
       >
         <div className="absolute top-6 left-6 lg:hidden">
-          <BrandTile className="size-10" />
+          <BrandTile className="size-10" variant="theme" />
         </div>
         {children}
       </AuthSplitLayout>
