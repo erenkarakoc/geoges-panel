@@ -40,7 +40,7 @@ DEF-001 Data import · DEF-002 Offline entry · DEF-003 Native mobile app · DEF
 - Do not force-stop the claude-mem worker: its uvx/chroma-mcp children inherit and hold port 37777, blocking respawn. Prefer fully restarting the Claude app or Windows.
 - `Desktop\test\app` (out of scope) still pins claude-mem v12.3.6; running it against the shared DB reproduces `no such column: failed_at_epoch` errors.
 - claude-mem v13.11.0 ships a `cloud-sync` skill; it must never be invoked (ADR-013).
-- An untracked `.agents/skills/` copy of `.claude/skills` exists (created 2026-09-16, origin unknown — likely another AI tool). Its Tailwind docs snapshot is git-ignored; do not commit it and do not use `git add -A`. Awaiting owner confirmation.
+- The owner also uses Codex. `.agents/skills/` (Codex mirror of `.claude/skills/`) and `.codex/` are git-ignored local state. Keep skills and instructions single-sourced (`ai/AI_SKILLS.md` policy); stage explicit paths when committing.
 - claude-mem v13.11.0 cache is locally patched (`windowsHide` on git calls, TASK-0019) to stop console window flashes. A plugin update overwrites the patch; re-check for flashes after any update and re-apply or drop the patch if upstream fixed it.
 - `~/.claude-mem/telemetry.json` has an empty `decidedAt`; telemetry stays off via settings, but the plugin may prompt again.
 

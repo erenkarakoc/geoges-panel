@@ -7,7 +7,8 @@ Last updated: 2026-09-15
 - Tiers: **A** first party (technology vendor) · **B** established third party · **C** community (full audit mandatory).
 - Before install: review repository, maintainer, `SKILL.md` and all bundled scripts, shell commands, network calls, filesystem access, credentials, MCP connections, license, maintenance activity.
 - **Installation method (decided 2026-09-15):** skill folders are copied verbatim from an audited commit into `.claude/skills/<name>/` and committed to this repository. No installer CLI is used. Local edits to vendored skills are forbidden; project-specific guidance goes into project rules or `geoges-*` skills.
-- Updates follow: current commit → new commit → changelog → breaking changes → security review (diff of the skill folder) → replace folder → update this registry.
+- Updates follow: current commit → new commit → changelog → breaking changes → security review (diff of the skill folder) → replace folder → **mirror to `.agents/skills/` and verify identical** → update this registry.
+- **Multiple AI tools (owner, 2026-09-16):** the owner also uses Codex. Single sources: project instructions = root `AGENTS.md` (`CLAUDE.md` only imports it); skills = `.claude/skills/` (committed). Codex reads `.agents/skills/`, a local, git-ignored mirror. Never edit the mirror directly; never add a skill or instruction file to only one tool. Verified identical on 2026-09-16 (only difference: locally generated, git-ignored Tailwind `docs-index.tsx`). `.codex/` is local tool config and git-ignored.
 - Activation is task-scoped (Supabase task → Supabase skills; UI task → COSS skills; React → Vercel skills; R2 → Cloudflare skill; styling → Tailwind docs skill).
 - Precedence on conflict: project rules > ADRs > project docs > official framework guidance > skills > pretrained knowledge.
 
