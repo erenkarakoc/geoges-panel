@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-09-16 — M0 app shell, cockpit skeleton, onboarding (TASK-0026, REVIEW)
+
+- Registries: navigation (§40.1, D-026 "Şantiye" labels, permission per item), dashboard widgets (§3.1–§3.3); `AccessPolicy` with M0 preview policy so real IAM plugs in without UI changes.
+- App shell on COSS Sidebar (collapsible icon mode, mobile drawer closes on navigation), top bar with Açık/Koyu/Sistem theme menu (`next-themes` 0.4.6), GEOGES brand tokens in a separate `brand.css`.
+- 25 module placeholder pages generated from the registry; cockpit empty card skeleton; static new-role onboarding with step indicator.
+- Root layout: `lang="tr"`, Inter/Geist Mono with `latin-ext` (Turkish characters), noindex metadata.
+- 9 unit tests; typecheck, lint (boundaries), format, build pass; browser-verified in light/dark and desktop/mobile with no console errors.
+- OQ-025 raised: §40.1 menu has no Projects (PRJ) or CRM entries.
+
 ## 2026-09-16 — Source documents moved out of repo root
 
 - Owner request (clean root): `Geoges Panel Özellik Yapısı.md` → `docs/sources/functional-scope.md`, `Geoges Panel Mimari.md` → `docs/sources/architecture-principles.md`, `AI_Destekli_Proje_Gelistirme_Ana_Promptu.md` → `docs/sources/ai-development-protocol.md` (`git mv`, history kept). Added `docs/sources/README.md` (old-name mapping, deletion conditions).

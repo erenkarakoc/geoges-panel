@@ -1,52 +1,52 @@
 # SESSION HANDOFF
 
-Session date: 2026-09-15 · Model: Claude Opus 5 (Claude Code desktop) · Focus: Phase 00 closure, claude-mem fixes, Phase 01 glossary rounds
+Session date: 2026-09-15/16 · Model: Claude Opus 5 (Claude Code desktop) · Focus: Phase 01 rounds, CHG-002 Milestone M0 (early first screen)
 
 ## Completed
-- Phase 00 DONE (`c65495d` on `main`).
-- Branch `docs/phase-01-kickoff` created and pushed; commit `c49489c` (D-026 "Şantiye" UI label, TASK-0019 record).
-- TASK-0019: process trace root-caused console flashes (claude-mem worker `git` spawns without `windowsHide` → Windows Terminal); owner-approved local patch on 4 calls in 3 plugin scripts, backups in `~/.claude-mem/backups/worker-service-pre-windowsHide-2026-09-15/`.
-- Phase 01 glossary rounds 1–2 (OQ-007): D-027…D-034 recorded; all OPEN glossary terms closed.
+- Phase 01 decisions D-027…D-043 (glossary, slice 1 rules, Origin as design reference, TOTP 2FA). OQ-023 answered.
+- CHG-002 approved (option B): real Supabase Auth, local preview, empty dashboard skeleton, sign-in + 2FA + password reset + onboarding. Plan: `docs/features/m0-early-first-screen-plan.md` (TASK-0022 DONE). ADR-007 amended.
+- TASK-0023 DONE: Next.js 16.3.5 scaffold, COSS UI, pinned deps, ESLint module boundaries, Vitest, Prettier, noindex, `.env.example`, `.gitattributes` (LF).
+- TASK-0026 REVIEW: registries (navigation, dashboard widgets), `AccessPolicy`, app shell, theme, 25 module placeholders, cockpit skeleton, onboarding. Browser-verified.
+- Source documents moved to `docs/sources/` (owner request; TASK-0027 deletes them at Phase 01 exit).
+- TASK-0018 partially verified after restart; TASK-0019 DONE.
 
 ## Partially Completed
-- TASK-0018 (long-lived token): verified after 23:25 restart (worker PID 19196, 0 auth errors, observations stored); env fallback only exercised after `.credentials.json` expires (2026-10-15) — re-check then. TASK-0019 DONE (verified by process trace).
-- D-042 (COSS Origin as first reference for advanced components, rebuilt with COSS UI/Particles) recorded; uncommitted on `docs/phase-01-kickoff` with rounds D-035…D-041.
-- TASK-0020: PROPOSED glossary terms still reviewed per module.
+- TASK-0024 (owner creates Supabase dev project, EU Frankfurt, sign-up disabled, own user) — waiting on owner.
+- TASK-0025 auth (sign-in, 2FA TOTP, password reset, `proxy.ts` session refresh, `getClaims`, header user menu/sign-out) — blocked by TASK-0024. Supabase docs checked 2026-09-16; Next.js `proxy.ts` and auth guide read from `node_modules/next/dist/docs`.
+- TASK-0021 remaining questions: OQ-021 pilot, OQ-022 dates, OQ-024 KVKK legal review.
 
 ## Current State
-PHASE 01 · DISCOVER / QUESTION · branch `docs/phase-01-kickoff`
+PHASE 01 (QUESTIONS_PENDING) + Milestone M0 in progress on branch `feature/m0-early-first-screen`.
 
 ## Next Task
-1. Commit round 1–2 records on `docs/phase-01-kickoff` (owner approval needed).
-2. Plan Phase 01 requirement rounds per module (start with Slice 1 modules: Core/IAM, SIT, WFL approvals, RPT site detail + cockpit), raise OQ-021 (pilot site/users), OQ-022 (dates), OQ-023 (backup approver), OQ-024 (KVKK legal review).
-3. After Windows restart: verify TASK-0018 and TASK-0019.
+1. Owner visual review of TASK-0026 (`npm run dev`, http://localhost:3000).
+2. Owner completes TASK-0024; then implement TASK-0025 behind `AuthProvider` port.
+3. Answer OQ-021, OQ-022, OQ-024, OQ-025.
 
 ## Open Questions
-OQ-007 (PROPOSED terms per module); OQ-010…OQ-017, OQ-020…OQ-024.
+OQ-007 (PROPOSED terms per module), OQ-010…OQ-017, OQ-020…OQ-022, OQ-024, OQ-025.
 
 ## New Decisions
-D-026 … D-041 (see `ai/DECISIONS.md`). D-030 extends scope §15.1/§16.4 (three subcontractor payment methods). D-035 clarifies §9.2 (entry fallback order, coordinator approves). D-040: all role/approval/delegation/escalation behavior is admin-configurable — do not ask for default values of configurable settings. OQ-023 answered (D-041). Next open: OQ-021 pilot, OQ-022 dates, OQ-024 KVKK legal review.
+D-026…D-043; CHG-002 approved.
 
 ## Deferred Items
 DEF-001…DEF-005.
 
 ## Technical Debt
-None (no application code). Line-ending policy (`.gitattributes`) to define at Phase 07 scaffold.
+- ESLint 9.39.5 deprecation warning (tied to `eslint-config-next` 16.3.5) — revisit Phase 07.
+- Vendored COSS sidebar: English screen-reader strings; Cookie Store API browser support not verified.
+- M0 `previewAccessPolicy` allows everything — must be replaced by IAM policy before real data.
 
 ## Known Bugs
-- Out of scope: `Desktop\test\app` still pins claude-mem v12.3.6 and will reproduce schema errors if used.
-
-## Files Changed (uncommitted, branch `docs/phase-01-kickoff`)
-`ai/DECISIONS.md`, `docs/domain/GLOSSARY.md`, `ai/OPEN_QUESTIONS.md`, `ai/CURRENT_STATE.md`, `ai/TASKS.md`, `ai/CHANGELOG.md`, `ai/SESSION_HANDOFF.md`.
+- Out of scope: `Desktop\test\app` still pins claude-mem v12.3.6.
 
 ## Tests Run
-Process trace of new processes during tool use; `node --check` on patched plugin scripts; worker health and boot-time checks.
+`npm run check` (typecheck, lint with boundaries, 9 unit tests, format) and `npm run build` pass; boundary rules verified with probe files; runtime noindex verified; browser checks (light/dark, desktop/mobile, 0 console errors).
 
 ## Important Context
-- Owner is not a developer; explain choices in plain Turkish; **never take an action without asking** (owner instruction 2026-09-15).
-- Branches are mandatory from Phase 01 (`docs/standards/GIT_WORKFLOW.md`).
-- Old code in `../eski/` must not be reused (ADR-007).
-- UI: COSS + Tailwind only; ask before any custom element. UI label for sites: "Şantiye".
-- Never enable claude-mem Cloud Sync; never invoke the plugin's `cloud-sync` skill. Never commit the Tailwind docs snapshot.
-- Never force-stop the claude-mem worker; restart the Claude app or Windows instead. claude-mem cache carries a local patch (TASK-0019) that a plugin update overwrites.
-- Never read or handle the `CLAUDE_CODE_OAUTH_TOKEN` value.
+- Owner is not a developer; explain choices in plain Turkish; never take an action without asking.
+- Do not re-ask answered questions; admin-configurable settings need no default values (D-040).
+- Branches mandatory from Phase 01. UI: COSS + Tailwind only; Origin as design reference, rebuilt with COSS (D-042). UI label "Şantiye" (D-026).
+- `src/components/ui`, `src/lib`, `src/hooks` are COSS CLI-managed; do not edit by hand.
+- Before writing Next.js code, read the relevant guide in `node_modules/next/dist/docs/`.
+- Never handle secrets (Supabase keys, `CLAUDE_CODE_OAUTH_TOKEN`). Never enable claude-mem Cloud Sync. Never force-stop the claude-mem worker.

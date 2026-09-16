@@ -23,6 +23,12 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 | OQ-005 | Tailwind: Lombiq `tailwind-4-docs` (best available; no official skill). |
 | OQ-006 | Next.js: no separate skill exists anymore; version-matched bundled docs + `AGENTS.md` pointer used when app is scaffolded. Vercel `composition-patterns` added. Skills vendored from pinned commits (no CLI). |
 
+## Phase 01/02 — UI structure
+
+| ID | Category | Question | Proposed answer | Blocks |
+|---|---|---|---|---|
+| OQ-025 | UI/UX | The proposed left menu in functional scope §40.1 has no entries for Projects (PRJ, §7–§8) or Leads & Clients (CRM, §5), although both are scope modules. Where should they appear? | Add "Projeler" under "Şantiye & Günlük" and "Talepler & Müşteriler" under "Ticari"; confirm in Phase 02 | Phase 02 exit (M0 menu follows §40.1 as written until answered) |
+
 ## Infrastructure & operations — non-blocking until Phase 05
 
 | ID | Question |

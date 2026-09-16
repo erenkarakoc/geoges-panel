@@ -40,16 +40,19 @@ src/
     auth/confirm/route.ts      e-posta bağlantısı doğrulama (PKCE, token_hash)
     (app)/layout.tsx           uygulama kabuğu
     (app)/dashboard/           boş kart iskeleti
-    (app)/onboarding/          yeni rol yönlendirmesi
+    (app)/[moduleSlug]/        menü kayıt defterinden otomatik üretilen modül yer tutucuları
+    (auth)/onboarding/         yeni rol yönlendirmesi (ortalanmış yerleşim)
   modules/
     iam/  application/ domain/ infrastructure/supabase/ ui/
     rpt/  ui/dashboard/
   components/ui/  COSS UI temel bileşenleri (shadcn CLI `@coss/*` ile yönetilir, elle değiştirilmez)
   lib/, hooks/    COSS'un yardımcı dosyaları (CLI yönetir)
   platform/
-    ui/        COSS sarmalayıcıları, app-shell, tema
-    config/    navigation-registry.ts, dashboard-widget-registry.ts
-    supabase/  browser ve server istemcileri
+    access/     AccessPolicy arayüzü (M0 önizleme politikası; gerçek politika IAM'den gelir)
+    navigation/ navigation-registry.ts (sol menü, §40.1)
+    dashboard/  dashboard-widget-registry.ts (cockpit kartları, §3.1–§3.3)
+    ui/         app-shell, tema (brand.css), modül yer tutucu sayfası
+    supabase/   browser ve server istemcileri (TASK-0025)
   proxy.ts     oturum yenileme ve korumalı sayfa yönlendirmesi
 ```
 

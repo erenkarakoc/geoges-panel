@@ -1,0 +1,25 @@
+/*
+ * GEOGES brand tokens (functional scope §40.5, docs/ui-ux/DESIGN_SYSTEM_RULES.md §4).
+ * Kept separate from globals.css, which the COSS CLI manages, so COSS updates do not
+ * overwrite brand choices. Status colors (success/warning/destructive) stay COSS defaults.
+ */
+
+:root {
+  --brand-blue: #0f4c81;
+  --brand-gray: #dddbdb;
+
+  --primary: var(--brand-blue);
+  --primary-foreground: var(--color-white);
+  --sidebar-primary: var(--brand-blue);
+  --sidebar-primary-foreground: var(--color-white);
+  --ring: color-mix(in srgb, var(--brand-blue) 60%, var(--color-white));
+}
+
+.dark {
+  /* Lightened brand blue keeps WCAG AA contrast on dark surfaces. */
+  --primary: color-mix(in srgb, var(--brand-blue) 45%, var(--color-white));
+  --primary-foreground: var(--color-neutral-950);
+  --sidebar-primary: color-mix(in srgb, var(--brand-blue) 45%, var(--color-white));
+  --sidebar-primary-foreground: var(--color-neutral-950);
+  --ring: color-mix(in srgb, var(--brand-blue) 55%, var(--color-white));
+}

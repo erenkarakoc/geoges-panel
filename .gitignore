@@ -48,3 +48,6 @@ next-env.d.ts
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+
+# local preview launcher (Claude desktop)
+.claude/launch.json
