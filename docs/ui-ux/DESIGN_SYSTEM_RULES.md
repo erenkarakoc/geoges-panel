@@ -58,7 +58,8 @@ Sahip isteği (2026-09-16): COSS UI / Tailwind varsayılanlarının dışına ç
 | 1 | Renk token'ları | `--primary`, `--sidebar-primary`, `--ring` nötr gri | Marka mavisi `#0F4C81`; koyu modda açık tonu | Kurumsal kimlik (§40.5) | `src/platform/ui/theme/brand.css` |
 | 2 | Logo rengi | — | `--brand-logo`: açıkta `#0F4C81`, koyuda `#EFEFEF` | Sahibin logo dosyaları | `brand.css`, `brand-logo.tsx` |
 | 3 | Uygulama kartı kenarlığı | `inset` kartında yalnızca gölge | Masaüstünde 1px kenarlık | Sahip isteği: kenarlıklı kart | `app-shell.tsx` |
-| 4 | Uygulama kartı dış boşluğu | `m-2` (0,5rem) | `md` ≥: 1rem, `xl` ≥: 1,5rem; menü tarafı 0 | Sahip isteği: derli toplu arayüz | `app-shell.tsx` |
+| 4 | Yerleşim boşluğu (`--layout-gap`): uygulama kartı ve sidebar çevresi | Kart `m-2`, sidebar `p-2` (0,5rem) | `md` ≥: 1,5rem, `xl` ≥: 2,5rem; sidebar dört kenarda, kart üst/sağ/alt ve sidebar ile arasında aynı değer | Sahip isteği: geniş kenar boşluklu, derli toplu arayüz | `app-shell.tsx`, `app-sidebar.tsx` |
+| 4a | Sidebar genişliği | `--sidebar-width` 16rem, daraltılmış `ikon + 1rem + 2px` | `15rem + 2 × --layout-gap` (menü içeriği COSS ile aynı 15rem kalır); daraltılmış `ikon + 2 × --layout-gap + 2px`; kart daraltılmışta buna göre kaydırılır | 4. maddedeki boşluğun menü alanını daraltmaması | `app-shell.tsx`, `app-sidebar.tsx` |
 | 5 | Üst bar köşeleri | — | Masaüstünde üst köşeler karta uygun yuvarlatıldı | Kart köşeleriyle uyum | `app-shell.tsx` |
 | 6 | Yazı tipi alt kümesi | `latin` | `latin` + `latin-ext` | Türkçe karakterler | `src/app/layout.tsx` |
 | 7 | Kurulum bağımlılıkları | `@coss/style` `radix-ui` ve `cn` ekler | Kaldırıldı (kullanılmıyor) | Yalnızca Base UI (ADR-009) | `package.json` |

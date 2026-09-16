@@ -28,7 +28,11 @@ export function AppSidebar({ visibleItemIds }: { visibleItemIds: readonly string
   const closeMobileDrawer = () => setOpenMobile(false);
 
   return (
-    <Sidebar collapsible="icon" variant="inset">
+    <Sidebar
+      className="md:p-(--layout-gap) md:group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+2*var(--layout-gap)+2px)]"
+      collapsible="icon"
+      variant="inset"
+    >
       <SidebarHeader>
         <Link
           aria-label="GEOGES Panel ana sayfa"

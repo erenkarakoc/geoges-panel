@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-16 — Wider layout gap around sidebar and app card
+
+- Owner request: wider margins around the whole layout, sidebar included. Single `--layout-gap` token (0.5rem base, 1.5rem from `md`, 2.5rem from `xl`) drives sidebar padding, card margins and the sidebar–card gap. Sidebar width becomes `15rem + 2 × gap` so menu content keeps the COSS width; collapsed width and card offset adjusted accordingly. Deviation register rows 4/4a updated.
+- Browser-measured with transitions disabled at 1024px (24px everywhere) and 1440px (40px everywhere), expanded and collapsed. Note: the Browser pane does not advance CSS transitions while in the background, so screenshots can show a frozen mid-animation state.
+
 ## 2026-09-16 — Larger app card margins; COSS deviation register
 
 - Owner request (compact interface): app card outer margin 1rem from `md`, 1.5rem from `xl` (COSS inset default 0.5rem); sidebar side stays 0, collapsed state uses the same margin. Browser-measured at 1024px (16px) and 1440px (24px), expanded and collapsed.
