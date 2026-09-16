@@ -54,6 +54,13 @@ const damping = 0.86;
 const keepRatio = 0.75;
 const jitter = 0.4;
 
+/**
+ * Dot size and opacity multiplier for the light theme. Brand blue on a light surface reads much
+ * weaker than the light ink on a dark one, so the figure is painted heavier there. Applied while
+ * drawing, not while sampling, so switching theme does not rebuild the field.
+ */
+const lightThemeInkBoost = 1.6;
+
 /** Adds energy to the field (a keystroke, a preset chip, …). */
 function addImpulse(impulseRef: RefObject<number>, amount: number): void {
   impulseRef.current = Math.min(impulseRef.current + amount, typingImpulseCap);
@@ -109,6 +116,7 @@ export function ParticleField({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const fillColorRef = useRef("#0f4c81");
+  const inkBoostRef = useRef(1);
   const repaintRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
@@ -225,10 +233,12 @@ export function ParticleField({
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.fillStyle = fillColorRef.current;
 
+      const boost = inkBoostRef.current;
+
       for (const particle of particles) {
-        context.globalAlpha = particle.alpha;
+        context.globalAlpha = Math.min(1, particle.alpha * boost);
         context.beginPath();
-        context.arc(particle.originX, particle.originY, particle.size, 0, Math.PI * 2);
+        context.arc(particle.originX, particle.originY, particle.size * boost, 0, Math.PI * 2);
         context.fill();
       }
 
@@ -256,6 +266,7 @@ export function ParticleField({
       }
 
       const typingBoost = 1 + typing * 10;
+      const inkBoost = inkBoostRef.current;
 
       for (const particle of particles) {
         particle.velocityX += (particle.originX - particle.x) * spring;
@@ -300,9 +311,9 @@ export function ParticleField({
         const twinkle =
           0.85 + Math.sin(time * (1.4 + typing * 2.2) + particle.phase) * (0.15 + typing * 0.35);
 
-        context.globalAlpha = particle.alpha * twinkle;
+        context.globalAlpha = Math.min(1, particle.alpha * twinkle * inkBoost);
         context.beginPath();
-        context.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        context.arc(particle.x, particle.y, particle.size * inkBoost, 0, Math.PI * 2);
         context.fill();
       }
 
@@ -383,7 +394,7 @@ export function ParticleField({
     };
   }, [src, sampleStep, threshold, renderScale, dotSize, typingImpulseRef]);
 
-  // Dot colour follows the brand token, so a theme switch does not resample the image.
+  // Colour and weight follow the theme; neither resamples the image.
   useEffect(() => {
     const wrapper = wrapperRef.current;
 
@@ -392,6 +403,7 @@ export function ParticleField({
     }
 
     fillColorRef.current = getComputedStyle(wrapper).color;
+    inkBoostRef.current = themeClassName.includes("dark") ? 1 : lightThemeInkBoost;
     repaintRef.current?.();
   }, [themeClassName]);
 
