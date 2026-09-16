@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-09-16 — Fixed-height shell, drag rail, Geist, footer rework
+
+- Sidebar–card distance back to COSS defaults (8px expanded, 14px collapsed); outer layout gap unchanged (1.5rem md, 2.5rem xl). Browser-measured.
+- Fixed viewport height: shell `h-svh`, window never scrolls; app card keeps a fixed height and content scrolls inside COSS `ScrollArea`; header pinned at the card top.
+- `SidebarDragRail` wraps COSS `SidebarRail`: drag left ≥32px collapses, drag right expands, plain click still toggles. Verified with real pointer drags.
+- Logo/copyright footer removed from the app card. A transparent bottom brand strip was added and then removed at owner request. TASK-0028 records the planned functional page footer (fixed to the card bottom, layered above content, bottom-navigation style; Phase 02).
+- Font: Geist for body and headings, Geist Mono for code (COSS default Inter), `latin-ext` kept. Rule added: all financial numbers use Geist Mono + `tabular-nums` via one shared formatter (built with the first financial screen).
+- Deviation register rows 4, 4a, 5, 5a, 6 updated.
+
 ## 2026-09-16 — Wider layout gap around sidebar and app card
 
 - Owner request: wider margins around the whole layout, sidebar included. Single `--layout-gap` token (0.5rem base, 1.5rem from `md`, 2.5rem from `xl`) drives sidebar padding, card margins and the sidebar–card gap. Sidebar width becomes `15rem + 2 × gap` so menu content keeps the COSS width; collapsed width and card offset adjusted accordingly. Deviation register rows 4/4a updated.

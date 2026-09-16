@@ -13,10 +13,10 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { navigationRegistry, pickNavigationItems } from "@/platform/navigation/navigation-registry";
+import { SidebarDragRail } from "@/platform/ui/app-shell/sidebar-drag-rail";
 import { BrandLogo } from "@/platform/ui/brand/brand-logo";
 
 /** `visibleItemIds` is decided on the server by the access policy. */
@@ -29,7 +29,7 @@ export function AppSidebar({ visibleItemIds }: { visibleItemIds: readonly string
 
   return (
     <Sidebar
-      className="md:p-(--layout-gap) md:group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+2*var(--layout-gap)+2px)]"
+      className="md:p-(--layout-gap) md:pe-2 md:group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+var(--layout-gap)+0.5rem+2px)]"
       collapsible="icon"
       variant="inset"
     >
@@ -75,7 +75,7 @@ export function AppSidebar({ visibleItemIds }: { visibleItemIds: readonly string
           ))}
         </nav>
       </SidebarContent>
-      <SidebarRail />
+      <SidebarDragRail />
     </Sidebar>
   );
 }

@@ -48,6 +48,8 @@ Kullanım alanları: uygulama kabuğu, dashboard, navigasyon, ayarlar, formlar, 
 - Açık ve koyu mod desteklenir; kontrast WCAG 2.2 AA'yı sağlar.
 - Renk, spacing, radius, tipografi, gölge, z-index, breakpoint ve motion değerleri merkezi token'lardan gelir; bileşen içinde rastgele değer yazılmaz.
 - Doğru GEOGES logo dosyaları Phase 02'de sahipten alınır.
+- **Yazı tipi (sahip tercihi, 2026-09-16):** arayüzün tamamı Geist; kod alanları Geist Mono.
+- **Finansal sayılar (sahip tercihi, 2026-09-16):** tüm finansal sayılar Geist Mono (`font-mono`) ve eşit genişlikli rakamlarla (`tabular-nums`) gösterilir. Kapsam: para tutarları (hakediş, gelir-gider, kâr-zarar, cari bakiye, teklif/fatura/ödeme tutarları, bütçe), döviz kurları ve finansal oranlar (marj, kâr yüzdesi). Tutarlar tek bir ortak biçimlendirme bileşeninden/fonksiyonundan geçer (para birimi, binlik ayırıcı, TL karşılığı); ekranlarda elle biçimlendirilmez. Bileşen, ilk finansal ekranla birlikte (Phase 02 tasarımı, uygulama FIN/RPT dilimleri) oluşturulur.
 
 ## 4.1. COSS varsayılanlarından sapmalar (kayıt)
 
@@ -58,10 +60,11 @@ Sahip isteği (2026-09-16): COSS UI / Tailwind varsayılanlarının dışına ç
 | 1 | Renk token'ları | `--primary`, `--sidebar-primary`, `--ring` nötr gri | Marka mavisi `#0F4C81`; koyu modda açık tonu | Kurumsal kimlik (§40.5) | `src/platform/ui/theme/brand.css` |
 | 2 | Logo rengi | — | `--brand-logo`: açıkta `#0F4C81`, koyuda `#EFEFEF` | Sahibin logo dosyaları | `brand.css`, `brand-logo.tsx` |
 | 3 | Uygulama kartı kenarlığı | `inset` kartında yalnızca gölge | Masaüstünde 1px kenarlık | Sahip isteği: kenarlıklı kart | `app-shell.tsx` |
-| 4 | Yerleşim boşluğu (`--layout-gap`): uygulama kartı ve sidebar çevresi | Kart `m-2`, sidebar `p-2` (0,5rem) | `md` ≥: 1,5rem, `xl` ≥: 2,5rem; sidebar dört kenarda, kart üst/sağ/alt ve sidebar ile arasında aynı değer | Sahip isteği: geniş kenar boşluklu, derli toplu arayüz | `app-shell.tsx`, `app-sidebar.tsx` |
-| 4a | Sidebar genişliği | `--sidebar-width` 16rem, daraltılmış `ikon + 1rem + 2px` | `15rem + 2 × --layout-gap` (menü içeriği COSS ile aynı 15rem kalır); daraltılmış `ikon + 2 × --layout-gap + 2px`; kart daraltılmışta buna göre kaydırılır | 4. maddedeki boşluğun menü alanını daraltmaması | `app-shell.tsx`, `app-sidebar.tsx` |
-| 5 | Üst bar köşeleri | — | Masaüstünde üst köşeler karta uygun yuvarlatıldı | Kart köşeleriyle uyum | `app-shell.tsx` |
-| 6 | Yazı tipi alt kümesi | `latin` | `latin` + `latin-ext` | Türkçe karakterler | `src/app/layout.tsx` |
+| 4 | Dış yerleşim boşluğu (`--layout-gap`) | Kart `m-2`, sidebar `p-2` (0,5rem) | `md` ≥: 1,5rem, `xl` ≥: 2,5rem; sidebar üst/sol/alt ve kart üst/sağ/alt kenarlarında. Sidebar ile kart arası COSS varsayılanında kalır (açık 8px, daraltılmış 14px) | Sahip isteği: geniş dış kenar boşluğu | `app-shell.tsx`, `app-sidebar.tsx` |
+| 4a | Sidebar genişliği | `--sidebar-width` 16rem, daraltılmış `ikon + 1rem + 2px` | `15rem + --layout-gap + 0,5rem` (menü içeriği COSS ile aynı 15rem kalır); daraltılmış `ikon + --layout-gap + 0,5rem + 2px`; kart daraltılmışta `--layout-gap` kadar kaydırılır | 4. maddedeki boşluğun menü alanını daraltmaması | `app-shell.tsx`, `app-sidebar.tsx` |
+| 5 | Sabit yükseklik, kart içi kaydırma | Sayfa (pencere) kayar; kabuk `min-h-svh` | Kabuk `h-svh`; pencere kaymaz, uygulama kartı sabit yükseklikte, içerik COSS `ScrollArea` içinde kayar; üst bar kartın tepesinde sabit | Sahip isteği | `app-shell.tsx` |
+| 5a | Sidebar kenar çubuğu (rail) | Yalnızca tıklamayla aç/kapat | Tıklamaya ek olarak sürükleme: 32px sola daraltır, sağa genişletir; sürükleme sonrası tıklama yok sayılır | Sahip isteği | `sidebar-drag-rail.tsx` |
+| 6 | Yazı tipi | Gövde ve başlık Inter, kod Geist Mono; alt küme `latin` | Gövde, başlık ve kod Geist / Geist Mono (COSS değişkenleri `--font-sans`, `--font-heading`, `--font-mono` korunur); alt küme `latin` + `latin-ext` | Sahip tercihi; Türkçe karakterler | `src/app/layout.tsx` |
 | 7 | Kurulum bağımlılıkları | `@coss/style` `radix-ui` ve `cn` ekler | Kaldırıldı (kullanılmıyor) | Yalnızca Base UI (ADR-009) | `package.json` |
 | 8 | Menü tetikleyici erişilebilir adı | "Toggle Sidebar" | "Menüyü aç veya kapat" (`aria-label`) | Türkçe arayüz (ADR-011) | `app-shell.tsx` |
 

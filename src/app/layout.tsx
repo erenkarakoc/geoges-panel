@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 
 import "./globals.css";
 import "@/platform/ui/theme/brand.css";
@@ -7,9 +7,10 @@ import { cn } from "@/lib/utils";
 import { brandIconUrls } from "@/platform/ui/brand/brand-logo";
 import { ThemeProvider } from "@/platform/ui/theme/theme-provider";
 
-// latin-ext is required for Turkish characters (ğ, ş, ı, İ).
-const inter = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-sans" });
-const interHeading = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-heading" });
+// Owner choice: Geist everywhere (COSS default is Inter). latin-ext is required for Turkish
+// characters (ğ, ş, ı, İ). Variable names follow the COSS font contract.
+const geist = Geist({ subsets: ["latin", "latin-ext"], variable: "--font-sans" });
+const geistHeading = Geist({ subsets: ["latin", "latin-ext"], variable: "--font-heading" });
 const geistMono = Geist_Mono({ subsets: ["latin", "latin-ext"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
@@ -33,8 +34,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       className={cn(
         "h-full antialiased",
-        inter.variable,
-        interHeading.variable,
+        geist.variable,
+        geistHeading.variable,
         geistMono.variable,
       )}
       lang="tr"

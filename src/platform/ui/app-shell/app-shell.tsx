@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import type { AccessPolicy } from "@/platform/access/access-policy";
 import {
@@ -7,28 +8,33 @@ import {
   navigationRegistry,
 } from "@/platform/navigation/navigation-registry";
 import { AppSidebar } from "@/platform/ui/app-shell/app-sidebar";
-import { BrandFooter } from "@/platform/ui/brand/brand-footer";
 import { ThemeToggle } from "@/platform/ui/theme/theme-toggle";
 
 /*
- * Layout gap: space around the sidebar and the app card on desktop (owner request).
- * Deviation from COSS inset defaults (0.5rem) — see docs/ui-ux/DESIGN_SYSTEM_RULES.md §4.1.
+ * Layout gap: outer space around the sidebar and the app card on desktop (owner request).
+ * The space between sidebar and card stays the COSS default (0.5rem).
+ * Deviations from COSS defaults — see docs/ui-ux/DESIGN_SYSTEM_RULES.md §4.1.
  * Change the values here to resize every outer margin at once.
  */
-const layoutGapClassName =
-  "[--layout-gap:0.5rem] md:[--layout-gap:1.5rem] xl:[--layout-gap:2.5rem]";
+const layoutClassName = [
+  "[--layout-gap:0.5rem] md:[--layout-gap:1.5rem] xl:[--layout-gap:2.5rem]",
+  // Fixed viewport height: the page itself never scrolls, the app card scrolls inside.
+  "h-svh overflow-hidden",
+].join(" ");
 
-// COSS sets --sidebar-width to 16rem including its 0.5rem padding on each side.
-// Keep the same usable menu width (15rem) and add the layout gap on both sides.
+// COSS sets --sidebar-width to 16rem including 0.5rem padding on each side. Keep the usable
+// menu width (15rem): outer padding is the layout gap, the inner (card) side keeps 0.5rem.
 const sidebarWidthStyle = {
-  "--sidebar-width": "calc(15rem + 2 * var(--layout-gap))",
+  "--sidebar-width": "calc(15rem + var(--layout-gap) + 0.5rem)",
 } as CSSProperties;
 
 const appCardClassName = [
-  "md:border",
+  "min-h-0 overflow-hidden md:border",
   "md:peer-data-[variant=inset]:m-(--layout-gap) md:peer-data-[variant=inset]:ms-0",
-  // Collapsed: COSS reserves icon width + 1rem, the sidebar now takes icon width + 2 × gap + 2px.
-  "md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-[calc(2*var(--layout-gap)-1rem+2px)]",
+  // Collapsed: COSS reserves icon + 1rem and offsets the card by 0.5rem; the sidebar now takes
+  // icon + layout gap + 0.5rem + 2px. Offsetting by the layout gap keeps the COSS default
+  // sidebar-to-card distance (14px).
+  "md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-(--layout-gap)",
 ].join(" ");
 
 type AppShellProps = {
@@ -44,19 +50,21 @@ export function AppShell({ access, headerActions, children }: AppShellProps) {
   );
 
   return (
-    <SidebarProvider className={layoutGapClassName} style={sidebarWidthStyle}>
+    <SidebarProvider className={layoutClassName} style={sidebarWidthStyle}>
       <AppSidebar visibleItemIds={visibleItemIds} />
-      {/* Inset variant: on desktop the app sits in a bordered, rounded card. */}
+      {/* Inset variant: on desktop the app sits in a bordered, rounded card of fixed height. */}
       <SidebarInset className={appCardClassName}>
-        <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur md:rounded-t-xl">
+        <header className="flex h-14 shrink-0 items-center gap-2 border-b bg-background px-4">
           <SidebarTrigger aria-label="Menüyü aç veya kapat" className="-ms-1" />
           <div className="ms-auto flex items-center gap-1">
             <ThemeToggle />
             {headerActions}
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">{children}</div>
-        <BrandFooter className="border-t" />
+        {/* Page-specific functional footer is planned for Phase 02 (TASK-0028). */}
+        <ScrollArea className="min-h-0 flex-1">
+          <div className="flex flex-col gap-6 p-4 md:p-6">{children}</div>
+        </ScrollArea>
       </SidebarInset>
     </SidebarProvider>
   );
