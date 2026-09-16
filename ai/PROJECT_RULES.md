@@ -141,6 +141,7 @@ Code, database, API, events, env vars, storage keys, logs, tests and infrastruct
 - Default branch `main`; remote `github.com/erenkarakoc/geoges-panel` (private).
 - Branch prefixes: `feature/ fix/ refactor/ infra/ docs/ test/ spike/`.
 - Commits and pushes happen only when the user asks or a recorded task explicitly includes them.
+- Never add AI attribution to commit messages or PR descriptions: no `Co-Authored-By: Claude …` trailer and no "Generated with …" line, from any AI tool (owner decision 2026-09-16; history cleaned on all branches the same day).
 - Never commit secrets, `.env` files or real personal data.
 - Details: `docs/standards/GIT_WORKFLOW.md`.
 

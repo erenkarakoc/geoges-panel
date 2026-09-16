@@ -7,6 +7,7 @@ Durum: Kabul edildi · 2026-09-15
 - Dal önekleri: `feature/`, `fix/`, `refactor/`, `infra/`, `docs/`, `test/`, `spike/`. Örnek: `feature/sit-daily-log-casting`.
 - `spike/` dalları hiçbir zaman `main`'e birleştirilmez; bulgular `docs/architecture/spikes/` altına yazılır.
 - Commit mesajı: Conventional Commits + ilgili ID. Örnek: `feat(inv): record weighbridge ticket (TASK-0214)`. Türler: `feat, fix, refactor, docs, test, chore, infra, spike`.
+- **Yapay zekâ imzası yasak (sahip kararı, 2026-09-16):** commit mesajlarına ve PR açıklamalarına `Co-Authored-By: Claude …` veya başka bir yapay zekâ aracının imza/tanıtım satırı (ör. "Generated with …") eklenmez. Bu kural tüm yapay zekâ araçları için geçerlidir (Claude Code, Codex vb.). Geçmişteki bu satırlar 2026-09-16'da tüm dallardan temizlenmiştir.
 - Birleştirme pull request ile yapılır; CI (lint, type-check, test, build, güvenlik kontrolleri) geçmeden birleşmez.
 - Commit ve push, kullanıcı istediğinde veya görev kaydı açıkça içeriyorsa yapılır.
 - Sırlar, `.env` dosyaları ve gerçek kişisel veri asla commit edilmez.

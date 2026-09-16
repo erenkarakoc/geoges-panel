@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-16 — AI attribution removed from history
+
+- Owner request: `Co-Authored-By: Claude …` trailers removed from all commit messages on `main`, `docs/phase-01-kickoff` and `feature/m0-early-first-screen` (18 commits) with `git filter-branch --msg-filter`. Verified per branch: file trees identical, commit count, authors and dates unchanged, 0 trailers left; force-pushed with lease. All commit IDs changed; other clones must re-fetch. Full pre-rewrite backup kept locally as a git bundle.
+- Rule added (`ai/PROJECT_RULES.md` §17, `docs/standards/GIT_WORKFLOW.md`): no AI attribution in commits or PRs, for every AI tool.
+- Uncommitted formatting change in `src/app/(auth)/two-factor/page.tsx` committed first (owner: leave nothing uncommitted).
+
 ## 2026-09-16 — Milestone M0 closed; Projects and CRM in the menu
 
 - Owner approved TASK-0025 (real sign-in, password reset, two-factor) and TASK-0026 (app shell) → DONE. Milestone M0 closed. TASK-0022…TASK-0026 added to `ai/COMPLETED.md`. Code track closed until Phase 07 or an approved change request.
