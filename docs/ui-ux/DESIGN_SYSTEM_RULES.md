@@ -10,6 +10,24 @@ Durum: Kabul edildi (ADR-009) · 2026-09-15
 - COSS bileşenleri projeye ait kompozisyon katmanında sarmalanır (ör. `modules/<modul>/ui/`), ekranlara dağınık ve tutarsız biçimde kopyalanmaz. Aynı bileşenin iki farklı uygulaması olamaz.
 - Yaklaşım: `COSS component → proje tasarım token'ları → proje kompozisyonu`.
 
+### 1.1. Katman ve yüzey bileşenleri (sahip notu, 2026-09-16)
+
+COSS UI'ın aşağıdaki bileşenleri gerektiği her yerde kullanılır; aynı ihtiyaç için özgün çözüm yazılmaz:
+
+| Bileşen | Ne zaman |
+|---|---|
+| `Frame` | Kenarlıklı içerik yüzeyi; kart başlığı/gövde/alt yapısı gerekmeyen gruplanmış içerik |
+| `Dialog` | Kullanıcının odaklanması gereken kısa işlem veya form (masaüstü) |
+| `Drawer` | Mobilde alttan/yandan açılan panel; masaüstünde Dialog/Menu'nün mobil karşılığı |
+| `Sheet` | Sayfadan ayrılmadan detay, filtre veya ayar paneli (yandan açılır) |
+| `Menu` | Bir öğeye ait eylem listesi (ör. satır eylemleri, kullanıcı menüsü) |
+
+Yıkıcı onaylar için `AlertDialog`; aranabilir seçimler için `Command` / `Combobox` kullanılır. Masaüstü–mobil eşleşmesi (ör. Dialog ↔ Drawer, Menu ↔ DrawerMenu) Phase 02 ekran tasarımında her ekran için belirlenir.
+
+### 1.2. Site içi arama (D-044)
+
+Panelde kapsamlı bir site içi arama bulunur ve arayüzü COSS `Command` bileşeniyle kurulur (üst bardan ve klavye kısayoluyla açılan komut paleti). Sonuçlar yalnızca kullanıcının görmeye yetkili olduğu kayıtları içerir. Ayrıntılı tasarım: TASK-0029.
+
 ## 2. UI kaynak önceliği
 
 1. Kullanıcı ihtiyacı ve doğru UX akışı

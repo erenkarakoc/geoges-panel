@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-16 — Owner notes: COSS surfaces, site-wide search
+
+- D-045: COSS `Frame`, `Drawer`, `Dialog`, `Menu`, `Sheet` used wherever needed; usage table in `docs/ui-ux/DESIGN_SYSTEM_RULES.md` §1.1.
+- D-044: comprehensive site-wide search as a COSS `Command` palette, permission-aware; not in the functional scope (only archive §33.2 and list §41 search), recorded as scope extension. `ai/REQUIREMENTS.md` NFR row added; TASK-0029 (T1) planned across Phases 01–03.
+
 ## 2026-09-16 — Fixed-height shell, drag rail, Geist, footer rework
 
 - Sidebar–card distance back to COSS defaults (8px expanded, 14px collapsed); outer layout gap unchanged (1.5rem md, 2.5rem xl). Browser-measured.
