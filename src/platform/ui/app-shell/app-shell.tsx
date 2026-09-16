@@ -10,6 +10,14 @@ import { AppSidebar } from "@/platform/ui/app-shell/app-sidebar";
 import { BrandFooter } from "@/platform/ui/brand/brand-footer";
 import { ThemeToggle } from "@/platform/ui/theme/theme-toggle";
 
+const appCardClassName = [
+  "md:border",
+  "md:peer-data-[variant=inset]:m-4 md:peer-data-[variant=inset]:ms-0",
+  "md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-4",
+  "xl:peer-data-[variant=inset]:m-6 xl:peer-data-[variant=inset]:ms-0",
+  "xl:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-6",
+].join(" ");
+
 type AppShellProps = {
   access: AccessPolicy;
   /** Right side of the top bar (user menu, notifications, role switcher — §40.3). */
@@ -25,8 +33,12 @@ export function AppShell({ access, headerActions, children }: AppShellProps) {
   return (
     <SidebarProvider>
       <AppSidebar visibleItemIds={visibleItemIds} />
-      {/* Inset variant: on desktop the app sits in a bordered, rounded card with a margin. */}
-      <SidebarInset className="md:border">
+      {/*
+        Inset variant: on desktop the app sits in a bordered, rounded card with a margin.
+        Deviations from COSS defaults (docs/ui-ux/DESIGN_SYSTEM_RULES.md §4.1): border added,
+        outer margin 1rem (md) / 1.5rem (xl) instead of 0.5rem; sidebar side stays 0.
+      */}
+      <SidebarInset className={appCardClassName}>
         <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur md:rounded-t-xl">
           <SidebarTrigger aria-label="Menüyü aç veya kapat" className="-ms-1" />
           <div className="ms-auto flex items-center gap-1">

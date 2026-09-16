@@ -49,6 +49,23 @@ Kullanım alanları: uygulama kabuğu, dashboard, navigasyon, ayarlar, formlar, 
 - Renk, spacing, radius, tipografi, gölge, z-index, breakpoint ve motion değerleri merkezi token'lardan gelir; bileşen içinde rastgele değer yazılmaz.
 - Doğru GEOGES logo dosyaları Phase 02'de sahipten alınır.
 
+## 4.1. COSS varsayılanlarından sapmalar (kayıt)
+
+Sahip isteği (2026-09-16): COSS UI / Tailwind varsayılanlarının dışına çıkılan her yer sahibe bildirilir ve bu tabloya yazılır. COSS dosyaları (`src/components/ui`) değiştirilmez; sapmalar proje katmanında (sınıf, token, kompozisyon) yapılır.
+
+| # | Yer | COSS varsayılanı | Projede | Neden | Dosya |
+|---|---|---|---|---|---|
+| 1 | Renk token'ları | `--primary`, `--sidebar-primary`, `--ring` nötr gri | Marka mavisi `#0F4C81`; koyu modda açık tonu | Kurumsal kimlik (§40.5) | `src/platform/ui/theme/brand.css` |
+| 2 | Logo rengi | — | `--brand-logo`: açıkta `#0F4C81`, koyuda `#EFEFEF` | Sahibin logo dosyaları | `brand.css`, `brand-logo.tsx` |
+| 3 | Uygulama kartı kenarlığı | `inset` kartında yalnızca gölge | Masaüstünde 1px kenarlık | Sahip isteği: kenarlıklı kart | `app-shell.tsx` |
+| 4 | Uygulama kartı dış boşluğu | `m-2` (0,5rem) | `md` ≥: 1rem, `xl` ≥: 1,5rem; menü tarafı 0 | Sahip isteği: derli toplu arayüz | `app-shell.tsx` |
+| 5 | Üst bar köşeleri | — | Masaüstünde üst köşeler karta uygun yuvarlatıldı | Kart köşeleriyle uyum | `app-shell.tsx` |
+| 6 | Yazı tipi alt kümesi | `latin` | `latin` + `latin-ext` | Türkçe karakterler | `src/app/layout.tsx` |
+| 7 | Kurulum bağımlılıkları | `@coss/style` `radix-ui` ve `cn` ekler | Kaldırıldı (kullanılmıyor) | Yalnızca Base UI (ADR-009) | `package.json` |
+| 8 | Menü tetikleyici erişilebilir adı | "Toggle Sidebar" | "Menüyü aç veya kapat" (`aria-label`) | Türkçe arayüz (ADR-011) | `app-shell.tsx` |
+
+Bilinen, henüz giderilmemiş fark: COSS sidebar'ın mobil başlığı ("Sidebar") ve kenar çubuğu ipucu ("Toggle Sidebar") İngilizce kalır; COSS dosyası değiştirilmeden düzeltilemez.
+
 ## 5. Ekran değerlendirme sırası
 
 `Kullanıcı hedefi → Bilgi hiyerarşisi → Birincil eylem → İkincil eylemler → Geri bildirim → Kurtarma`
