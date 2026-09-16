@@ -9,7 +9,8 @@ Session date: 2026-09-15 · Model: Claude Opus 5 (Claude Code desktop) · Focus:
 - Phase 01 glossary rounds 1–2 (OQ-007): D-027…D-034 recorded; all OPEN glossary terms closed.
 
 ## Partially Completed
-- TASK-0018 (long-lived token) and TASK-0019 (window flash patch): both need a Windows restart, then verification (new worker PID, observations stored, 0 auth errors, no flashes). Windows not restarted as of 21:05.
+- TASK-0018 (long-lived token): verified after 23:25 restart (worker PID 19196, 0 auth errors, observations stored); env fallback only exercised after `.credentials.json` expires (2026-10-15) — re-check then. TASK-0019 DONE (verified by process trace).
+- D-042 (COSS Origin as first reference for advanced components, rebuilt with COSS UI/Particles) recorded; uncommitted on `docs/phase-01-kickoff` with rounds D-035…D-041.
 - TASK-0020: PROPOSED glossary terms still reviewed per module.
 
 ## Current State
@@ -24,7 +25,7 @@ PHASE 01 · DISCOVER / QUESTION · branch `docs/phase-01-kickoff`
 OQ-007 (PROPOSED terms per module); OQ-010…OQ-017, OQ-020…OQ-024.
 
 ## New Decisions
-D-026 … D-034 (see `ai/DECISIONS.md`). D-030 extends scope §15.1/§16.4 (three subcontractor payment methods).
+D-026 … D-041 (see `ai/DECISIONS.md`). D-030 extends scope §15.1/§16.4 (three subcontractor payment methods). D-035 clarifies §9.2 (entry fallback order, coordinator approves). D-040: all role/approval/delegation/escalation behavior is admin-configurable — do not ask for default values of configurable settings. OQ-023 answered (D-041). Next open: OQ-021 pilot, OQ-022 dates, OQ-024 KVKK legal review.
 
 ## Deferred Items
 DEF-001…DEF-005.

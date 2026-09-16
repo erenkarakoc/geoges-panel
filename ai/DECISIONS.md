@@ -69,6 +69,32 @@ Decided by the owner in a four-round question session.
 - **Owner decision (2026-09-15):** No early preview. The first screen is shown after the critical infrastructure is complete — "no rush". Implemented as Milestone M1 at the end of Phase 07 (real authentication + application shell on staging). ADR-007 unchanged; roadmap approved with this milestone.
 - **Status:** RESOLVED
 
+### CHG-002 — Early first screen now: authentication + dashboard, built to be extended (PROPOSED)
+
+- **Requested change (owner, 2026-09-15):** see a simple first screen now — authentication pages and a dashboard — built so later work goes on top of it without rework. Flexibility and ease of change remain primary (ADR-005).
+- **Reason:** early visibility; owner re-evaluated after the time estimate for Milestone M1 (≈11–16 weeks).
+- **Conflicts (stated explicitly):** CHG-001 owner decision "no early preview, first screen at M1 (Phase 07)"; ADR-007 design-first; `ai/CURRENT_STATE.md` Phase 01 does not allow application code. Resolution requires owner approval of this CHG; ADR-007 is amended (not replaced) with a Milestone M0 track.
+- **Affected requirements:** scope §2.7–§2.8 (sign-in, 2FA, password reset), §3.1–§3.3 (cockpit), §40.1–§40.5 (left navigation, top bar, mobile, light/dark, brand).
+- **Affected features/tasks:** new Milestone M0 track running in parallel with Phase 01; part of Phase 07 scope (scaffold, lint/format/boundary rules, design tokens, app shell) pulled forward; Phase 07 M1 still delivers real auth, 2FA, audit and staging.
+- **Database / APIs / permissions:** none in option A (mock data, mock auth). Option B needs a Supabase dev project (OQ-012) and touches OQ-020 early.
+- **Tests:** code that is kept meets T2 gates: type-check, lint, boundary rules, unit tests for the auth port and navigation/dashboard configuration, accessibility checks (WCAG 2.2 AA), responsive review.
+- **Migration / backward compatibility:** none for data. The mock auth adapter is replaced by the Supabase adapter in Phase 07 behind the same port, without UI changes.
+- **Design for extension (owner requirement):**
+  - Next.js App Router with route groups `(auth)` and `(app)`; module folders by owner module (`modules/iam`, `modules/rpt`), shared platform layer (`platform/ui`, `platform/config`); no generic `utils/`.
+  - `AuthProvider` port (sign in, sign out, current session, 2FA challenge, password reset) with a mock adapter; screens depend only on the port.
+  - Navigation and dashboard widgets are data-driven registries (module, label, icon, route, required permission), so modules and role filtering are added by configuration, not by editing the shell.
+  - COSS UI components wrapped in the project composition layer; design tokens central (`#0F4C81`, `#DDDBDB`, status colors, light/dark); Origin examples as design reference (D-042).
+  - Architecture boundary lint from day one; Turkish UI text inside components (ADR-011); mock data clearly labeled "örnek veri".
+- **Risks:** look & feel decided before Phase 02 UX (rework of screens, not structure); preview mistaken for a real system (mock label, local only); provisional technical choices (package manager, folder layout) recorded as provisional and re-reviewed in Phase 03/07.
+- **Options:**
+  - **A (recommended):** local UI preview on the owner's computer with mock auth and sample data; production-quality structure. Estimate with AI: ≈3–5 working days including owner review rounds.
+  - **B:** A + real Supabase Auth on a dev project. ≈1 extra week; requires the owner to open a Supabase account; data-access decision (OQ-020) pulled forward.
+  - **C:** A or B + online private preview link. Requires hosting decision (OQ-010/OQ-011) or a temporary host; noindex mandatory (ADR-012).
+- **Tooling found (2026-09-15):** Node 24.13.1, npm 11.8.0, Bun 1.3.13, Docker 29.7.2; latest Next.js 16.3.5, `@base-ui/react` 1.8.0, Tailwind CSS 4.3.3.
+- **Owner decision (2026-09-15):** **Option B approved** — real Supabase Auth on a dev project, local preview (no online link). Dashboard: empty card skeleton (no sample numbers; content defined in Phase 02). Auth screens: email + password sign-in, 2FA, password reset, new-role onboarding (§2.7).
+- **Implications recorded:** auth work is T1 (owner approval of auth rules, tests, documented self-review). No domain tables are created; only Supabase Auth is used. Public sign-up is disabled (accounts are created by authorized admins). The owner creates the Supabase account/project and places keys in the local env file (AI never handles secrets). Onboarding content is static until roles are designed (Phase 01/04). Provisional choices (package manager, folder layout, data-access for auth via `@supabase/ssr`) are re-reviewed in Phase 03/07 (OQ-017, OQ-020).
+- **Status:** APPROVED — Milestone M0 track (TASK-0022…TASK-0026).
+
 ## Further decisions (2026-09-15)
 
 | ID | Decision | Ref |
@@ -95,3 +121,22 @@ Decided by the owner in a four-round question session.
 | D-032 | Lug is a single standard item tracked by quantity (no lug types) | Scope §17.4, §18.1 |
 | D-033 | A party with several roles (e.g. client and supplier) has one net party account balance; receivables and payables offset automatically | Scope §22.6, D-027 |
 | D-034 | Party account balances are kept per currency (e.g. EUR balance), each shown with its current TRY equivalent; exchange differences are calculated separately. Combined with D-033: one net balance per party per currency | Scope §22.5, §22.6 |
+
+## PHASE 01 — Slice 1 requirement round 1 (2026-09-15, TASK-0021)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-035 | Scope §9.2 chain "site engineer → coordinator → technical office → HR" is the **entry responsibility fallback order** for the daily site log (next role enters when the previous is unavailable), not an approval chain. Approval of the daily site log is given by the coordinator (§13); management can reassign entry per site or period | Scope §9.2, §13 |
+| D-036 | All users, including field staff and subcontractor crew leads, sign in with email + password (2FA rules per §2.8 still apply) | Scope §2.8 |
+| D-037 | Daily site log submission deadline is configured in the panel by authorized management (per site or project); no default value is fixed in requirements. Missing the deadline raises a warning | Scope §3.3, §9; owner clarification 2026-09-15 |
+| D-038 | Days marked as holidays in the working calendar require no daily site log; on any other day without work a short "no work" log with a selected reason (weather, client waiting, …) is mandatory | Scope §9.3, §14.3, §23.9 |
+| D-039 | Email addresses: company employees get a company-domain address; subcontractor crew leads may use a personal email. Panel access is revoked in the panel regardless of mailbox ownership | Scope §2.8, D-036 |
+| D-040 | Approval fallback: the approver's active delegate approves first; if there is no delegate or the configured waiting time passes, the approval escalates to the approver's superior role. Roles, their permitted actions, approval assignments, delegation and escalation times are all configurable in detail by authorized administrators (general principle, not specific to daily logs) | Scope §2.1, §2.3, §4, §25.3; ADR-005, ADR-006 |
+| D-041 | Owner-only approvals while the owner is unavailable: an owner-designated delegate may give them for an owner-defined period; every action taken is reported to the owner (answers OQ-023) | Scope §2.3, §2.4 |
+
+## UI decisions (2026-09-15)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-042 | For advanced components, COSS Origin (https://coss.com/origin) examples are the first design reference. Origin is a Radix-based legacy snapshot (verified in `cosscom/coss` `apps/origin`: `radix-ui` imports, no Base UI; README "Legacy snapshot"; MIT), so its code is not copied; the design/behavior is rebuilt with COSS UI primitives and Particles. Owner chose this over copying Origin code (which would mix Radix and Base UI and need a superseding ADR) | ADR-009, `docs/ui-ux/DESIGN_SYSTEM_RULES.md` §3.1 |
+| D-043 | Second factor for 2FA is an authenticator app (TOTP, Supabase Auth MFA); SMS is not used. Which roles must use 2FA stays admin-configurable (§2.8, D-040). Recovery method for a lost device to be designed in Phase 03 | CHG-002, scope §2.8 |

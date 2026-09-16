@@ -43,5 +43,5 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 | OQ-020 | Data access approach: supabase-js/PostgREST vs direct Postgres client/ORM — decided in Phase 03 after spike. |
 | OQ-021 | Pilot: which site and which users for Slice 1? |
 | OQ-022 | Target dates or constraints for design completion and first pilot? |
-| OQ-023 | Who approves business rules when owner is unavailable? |
+| OQ-023 | ANSWERED 2026-09-15 → D-041: owner-designated delegate for an owner-defined period; all actions reported to the owner. |
 | OQ-024 | Legal review of KVKK obligations before entering real HR data (RISK-001)? |

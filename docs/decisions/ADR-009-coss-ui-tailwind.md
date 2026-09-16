@@ -15,7 +15,7 @@ Farklı kaynaklardan bileşen almak tutarsızlık ve bakım yükü doğurur.
 3. shadcn/ui veya başka kütüphane
 
 ## Seçilen Çözüm
-Seçenek 1. Kurallar: `docs/ui-ux/DESIGN_SYSTEM_RULES.md`. Resmi `coss` ve `coss-particles` skill'leri UI görevlerinde kullanılır; `ui-ux-pro-max` bu projede kapatılır.
+Seçenek 1. Kurallar: `docs/ui-ux/DESIGN_SYSTEM_RULES.md`. Ek (D-042, 2026-09-15): gelişmiş bileşenlerde COSS Origin örnekleri öncelikli ilham kaynağıdır; Origin Radix tabanlı olduğundan kodu kopyalanmaz, COSS UI ve Particles ile yeniden kurulur. Resmi `coss` ve `coss-particles` skill'leri UI görevlerinde kullanılır; `ui-ux-pro-max` bu projede kapatılır.
 
 ## Gerekçe
 Tek tasarım otoritesi, AI'ın tahmin yerine resmi bileşen bilgisini kullanması.

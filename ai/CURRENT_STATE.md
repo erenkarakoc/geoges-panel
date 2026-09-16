@@ -10,6 +10,8 @@ CURRENT FEATURE:     —
 CURRENT TASK:        TASK-0020 Glossary confirmation rounds (OQ-007)
 STATUS:              QUESTIONS_PENDING
 BRANCH:              docs/phase-01-kickoff
+PARALLEL TRACK:      Milestone M0 early first screen (CHG-002) — TASK-0022 plan IN_PROGRESS
+CODE ALLOWED:        Only for M0 tasks (TASK-0023…TASK-0026), on branch feature/m0-early-first-screen
 ```
 
 ## LAST COMPLETED TASK
@@ -17,7 +19,7 @@ Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 00
 
 ## NEXT TASK
 1. Phase 01 kickoff on a working branch (branches mandatory from Phase 01): question round, starting with OQ-007 glossary terms
-2. After next Windows restart: TASK-0018 (worker uses long-lived token: new PID, observations stored, 0 auth errors) and TASK-0019 (no console window flashes)
+2. TASK-0018: re-check after 2026-10-15 that the worker keeps storing observations via the `CLAUDE_CODE_OAUTH_TOKEN` fallback (restart verified 2026-09-15; fallback not yet exercised). TASK-0019 DONE.
 
 ## BLOCKED BY
 None.

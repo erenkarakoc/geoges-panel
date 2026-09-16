@@ -16,10 +16,18 @@ Durum: Kabul edildi (ADR-009) · 2026-09-15
 2. Projenin mevcut tasarım sistemi
 3. COSS UI
 4. Projede mevcut bileşenler
-5. devl.dev örüntüleri (ilham)
-6. Sahip onaylı özgün element
+5. **COSS Origin gelişmiş bileşen örnekleri (öncelikli ilham, D-042)** — bkz. §3.1
+6. devl.dev örüntüleri (ilham)
+7. Sahip onaylı özgün element
 
 Hazır bileşen var diye kötü UX kurulmaz.
+
+## 3.1. COSS Origin kullanımı (D-042)
+
+- Gelişmiş bir bileşen gerektiğinde (tarih/saat seçici, dosya yükleme, zengin tablo, çok adımlı form, etiket girişi, ağaç görünümü, sürükle-bırak vb.) **önce https://coss.com/origin örnekleri incelenir**; tasarım ve davranış oradan referans alınır.
+- Origin kodu doğrudan projeye kopyalanmaz: Origin, COSS'un Radix tabanlı eski kopyasıdır ("legacy snapshot", sınırlı bakım). Aynı tasarım ve davranış **COSS UI primitive'leri ve COSS Particles** ile kurulur; böylece tek altyapı (Base UI) korunur (ADR-009).
+- COSS UI/Particles ile karşılanamayan bir Origin davranışı özgün element sayılır ve sahip onayına sunulur.
+- Origin lisansı MIT'tir (`cosscom/coss` `apps/origin/LICENSE.md`); tasarım referansı olarak kullanımda lisans engeli yoktur.
 
 ## 3. devl.dev kullanımı
 

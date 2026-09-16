@@ -20,3 +20,4 @@ Only items whose quality gate passed are listed here.
 | 2026-09-15 | TASK-0006 | ADR-001…ADR-013 | T2 PASS (owner approved; ADR-013 status corrected) |
 | 2026-09-15 | TASK-0012 | Module map & dependency graph (draft, finalized in Phase 03) | T2 PASS (owner approved) |
 | 2026-09-15 | TASK-0013 | UI/UX design-system, COSS and devl.dev rules | T2 PASS (owner approved) |
+| 2026-09-15 | TASK-0019 | claude-mem console window flashes stopped via local `windowsHide` patch | T2 PASS (process trace after restart: 0 terminal launches) |
