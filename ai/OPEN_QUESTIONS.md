@@ -47,8 +47,8 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 | ID | Question |
 |---|---|
 | OQ-020 | Data access approach: supabase-js/PostgREST vs direct Postgres client/ORM — decided in Phase 03 after spike. |
-| OQ-021 | Pilot: which site and which users for Slice 1? |
-| OQ-022 | Target dates or constraints for design completion and first pilot? |
+| OQ-021 | ANSWERED 2026-09-16 → D-048: first pilot runs on sample data; no pilot site or user group named yet. |
+| OQ-022 | ANSWERED 2026-09-16 → D-049: no target date; not schedule-driven. |
 | OQ-023 | ANSWERED 2026-09-15 → D-041: owner-designated delegate for an owner-defined period; all actions reported to the owner. |
-| OQ-024 | Legal review of KVKK obligations before entering real HR data (RISK-001)? |
+| OQ-024 | ANSWERED 2026-09-16 → D-050: no legal review commissioned; RISK-001 stays open and is raised again before real HR data is entered. |
 | OQ-026 | Password policy (minimum length, complexity, expiry) and account lockout after repeated failures (scope §2.8). M0 uses a provisional 8-character minimum in `auth-schemas.ts`; Supabase enforces its own project policy on top. Decide in Phase 03 security design and align the Supabase project setting with it. |

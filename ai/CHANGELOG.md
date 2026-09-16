@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2026-09-16 — Pilot, schedule and KVKK answers
+
+- D-048 pilot on sample data (OQ-021), D-049 no target date (OQ-022), D-050 no KVKK legal review with RISK-001 kept open (OQ-024). `ai/OPEN_QUESTIONS.md` rows marked answered; TASK-0021 notes updated. OQ-025 (menu placement of Projects and CRM) re-explained to the owner.
+
 ## 2026-09-16 — Two-factor removal, onboarding entry in the account menu
 
 - The second factor can now be removed. Supabase only allows this from an `aal2` session, so the action checks the level itself before calling and gives a plain reason when it is not met. `/two-factor` gained a third mode: a verified session now lands on a management view instead of being redirected to the dashboard (sign-in still goes straight there). Removal is confirmed in an `AlertDialog` (§1.1) and reported as a toast (§13); the screen falls back to the setup view afterwards.
