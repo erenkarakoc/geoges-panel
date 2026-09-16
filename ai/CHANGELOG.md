@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-16 — GEOGES brand logos (TASK-0026)
+
+- `platform/ui/brand/brand-logo.tsx`: single component for owner-provided assets in `public/assets/brand` (`primary` in light mode, `light` in dark mode). Owner placement: long logo in headers (sidebar header, auth header), stacked logo in footers (new `BrandFooter` in app shell and auth layout), icon in collapsed sidebar and favicon.
+- Favicon via metadata `icons` (primary + dark-scheme light variant) instead of duplicating files; removed default `src/app/favicon.ico` and unused create-next-app images in `public/`.
+- Verified: check + build pass; server-rendered HTML contains the expected logos and icon links. Browser pane visual check not possible at the time (pane not drawn, width 0). No apple-touch icon yet (needs PNG).
+
 ## 2026-09-16 — M0 app shell, cockpit skeleton, onboarding (TASK-0026, REVIEW)
 
 - Registries: navigation (§40.1, D-026 "Şantiye" labels, permission per item), dashboard widgets (§3.1–§3.3); `AccessPolicy` with M0 preview policy so real IAM plugs in without UI changes.

@@ -4,6 +4,7 @@ import { Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import "@/platform/ui/theme/brand.css";
 import { cn } from "@/lib/utils";
+import { brandIconUrls } from "@/platform/ui/brand/brand-logo";
 import { ThemeProvider } from "@/platform/ui/theme/theme-provider";
 
 // latin-ext is required for Turkish characters (ğ, ş, ı, İ).
@@ -18,6 +19,13 @@ export const metadata: Metadata = {
   },
   description: "GEOGES şirket yönetim paneli",
   robots: { index: false, follow: false },
+  // Brand icon from public/assets/brand; light variant for dark browser themes.
+  icons: {
+    icon: [
+      { url: brandIconUrls.primary, type: "image/svg+xml" },
+      { url: brandIconUrls.light, type: "image/svg+xml", media: "(prefers-color-scheme: dark)" },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -7,6 +7,7 @@ import {
   navigationRegistry,
 } from "@/platform/navigation/navigation-registry";
 import { AppSidebar } from "@/platform/ui/app-shell/app-sidebar";
+import { BrandFooter } from "@/platform/ui/brand/brand-footer";
 import { ThemeToggle } from "@/platform/ui/theme/theme-toggle";
 
 type AppShellProps = {
@@ -33,6 +34,7 @@ export function AppShell({ access, headerActions, children }: AppShellProps) {
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">{children}</div>
+        <BrandFooter className="border-t" />
       </SidebarInset>
     </SidebarProvider>
   );

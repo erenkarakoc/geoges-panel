@@ -17,6 +17,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { navigationRegistry, pickNavigationItems } from "@/platform/navigation/navigation-registry";
+import { BrandLogo } from "@/platform/ui/brand/brand-logo";
 
 /** `visibleItemIds` is decided on the server by the access policy. */
 export function AppSidebar({ visibleItemIds }: { visibleItemIds: readonly string[] }) {
@@ -30,14 +31,16 @@ export function AppSidebar({ visibleItemIds }: { visibleItemIds: readonly string
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <Link
-          className="flex h-8 items-center gap-2 rounded-lg px-2 font-heading font-semibold text-sidebar-primary group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+          aria-label="GEOGES Panel ana sayfa"
+          className="flex h-12 items-center rounded-lg px-2 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
           href="/dashboard"
           onClick={closeMobileDrawer}
         >
-          <span aria-hidden="true" className="hidden group-data-[collapsible=icon]:inline">
-            G
-          </span>
-          <span className="group-data-[collapsible=icon]:hidden">GEOGES Panel</span>
+          <BrandLogo className="h-7 group-data-[collapsible=icon]:hidden" variant="long" />
+          <BrandLogo
+            className="hidden h-6 group-data-[collapsible=icon]:inline-flex"
+            variant="icon"
+          />
         </Link>
       </SidebarHeader>
       <SidebarContent>
