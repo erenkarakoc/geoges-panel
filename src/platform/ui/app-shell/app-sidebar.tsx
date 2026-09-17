@@ -38,7 +38,7 @@ import {
 } from "@/platform/navigation/navigation-registry";
 import { rememberOpenGroups } from "@/platform/navigation/sidebar-group-preference";
 import { SidebarDragRail } from "@/platform/ui/app-shell/sidebar-drag-rail";
-import { BrandLogo, BrandTile } from "@/platform/ui/brand/brand-logo";
+import { BrandTile } from "@/platform/ui/brand/brand-logo";
 
 /**
  * Menu labels never wrap: while the rail animates its width, a long title would break onto a
@@ -48,11 +48,14 @@ import { BrandLogo, BrandTile } from "@/platform/ui/brand/brand-logo";
  * The blur is written as a plain `filter`, because a `blur-0` inside the variant does not clear
  * a `blur-*` utility set on the element itself.
  */
-const labelClassName = [
-  "truncate [filter:none] transition-[opacity,translate,filter] duration-200 ease-out",
+const labelMotionClassName = [
+  "[filter:none] transition-[opacity,translate,filter] duration-200 ease-out",
   "group-data-[collapsible=icon]:-translate-x-2 group-data-[collapsible=icon]:opacity-0",
   "group-data-[collapsible=icon]:[filter:blur(2px)] motion-reduce:transition-none",
 ].join(" ");
+
+/** Single-line labels are clipped as well; the wordmark in the head has two lines of its own. */
+const labelClassName = `truncate ${labelMotionClassName}`;
 
 /**
  * Two-region rail (D-054): the work layer on top, the module groups below a separator.
@@ -114,35 +117,26 @@ export function AppSidebar({
       <SidebarHeader className="p-0 pb-3">
         {/*
          * The head keeps its height in both states, so nothing below it moves while the sidebar
-         * animates. Swapping the two logos with `hidden` made the whole menu jump.
+         * animates. The mark itself never moves either: the square tile is the only logo the app
+         * uses (D-071), and next to it the name is set as text, which leaves with the menu
+         * labels instead of being a second image to swap.
          */}
         <Link
           aria-label="GEOGES Panel ana sayfa"
-          className="relative flex h-14 items-center rounded-lg px-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+          className="flex h-14 items-center gap-2 rounded-lg px-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:px-0"
           href="/dashboard"
           onClick={closeMobileDrawer}
         >
-          {/*
-           * The two marks trade places instead of fading on the spot: the long logo leaves to
-           * the left, blurring as it goes, while the square one arrives from the right. Both
-           * ride the rail's own 200ms, and neither moves the layout — the square one is an
-           * overlay, so the head keeps its height either way (owner 2026-09-17).
-           */}
-          <BrandLogo
-            className="h-12 [filter:none] transition-[opacity,translate,filter] duration-150 ease-out group-data-[collapsible=icon]:-translate-x-3 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:[filter:blur(1px)] motion-reduce:transition-none"
-            variant="long"
-          />
+          <BrandTile className="size-10" variant="theme" />
+          {/* The link already carries the accessible name, so the wordmark is decoration. */}
           <span
             aria-hidden="true"
-            // The box is the mark's own size and is pinned to the start, so it holds still while
-            // the head narrows. Centring it in the head made it ride the head's width as the
-            // rail closed, drifting left on top of our animation.
-            className="pointer-events-none absolute start-1 top-1/2 size-10 -translate-y-1/2"
+            className={`flex min-w-0 flex-col leading-tight ${labelMotionClassName}`}
           >
-            <BrandTile
-              className="size-10 translate-x-4 opacity-0 [filter:blur(1px)] transition-[opacity,translate,filter] duration-300 ease-out group-data-[collapsible=icon]:translate-x-0 group-data-[collapsible=icon]:opacity-100 group-data-[collapsible=icon]:[filter:none] motion-reduce:transition-none"
-              variant="theme"
-            />
+            <span className="text-sm font-semibold tracking-wide">GEOGES</span>
+            <span className="text-[0.6875rem] tracking-[0.2em] text-sidebar-foreground/72">
+              PANEL
+            </span>
           </span>
         </Link>
       </SidebarHeader>

@@ -76,7 +76,7 @@ Sahip kararı (2026-09-16): devl.dev auth ekranlarının tasarımı **ilham değ
 
 - Ana marka rengi: `#0F4C81`; panel/ikincil gri: `#DDDBDB`.
 - **Düz beyaz kullanılmaz (sahip kuralı, 2026-09-16):** `#FFF` yerine `--brand-light` (`#EFEFEF`) kullanılır. COSS'un açık temada beyaz boyadığı yüzeyler (`--background`, `--card`, `--popover`, `--code`) ve düğme yazısı (`--primary-foreground`) bu değere çekilir. Koyu temada ana mürekkep ailesi de (`--foreground`, `--card-foreground`, `--popover-foreground`, `--accent-foreground`, `--secondary-foreground`, `--sidebar-*-foreground`) `--brand-light`'tır; `--muted-foreground` kendi grisi olduğu için değişmez. Karşıtı `--brand-dark` (`#111111`).
-- **Logo rengi bileşene özellik olarak verilir (sahip kuralı, 2026-09-16):** `BrandLogo` bileşeninin `tone` özelliği — `theme` (varsayılan, `--brand-logo`), `brand`, `light`, `dark`, `inherit`. Renk bileşenin içine gömülmez.
+- **Uygulamada yalnız kare logo kullanılır (sahip kuralı, 2026-09-17, D-071):** yazılı (long/stacked) logolar üründen kaldırıldı; tek istisna kimlik doğrulama ekranlarındaki partikül figürüdür (`logo_light.svg` dosyasını örnekler). Sidebar başlığında kare logonun yanına marka adı **metin** olarak yazılır (GEOGES / PANEL), böylece menü kapanırken etiketlerle aynı hareketi yapar. `BrandLogo` bileşeni ve `tone` özelliği silindi; `BrandTile` kaldı.
 - Kare marka plakaları (`icon_rectangle_*`) iki renklidir (zemin + işaret), bu yüzden `currentColor` dönüşümünden geçmez: `BrandTile` bileşeniyle görsel olarak basılır. Favicon da bunları kullanır.
 - Durum renkleri markadan bağımsızdır: yeşil = olumlu/onaylı/kâr, amber = dikkat, kırmızı = kritik/zarar/gecikme, nötr gri = pasif/hazırlık.
 - Açık ve koyu mod desteklenir; kontrast WCAG 2.2 AA'yı sağlar.

@@ -1,23 +1,10 @@
-import type { FC, SVGProps } from "react";
-
 import { cn } from "@/lib/utils";
 
-import LogoIcon from "../../../../public/assets/brand/icon_primary.svg?svgr";
-import LogoLong from "../../../../public/assets/brand/logo_long_primary.svg?svgr";
-import LogoPanel from "../../../../public/assets/brand/logo_panel_primary.svg?svgr";
-import LogoStacked from "../../../../public/assets/brand/logo_primary.svg?svgr";
-
 /**
- * GEOGES logos from `public/assets/brand`, rendered inline as SVG. The brand fill is replaced
- * with currentColor at build time, so one file serves both themes via `--brand-logo`
- * (brand.css). Replace the `*_primary.svg` files there to update the logo everywhere.
+ * GEOGES brand marks. The app itself shows only the square tile (D-071): the wordmark logos were
+ * taken out of the product on 2026-09-17, and the only place a full logo still appears is the
+ * particle figure on the authentication screens, which samples the file below.
  */
-const logos: Record<"icon" | "stacked" | "long" | "panel", FC<SVGProps<SVGSVGElement>>> = {
-  icon: LogoIcon,
-  stacked: LogoStacked,
-  long: LogoLong,
-  panel: LogoPanel,
-};
 
 /** Stacked logo as a file URL, for consumers that sample the image instead of rendering it. */
 export const brandStackedLogoUrl = "/assets/brand/logo_light.svg";
@@ -35,41 +22,9 @@ export const brandTileUrls = {
 } as const;
 
 /**
- * Ink of the logo. `theme` follows `--brand-logo` (brand blue on light, light tone on dark);
- * the others are fixed, for placing a logo on a surface whose colour the theme does not control.
- * Never use `brand` on a theme-following surface: a primary logo must not appear in dark mode.
- */
-const tones = {
-  theme: "text-(--brand-logo)",
-  brand: "text-(--brand-blue)",
-  light: "text-(--brand-light)",
-  dark: "text-(--brand-dark)",
-  inherit: "",
-} as const;
-
-type BrandLogoProps = {
-  variant: keyof typeof logos;
-  tone?: keyof typeof tones;
-  /** Set the height (e.g. `h-12`); width follows the logo's aspect ratio. */
-  className?: string;
-};
-
-export function BrandLogo({ variant, tone = "theme", className }: BrandLogoProps) {
-  const Logo = logos[variant];
-
-  return (
-    <Logo
-      aria-label="GEOGES"
-      className={cn("w-auto shrink-0", tones[tone], className)}
-      role="img"
-    />
-  );
-}
-
-/**
  * Square GEOGES tile. Set the size with `className` (e.g. `size-12`).
  *
- * The tile is an image, so — unlike `BrandLogo` — the page's CSS cannot reach inside it and
+ * The tile is an image, so the page's CSS cannot reach inside it and
  * `text-*` classes have no effect on it. The default `variant="theme"` follows the theme: that
  * swaps the file itself — the brand-blue plate on light surfaces, the light plate on dark ones.
  *

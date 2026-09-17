@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-17 — The app wears one mark, and the name is text
+
+- The wordmark logos left the product. The square tile is the only logo the application shows now, and the only full logo left anywhere is the particle figure on the sign-in screens, which samples the file directly.
+- In the expanded rail the name sits next to the tile as text — GEOGES over PANEL — so the head leaves with the menu labels rather than being a second image to cross-fade. The tile itself no longer moves at all.
+- `BrandLogo`, its `tone` prop and `BrandFooter` went with the wordmark; `BrandFooter` had no callers anyway.
+
+
 ## 2026-09-17 — Group rows became one element, so their titles animate too
 
 - The work-layer rows animated when the rail opened and closed, but the group titles did not. They were two different components — a collapsible row when the menu was open, a flyout trigger when it was a rail — and swapping components replaces the DOM, so there was nothing for a transition to hold on to.
