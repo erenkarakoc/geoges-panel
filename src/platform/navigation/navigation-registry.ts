@@ -136,7 +136,7 @@ export const workNavigation: readonly NavigationItem[] = [
  */
 export const sampleWorkCounts: Readonly<Record<string, number>> = {
   approvals: 3,
-  tasks: 7,
+  tasks: 3,
 };
 
 /**

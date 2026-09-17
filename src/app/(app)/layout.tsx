@@ -17,7 +17,7 @@ import { AppShell } from "@/platform/ui/app-shell/app-shell";
 // permissions come from IAM (Phase 04).
 const roleSwitchingAllowed = process.env.NODE_ENV === "development";
 
-export default async function AppLayout({ children }: LayoutProps<"/">) {
+export default async function AppLayout({ children, context }: LayoutProps<"/">) {
   const session = await readAuthSession();
   const redirectTo = resolveProtectedPageRedirect(session);
 
@@ -34,6 +34,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
   return (
     <AppShell
       access={createPreviewRolePolicy(role)}
+      contextBar={context}
       headerActions={
         <UserMenu
           email={session.user.email}

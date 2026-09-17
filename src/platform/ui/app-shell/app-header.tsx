@@ -1,6 +1,6 @@
 "use client";
 
-import { BellIcon, ChevronDownIcon, PlusIcon } from "lucide-react";
+import { BellIcon, ChevronDownIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useState } from "react";
@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/menu";
 import { Popover, PopoverPopup, PopoverTitle, PopoverTrigger } from "@/components/ui/popover";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { toastManager } from "@/components/ui/toast";
 import {
   findNavigationGroupOfItem,
   navigationRegistry,
@@ -27,6 +26,7 @@ import {
 } from "@/platform/navigation/navigation-registry";
 import { rememberSiteScope } from "@/platform/navigation/site-scope-preference";
 import { CommandPalette } from "@/platform/ui/app-shell/command-palette";
+import { PrimaryActionButton } from "@/platform/ui/app-shell/primary-action";
 import { sampleNotifications } from "@/platform/ui/app-shell/sample-notifications";
 
 /** What the header needs to know about the current seat; plain values from the server. */
@@ -78,7 +78,8 @@ export function AppHeader({
     <header className="flex h-14 shrink-0 items-center gap-2 border-b bg-background px-4 xl:grid xl:grid-cols-[minmax(0,1fr)_minmax(0,26rem)_minmax(0,1fr)]">
       {/* Left — where you are */}
       <div className="flex min-w-0 items-center gap-2">
-        <SidebarTrigger aria-label="Menüyü aç veya kapat" className="-ms-1" />
+        {/* Phones navigate from the bottom bar (D-069), so the menu button is desktop-only. */}
+        <SidebarTrigger aria-label="Menüyü aç veya kapat" className="-ms-1 hidden md:inline-flex" />
         {current ? (
           <div className="flex min-w-0 items-baseline gap-2">
             {/* The name never gives way; the path shortens first. */}
@@ -117,21 +118,12 @@ export function AppHeader({
 
       {/* Right — what you do */}
       <div className="flex shrink-0 items-center justify-end gap-1">
-        <Button
-          aria-label={primaryAction}
-          className="me-1"
-          onClick={() =>
-            toastManager.add({
-              type: "info",
-              title: "Bu işlem henüz hazır değil",
-              description: `"${primaryAction}" ilgili modül geliştirildiğinde çalışacak.`,
-            })
-          }
-          type="button"
-        >
-          <PlusIcon aria-hidden="true" />
-          <span className="hidden md:inline">{primaryAction}</span>
-        </Button>
+        {/* On a phone this button lives in the middle of the bottom bar instead (D-069). */}
+        <PrimaryActionButton
+          className="me-1 hidden md:inline-flex"
+          label={primaryAction}
+          labelClassName="hidden md:inline"
+        />
         <NotificationsButton count={seat.notificationCount} />
         {actions}
       </div>

@@ -101,4 +101,12 @@ describe("dashboardWidgetRegistry", () => {
     const ids = dashboardWidgetRegistry.map((widget) => widget.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
+
+  it('marks six figures as critical, the ones "Bugün" shows unfolded', () => {
+    expect(dashboardWidgetRegistry.filter((widget) => widget.critical)).toHaveLength(6);
+  });
+
+  it("gives every figure a sample value, so no card renders an empty number", () => {
+    expect(dashboardWidgetRegistry.every((widget) => Boolean(widget.sampleValue))).toBe(true);
+  });
 });

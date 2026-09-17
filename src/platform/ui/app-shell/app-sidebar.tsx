@@ -41,6 +41,20 @@ import { SidebarDragRail } from "@/platform/ui/app-shell/sidebar-drag-rail";
 import { BrandLogo, BrandTile } from "@/platform/ui/brand/brand-logo";
 
 /**
+ * Menu labels never wrap: while the rail animates its width, a long title would break onto a
+ * second line for those 200ms and the whole menu would jump. They are clipped instead, and they
+ * leave the way the long logo does — sliding a little to the left, blurring and fading — so the
+ * whole menu closes as one movement rather than in two different ways (owner 2026-09-17).
+ * The blur is written as a plain `filter`, because a `blur-0` inside the variant does not clear
+ * a `blur-*` utility set on the element itself.
+ */
+const labelClassName = [
+  "truncate [filter:none] transition-[opacity,translate,filter] duration-200 ease-out",
+  "group-data-[collapsible=icon]:-translate-x-2 group-data-[collapsible=icon]:opacity-0",
+  "group-data-[collapsible=icon]:[filter:blur(2px)] motion-reduce:transition-none",
+].join(" ");
+
+/**
  * Two-region rail (D-054): the work layer on top, the module groups below a separator.
  *
  * Collapsed — the default — the rail shows one icon per group and its modules open in a flyout,
@@ -77,8 +91,11 @@ export function AppSidebar({
   return (
     <Sidebar
       className={[
-        "md:p-(--layout-gap) md:pe-2",
-        "md:group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+var(--layout-gap)+0.5rem+2px)]",
+        // The gap on the outside matches the one between the menu and the card — 1rem on both
+        // sides (owner 2026-09-17). Only the vertical space is the layout gap,
+        // so the menu still starts level with the card's top edge. The widths come from the two
+        // COSS variables, widened in `app-shell.tsx` by exactly this gutter.
+        "md:px-4 md:py-(--layout-gap)",
         // COSS pins the sidebar to the viewport (`fixed h-svh`). From `2xl` the shell is a
         // centred 16:9 frame, so the sidebar has to stay inside that frame instead.
         "2xl:absolute 2xl:h-full",
@@ -86,18 +103,45 @@ export function AppSidebar({
       collapsible="icon"
       variant="inset"
     >
-      <SidebarHeader>
+      {/*
+       * No padding of its own: COSS pads the header by 8px, which pushed the logo below the top
+       * of the app card. Without it the head is the same 56px band as the card's header, so the
+       * logo sits on the same line as the page name and the search (owner request 2026-09-17).
+       * The horizontal inset comes from the link below, as it did before.
+       */}
+      <SidebarHeader className="p-0 pb-3">
+        {/*
+         * The head keeps its height in both states, so nothing below it moves while the sidebar
+         * animates. Swapping the two logos with `hidden` made the whole menu jump.
+         */}
         <Link
           aria-label="GEOGES Panel ana sayfa"
-          className="flex h-14 items-center rounded-lg px-2 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+          className="relative flex h-14 items-center rounded-lg px-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
           href="/dashboard"
           onClick={closeMobileDrawer}
         >
-          <BrandLogo className="h-12 group-data-[collapsible=icon]:hidden" variant="long" />
-          <BrandTile
-            className="hidden size-8 group-data-[collapsible=icon]:block"
-            variant="theme"
+          {/*
+           * The two marks trade places instead of fading on the spot: the long logo leaves to
+           * the left, blurring as it goes, while the square one arrives from the right. Both
+           * ride the rail's own 200ms, and neither moves the layout — the square one is an
+           * overlay, so the head keeps its height either way (owner 2026-09-17).
+           */}
+          <BrandLogo
+            className="h-12 [filter:none] transition-[opacity,translate,filter] duration-150 ease-out group-data-[collapsible=icon]:-translate-x-3 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:[filter:blur(1px)] motion-reduce:transition-none"
+            variant="long"
           />
+          <span
+            aria-hidden="true"
+            // The box is the mark's own size and is pinned to the start, so it holds still while
+            // the head narrows. Centring it in the head made it ride the head's width as the
+            // rail closed, drifting left on top of our animation.
+            className="pointer-events-none absolute start-1 top-1/2 size-10 -translate-y-1/2"
+          >
+            <BrandTile
+              className="size-10 translate-x-4 opacity-0 [filter:blur(1px)] transition-[opacity,translate,filter] duration-300 ease-out group-data-[collapsible=icon]:translate-x-0 group-data-[collapsible=icon]:opacity-100 group-data-[collapsible=icon]:[filter:none] motion-reduce:transition-none"
+              variant="theme"
+            />
+          </span>
         </Link>
       </SidebarHeader>
       <SidebarContent>
@@ -119,7 +163,7 @@ export function AppSidebar({
                         tooltip={count ? `${item.label} (${count} · örnek veri)` : item.label}
                       >
                         <item.icon aria-hidden="true" />
-                        <span>{item.label}</span>
+                        <span className={labelClassName}>{item.label}</span>
                       </SidebarMenuButton>
                       {count ? (
                         <>
@@ -142,7 +186,14 @@ export function AppSidebar({
             </SidebarGroupContent>
           </SidebarGroup>
 
-          <SidebarSeparator />
+          {/*
+           * COSS's separator carries its own horizontal margins, which push it past the menu
+           * and give the sidebar a horizontal scrollbar. Padding on a wrapper does the same job
+           * without adding width.
+           */}
+          <div className="px-2">
+            <SidebarSeparator className="mx-0 w-full" />
+          </div>
 
           <SidebarGroup>
             <SidebarGroupContent>
@@ -164,7 +215,7 @@ export function AppSidebar({
                             }
                           >
                             <group.icon aria-hidden="true" />
-                            <span>{group.label}</span>
+                            <span className={labelClassName}>{group.label}</span>
                           </MenuTrigger>
                           <MenuPopup align="start" side="right">
                             <MenuGroup>
@@ -193,7 +244,7 @@ export function AppSidebar({
                         render={
                           <SidebarMenuButton isActive={hasActiveItem} type="button">
                             <group.icon aria-hidden="true" />
-                            <span>{group.label}</span>
+                            <span className={labelClassName}>{group.label}</span>
                             <ChevronRightIcon
                               aria-hidden="true"
                               // The trigger itself carries `data-panel-open` while the group is open.
@@ -219,7 +270,7 @@ export function AppSidebar({
                                   }
                                 >
                                   <item.icon aria-hidden="true" />
-                                  <span>{item.label}</span>
+                                  <span className={labelClassName}>{item.label}</span>
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>
                             );

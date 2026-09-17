@@ -15,10 +15,26 @@ export function parseOpenGroups(value: string | undefined): string[] {
   if (!value) {
     return [];
   }
-  return value
+  return decodeURIComponent(value)
     .split(",")
     .map((id) => id.trim())
     .filter(Boolean);
+}
+
+/**
+ * Which groups the rail opens with. Someone who has never touched the menu gets the first group
+ * open, so the expanded rail is not a wall of closed rows (owner decision 2026-09-17). Once they
+ * have opened or closed anything the cookie exists, and their choice wins — including the choice
+ * to leave everything closed, which is an empty cookie rather than a missing one.
+ */
+export function resolveOpenGroups(
+  cookieValue: string | undefined,
+  firstGroupId: string | undefined,
+): string[] {
+  if (cookieValue === undefined) {
+    return firstGroupId ? [firstGroupId] : [];
+  }
+  return parseOpenGroups(cookieValue);
 }
 
 /** Client-side write. Cookies are the storage, so this is a one-line document write. */
