@@ -1,6 +1,6 @@
 # CURRENT STATE
 
-Last updated: 2026-09-16
+Last updated: 2026-09-17
 
 ```text
 PROJECT STATUS:      BOOTSTRAP
@@ -10,7 +10,7 @@ CURRENT FEATURE:     —
 CURRENT TASK:        TASK-0020 Glossary confirmation rounds (OQ-007)
 STATUS:              QUESTIONS_PENDING
 BRANCH:              feature/presentation-sandbox (M0 merged into main via PR #1, 2026-09-16)
-PARALLEL TRACK:      CHG-004 product transfer, 5 steps (TASK-0032…TASK-0036) — steps 1–2 REVIEW · sandboxes TASK-0030, TASK-0031 REVIEW
+PARALLEL TRACK:      CHG-004 product transfer — 5 steps + sample work screens (TASK-0032…TASK-0037) REVIEW · presentation sandbox TASK-0030 REVIEW · navigation sandbox TASK-0031 DONE (deleted)
 CODE ALLOWED:        Development-only sandboxes (D-052) and the CHG-004 shell transfer (TASK-0032…TASK-0036, owner approved) · other product code resumes in Phase 07 (ADR-007) or via an approved change request
 ```
 
@@ -30,6 +30,10 @@ None.
 See `ai/OPEN_QUESTIONS.md` (OQ-007 for Phase 01; OQ-010…OQ-024 later phases).
 
 ## RECENT DECISIONS
+- D-070 (2026-09-17): approvals run as a queue and tasks list late/today/next with sample content; navigation sandbox deleted
+- D-069 (2026-09-17, CHG-004 step 5): phone navigation — bottom bar with the work layer and the primary action, modules in a searchable drawer
+- D-065…D-068 (2026-09-17, CHG-004 step 4): "Bugün" screen, charts as an approved custom element, only the number is mono, rail refinements
+- D-064 (2026-09-17, CHG-004 step 3): context row from the `@context` slot, sample site detail, one address per section, day strip + calendar in `?gun=`
 - D-057…D-063 (2026-09-16/17, CHG-004 transfer): rail, sample badges, dev role switcher, header zones, sample notifications
 - D-054…D-056 (2026-09-16, CHG-004): icon rail with a work layer, header as a three-zone toolbar with a conditional context row, "Bugün" as every role's entry screen
 - D-048…D-051 (2026-09-16): pilot on sample data, no target date, no KVKK legal review (RISK-001 open), Projects and CRM added to the menu

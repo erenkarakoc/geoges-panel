@@ -1,5 +1,51 @@
 # CHANGELOG
 
+## 2026-09-17 — "Bugün" keeps the work and the figures, and nothing else
+
+- The owner took the two charts and the site summary off the entry screen. What is left is the seat's work block, the six key figures and the fold — which is closer to what the screen is for.
+- Nothing was left behind to rot: the bar chart component, its two sample series, the site summaries and the two wide widgets in the registry went with them, and the registry's `size` field with those. The chart is in git history if a screen needs one later.
+
+
+## 2026-09-17 — Work screens get their own content, and the menu its gutter (D-070)
+
+- "Onaylar" and "Görevler" stopped being generated placeholders. The approval centre runs as a queue: one record fills the screen, a decision brings in the next, and the last one leaves "Bugün temiz" behind — which settles the first question of OQ-027 by building it rather than debating it. "Görevler" lists what is late, what is due today and what is coming, each task naming where it came from and linking to the screen where it is done.
+- Sample data stays small on purpose: three approvals, one task per state. Every figure that also appears on "Bugün" was pulled into line with its list, so the badge, the card and the screen can no longer disagree — the approvals card said 12 while the badge said 3.
+- The navigation sandbox was deleted: `src/sandbox/navigation`, its route and the account-menu entry. The product shell has replaced it. The presentation sandbox is untouched.
+- The menu now sits in an even gutter: 8px to the frame on its left and 8px to the card on its right, in both states. That turned out to remove work rather than add it — with even side padding the custom sidebar width formulas were no longer needed, so the shell is back on COSS's own widths, with a 2px nudge in the collapsed state where the rail is 2px wider than the space it reserves.
+- The logo transition became directional: the long logo leaves to the left and blurs, the square one arrives from the right and sharpens, 12px and 2px over 200ms, and nothing at all when the visitor asks for reduced motion. Three things had to be fixed to get there — Tailwind writes `translate-x-*` to the `translate` property, so a transition listing only `transform` left the slide instant; `blur-0` inside a variant did not clear a plain `blur-[2px]`, so the square mark stayed permanently blurred; and the mark, centred in a head that was itself narrowing, drifted left with the closing rail on top of its own animation. It now sits in a box its own size, pinned to the start.
+
+
+## 2026-09-17 — Phone navigation: the rail becomes a bottom bar (CHG-004 step 5, TASK-0036)
+
+- Below `md` the shell now carries its own bottom bar: Bugün and Onaylar, the seat's primary action in the middle where a thumb reaches, then Görevler and Modüller. Entries are permission-filtered exactly like the rail, so a subcontractor crew lead sees two of them and the owner four.
+- "Modüller" opens a full-height drawer with a search box and a grouped icon grid — big targets, no keyboard needed, and the search folds Turkish letters so "santiye" finds the whole Şantiye & Günlük group. Picking a module navigates and closes the drawer.
+- The header's menu button and its primary action are desktop-only now, so a phone has one way to navigate instead of two. The top bar keeps the page name, the search icon, notifications, theme and the account.
+- The primary action moved into one component that both the header and the bottom bar render, so its behaviour has a single implementation. On a phone it is the plus alone — a round 44px button, its name kept as the accessible label — which gives the four navigation entries their room back.
+- Found on the phone: on a site detail the section you were in could start off screen in the scrolling strip. The active section now scrolls itself into view whenever it changes.
+- This refines scope §40.2, which describes a hamburger drawer on phones. The drawer survives as the module grid; what changed is that the screens people use every day no longer live behind it.
+
+
+## 2026-09-17 — "Bugün" replaces the cockpit, and the rail stops jumping (CHG-004 step 4, TASK-0035)
+
+- `/dashboard` is now "Bugün": the seat's own work on the left, its six key figures on the right, the other nine behind a fold, then two charts and the site list. The M0 "Cockpit" heading is gone — the header already names the page, so the body opens with the date.
+- Work first, figures second, and every work row reaches its own source: the owner's "Dikkat" rows lead to the pour, the site, the finance screen; the coordinator's lead into the approval queue; the site engineer's into today's log.
+- Charts arrived as an approved custom element (COSS has none) without adding a charting library: at this size a bar is a box, so the chart is built from plain elements that keep their rounded ends crisp, take theme tokens directly and carry their own hover text. One series, no legend, only the last value labelled; a day with no work draws no bar, because a sliver would read as "a little"; profit is green and loss red, as those colours mean everywhere else (§40.5).
+- Found on screen and fixed everywhere: Geist Mono has no ₺ glyph, so the symbol was falling back to another font and sitting badly against the digits. §4 now reads "only the number is mono" — units and symbols are set in the body font by one shared `Figure` component, which the money component of §4 will build on. As a side effect "318 panel" no longer reads as code.
+- Rail refinements from the owner's review: a user who has never touched the menu finds the first group open (a remembered choice still wins, including leaving everything closed); labels are clipped and fade instead of wrapping onto a second line during the 200ms animation; the two logos cross-fade inside a head of fixed height; the app card animates its margin with the rail instead of snapping; and the separator no longer carries its own margins, which had been giving the menu a horizontal scrollbar.
+- The sidebar head also gave up COSS's own 8px padding: the logo now occupies the same 56px band as the app header, so it starts level with the card's top edge instead of 8px below it, in both the expanded and the icon state. The square mark grew from 32px to 40px along the way — 48px, which matched the long logo exactly, turned out to be too heavy for the rail.
+- Sample data is still sample data, and says so: every figure block carries an "Örnek veri" badge. The objection stands on the record — a panel that shows invented numbers can be mistaken for a real one.
+
+
+## 2026-09-17 — Context row: the second header line that appears only with an open record (CHG-004 step 3, TASK-0034)
+
+- The row is delivered by Next.js' `@context` parallel route slot rather than by a prop each page has to remember to set. A page with no open record matches a slot page that renders nothing, so the shell is byte-for-byte what it was before: no row, same 56px header, same card.
+- Judged on a sample site detail, because SIT does not exist yet: `/sites` lists three sample sites in a COSS `Frame`, and opening one shows the row. Each section is its own address with a Turkish slug (`/sites/kavakli/dokum`), so a section can be shared or bookmarked; the day travels in `?gun=`, and today leaves the address clean.
+- Days are chosen with a strip of five plus a calendar popover; future days are disabled on both, and "today" is decided in the company's time zone rather than the server's (`platform/date/day.ts`, calendar days as plain `YYYY-MM-DD` strings so they survive URLs and the server/browser boundary).
+- Found while verifying: the section strip was 53px inside a 44px row, because `overflow-x-auto` also makes the vertical axis `auto` and the reserved scrollbars grew the nav. Both axes are pinned now and the scrollbar is hidden.
+- Slot behaviour was proven with a mirror probe (deleted): the row appears on a site address and is absent on `/dashboard` and `/sites`, both on a full load and on client-side navigation — the case where a slot otherwise keeps showing the previous page's row.
+- Deviations logged as 15a–15c: a conditional second header row, COSS `Tabs` used as navigation links, and a hidden scrollbar on the section strip.
+
+
 ## 2026-09-17 — CHG-004 transfer, step 2: three-zone header (TASK-0033)
 
 - Owner decisions D-061 (development role switcher with four sample seats), D-062 (page name + path, page-declared site selector, wide centred search in COSS's Command layout, page-or-seat primary action), D-063 (sample notifications behind the bell).
