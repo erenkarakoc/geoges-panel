@@ -75,6 +75,8 @@ export function AppSidebar({
   const pathname = usePathname();
   const { setOpenMobile, state, isMobile } = useSidebar();
   const [openGroupIds, setOpenGroupIds] = useState<readonly string[]>(defaultOpenGroupIds);
+  // Which group's flyout is open in the rail; only one at a time, like a menu.
+  const [flyoutGroupId, setFlyoutGroupId] = useState<string | null>(null);
   const groups = pickNavigationItems(navigationRegistry, visibleItemIds);
   const workItems = workNavigation.filter((item) => visibleWorkIds.includes(item.id));
   // On phones the sidebar is a drawer; close it once the user picks a destination.
@@ -116,7 +118,7 @@ export function AppSidebar({
          */}
         <Link
           aria-label="GEOGES Panel ana sayfa"
-          className="relative flex h-10 items-center rounded-lg px-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+          className="relative flex h-14 items-center rounded-lg px-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
           href="/dashboard"
           onClick={closeMobileDrawer}
         >
@@ -200,59 +202,61 @@ export function AppSidebar({
               <SidebarMenu>
                 {groups.map((group) => {
                   const hasActiveItem = group.items.some((item) => pathname === item.href);
-
-                  if (isRail) {
-                    return (
-                      <SidebarMenuItem key={group.id}>
-                        <Menu>
-                          <MenuTrigger
-                            render={
-                              <SidebarMenuButton
-                                isActive={hasActiveItem}
-                                tooltip={group.label}
-                                type="button"
-                              />
-                            }
-                          >
-                            <group.icon aria-hidden="true" />
-                            <span className={labelClassName}>{group.label}</span>
-                          </MenuTrigger>
-                          <MenuPopup align="start" side="right">
-                            <MenuGroup>
-                              <MenuGroupLabel>{group.label}</MenuGroupLabel>
-                              {group.items.map((item) => (
-                                <MenuLinkItem key={item.id} render={<Link href={item.href} />}>
-                                  <item.icon aria-hidden="true" />
-                                  {item.label}
-                                </MenuLinkItem>
-                              ))}
-                            </MenuGroup>
-                          </MenuPopup>
-                        </Menu>
-                      </SidebarMenuItem>
-                    );
-                  }
-
                   return (
+                    /*
+                     * One row in both states. It used to be two — a collapsible row when the menu
+                     * was open and a flyout trigger when it was a rail — and swapping components
+                     * replaced the DOM, so the group titles could not animate like the rest.
+                     * Now the row stays put and only its behaviour changes: it folds the group
+                     * open when there is room for the list, and opens the flyout when there is not.
+                     */
                     <Collapsible
                       key={group.id}
-                      onOpenChange={(open) => toggleGroup(group.id, open)}
-                      open={openGroupIds.includes(group.id)}
+                      onOpenChange={(open) => {
+                        if (!isRail) {
+                          toggleGroup(group.id, open);
+                        }
+                      }}
+                      open={!isRail && openGroupIds.includes(group.id)}
                       render={<SidebarMenuItem />}
                     >
-                      <CollapsibleTrigger
-                        render={
-                          <SidebarMenuButton isActive={hasActiveItem} type="button">
-                            <group.icon aria-hidden="true" />
-                            <span className={labelClassName}>{group.label}</span>
-                            <ChevronRightIcon
-                              aria-hidden="true"
-                              // The trigger itself carries `data-panel-open` while the group is open.
-                              className="ms-auto transition-transform in-data-[panel-open]:rotate-90"
+                      <Menu
+                        onOpenChange={(open) => setFlyoutGroupId(open && isRail ? group.id : null)}
+                        open={isRail && flyoutGroupId === group.id}
+                      >
+                        <MenuTrigger
+                          render={
+                            <CollapsibleTrigger
+                              render={
+                                <SidebarMenuButton
+                                  isActive={hasActiveItem}
+                                  tooltip={group.label}
+                                  type="button"
+                                />
+                              }
                             />
-                          </SidebarMenuButton>
-                        }
-                      />
+                          }
+                        >
+                          <group.icon aria-hidden="true" />
+                          <span className={labelClassName}>{group.label}</span>
+                          <ChevronRightIcon
+                            aria-hidden="true"
+                            // The trigger itself carries `data-panel-open` while the group is open.
+                            className={`ms-auto transition-transform in-data-[panel-open]:rotate-90 ${labelClassName}`}
+                          />
+                        </MenuTrigger>
+                        <MenuPopup align="start" side="right">
+                          <MenuGroup>
+                            <MenuGroupLabel>{group.label}</MenuGroupLabel>
+                            {group.items.map((item) => (
+                              <MenuLinkItem key={item.id} render={<Link href={item.href} />}>
+                                <item.icon aria-hidden="true" />
+                                {item.label}
+                              </MenuLinkItem>
+                            ))}
+                          </MenuGroup>
+                        </MenuPopup>
+                      </Menu>
                       <CollapsiblePanel>
                         <SidebarMenuSub>
                           {group.items.map((item) => {

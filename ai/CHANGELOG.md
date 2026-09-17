@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-17 — Group rows became one element, so their titles animate too
+
+- The work-layer rows animated when the rail opened and closed, but the group titles did not. They were two different components — a collapsible row when the menu was open, a flyout trigger when it was a rail — and swapping components replaces the DOM, so there was nothing for a transition to hold on to.
+- The row is one element now and only its behaviour changes: it folds the group open when there is room for the list, and opens the flyout when there is not. Fewer branches, and the titles slide, blur and fade like everything else.
+
+
 ## 2026-09-17 — "Bugün" keeps the work and the figures, and nothing else
 
 - The owner took the two charts and the site summary off the entry screen. What is left is the seat's work block, the six key figures and the fold — which is closer to what the screen is for.
