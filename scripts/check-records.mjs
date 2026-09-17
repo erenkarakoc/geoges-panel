@@ -22,9 +22,16 @@ import { join, resolve } from "node:path";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const STRICT = process.argv.includes("--strict");
+const VERBOSE = process.argv.includes("--verbose");
 
 const problems = [];
+// `warnings` always print — they are few and each one wants acting on.
+// `notes` are the forward references a design-first repository is full of
+// (REQ files Phase 01 has not written yet). They are counted, not listed,
+// unless --verbose: a gate that prints forty lines on every commit stops
+// being read, and an unread gate is the same as no gate.
 const notes = [];
+const warnings = [];
 
 function fail(file, line, message, fix) {
   problems.push({ file, line, message, fix });
@@ -375,7 +382,7 @@ for (const file of FILES.filter((name) => name.startsWith("ai/"))) {
   if (dirty.has(file) && stamp[1] !== today) {
     const message = `"Last updated: ${stamp[1]}" but the file has uncommitted changes (today is ${today})`;
     if (STRICT) fail(file, 1, message, "update the stamp before committing");
-    else notes.push(`${file}: ${message}`);
+    else warnings.push(`${file}: ${message}`);
   }
 }
 
@@ -393,7 +400,7 @@ if (!existsSync(join(ROOT, "ai/SESSION_JOURNAL.md"))) {
 }
 
 if (git(["config", "core.hooksPath"]) !== ".githooks") {
-  notes.push(
+  warnings.push(
     "pre-commit gate is not enabled in this clone — run: git config core.hooksPath .githooks",
   );
 }
@@ -402,7 +409,15 @@ if (git(["config", "core.hooksPath"]) !== ".githooks") {
 // Report
 // ---------------------------------------------------------------------------
 
-for (const note of notes) console.log(`note   ${note}`);
+for (const warning of warnings) console.log(`warn   ${warning}`);
+
+if (notes.length > 0) {
+  if (VERBOSE) for (const note of notes) console.log(`note   ${note}`);
+  else
+    console.log(
+      `note   ${notes.length} forward reference(s) to files the roadmap has not reached yet — npm run records -- --verbose`,
+    );
+}
 
 if (problems.length === 0) {
   console.log(

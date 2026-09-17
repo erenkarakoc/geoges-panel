@@ -184,7 +184,7 @@ Rules written only as prose depend on a model remembering them at the right mome
 9. Task ids referenced in `depends_on` exist.
 10. No record cites a path that does not exist, and — once TASK-0039 is done — no record cites `docs/sources/` by section number.
 
-A failure prints the file, the line and what to fix. The validator is amended whenever a new class of contradiction is found; a contradiction found twice is a missing check.
+A failure prints the file, the line and what to fix. Forward references — records citing files the roadmap has not produced yet, such as `docs/requirements/REQ-*.md` — are counted on one line rather than listed; `npm run records -- --verbose` lists them. A gate that prints forty lines on every commit stops being read. The validator is amended whenever a new class of contradiction is found; a contradiction found twice is a missing check.
 
 ### 21.2 The session journal
 
