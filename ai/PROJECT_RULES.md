@@ -1,6 +1,6 @@
 # PROJECT RULES
 
-Status: ACTIVE · Owner: project owner · Last updated: 2026-09-15
+Status: ACTIVE · Owner: project owner · Last updated: 2026-09-18
 
 These rules are a working protocol, not advice. Source: `docs/sources/ai-development-protocol.md` (originally `AI_Destekli_Proje_Gelistirme_Ana_Promptu.md`), revised by the Phase 00 decision round (see `ai/DECISIONS.md`). Where this file and the original prompt differ, this file wins.
 
@@ -97,6 +97,10 @@ Hard-coded enums are used only for system states. Every architectural decision i
 
 A change request is never implemented directly. First record in `ai/DECISIONS.md` (or a `CHG-NNN` section) an analysis of: requested change · reason · affected requirements · features · tasks · database · APIs · UI · permissions · tests · migration requirement · backward compatibility · risks · recommended approach. Implement only after approval.
 
+**Roadmap rule (D-072, CHG-005):** `ai/MASTER_ROADMAP.md` is the single authority for the plan. An approved change request is written into its change register **in the same session it is approved**, together with the phases it moves. A change request that is not in the roadmap may not be implemented. This is checked by `npm run records`, which fails when a `CHG-NNN` exists in `ai/DECISIONS.md` but not in `ai/MASTER_ROADMAP.md`.
+
+**Phase status vocabulary (D-073):** `NOT_STARTED · DISCOVER · QUESTIONS_PENDING · DESIGNING · PARTIALLY_DONE · IN_PROGRESS · DONE`. When a change request delivers part of a later phase early, that phase becomes `PARTIALLY_DONE` and its section lists item by item what was delivered and what it still owes. Early work is never parked in a parallel milestone track, because a second plan is exactly the failure this rule exists to prevent.
+
 ## 10. Implementation plan (T1/T2 tasks)
 
 Before coding: Task · Goal · Dependencies · Affected files · Database changes · Backend changes · Frontend changes · Security · Tests · Migration · Rollback strategy · Acceptance criteria.
@@ -111,8 +115,9 @@ Tasks declare `depends_on`. A task does not start before its mandatory dependenc
 
 ## 13. Session continuity
 
-- Start: follow the bootstrap order in `AGENTS.md`.
+- Start: follow the bootstrap order in `AGENTS.md`, then read `ai/SESSION_HANDOFF.md` and the tail of `ai/SESSION_JOURNAL.md` (see §21).
 - End: update `ai/CURRENT_STATE.md`, `ai/TASKS.md`, `ai/CHANGELOG.md` and overwrite `ai/SESSION_HANDOFF.md`.
+- **A session that is cut off is not a lost session (§21).** The journal is written by a harness hook after every file change, not by the model at the end, so the next agent — Claude Code, Codex or any other — can resume from the repository alone.
 - Source of truth: **Git + `/ai` + `/docs` + ADRs**. AI memory tools (claude-mem, built-in memory) are helper layers only; the project must survive their loss.
 
 Context priority: current user instruction → project rules → recorded decisions → current state → existing code → official documentation → official skills → trusted third-party skills → general AI knowledge.
@@ -159,3 +164,48 @@ Code, database, API, events, env vars, storage keys, logs, tests and infrastruct
 ## 20. Skills
 
 Skills are installed only after audit and approval, recorded in `ai/AI_SKILLS.md`, pinned to a version/commit and updated through a reviewed flow. Skills are activated only when relevant to the task.
+
+## 21. Record consistency and session continuity are machine-enforced (D-076, CHG-005)
+
+Rules written only as prose depend on a model remembering them at the right moment. The rules below are enforced by programs, so a session that forgets them fails loudly instead of drifting.
+
+### 21.1 The validator
+
+`scripts/check-records.mjs`, run by `npm run records`, by `npm run check` and by the pre-commit hook. It asserts:
+
+1. Every `TASK-NNNN` in `ai/TASKS.md` is unique and sits under a recognised phase/milestone heading.
+2. Every task status is in the §4 vocabulary; every phase status in the §9 vocabulary.
+3. Every `CHG-NNN` in `ai/DECISIONS.md` appears in the roadmap's change register.
+4. Every `D-NNN` is unique and cited by at least one ADR, CHG or task.
+5. Every `OQ-NNN` in `ai/CURRENT_STATE.md` exists in `ai/OPEN_QUESTIONS.md`.
+6. Every `ADR-NNN` referenced anywhere exists as a file in `docs/decisions/`.
+7. Every `TASK-NNNN`, `REQ-*`, `D-NNN` and `OQ-NNN` referenced anywhere is defined somewhere.
+8. `Last updated:` in each `/ai` record is not older than that file's last commit date.
+9. Task ids referenced in `depends_on` exist.
+10. No record cites a path that does not exist, and — once TASK-0039 is done — no record cites `docs/sources/` by section number.
+
+A failure prints the file, the line and what to fix. The validator is amended whenever a new class of contradiction is found; a contradiction found twice is a missing check.
+
+### 21.2 The session journal
+
+`ai/SESSION_JOURNAL.md` is append-only and written by a `PostToolUse` hook in `.claude/settings.json`, not by the model. Every file-modifying tool call appends one line: timestamp, session id, tool, path. The model never edits it; the file is committed with the work.
+
+Resuming after an interrupted session, from any agent:
+
+1. `git status` and `git diff` — what is uncommitted.
+2. Tail of `ai/SESSION_JOURNAL.md` — what the previous session touched, in order, including work it never got to describe.
+3. `ai/SESSION_HANDOFF.md` — what the previous session meant to do, if it lived long enough to say so.
+4. `ai/TASKS.md` — any task in `IMPLEMENTING`, `TESTING` or `REVIEW` is unfinished business.
+5. `npm run records` and `npm run check` — whether the tree it left behind is consistent.
+
+Order matters: 1 and 2 are facts the harness recorded, 3 is a claim the model made. When they disagree, 1 and 2 win.
+
+### 21.3 The commit gate
+
+`.githooks/pre-commit` runs the validator and refuses inconsistent commits. It is versioned in the repository and enabled once per clone:
+
+```
+git config core.hooksPath .githooks
+```
+
+`npm run records` prints a reminder when the hook path is not configured.

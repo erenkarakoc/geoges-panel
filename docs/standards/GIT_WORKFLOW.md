@@ -1,6 +1,16 @@
 # Git Çalışma Kuralları
 
-Durum: Kabul edildi · 2026-09-15
+Durum: Kabul edildi · 2026-09-15 · Son güncelleme: 2026-09-17 (CHG-005)
+
+## Klon başına tek seferlik kurulum
+
+Depoyu her klonlayan, kayıt tutarlılık kapısını açmak için bir kez şunu çalıştırır:
+
+```
+git config core.hooksPath .githooks
+```
+
+Bu, `.githooks/pre-commit` kancasını devreye alır; kanca `scripts/check-records.mjs --strict` çalıştırır ve kayıtları birbiriyle çelişen bir commit'i reddeder (`ai/PROJECT_RULES.md` §21.3). Kurulmadıysa `npm run records` uyarı basar. Gerçek bir acil durumda `git commit --no-verify` ile aşılabilir; aşıldığında sebebi `ai/CHANGELOG.md`'ye yazılır — sessiz atlama, kayıtların en baştan bozulma biçimidir.
 
 - Uzak repo: `github.com/erenkarakoc/geoges-panel` (private). Varsayılan dal: `main`.
 - `main` her zaman dağıtılabilir durumdadır; doğrudan geliştirme `main` üzerinde yapılmaz. İstisna: Phase 00 kurulum ve doküman commit'leri (`deb14ef`, `50492e9`, `15902fb` ve Phase 00 kapanış commit'i) sahip onayıyla doğrudan `main`'e yazılmıştır. Phase 01'den itibaren her iş kendi dalında yapılır (sahip kararı, 2026-09-15).

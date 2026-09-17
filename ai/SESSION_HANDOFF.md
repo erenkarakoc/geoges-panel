@@ -1,74 +1,42 @@
 # SESSION HANDOFF
 
-Session date: 2026-09-16/17 · Model: Claude Opus 5 (Claude Code desktop) · Focus: transferring the CHG-004 navigation skeleton into the product shell, all five steps (TASK-0032…TASK-0036)
+Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Focus: CHG-005 — fixing the contradictions in the state system and making the rules machine-enforced; recording the workflow-platform direction as input for CHG-006
+
+> Read this **after** `git status`, `git diff` and the tail of `ai/SESSION_JOURNAL.md`. Those are facts the harness recorded; this file is a claim a model made. When they disagree, they win (`ai/PROJECT_RULES.md` §21.2).
 
 ## Completed
 
-- **Owner approved the transfer** of the sandbox navigation skeleton into the product layout, step by step, each step decided by question and answer, without breaking the existing layout. CHG-004 status amended. Five steps opened as T2 tasks TASK-0032…TASK-0036 (rail, header zones, context row, "Bugün" screen, mobile bottom bar). Rollback point before the transfer: `3a83586`.
-- **Step 1 decisions:** D-057 (existing COSS sidebar, collapsed by default; group icons with flyout menus when collapsed; several groups open and remembered when expanded; logo at the head; `/dashboard` = "Bugün"), D-058 ("Onay"/"Görevler" only in the work layer; "Genel Bakış" disappeared because its only item became "Bugün", so 5 group icons), D-059 (sample badge counts marked "örnek veri", AI objection recorded), D-060 (owner requirements for later steps: dev role switcher, ⌘K in COSS's documented Command design, COSS `Frame` where needed).
-- **TASK-0032 (REVIEW), committed `8a14cb1`:** `navigation-registry.ts` (work layer, group icons, `sampleWorkCounts`, `allNavigationItems`), `app-sidebar.tsx` (rail with COSS `Menu` flyouts, COSS `Collapsible` groups, badge dot in icon state), `sidebar-group-preference.ts`, `app-shell.tsx` reads `sidebar_state`/`sidebar_groups` on the server. Deviations 13a–13d.
-- **Step 2 decisions:** D-061 (dev-only role switcher, four sample seats), D-062 (bold page name + muted path; site selector only on `scope: "site"` pages, remembered; wide centred search opening COSS Command in COSS's documented layout; primary action = page's own or the seat's, toast until forms exist), D-063 (sample notifications behind the bell).
-- **TASK-0033 (REVIEW), committed `d780d5a`:** `app-header.tsx`, `command-palette.tsx`, `search-text.ts` (Turkish-insensitive search), `preview-roles.ts`, `site-scope-preference.ts`, `sample-notifications.ts`; registry `scope`/`primaryAction`; account menu "Rol olarak görüntüle" in development only. Deviations 14a–14c.
-- **Step 3 decisions (D-064):** the context row is delivered by the Next.js `@context` parallel route slot, judged on a sample site detail until SIT exists; each section is its own address with a Turkish slug; the day is chosen with a five-day strip plus a COSS `Calendar` popover and travels in `?gun=`, today leaving the address clean; the day selector belongs to every context row.
-- **TASK-0034 implemented (REVIEW), not yet committed:** `context-bar.tsx` (generic row), `modules/sit/ui/*` (sample sites, site context row, section placeholder, `Frame` list), `platform/date/day.ts` (+ tests), `(app)/@context/*` slot pages, `/sites` and `/sites/[siteId]/[[...section]]`, `contextBar` prop on the shell. Deviations 15a–15c.
-- **Step 4 decisions (D-065…D-068):** "Bugün" on `/dashboard` — work first, figures second, work block and six key indicators side by side, nine more behind a fold, sample figures marked "Örnek veri"; charts as an approved custom element with no library; only the number is mono (units and ₺ in the body font, one shared `Figure`); rail refinements (first group open for a fresh user, labels clipped not wrapped, logo cross-fade, card margin animated with the rail, separator margins removed).
-- **TASK-0035 implemented (REVIEW), not yet committed:** `today-overview.tsx`, `today-work.ts`, `platform/ui/chart/bar-chart.tsx`, `platform/ui/format/figure.tsx`, widget registry (`critical`, `sampleValue`, `sampleUnit`), `dashboard/page.tsx`; `cockpit-overview.tsx` deleted. Deviations 16a–16d, and §4 of the design rules now says only the digits are mono.
-- **Step 5 decisions (D-069):** below `md` the rail becomes a bottom bar (work layer, primary action in the middle, "Modüller" opening a searchable drawer of grouped module tiles); the header's menu button and action are desktop-only; refines scope §40.2.
-- **TASK-0036 implemented (REVIEW), not yet committed:** `mobile-bottom-bar.tsx`, `primary-action.tsx` (shared by header and bottom bar), header changes, context row scrolls the active section into view. Deviations 17a–17c.
-- Fixed while verifying step 5: the section you were in could start off screen in the scrolling strip on a phone.
-- Fixed while verifying step 4: Geist Mono has no ₺ glyph (the symbol fell back to another font and sat wrong beside the digits); indicator panels did not stretch to the tallest card in their row; a zero-production day drew a sliver that read as "a little"; the menu's separator carried margins that gave the sidebar a horizontal scrollbar.
-- Fixed while verifying step 3: the section strip was 53px inside the 44px row because `overflow-x-auto` also turns the vertical axis to `auto` and the reserved scrollbars grew the nav; both axes are pinned and the scrollbar is hidden.
+- **Audit.** Nine contradictions found across the state system and listed in the CHG-005 record in `ai/DECISIONS.md`. Every one is fixed or explicitly recorded with the reason it cannot be fixed yet.
+- **`ai/MASTER_ROADMAP.md` rewritten where it was wrong:** declared the single authority; gained a change-request register (CHG-001…CHG-006) and a "work delivered ahead of its phase" table; Phase 01 given an honest status (no REQ file exists yet); Phases 02 and 07 set to `PARTIALLY_DONE` with item-by-item delivered/owed lists; Milestone M1 redefined as the staging milestone; Phase 08 annotated with the pending CHG-006 split.
+- **Decisions D-072…D-076** written (the first free id was D-072 — the validator caught a collision with the existing D-071 logo decision).
+- **`ai/PROJECT_RULES.md`:** §9 gained the roadmap rule and the phase status vocabulary; §13 now points at the journal; new **§21** documents the validator, the journal and the commit gate.
+- **`ai/TASKS.md`** refiled: TASK-0028 and TASK-0030…TASK-0037 moved under a CHG-003/CHG-004 heading, TASK-0011…TASK-0017 under Phase 00, TASK-0038 under CHG-005. New TASK-0038 (this work) and TASK-0039 (§ → REQ remap). TASK-0027 set to `BLOCKED`.
+- **`ai/CURRENT_STATE.md`:** branch corrected to `main`, `CODE ALLOWED` rewritten as the owner's freeze, RISK-009 added, next-task list reordered behind OQ-028.
+- **OQ-028** opened in `ai/OPEN_QUESTIONS.md` — blocking, with the reasoning in the root direction file.
+- **§45 palette test run** (owner asked for it, 2026-09-17): all eight end-to-end flows walked step by step against ADR-006's 12-node palette. 45.6 and 45.7 are fully expressible; the other six produced **six gaps** (B-1 record create/update node, B-2 iterate-over-list, B-3 approval reject / send-back edge, B-4 windowed conditions, B-5 external-party approval, B-6 undefined trigger types) plus one design rule: an end-to-end flow is several short flows chained by events, not one long definition. Written up as §7.1 of the direction file; questions 19–25 added to OQ-028.
+- **`WORKFLOW_PLATFORM_DIRECTION.md`** written at the repository root: three-layer model, capability catalog, the designer's out-of-scope list, §45 as templates and as a validation set, roadmap options, risks, and the 14 unanswered questions. It is a **proposal**; it becomes CHG-006 and then deletes itself.
+- **Guards built and proven:** `scripts/check-records.mjs` (+ `npm run records`, wired into `npm run check`) passes on 51 files / 39 tasks / 76 decisions; `.githooks/pre-commit` written and `core.hooksPath` set; `scripts/session-journal.mjs` on a `PostToolUse` hook — **verified firing live**, it recorded this session's own edit to `docs/standards/GIT_WORKFLOW.md`; `scripts/session-resume.mjs` on a `SessionStart` hook, pipe-tested.
+- `ai/CHANGELOG.md`, `docs/standards/GIT_WORKFLOW.md`, `docs/sources/README.md` and ADR-007 updated to match.
 
-## Partially Completed
+## Not done / open
 
-- TASK-0029 site-wide search: navigation palette done; record-level search still open.
-- OQ-027 (flow methods) still open. TASK-0030 and TASK-0031 still REVIEW.
+- **OQ-028 is unanswered.** Questions 1–14 and 19–25. Nothing in the plan moves until the owner answers them.
+- **Product code is frozen** by owner instruction until CHG-005 and CHG-006 are both closed.
+- Three judgment calls were applied on the AI's recommendation and are **reversible if the owner disagrees**: M1 redefined rather than cancelled (D-074), early work recorded as `PARTIALLY_DONE` phases rather than a separate milestone track (D-073), TASK-0027 blocked rather than merely scheduled (D-075).
+- The validator reports **notes** (not failures) for ~30 forward references — `docs/requirements/REQ-*.md` and `docs/architecture/spikes/` do not exist yet. That is expected in a design-first project; the notes disappear as Phase 01 and Phase 06 produce those files.
+- Nothing has been committed. The whole change sits in the working tree.
+- Still in `REVIEW` from earlier sessions: TASK-0030, TASK-0032…TASK-0037. TASK-0018 still `TESTING` (re-check after 2026-10-15).
 
-## Current State
+## Current state
 
-PHASE 01 (QUESTIONS_PENDING) on branch `feature/presentation-sandbox`. Steps 1–2 pushed; steps 3, 4 and 5 sit in the working tree with their records, awaiting the owner's commit approval. The transfer is functionally complete.
+PHASE 01, branch `main`, working tree dirty with the CHG-005 change. `npm run records` passes. Product code frozen.
 
-## Next Task
+## Next session
 
-1. Owner reviews the whole shell in the real panel (TASK-0032…TASK-0036), including the role switcher and the phone width.
-2. Commit and push steps 3–5 once approved.
-3. Then either answer OQ-027 (flow methods) or return to Phase 01 requirement rounds (TASK-0020, TASK-0021). The navigation sandbox (TASK-0031) can be retired once the product shell is accepted.
-
-## Open Questions
-
-OQ-007, OQ-010…OQ-017, OQ-020, OQ-026, OQ-027.
-
-## New Decisions
-
-D-057…D-069 (CHG-004 product transfer).
-
-## Deferred Items
-
-DEF-001…DEF-005.
-
-## Technical Debt
-
-- Everything from the previous handoff still stands (ESLint deprecation warning, vendored COSS sidebar English strings, M0 `previewAccessPolicy`, no lockout / 2FA recovery / audit log yet).
-- Sample data to replace later: badge counts (`sampleWorkCounts`), seats (`preview-roles.ts`), notifications (`sample-notifications.ts`), sites and site sections (`modules/sit/ui/site-context.ts`, `/sites` routes), every figure on "Bugün" (`dashboard-widget-registry.ts` sample fields, `today-work.ts`). The `/sites` route now has its own page, so it is excluded from the generated module placeholders.
-- The sandbox prototype still mirrors navigation labels by hand and has drifted from the registry; it goes away when the transfer is accepted.
-
-## Known Bugs
-
-None open.
-
-## Tests Run
-
-`npm run check` (typecheck, lint with boundaries, 64 unit tests, Prettier) and `npm run build` pass. Step 3 browser (temporary signed-out probes, deleted): row at 44px with no scrollbars, correct section and day addresses, next-day disabled on today, Turkish calendar with future days disabled and the chosen day selected, 375px without horizontal scroll, no console errors; a mirror probe proved the slot shows the row on a site address and nothing on `/dashboard` or `/sites`, on both full load and client-side navigation. Step 4 browser (same kind of probe, deleted): all four seats — the owner's nine rail rows down to the crew lead's three — work block, folded indicators (6 → 15), both charts in light and dark, site rows leading into the context row, equal card heights, 375px without horizontal scroll, no console errors. Step 5 browser (the owner's own session was open in the pane, so the real panel this time): bottom bar at 375px with badges and the centred action, module drawer with Turkish-insensitive search, navigation closing the drawer, site detail with header + context row + bottom bar, desktop unaffected.
-
-## Verification note
-
-The Browser pane in this session runs hidden, so CSS transitions do not advance while it is not painting: width and position readings taken during an animation are meaningless there, and a "the sidebar no longer opens" measurement turned out to be that artifact. Static layout, hrefs, classes and text are reliable; anything about motion needs the owner's own eyes.
-
-## Important Context
-
-- Owner is not a developer; explain choices in plain Turkish; never take an action without asking.
-- Do not re-ask answered questions; admin-configurable settings need no default values (D-040).
-- The existing layout (inset frame, `--layout-gap`, 56px header, drag rail) must not break during the transfer.
-- `src/components/ui`, `src/lib`, `src/hooks` are COSS CLI-managed; do not edit by hand. Report and log every COSS/Tailwind default deviation.
-- Before writing Next.js code, read the relevant guide in `node_modules/next/dist/docs/`. Next 16 renamed middleware to `proxy.ts`.
-- Never handle secrets. Never enable claude-mem Cloud Sync. Never force-stop the claude-mem worker. No AI attribution in commits.
+1. Take the owner's answers to OQ-028 (the 14 questions).
+2. Write them as `D-077…` in `ai/DECISIONS.md`, then the **CHG-006** analysis.
+3. Revise ADR-006 (out-of-scope list, trigger types, traceability, authority model); amend ADR-005 and ADR-007 if the answers require it.
+4. Fold the direction into `ai/MASTER_ROADMAP.md` — capability catalog as a Phase 01/03 deliverable, engine core position in Phase 07/08.
+5. Move §45 from `REQ-NFR` to `REQ-WFL` in `ai/REQUIREMENTS.md`.
+6. Delete `WORKFLOW_PLATFORM_DIRECTION.md`.
+7. Only then does the product-code freeze lift.

@@ -1,0 +1,23 @@
+#!/bin/sh
+# Record consistency gate (PROJECT_RULES §21.3, D-076, CHG-005).
+#
+# Enabled once per clone:   git config core.hooksPath .githooks
+#
+# Refuses a commit whose records contradict each other. Strict mode also requires
+# that a record changed in this commit carries today's "Last updated:" stamp.
+#
+# To commit anyway in a genuine emergency: git commit --no-verify — and then say
+# so in ai/CHANGELOG.md, because an unexplained bypass is how the records drifted
+# in the first place.
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "pre-commit: node not found; cannot verify records." >&2
+  exit 1
+fi
+
+node scripts/check-records.mjs --strict || {
+  echo "" >&2
+  echo "pre-commit: the records above contradict each other — commit refused." >&2
+  echo "See ai/PROJECT_RULES.md §21." >&2
+  exit 1
+}

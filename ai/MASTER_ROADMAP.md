@@ -1,6 +1,12 @@
 # MASTER ROADMAP
 
-Status: APPROVED by owner (2026-09-15, incl. CHG-001 resolution) · Last updated: 2026-09-15
+Status: APPROVED by owner (2026-09-15, incl. CHG-001 resolution) · Last updated: 2026-09-18
+
+**This file is the single authority for the plan.** Every other record derives from it and may not contradict it:
+`ai/TASKS.md` says who does what and in which state, `ai/DECISIONS.md` + ADRs say why, `ai/CURRENT_STATE.md` says where we are right now, `ai/REQUIREMENTS.md` says what is wanted. An approved change request is written into this file **in the same session it is approved** (`ai/PROJECT_RULES.md` §9); a change request that is not in this file may not be implemented. Consistency is machine-checked by `npm run records` (`scripts/check-records.mjs`), not by memory.
+
+**Phase status vocabulary:** `NOT_STARTED · DISCOVER · QUESTIONS_PENDING · DESIGNING · PARTIALLY_DONE · IN_PROGRESS · DONE`.
+`PARTIALLY_DONE` means some of the phase's scope was delivered early through an approved change request; the phase section lists exactly which items and which remain.
 
 Strategy (ADR-007): **design everything first → validate risky assumptions with spikes → build foundation → deliver vertical module slices, each piloted.**
 Security, tests, accessibility and documentation are part of every phase's Definition of Done; there is no separate "add security later" phase.
@@ -13,12 +19,12 @@ Module codes: see `docs/architecture/MODULE_MAP.md`.
 |---|---|---|---|
 | 00 | Project Bootstrap & AI Infrastructure | Setup | DONE |
 | 01 | Requirements & Domain Analysis | Design | QUESTIONS_PENDING |
-| 02 | UX, Information Architecture & User Flows | Design | NOT_STARTED |
+| 02 | UX, Information Architecture & User Flows | Design | PARTIALLY_DONE |
 | 03 | System Architecture | Design | NOT_STARTED |
 | 04 | Database Architecture | Design | NOT_STARTED |
 | 05 | Infrastructure, Environments & Operations Design | Design | NOT_STARTED |
 | 06 | Validation Spikes | Validate | NOT_STARTED |
-| 07 | Foundation Build | Build | NOT_STARTED |
+| 07 | Foundation Build | Build | PARTIALLY_DONE |
 | 08 | Workflow Engine & Visual Designer | Build | NOT_STARTED |
 | 09 | Slice 1 — Projects, Sites, Daily Log, Approvals, Cockpit | Build + Pilot | NOT_STARTED |
 | 10 | Slice 2 — Inventory, Weighing, Purchasing, Factory | Build + Pilot | NOT_STARTED |
@@ -33,6 +39,31 @@ Module codes: see `docs/architecture/MODULE_MAP.md`.
 | 19 | Production Readiness & Company-wide Rollout | Release | NOT_STARTED |
 
 **Milestone M0 — early first screen (CHG-002, approved 2026-09-15) — DONE 2026-09-16, owner approved:** runs in parallel with Phase 01. Real Supabase Auth (sign-in, 2FA, password reset), new-role onboarding, app shell and empty dashboard skeleton, local only. Built as the first part of the Phase 07 foundation, not throwaway. Plan: `docs/features/m0-early-first-screen-plan.md`; tasks TASK-0022…TASK-0026.
+
+## Change request register
+
+Every approved change request must appear here, with the phase it changed. Analyses live in `ai/DECISIONS.md`.
+
+| ID | Change | Effect on this roadmap | Status |
+|---|---|---|---|
+| CHG-001 | Early preview of authentication screens and app shell | Rejected as an early preview; became Milestone M1 in Phase 07 | RESOLVED |
+| CHG-002 | Early first screen now (auth + dashboard, built to keep) | Added Milestone M0 in parallel with Phase 01; amended ADR-007 | DONE 2026-09-16 |
+| CHG-003 | Development-only structure presentation page | Added TASK-0030; sandbox code only, never ships (production 404). No phase moved | REVIEW |
+| CHG-004 | Compact navigation: header as a toolbar, work layer on the sidebar rail | Delivered part of **Phase 02** (navigation/IA, role home screen, top bar, mobile) and part of **Phase 07** (app shell) early, in five steps: TASK-0032…TASK-0037. Both phases are therefore `PARTIALLY_DONE` | REVIEW |
+| CHG-005 | Record consistency and deterministic guards | Rewrote the stale parts of this file, refiled `ai/TASKS.md`, redefined Milestone M1, blocked TASK-0027 behind TASK-0039, added `npm run records`, the pre-commit gate and the hook-written session journal | 2026-09-17/18 |
+| CHG-006 | Composition-first workflow platform (candidate) | **Not decided.** Would move the workflow engine core earlier and add a per-module capability catalog to Phases 01 and 03. Input: `WORKFLOW_PLATFORM_DIRECTION.md` (root), 21 open questions — 14 on direction, 7 from the §45 palette test | PROPOSED |
+
+## Work delivered ahead of its phase
+
+Recorded so that no phase is entered believing its scope is untouched.
+
+| Delivered | Phase it belongs to | Tasks | Still owed by that phase |
+|---|---|---|---|
+| Next.js scaffold, lint/boundary rules, test setup, CI-less local checks | 07 | TASK-0023 | CI pipeline, staging deploy, environments |
+| Real Supabase authentication (sign-in, TOTP 2FA, password reset, session guard) | 07 | TASK-0024, TASK-0025 | Dynamic roles, delegation, acting role, visibility rules, audit |
+| App shell, navigation registry, theme, brand tokens, role onboarding | 07 | TASK-0026 | Audit & history, documents/storage, outbox & jobs, catalogs, custom fields, currency & calendar |
+| Icon rail, three-zone header, context row, "Bugün" screen, mobile bottom bar | 02 | TASK-0032…TASK-0036 | Screen inventory, per-screen state matrix, list/detail/form standards, end-to-end flow specs, accessibility targets |
+| Sample "Onaylar" queue and "Görevler" list screens | 02 | TASK-0037 | Same as above; these screens are sample data and must be re-wired to the workflow engine in Phase 08 |
 
 Deferred (not in this roadmap until reactivated): data import, offline entry, native mobile, self-hosted Supabase migration — see `ai/DEFERRED.md`.
 
@@ -110,6 +141,9 @@ STATUS: DONE
 - **Deliverables:** `docs/requirements/REQ-*.md`, `ai/REQUIREMENTS.md` index, `docs/domain/*` (domain model, events catalog, business rules), confirmed `GLOSSARY.md`, permission matrix.
 - **Acceptance:** every section of the functional scope maps to ≥1 REQ; no REQ without owner module; owner has approved business rules marked T1.
 - **Risks:** scope size (RISK-002); hidden calculation rules.
+- **Status:** `QUESTIONS_PENDING`. Glossary rounds 1–2 done (D-027…D-034); Slice 1 requirement rounds 1–3 done (D-035…D-041, D-048…D-050). No REQ file has been written yet — `docs/requirements/` holds only its README, so the phase's main deliverable is entirely outstanding.
+- **Exit blocker:** TASK-0027 (deleting `docs/sources/`) may not run until every `§` reference in the records has been remapped to a REQ id. See CHG-005.
+- **Note:** if CHG-006 is approved, this phase gains one deliverable per module — the capability catalog (events it publishes, actions it exposes, typed fields conditions may read).
 
 ## PHASE 02 — UX, Information Architecture & User Flows
 
@@ -118,6 +152,8 @@ STATUS: DONE
 - **Dependencies:** Phase 01.
 - **Deliverables:** `docs/ui-ux/*` flows and screen specs; list of required custom elements with owner approval.
 - **Acceptance:** every REQ with UI has a screen spec; every screen lists states and COSS components; owner approved key flows.
+- **Status:** `PARTIALLY_DONE`. CHG-004 delivered the navigation skeleton, the three-zone header, the conditional context row, the per-role "Bugün" entry screen and the phone bottom bar ahead of this phase (D-054…D-070, TASK-0032…TASK-0037). Those decisions stand and are not re-opened here. **Still owed:** screen inventory, the per-screen state matrix (initial, loading, empty, partial, error, permission denied, retry, destructive confirmation), list/detail/form standards (§41–§43), the daily site log table UX, the end-to-end flow specifications (§45) and the WCAG 2.2 AA targets.
+- **Note:** if CHG-006 is approved, the §45 flows are specified here as **workflow definition drafts** tested against the engine's node palette, not as screen flows.
 
 ## PHASE 03 — System Architecture
 
@@ -155,14 +191,16 @@ STATUS: DONE
 
 - **Scope:** repository scaffold (Next.js, TypeScript, COSS, Tailwind, lint/format/boundary rules, test setup), CI pipeline, environments, design tokens and app shell, IAM (auth, 2FA, roles, delegation, visibility), audit & history, revision request mechanism core, documents/storage, outbox & jobs, notifications & tasks core, catalogs & custom fields, currency & calendar, deployment to staging.
 - **Dependencies:** Phase 06.
-- **Milestone M1 — first visible screen (CHG-001):** once the critical foundation (IAM with real authentication, audit, design tokens, app shell) passes its gates, the owner reviews the authentication pages and the application shell (left navigation, top bar, light/dark mode, empty module pages) on staging.
-- **Acceptance:** foundation features pass T1 gates; staging deploy with rollback proven; M1 review done with owner feedback recorded.
+- **Status:** `PARTIALLY_DONE`. Delivered ahead of the phase by M0 and CHG-004: scaffold, lint/boundary rules and test setup (TASK-0023), real Supabase authentication with TOTP 2FA and session guard (TASK-0024, TASK-0025), app shell with navigation registry, theme and brand tokens, role onboarding (TASK-0026, TASK-0032…TASK-0036). **Still owed:** CI pipeline, environments and staging deploy, dynamic roles / delegation / acting role / visibility, audit & history, revision-request core, documents & storage, outbox & jobs, notifications & tasks core, catalogs & custom fields, currency & calendar.
+- **Milestone M1 — first review on a real environment (CHG-001, redefined by CHG-005 2026-09-17):** the original M1 ("owner sees the authentication pages and the shell for the first time") was consumed by M0 and CHG-004, which the owner reviewed locally. M1 is now the **staging** milestone: the same screens plus the foundation services running on the deployed environment, with a proven deploy and rollback. What M1 still proves that local review did not: real environment configuration, secrets handling, session behaviour behind the reverse proxy, backup/restore path and rollback.
+- **Acceptance:** foundation features pass T1 gates; staging deploy with rollback proven; M1 review done on staging with owner feedback recorded.
 
 ## PHASE 08 — Workflow Engine & Visual Designer
 
 - **Scope:** workflow definitions (fixed node palette), versioning, execution engine, test-run, publish permissions, approval center integration, visual designer UI.
 - **Dependencies:** Phase 07.
-- **Acceptance:** default company flows (daily log approval, material issue, payment approval) defined and executed through the engine; T1 gate.
+- **Acceptance:** default company flows (daily log approval, material issue, payment approval) defined and executed through the engine; the sample "Onaylar" screen delivered by TASK-0037 re-wired to the engine's real queue; T1 gate.
+- **Open:** CHG-006 proposes splitting this phase — engine core (definition model, execution, event backbone) into Phase 07, visual designer staying here — and adding a per-module capability catalog to Phases 01 and 03. Not decided; 14 open questions in `WORKFLOW_PLATFORM_DIRECTION.md` (root). Until it is decided, this phase stands as written.
 
 ## PHASES 09–18 — Module Slices
 

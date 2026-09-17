@@ -19,3 +19,7 @@ Bu klasör Phase 01 çıkışında silinir. Silmeden önce:
 3. Sahip onayı alınır.
 
 Silindikten sonra da Git geçmişinden erişilebilir kalır.
+
+## Silme engeli (CHG-005, D-075)
+
+Bu klasör **TASK-0039 tamamlanmadan silinemez.** Kayıtların gövdesi buraya bölüm numarasıyla atıf yapıyor (§9.4, §40.2, §45 gibi). Numaralar REQ kimliklerine taşınmadan silme yapılırsa yüzlerce kararın dayanağı kaybolur. TASK-0027 bu yüzden `BLOCKED` durumundadır.

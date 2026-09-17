@@ -1,35 +1,41 @@
 # CURRENT STATE
 
-Last updated: 2026-09-17
+Last updated: 2026-09-18
 
 ```text
 PROJECT STATUS:      BOOTSTRAP
 CURRENT PHASE:       PHASE 01 — Requirements & Domain Analysis
 CURRENT SUBPHASE:    DISCOVER / QUESTION
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0020 Glossary confirmation rounds (OQ-007)
-STATUS:              QUESTIONS_PENDING
-BRANCH:              feature/presentation-sandbox (M0 merged into main via PR #1, 2026-09-16)
+CURRENT TASK:        TASK-0038 Record consistency and deterministic guards (CHG-005)
+STATUS:              IMPLEMENTING
+BRANCH:              main (feature/presentation-sandbox merged 2026-09-17, a189684; M0 merged via PR #1, 2026-09-16)
 PARALLEL TRACK:      CHG-004 product transfer — 5 steps + sample work screens (TASK-0032…TASK-0037) REVIEW · presentation sandbox TASK-0030 REVIEW · navigation sandbox TASK-0031 DONE (deleted)
-CODE ALLOWED:        Development-only sandboxes (D-052) and the CHG-004 shell transfer (TASK-0032…TASK-0036, owner approved) · other product code resumes in Phase 07 (ADR-007) or via an approved change request
+CODE ALLOWED:        FROZEN for product code by owner instruction 2026-09-17 — no product code until CHG-005 (records + guards) and CHG-006 (workflow platform direction) are closed.
+                     Permitted meanwhile: records and documentation, and tooling code that enforces the records (scripts/check-records.mjs, .githooks/, hook scripts).
+                     Already-shipped exceptions that remain valid: development-only sandboxes (D-052) and the CHG-004 shell transfer (TASK-0032…TASK-0037, owner approved).
+                     Note: TASK-0034 and TASK-0037 also shipped module-namespaced sample screens (modules/sit/ui, modules/wfl/ui, modules/tsk/ui). They are sample data behind the shell, approved as part of CHG-004, and are re-wired when SIT and the workflow engine exist.
 ```
 
 ## LAST COMPLETED TASK
 Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Owner reviews CHG-004 steps 1–2 (TASK-0032, TASK-0033), then step 3 decisions by question and answer (TASK-0034: conditional context row).
-2. OQ-027 (flow methods) still open.
-3. Phase 01 per-module requirement rounds (TASK-0020, TASK-0021).
-4. TASK-0018: re-check after 2026-10-15 that the worker keeps storing observations via the `CLAUDE_CODE_OAUTH_TOKEN` fallback (restart verified 2026-09-15; fallback not yet exercised). TASK-0019 DONE.
+1. **Owner answers OQ-028** — 21 open questions in `WORKFLOW_PLATFORM_DIRECTION.md` (root): 14 on direction, 7 raised by the §45 palette test (§7.1 of that file). Nothing else in the plan moves until these are answered; no product code is written (owner instruction 2026-09-17).
+2. Then: write CHG-006, revise ADR-005/006/007, fold the direction into `ai/MASTER_ROADMAP.md`, delete the root direction file.
+3. Owner reviews the CHG-004 tasks still in REVIEW (TASK-0030, TASK-0032…TASK-0037).
+4. OQ-027 items 3 and 4 (flow methods) still open.
+5. Phase 01 per-module requirement rounds (TASK-0020, TASK-0021) — no REQ file written yet.
+6. TASK-0018: re-check after 2026-10-15 that the worker keeps storing observations via the `CLAUDE_CODE_OAUTH_TOKEN` fallback (restart verified 2026-09-15; fallback not yet exercised). TASK-0019 DONE.
 
 ## BLOCKED BY
 None.
 
 ## OPEN QUESTIONS
-See `ai/OPEN_QUESTIONS.md` (OQ-007 for Phase 01; OQ-010…OQ-024 later phases).
+See `ai/OPEN_QUESTIONS.md`. **OQ-028 (workflow platform direction) blocks everything** — 14 questions, reasoning in `WORKFLOW_PLATFORM_DIRECTION.md`. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
+- D-072…D-076 (2026-09-17, CHG-005): roadmap is the single authority and is updated in the same session a CHG is approved; phase status vocabulary gains `PARTIALLY_DONE`; Milestone M1 redefined as the staging review; TASK-0027 (`docs/sources/` deletion) blocked until § references are remapped; record consistency is machine-checked (`npm run records`) and session continuity is hook-written, not model-remembered
 - D-070 (2026-09-17): approvals run as a queue and tasks list late/today/next with sample content; navigation sandbox deleted
 - D-069 (2026-09-17, CHG-004 step 5): phone navigation — bottom bar with the work layer and the primary action, modules in a searchable drawer
 - D-065…D-068 (2026-09-17, CHG-004 step 4): "Bugün" screen, charts as an approved custom element, only the number is mono, rail refinements
@@ -46,6 +52,7 @@ See `ai/OPEN_QUESTIONS.md` (OQ-007 for Phase 01; OQ-010…OQ-024 later phases).
 DEF-001 Data import · DEF-002 Offline entry · DEF-003 Native mobile app · DEF-004 Self-hosted Supabase migration · DEF-005 Cloud Run workers
 
 ## KNOWN ISSUES
+- **`npm run check` fails on committed `main` (found 2026-09-17, CHG-005 finding 10):** `src/platform/ui/app-shell/app-sidebar.tsx` is committed in a state Prettier rejects, so `format:check` fails even with a clean working tree. It predates this session — TASK-0032/0036 notes claim "check + build pass", which is no longer true of the committed tree. Not fixed here because product code is frozen (owner 2026-09-17); the fix is a Prettier reformat of that one file and nothing else. Raise with the owner before the freeze lifts.
 - claude-mem summarization depends on the Claude Code CLI login in `~/.claude/.credentials.json` (refresh token valid until 2026-10-15). If it lapses, observations silently stop with `OAuth session expired`; fix = owner re-login via CLI. On Windows the worker reads Windows Credential Manager first (absent, expected WARN), then falls back to the `CLAUDE_CODE_OAUTH_TOKEN` environment variable (v13.11.0 source). Safeguard tracked in TASK-0018.
 - Do not force-stop the claude-mem worker: its uvx/chroma-mcp children inherit and hold port 37777, blocking respawn. Prefer fully restarting the Claude app or Windows.
 - `Desktop\test\app` (out of scope) still pins claude-mem v12.3.6; running it against the shared DB reproduces `no such column: failed_at_epoch` errors.
@@ -65,4 +72,5 @@ DEF-001 Data import · DEF-002 Offline entry · DEF-003 Native mobile app · DEF
 | RISK-005 | Visual workflow designer complexity | Medium | Fixed node palette, engine-first, validation spike | AI |
 | RISK-006 | Provider lock-in to Supabase Cloud | Medium | Portability rules (ADR-002) | AI |
 | RISK-007 | claude-mem stores prompts/observations locally, shared across projects | Low–Medium | Local-only, telemetry off, no real personal data in sessions, `<private>` tags | AI |
+| RISK-009 | Records drift out of agreement with each other and with reality (9 contradictions found 2026-09-17: stale roadmap, dead milestone, mis-filed tasks, wrong "last updated" stamps, references to a file scheduled for deletion) | High (the plan stops being trustworthy, and an AI session bootstraps from a false picture) | `npm run records` in `npm run check` and in the pre-commit gate; CHG→roadmap rule in PROJECT_RULES §9; hook-written session journal | AI |
 | RISK-008 | Tailwind docs license (source-available, educational) for local AI use | Low | Owner-accepted local use only; never committed or redistributed (D-024) | Owner |

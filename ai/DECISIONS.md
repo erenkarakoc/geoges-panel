@@ -1,6 +1,6 @@
 # DECISIONS
 
-Last updated: 2026-09-15
+Last updated: 2026-09-18
 
 ## PHASE DECISION SUMMARY — PHASE 00 (2026-09-15)
 
@@ -124,6 +124,29 @@ Decided by the owner in a four-round question session.
 - **Owner decision (2026-09-16):** T2 (three-zone toolbar + conditional context row) and option (a) for the work layer approved. "Bugün" is the entry screen for every role. Built first as a sandbox prototype; product code stays closed until the prototype is approved.
 - **Status:** APPROVED for the sandbox prototype (TASK-0031). Product implementation waits for Phase 02 design and Phase 07.
 - **Owner decision (2026-09-16, amends the status above):** the approved skeleton is transferred into the product shell now, step by step, deciding for each step where it lands in the existing layout by question and answer. The existing layout must not break (shell, `--layout-gap`, frame). Five steps, each a T2 task: (1) rail — work layer + group structure (TASK-0032), (2) header three zones, height stays 56px (TASK-0033), (3) conditional context row via an optional `contextBar` prop (TASK-0034), (4) "Bugün" screen on `/dashboard` (TASK-0035), (5) mobile: rail → bottom bar below `md` (TASK-0036). Rollback point before the transfer: commit `3a83586`. Decisions: D-057…D-060.
+
+### CHG-005 — Record consistency and deterministic guards (APPROVED, implemented 2026-09-17)
+
+- **Requested change (owner, 2026-09-17):** "Mevcut kayıtlardaki çelişkileri ve güncel olmayan durumları düzeltelim; aynı hataların tekrarlanmaması için gerekli kuralları, dil modeli öngörülemezliğine güvenmeyerek determinist şekilde ekleyelim." Plus, in the same session: a deterministic way to resume work when a session is cut off and another agent continues. And: the whole roadmap must be single and free of internal contradictions.
+- **Reason:** an audit of the state system on 2026-09-17 found nine contradictions. The records had drifted because keeping them in agreement depended on a model remembering to do it at the end of a session.
+- **Findings:** (1) `ai/MASTER_ROADMAP.md` two days stale, CHG-003 and CHG-004 absent from the plan although approved and largely built; (2) `CODE ALLOWED` in `ai/CURRENT_STATE.md` contradicted by shipped `modules/sit/ui`, `modules/wfl/ui`, `modules/tsk/ui`; (3) Milestone M1 still claiming a deliverable M0 and CHG-004 already produced; (4) Phase 02 executed in part while marked `NOT_STARTED`; (5) Phase 07 scope listing finished work; (6) TASK-0028…TASK-0037 filed under the Phase 01 heading and TASK-0011…TASK-0017 under the M0 heading; (7) "Last updated" stamps wrong in six files; (8) hundreds of `§` citations pointing at `docs/sources/`, a directory scheduled for deletion by TASK-0027; (9) §45 end-to-end flows filed under REQ-NFR instead of REQ-WFL. Also found: `BRANCH` in `ai/CURRENT_STATE.md` still naming a merged branch.
+- **Affected requirements:** none (no product requirement changes).
+- **Affected features/tasks:** TASK-0027 blocked; TASK-0038 and TASK-0039 opened; TASK-0028…TASK-0037 refiled.
+- **Affected database / APIs / UI / permissions:** none.
+- **Tests:** `scripts/check-records.mjs` is the test. Wired into `npm run check` as `npm run records` and into the versioned pre-commit hook.
+- **Migration / backward compatibility:** records only; no runtime effect. The pre-commit gate needs one local command (`git config core.hooksPath .githooks`), recorded in `docs/standards/GIT_WORKFLOW.md`.
+- **Risks:** a validator that is too strict becomes noise and gets bypassed. Mitigated by checking only invariants that have actually been violated, and by failing with the exact file, line and fix.
+- **Owner decision (2026-09-17):** approved; product code frozen until CHG-005 and CHG-006 are closed.
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-072 | `ai/MASTER_ROADMAP.md` is the **single authority** for the plan; every other record derives from it and may not contradict it. An approved change request is written into the roadmap **in the same session it is approved**; a change request absent from the roadmap may not be implemented | `ai/PROJECT_RULES.md` §9, `ai/MASTER_ROADMAP.md` |
+| D-073 | Phases get an explicit status vocabulary including `PARTIALLY_DONE`, and a phase delivered early records item by item what was delivered and what it still owes. Applied to Phase 02 and Phase 07 (answers question 16: kalem kalem, not a separate parallel milestone — a second milestone track would recreate the very problem being fixed) | `ai/MASTER_ROADMAP.md` |
+| D-074 | **Milestone M1 is redefined**, not cancelled: its original content ("owner sees the auth pages and the shell for the first time") was consumed by M0 and CHG-004 locally, so M1 becomes the **staging** milestone — the same screens plus foundation services on the deployed environment, with proven deploy and rollback (answers question 15) | `ai/MASTER_ROADMAP.md` Phase 07, CHG-001 |
+| D-075 | **TASK-0027 is blocked**, not merely scheduled: `docs/sources/` may not be deleted until every `§` reference in the records is remapped to a REQ id (new TASK-0039). Deleting first would strip the reasoning out of hundreds of decisions (answers question 17) | `ai/TASKS.md`, `docs/sources/README.md` |
+| D-076 | Record consistency and session continuity are **machine-enforced, not model-remembered** (answers question 18): `scripts/check-records.mjs` (run by `npm run records`, `npm run check` and the pre-commit hook) asserts the invariants, and an append-only session journal written by a `PostToolUse` hook records what each session touched, so an interrupted session can be resumed by any agent from the repository alone | `ai/PROJECT_RULES.md` §21, `scripts/check-records.mjs`, `.githooks/pre-commit` |
+
+> Questions 1–14 of the 2026-09-17 round (workflow platform direction) are **not** answered by this change request. They are tracked as OQ-028 with the reasoning in `WORKFLOW_PLATFORM_DIRECTION.md` at the repository root, and become CHG-006 once answered.
 
 ## Further decisions (2026-09-15)
 

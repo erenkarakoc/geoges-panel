@@ -39,6 +39,10 @@ Pilot bulguları CHG kayıtlarıyla tasarıma geri işlenir.
 
 **Değişiklik (CHG-002, 2026-09-15, sahip onaylı):** Phase 01 ile paralel yürüyen **Milestone M0** eklendi. M0'da gerçek Supabase girişiyle çalışan giriş ekranları ve boş kart iskeletli dashboard yerelde gösterilir. Kod atılmaz; Phase 07 temelinin ilk parçası olarak kalite kapılarıyla kurulur. Diğer tüm maddeler geçerlidir.
 
+**Değişiklik (CHG-003 ve CHG-004, 2026-09-16/17, sahip onaylı):** Yalnızca geliştirmede çalışan sunum sandbox'ı (CHG-003) ve navigasyon iskeletinin ürün kabuğuna aktarımı (CHG-004) onaylandı. CHG-004, **Phase 02**'nin (navigasyon, bilgi mimarisi, rol giriş ekranı, üst bar, mobil) ve **Phase 07**'nin (uygulama kabuğu) bir kısmını fazlarından önce teslim etti; iki faz da `PARTIALLY_DONE` işaretlidir ve yol haritasında neyin teslim edildiği, neyin borçta kaldığı kalem kalem yazılıdır. Maddenin geri kalanı (tasarım önce, spike, dilim pilotu) geçerlidir.
+
+**Değişiklik (CHG-005, 2026-09-17, sahip onaylı):** Sahip talimatıyla ürün kodu, CHG-005 (kayıt tutarlılığı) ve CHG-006 (iş akışı altyapısı yönü) kapanana kadar **donduruldu**. Bu süre boyunca yalnızca kayıt/doküman işi ve kayıtları denetleyen araç kodu yazılır.
+
 ## Tarih
 2026-09-15
 

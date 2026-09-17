@@ -1,6 +1,6 @@
 # REQUIREMENTS INDEX
 
-Status: SKELETON — requirement extraction happens in Phase 01 · Last updated: 2026-09-15
+Status: SKELETON — requirement extraction happens in Phase 01 · Last updated: 2026-09-18
 
 ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirement bodies are written in Turkish under `docs/requirements/`.
 
@@ -36,6 +36,10 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | MIG (data import — DEFERRED) | §36.5, §33.4 import part | `docs/requirements/REQ-MIG.md` | — |
 | NFR (UI standards, alerts, platform) | §1, §39–§43, §40.2, §45, §46 | `docs/requirements/REQ-NFR.md` | — |
 | NFR / platform — site-wide search (owner decision, no scope section) | D-044 | `docs/requirements/REQ-NFR.md` | — |
+
+## Known mis-filing (CHG-005 finding 9, pending CHG-006)
+
+§45 (end-to-end flows) and §46 are mapped to `REQ-NFR` above. If CHG-006 is approved, those flows become workflow-engine templates and belong to `REQ-WFL`. The row is **not** moved yet, because the decision is open (OQ-028). Moving it is step 5 of `WORKFLOW_PLATFORM_DIRECTION.md` §13.
 
 ## Coverage rule
 
