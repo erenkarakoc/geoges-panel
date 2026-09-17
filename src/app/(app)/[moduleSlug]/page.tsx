@@ -9,7 +9,7 @@ import {
 import { ModulePlaceholder } from "@/platform/ui/module-placeholder";
 
 // Placeholder pages for every registered module except those with their own route.
-const ownRoutes = new Set(["/dashboard"]);
+const ownRoutes = new Set(["/dashboard", "/sites", "/approvals", "/tasks"]);
 
 export const dynamicParams = false;
 
