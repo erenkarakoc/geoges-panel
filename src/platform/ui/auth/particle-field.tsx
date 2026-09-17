@@ -107,7 +107,7 @@ export function ParticleField({
   src,
   sampleStep = 8,
   threshold = 4,
-  renderScale = 1.35,
+  renderScale = 1.3,
   dotSize = 0.7,
   className,
   typingImpulseRef,

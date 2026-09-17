@@ -28,6 +28,7 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 | ID | Category | Question | Proposed answer | Blocks |
 |---|---|---|---|---|
 | OQ-025 | UI/UX | ANSWERED 2026-09-16 → D-051: "Projeler" above "Şantiyeler" in "Şantiye & Günlük"; "Talepler & Müşteriler" first in "Ticari". Implemented in the navigation registry. | — | — |
+| OQ-027 | UI/UX | Which flow methods are adopted on top of the navigation skeleton (CHG-004, D-054…D-056): (1) queue mode — approving a record pulls the next one in automatically instead of returning to a list; (2) persistent role-specific primary action in the toolbar; (3) stepped entry for the daily site log (§9.4 has 15 sections) plus a date strip instead of module tabs inside a site; (4) notification-driven navigation, where a task or notification drops the user straight into the work (§25.4–§25.5). Item (1) queue mode and item (2) the persistent primary action are **adopted** (D-069, D-070) — both are in the product shell now. Items (3) and (4) are still open. | Adopt 1, 2 and 4 now; 3 with the site module design in Phase 02 | Phase 02 screen design |
 
 ## Infrastructure & operations — non-blocking until Phase 05
 

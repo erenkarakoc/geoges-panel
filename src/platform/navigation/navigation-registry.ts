@@ -3,15 +3,17 @@ import {
   BarChart3Icon,
   BookOpenIcon,
   BoxesIcon,
+  Building2Icon,
   CalendarCheckIcon,
   ClipboardCheckIcon,
   ClipboardListIcon,
+  CoinsIcon,
   FactoryIcon,
   FileClockIcon,
   FileSearchIcon,
   FileTextIcon,
   FolderKanbanIcon,
-  GaugeIcon,
+  HammerIcon,
   HandshakeIcon,
   HardHatIcon,
   LandmarkIcon,
@@ -20,7 +22,9 @@ import {
   ListChecksIcon,
   type LucideIcon,
   MapPinnedIcon,
+  PackageIcon,
   ScaleIcon,
+  Settings2Icon,
   ShieldCheckIcon,
   ShoppingCartIcon,
   SlidersHorizontalIcon,
@@ -72,38 +76,80 @@ export type NavigationItem = PermissionGuarded & {
   moduleCode: ModuleCode;
   /** Short Turkish explanation shown on the module's placeholder page. */
   description: string;
+  /**
+   * The page works inside one site, so the header shows the site selector (D-062). Only pages
+   * that declare it get one; the chosen site is remembered across them.
+   */
+  scope?: "site";
+  /** The page's own primary action in the header; without one the role's action is shown. */
+  primaryAction?: string;
 };
 
 export type NavigationGroup = {
   id: string;
   label: string;
+  /** One icon per group: the rail shows the group, not its modules (D-054). */
+  icon: LucideIcon;
   items: readonly NavigationItem[];
 };
 
 /**
- * Left navigation, grouped as proposed in the functional scope §40.1.
+ * Work layer — the top region of the rail (D-054). These are the screens a user comes back to
+ * every day, so they sit above the module groups instead of inside them. "Bugün" is every
+ * role's entry screen and is composed per role (D-056); the cockpit is the owner's variant of
+ * it, which is why it is not a separate menu entry.
+ */
+export const workNavigation: readonly NavigationItem[] = [
+  {
+    id: "today",
+    label: "Bugün",
+    href: "/dashboard",
+    icon: CalendarCheckIcon,
+    moduleCode: "RPT",
+    requiredPermission: "rpt.cockpit.view",
+    description: "Rolünüze göre kurulan giriş ekranı: bugün sizden bekleneni gösterir.",
+  },
+  {
+    id: "approvals",
+    label: "Onaylar",
+    href: "/approvals",
+    icon: ClipboardCheckIcon,
+    moduleCode: "WFL",
+    requiredPermission: "wfl.approval.view",
+    description: "Yetkinize göre bekleyen tüm onayların toplandığı onay merkezi.",
+  },
+  {
+    id: "tasks",
+    label: "Görevler",
+    href: "/tasks",
+    icon: ListChecksIcon,
+    moduleCode: "TSK",
+    requiredPermission: "tsk.task.view",
+    description: "Size atanan görevler, bildirimler ve eskalasyonlar.",
+  },
+];
+
+/**
+ * SAMPLE DATA (owner decision 2026-09-16). There is no approval or task data yet, so the rail
+ * badges show example numbers. Replace this map with the permission-filtered counts when WFL
+ * and TSK deliver them; nothing else has to change.
+ */
+export const sampleWorkCounts: Readonly<Record<string, number>> = {
+  approvals: 3,
+  tasks: 3,
+};
+
+/**
+ * Module groups of the functional scope §40.1, unchanged in name and order. The rail shows one
+ * icon per group and its modules open from there (D-054), so the list is no longer a column.
  * UI label "Şantiye" replaces "Saha" per D-026.
  * Add a module by adding an item here; its placeholder page is generated automatically.
  */
 export const navigationRegistry: readonly NavigationGroup[] = [
   {
-    id: "overview",
-    label: "Genel Bakış",
-    items: [
-      {
-        id: "cockpit",
-        label: "Cockpit",
-        href: "/dashboard",
-        icon: GaugeIcon,
-        moduleCode: "RPT",
-        requiredPermission: "rpt.cockpit.view",
-        description: "Şirketin tamamını tek bakışta gösteren yönetim ekranı.",
-      },
-    ],
-  },
-  {
     id: "site-daily",
     label: "Şantiye & Günlük",
+    icon: HammerIcon,
     items: [
       {
         id: "daily-site-logs",
@@ -114,15 +160,8 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         requiredPermission: "sit.daily-site-log.view",
         description:
           "Şantiyenin günlük ana kaydı: döküm, montaj, şerit, puantaj, zayi ve harcamalar.",
-      },
-      {
-        id: "approvals",
-        label: "Onay",
-        href: "/approvals",
-        icon: ClipboardCheckIcon,
-        moduleCode: "WFL",
-        requiredPermission: "wfl.approval.view",
-        description: "Yetkinize göre bekleyen tüm onayların toplandığı onay merkezi.",
+        scope: "site",
+        primaryAction: "Günü kaydet",
       },
       {
         // Not in scope §40.1; placed here by owner decision D-051 (OQ-025).
@@ -144,15 +183,6 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         description: "Şantiye kartları, ilerleme ve şantiye detay ekranları.",
       },
       {
-        id: "tasks",
-        label: "Görevler",
-        href: "/tasks",
-        icon: ListChecksIcon,
-        moduleCode: "TSK",
-        requiredPermission: "tsk.task.view",
-        description: "Size atanan görevler, bildirimler ve eskalasyonlar.",
-      },
-      {
         id: "insights",
         label: "Öneriler",
         href: "/insights",
@@ -169,12 +199,14 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         moduleCode: "RPT",
         requiredPermission: "rpt.daily-report.view",
         description: "Onaylı günlük kayıtlardan üretilen resmi günlük raporlar.",
+        scope: "site",
       },
     ],
   },
   {
     id: "resources-production",
     label: "Kaynak & Üretim",
+    icon: PackageIcon,
     items: [
       {
         id: "inventory",
@@ -193,6 +225,7 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         moduleCode: "PUR",
         requiredPermission: "pur.purchase-order.view",
         description: "Tedarikçiler, siparişler ve satın alma talepleri.",
+        primaryAction: "Talep oluştur",
       },
       {
         id: "equipment",
@@ -217,6 +250,7 @@ export const navigationRegistry: readonly NavigationGroup[] = [
   {
     id: "commercial",
     label: "Ticari",
+    icon: CoinsIcon,
     items: [
       {
         // Not in scope §40.1; placed here by owner decision D-051 (OQ-025).
@@ -236,6 +270,7 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         moduleCode: "QTE",
         requiredPermission: "qte.quote.view",
         description: "Teklifler, marj hesabı ve teklif belgeleri.",
+        primaryAction: "Teklif hazırla",
       },
       {
         id: "finance",
@@ -260,6 +295,7 @@ export const navigationRegistry: readonly NavigationGroup[] = [
   {
     id: "corporate",
     label: "Kurumsal",
+    icon: Building2Icon,
     items: [
       {
         id: "human-resources",
@@ -323,12 +359,14 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         moduleCode: "SUP",
         requiredPermission: "sup.ticket.view",
         description: "İç destek talepleri ve yönlendirme.",
+        primaryAction: "Destek talebi aç",
       },
     ],
   },
   {
     id: "administration",
     label: "Yönetim",
+    icon: Settings2Icon,
     items: [
       {
         id: "master-data",
@@ -403,9 +441,25 @@ export function pickNavigationItems(
     .filter((group) => group.items.length > 0);
 }
 
+/** Work layer first, then the groups in order — every destination the shell knows. */
+export function allNavigationItems(
+  groups: readonly NavigationGroup[] = navigationRegistry,
+): NavigationItem[] {
+  return [...workNavigation, ...groups.flatMap((group) => group.items)];
+}
+
+/** Searches the work layer as well, because "Onaylar" and "Görevler" left the group list. */
 export function findNavigationItemByHref(
   groups: readonly NavigationGroup[],
   href: string,
 ): NavigationItem | undefined {
-  return groups.flatMap((group) => group.items).find((item) => item.href === href);
+  return allNavigationItems(groups).find((item) => item.href === href);
+}
+
+/** The group a module belongs to; work-layer items have none. Used for the header path. */
+export function findNavigationGroupOfItem(
+  groups: readonly NavigationGroup[],
+  itemId: string,
+): NavigationGroup | undefined {
+  return groups.find((group) => group.items.some((item) => item.id === itemId));
 }

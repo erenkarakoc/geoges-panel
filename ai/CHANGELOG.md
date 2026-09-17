@@ -1,5 +1,103 @@
 # CHANGELOG
 
+## 2026-09-17 — Group rows became one element, so their titles animate too
+
+- The work-layer rows animated when the rail opened and closed, but the group titles did not. They were two different components — a collapsible row when the menu was open, a flyout trigger when it was a rail — and swapping components replaces the DOM, so there was nothing for a transition to hold on to.
+- The row is one element now and only its behaviour changes: it folds the group open when there is room for the list, and opens the flyout when there is not. Fewer branches, and the titles slide, blur and fade like everything else.
+
+
+## 2026-09-17 — "Bugün" keeps the work and the figures, and nothing else
+
+- The owner took the two charts and the site summary off the entry screen. What is left is the seat's work block, the six key figures and the fold — which is closer to what the screen is for.
+- Nothing was left behind to rot: the bar chart component, its two sample series, the site summaries and the two wide widgets in the registry went with them, and the registry's `size` field with those. The chart is in git history if a screen needs one later.
+
+
+## 2026-09-17 — Work screens get their own content, and the menu its gutter (D-070)
+
+- "Onaylar" and "Görevler" stopped being generated placeholders. The approval centre runs as a queue: one record fills the screen, a decision brings in the next, and the last one leaves "Bugün temiz" behind — which settles the first question of OQ-027 by building it rather than debating it. "Görevler" lists what is late, what is due today and what is coming, each task naming where it came from and linking to the screen where it is done.
+- Sample data stays small on purpose: three approvals, one task per state. Every figure that also appears on "Bugün" was pulled into line with its list, so the badge, the card and the screen can no longer disagree — the approvals card said 12 while the badge said 3.
+- The navigation sandbox was deleted: `src/sandbox/navigation`, its route and the account-menu entry. The product shell has replaced it. The presentation sandbox is untouched.
+- The menu now sits in an even gutter: 8px to the frame on its left and 8px to the card on its right, in both states. That turned out to remove work rather than add it — with even side padding the custom sidebar width formulas were no longer needed, so the shell is back on COSS's own widths, with a 2px nudge in the collapsed state where the rail is 2px wider than the space it reserves.
+- The logo transition became directional: the long logo leaves to the left and blurs, the square one arrives from the right and sharpens, 12px and 2px over 200ms, and nothing at all when the visitor asks for reduced motion. Three things had to be fixed to get there — Tailwind writes `translate-x-*` to the `translate` property, so a transition listing only `transform` left the slide instant; `blur-0` inside a variant did not clear a plain `blur-[2px]`, so the square mark stayed permanently blurred; and the mark, centred in a head that was itself narrowing, drifted left with the closing rail on top of its own animation. It now sits in a box its own size, pinned to the start.
+
+
+## 2026-09-17 — Phone navigation: the rail becomes a bottom bar (CHG-004 step 5, TASK-0036)
+
+- Below `md` the shell now carries its own bottom bar: Bugün and Onaylar, the seat's primary action in the middle where a thumb reaches, then Görevler and Modüller. Entries are permission-filtered exactly like the rail, so a subcontractor crew lead sees two of them and the owner four.
+- "Modüller" opens a full-height drawer with a search box and a grouped icon grid — big targets, no keyboard needed, and the search folds Turkish letters so "santiye" finds the whole Şantiye & Günlük group. Picking a module navigates and closes the drawer.
+- The header's menu button and its primary action are desktop-only now, so a phone has one way to navigate instead of two. The top bar keeps the page name, the search icon, notifications, theme and the account.
+- The primary action moved into one component that both the header and the bottom bar render, so its behaviour has a single implementation. On a phone it is the plus alone — a round 44px button, its name kept as the accessible label — which gives the four navigation entries their room back.
+- Found on the phone: on a site detail the section you were in could start off screen in the scrolling strip. The active section now scrolls itself into view whenever it changes.
+- This refines scope §40.2, which describes a hamburger drawer on phones. The drawer survives as the module grid; what changed is that the screens people use every day no longer live behind it.
+
+
+## 2026-09-17 — "Bugün" replaces the cockpit, and the rail stops jumping (CHG-004 step 4, TASK-0035)
+
+- `/dashboard` is now "Bugün": the seat's own work on the left, its six key figures on the right, the other nine behind a fold, then two charts and the site list. The M0 "Cockpit" heading is gone — the header already names the page, so the body opens with the date.
+- Work first, figures second, and every work row reaches its own source: the owner's "Dikkat" rows lead to the pour, the site, the finance screen; the coordinator's lead into the approval queue; the site engineer's into today's log.
+- Charts arrived as an approved custom element (COSS has none) without adding a charting library: at this size a bar is a box, so the chart is built from plain elements that keep their rounded ends crisp, take theme tokens directly and carry their own hover text. One series, no legend, only the last value labelled; a day with no work draws no bar, because a sliver would read as "a little"; profit is green and loss red, as those colours mean everywhere else (§40.5).
+- Found on screen and fixed everywhere: Geist Mono has no ₺ glyph, so the symbol was falling back to another font and sitting badly against the digits. §4 now reads "only the number is mono" — units and symbols are set in the body font by one shared `Figure` component, which the money component of §4 will build on. As a side effect "318 panel" no longer reads as code.
+- Rail refinements from the owner's review: a user who has never touched the menu finds the first group open (a remembered choice still wins, including leaving everything closed); labels are clipped and fade instead of wrapping onto a second line during the 200ms animation; the two logos cross-fade inside a head of fixed height; the app card animates its margin with the rail instead of snapping; and the separator no longer carries its own margins, which had been giving the menu a horizontal scrollbar.
+- The sidebar head also gave up COSS's own 8px padding: the logo now occupies the same 56px band as the app header, so it starts level with the card's top edge instead of 8px below it, in both the expanded and the icon state. The square mark grew from 32px to 40px along the way — 48px, which matched the long logo exactly, turned out to be too heavy for the rail.
+- Sample data is still sample data, and says so: every figure block carries an "Örnek veri" badge. The objection stands on the record — a panel that shows invented numbers can be mistaken for a real one.
+
+
+## 2026-09-17 — Context row: the second header line that appears only with an open record (CHG-004 step 3, TASK-0034)
+
+- The row is delivered by Next.js' `@context` parallel route slot rather than by a prop each page has to remember to set. A page with no open record matches a slot page that renders nothing, so the shell is byte-for-byte what it was before: no row, same 56px header, same card.
+- Judged on a sample site detail, because SIT does not exist yet: `/sites` lists three sample sites in a COSS `Frame`, and opening one shows the row. Each section is its own address with a Turkish slug (`/sites/kavakli/dokum`), so a section can be shared or bookmarked; the day travels in `?gun=`, and today leaves the address clean.
+- Days are chosen with a strip of five plus a calendar popover; future days are disabled on both, and "today" is decided in the company's time zone rather than the server's (`platform/date/day.ts`, calendar days as plain `YYYY-MM-DD` strings so they survive URLs and the server/browser boundary).
+- Found while verifying: the section strip was 53px inside a 44px row, because `overflow-x-auto` also makes the vertical axis `auto` and the reserved scrollbars grew the nav. Both axes are pinned now and the scrollbar is hidden.
+- Slot behaviour was proven with a mirror probe (deleted): the row appears on a site address and is absent on `/dashboard` and `/sites`, both on a full load and on client-side navigation — the case where a slot otherwise keeps showing the previous page's row.
+- Deviations logged as 15a–15c: a conditional second header row, COSS `Tabs` used as navigation links, and a hidden scrollbar on the section strip.
+
+
+## 2026-09-17 — CHG-004 transfer, step 2: three-zone header (TASK-0033)
+
+- Owner decisions D-061 (development role switcher with four sample seats), D-062 (page name + path, page-declared site selector, wide centred search in COSS's Command layout, page-or-seat primary action), D-063 (sample notifications behind the bell).
+- New: `app-header.tsx`, `command-palette.tsx`, `preview-roles.ts`, `site-scope-preference.ts`, `search-text.ts`, `sample-notifications.ts`; registry items may declare `scope` and `primaryAction`; the app layout reads the seat cookie in development only; the account menu gained "Rol olarak görüntüle".
+- Found while verifying: the left zone collapsed under the search at narrower widths (now the search gives way first, grid only from `xl`); "gorev" did not find "Görevler" (Turkish-insensitive filter added); the chosen site would reset after visiting a page without a selector (state lifted into the header). Deviation rows 14a–14c. 45 tests.
+
+## 2026-09-16/17 — CHG-004 transfer, step 1: rail in the product sidebar (TASK-0032)
+
+- Owner decision: transfer the approved navigation skeleton into the product shell in five steps without breaking the layout (TASK-0032…TASK-0036). CHG-004 status amended; decisions D-057 (collapsed rail, group flyouts, multiple open groups remembered, logo at head, `/dashboard` = "Bugün"), D-058 ("Onay"/"Görevler" out of the module list; "Genel Bakış" group gone → 5 groups), D-059 (sample badge counts in one place, marked "örnek veri", with a recorded objection), D-060 (next steps: dev role switcher under the account menu, ⌘K in COSS's own Command design, COSS `Frame` where needed).
+- Step 1 code: work layer and group icons in `navigation-registry.ts`; rail with flyouts and collapsible groups in `app-sidebar.tsx`; open groups cookie in `sidebar-group-preference.ts`; `app-shell.tsx` reads both cookies on the server. Registry tests extended (35 tests).
+- Session interrupted by a usage limit mid-verification; resumed: chevron rotation bug fixed (`group-data-[panel-open]/collapsible` never matched; the trigger itself carries `data-panel-open`), "örnek veri" added to badge tooltip and title, temporary signed-out probe page deleted. Verified in the browser: collapsed rail, flyout, two groups open, open set survives reload. Deviation rows 13a–13d added.
+
+## 2026-09-16 — Navigation rethought: icon rail, header as a toolbar (CHG-004, TASK-0031)
+
+- Owner direction: the left menu must stop being a list of 28 modules stacked underneath one another, the panel must not look like a standard dashboard, and each role should get a flowing path of its own. The diagnosis that drove the design: the menu holds nouns while people work in verbs, and the same structure is asked to serve an owner who sees everything, field roles who see three rows, and coordinators who do not browse at all — they drain queues.
+- Four patterns were weighed (command-palette-first, icon rail, role workspace, object-first) and the rail was chosen; then four rail variants were weighed for what its second panel should hold. The owner took the second panel out of the sidebar entirely: its job moves into the header, so the existing shell, `--layout-gap`, `--frame-inset` and the 16:9 frame stay untouched.
+- Decided (D-054…D-056): a two-region rail (work layer with badges on top, module groups below a separator); a three-zone toolbar — left is where you are, middle is where you go, right is what you do — with a second row that renders only while an object is open; and "Bugün" as every role's entry screen, composed per role, with the cockpit as the owner's variant rather than a competing entry.
+- Prototype built in the development-only sandbox, reachable from the account menu in development. A role switcher shows the same skeleton from four seats: the owner keeps nine rail entries, the subcontractor crew lead keeps three, and nothing about the frame changes between them. Queue mode (approve pulls in the next record) and the empty state that means finished work are shown as demonstrations — those flow methods are still open (OQ-027).
+- Module lists never occupy a column: a rail group icon opens its modules as a flyout, and the same entries are reachable from the ⌘K palette.
+- Found while verifying: Base UI's Autocomplete reports the input value on every keystroke, so a typed fragment was navigating on its own; selection now requires a value that names an entry, compared without case. The toolbar keeps its context selection in local state, so it is keyed by role and starts fresh when the role changes.
+- No product code beyond one development-only menu entry. The real route redirects signed-out visitors to sign-in and returns 404 in production.
+
+
+## 2026-09-16 — Presentation redesigned as one cross-section
+
+- The first build stacked five sections and read as clutter. Owner direction: simplifying means conveying the same information legibly, not showing less. So the page became a single pan/zoom cross-section with a reading panel beside it: one horizontal band per group, stacked so the stack itself carries the architecture — platform at the bottom because everything rests on it, analysis at the top because it summarises what happens below. A constellation version was built first and dropped: on a flat sky the layering that MODULE_MAP.md describes was not visible.
+- Legibility comes from deferral, not omission: with nothing selected the links stay faint, and touching a module lights only its own connections while the rest dim. Picking a flow traces just that path. Each plate carries its connection count, so hubs stand out without a legend.
+- `@xyflow/react` 12.11.6 added (MIT, exact-pinned, D-053) for the viewport and edge plumbing only; the nodes and links are our own components and stylesheet, so none of its default look survives. Mermaid was rejected because it owns its rendering and would have dictated the visual style.
+- Code shrank from 2351 to 1949 lines with no content lost — the 496-line data file is untouched; the five section components and 942 lines of hand-written layout CSS were replaced.
+- Owner request: the page speaks the product's visual language. The sandbox palette, radius and fonts now read the app's global custom properties instead of carrying their own hex values, and its dark-mode block is gone because those tokens already switch. Inheriting a CSS variable is not an import, so the code isolation (D-052) is untouched.
+- Group colours stay five distinct hues: they carry which layer a module belongs to, so collapsing them lost information. Four of the five are app tokens (`--muted-foreground`, `--primary`, `--success`, `--warning`); the fifth has no equivalent and is the page's only literal colour, with a dark value of its own. Noted for later: green and amber also mean status elsewhere in the product (§4), so a module is never coloured by state here.
+- Icons sit on the plates themselves — a plate has room for one, where a dot did not.
+- A roles sidebar was added on the left, opposite the module detail on the right. The records hold no role-to-module link, so rather than inventing one the panel derives it: each module now states which classes of data it carries, and who may see which class is already recorded (§2.4, §2.5). Selecting FIN therefore answers "Saha Mühendisi görmez" from the decisions, not from a guess. A module carrying mixed classes reports "kısmen görür". Picking a flow answers the same question for the flow: the classes its modules carry together are judged as one, so the left panel follows the flow tabs as well as the map. The data-class field is the one inference on the page and is labelled as a proposal; the permission matrix is settled in Phase 01.
+- Roles, the visibility matrix and the role rules moved out of the right panel into the new one; with nothing selected it lists all six roles. Roles gained icons, and visibility is shown with eye / eye-off / question icons rather than words alone.
+- Each flow gained a sentence saying what it actually achieves, replacing a lead that only described the screen ("Kesitte aydınlanan 2 modül bu akışta sırayla devreye giriyor"). The sentences summarise each flow's own recorded steps (§45), so "Yeni işten tahsilata" now reads as turning a customer request into contracted work, production, a progress payment and finally collected money. The module count moved to a secondary line.
+- Technical event ids (`daily_log.approved` and the like) no longer appear on screen; the human label and the modules it sets off are enough for a presentation. They stay in the data as the record link.
+- Shared elements are COSS components rather than hand-made ones (owner request): `Badge`, `Button`, `Toggle` for the flow selector, `Table` for the visibility matrix and `ScrollArea` for the reading panel. The ESLint boundary was widened for this — a sandbox may now import the COSS UI layer, still nothing from modules or platform, and still nothing may import a sandbox. Only the section itself (bands, plates, links) stays custom, which is what D-052 approved.
+
+## 2026-09-16 — Development-only structure presentation (CHG-003, TASK-0030)
+
+- New page at `/presentation`, linked from the account menu, summarising the whole application: module map with connections, cross-module events, the end-to-end flows of scope §45, roles and visibility, and the daily log approval cycle. Visualisation first, no detail.
+- Built as a sandbox (D-052): `src/sandbox/presentation/` holds its own data, CSS Modules styles and components. ESLint boundaries enforce the isolation in both directions — the sandbox imports nothing from the app (not even COSS UI), and nothing may import the sandbox. Removing the folder, the route, the menu item and the lint element removes the feature completely.
+- Production returns 404 for the route and the menu entry is hidden there, so the page never ships. In development it still requires a signed-in session.
+- The custom shapes and SVG connector lines are approved for this sandbox only; the COSS-only rule (ADR-009) continues to apply to the product itself.
+- Content is sourced from `docs/architecture/MODULE_MAP.md`, scope §2/§9/§13/§45 and decisions D-035…D-040; roles show only what the scope states and mark the rest as decided in Phase 01. It has to be updated when those records change.
+
 ## 2026-09-16 — AI attribution removed from history
 
 - Owner request: `Co-Authored-By: Claude …` trailers removed from all commit messages on `main`, `docs/phase-01-kickoff` and `feature/m0-early-first-screen` (18 commits) with `git filter-branch --msg-filter`. Verified per branch: file trees identical, commit count, authors and dates unchanged, 0 trailers left; force-pushed with lease. All commit IDs changed; other clones must re-fetch. Full pre-rewrite backup kept locally as a git bundle.
