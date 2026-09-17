@@ -2,7 +2,6 @@
 
 import {
   CompassIcon,
-  LayoutPanelLeftIcon,
   LogOutIcon,
   NetworkIcon,
   ShieldCheckIcon,
@@ -77,16 +76,10 @@ export function UserMenu({
           </MenuLinkItem>
           {/* Development-only structure presentation (D-052); hidden in production builds. */}
           {process.env.NODE_ENV === "development" ? (
-            <>
-              <MenuLinkItem render={<Link href="/presentation" />}>
-                <NetworkIcon aria-hidden="true" />
-                Yapı sunumu
-              </MenuLinkItem>
-              <MenuLinkItem render={<Link href="/navigation" />}>
-                <LayoutPanelLeftIcon aria-hidden="true" />
-                Gezinme prototipi
-              </MenuLinkItem>
-            </>
+            <MenuLinkItem render={<Link href="/presentation" />}>
+              <NetworkIcon aria-hidden="true" />
+              Yapı sunumu
+            </MenuLinkItem>
           ) : null}
         </MenuGroup>
         {roleSwitcher ? (
