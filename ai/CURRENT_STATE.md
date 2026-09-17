@@ -7,9 +7,9 @@ PROJECT STATUS:      BOOTSTRAP
 CURRENT PHASE:       PHASE 01 — Requirements & Domain Analysis
 CURRENT SUBPHASE:    DISCOVER / QUESTION
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0038 Record consistency and deterministic guards (CHG-005)
-STATUS:              IMPLEMENTING
-BRANCH:              main (feature/presentation-sandbox merged 2026-09-17, a189684; M0 merged via PR #1, 2026-09-16)
+CURRENT TASK:        TASK-0038 Record consistency and deterministic guards (CHG-005) — committed, awaiting owner review
+STATUS:              REVIEW
+BRANCH:              infra/chg-005-record-consistency (from main a189684; not pushed)
 PARALLEL TRACK:      CHG-004 product transfer — 5 steps + sample work screens (TASK-0032…TASK-0037) REVIEW · presentation sandbox TASK-0030 REVIEW · navigation sandbox TASK-0031 DONE (deleted)
 CODE ALLOWED:        FROZEN for product code by owner instruction 2026-09-17 — no product code until CHG-005 (records + guards) and CHG-006 (workflow platform direction) are closed.
                      Permitted meanwhile: records and documentation, and tooling code that enforces the records (scripts/check-records.mjs, .githooks/, hook scripts).
