@@ -116,7 +116,7 @@ export function AppSidebar({
          */}
         <Link
           aria-label="GEOGES Panel ana sayfa"
-          className="relative flex h-14 items-center rounded-lg px-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+          className="relative flex h-10 items-center rounded-lg px-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
           href="/dashboard"
           onClick={closeMobileDrawer}
         >
