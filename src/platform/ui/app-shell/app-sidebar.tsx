@@ -117,13 +117,14 @@ export function AppSidebar({
       <SidebarHeader className="p-0 pb-3">
         {/*
          * The head keeps its height in both states, so nothing below it moves while the sidebar
-         * animates. The mark itself never moves either: the square tile is the only logo the app
-         * uses (D-071), and next to it the name is set as text, which leaves with the menu
-         * labels instead of being a second image to swap.
+         * animates. The mark holds still as well: the tile keeps the same inset in both states —
+         * centring it in the icon rail made it slide sideways as the menu closed — and it sits on
+         * the same centre line as the icons below it. Only the name moves, and it moves the way
+         * the menu labels do (D-071).
          */}
         <Link
           aria-label="GEOGES Panel ana sayfa"
-          className="flex h-14 items-center gap-2 rounded-lg px-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:px-0"
+          className="flex h-14 items-center gap-2 rounded-lg ps-1 pe-2"
           href="/dashboard"
           onClick={closeMobileDrawer}
         >
@@ -133,10 +134,8 @@ export function AppSidebar({
             aria-hidden="true"
             className={`flex min-w-0 flex-col leading-tight ${labelMotionClassName}`}
           >
-            <span className="text-sm font-semibold tracking-wide">GEOGES</span>
-            <span className="text-[0.6875rem] tracking-[0.2em] text-sidebar-foreground/72">
-              PANEL
-            </span>
+            <span className="text-sm font-semibold tracking-wide text-[#efefef]">GEOGES</span>
+            <span className="text-[0.6875rem] tracking-[0.2em]">PANEL</span>
           </span>
         </Link>
       </SidebarHeader>

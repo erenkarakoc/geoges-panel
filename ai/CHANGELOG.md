@@ -3,7 +3,7 @@
 ## 2026-09-17 — The app wears one mark, and the name is text
 
 - The wordmark logos left the product. The square tile is the only logo the application shows now, and the only full logo left anywhere is the particle figure on the sign-in screens, which samples the file directly.
-- In the expanded rail the name sits next to the tile as text — GEOGES over PANEL — so the head leaves with the menu labels rather than being a second image to cross-fade. The tile itself no longer moves at all.
+- In the expanded rail the name sits next to the tile as text — GEOGES over PANEL — so the head leaves with the menu labels rather than being a second image to cross-fade. The tile keeps the same place in both states: it had been centring itself in the icon rail, which made it slide sideways as the menu closed, and it now sits on the same centre line as the icons below it.
 - `BrandLogo`, its `tone` prop and `BrandFooter` went with the wordmark; `BrandFooter` had no callers anyway.
 
 
