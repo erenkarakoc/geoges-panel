@@ -46,7 +46,7 @@ export function DetailPanel({ selected, activeFlow, onSelect }: DetailPanelProps
     );
 
     return (
-      <aside className={styles.panel}>
+      <aside className={`${styles.panel} ${styles.panelLeft}`}>
         <ScrollArea className={styles.panelScroll}>
           <div className={styles.panelInner}>
             <Button
@@ -135,7 +135,7 @@ export function DetailPanel({ selected, activeFlow, onSelect }: DetailPanelProps
 
   if (flow) {
     return (
-      <aside className={styles.panel}>
+      <aside className={`${styles.panel} ${styles.panelLeft}`}>
         <ScrollArea className={styles.panelScroll}>
           <div className={styles.panelInner}>
             <p className={styles.panelEyebrow}>İş akışı {flow.section}</p>
@@ -163,7 +163,7 @@ export function DetailPanel({ selected, activeFlow, onSelect }: DetailPanelProps
   }
 
   return (
-    <aside className={styles.panel}>
+    <aside className={`${styles.panel} ${styles.panelLeft}`}>
       <ScrollArea className={styles.panelScroll}>
         <div className={styles.panelInner}>
           <p className={styles.panelEyebrow}>Genel bakış</p>

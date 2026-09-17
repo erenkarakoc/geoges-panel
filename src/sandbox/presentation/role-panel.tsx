@@ -99,7 +99,7 @@ export function RolePanel({
   const subject = subjectFor(selected, activeFlow);
 
   return (
-    <aside className={`${styles.panel} ${styles.panelLeft}`}>
+    <aside className={styles.panel}>
       <ScrollArea className={styles.panelScroll}>
         <div className={styles.panelInner}>
           {subject ? (

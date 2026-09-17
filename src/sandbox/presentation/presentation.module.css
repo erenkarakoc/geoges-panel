@@ -116,7 +116,7 @@
 
 .stage {
   display: grid;
-  grid-template-columns: 320px minmax(0, 1fr) 380px;
+  grid-template-columns: 380px minmax(0, 1fr) 320px;
   flex: 1;
   min-height: 0;
   gap: 0;
@@ -133,7 +133,7 @@
 
 @media (max-width: 1400px) {
   .stage {
-    grid-template-columns: 280px minmax(0, 1fr);
+    grid-template-columns: 340px minmax(0, 1fr);
     grid-template-rows: minmax(320px, 1fr) auto;
   }
 }

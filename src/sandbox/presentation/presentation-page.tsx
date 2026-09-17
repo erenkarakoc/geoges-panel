@@ -71,9 +71,9 @@ export function PresentationPage() {
       </nav>
 
       <div className={styles.stage}>
-        <RolePanel activeFlow={activeFlow} selected={selected} />
-        <StructureMap activeFlow={activeFlow} onSelect={selectModule} selected={selected} />
         <DetailPanel activeFlow={activeFlow} onSelect={selectModule} selected={selected} />
+        <StructureMap activeFlow={activeFlow} onSelect={selectModule} selected={selected} />
+        <RolePanel activeFlow={activeFlow} selected={selected} />
       </div>
 
       <footer className={styles.footer}>
