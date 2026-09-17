@@ -9,7 +9,7 @@ CURRENT SUBPHASE:    DISCOVER / QUESTION
 CURRENT FEATURE:     —
 CURRENT TASK:        TASK-0020 Glossary confirmation rounds (OQ-007)
 STATUS:              QUESTIONS_PENDING
-BRANCH:              feature/m0-early-first-screen (M0 work; merge to main pending owner decision)
+BRANCH:              docs/phase-01-requirements (M0 merged into main via PR #1, 2026-09-16)
 PARALLEL TRACK:      Milestone M0 early first screen (CHG-002) — DONE 2026-09-16 (TASK-0022…TASK-0026, owner approved)
 CODE ALLOWED:        None — M0 closed; product code resumes in Phase 07 (ADR-007) or via an approved change request
 ```
@@ -19,7 +19,7 @@ Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 00
 
 ## NEXT TASK
 1. Phase 01 per-module requirement rounds (TASK-0020 PROPOSED glossary terms per module, TASK-0021 slice 1 REQ extraction). OQ-021…OQ-025 answered (D-048…D-051).
-2. Owner decision: merge `feature/m0-early-first-screen` into `main`.
+2. M0 merged into `main` (PR #1, 2026-09-16).
 3. TASK-0018: re-check after 2026-10-15 that the worker keeps storing observations via the `CLAUDE_CODE_OAUTH_TOKEN` fallback (restart verified 2026-09-15; fallback not yet exercised). TASK-0019 DONE.
 
 ## BLOCKED BY
