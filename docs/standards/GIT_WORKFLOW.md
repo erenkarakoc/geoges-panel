@@ -19,6 +19,7 @@ Bu, `.githooks/pre-commit` kancasını devreye alır; kanca `scripts/check-recor
 - Commit mesajı: Conventional Commits + ilgili ID. Örnek: `feat(inv): record weighbridge ticket (TASK-0214)`. Türler: `feat, fix, refactor, docs, test, chore, infra, spike`.
 - **Yapay zekâ imzası yasak (sahip kararı, 2026-09-16):** commit mesajlarına ve PR açıklamalarına `Co-Authored-By: Claude …` veya başka bir yapay zekâ aracının imza/tanıtım satırı (ör. "Generated with …") eklenmez. Bu kural tüm yapay zekâ araçları için geçerlidir (Claude Code, Codex vb.). Geçmişteki bu satırlar 2026-09-16'da tüm dallardan temizlenmiştir.
 - Birleştirme pull request ile yapılır; CI (lint, type-check, test, build, güvenlik kontrolleri) geçmeden birleşmez.
+- **İstisna (sahip talimatı, 2026-09-18):** `infra/chg-005-record-consistency` dalı, sahibin "tek branch" talimatıyla PR açılmadan doğrudan `main`'e fast-forward edildi (`5c4ff54`). Gerekçe: CI hattı henüz kurulmadı (Phase 07 borcu), dolayısıyla PR bir kapı değil yalnızca bir okuma yüzeyi olurdu; dalın içeriği ürün kodu değil kayıt ve araç kodudur ve `npm run check` ile pre-commit kapısından geçmiştir. CI kurulduktan sonra bu istisna geçersizdir.
 - Commit ve push, kullanıcı istediğinde veya görev kaydı açıkça içeriyorsa yapılır.
 - Sırlar, `.env` dosyaları ve gerçek kişisel veri asla commit edilmez.
 - Sürüm etiketleri: `vMAJOR.MINOR.PATCH`; production deploy'ları etiketlenir.
