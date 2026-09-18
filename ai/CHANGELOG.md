@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-18 — REQ-IAM, and a banned word caught
+
+- IAM got its round: two sets of four plain-language questions, eight decisions (D-111…D-118). Roles are handed out with a scope — a site engineer for Kavaklı only — and the hierarchy runs between roles with a per-person override. Someone with two roles uses both at once and every action records which role it was taken under. The owner layer may be held by several partners, any one of whom completes an "owner approval". Commercial and sensitive visibility is granted module by module, delegation can come from the person or the manager, and access closes by itself on the leaving date.
+- `docs/requirements/REQ-IAM.md` holds 27 requirements and a capability catalog that deliberately publishes no action: nothing a workflow runs may grant or remove access.
+- Writing the catalog meant checking the glossary, which showed that REQ-WFL had used `flow` in its event codes — a word the glossary forbids in code (the term is `workflow`). Fixed, and thirteen proposed terms were added to the glossary before being used.
+
+
 ## 2026-09-18 — The first requirement file: REQ-WFL
 
 - Phase 01 produced its first requirement file. `docs/requirements/REQ-WFL.md` holds 39 requirements — layers, the capability catalog and its contract tests, the node palette and what the designer may never do, triggers and conditions, the approval centre with its three outcomes and mandatory reasons, authority and publishing, templates, locks and exceptions, central rules, traceability and the record-type builder — each with acceptance criteria and its source. No new questions were needed; OQ-028 was this module's round.

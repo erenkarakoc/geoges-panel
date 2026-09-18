@@ -8,7 +8,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 
 | Module | Source sections (`docs/sources/functional-scope.md`; "Mimari §" = `docs/sources/architecture-principles.md`) | REQ file | REQ count |
 |---|---|---|---|
-| IAM | §2 | `docs/requirements/REQ-IAM.md` | — |
+| IAM | §2 | `docs/requirements/REQ-IAM.md` | 27 (DRAFT) |
 | RPT (cockpit, reports) | §3, §14, §34 | `docs/requirements/REQ-RPT.md` | — |
 | WFL (approvals, rules, workflow, end-to-end flows, capability catalog, record-type builder) | §4, §13, §37, §45, Mimari §6, §13; CHG-006 (D-077…D-105) | `docs/requirements/REQ-WFL.md` | 39 (DRAFT) |
 | CRM | §5 | `docs/requirements/REQ-CRM.md` | — |

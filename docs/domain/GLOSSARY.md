@@ -1,6 +1,6 @@
 # Terim Sözlüğü (Glossary)
 
-Durum: TASLAK — önerilen terimler Phase 01'de sahiple kesinleşir (OQ-007) · 2026-09-15
+Durum: TASLAK — önerilen terimler Phase 01'de sahiple kesinleşir (OQ-007) · Son güncelleme: 2026-09-18
 
 Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** kullanılır. Durum sütunu: `PROPOSED` (önerildi), `CONFIRMED` (kesinleşti), `OPEN` (tartışmalı).
 
@@ -9,6 +9,13 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Sahip | Owner | Şirket sahibi; hiçbir rol tarafından kısıtlanamayan en üst görünürlük | — | admin, boss | PROPOSED | Sistem yöneticisi rolünden ayrıdır |
 | Rol | Role | Yetki ve sorumluluk seti | — | position (farklı kavram) | PROPOSED | |
 | Vekâlet | Role Delegation | Belirli süreli rol ataması | — | proxy, deputy | PROPOSED | |
+| Kullanıcı | User | Panele giriş yapan hesap | — | account, member | PROPOSED | Personelden (Employee) ayrıdır; taşeron ekip başı da kullanıcıdır |
+| Yetki | Permission | Bir rolün taşıdığı tek bir izin (ör. `wfl.approval.view`) | Yetki tipi (UI) | right, privilege | PROPOSED | Roller yetkilerin bir araya gelmesidir (D-098) |
+| Rol ataması | Role Assignment | Bir rolün bir kişiye bir kapsamla verilmesi | — | user_role | PROPOSED | D-111 |
+| Kapsam | Scope | Rol atamasının geçerli olduğu alan: tüm şirket, şantiyeler veya projeler | — | area, region | PROPOSED | D-111 |
+| Veri sınıfı | Data Class | Verinin gizlilik sınıfı: genel, iç, ticari, hassas kişisel | — | sensitivity_level | PROPOSED | Görme izni modül bazında (D-115) |
+| Tam görünürlük | Full Visibility | Tüm modüllerde tüm veri sınıflarını tüm kapsamlarda görebilmek | — | superuser, admin | PROPOSED | Akış tasarlama yetkisinin şartı (D-083) |
+| Görev ayrılığı | Separation of Duties | Hazırlayanın kendi işlemini onaylayamaması kuralı | — | four_eyes | PROPOSED | §2.6 |
 | İşlem yapılan rol | Acting Role | Çoklu rolü olan kullanıcının işlemi yaptığı rol | — | current_role | PROPOSED | |
 | Firma | Party | Şirketin iş yaptığı her firma/kurum için tek kayıt; rolleri olur (işveren, müşteri, tedarikçi…) | — | company, firm, organization | CONFIRMED | D-027; aynı firma için ikinci kart açılmaz |
 | İşveren | Client | Bizi uygulama işine alan firma/idare; Party rolü `client` | Employer (sözleşme metinlerinde) | company | CONFIRMED | D-027; FIDIC "Employer" kullanır |
@@ -80,6 +87,12 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Revizyon talebi | Revision Request | Onaylı kayıt değişiklik talebi | — | edit_request | PROPOSED | |
 | Onay | Approval | — | — | confirmation | PROPOSED | |
 | Düzeltme isteği | Correction Request | Kaydı düzeltmeye geri gönderme | — | rejection (farklı) | PROPOSED | |
+| Akış örneği | Workflow Instance | Bir iş akışının tek bir çalışması | — | run, process, flow | PROPOSED | CHG-006 |
+| Akış şablonu | Workflow Template | Varsayılan şirket akışı; kullanılan akış onun kopyasıdır | — | preset | PROPOSED | D-086 |
+| Yetenek kataloğu | Capability Catalog | Bir modülün akışlara sunduğu olaylar, aksiyonlar ve koşul alanları | — | api_list | PROPOSED | D-078 |
+| Bağımlılık kilidi | Dependency Lock | Bir koşul sağlanmadan durum geçişini engelleyen kural | — | block, freeze | PROPOSED | ADR-006, D-084 |
+| Kayıt türü üreteci | Record Type Builder | Kullanıcının yeni kayıt türü tanımladığı araç | — | form_builder | PROPOSED | D-079 |
+| Kullanıcı tanımlı kayıt türü | Custom Record Type | Üreteçle tanımlanmış kayıt türü | — | custom_entity | PROPOSED | D-079 |
 | İş akışı | Workflow | Tanımlı süreç | — | process, flow (kodda) | PROPOSED | |
 | Görev | Task | Sorumluya atanan iş | — | job, todo | PROPOSED | Geliştirme görevleri `TASK-NNNN` ID'si ile karışmaması için kodda `work_task` Phase 04'te değerlendirilir |
 | Eskalasyon | Escalation | — | — | — | PROPOSED | |

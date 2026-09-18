@@ -202,6 +202,21 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — IAM requirement round (2026-09-18, TASK-0021)
+
+Two rounds with the owner; the answers are written into `docs/requirements/REQ-IAM.md`.
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-111 | **A role assignment carries a scope**: the whole company, specific sites or specific projects. One role is defined once and given to different people with different scopes | Owner 2026-09-18; §2.1, §2.5 |
+| D-112 | **Hierarchy is defined between roles and can be overridden per person.** A person's manager is whoever holds the next role up in the same scope; a manually set manager takes precedence | Owner 2026-09-18; §2.1; D-040, D-097 |
+| D-113 | **Several roles: permissions combine.** The user never switches roles; every action records the role it was taken under, and the user is asked once when two roles both allow it. Single-role users never see a role choice | Owner 2026-09-18; §2.2 |
+| D-114 | **The owner layer can be held by several people (partners).** None can hide data from another; each can audit the others | Owner 2026-09-18; §2.4 |
+| D-115 | **Commercial and sensitive-personal visibility is granted module by module**, not by one company-wide switch | Owner 2026-09-18; §2.5 |
+| D-116 | **Delegation can be given by the person (planned absence, manager notified) and by the manager or an authorised person (unplanned)** | Owner 2026-09-18; §2.3 |
+| D-117 | **Access closes by itself on the leaving date** set by HR: account deactivated, sessions ended, owners and the manager notified. This is IAM's own behaviour, not a workflow action | Owner 2026-09-18; §2.8, §45.4; D-091 |
+| D-118 | **"Owner approval" is completed by any one owner** | Owner 2026-09-18; D-114 |
+
 ## CHG-004 follow-up after CHG-006 (2026-09-18, TASK-0040)
 
 The owner reviewed the TASK-0040 findings and decided:

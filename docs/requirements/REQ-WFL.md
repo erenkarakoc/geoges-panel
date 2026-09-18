@@ -431,10 +431,10 @@ Biçim: `docs/requirements/README.md`. WFL'in kendi yayımladıkları; diğer mo
 
 | Kod | Ad | Ne zaman | Taşıdığı alanlar | Veri sınıfı |
 |---|---|---|---|---|
-| `flow.published` | Akış yayımlandı | Bir akış sürümü canlıya alındığında | akış, sürüm, yayımlayan | iç |
-| `flow_instance.started` | Akış başladı | Bir akış örneği tetiklendiğinde | akış, sürüm, tetikleyen olay/kayıt | iç |
-| `flow_instance.completed` | Akış tamamlandı | Bir örnek bitiş adımına ulaştığında | akış, sürüm, sonuç | iç |
-| `flow_instance.failed` | Akış hata ile durdu | Bir adım hata verdiğinde veya koşul süre sınırını aştığında | akış, sürüm, adım, hata | iç |
+| `workflow.published` | Akış yayımlandı | Bir akış sürümü canlıya alındığında | akış, sürüm, yayımlayan | iç |
+| `workflow_instance.started` | Akış başladı | Bir akış örneği tetiklendiğinde | akış, sürüm, tetikleyen olay/kayıt | iç |
+| `workflow_instance.completed` | Akış tamamlandı | Bir örnek bitiş adımına ulaştığında | akış, sürüm, sonuç | iç |
+| `workflow_instance.failed` | Akış hata ile durdu | Bir adım hata verdiğinde veya koşul süre sınırını aştığında | akış, sürüm, adım, hata | iç |
 | `approval.decided` | Onay kararı verildi | Onayla / reddet / düzeltmeye geri gönder seçildiğinde | kayıt, karar, karar veren, gerekçe | kaydın sınıfı |
 | `lock.overridden` | Kilit aşıldı | Sahip veya GM bir kilidi aştığında | kayıt, kilit, aşan, gerekçe | iç |
 
@@ -448,4 +448,4 @@ WFL'in kendi aksiyonları palet adımlarıdır (REQ-WFL-005); ayrıca katalog ak
 |---|---|---|---|
 | `approval.decision` | Onay kararı | seçim: onayla / reddet / geri gönder | iç |
 | `approval.waiting_hours` | Onayın beklediği süre | sayı (saat) | iç |
-| `flow_instance.age_days` | Akış örneğinin yaşı | sayı (gün) | iç |
+| `workflow_instance.age_days` | Akış örneğinin yaşı | sayı (gün) | iç |

@@ -34,6 +34,7 @@ None.
 See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
+- D-111…D-118 (2026-09-18, IAM round): role assignments carry a scope; role hierarchy with per-person override; several roles combine and the acting role is recorded; several owners possible, any one completes an owner approval; commercial/sensitive visibility per module; delegation by the person or the manager; access closes by itself on the leaving date
 - D-110 (2026-09-18): full check before every commit, automatic push after every commit on `main`
 - D-109 (2026-09-18): single branch — all work committed directly to `main`, no feature branches or PRs; `main` stays green on every commit
 - D-106…D-108 (2026-09-18, TASK-0040): sample data removed from approvals, tasks, notifications and badges; reason required on reject and send-back; no "İş Akışları" menu entry until its own UX round
