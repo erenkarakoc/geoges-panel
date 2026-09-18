@@ -209,7 +209,7 @@ Decided by the owner in a four-round question session.
 | D-169 | **A request arriving by e-mail is opened by hand** from the quick-entry screen and the e-mail is attached with its files; the panel does not read the mailbox (consistent with D-103) | Owner 2026-09-18; §5.1 |
 | D-170 | **WhatsApp requests are entered by hand** on the quick-entry screen, with a screenshot if needed; no WhatsApp connection | Owner 2026-09-18; §5.1 |
 | D-171 | **The client scorecard is calculated from records, plus dated notes with a reason** from authorised people; no manual score | Owner 2026-09-18; §5.3 |
-| D-172 | **A won request opens a pre-filled draft project** from the request and the accepted quote; the technical office completes it. Derived consequence, to be confirmed with the requirement file: the project starts at the contract stage and the earlier stages of REQ-PRJ-003 come from the request's history | Owner 2026-09-18; §5; REQ-PRJ-003 |
+| D-172 | **A won request opens a pre-filled draft project** from the request and the accepted quote; the technical office completes it. Derived consequence, **confirmed by the owner 2026-09-18**: the project starts at the contract stage and the earlier stages of REQ-PRJ-003 come from the request's history | Owner 2026-09-18; §5; REQ-PRJ-003 |
 
 ## PHASE 01 — HR requirement round (2026-09-18)
 
