@@ -1025,10 +1025,11 @@ Bu durumda gelir normal proje geliridir; gider hesabında:
 - operatör,
 - nakliye,
 - saha harcamaları,
-- amortisman,
-- genel gider payı
+- amortisman
 
 dahil edilir.
+
+> **D-149 ile değişti (2026-09-18):** Önceki metinde listenin son kalemi "genel gider payı" idi. Genel giderler (ofis kirası, genel müdürlük) projelere ve şantiyelere dağıtılmaz; yalnızca şirket genelinde görünür. Bkz. REQ-FIN-017.
 
 Yani taşeron şantiyede kâr-zarar yalnızca “işverenden aldığım para - taşerona ödediğim işçilik” değildir; GEOGES'in üstlendiği tüm destek maliyetleri hesaba katılır.
 
@@ -1751,7 +1752,9 @@ Aynı giderin iki kez sayılması engellenmelidir.
 
 Gerçek proje kâr-zararı mümkün olduğunca tüm giderleri kapsamalıdır:
 
-**Gelir - (işçilik + malzeme + yemek/konaklama + ekipman/amortisman + nakliye + operatör/vinç + saha harcaması + proje payına düşen diğer giderler)**
+**Gelir - (işçilik + malzeme + yemek/konaklama + ekipman/amortisman + nakliye + operatör/vinç + saha harcaması + projeye doğrudan yazılmış diğer giderler)**
+
+> **D-149 ile değişti (2026-09-18):** Önceki metin "proje payına düşen diğer giderler" diyordu. Genel giderler projelere dağıtılmaz; şirket geneli kâr-zarar = proje sonuçlarının toplamı − genel giderler. Bkz. REQ-FIN-017.
 
 Hem günlük/aylık hem kümülatif izlenebilir.
 

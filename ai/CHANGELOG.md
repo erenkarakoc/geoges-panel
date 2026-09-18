@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-18 — FIN requirements confirmed
+
+- The owner confirmed REQ-FIN, including the derived rule that the factory and the office close their own month: 30 more requirements CONFIRMED, 242 in all.
+- The contradiction D-149 left in the scope is fixed at its source: §15.1 no longer lists an overhead share among a site's costs, and the §22.4 formula counts only costs recorded directly on the project. Both places carry a note naming D-149. The overhead markup in quote estimates (§6.3) is a different question and goes to the QTE round.
+
+
 ## 2026-09-18 — FIN requirements
 
 - Eight finance decisions (D-147…D-154). A quantity the client refuses carries over to the next month; subcontractors are paid on the production we approved, without waiting for the client; a client advance is recovered from progress payments; the expected collection date comes from the contract's term; when one spending arrives twice, the first entry books it and the second is linked; the accountant gets a monthly export file. Two answers went against the recommendation: general expenses are not spread over projects — which changes the scope's "overhead share" wording in §15.1 and §22.4 — and each site closes its own month, with the factory and the office as units of their own (a derived rule marked for confirmation).

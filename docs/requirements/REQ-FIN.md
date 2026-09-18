@@ -1,6 +1,6 @@
 # REQ-FIN — Hakediş, Gelir-Gider, Cari, Nakit ve Dönem Kapanışı
 
-Durum: DRAFT · 2026-09-18 · Modül: FIN (Finance)
+Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: FIN (Finance)
 
 Kaynaklar: Özellik Yapısı §15.1 (maliyet kalemleri), §16, §20.2, §22; kararlar D-027, D-029, D-030, D-033, D-034, D-140, D-141, D-147…D-154.
 
@@ -20,7 +20,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Dövizli hakedişte tutar, TL karşılığıyla birlikte saklanır (REQ-ADM-013).
   - [ ] Bir proje ve dönem için yalnızca bir işveren hakedişi açık olabilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-002 — Onaylı üretim öneri olarak gelir
 
@@ -30,7 +30,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Gerekçesiz miktar düzeltmesi kaydedilmez.
   - [ ] Onaylanmamış günlük kayıtların üretimi öneriye girmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-003 — İşverenin onaylamadığı miktar sonraki aya devreder
 
@@ -40,7 +40,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Devreden miktar, bir sonraki hakediş önerisinde ayrı satır olarak ve ilk sunulduğu ayla birlikte görünür.
   - [ ] Aynı miktar hiçbir zaman iki hakedişte birden onaylanmış sayılmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-004 — Hakediş durum zinciri
 
@@ -50,7 +50,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Her durum geçişi tarihi ve yapanla hakedişin geçmişine yazılır.
   - [ ] Durum atlanamaz; ör. faturalanmamış hakediş "Tahsil edildi" olamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-005 — Kısmi tahsilat
 
@@ -59,7 +59,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Açıklama: Bir hakediş birden fazla tahsilatla kapanabilir; kalan açık alacak görünür. Hakediş, net tutarın tamamı tahsil edilince "Tahsil edildi" olur.
 - Kabul kriterleri:
   - [ ] Her tahsilat tarih, tutar, para birimi ve dekontla girilir ve işveren carisini azaltır (REQ-FIN-019).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-006 — Kesintiler
 
@@ -69,7 +69,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Teminat kesintisi, iş sonunda iade edilecek alacak olarak ayrı izlenir; toplam kesilen teminat projede görünür.
   - [ ] Her kesinti türü ayrı satırdır; net tutar satırlardan hesaplanır, elle yazılmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-007 — İşveren avansı hakedişlerden kesilerek kapanır
 
@@ -79,7 +79,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Kesilen avans toplamı alınan avansı aşamaz.
   - [ ] Avans kesinti oranı projeye göre ayarlanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-008 — İşveren onayı fatura görevi açar
 
@@ -88,7 +88,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Açıklama: İşveren hakedişi onayladığında muhasebe birimine fatura görevi düşer. Faturanın kesilmesi için ayrıca yönetim onayı gerekip gerekmediği iş akışında tanımlanır.
 - Kabul kriterleri:
   - [ ] Fatura görevi, hakedişe bağlıdır; hakediş "Faturalandı" olunca görev kapanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Taşeron hakedişi
 
@@ -100,7 +100,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] İşveren bir miktarı kısarsa taşeron hakedişi kendiliğinden değişmez; fark projenin sonucunda görünür.
   - [ ] Taşeron hakedişi de kesinti ve onay adımlarından geçer ve taşeron carisine borç olarak yazılır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-010 — İki hakediş aynı veriden
 
@@ -109,7 +109,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Açıklama: İşveren ve taşeron hakedişleri aynı onaylı üretim verisinden hesaplanır; miktarlar ayrı ayrı girilmez.
 - Kabul kriterleri:
   - [ ] Bir dönem için işveren ve taşeron hakedişlerinin miktarları yan yana karşılaştırılabilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Gelir ve gider
 
@@ -120,7 +120,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Açıklama: Gelir kaynakları hakediş tahsilatları, yan gelirler, hurda, dış nakliye, dış imalat, kiralama ve diğer gelirlerdir. Her gelirde tutar, para birimi, tarih, ilgili proje veya birim, faturalı/nakit bilgisi ve belge tutulur.
 - Kabul kriterleri:
   - [ ] Her gelir bir maliyet merkezine (proje, şantiye, fabrika, ekipman, genel) bağlıdır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-012 — Yan gelir ve dış işler
 
@@ -130,7 +130,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Nakit tahsil edilen yan gelir de kayda girilir ve resmi muhasebe mutabakatına dahildir (REQ-FIN-026).
   - [ ] Hurda satışı, stoktaki hurda miktarını azaltır (REQ-INV).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-013 — Sistemden kendiliğinden gelen giderler
 
@@ -140,7 +140,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Kendiliğinden gelen her gider, kaynak kaydına bağlantı taşır.
   - [ ] Kaynak kaydı onaylanmadan gider yazılmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-014 — Elle girilen giderler
 
@@ -149,7 +149,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Açıklama: Ofis gideri, kira, seyahat, yemek, konaklama, avans ve diğer genel giderler elle, belgeyle girilir. Her gider bir maliyet merkezine bağlanır; hiçbir projeye ait olmayan gider "genel" merkeze yazılır.
 - Kabul kriterleri:
   - [ ] Maliyet merkezi seçilmeden gider kaydedilmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-015 — Saha harcamasının onayı
 
@@ -158,7 +158,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Açıklama: Şantiyede girilen harcama, iş akışında tanımlı onaydan geçince şantiyenin gideri olarak yazılır.
 - Kabul kriterleri:
   - [ ] Onay bekleyen harcama gider toplamlarında görünmez; ayrı "onay bekleyen" olarak görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-016 — Aynı gider iki kez sayılmaz
 
@@ -168,7 +168,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Aynı tedarikçi, yakın tarih ve benzer tutarla gelen kayıt, olası tekrar olarak işaretlenir ve bağlama önerilir.
   - [ ] Bağlanan iki kayıt arasındaki tutar farkı, gerekçeyle kapatılana kadar açık kalem olarak görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## D. Proje kâr-zararı
 
@@ -181,7 +181,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
   - [ ] Kâr-zarar günlük, aylık ve kümülatif izlenebilir.
   - [ ] Her tutar kaynağına kadar açılabilir (hangi kayıt, hangi gider).
   - [ ] Şirket geneli kâr-zarar = proje sonuçlarının toplamı − genel giderler, ayrı satırlarla gösterilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## E. Cari hesap
 
@@ -192,7 +192,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Açıklama: Her firmanın her para birimi için tek net yürüyen bakiyesi vardır; aynı firma hem işveren hem tedarikçiyse alacak ve borç netleşir. Her bakiye güncel TL karşılığıyla gösterilir (D-140).
 - Kabul kriterleri:
   - [ ] Kur farkı, bakiyeden ayrı hesaplanır ve gösterilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-019 — Cari hareketleri
 
@@ -202,7 +202,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Cari kartında tarihli hareket dökümü, açıklama, artış/azalış, yürüyen bakiye, para birimi ve TL karşılığı görünür.
   - [ ] Cari hareketi elle silinmez; yanlış hareket ters kayıtla düzeltilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## F. Finans ekranı ve nakit
 
@@ -214,7 +214,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Her gösterge, dökümüne inilerek açılabilir.
   - [ ] Ekran yalnızca ticari veri yetkisi olan kullanıcılara görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-021 — Haftalık nakit projeksiyonu
 
@@ -224,7 +224,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Planlı nakit kalemi (tek seferlik veya tekrarlayan) elle eklenebilir.
   - [ ] Her haftanın rakamı, onu oluşturan kalemlere açılabilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-022 — Beklenen tahsil tarihi sözleşme vadesinden
 
@@ -234,7 +234,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Değiştirilen tarih, hesaplanan tarihle birlikte ve gerekçesiyle görünür.
   - [ ] Beklenen tarihi geçen ve tahsil edilmeyen hakediş gecikmiş olarak işaretlenir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-023 — Nakit açığı önceden uyarılır
 
@@ -243,7 +243,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Açıklama: Kümülatif nakdin eşiğin altına düştüğü hafta önceden uyarılır; yönetim açığı hangi kalemlerin yarattığını görür. Eşik merkezi kuraldır (REQ-WFL-032).
 - Kabul kriterleri:
   - [ ] Uyarı, açığın beklendiği haftayı ve en büyük çıkış kalemlerini gösterir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## G. Fatura ve ödeme
 
@@ -254,7 +254,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Açıklama: Muhasebe birimi fatura, irsaliye, ödeme listesi, cari, avans, dekont, ödeme durumu ve diğer muhasebe evrakını panelden takip eder. Gelen fatura ilgili siparişe, teslim alıma veya gidere bağlanır.
 - Kabul kriterleri:
   - [ ] Faturası gelmemiş teslim alımlar ve bağlanmamış faturalar listelenebilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-025 — Ödeme onaysız tamamlanmaz
 
@@ -264,7 +264,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Onaysız ödeme için "ödendi" işlemi yoktur.
   - [ ] Ödemeyi hazırlayan kişi kendi ödemesini onaylayamaz (REQ-IAM, görev ayrılığı).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## H. Resmi muhasebe
 
@@ -276,7 +276,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Dışa aktarılan her kayıt, hangi dosyayla ve ne zaman aktarıldığını taşır.
   - [ ] Mutabakatta bulunan fark gerekçesiyle kaydedilir ve kapanana kadar açık kalem olarak görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## I. Dönem kapanışı
 
@@ -284,10 +284,10 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.10; D-154
 - Öncelik: Must · Kademe: T1
-- Açıklama: Dönem kapanışı kapanış birimi bazındadır: her şantiye kendi ayını hazır olunca kapatır. Fabrika ve genel (ofis) de kendi kapanış birimidir (D-154'ten türetilen kural, bu dosyanın onayıyla kesinleşir). Şirket geneli ay, son birim de kapanınca kesinleşir.
+- Açıklama: Dönem kapanışı kapanış birimi bazındadır: her şantiye kendi ayını hazır olunca kapatır. Fabrika ve genel (ofis) de kendi kapanış birimidir (D-154'ten türetilen kural, sahip onayladı). Şirket geneli ay, son birim de kapanınca kesinleşir.
 - Kabul kriterleri:
   - [ ] Hangi birimin hangi ayı kapattığı ve hangilerinin beklediği tek listede görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-028 — Kapanış kontrol listesi
 
@@ -297,7 +297,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Engelleyici kalemi olan birimde "kapat" işlemi çalışmaz ve kalemler bağlantılarıyla listelenir.
   - [ ] Hangi kalem türlerinin engelleyici, hangilerinin uyarı olduğu merkezi olarak ayarlanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-029 — Kapanan dönem kesinleşir ve kilitlenir
 
@@ -307,7 +307,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Kabul kriterleri:
   - [ ] Kapalı döneme tarihli yeni kayıt doğrudan girilemez.
   - [ ] Yeniden açma gerekçesiz yapılamaz, sahiplere bildirilir ve denetim kaydına yazılır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FIN-030 — Geciken kapanış için uyarı ve görev
 
@@ -316,7 +316,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 - Açıklama: Ayın belirli gününe kadar (varsayılan ayın 10'u; ayarlanabilir) kapatılmayan birim için sorumlusuna uyarı ve görev oluşur.
 - Kabul kriterleri:
   - [ ] Görev, birim kapanınca kendiliğinden kapanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 
