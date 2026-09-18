@@ -19,7 +19,7 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 - **Slice 1 and later files confirmed by the owner:** WFL, IAM, SIT, RPT, TSK (D-130…D-133), AUD (D-134, D-135), PRJ (D-136…D-138), ADM (D-139…D-141), INV, PUR, FAC (D-142…D-146) — 212 requirements CONFIRMED.
 - **REQ-FIN** — 30 requirements, D-147…D-154, CONFIRMED; scope §15.1/§22.4 corrected for D-149.
 - **REQ-EQP** — 21 requirements, D-155…D-162, CONFIRMED; scope §20.3/§21.3 corrected in place; REQ-SIT-003 gains an equipment section (D-162). Two answers went against the recommendation: no overhead allocation to projects (D-149, changes §15.1/§22.4 wording) and period close per site (D-154, with a derived rule for factory and office marked for confirmation).
-- **REQ-HR** — 16 requirements, D-163…D-168, DRAFT; RISK-011 (payroll engine) opened. Derived rule awaiting confirmation: mid-month unit change splits salary cost by date (D-164).
+- **REQ-HR** — 16 requirements, D-163…D-168, CONFIRMED; RISK-011 (payroll engine) opened.
 - Validator gained checks for decision and requirement ids and six-column task rows; the rule text in PROJECT_RULES §21.1 now matches what the tool does.
 - Glossary: ~25 proposed terms added before use; non-canonical names fixed (`flow` → `workflow`, `daily_log` → `daily_site_log`, `waste` → `damaged_unit`).
 
@@ -33,5 +33,4 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 
 ## Next session
 
-1. Owner confirms or corrects REQ-HR (incl. the D-164 derived rule); mark CONFIRMED.
-2. Continue with CRM, then QTE (ask the §6.3 overhead-markup question), following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).
+1. Continue with CRM, then QTE (ask the §6.3 overhead-markup question), following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).

@@ -1,6 +1,6 @@
 # REQ-HR — Personel, Puantaj, Bordro, İzin ve Günlük Faaliyet
 
-Durum: DRAFT · 2026-09-18 · Modül: HR (Human Resources)
+Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: HR (Human Resources)
 
 Kaynaklar: Özellik Yapısı §23.1–§23.8; kararlar D-050, D-117, D-134, D-163…D-168; RISK-001.
 
@@ -22,7 +22,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Kabul kriterleri:
   - [ ] Personel kartı ile kullanıcı hesabı ayrı kayıtlardır; bir personelin hesabı olmayabilir.
   - [ ] Birim değişikliği geçerlilik tarihiyle kaydedilir; önceki birimler geçmişte kalır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-HR-002 — Hassas alanlar
 
@@ -31,7 +31,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Açıklama: Maaş, SGK bilgisi, IBAN, sağlık raporu ve özlük belgeleri hassas kişisel veridir; yalnızca bu veri sınıfını görme izni olan roller (varsayılan: yetkili İK ve sahip) görür.
 - Kabul kriterleri:
   - [ ] Hassas izni olmayan kullanıcı bu alanları listelerde, dışa aktarmalarda ve kayıt geçmişinde de görmez (REQ-AUD-004).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-HR-003 — Süreli belge uyarıları
 
@@ -40,7 +40,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Açıklama: Eğitim sertifikası, sağlık raporu, operatör belgesi gibi süreli belgelerin bitiş tarihi yaklaşınca ve geçince uyarı üretilir.
 - Kabul kriterleri:
   - [ ] Süresi geçen zorunlu belge, sebebi çözülene kadar "Dikkat" bölümünde kalır (REQ-RPT-008).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Puantaj
 
@@ -52,7 +52,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Kabul kriterleri:
   - [ ] Onaylanmamış günlük kaydın puantajı bordroya girmez.
   - [ ] Aynı kişi aynı gün iki yerde tam gün çalışmış görünürse uyarı üretilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-HR-005 — Aylık puantaj görünümü
 
@@ -61,7 +61,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Açıklama: Her personel için aylık çalışma günü, saat, fazla mesai, izin ve devamsızlık görünür. Fazla mesai, çalışma takviminin kurallarıyla hesaplanır.
 - Kabul kriterleri:
   - [ ] Ayın puantajı, bordro hazırlanmadan önce İK tarafından kontrol edildi olarak işaretlenir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Bordro
 
@@ -73,7 +73,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Kabul kriterleri:
   - [ ] Her bordro satırının hesap dökümü (hangi oran, hangi matrah) görüntülenebilir.
   - [ ] Hesap, bilinen örnek bordrolarla karşılaştırılan otomatik testlerle doğrulanır; test örnekleri muhasebeciden alınır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-HR-007 — Bordro parametreleri tarihli tanımdır
 
@@ -83,7 +83,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Kabul kriterleri:
   - [ ] Onaylanmış bordro, parametre değişince yeniden hesaplanmaz.
   - [ ] Yeni yıl için parametre girilmemişse ocak bordrosu hazırlanırken uyarı üretilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-HR-008 — Bordro durumu
 
@@ -93,16 +93,16 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Kabul kriterleri:
   - [ ] Onaylanan bordro kilitlenir; değişiklik revizyon talebiyle yapılır (REQ-AUD-007).
   - [ ] Bordroyu hazırlayan kendi bordrosunu onaylayamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-HR-009 — Maaş gideri kayıtlı birime yazılır
 
 - Kaynak: §23.3; D-164
 - Öncelik: Must · Kademe: T1
-- Açıklama: Ödenen bordro, personelin kayıtlı olduğu birimin maliyet merkezine maaş gideri olarak yazılır; ay içinde başka şantiyede çalışması gideri değiştirmez. Birim ay içinde değişmişse gider, geçerlilik tarihlerine göre iki birime gün oranında bölünür (D-164'ten türetilen kural, bu dosyanın onayıyla kesinleşir). İşveren SGK payı da giderdir.
+- Açıklama: Ödenen bordro, personelin kayıtlı olduğu birimin maliyet merkezine maaş gideri olarak yazılır; ay içinde başka şantiyede çalışması gideri değiştirmez. Birim ay içinde değişmişse gider, geçerlilik tarihlerine göre iki birime gün oranında bölünür (D-164'ten türetilen kural, sahip onayladı). İşveren SGK payı da giderdir.
 - Kabul kriterleri:
   - [ ] Maaş gideri bordro onaylanınca FIN'e yazılır (REQ-FIN-013).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-HR-010 — Maaş avansı sonraki bordrodan kesilir
 
@@ -112,7 +112,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Kabul kriterleri:
   - [ ] Kesilen toplam, verilen avansı aşamaz.
   - [ ] Ayrılan personelin kalan avansı çıkış kontrol listesinde açık madde olur (REQ-HR-015).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-HR-011 — Banka toplu ödeme dosyası
 
@@ -122,7 +122,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Kabul kriterleri:
   - [ ] Onaylanmamış bordro için dosya üretilemez.
   - [ ] IBAN'ı eksik personel dosyaya girmez ve eksik olarak listelenir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-HR-012 — İmzalı bordro şartı ve son tarih görevi
 
@@ -131,7 +131,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Açıklama: Sözleşme veya şirket kuralı gerektiriyorsa imzalı bordrolar yüklenmeden maaş ödemesi tamamlanamaz. Bordroların belirli bir güne kadar işverene gönderilmesi gerekiyorsa muhasebeye son tarih görevi oluşur. Hangi projede bu şartların geçerli olduğu ayarlanır.
 - Kabul kriterleri:
   - [ ] Şart açık olan projede imzalı bordro yüklenmeden "Ödendi" işlemi çalışmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-HR-013 — Resmi bildirimler muhasebecide
 
@@ -140,7 +140,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Açıklama: SGK bildirgesi ve muhtasar beyan gibi resmi bildirimleri muhasebeci kendi programından yapar. Panelin hesapladığı bordro tutarları aylık muhasebe aktarımına eklenir ve muhasebecininkiyle karşılaştırılır.
 - Kabul kriterleri:
   - [ ] Karşılaştırmada çıkan fark gerekçesiyle kaydedilir ve kapanana kadar açık kalem olarak görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## D. İzin
 
@@ -152,7 +152,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Kabul kriterleri:
   - [ ] Bakiyeyi aşan yıllık izin talebi uyarıyla gösterilir.
   - [ ] Rapor/hastalık izni belge olmadan onaylanmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## E. Giriş ve çıkış
 
@@ -164,7 +164,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Kabul kriterleri:
   - [ ] Ayrılan personelin üzerinde telefon, laptop, araç, ekipman veya başka demirbaş varsa kritik uyarı çıkar ve sebebi çözülene kadar kalır.
   - [ ] Ayrılış tarihinde erişim kapanır (REQ-IAM-007), ama kontrol listesi açık kalır ve İK'nın görevidir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## F. Günlük faaliyet raporu
 
@@ -177,7 +177,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
   - [ ] Yöneticiler bağlı personelin raporlarını görür (REQ-IAM hiyerarşisi).
   - [ ] Bir rapor satırı bir göreve bağlanabilir ve görevin geçmişinde görünür (REQ-TSK).
   - [ ] Girilmeyen rapor, performansa veri olarak geçer (REQ-PRF).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 

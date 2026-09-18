@@ -21,7 +21,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | PUR | §18.2–§18.3, §18.16 | `docs/requirements/REQ-PUR.md` | 11 (CONFIRMED) |
 | FIN / EQP (ancillary income, service vehicle) | §20.2–§20.4 | `docs/requirements/REQ-FIN.md`, `REQ-EQP.md` | FIN-012, EQP-017, EQP-021 |
 | EQP | §21 | `docs/requirements/REQ-EQP.md` | 21 (CONFIRMED) |
-| HR | §23 | `docs/requirements/REQ-HR.md` | 16 (DRAFT) |
+| HR | §23 | `docs/requirements/REQ-HR.md` | 16 (CONFIRMED) |
 | CMP | §24, §31 | `docs/requirements/REQ-CMP.md` | — |
 | TSK (tasks, notifications, escalation) | §25.1–§25.6 | `docs/requirements/REQ-TSK.md` | 13 (CONFIRMED) |
 | SUP | §25.7 | `docs/requirements/REQ-SUP.md` | — |
