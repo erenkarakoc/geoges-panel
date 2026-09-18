@@ -7,7 +7,7 @@ PROJECT STATUS:      BOOTSTRAP
 CURRENT PHASE:       PHASE 01 — Requirements & Domain Analysis
 CURRENT SUBPHASE:    DISCOVER / QUESTION
 CURRENT FEATURE:     —
-CURRENT TASK:        Phase 01 requirement work — TASK-0021 (Slice 1 modules) with the capability catalog (TASK-0041)
+CURRENT TASK:        Phase 01 requirement work — TSK and AUD rounds, with their capability catalogs (TASK-0041)
 STATUS:              QUESTIONS_PENDING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -21,8 +21,7 @@ CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 a
 Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Owner confirms the four Slice 1 requirement files (REQ-WFL, REQ-IAM, REQ-SIT, REQ-RPT — all DRAFT, TASK-0021 in REVIEW).
-1b. Then Phase 01 continues with the remaining modules and §34, each with its round and capability catalog (TASK-0041).
+1. Phase 01 continues (Slice 1 files confirmed 2026-09-18) with the remaining modules and §34, each with its round and capability catalog (TASK-0041).
 2. Phase 01 requirement rounds continue (TASK-0020, TASK-0021), now with the capability catalog per module (TASK-0041).
 4. OQ-027 items 3 and 4 (flow methods) still open.
 5. Phase 01 per-module requirement rounds (TASK-0020, TASK-0021) — no REQ file written yet.

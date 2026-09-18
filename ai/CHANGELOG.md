@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2026-09-18 — Slice 1 requirements confirmed
+
+- The owner confirmed REQ-WFL, REQ-IAM, REQ-SIT and REQ-RPT: 115 requirements move from DRAFT to CONFIRMED and TASK-0021 is done. Phase 01 continues with TSK and AUD, the two modules Slice 1 leans on.
+
 ## 2026-09-18 — REQ-RPT; Slice 1 has its requirements
 
 - One round, four decisions, all as recommended (D-126…D-129): an attention item closes only when its cause is gone — nobody can dismiss it, only mark it seen; indicators come from a per-role default that each person can adjust; the "company through the system" view is for the owners and the general manager; the loss diagnosis card is always there and jumps to the top when a site is losing money.

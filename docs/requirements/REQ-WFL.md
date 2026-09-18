@@ -1,6 +1,6 @@
 # REQ-WFL — İş Akışı, Onay ve Kurallar
 
-Durum: DRAFT · 2026-09-18 · Modül: WFL (Workflow & Rules)
+Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: WFL (Workflow & Rules)
 
 Kaynaklar: Özellik Yapısı §4, §13 (onay mekanizması), §37 (§37.1 hariç), §45; Mimari §6, §13; ADR-005, ADR-006 (CHG-006 ekiyle); kararlar D-077…D-108 (OQ-028, TASK-0040).
 
@@ -25,7 +25,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Hiçbir akış tanımı bir hesaplama kuralını değiştiremez; tasarımcıda buna karşılık gelen bir seçenek yoktur.
   - [ ] Bir onay zincirindeki kademe sayısı, onaylayıcı ve eşik, yazılım güncellemesi olmadan değiştirilip yayınlanabilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-002 — Akış hiçbir defter kaydını kesinleştirmez
 
@@ -35,7 +35,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Yetenek kataloğunda defter kesinleştiren bir aksiyon yayımlanamaz; sözleşme testi bunu reddeder (REQ-WFL-004).
   - [ ] Her defter kaydında onu tamamlayan kişi, bir akış sürümü değil, adı belli bir kullanıcıdır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Yetenek kataloğu ve sözleşmeler
 
@@ -47,7 +47,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Tasarımcıdaki her olay, aksiyon ve koşul alanı bir modülün kataloğunda karşılığı olan bir kayda denk gelir.
   - [ ] Her koşul alanının veri sınıfı (genel / iç / ticari / hassas kişisel) bellidir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-004 — Yetenekler sözleşmedir; ilan ile kod ayrışamaz
 
@@ -58,7 +58,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
   - [ ] İlan ile kod arasındaki her ayrışma CI'ı kırar.
   - [ ] Yayımlanmış bir yeteneği silmek veya imzasını değiştirmek CI'ı kırar; "kullanımdan kalktı" işareti ise geçer ve tasarımcıda uyarı olarak görünür.
   - [ ] Kullanımdan kalkmış bir yeteneğe bağlı akışlar listelenebilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Akış tanımı
 
@@ -70,7 +70,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Tasarımcı bu listenin dışında bir adım tipi sunmaz.
   - [ ] Yeni bir adım tipi ancak ADR-006'nın değiştirilmesiyle eklenir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-006 — Tasarımcının yapamayacakları
 
@@ -80,7 +80,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Bu altı işlemin hiçbiri için tasarımcıda bir adım, alan veya ayar yoktur.
   - [ ] Hassas kişisel veri sınıfındaki bir alan, bildirim metni şablonuna eklenemez; yerine kayda giden bağlantı konur.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-007 — Tetikleyiciler
 
@@ -90,7 +90,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Her üç tetikleyici tipi ve elle başlatma, deneme çalıştırmasında örnek veriyle tetiklenebilir.
   - [ ] Takvim tetikleyicisi çalışma takvimini ve tatilleri dikkate alabilir (ADM).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-008 — Koşullar, geçmişe bakan koşullar dahil
 
@@ -100,7 +100,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Geçmişe bakan bir koşul, yayından önceki deneme çalıştırmasında gerçek veri üzerindeki sonucunu gösterir.
   - [ ] Süre sınırını aşan bir koşul akışı sessizce geçmez; akış örneği "hata" durumuna düşer ve kurucuya bildirilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-009 — "Her biri için" adımı
 
@@ -110,7 +110,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Personel çıkışı akışı (§45.4), her zimmet için ayrı kontrol üreterek kurulabilir.
   - [ ] Bir "her biri için" adımının içine ikinci bir "her biri için" konamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-010 — Kayıt oluştur / durum değiştir adımı
 
@@ -120,7 +120,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Akışın oluşturduğu kayıt taslak durumundadır ve kaydın geçmişinde onu oluşturan akış, sürüm ve adım görünür.
   - [ ] Bu adımla defter yazan bir kayıt türünün kesinleşmiş durumuna geçiş yapılamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-011 — Uçtan uca süreçler kısa akışların zinciridir
 
@@ -130,7 +130,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Bir akışın bitişi, başka bir akışı başlatan olayı yayımlayabilir.
   - [ ] Zincirdeki bir akışın yeni sürümü yayımlandığında, zincirin diğer halkalarında yürüyen örnekler kendi sürümleriyle devam eder.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## D. Onay
 
@@ -143,7 +143,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
   - [ ] Kullanıcı yalnızca kendisine düşen onayları görür (REQ-WFL-017).
   - [ ] Bir karardan sonra sıradaki kayıt, listeye dönmeden açılır.
   - [ ] Bekleyen onay sayısı çalışma katmanı rozetinde ve "Bugün"de aynı sayıyla görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-013 — Her onayda görülecekler
 
@@ -153,7 +153,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Her onayda kaynak akış, adım ve kayda giden bağlantı vardır.
   - [ ] Onayı bu kişiye getiren kural açıkça yazar (ör. "şantiye sorumlusu olduğunuz için").
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-014 — Onayın üç sonucu
 
@@ -163,7 +163,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Üç sonuç da her onayda mevcuttur.
   - [ ] Düzeltilip yeniden gönderilen kayıt, aynı onay adımına ve aynı onaylayıcı kuralına döner.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-015 — Ret ve geri göndermede gerekçe zorunlu
 
@@ -173,7 +173,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Gerekçe alanı boşken ret ve geri gönderme yapılamaz.
   - [ ] Kaydı açan kişi, dönen kayıtta gerekçeyi görür ve bildirim alır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-016 — Onay ve düzeltme geçmişi
 
@@ -182,7 +182,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Açıklama: Bir kaydın onay geçmişinde kimin ne zaman gönderdiği, kimin neden geri çevirdiği, hangi düzeltmenin yapıldığı ve ne zaman yeniden gönderildiği görünür.
 - Kabul kriterleri:
   - [ ] Her gönderme, karar ve yeniden gönderme; kişi, zaman ve gerekçeyle birlikte kaydın geçmişinde listelenir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-017 — Adım sahibinin belirlenmesi
 
@@ -193,7 +193,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
   - [ ] Dört adresleme yolu da tasarımcıda seçilebilir.
   - [ ] Kişi ayrıldığında veya rolü değiştiğinde, yetki tipi, rol ve ilişki ile adreslenen adımlar kendiliğinden doğru kişiye gider; belirli kişiyle adreslenen adımlar için akış kurucusuna uyarı düşer.
   - [ ] Adımı yapabilecek kimse yoksa akış örneği bekletilir ve kurucuya bildirilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-018 — Dış taraf onayı
 
@@ -203,7 +203,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Şablon, tasarımcıda tek hamlede bir akışa eklenebilir.
   - [ ] Dış cevabın belgesi eklenmeden "onayladı" işaretlenemez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## E. Yetki, yayın ve sürüm
 
@@ -215,7 +215,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Kısıtlı bir role akış tasarlama yetkisi atanamaz; deneme hata verir ve kaydedilir.
   - [ ] Bir rolün görünürlüğü daraltılırsa, o roldeki akış tasarlama yetkisi kaldırılır ve sahibe bildirilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-020 — Çalışan akış sistem yetkisiyle hareket eder
 
@@ -225,7 +225,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Akış, kurucusunun göremeyeceği bir modülün verisini okuyarak koşul değerlendirebilir.
   - [ ] Akışın yaptığı her işlem, akış sürümü ve adımıyla birlikte audit'e yazılır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-021 — Tasarımcı yetki tipi ve rol tanımlar ve atar
 
@@ -235,7 +235,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Tasarımcıdan yapılan bir rol ataması, "Kullanıcılar & Roller" ekranında aynı şekilde görünür ve oradan geri alınabilir.
   - [ ] Her tanım ve atama, kim ve ne zaman bilgisiyle audit'e yazılır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-022 — Geçici yetki yoktur
 
@@ -244,7 +244,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Açıklama: Bir adımı yapabilmek için gereken yetki tipine veya role sahip olmak yeterlidir. Akış, bir adım süresince kimseye geçici yetki vermez.
 - Kabul kriterleri:
   - [ ] Bir kişinin görebildikleri, akış çalışırken değişmez; yalnızca rol atamalarıyla değişir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-023 — Yayın ve telafi kontrolleri
 
@@ -254,7 +254,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Yayın anında sahibe bildirim gider.
   - [ ] Yayınlanan akış 7 gün boyunca "yeni" işaretiyle ve işlem listesiyle görünür, sonra işaret kendiliğinden kalkar.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-024 — Sürümleme
 
@@ -264,7 +264,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Yeni sürüm yayımlandığında yürüyen örneklerin hiçbiri yeni sürüme geçmez.
   - [ ] Her örneğin hangi sürümle çalıştığı görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-025 — Yayından önce deneme çalıştırması zorunlu
 
@@ -274,7 +274,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Deneme çalıştırması yapılmamış veya son değişiklikten sonra tekrarlanmamış bir akışta "Yayınla" pasiftir.
   - [ ] Deneme çalıştırması gerçek veri üzerinde hiçbir kalıcı değişiklik yapmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## F. Tasarımcı ve şablonlar
 
@@ -285,7 +285,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Açıklama: Akış iki görünümle kurulur: adım adım soru-cevap ("Ne olunca başlasın? Kim onaylasın? Onaylanmazsa ne olsun?") ve kutu-ok şeması. İkisi de düzenlenebilir ve aynı tanımı gösterir. Ekran yerleşimi ve menüdeki yeri ayrı bir soru-cevap turunda kararlaştırılır (D-108).
 - Kabul kriterleri:
   - [ ] Bir görünümde yapılan değişiklik diğerinde aynı anda görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-027 — Şablonlar kopya olarak gelir
 
@@ -295,7 +295,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Şablon güncellemesi, değiştirilmiş kopyaları değiştirmez ve kopya sahibine bildirim üretir.
   - [ ] "Şablona sıfırla" işlemi yeni bir akış sürümü olarak yayımlanır ve audit'e yazılır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-028 — Varsayılan şirket akışları
 
@@ -304,7 +304,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Açıklama: Panel şu şablonlarla gelir: günlük saha kaydı onayı, malzeme çıkış talebi, ödeme onayı, hakediş → fatura, personel çıkışı, revizyon talebi, stok sayımı onayı, satın alma talebi, teklif onayı ve §45'in sekiz uçtan uca süreci. §45 süreçleri motorun kabul testleridir.
 - Kabul kriterleri:
   - [ ] §45'in sekiz sürecinin her biri, TASK-0042'de yazılan tanımıyla motorda çalıştırılıp beklenen görevleri ve kayıtları üretir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## G. Kilit ve istisna
 
@@ -315,7 +315,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Açıklama: Kilit, kaydı silmez veya gizlemez; yalnızca bir durum geçişini engeller ve sebebini ekranda yazar ("zimmet kapanmadan çıkış tamamlanamaz").
 - Kabul kriterleri:
   - [ ] Kilitli geçiş denendiğinde işlem yapılmaz ve kilidin sebebi ile kaynağı gösterilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-030 — Kilidi aşma
 
@@ -325,7 +325,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Sahip ve genel müdür dışında hiçbir rol kilidi aşamaz.
   - [ ] Gerekçesiz aşma yapılamaz; her aşma audit'te ve ilgili kaydın geçmişinde görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-031 — İstisnai manuel işlem izni
 
@@ -335,7 +335,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] İzin yalnızca talep edilen alan veya işlem için geçerlidir; kapsam dışı bir değişiklik reddedilir.
   - [ ] Sahip istisna yetkisini kapattığında yeni izin talebi açılamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## H. Merkezi kurallar
 
@@ -347,7 +347,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Bir kuralın değişmesi, önceki tarihlere ait kayıtların değerlendirmesini değiştirmez.
   - [ ] Hangi kuralın hangi tarihte ne olduğu görülebilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## I. İzlenebilirlik
 
@@ -358,7 +358,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Açıklama: Akışın ürettiği her görev ve bildirim, onu üreten akışı, sürümü, adımı ve kaydı taşır ve oraya bağlantı verir. Görevin ve bildirimin gösterimi REQ-TSK'dadır; kaynağın taşınması burada.
 - Kabul kriterleri:
   - [ ] Akışın ürettiği hiçbir görev veya bildirim kaynak bilgisi olmadan oluşturulamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-034 — Akış örneği çalışma günlüğü
 
@@ -368,7 +368,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kabul kriterleri:
   - [ ] Bir görevden, onu üreten akış örneğinin çalışma günlüğüne gidilebilir.
   - [ ] Hata ile durmuş örnekler ayrı listelenir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## J. Kayıt türü üreteci
 
@@ -383,7 +383,7 @@ Yapımı Phase 09R'dir (ilk dilim pilotundan sonra, D-105). Mimarisi Phase 03'te
   - [ ] Tanımlanan bir tür için liste ve detay ekranı kod yazılmadan kullanılabilir hale gelir.
   - [ ] Tür, mevcut bir kayda (ör. şantiye, personel, ekipman) ilişkilendirilebilir.
   - [ ] Tür, bir akışın tetikleyicisi, koşulu ve kayıt oluştur adımında kullanılabilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-036 — Kullanıcı tanımlı kayıtlar panelin yetki modelini kullanır
 
@@ -392,7 +392,7 @@ Yapımı Phase 09R'dir (ilk dilim pilotundan sonra, D-105). Mimarisi Phase 03'te
 - Açıklama: Rol bazında görme ve yazma, şantiye bazında satır görünürlüğü ve hassas alan işaretleme, tür tanımlanırken seçilir ve diğer kayıtlarla aynı şekilde uygulanır.
 - Kabul kriterleri:
   - [ ] Yetkisi olmayan kullanıcı, kullanıcı tanımlı bir kaydı ne listede ne aramada ne raporda görür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-037 — Arama, rapor ve "Bugün" katılımı tanımda seçilir
 
@@ -401,7 +401,7 @@ Yapımı Phase 09R'dir (ilk dilim pilotundan sonra, D-105). Mimarisi Phase 03'te
 - Açıklama: Her tür için aramaya girip girmeyeceği, raporlara ve dışa aktarmaya katılıp katılmayacağı ve "Bugün"de sayısının görünüp görünmeyeceği ayrı ayrı seçilir.
 - Kabul kriterleri:
   - [ ] Seçimlerin her biri tek başına açılıp kapatılabilir ve hemen etkili olur.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-038 — Tür değişince geçmiş korunur
 
@@ -410,7 +410,7 @@ Yapımı Phase 09R'dir (ilk dilim pilotundan sonra, D-105). Mimarisi Phase 03'te
 - Açıklama: Bir alan kaldırıldığında geçmiş kayıtlardaki değerleri silinmez, yalnızca gösterilmez. Kim ne zaman değiştirdi bilgisi bu kayıtlar için de tutulur.
 - Kabul kriterleri:
   - [ ] Kaldırılan bir alanın geçmiş değeri kaydın geçmişinde okunabilir kalır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-WFL-039 — Kullanıcı tanımlı kayıtlar deftere yazmaz
 
@@ -419,7 +419,7 @@ Yapımı Phase 09R'dir (ilk dilim pilotundan sonra, D-105). Mimarisi Phase 03'te
 - Açıklama: Kullanıcı tanımlı bir kayıt türü para, stok veya zimmet defterine hareket üretemez; hesaplama kurallarını değiştiremez.
 - Kabul kriterleri:
   - [ ] Üretecin alan tiplerinde defter hareketi oluşturan bir tip yoktur.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 

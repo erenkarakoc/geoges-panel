@@ -8,13 +8,13 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 
 | Module | Source sections (`docs/sources/functional-scope.md`; "Mimari §" = `docs/sources/architecture-principles.md`) | REQ file | REQ count |
 |---|---|---|---|
-| IAM | §2 | `docs/requirements/REQ-IAM.md` | 27 (DRAFT) |
-| RPT (cockpit, reports) | §3, §14, §34 | `docs/requirements/REQ-RPT.md` | 14 (DRAFT; §34 pending) |
-| WFL (approvals, rules, workflow, end-to-end flows, capability catalog, record-type builder) | §4, §13, §37, §45, Mimari §6, §13; CHG-006 (D-077…D-105) | `docs/requirements/REQ-WFL.md` | 39 (DRAFT) |
+| IAM | §2 | `docs/requirements/REQ-IAM.md` | 27 (CONFIRMED) |
+| RPT (cockpit, reports) | §3, §14, §34 | `docs/requirements/REQ-RPT.md` | 14 (CONFIRMED; §34 pending) |
+| WFL (approvals, rules, workflow, end-to-end flows, capability catalog, record-type builder) | §4, §13, §37, §45, Mimari §6, §13; CHG-006 (D-077…D-105) | `docs/requirements/REQ-WFL.md` | 39 (CONFIRMED) |
 | CRM | §5 | `docs/requirements/REQ-CRM.md` | — |
 | QTE | §6 | `docs/requirements/REQ-QTE.md` | — |
 | PRJ | §7, §8, §10.1–10.2 | `docs/requirements/REQ-PRJ.md` | — |
-| SIT | §9–§13, §15, §44 | `docs/requirements/REQ-SIT.md` | 35 (DRAFT) |
+| SIT | §9–§13, §15, §44 | `docs/requirements/REQ-SIT.md` | 35 (CONFIRMED) |
 | FIN (incl. progress payments, period close) | §16, §22 | `docs/requirements/REQ-FIN.md` | — |
 | FAC | §17 | `docs/requirements/REQ-FAC.md` | — |
 | INV | §18.1, §18.4–§18.15, §19, §20.1 | `docs/requirements/REQ-INV.md` | — |

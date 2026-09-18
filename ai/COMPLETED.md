@@ -35,3 +35,4 @@ Only items whose quality gate passed are listed here.
 | 2026-09-18 | TASK-0037 | "Onaylar" and "Görevler" screens (sample data removed, D-106) | T2 PASS (owner approved) |
 | 2026-09-18 | TASK-0038 | CHG-005 record consistency fixes, validator, pre-commit gate, session journal | T2 PASS (owner approved) |
 | 2026-09-18 | TASK-0040 | CHG-004 shell work re-reviewed against CHG-006; sample data removed | T2 PASS (check green, browser-verified) |
+| 2026-09-18 | TASK-0021 | Slice 1 requirement files: REQ-WFL (39), REQ-IAM (27), REQ-SIT (35), REQ-RPT (14) with capability catalogs | T1 PASS (owner confirmed) |

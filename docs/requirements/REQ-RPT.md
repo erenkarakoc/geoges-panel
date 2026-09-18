@@ -1,6 +1,6 @@
 # REQ-RPT — "Bugün", Sahip Görünümü ve Şantiye Detayı
 
-Durum: DRAFT · 2026-09-18 · Modül: RPT (Reporting & Cockpit)
+Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: RPT (Reporting & Cockpit)
 
 Kaynaklar: Özellik Yapısı §3, §14; kararlar D-056, D-065, D-106, D-126…D-129. **Kapsam dışı (henüz):** §34 raporlar ve dışa aktarım, ayrı bir soru turuyla Phase 01 içinde bu dosyaya eklenecek.
 
@@ -20,7 +20,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Kabul kriterleri:
   - [ ] Girişten sonra her rol kendi "Bugün" ekranına düşer; ayrı bir cockpit giriş noktası yoktur.
 - Bağlı: TASK-0035
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-002 — Önce özet, sonra derine inme
 
@@ -29,7 +29,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Açıklama: Her gösterge, satır ve uyarı tıklanarak kaynağına gidilir.
 - Kabul kriterleri:
   - [ ] "Bugün"deki hiçbir öğe kaynağa bağlantısız değildir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-003 — Üst yönetim göstergeleri
 
@@ -39,7 +39,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Kabul kriterleri:
   - [ ] Yetkisi olmayan kullanıcıya gösterge hiç gösterilmez; boş kutu kalmaz.
   - [ ] Aynı sayı iki yerde görünüyorsa (ör. bekleyen onay rozeti ve göstergesi) iki yerde de aynıdır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-004 — Gösterge seçimi: rol varsayılanı, kişi düzenler
 
@@ -49,7 +49,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Kabul kriterleri:
   - [ ] Kullanıcının düzenlemesi yalnızca kendi ekranını etkiler.
   - [ ] Rol varsayılanı değişince, kendi ekranını değiştirmemiş kullanıcılar yeni varsayılanı görür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-005 — Açık ve katlanmış göstergeler
 
@@ -59,7 +59,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Kabul kriterleri:
   - [ ] Altıdan fazla gösterge seçildiğinde fazlası katlanmış bölümde görünür.
 - Bağlı: TASK-0035
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-006 — Şantiye özet tablosu şantiye ekranlarında
 
@@ -68,7 +68,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Açıklama: Her aktif şantiyenin özeti (proje ve şantiye adı, günlük üretim, toplam ilerleme, hedefe göre durum, son veri giriş zamanı, son kaydın onay durumu, çift döküm bilgisi, kümülatif kâr-zarar, gecikme/bekleme sinyali, zayi/fire sinyali, kritik stok veya ekipman ihtiyacı) şantiye listesi ekranında gösterilir; "Bugün"de değil. Satıra tıklanınca şantiye detayı açılır. Kâr-zarar yalnızca ticari yetkililere görünür.
 - Kabul kriterleri:
   - [ ] Şantiye listesindeki her satır şantiye detayına gider.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Dikkat
 
@@ -79,7 +79,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Açıklama: Yönetim görünümünde ayrı bir "Dikkat" bölümü vardır. Şu durumlar buraya çıkar: proje hedefinden fazla döküm; fazla üretimin gizlenmeye çalışılması; zayi oranının yükselmesi; fotoğrafsız veya açıklamasız zayi girişi girişimi; geciken saha onayı; uzun süre veri girilmeyen şantiye; işveren dolgusunun gecikmesi; olağan dışı sarfiyat veya kalıp yağı tüketimi; kritik stok; uzun süre atıl vinç/makine/araç; bakımı veya periyodik kontrolü geciken ekipman; geciken hakediş veya tahsilat; negatif/tehlikeli nakit pozisyonu; yaklaşan sözleşme cezası; süresi dolan sertifika veya eğitim; açık ciddi İSG olayı; geciken toplantı kararı; kapanmayan kritik görev. Her uyarı kaynağına gider.
 - Kabul kriterleri:
   - [ ] Listedeki her durum türü, ilgili modül olayı geldiğinde "Dikkat"te görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-008 — Dikkat öğesi yalnızca sebebi çözülünce kapanır
 
@@ -90,7 +90,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
   - [ ] Uyarı için "kapat", "sil" veya "gizle" işlemi yoktur.
   - [ ] "Gördüm" işareti kimin ve ne zaman koyduğuyla kaydedilir ve uyarıyı gizlemez.
   - [ ] Sebep ortadan kalktığında uyarı kendiliğinden kapanır ve kapanış zamanı kaydedilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-009 — Uyarı eşikleri merkezi kuraldır
 
@@ -99,7 +99,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Açıklama: "Zayi oranı yüksek", "uzun süre veri girilmedi", "uzun süre atıl" gibi eşikler merkezi kurallarda tutulur ve yetkili yönetimce ayarlanır; gereksinimde varsayılan değer yoktur. Tatil günleri veri girilmeyen gün sayısına katılmaz (D-038).
 - Kabul kriterleri:
   - [ ] Bir eşiğin değişmesi, değişiklikten sonraki değerlendirmeleri etkiler; geçmiş uyarıları yeniden yazmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Şirketi sistem gözünden gör
 
@@ -111,7 +111,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Kabul kriterleri:
   - [ ] Zaman aralığı değiştiğinde tüm cevaplar o aralığa göre yeniden hesaplanır.
   - [ ] Her cevap kaynağına gider.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-011 — Sistem gözü ekranını sahipler ve genel müdür görür
 
@@ -120,7 +120,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Açıklama: Bu ekran ticari ve hassas veri içerdiği için yalnızca sahipler ve genel müdür tarafından görülür.
 - Kabul kriterleri:
   - [ ] Başka bir role ekranın yetkisi verilemez; deneme reddedilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## D. Şantiye detayı
 
@@ -131,7 +131,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Açıklama: Şantiye detayında toplam ilerleme %, günlük/kümülatif döküm, günlük/kümülatif montaj, kalan iş ve hedefe göre durum görünür; ticari yetkisi olana gelir, gider ve kâr-zarar da görünür.
 - Kabul kriterleri:
   - [ ] Ticari yetkisi olmayan kullanıcı gelir, gider ve kâr-zararı görmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-013 — "Niye zarardayız?" tanı kartı
 
@@ -141,7 +141,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Kabul kriterleri:
   - [ ] Etkenlerin parasal toplamı, gösterilen gider toplamıyla açıklanabilir biçimde ilişkilidir; hesaplanamayan etken "hesaplanamadı" diye belirtilir, sıfır gösterilmez.
   - [ ] Zarar durumunda kart sayfanın en üstünde, en büyük üç etken vurgulu görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-014 — Son günlük kayıtlar ve eksik günler
 
@@ -150,7 +150,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Açıklama: Şantiye detayında son günlerin listesi vardır: tarih, döküm, montaj, durum, onay/düzeltme, günlük gider/kâr-zarar (ticari yetkiliye), eksik kayıt uyarısı. Kayıt girilmeyen günler kolayca fark edilir; tatil günleri eksik sayılmaz.
 - Kabul kriterleri:
   - [ ] Kayıt girilmemiş iş günü listede boş satır olarak değil, belirgin bir "kayıt yok" satırı olarak görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 

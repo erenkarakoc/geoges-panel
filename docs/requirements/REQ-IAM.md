@@ -1,6 +1,6 @@
 # REQ-IAM — Kimlik, Rol ve Erişim
 
-Durum: DRAFT · 2026-09-18 · Modül: IAM (Identity & Access)
+Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: IAM (Identity & Access)
 
 Kaynaklar: Özellik Yapısı §2; kararlar D-036, D-039, D-040, D-041, D-043, D-083, D-098, D-101, D-111…D-118. Açık soru: OQ-026 (parola politikası ve hesap kilidi eşikleri, Phase 03).
 
@@ -21,7 +21,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
   - [ ] Hesabı olmayan biri panelde hesap oluşturamaz.
   - [ ] Hatalı giriş, hangi alanın hatalı olduğunu söylemeyen tek bir mesajla reddedilir.
 - Bağlı: TASK-0025
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-002 — E-posta adresi politikası
 
@@ -30,7 +30,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Açıklama: Şirket çalışanları kurumsal alan adlı adres kullanır; taşeron ekip başları kişisel adres kullanabilir. Panel erişimi, posta kutusunun kime ait olduğundan bağımsız olarak panelden kapatılır.
 - Kabul kriterleri:
   - [ ] Kişisel adresli bir hesabın erişimi panelden kapatıldığında o adresle giriş yapılamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-003 — İki adımlı giriş
 
@@ -40,7 +40,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Kabul kriterleri:
   - [ ] İki adımın zorunlu olduğu bir rolü taşıyan kullanıcı, ikinci adımı tamamlamadan panelin hiçbir sayfasına erişemez.
 - Bağlı: TASK-0025
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-004 — Parola değiştirme ve sıfırlama
 
@@ -50,7 +50,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Kabul kriterleri:
   - [ ] Yönetici bir kullanıcının parolasını göremez ve kendisi belirleyemez; yalnızca sıfırlama başlatır.
 - Bağlı: TASK-0025
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-005 — Hatalı giriş denemelerinde geçici kilit
 
@@ -59,7 +59,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Açıklama: Ardışık hatalı girişlerde hesap geçici olarak kilitlenir. Deneme sayısı ve kilit süresi OQ-026 ile belirlenir.
 - Kabul kriterleri:
   - [ ] Eşik aşıldığında doğru parolayla bile kilit süresi dolana kadar giriş yapılamaz; olay denetim kaydına düşer.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-006 — Pasife alınan hesabın erişimi anında kapanır
 
@@ -68,7 +68,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Açıklama: Bir hesap pasife alındığında erişim anında kapanır ve açık oturumlar sonlandırılır.
 - Kabul kriterleri:
   - [ ] Pasife alınan kullanıcının açık oturumu bir sonraki istekte reddedilir; yeni giriş yapılamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-007 — Ayrılış tarihinde erişim kendiliğinden kapanır
 
@@ -78,7 +78,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Kabul kriterleri:
   - [ ] Ayrılış tarihi gelen hesap, hiçbir insan işlemi olmadan pasife alınır.
   - [ ] Ayrılış tarihi ileri bir tarihse o güne kadar erişim sürer.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-008 — Giriş ve yetki olayları denetime yazılır
 
@@ -87,7 +87,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Açıklama: Başarılı ve başarısız girişler, çıkışlar, rol atamaları ve bitişleri, vekâletler, kişisel istisnalar ve hesap pasifleştirmeleri denetim kaydına yazılır. Gösterimi REQ-AUD'dadır.
 - Kabul kriterleri:
   - [ ] Bu olayların her biri kim, ne zaman ve (varsa) kim tarafından bilgisiyle kaydedilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Roller ve yetkiler
 
@@ -99,7 +99,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Kabul kriterleri:
   - [ ] Yeni bir rol kod değişikliği olmadan tanımlanıp kullanılabilir.
   - [ ] Bir rolün seviyesi değiştiğinde hiyerarşiye bağlı yönlendirmeler (REQ-IAM-014) yeni duruma göre çalışır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-010 — Rol, yetkilerin bir araya gelmesidir
 
@@ -108,7 +108,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Açıklama: Bir rol; görebileceği modülleri, veri girebileceği alanları, onaylayabileceği işlemleri ve kendisine düşecek görev türlerini belirleyen yetkilerden oluşur. Yetkiler hem yönetici ekranından hem iş akışı tasarımcısından tanımlanabilir (REQ-IAM-016).
 - Kabul kriterleri:
   - [ ] Bir kullanıcının görebildikleri ve yapabildikleri, rollerindeki yetkilerden başka hiçbir kaynaktan gelmez (kişisel istisnalar hariç, REQ-IAM-015).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-011 — Ticari ve hassas veri görünürlüğü modül bazında
 
@@ -118,7 +118,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Kabul kriterleri:
   - [ ] Ticari veya hassas izni olmayan kullanıcı, o sınıftaki alanı ekranda, aramada, raporda, dışa aktarmada ve bildirimde görmez.
   - [ ] İzin bir modülde verilip diğerinde verilmeyebilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-012 — Rol ataması kapsam taşır
 
@@ -128,7 +128,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Kabul kriterleri:
   - [ ] Kavaklı kapsamıyla "Saha Mühendisi" olan kişi Ilgaz'ın verisini görmez.
   - [ ] Kapsam değiştiğinde görünürlük hemen değişir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-013 — Birden fazla rol; yetkiler birleşir, işlemde rol kaydedilir
 
@@ -138,7 +138,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Kabul kriterleri:
   - [ ] Onay ve kayıt işlemlerinin geçmişinde işlemin yapıldığı rol görünür.
   - [ ] Tek rollü kullanıcı hiçbir ekranda rol seçimi görmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-014 — Hiyerarşi: rol düzeyinde, kişi için elle değiştirilebilir
 
@@ -148,7 +148,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Kabul kriterleri:
   - [ ] "Kaydı açanın amiri" ve eskalasyon, önce kişiye elle atanmış amiri, yoksa rol hiyerarşisini kullanır.
   - [ ] Bir kapsamda bir üst rolü taşıyan kimse yoksa bir sonraki üst seviyeye çıkılır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-015 — Kişisel istisnalar
 
@@ -158,7 +158,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Kabul kriterleri:
   - [ ] Yalnızca sahip katmanındaki kişiler kişisel istisna tanımlayabilir.
   - [ ] Tüm kişisel istisnalar tek bir listede, kişi ve tarihle görülebilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-016 — Yetki ve rol iş akışı tasarımcısından da tanımlanıp atanır
 
@@ -167,7 +167,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Açıklama: İş akışı tasarımcısı akış için yeni yetki ve rol tanımlayıp kişilere atayabilir. Bunlar yönetici ekranındaki tanım ve atamalarla aynı kayda yazılır; "kim neyi görüyor" tek yerden okunur.
 - Kabul kriterleri:
   - [ ] Tasarımcıdan tanımlanan rol ve yapılan atama "Kullanıcılar & Roller" ekranında görünür ve oradan değiştirilebilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-017 — Tam görünürlük
 
@@ -177,7 +177,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Kabul kriterleri:
   - [ ] Bir rolün tam görünürlükte olup olmadığı rol ekranında görünür.
   - [ ] Tam görünürlükte olmayan bir role akış tasarlama yetkisi eklenemez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Vekâlet ve süreli rol
 
@@ -188,7 +188,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Açıklama: Bir kişiye başlangıç ve bitiş tarihiyle vekâleten rol verilir. Süre boyunca ilgili yetkileri kullanır; süre bitince vekâlet kendiliğinden sona erer.
 - Kabul kriterleri:
   - [ ] Bitiş tarihinde vekâlet, hiçbir insan işlemi olmadan sona erer ve vekilin o rolden gelen erişimi kapanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-019 — Vekâleti kim verir
 
@@ -198,7 +198,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Kabul kriterleri:
   - [ ] Kişi yalnızca kendi rolleri için vekâlet verebilir.
   - [ ] Kişinin kendi verdiği vekâlette yöneticisine bildirim gider.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-020 — Onay yedeği: önce vekil, sonra üst rol
 
@@ -208,7 +208,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Kabul kriterleri:
   - [ ] Etkin vekili olan onaylayıcının onayları vekile düşer.
   - [ ] Bekleme süresi dolan onay bir üst role çıkar ve bu geçiş onay geçmişinde görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-021 — Sahip vekili
 
@@ -217,7 +217,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Açıklama: Sahibe özel onaylar, sahip yokken sahibin belirlediği vekil tarafından, sahibin belirlediği süre içinde verilebilir; vekilin yaptığı her işlem sahibe raporlanır.
 - Kabul kriterleri:
   - [ ] Sahip vekilinin her işlemi sahiplere bildirim ve rapor olarak düşer.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## D. Sahip katmanı
 
@@ -228,7 +228,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Açıklama: Sahip katmanı birden fazla kişide olabilir (ortaklar). Sahipler birbirinden veri gizleyemez ve birbirlerinin işlemlerini denetleyebilir.
 - Kabul kriterleri:
   - [ ] Hiçbir sahip, başka bir sahibin görünürlüğünü kısıtlayamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-023 — Sahibin görünürlüğü kısıtlanamaz
 
@@ -237,7 +237,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Açıklama: Genel müdür dahil hiçbir yönetici sahipten veri gizleyemez; sahibin görünürlüğünü azaltan hiçbir ayar yoktur.
 - Kabul kriterleri:
   - [ ] Sahip katmanındaki bir kişinin yetkilerini daraltmaya yönelik her işlem reddedilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-024 — Sahibin yetkileri
 
@@ -246,7 +246,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Açıklama: Sahip tüm şirket verisini ve tüm kritik uyarıları görür; genel müdür dahil herkesin işlem geçmişini denetler; görünürlükleri açıp kapatır; istisnai işlemlere izin verir; onay zincirlerini değiştirir; kimin hangi rol ve yetkiye sahip olduğunu yönetir.
 - Kabul kriterleri:
   - [ ] Bu yetkilerin her biri sahip katmanında varsayılan olarak vardır ve kaldırılamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-IAM-025 — "Sahip onayı" herhangi bir sahiple tamamlanır
 
@@ -255,7 +255,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Açıklama: Sahip onayı isteyen işlerde (ör. belirli tutarın üstündeki ödeme) sahiplerden herhangi birinin onayı yeterlidir.
 - Kabul kriterleri:
   - [ ] Sahip onayı bekleyen iş, bütün sahiplerin onay kuyruğunda görünür; biri onayladığında diğerlerinin kuyruğundan düşer.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## E. Görev ayrılığı
 
@@ -266,7 +266,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Açıklama: Kritik işlerde aynı kişinin hazırladığı işlemi yine kendisinin onaylaması engellenebilir. Bu kural onay adımında açılıp kapatılan bir ayardır.
 - Kabul kriterleri:
   - [ ] Kural açık bir onay adımında, işlemi hazırlayan kişiye onay düşmez; başka bir yetkiliye gider.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## F. Rol ataması yönlendirmesi
 
@@ -279,7 +279,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
   - [ ] Rol atandıktan sonraki ilk girişte yönlendirme ekranı açılır.
   - [ ] Yönlendirme içeriği rol tanımından gelir; rolü olmayan içerik gösterilmez.
 - Bağlı: TASK-0026
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 
