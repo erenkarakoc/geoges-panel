@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-18 — REQ-ADM
+
+- Master data: a new list item is usable the moment it is added — after the similar ones are shown — and duplicates are merged later without losing their history; the exchange rate is the previous business day's CBRT buying rate, and a missing rate stops dollar transactions from being quietly priced at an old one; a price may be back-dated, but only unapproved transactions feel it.
+- `REQ-ADM.md` holds 15 requirements. With TSK, AUD, PRJ and ADM, the modules Slice 1 leans on now have requirement files too.
+
+
 ## 2026-09-18 — REQ-PRJ
 
 - Projects: targets never change in place — the technical office enters a new project revision, it becomes valid on approval, earlier revisions stay with their dates, and over-casting is always judged against the revision valid that day, so nobody can raise a target to make an over-cast disappear. Daily targets are calculated from the chosen duration, the remaining work and the calendar, and can be corrected by an authorised person. Every site belongs to exactly one project.

@@ -31,7 +31,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | MTG | §32 | `docs/requirements/REQ-MTG.md` | — |
 | DOC | §33 | `docs/requirements/REQ-DOC.md` | — |
 | STR | §35 | `docs/requirements/REQ-STR.md` | — |
-| ADM (master data, calendar, panel and strip type catalogs) | §36.1–§36.4, §23.9, §10.1, §11.2 (type definitions) | `docs/requirements/REQ-ADM.md` | — |
+| ADM (master data, calendar, panel and strip type catalogs, exchange rate) | §36.1–§36.4, §23.9, §10.1, §11.2 (type definitions), §22.5 (rate) | `docs/requirements/REQ-ADM.md` | 15 (DRAFT) |
 | AUD (audit, revision requests) | §38, §37.1 | `docs/requirements/REQ-AUD.md` | 10 (DRAFT) |
 | MIG (data import — DEFERRED) | §36.5, §33.4 import part | `docs/requirements/REQ-MIG.md` | — |
 | NFR (UI standards, alerts, platform) | §1, §39–§43, §40.2, §46 | `docs/requirements/REQ-NFR.md` | — |

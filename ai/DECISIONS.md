@@ -202,6 +202,14 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — ADM requirement round (2026-09-18)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-139 | **A new item in a shared list is added and usable at once, after the similar ones are shown**; authorised staff merge duplicates later, and history keeps the old name | Owner 2026-09-18; §36.3 |
+| D-140 | **The daily exchange rate is the previous business day's CBRT (TCMB) buying rate** — the rate used for valuing foreign-currency receivables and payables | Owner 2026-09-18; §22.5 |
+| D-141 | **A price or definition may be entered with a past effective date, but it applies only to transactions not yet approved**; approved records and closed periods are untouched and need a revision request | Owner 2026-09-18; §36.4 |
+
 ## PHASE 01 — PRJ requirement round (2026-09-18)
 
 | ID | Decision | Ref |

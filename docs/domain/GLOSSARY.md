@@ -32,6 +32,10 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Günlük hedef | Daily Target | Şantiyenin bir günlük üretim hedefi | — | quota | PROPOSED | D-137 |
 | Duvar | Wall | Proje içindeki duvar birimi | — | structure | PROPOSED | |
 | Toprakarme | Reinforced Earth (MSE wall) | Çelik şerit donatılı zemin duvarı | mechanically stabilized earth | — | PROPOSED | Kodda `mse` kısaltması kullanılmaz |
+| Katalog kalemi | Catalog Item | Ortak listelerdeki tek bir tanım (gider kategorisi, malzeme…) | — | lookup, option | PROPOSED | D-139 |
+| Şerit tipi | Strip Type | Genişlik, kalınlık, delik sayısı ve standart boylarıyla tanımlı çelik şerit türü | — | strip_model | PROPOSED | §11.2 |
+| Özel alan | Custom Field | Belirlenmiş kayıt türlerine eklenen tipli alan | — | extra_field, meta | PROPOSED | ADR-005 |
+| Çalışma takvimi | Working Calendar | Çalışma saatleri, tatiller ve fazla mesai kuralları | — | schedule, shift_plan | PROPOSED | §23.9 |
 | Panel tipi | Panel Type | C4, C5… gibi tanımlı panel ölçüsü | — | panel_model | PROPOSED | |
 | Kademe (panel sırası) | Panel Course | Panelin duvarda alttan üste yer aldığı sıra/yükseklik (1. kademe, 2. kademe…) | — | level, grade, rank | CONFIRMED | D-031 |
 | Panel dökümü | Panel Casting | Sahada panelin kalıpta dökülmesi | — | pouring, production | PROPOSED | |
