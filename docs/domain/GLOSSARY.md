@@ -23,6 +23,13 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Kurum / İdare | Authority | Projeyi onaylayan kamu kurumu | — | institution | PROPOSED | |
 | Proje | Project | Sözleşmeli iş; 1..N şantiye | — | job | PROPOSED | |
 | Şantiye | Site | Projenin fiziksel uygulama yeri | — | construction_site, workplace | PROPOSED | Arayüzde modül ve menü adı "Şantiye" (D-026) |
+| Proje revizyonu | Project Revision | Onaylanınca geçerli olan, hedefleri taşıyan proje sürümü (ör. Rev.2) | — | version, drawing_rev | PROPOSED | D-136 |
+| Proje aşaması | Project Stage | Projenin yaşam döngüsündeki yeri | — | phase, status | PROPOSED | §7.2 |
+| Teknik ofis işi | Technical Office Item | Teknik ofisin proje altında izlenen işi | — | tech_task | PROPOSED | §7.4 |
+| Sözleşme süresi | Contract Duration | İşverene karşı resmî süre | — | deadline | PROPOSED | §8.1 |
+| Teorik süre | Theoretical Duration | Mevcut kaynaklarla beklenen süre | — | estimate | PROPOSED | §8.1 |
+| Yönetim hedef süresi | Management Target Duration | Yönetimin koyduğu iç hedef süre | — | goal | PROPOSED | §8.1 |
+| Günlük hedef | Daily Target | Şantiyenin bir günlük üretim hedefi | — | quota | PROPOSED | D-137 |
 | Duvar | Wall | Proje içindeki duvar birimi | — | structure | PROPOSED | |
 | Toprakarme | Reinforced Earth (MSE wall) | Çelik şerit donatılı zemin duvarı | mechanically stabilized earth | — | PROPOSED | Kodda `mse` kısaltması kullanılmaz |
 | Panel tipi | Panel Type | C4, C5… gibi tanımlı panel ölçüsü | — | panel_model | PROPOSED | |

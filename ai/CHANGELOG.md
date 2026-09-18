@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-18 — REQ-PRJ
+
+- Projects: targets never change in place — the technical office enters a new project revision, it becomes valid on approval, earlier revisions stay with their dates, and over-casting is always judged against the revision valid that day, so nobody can raise a target to make an over-cast disappear. Daily targets are calculated from the chosen duration, the remaining work and the calendar, and can be corrected by an authorised person. Every site belongs to exactly one project.
+- `REQ-PRJ.md` holds 11 requirements. On the way, the requirement index was corrected: panel and strip type definitions are catalogs and belong to ADM, as REQ-SIT had already said; only the project targets stay with PRJ.
+
+
 ## 2026-09-18 — REQ-TSK and REQ-AUD
 
 - Tasks and notifications: a manual task can go to anyone in the giver's scope; whoever gives it decides whether it needs their approval to close; everything shows in the panel, while new tasks, approval requests and critical alerts also reach the phone as a browser notification, and e-mail carries only the morning digest — which every user now gets for their own work, the owners also for the company. That answers OQ-016.

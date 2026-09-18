@@ -202,6 +202,14 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — PRJ requirement round (2026-09-18)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-136 | **Targets change only through a new project revision**, entered by the technical office and valid once approved; earlier revisions are kept with their dates, and over-casting is always judged against the revision valid on that day, so targets cannot be raised to hide over-casting | Owner 2026-09-18; §7.4, §7.5, §10.6 |
+| D-137 | **Daily targets are calculated from the chosen duration, the remaining work and the working calendar; an authorised person may correct them**, the correction is recorded, and the remaining days are recalculated as production falls behind | Owner 2026-09-18; §8.2 |
+| D-138 | **A site belongs to exactly one project**; a project may be split into several sites. Two contracts on the same ground are two sites | Owner 2026-09-18; §7 |
+
 ## PHASE 01 — TSK and AUD requirement rounds (2026-09-18)
 
 One round each; the answers are written into `docs/requirements/REQ-TSK.md` and `docs/requirements/REQ-AUD.md`.

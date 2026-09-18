@@ -33,6 +33,7 @@ None.
 See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
+- D-136…D-138 (2026-09-18, PRJ round): targets change only through an approved project revision; daily targets calculated and correctable; a site belongs to one project
 - D-130…D-135 (2026-09-18, TSK and AUD rounds): manual tasks to anyone in scope; closing mode chosen per task; panel + phone push, e-mail only for the digest (OQ-016); personal digests plus a company digest for owners; nothing ever deleted or anonymised (KVKK risk, RISK-001); audit log screen for owners only
 - D-126…D-129 (2026-09-18, RPT round): attention items close only when resolved; indicators per role, adjustable per person; the system view for owners and GM; loss diagnosis always shown, on top when in loss
 - D-119…D-125 (2026-09-18, SIT round): several people fill a log section by section; recall before decision; over-casting needs an explanation; late entry allowed and marked; consumption editable with the difference flagged; client handover rests on our own record; subcontractor workers recorded by name (KVKK note)
