@@ -1,6 +1,6 @@
 # DECISIONS
 
-Last updated: 2026-09-18
+Last updated: 2026-09-19
 
 ## PHASE DECISION SUMMARY — PHASE 00 (2026-09-15)
 
@@ -206,13 +206,13 @@ Decided by the owner in a four-round question session.
 
 | ID | Decision | Ref |
 |---|---|---|
-| D-181 | **Every requirement states its layer** — Sabit (fixed records and calculations), Akış (a default workflow the designer can change) or Tanım (a catalog value) — and names the configurable part in its own line. A process step is never written as fixed module behaviour; it is named as a default workflow and the module's catalog publishes what that workflow needs. Enforced by the records validator. Asked for by the owner after noticing that module questions were not workflow design; the scan of all 328 requirements found 101 with a configurable part, and three descriptions (REQ-TSK-006, REQ-CRM-007, REQ-CMP-013) were reworded without change of meaning; REQ-CMP-013 gained the catalog action `notice_letter.create_draft` | Owner 2026-09-18; D-077 |
+| D-181 | **Every requirement states its layer** — Sabit (fixed records and calculations), Akış (a default workflow the designer can change) or Tanım (a catalog value) — and names the configurable part in its own line. A process step is never written as fixed module behaviour; it is named as a default workflow and the module's catalog publishes what that workflow needs. Enforced by the records validator. Asked for by the owner after noticing that module questions were not workflow design; the scan of all 328 requirements found 101 with a configurable part, and three descriptions (REQ-TSK-006, REQ-CRM-007, REQ-CMP-013) were reworded without change of meaning; REQ-CMP-013 gained the catalog action `notice_letter.create_draft`. Scan and rewordings confirmed by the owner 2026-09-19 | Owner 2026-09-18; D-077 |
 
 ## PHASE 01 — CMP requirement round (2026-09-18)
 
 | ID | Decision | Ref |
 |---|---|---|
-| D-177 | **The contracts module holds client contracts, subcontractor contracts and long-term supplier agreements** (AI recommended client and subcontractor only), each with trackable terms and obligations. Derived consequences, to be confirmed with the requirement file: a supplier framework price is proposed when an order is opened, and a contract amendment is a new dated version that keeps the earlier ones | Owner 2026-09-18; §24 |
+| D-177 | **The contracts module holds client contracts, subcontractor contracts and long-term supplier agreements** (AI recommended client and subcontractor only), each with trackable terms and obligations. Derived consequences, **confirmed by the owner 2026-09-19**: a supplier framework price is proposed when an order is opened, and a contract amendment is a new dated version that keeps the earlier ones | Owner 2026-09-18; §24 |
 | D-178 | **An extension of time is tracked as request → client decision → new date**; the contract end date and the delay penalty follow the decision, earlier dates stay in history | Owner 2026-09-18; §24.1 |
 | D-179 | **When a client obligation is late, the panel drafts a formal notice letter (PDF)** documented from the records; an authorised person decides whether to send it and the sending is recorded | Owner 2026-09-18; §24.5, §24.6 |
 | D-180 | **A letter of guarantee's bank commission is an expense of the project it was taken for**, charged period by period while the letter runs | Owner 2026-09-18; §24.7 |

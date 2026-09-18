@@ -1,6 +1,6 @@
 # REQUIREMENTS INDEX
 
-Status: IN PROGRESS — requirement extraction in Phase 01; first file REQ-WFL (2026-09-18) · Last updated: 2026-09-18
+Status: IN PROGRESS — requirement extraction in Phase 01; first file REQ-WFL (2026-09-18) · Last updated: 2026-09-19
 
 ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirement bodies are written in Turkish under `docs/requirements/`.
 
@@ -22,7 +22,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | FIN / EQP (ancillary income, service vehicle) | §20.2–§20.4 | `docs/requirements/REQ-FIN.md`, `REQ-EQP.md` | FIN-012, EQP-017, EQP-021 |
 | EQP | §21 | `docs/requirements/REQ-EQP.md` | 21 (CONFIRMED) |
 | HR | §23 | `docs/requirements/REQ-HR.md` | 16 (CONFIRMED) |
-| CMP | §24, §31 | `docs/requirements/REQ-CMP.md` | 17 (DRAFT) |
+| CMP | §24, §31 | `docs/requirements/REQ-CMP.md` | 17 (CONFIRMED) |
 | TSK (tasks, notifications, escalation) | §25.1–§25.6 | `docs/requirements/REQ-TSK.md` | 13 (CONFIRMED) |
 | SUP | §25.7 | `docs/requirements/REQ-SUP.md` | — |
 | INT | §26, §27, §8.3, §8.4 | `docs/requirements/REQ-INT.md` | — |

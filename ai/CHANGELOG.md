@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — CMP and the layer scan confirmed
+
+- The owner confirmed REQ-CMP with both derived rules (framework price proposed on orders; a contract amendment is a new dated version) and the layer scan of D-181 with its three rewordings: 17 more requirements CONFIRMED, 328 in all. Next: QHS.
+
+
 ## 2026-09-18 — Every requirement says which layer it is in
 
 - The owner asked why the module questions were not workflow design. The answer is the three layers of D-077: records and calculations are fixed, processes are workflows, catalog values are settings. To make that visible, all 328 requirements now carry a layer line; 101 have a configurable part, named in its own line ("Akışla ayarlanan", "Tanımla ayarlanan"), so the owner can read what is in their hands without guessing.

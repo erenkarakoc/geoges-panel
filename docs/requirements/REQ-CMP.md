@@ -1,6 +1,6 @@
 # REQ-CMP — Sözleşme, Yükümlülük, Teminat ve Süreli Belgeler
 
-Durum: DRAFT · 2026-09-18 · Modül: CMP (Contracts & Compliance)
+Durum: CONFIRMED (sahip, 2026-09-19) · 2026-09-18 · Modül: CMP (Contracts & Compliance)
 
 Kaynaklar: Özellik Yapısı §24, §31; kararlar D-029, D-030, D-124, D-177…D-180.
 
@@ -21,7 +21,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Kabul kriterleri:
   - [ ] Her sözleşmede imzalı belge, taraflar, tarih ve durum bulunur.
   - [ ] Sözleşme tutarları ve fiyatları ticari veridir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-CMP-002 — İşveren sözleşmesinin şartları
 
@@ -31,7 +31,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Açıklama: İş kapsamı, teslim tarihi, iş süresi, ödeme koşulları ve vadesi (REQ-FIN-022), hakediş şartları, teminat türü ve oranı, teminat iadesi için gereken evraklar, gecikme cezası ve günlük cezai tutar, işveren avansı ve kesinti oranı (REQ-FIN-007), İSG yükümlülükleri, işveren ve GEOGES yükümlülükleri, gerekli belge ve gönderim tarihleri tanımlanır.
 - Kabul kriterleri:
   - [ ] Hakediş, nakit projeksiyonu ve ceza hesabı bu şartları sözleşmeden okur; aynı şart ikinci yerde girilmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-CMP-003 — Taşeron sözleşmesi
 
@@ -41,27 +41,27 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Açıklama: Taşeron sözleşmesinde ödeme yöntemi (birim fiyat, götürü, gündelik), birim fiyatlar, kesintiler, iş kapsamı, süre ve tarafların yükümlülükleri tutulur. Taşeron hakedişi fiyatını bu sözleşmeden alır.
 - Kabul kriterleri:
   - [ ] Geçerli taşeron sözleşmesi olmayan ekip için taşeron hakedişi hazırlanamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-CMP-004 — Tedarikçi çerçeve anlaşması
 
 - Kaynak: D-177; REQ-PUR-003
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit
-- Açıklama: Uzun süreli tedarikçi anlaşmasında malzeme, çerçeve fiyat, para birimi, teslim şartları ve geçerlilik süresi tutulur; yükümlülükleri diğer sözleşmeler gibi izlenir. O tedarikçiye sipariş açılırken çerçeve fiyat öneri olarak gelir; siparişteki fiyat farklıysa fark görünür (D-177'den türetilen kural, bu dosyanın onayıyla kesinleşir).
+- Açıklama: Uzun süreli tedarikçi anlaşmasında malzeme, çerçeve fiyat, para birimi, teslim şartları ve geçerlilik süresi tutulur; yükümlülükleri diğer sözleşmeler gibi izlenir. O tedarikçiye sipariş açılırken çerçeve fiyat öneri olarak gelir; siparişteki fiyat farklıysa fark görünür (D-177'den türetilen kural, sahip onayladı).
 - Kabul kriterleri:
   - [ ] Süresi biten anlaşmanın fiyatı öneri olarak gelmez; bitişten önce sorumlusuna uyarı düşer.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-CMP-005 — Sözleşme değişikliği yeni sürümdür
 
 - Kaynak: §24.1; D-136 (aynı mantık)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
-- Açıklama: Sözleşmede değişiklik (zeyilname) olursa geçerlilik tarihli yeni sürüm açılır; önceki sürüm ve şartları silinmez. Her hesap, işlemin tarihinde geçerli sürümü kullanır (D-177 kapsamında türetilen kural, bu dosyanın onayıyla kesinleşir).
+- Açıklama: Sözleşmede değişiklik (zeyilname) olursa geçerlilik tarihli yeni sürüm açılır; önceki sürüm ve şartları silinmez. Her hesap, işlemin tarihinde geçerli sürümü kullanır (D-177'den türetilen kural, sahip onayladı).
 - Kabul kriterleri:
   - [ ] Sürümler arasındaki şart farkları yan yana görülebilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Yükümlülükler
 
@@ -74,7 +74,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Açıklama: Her yükümlülükte ne yapılacağı, sorumlu taraf (GEOGES, işveren, taşeron veya tedarikçi), sorumlu kişi veya rol, son tarih, durum, ceza riski ve ilgili belge görünür. Süre yaklaşınca uyarı, geçince gecikme ve gerekirse kritik eskalasyon oluşur (REQ-TSK-006).
 - Kabul kriterleri:
   - [ ] Gecikmiş yükümlülük, sebebi çözülene kadar "Dikkat" bölümünde kalır (REQ-RPT-008).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-CMP-007 — İşveren yükümlülükleri
 
@@ -84,7 +84,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Açıklama: İşverenin yükümlülükleri de izlenir: saha teslimi, dolgu, beton, demir, elektrik/su, ödeme ve diğer sözleşmesel yükümlülükler. Yerine getirilme zamanı teslim-tesellüm kayıtlarından ve tahsilattan gelir.
 - Kabul kriterleri:
   - [ ] İşveren yükümlülüğü gecikince işveren karnesine yansır (REQ-CRM-009).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-CMP-008 — Sözleşmeden doğan tetikleyiciler
 
@@ -95,7 +95,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Açıklama: Bir olayla doğan işler iş akışıyla kurulur. Varsayılan şirket akışları arasında: hakediş onaylandı → fatura görevi; ay sonu → bordro hazırlama/gönderme görevi; personel ayrılıyor → çıkış kontrol listesi; sertifika süresi yaklaşıyor → yenileme görevi; iş başlangıcı → teminat, SGK ve yer teslim yükümlülükleri.
 - Kabul kriterleri:
   - [ ] Sözleşme kaydedilince içindeki tarihli yükümlülükler kendiliğinden yükümlülük kaydına dönüşür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-CMP-009 — Bağımlılık kilitleri ve nedeni
 
@@ -106,7 +106,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Açıklama: Belirli işlerin sırası zorunlu tutulur: imzalı bordro tamamlanmadan maaş ödemesi (REQ-HR-012), hakediş onayı olmadan fatura, çıkış ve teminat evrakları tamamlanmadan personel çıkışının kapanması (REQ-HR-015). Kullanıcı işlemin neden kilitli olduğunu ve kilidi neyin açacağını açıkça görür.
 - Kabul kriterleri:
   - [ ] Kilitli işlemde eksik koşullar bağlantılarıyla listelenir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Süre ve ceza
 
@@ -119,7 +119,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Açıklama: Sözleşme bitiş tarihi ile beklenen bitiş (REQ-PRJ teorik süre) karşılaştırılır; aşılacak gün sayısı günlük cezai tutarla çarpılarak ceza riski gösterilir. Ceza riski ticari veridir.
 - Kabul kriterleri:
   - [ ] Ceza riski oluştuğunda proje sorumlusuna ve yönetime uyarı gider; risk tutarı değiştikçe güncellenir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-CMP-011 — Süre uzatımı
 
@@ -130,7 +130,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Kabul kriterleri:
   - [ ] Karar girilmeden bitiş tarihi değişmez.
   - [ ] Talep, verilen ve reddedilen gün sayısı projede ayrı görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## D. İşveren gecikmesi
 
@@ -142,7 +142,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Açıklama: Teslim-tesellüm saatleri ve sözleşme yükümlülükleri birleştirilerek gecikme dosyası hazırlanır: hangi tarihte ne beklendi, işveren ne zaman yerine getirdi, kaç saat/gün gecikme oldu, hangi kayıt, fotoğraf ve belge bunu destekliyor, tahmini maliyet etkisi. Dosya PDF olarak dışa aktarılır. Kanıt kendi kayıtlarımıza dayanır; işverenden imza alınmaz (D-124).
 - Kabul kriterleri:
   - [ ] Dosyadaki her gecikme satırı, kaynağı olan kayda bağlantı taşır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-CMP-013 — Bildirim yazısı taslağı
 
@@ -154,7 +154,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Kabul kriterleri:
   - [ ] Gönderilen yazı gecikme dosyasına ve yükümlülüğe bağlanır.
   - [ ] Yazı şablonları yetkili kullanıcı tarafından güncellenebilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## E. Teminat, belgeler ve uyuşmazlık
 
@@ -168,7 +168,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Kabul kriterleri:
   - [ ] Süresi bitecek teminat mektubu için uzatma uyarısı düşer.
   - [ ] İade evrakları tamamlanmadan teminat iadesi talebi kapanmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-CMP-015 — Teminat mektubu komisyonu projenin gideridir
 
@@ -178,7 +178,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Açıklama: Teminat mektubunun banka komisyonu, mektubun alındığı projenin gideridir ve mektup süresi boyunca dönem dönem yazılır.
 - Kabul kriterleri:
   - [ ] Mektup iade edilince komisyon yazımı durur.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-CMP-016 — Süreli belgeler tek listede
 
@@ -190,7 +190,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Açıklama: Şirket ve şantiye resmi belgeleri, kurum evrakları ve kalite sertifikaları bitiş tarihleriyle tutulur. Ekipman kontrolleri ve personel belgeleriyle birlikte tüm süreli belgeler tek listede, yaklaşan ve geçen olarak görünür. Yaklaşan son tarih önceden görev ve uyarıya dönüşür.
 - Kabul kriterleri:
   - [ ] Liste belge türü, sahip (şirket, şantiye, ekipman, personel) ve kalan güne göre süzülür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-CMP-017 — Uyuşmazlık dosyaları
 
@@ -200,7 +200,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Açıklama: Uyuşmazlık ve hak talebi dosyaları proje veya şirket bazında tutulur: konu, taraf, tarih, tutar, durum, ilgili gecikme dosyaları, yazışmalar ve belgeler.
 - Kabul kriterleri:
   - [ ] Uyuşmazlık işveren karnesine yansır (REQ-CRM-009).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 
