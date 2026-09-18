@@ -5,6 +5,11 @@
 - The owner approved the eight tasks that were waiting: the presentation sandbox, the five steps of the navigation transfer, the emptied approval and task screens, and the CHG-005 record machinery. CHG-003, CHG-004 and CHG-005 are closed in the roadmap register, and nothing runs in parallel with Phase 01 any more.
 
 
+## 2026-09-18 — main guarded and pushed by machine (D-110)
+
+- The single-branch rule said `main` stays green; now a hook makes sure of it. Every commit runs the whole check first — records in strict mode, types, lint, tests, formatting, about twenty seconds — and a red commit is refused. It would have stopped the formatting error that sat unnoticed on `main` for days.
+- Every commit on `main` is then pushed automatically, so the local copy and GitHub never drift apart. A failed push never loses the commit; it says so and the next one catches up.
+
 ## 2026-09-18 — One branch (D-109)
 
 - The owner removed the separate-branch rule: work goes straight to `main` in small, frequent commits. The two direct-to-`main` exceptions written down earlier the same day are now simply the rule.

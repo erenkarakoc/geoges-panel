@@ -146,7 +146,7 @@ Code, database, API, events, env vars, storage keys, logs, tests and infrastruct
 
 - Default branch `main`; remote `github.com/erenkarakoc/geoges-panel` (private).
 - **Single branch (D-109):** all work is committed directly to `main` in small, frequent commits; no feature branches, no pull requests. `main` stays green: `npm run check` passes before every commit. The only other branch is a throwaway `spike/` branch, never merged (ADR-007).
-- Commits and pushes happen only when the user asks or a recorded task explicitly includes them.
+- Commits are made as work progresses, in small steps (D-109); every commit on `main` is pushed automatically by the `post-commit` hook (D-110).
 - Never add AI attribution to commit messages or PR descriptions: no `Co-Authored-By: Claude …` trailer and no "Generated with …" line, from any AI tool (owner decision 2026-09-16; history cleaned on all branches the same day).
 - Never commit secrets, `.env` files or real personal data.
 - Details: `docs/standards/GIT_WORKFLOW.md`.
@@ -204,7 +204,7 @@ Order matters: 1 and 2 are facts the harness recorded, 3 is a claim the model ma
 
 ### 21.3 The commit gate
 
-`.githooks/pre-commit` runs the validator and refuses inconsistent commits. It is versioned in the repository and enabled once per clone:
+`.githooks/pre-commit` runs `npm run check:commit` — the validator in strict mode plus type check, lint, tests and formatting — and refuses the commit if any of it fails, so `main` never goes red (D-110). `.githooks/post-commit` then pushes the commit to `origin/main`; a failed push leaves the commit intact and says so. It is versioned in the repository and enabled once per clone:
 
 ```
 git config core.hooksPath .githooks

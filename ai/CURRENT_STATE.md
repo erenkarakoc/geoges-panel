@@ -21,7 +21,7 @@ CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 a
 Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Owner decides whether the pre-commit gate runs the full `npm run check` (~20 s) so `main` can never go red (D-109 follow-up).
+1. Phase 01 requirement work: Slice 1 requirement files (TASK-0021) with each module's capability catalog (TASK-0041).
 2. Phase 01 requirement rounds continue (TASK-0020, TASK-0021), now with the capability catalog per module (TASK-0041).
 4. OQ-027 items 3 and 4 (flow methods) still open.
 5. Phase 01 per-module requirement rounds (TASK-0020, TASK-0021) — no REQ file written yet.
@@ -34,6 +34,7 @@ None.
 See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
+- D-110 (2026-09-18): full check before every commit, automatic push after every commit on `main`
 - D-109 (2026-09-18): single branch — all work committed directly to `main`, no feature branches or PRs; `main` stays green on every commit
 - D-106…D-108 (2026-09-18, TASK-0040): sample data removed from approvals, tasks, notifications and badges; reason required on reject and send-back; no "İş Akışları" menu entry until its own UX round
 - D-105 (2026-09-18): record-type builder built after the Slice 1 pilot (roadmap step 09R); CHG-006 approved and folded, product-code freeze ended

@@ -216,6 +216,7 @@ The owner reviewed the TASK-0040 findings and decided:
 
 | ID | Decision | Ref |
 |---|---|---|
+| D-110 | **`main` is kept green and in sync by machine.** The pre-commit hook runs the full check (`npm run check:commit`: records in strict mode, type check, lint, tests, formatting, about 20 s) and refuses a red commit; the post-commit hook pushes every commit on `main` to `origin` automatically. Commits are made as work progresses, without waiting to be asked | Owner 2026-09-18 |
 | D-109 | **Single branch.** Work is committed directly to `main` in small, frequent commits; the separate-branch and pull-request rule is removed. `main` must stay green on every commit (`npm run check` before committing; the pre-commit gate enforces record consistency). The only other branch allowed is a throwaway `spike/` branch that is never merged, because spike code never becomes product code (ADR-007). Supersedes the branching part of `docs/standards/GIT_WORKFLOW.md` and the direct-to-`main` exceptions recorded on 2026-09-18 | Owner 2026-09-18 |
 
 ## Further decisions (2026-09-15)

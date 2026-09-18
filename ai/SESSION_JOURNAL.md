@@ -17,3 +17,5 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-18 11:21:25Z · 6c9e96a0 · Edit · `scripts/check-records.mjs`
 - 2026-09-18 11:57:42Z · 6c9e96a0 · Write · `src/app/probe/page.tsx`
 - 2026-09-18 11:58:30Z · 6c9e96a0 · Edit · `src/modules/rpt/ui/today-overview.tsx`
+- 2026-09-18 12:47:06Z · 6c9e96a0 · Write · `.githooks/pre-commit`
+- 2026-09-18 12:47:09Z · 6c9e96a0 · Write · `.githooks/post-commit`

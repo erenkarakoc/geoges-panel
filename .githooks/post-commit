@@ -1,0 +1,17 @@
+#!/bin/sh
+# Push every commit on `main` to origin (D-110), so the local and remote copies never drift
+# apart and no work lives only on one machine.
+#
+# A failed push (offline, rejected) never undoes the commit; it says so, and the next commit
+# or a manual `git push` catches up. Other branches (throwaway spike/ branches, ADR-007) are
+# not pushed.
+
+branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+[ "$branch" = "main" ] || exit 0
+
+if git push --quiet origin main; then
+  echo "post-commit: pushed to origin/main"
+else
+  echo "post-commit: push FAILED — the commit is safe locally; run 'git push' when online." >&2
+fi
+exit 0
