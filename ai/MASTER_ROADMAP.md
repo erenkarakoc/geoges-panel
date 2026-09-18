@@ -49,9 +49,9 @@ Every approved change request must appear here, with the phase it changed. Analy
 |---|---|---|---|
 | CHG-001 | Early preview of authentication screens and app shell | Rejected as an early preview; became Milestone M1 in Phase 07 | RESOLVED |
 | CHG-002 | Early first screen now (auth + dashboard, built to keep) | Added Milestone M0 in parallel with Phase 01; amended ADR-007 | DONE 2026-09-16 |
-| CHG-003 | Development-only structure presentation page | Added TASK-0030; sandbox code only, never ships (production 404). No phase moved | REVIEW |
-| CHG-004 | Compact navigation: header as a toolbar, work layer on the sidebar rail | Delivered part of **Phase 02** (navigation/IA, role home screen, top bar, mobile) and part of **Phase 07** (app shell) early, in five steps: TASK-0032…TASK-0037. Both phases are therefore `PARTIALLY_DONE` | REVIEW |
-| CHG-005 | Record consistency and deterministic guards | Rewrote the stale parts of this file, refiled `ai/TASKS.md`, redefined Milestone M1, blocked TASK-0027 behind TASK-0039, added `npm run records`, the pre-commit gate and the hook-written session journal | 2026-09-17/18 |
+| CHG-003 | Development-only structure presentation page | Added TASK-0030; sandbox code only, never ships (production 404). No phase moved | DONE 2026-09-18 |
+| CHG-004 | Compact navigation: header as a toolbar, work layer on the sidebar rail | Delivered part of **Phase 02** (navigation/IA, role home screen, top bar, mobile) and part of **Phase 07** (app shell) early, in five steps: TASK-0032…TASK-0037. Both phases are therefore `PARTIALLY_DONE` | DONE 2026-09-18 |
+| CHG-005 | Record consistency and deterministic guards | Rewrote the stale parts of this file, refiled `ai/TASKS.md`, redefined Milestone M1, blocked TASK-0027 behind TASK-0039, added `npm run records`, the pre-commit gate and the hook-written session journal | DONE 2026-09-18 |
 | CHG-006 | Composition-first workflow platform | **Approved and folded 2026-09-18 (D-077…D-105).** Phase order unchanged (engine + designer stay in Phase 08, before the slices — D-088). Adds a per-module capability catalog to Phase 01, contract tests to Phase 03, a free record-type builder (D-079), built after the Slice 1 pilot (D-105), new spikes to Phase 06. Analysis in `ai/DECISIONS.md` | DONE 2026-09-18 |
 
 ## Work delivered ahead of its phase

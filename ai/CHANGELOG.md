@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-18 — The shell work is approved
+
+- The owner approved the eight tasks that were waiting: the presentation sandbox, the five steps of the navigation transfer, the emptied approval and task screens, and the CHG-005 record machinery. CHG-003, CHG-004 and CHG-005 are closed in the roadmap register, and nothing runs in parallel with Phase 01 any more.
+
+
 ## 2026-09-18 — One branch (D-109)
 
 - The owner removed the separate-branch rule: work goes straight to `main` in small, frequent commits. The two direct-to-`main` exceptions written down earlier the same day are now simply the rule.

@@ -26,3 +26,12 @@ Only items whose quality gate passed are listed here.
 | 2026-09-16 | TASK-0024 | Supabase dev project (EU Frankfurt), sign-up disabled, local env set by owner | T1 PASS (verified without reading key values) |
 | 2026-09-16 | TASK-0025 | Real Supabase authentication: sign-in, password reset, two-factor (TOTP), session protection | T1 PASS (owner tested and approved) |
 | 2026-09-16 | TASK-0026 | App shell, cockpit skeleton, role onboarding, brand logos, layout | T2 PASS (owner approved) |
+| 2026-09-18 | TASK-0030 | Development-only presentation sandbox (module map, flows, roles, approval cycle) | T3 PASS (owner approved) |
+| 2026-09-18 | TASK-0032 | CHG-004 step 1: icon rail with work layer and module-group flyouts | T2 PASS (owner approved) |
+| 2026-09-18 | TASK-0033 | CHG-004 step 2: three-zone header, search palette, site selector, dev role switcher | T2 PASS (owner approved) |
+| 2026-09-18 | TASK-0034 | CHG-004 step 3: conditional context row with day strip and calendar | T2 PASS (owner approved) |
+| 2026-09-18 | TASK-0035 | CHG-004 step 4: "Bugün" entry screen composed per role | T2 PASS (owner approved) |
+| 2026-09-18 | TASK-0036 | CHG-004 step 5: phone bottom bar and module drawer | T2 PASS (owner approved) |
+| 2026-09-18 | TASK-0037 | "Onaylar" and "Görevler" screens (sample data removed, D-106) | T2 PASS (owner approved) |
+| 2026-09-18 | TASK-0038 | CHG-005 record consistency fixes, validator, pre-commit gate, session journal | T2 PASS (owner approved) |
+| 2026-09-18 | TASK-0040 | CHG-004 shell work re-reviewed against CHG-006; sample data removed | T2 PASS (check green, browser-verified) |
