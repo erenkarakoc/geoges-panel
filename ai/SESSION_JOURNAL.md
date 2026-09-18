@@ -38,3 +38,4 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-18 19:45:32Z · 6c9e96a0 · Write · `docs/requirements/REQ-HR.md`
 - 2026-09-18 19:58:14Z · 6c9e96a0 · Write · `docs/requirements/REQ-CRM.md`
 - 2026-09-18 20:12:17Z · 6c9e96a0 · Write · `docs/requirements/REQ-QTE.md`
+- 2026-09-18 20:36:34Z · 6c9e96a0 · Write · `docs/requirements/REQ-CMP.md`

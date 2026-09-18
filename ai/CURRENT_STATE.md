@@ -33,6 +33,7 @@ None.
 See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
+- D-177…D-180 (2026-09-18, CMP round): client, subcontractor and supplier contracts; extension of time as request → decision → new date; notice-letter draft on client delay; guarantee commission charged to the project
 - D-173…D-176 (2026-09-18, QTE round): no general-expense share in quote estimates (changes §6.3); estimated cost proposed from actual cost; sales orders reserve stock; each shipment invoiced separately
 - D-169…D-172 (2026-09-18, CRM round): e-mail and WhatsApp requests entered by hand; client scorecard from records plus reasoned notes; a won request opens a pre-filled draft project
 - D-163…D-168 (2026-09-18, HR round): the panel calculates payroll itself (RISK-011); salary cost to the registered unit; salary advance deducted from payroll; leave entitlement entered by HR; official filings stay with the accountant; bank bulk payment file

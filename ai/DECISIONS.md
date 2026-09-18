@@ -202,6 +202,15 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — CMP requirement round (2026-09-18)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-177 | **The contracts module holds client contracts, subcontractor contracts and long-term supplier agreements** (AI recommended client and subcontractor only), each with trackable terms and obligations. Derived consequences, to be confirmed with the requirement file: a supplier framework price is proposed when an order is opened, and a contract amendment is a new dated version that keeps the earlier ones | Owner 2026-09-18; §24 |
+| D-178 | **An extension of time is tracked as request → client decision → new date**; the contract end date and the delay penalty follow the decision, earlier dates stay in history | Owner 2026-09-18; §24.1 |
+| D-179 | **When a client obligation is late, the panel drafts a formal notice letter (PDF)** documented from the records; an authorised person decides whether to send it and the sending is recorded | Owner 2026-09-18; §24.5, §24.6 |
+| D-180 | **A letter of guarantee's bank commission is an expense of the project it was taken for**, charged period by period while the letter runs | Owner 2026-09-18; §24.7 |
+
 ## PHASE 01 — QTE requirement round (2026-09-18)
 
 | ID | Decision | Ref |

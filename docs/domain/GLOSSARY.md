@@ -130,6 +130,14 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Maliyet geri beslemesi | Cost Feedback | Tahmini ve gerçekleşen maliyetin karşılaştırılması | — | variance_report | PROPOSED | §6.7 |
 | Ders notu | Lesson Note | Tamamlanan işten sonraki tekliflere taşınan not | — | comment | PROPOSED | §6.7 |
 | Stok ayırma | Stock Reservation | Satış siparişi için stokta ayrılan, kullanılabilir sayılmayan miktar | — | hold, block | PROPOSED | D-175 |
+| Sözleşme değişikliği (zeyilname) | Contract Amendment | Geçerlilik tarihli yeni sözleşme sürümü; öncekiler silinmez | — | revision (proje revizyonuna ayrılmış) | PROPOSED | REQ-CMP-005 |
+| Çerçeve anlaşma | Framework Agreement | Tedarikçiyle süreli fiyat ve teslim şartı anlaşması | — | blanket_order | PROPOSED | D-177 |
+| Gecikme cezası | Delay Penalty | Sözleşme süresinin aşılmasında günlük cezai tutarla hesaplanan risk | — | fine | PROPOSED | §24.1 |
+| Süre uzatımı | Extension of Time | İşverenin sözleşme bitiş tarihini ileri alma kararı | EOT | delay_extension | PROPOSED | D-178 |
+| İşveren gecikme dosyası | Client Delay File | İşveren gecikmelerini kayıt ve belgeyle toplayan dosya | — | claim_report | PROPOSED | §24.6 |
+| Bildirim yazısı | Notice Letter | İşverene gönderilen resmi gecikme bildirimi | — | warning_letter | PROPOSED | D-179 |
+| Teminat mektubu komisyonu | Guarantee Commission | Teminat mektubu için bankaya ödenen, projeye yazılan komisyon | — | bank_fee | PROPOSED | D-180 |
+| Uyuşmazlık dosyası | Dispute File | Hak talebi veya uyuşmazlık kaydı ve belgeleri | — | case | PROPOSED | §24.7 |
 | Malzeme | Material | — | item (katalog satırı) | product | PROPOSED | |
 | Sarf malzeme | Consumable | — | — | supply | PROPOSED | |
 | Sarf reçetesi | Consumption Recipe | İş birimi başına standart sarf | bill of materials | — | PROPOSED | |

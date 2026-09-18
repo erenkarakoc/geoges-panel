@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-18 — CMP requirements
+
+- Four contract decisions (D-177…D-180). Contracts cover clients, subcontractors and — beyond the recommendation — long-term supplier agreements, all as trackable terms rather than PDFs. An extension of time runs from request to the client's decision and only then moves the end date and the penalty; a late client obligation produces a draft notice letter that someone decides to send; a guarantee letter's bank commission is charged to its project.
+- `REQ-CMP.md` (17) is written, DRAFT, with its catalog; eight proposed glossary terms were added first. Two derived rules await confirmation: a supplier framework price is proposed on new orders, and a contract amendment is a new dated version.
+
+
 ## 2026-09-18 — QTE requirements confirmed
 
 - The owner confirmed REQ-QTE, including the derived rule that a won quote cancels the request's other open quotes: 18 more requirements CONFIRMED, 311 in all. Next: CMP.
