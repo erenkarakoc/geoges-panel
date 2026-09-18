@@ -13,7 +13,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | WFL (approvals, rules, workflow, end-to-end flows, capability catalog, record-type builder) | §4, §13, §37, §45, Mimari §6, §13; CHG-006 (D-077…D-105) | `docs/requirements/REQ-WFL.md` | 39 (CONFIRMED) |
 | CRM | §5 | `docs/requirements/REQ-CRM.md` | — |
 | QTE | §6 | `docs/requirements/REQ-QTE.md` | — |
-| PRJ | §7, §8.1–§8.2, §10.2 | `docs/requirements/REQ-PRJ.md` | 11 (DRAFT) |
+| PRJ | §7, §8.1–§8.2, §10.2 | `docs/requirements/REQ-PRJ.md` | 11 (CONFIRMED) |
 | SIT | §9–§13, §15, §44 | `docs/requirements/REQ-SIT.md` | 35 (CONFIRMED) |
 | FIN (incl. progress payments, period close) | §16, §22 | `docs/requirements/REQ-FIN.md` | — |
 | FAC | §17 | `docs/requirements/REQ-FAC.md` | — |
@@ -23,7 +23,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | EQP | §21 | `docs/requirements/REQ-EQP.md` | — |
 | HR | §23 | `docs/requirements/REQ-HR.md` | — |
 | CMP | §24, §31 | `docs/requirements/REQ-CMP.md` | — |
-| TSK (tasks, notifications, escalation) | §25.1–§25.6 | `docs/requirements/REQ-TSK.md` | 13 (DRAFT) |
+| TSK (tasks, notifications, escalation) | §25.1–§25.6 | `docs/requirements/REQ-TSK.md` | 13 (CONFIRMED) |
 | SUP | §25.7 | `docs/requirements/REQ-SUP.md` | — |
 | INT | §26, §27, §8.3, §8.4 | `docs/requirements/REQ-INT.md` | — |
 | PRF | §28 | `docs/requirements/REQ-PRF.md` | — |
@@ -31,8 +31,8 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | MTG | §32 | `docs/requirements/REQ-MTG.md` | — |
 | DOC | §33 | `docs/requirements/REQ-DOC.md` | — |
 | STR | §35 | `docs/requirements/REQ-STR.md` | — |
-| ADM (master data, calendar, panel and strip type catalogs, exchange rate) | §36.1–§36.4, §23.9, §10.1, §11.2 (type definitions), §22.5 (rate) | `docs/requirements/REQ-ADM.md` | 15 (DRAFT) |
-| AUD (audit, revision requests) | §38, §37.1 | `docs/requirements/REQ-AUD.md` | 10 (DRAFT) |
+| ADM (master data, calendar, panel and strip type catalogs, exchange rate) | §36.1–§36.4, §23.9, §10.1, §11.2 (type definitions), §22.5 (rate) | `docs/requirements/REQ-ADM.md` | 15 (CONFIRMED) |
+| AUD (audit, revision requests) | §38, §37.1 | `docs/requirements/REQ-AUD.md` | 10 (CONFIRMED) |
 | MIG (data import — DEFERRED) | §36.5, §33.4 import part | `docs/requirements/REQ-MIG.md` | — |
 | NFR (UI standards, alerts, platform) | §1, §39–§43, §40.2, §46 | `docs/requirements/REQ-NFR.md` | — |
 | NFR / platform — site-wide search (owner decision, no scope section) | D-044 | `docs/requirements/REQ-NFR.md` | — |

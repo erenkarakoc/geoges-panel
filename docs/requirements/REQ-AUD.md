@@ -1,6 +1,6 @@
 # REQ-AUD — Kayıt Geçmişi, Denetim ve Revizyon Talebi
 
-Durum: DRAFT · 2026-09-18 · Modül: AUD (Audit & History)
+Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: AUD (Audit & History)
 
 Kaynaklar: Özellik Yapısı §37.1, §38; kararlar D-050, D-134, D-135; REQ-IAM-008.
 
@@ -19,7 +19,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 - Açıklama: Bir kayıtta kimin oluşturduğu, ne zaman oluşturduğu, kimin değiştirdiği, önceki ve yeni değer, değişikliğin nedeni, kimin onayladığı, kimin düzeltme istediği ve hangi belgenin eklendiği görülebilir.
 - Kabul kriterleri:
   - [ ] Bir kaydın her alan değişikliği, önceki ve yeni değeriyle kaydın geçmişinde listelenir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-AUD-002 — Hiçbir kayıt görünmez şekilde silinmez
 
@@ -28,7 +28,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 - Açıklama: Yanlış kayıt silinmez; iptal edilir ve düzeltme geçmişiyle korunur. İptal edilen kayıt listelerde varsayılan olarak gizlenebilir ama her zaman bulunabilir.
 - Kabul kriterleri:
   - [ ] Panelde hiçbir kayıt türü için "sil" işlemi yoktur; yalnızca "iptal et", gerekçeyle.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-AUD-003 — Kişisel veri de silinmez ve anonimleştirilmez
 
@@ -38,7 +38,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 - Kabul kriterleri:
   - [ ] Kişisel veri için silme veya anonimleştirme işlemi yoktur.
   - [ ] Gerçek İK verisi girişinden önceki kontrol listesinde bu karar ayrı bir madde olarak yer alır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-AUD-004 — Geçmişi kaydı görebilen görür, alan bazında süzülür
 
@@ -47,7 +47,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 - Açıklama: Bir kaydın geçmişini o kaydı görebilen herkes görür. Geçmişteki değerler de kullanıcının veri sınıfı izinlerine göre süzülür: maaşı göremeyen, maaş alanının eski ve yeni değerini de göremez.
 - Kabul kriterleri:
   - [ ] Ticari veya hassas izni olmayan kullanıcı, geçmişte o sınıftaki alanların değerlerini görmez; yalnızca "değişti" bilgisini görür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-AUD-005 — Denetim kaydı değiştirilemez
 
@@ -56,7 +56,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 - Açıklama: Denetim kaydı yalnızca eklenir; sahipler dahil kimse bir denetim kaydını değiştiremez veya silemez.
 - Kabul kriterleri:
   - [ ] Denetim kaydını değiştiren veya silen hiçbir ekran, işlem veya yetki yoktur; veritabanı düzeyinde de engellidir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Şirket geneli denetim ekranı
 
@@ -68,7 +68,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 - Kabul kriterleri:
   - [ ] Sahip katmanı dışında hiçbir role bu ekranın yetkisi verilemez.
   - [ ] Genel müdür dahil herkesin işlemleri bu ekranda görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Revizyon talebi
 
@@ -79,7 +79,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 - Açıklama: Onaylanmış kayıtlar (günlük saha ve fabrika kayıtları, hakediş, açılış stoku, stok sayımı, malzeme tanımları vb.) içerik olarak kilitlenir. Hangi kayıt türünün hangi durumda kilitli olduğu ve kimin onaylayacağı merkezi olarak tanımlanır.
 - Kabul kriterleri:
   - [ ] Kilitli bir kaydın alanları doğrudan düzenlenemez; tek yol revizyon talebidir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-AUD-008 — Revizyon talebinin adımları
 
@@ -89,7 +89,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 - Kabul kriterleri:
   - [ ] Onay ekranında her değişen alanın eski ve yeni değeri yan yanadır.
   - [ ] Ret gerekçesiz yapılamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-AUD-009 — Onaylanan revizyon etkilenen hesapları fark kadar düzeltir
 
@@ -99,7 +99,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 - Kabul kriterleri:
   - [ ] Düzeltme hareketleri kaynağındaki revizyon talebine bağlantı taşır.
   - [ ] Revizyondan önceki hesap değerleri geçmişte okunabilir kalır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-AUD-010 — Revizyon geçmişi ve bekleyen revizyonlar görünür
 
@@ -108,7 +108,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 - Açıklama: Kaydın ekranında revizyon geçmişi görünür. Bekleyen revizyon talepleri Onay Merkezi'nde, yönetimin "Bugün" ekranında ve dönem kapanışı kontrol listesinde (§22.10, REQ-FIN) görünür.
 - Kabul kriterleri:
   - [ ] Bekleyen revizyon talebi olan bir dönem, kapanış kontrol listesinde açık madde olarak görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 

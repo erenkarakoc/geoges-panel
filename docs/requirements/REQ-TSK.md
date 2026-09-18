@@ -1,6 +1,6 @@
 # REQ-TSK — Görevler ve Bildirimler
 
-Durum: DRAFT · 2026-09-18 · Modül: TSK (Tasks & Notifications)
+Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: TSK (Tasks & Notifications)
 
 Kaynaklar: Özellik Yapısı §25.1–§25.6; kararlar D-040, D-087, D-091, D-097, D-106, D-130…D-133; OQ-016 (cevaplandı, D-132).
 
@@ -19,7 +19,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 - Açıklama: Her görevde başlık, açıklama, sorumlu kişi veya rol, öncelik, son tarih, durum, görevin kaynağı, ilgili proje/birim ve gerekli belge veya eylem görünür. Kaynak, görevi elle veren kişi ya da görevi üreten akış, adım ve kayıttır.
 - Kabul kriterleri:
   - [ ] Kaynağı olmayan görev oluşturulamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-TSK-002 — Elle ve sistemce oluşan görevler
 
@@ -28,7 +28,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 - Açıklama: Görevler elle verilebilir veya sistem tarafından otomatik oluşturulur. Otomatik kaynaklar arasında geciken saha onayı, kritik stok, atıl ekipman, geçen bakım tarihi, geciken hakediş/alacak, nakit açığı, sözleşme yükümlülüğü, bordro son tarihi, sertifika ve eğitim yenileme, İSG aksiyonu ve toplantı kararı vardır.
 - Kabul kriterleri:
   - [ ] Otomatik görevin kaynağında onu üreten olay veya akış adımı görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-TSK-003 — Elle görev kendi kapsamındaki herkese verilir
 
@@ -37,7 +37,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 - Açıklama: Kullanıcı, rol atamasının kapsamındaki (şantiye/proje/şirket) herkese seviyeden bağımsız olarak görev verebilir; kendine de verebilir. Kapsamı tüm şirket olan roller herkese verebilir.
 - Kabul kriterleri:
   - [ ] Kapsamı Kavaklı olan kullanıcı, Ilgaz'da çalışan birine görev veremez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-TSK-004 — Görevin kapanışı, verilirken seçilir
 
@@ -47,7 +47,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 - Kabul kriterleri:
   - [ ] "Onayım gereksin" seçili görev, veren onaylamadan kapanmış görünmez.
   - [ ] Yeniden açılan görevin geçmişinde kapanış ve yeniden açılış kişi ve zamanla görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-TSK-005 — Sistem görevleri kopyalanmaz, sorun çözülünce kapanır
 
@@ -57,7 +57,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 - Kabul kriterleri:
   - [ ] Aynı kaynak ve aynı sorun için ikinci bir açık görev oluşmaz.
   - [ ] Sorun ortadan kalkınca görev "sebebi çözüldü" notuyla kapanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Eskalasyon
 
@@ -69,7 +69,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 - Kabul kriterleri:
   - [ ] Her eskalasyon, görevin geçmişinde kimden kime ve ne zaman olarak görünür.
   - [ ] Eskale olan görev ilk sorumlunun listesinden düşmez; ikisi de görür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Görevlerim ve bildirimler
 
@@ -82,7 +82,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
   - [ ] Gecikmiş görevler her zaman listenin en üstündedir.
   - [ ] Her görevden, işin yapılacağı ekrana tek tıkla gidilir.
 - Bağlı: TASK-0037
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-TSK-008 — Her görev ve bildirim "neden bende" der
 
@@ -91,7 +91,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 - Açıklama: Görevin ve bildirimin kaynağına (akış, adım, kayıt veya veren kişi) ve kişiye hangi kuralla geldiğine tıklanarak gidilir.
 - Kabul kriterleri:
   - [ ] Bir akışın ürettiği görevden, akış örneğinin çalışma günlüğüne gidilebilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-TSK-009 — Bildirim merkezi
 
@@ -100,7 +100,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 - Açıklama: Üst alanda bildirim sayacı ve çekmecesi bulunur. Türler: yeni görev, görev gecikmesi, düzeltme isteği, onay talebi, kritik uyarı, rol ataması, belge süresi, stok riski, finansal risk. Her bildirim kaynağına gider. Bildirim yoksa çekmece "Bildirim yok." der.
 - Kabul kriterleri:
   - [ ] Sayaç yalnızca okunmamış bildirimleri sayar ve açık görev sayısından ayrıdır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-TSK-010 — Kanal: panel ve telefona anında bildirim
 
@@ -110,7 +110,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 - Kabul kriterleri:
   - [ ] Telefon bildirimine izin vermiş kullanıcı, panel kapalıyken de yeni görev, onay talebi ve kritik uyarıyı alır.
   - [ ] Telefon bildirimi reddedilmişse bildirim panelde eksiksiz durur.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-TSK-011 — Bildirim metninde hassas kişisel veri yoktur
 
@@ -119,7 +119,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 - Açıklama: Hiçbir bildirimin metnine (panel, telefon veya e-posta) hassas kişisel veri konmaz; yerine kayda giden bağlantı konur. Bu kural elle ve sistemce üretilen bütün bildirimler için geçerlidir.
 - Kabul kriterleri:
   - [ ] Hassas kişisel sınıftaki bir alan, bildirim metni üretilirken hiçbir yoldan metne giremez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-TSK-012 — Kritik anında, acil olmayan özetlenir
 
@@ -128,7 +128,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 - Açıklama: Kritik olaylar günlük özeti beklemeden anında bildirilir; acil olmayan bildirimler dikkat dağıtmamak için özette toplanabilir.
 - Kabul kriterleri:
   - [ ] Bir bildirim türünün "anında" mı "özette" mi gideceği ayarlanabilir; kritik uyarı her zaman anında gider.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-TSK-013 — Günlük özet
 
@@ -138,7 +138,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 - Kabul kriterleri:
   - [ ] Özet e-postayla ve panelde gelir; içeriği kişinin yetkisine göre süzülür.
   - [ ] Hiç işi olmayan kullanıcıya boş özet gönderilmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 

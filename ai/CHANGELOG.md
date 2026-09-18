@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2026-09-18 — TSK, AUD, PRJ and ADM confirmed
+
+- The owner confirmed REQ-TSK, REQ-AUD, REQ-PRJ and REQ-ADM: 49 more requirements are CONFIRMED, 164 in all. Next come the Slice 2 modules — inventory, purchasing and the factory.
+
 ## 2026-09-18 — The gate checks what is actually committed
 
 - `REQ-ADM.md` was left out of its own commit: `git commit -a` does not pick up new files, and the gate passed because its checks read the working tree, where the file was. It was committed straight after. The gate now refuses a commit while untracked files sit in the tracked folders, so the same slip cannot recur.

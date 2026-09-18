@@ -1,6 +1,6 @@
 # REQ-PRJ — Projeler, Duvarlar ve Hedefler
 
-Durum: DRAFT · 2026-09-18 · Modül: PRJ (Projects)
+Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: PRJ (Projects)
 
 Kaynaklar: Özellik Yapısı §7, §8.1, §8.2, §10.2; kararlar D-136…D-138.
 
@@ -20,7 +20,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 - Kabul kriterleri:
   - [ ] Bir şantiye ikinci bir projeye bağlanamaz.
   - [ ] Projenin ilerlemesi ve maliyeti, şantiyelerinin toplamından oluşur.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRJ-002 — Proje kartı
 
@@ -29,7 +29,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 - Açıklama: Proje kartında proje adı, işveren/ana firma, kurum/idare, şehir ve lokasyon, sözleşme bilgileri, sözleşme bedeli ve para birimi, başlangıç ve hedef bitiş tarihi, sözleşmedeki son bitiş tarihi, toplam hedef metraj, panel tipleri ve hedef adetleri, şerit tipleri ve hedef metrajları, diğer iş kalemleri, duvarlar ve duvar bazlı hedefler, sorumlu koordinatör, şantiyeler, iş modeli, teknik ofis durumu, kurum onay durumu, hakediş durumu, sözleşme yükümlülükleri ve proje dokümanları bulunur. Sözleşme bedeli ve hakediş tutarları ticari veridir.
 - Kabul kriterleri:
   - [ ] Ticari yetkisi olmayan kullanıcı sözleşme bedelini ve hakediş tutarlarını görmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRJ-003 — Proje aşamaları
 
@@ -38,7 +38,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 - Açıklama: Proje şu aşamalardan geçer: talep/fırsat, ön inceleme ve yaklaşık miktar, teklif, görüşme/pazarlık, sözleşme, teknik proje/statik hesap/kurum onayı, mobilizasyon ve saha kurulumu, uygulama/üretim, aylık hakedişler ve ara teslimler, tamamlama, kesin kabul/kapanış, teminat ve kapanış yükümlülüklerinin tamamlanması. Aşamalar bir katalogdur; aşama geçişleri iş akışlarıyla yönetilir ve kilitlenebilir (ör. yükümlülükler kapanmadan kapanış aşamasına geçilmez).
 - Kabul kriterleri:
   - [ ] Her aşama geçişi tarih ve kişiyle projenin geçmişinde görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRJ-004 — Tedarik/sorumluluk matrisi
 
@@ -47,7 +47,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 - Açıklama: Her projede "kim neyi karşılıyor" tutulur: beton, demir, dolgu temini/serme/sıkıştırma, yemek, konaklama, kamp/konteyner, nakliye, vinç ve operatör, kalıp/demirbaş, çelik şerit ve sarf. Her kalem için seçenekler: işveren karşılar · GEOGES karşılar · işveren karşılar ve GEOGES hakedişinden keser. Kalemler katalogdur. Matris maliyet ve kâr-zarar hesabının girdisidir (REQ-FIN).
 - Kabul kriterleri:
   - [ ] Matriste bir kalemin değişmesi, değişiklik tarihinden sonraki maliyet hesabını etkiler; geçmiş dönemleri yeniden yazmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRJ-005 — Teknik ofis işleri
 
@@ -56,7 +56,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 - Açıklama: Proje altında teknik ofisin işleri izlenir: proje çizimi, revizyonlar, statik hesap, metraj, kurum onay süreci, hakediş hazırlık desteği, teknik evraklar. Her işin teslim tarihi ve revizyon sayısı tutulur; geciken teknik işler görünür. Teslim süresi ve hata/revizyon sayısı performans değerlendirmesine girer (REQ-PRF).
 - Kabul kriterleri:
   - [ ] Teslim tarihi geçen teknik iş, sorumlusuna görev olarak düşer ve "Dikkat" bölümünde görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Duvarlar ve hedefler
 
@@ -67,7 +67,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 - Açıklama: Bir proje birden fazla duvardan oluşur (ör. "Kötekli Duvar 1 Sağ"). Duvar proje altında tanımlanır ve bir şantiyeye bağlanır. Her duvar için ad/kod, panel tipi başına hedef adet (duvar × panel tipi matrisi), şerit tipi ve boyuna göre hedef metraj, varsa diğer iş kalemlerinin hedefleri ve durum (başlamadı / devam ediyor / tamamlandı) tutulur.
 - Kabul kriterleri:
   - [ ] Bir duvar yalnızca kendi projesinin şantiyelerinden birine bağlanabilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRJ-007 — Proje hedefi duvarların toplamıdır
 
@@ -76,7 +76,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 - Açıklama: Projede panel tipi bazında hedef adet tutulur. Hedefler duvar bazında tanımlandığında proje hedefi duvarların toplamıdır; elle ayrıca girilmez.
 - Kabul kriterleri:
   - [ ] Bir duvarın hedefi değişince proje hedefi kendiliğinden değişir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRJ-008 — İlerleme proje, şantiye ve duvar bazında
 
@@ -85,7 +85,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 - Açıklama: Panel dökümü duvardan bağımsız, panel tipine göre izlenir; montaj ve şerit kayıtları ilgili duvara bağlanır. İlerleme proje, şantiye ve duvar bazında ayrı ayrı görülür; "hangi duvar ne durumda, hangi duvarda şerit eksik kaldı?" sorusu cevaplanır.
 - Kabul kriterleri:
   - [ ] Her duvar için montaj ve şerit ilerlemesi, hedefine oranla görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRJ-009 — Hedefler proje revizyonuyla değişir
 
@@ -96,7 +96,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
   - [ ] Onaylı hedeflerin doğrudan düzenlenebildiği bir ekran yoktur; yalnızca yeni revizyon.
   - [ ] Geçmiş bir tarihin fazla döküm değerlendirmesi, o tarihteki revizyonun hedefleriyle yapılır.
   - [ ] Revizyonlar arasındaki fark (panel tipi ve duvar bazında) yan yana gösterilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Süreler ve günlük hedefler
 
@@ -107,7 +107,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 - Açıklama: Projede birbirinden ayrı üç süre görünür: sözleşme süresi ve sözleşme bitiş tarihi (işverene karşı resmî süre), normal teorik süre (mevcut ekip ve kaynaklarla beklenen süre), yönetim hedef süresi (daha hızlı bitirmek için konan iç hedef).
 - Kabul kriterleri:
   - [ ] Üç sürenin her biri ayrı girilir ve ayrı gösterilir; biri diğerinden türetilmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRJ-011 — Günlük hedefler hesaplanır, yetkili düzeltir
 
@@ -118,7 +118,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
   - [ ] Tatil günlerine hedef verilmez.
   - [ ] Elle düzeltilen hedefte hesaplanan değer ve düzeltilen değer birlikte saklanır.
   - [ ] Gerçekleşen üretim, günlük kayıtta ve "Bugün"de hedefle karşılaştırılır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 

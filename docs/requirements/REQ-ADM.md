@@ -1,6 +1,6 @@
 # REQ-ADM — Tanımlar, Kataloglar, Çalışma Takvimi ve Döviz Kuru
 
-Durum: DRAFT · 2026-09-18 · Modül: ADM (Master Data & Settings)
+Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: ADM (Master Data & Settings)
 
 Kaynaklar: Özellik Yapısı §36.1–§36.4, §23.9, §22.5 (kur), §10.1, §11.2 (tip tanımları); ADR-005; kararlar D-139…D-141.
 
@@ -19,7 +19,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Açıklama: Yetkili kullanıcı şu tanımları tek yerden yönetir: panel tipleri, çelik şerit tipleri ve boyları, iş kalemleri, birimler, sarf malzemeler, sarf reçeteleri, gider kategorileri, birim fiyat tanımları, kritik stok eşikleri ve çalışma takvimi. Aynı bilgi farklı yerlerde tekrar yazılmaz; her modül tanımı buradan okur.
 - Kabul kriterleri:
   - [ ] Bu tanımların hiçbiri başka bir ekranda ayrıca girilmez; diğer ekranlar yalnızca seçer.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-ADM-002 — Panel tipi tanımı
 
@@ -29,7 +29,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Kabul kriterleri:
   - [ ] Panel tipinin m²'si elle girilmez.
   - [ ] Komşu tip ilişkisi, fazla panel önerisinin (REQ-SIT-019) kullandığı sırayı verir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-ADM-003 — Çelik şerit tipi tanımı
 
@@ -38,7 +38,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Açıklama: Şerit tipleri (ör. 40×4, 50×4, 50×5) genişlik, kalınlık, delik sayısı ve standart boylarıyla tanımlanır.
 - Kabul kriterleri:
   - [ ] Şerit montajında yalnızca tanımlı tipler ve boylar seçilebilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-ADM-004 — Sarf reçeteleri
 
@@ -47,7 +47,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Açıklama: Sarf reçetesi, bir birim üretim için hangi sarf malzemeden ne kadar kullanıldığını tanımlar; günlük kayıttaki tüketim önerisi buradan hesaplanır.
 - Kabul kriterleri:
   - [ ] Reçete değişikliği, geçerlilik tarihinden önceki günlerin tüketimini değiştirmez (REQ-ADM-007).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-ADM-005 — Genel veya projeye özel tanım
 
@@ -56,7 +56,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Açıklama: Bir tanımın tüm projeler için mi yoksa belirli bir proje için mi geçerli olduğu seçilir. Projeye özel tanım yalnızca o projede görünür ve genel tanımdan önce gelir.
 - Kabul kriterleri:
   - [ ] Projeye özel bir birim fiyat, o projenin hesaplarında genel fiyatın yerine kullanılır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-ADM-006 — Kendini geliştiren ortak listeler
 
@@ -66,7 +66,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Kabul kriterleri:
   - [ ] Yeni kalem eklenmeden önce benzer adlı kalemler (Türkçe karakter ve ek farklarına duyarsız) listelenir.
   - [ ] Birleştirme sonrası raporlar birleşik kalem üzerinden toplanır; tek bir geçmiş kayıt kaybolmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-ADM-007 — Geçmişi bozmayan değişiklik
 
@@ -76,7 +76,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Kabul kriterleri:
   - [ ] Onaylanmış her işlem, onaylandığı anda geçerli tanım ve fiyatla hesaplanmış haliyle kalır.
   - [ ] Bir tanımın hangi tarihte hangi değerde olduğu görülebilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-ADM-008 — Geriye dönük geçerlilik yalnızca onaylanmamış işlemlere
 
@@ -85,7 +85,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Açıklama: Yeni bir fiyat veya tanım geçmiş bir tarihten geçerli girilebilir. Yalnızca o tarihten sonraki henüz onaylanmamış işlemlere uygulanır; onaylanmış kayıtlara ve kapanmış dönemlere dokunmaz. Onaylı bir kaydın etkilenmesi gerekiyorsa revizyon talebi açılır (REQ-AUD-008).
 - Kabul kriterleri:
   - [ ] Geriye dönük girilen fiyat, kapsadığı tarih aralığındaki onaylı kayıtları değiştirmez ve bunları "revizyon gerekebilir" diye listeler.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-ADM-009 — Tipli özel alanlar
 
@@ -94,7 +94,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Açıklama: Belirlenmiş kayıt türlerine yetkili kişi tipli özel alan ekleyebilir (metin, sayı, tarih, seçim, evet/hayır). Hangi kayıt türlerinin özel alan alacağı Phase 03 mimarisinde belirlenir. Yeni kayıt türü tanımlamak bu gereksinimin değil, kayıt türü üretecinin konusudur (REQ-WFL-035).
 - Kabul kriterleri:
   - [ ] Özel alanın veri sınıfı tanımlanırken seçilir ve görünürlük buna göre süzülür (REQ-IAM-011).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Çalışma takvimi
 
@@ -105,7 +105,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Açıklama: Şirket genelinde çalışma saatleri (varsayılan: ofis 08:00–17:00, saha ve fabrika 08:00–18:00), hafta tatili ve resmî tatiller, fazla mesai kuralları ve maaş ödeme günü (varsayılan: her ayın 1'i) tanımlanır.
 - Kabul kriterleri:
   - [ ] Resmî tatiller yıl bazında girilir ve her yıl yeniden tanımlanabilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-ADM-011 — Birime veya şantiyeye özel takvim
 
@@ -114,7 +114,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Açıklama: Bir birim veya şantiye için şirket takviminden farklı bir takvim tanımlanabilir; tanımlanmadıysa şirket takvimi geçerlidir.
 - Kabul kriterleri:
   - [ ] Özel takvimi olan şantiyede günlük hedef, geç giriş ve tatil kontrolü o takvimle yapılır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-ADM-012 — Takvimi kullanan hesaplar
 
@@ -123,7 +123,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Açıklama: Puantaj, fazla mesai, geç veri girişi, son tarihler, nakit projeksiyonu, günlük hedefler ve takvime bağlı akış tetikleyicileri bu takvimi kullanır.
 - Kabul kriterleri:
   - [ ] Takvim değişikliği, geçerlilik tarihinden sonraki hesapları etkiler; geçmişte hesaplanmış son tarihleri yeniden yazmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Döviz kuru
 
@@ -134,7 +134,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Açıklama: TL, USD, EUR ve gerekli diğer para birimleri için günlük TL karşılığında varsayılan olarak bir önceki iş gününün TCMB döviz alış kuru kullanılır. Kur her iş günü kendiliğinden alınır.
 - Kabul kriterleri:
   - [ ] Kur alınamazsa yetkiliye görev ve uyarı düşer; o gün için kur girilene kadar dövizli işlemler "kur bekliyor" olarak işaretlenir, sessizce eski kurla hesaplanmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-ADM-014 — Elle kur girişi
 
@@ -143,7 +143,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Açıklama: Gerekli özel durumda yetkili kullanıcı elle kur girer; kim, ne zaman ve neden girdiği kayda geçer.
 - Kabul kriterleri:
   - [ ] Elle girilen kur, gerekçesiz kaydedilemez ve TCMB kurundan ayırt edilerek gösterilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-ADM-015 — Geçmiş kayıtların kuru korunur
 
@@ -152,7 +152,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Açıklama: Bir işlemde kullanılan kur, işlemle birlikte saklanır; daha sonra kur düzeltilse bile onaylanmış işlemin hesabı değişmez.
 - Kabul kriterleri:
   - [ ] Her dövizli işlem, kullandığı kuru ve kurun kaynağını (TCMB / elle) taşır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 
