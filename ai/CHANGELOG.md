@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-18 — REQ-RPT; Slice 1 has its requirements
+
+- One round, four decisions, all as recommended (D-126…D-129): an attention item closes only when its cause is gone — nobody can dismiss it, only mark it seen; indicators come from a per-role default that each person can adjust; the "company through the system" view is for the owners and the general manager; the loss diagnosis card is always there and jumps to the top when a site is losing money.
+- `docs/requirements/REQ-RPT.md` holds 14 requirements. Reports and exports (§34) are left for their own round.
+- With it, the four modules of Slice 1 — WFL, IAM, SIT, RPT — have requirement files: 115 requirements, all DRAFT until the owner confirms them.
+- The glossary gained the entry screen, indicator, attention item and loss diagnosis. It forbids `dashboard` for general screens, which the code still uses for "Bugün"; that rename is TASK-0043 rather than a silent change.
+
+
 ## 2026-09-18 — REQ-SIT, and the event names follow the glossary
 
 - The site module got its round: seven decisions (D-119…D-125). Several people fill the same day's log section by section and one person submits it; the sender can recall it until the approver decides; over-casting can be entered but not submitted without an explanation; a missed day can still be entered, marked late for good; the suggested consumption can be corrected and the difference is shown to the approver.

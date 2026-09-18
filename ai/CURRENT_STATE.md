@@ -21,7 +21,8 @@ CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 a
 Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Phase 01 requirement work: Slice 1 requirement files (TASK-0021) with each module's capability catalog (TASK-0041).
+1. Owner confirms the four Slice 1 requirement files (REQ-WFL, REQ-IAM, REQ-SIT, REQ-RPT — all DRAFT, TASK-0021 in REVIEW).
+1b. Then Phase 01 continues with the remaining modules and §34, each with its round and capability catalog (TASK-0041).
 2. Phase 01 requirement rounds continue (TASK-0020, TASK-0021), now with the capability catalog per module (TASK-0041).
 4. OQ-027 items 3 and 4 (flow methods) still open.
 5. Phase 01 per-module requirement rounds (TASK-0020, TASK-0021) — no REQ file written yet.
@@ -34,6 +35,7 @@ None.
 See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
+- D-126…D-129 (2026-09-18, RPT round): attention items close only when resolved; indicators per role, adjustable per person; the system view for owners and GM; loss diagnosis always shown, on top when in loss
 - D-119…D-125 (2026-09-18, SIT round): several people fill a log section by section; recall before decision; over-casting needs an explanation; late entry allowed and marked; consumption editable with the difference flagged; client handover rests on our own record; subcontractor workers recorded by name (KVKK note)
 - D-111…D-118 (2026-09-18, IAM round): role assignments carry a scope; role hierarchy with per-person override; several roles combine and the acting role is recorded; several owners possible, any one completes an owner approval; commercial/sensitive visibility per module; delegation by the person or the manager; access closes by itself on the leaving date
 - D-110 (2026-09-18): full check before every commit, automatic push after every commit on `main`

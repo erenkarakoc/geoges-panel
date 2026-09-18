@@ -202,6 +202,17 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — RPT requirement round (2026-09-18, TASK-0021)
+
+One round with the owner; the answers are written into `docs/requirements/REQ-RPT.md`. §34 (reports and exports) gets its own round later in Phase 01.
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-126 | **An attention item closes only when its cause is resolved.** Nobody can close, delete or hide it; a user may mark it "seen", and it stays | Owner 2026-09-18; §3.3, §10.6 |
+| D-127 | **Indicators: a default per role, adjusted by each person.** Authorised staff set each role's defaults; users reorder, add and remove on their own screen and can reset; nobody adds an indicator outside their permissions | Owner 2026-09-18; §3.1 |
+| D-128 | **"See the company through the system" is visible to the owners and the general manager** | Owner 2026-09-18; §3.4 |
+| D-129 | **The loss diagnosis card is always shown and moves to the top when the site is in loss or its profitability is falling**, with the largest drivers highlighted | Owner 2026-09-18; §14.2 |
+
 ## PHASE 01 — SIT requirement round (2026-09-18, TASK-0021)
 
 Two rounds with the owner; the answers are written into `docs/requirements/REQ-SIT.md`.

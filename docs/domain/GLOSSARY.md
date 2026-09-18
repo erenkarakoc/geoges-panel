@@ -119,4 +119,8 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Kurum onayı öncesi döküm | Pre-Approval Casting | — | — | — | PROPOSED | |
 | Fazla döküm | Over-Casting | Hedef üstü döküm | — | — | PROPOSED | |
 | Çift döküm | Double Casting Day | Aynı gün birden fazla döküm seansı | — | — | PROPOSED | |
+| Bugün (giriş ekranı) | Today Screen | Her rolün girişte açılan, role göre kurulan ekranı | — | dashboard, home | PROPOSED | D-056. Kodda hâlâ `/dashboard` ve `dashboard-widget-registry` adları var — TASK-0043 |
+| Gösterge | Indicator | "Bugün"de ve raporlarda gösterilen tek sayı | — | widget (kavram adı olarak), metric | PROPOSED | Kodda şimdilik `widget` — TASK-0043 |
+| Dikkat öğesi | Attention Item | Gizlenemeyen, yalnızca sebebi çözülünce kapanan kritik uyarı | — | alert, alarm | PROPOSED | D-126 |
+| Zarar tanısı | Loss Diagnosis | Şantiye maliyetini etkenlerine ayıran kart | — | root_cause | PROPOSED | §14.2, D-129 |
 | Cockpit | Owner Cockpit | Sahip yönetim ekranı | — | dashboard (genel ekranlar için) | PROPOSED | |
