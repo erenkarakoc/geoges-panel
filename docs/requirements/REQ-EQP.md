@@ -1,6 +1,6 @@
 # REQ-EQP — Ekipman, Demirbaş, Kalıp ve Araçlar
 
-Durum: DRAFT · 2026-09-18 · Modül: EQP (Equipment & Assets)
+Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: EQP (Equipment & Assets)
 
 Kaynaklar: Özellik Yapısı §20.3, §20.4, §21; kararlar D-155…D-162.
 
@@ -20,7 +20,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Kabul kriterleri:
   - [ ] Aynı seri numarası veya plakayla ikinci kart açılmaz.
   - [ ] Ticari yetkisi olmayan kullanıcı bedel ve amortisman alanlarını görmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-EQP-002 — Kategoriler
 
@@ -29,17 +29,17 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Açıklama: Kategoriler merkezi tanımdır; başlangıç listesi: mobil vinç, kalıp, pres, kaynak makinesi, testere, tavan vinci, araç, konteyner, laptop, telefon, SIM kart, el aleti, diğer demirbaş. Kategoriye göre periyodik kontrol türleri ve amortisman ömrü önerilir.
 - Kabul kriterleri:
   - [ ] Yeni kategori tanımlardan eklenebilir; kullanılan kategori silinmez, pasifleştirilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-EQP-003 — Düşük değerli eşya grup halinde, adetle
 
 - Kaynak: D-158
 - Öncelik: Must · Kademe: T2
-- Açıklama: El aletleri gibi düşük değerli eşyalar tek tek kartla değil, lokasyon başına adetle izlenir (ör. "Şantiye A'da 12 matkap"). Zimmetlenen eşyalar (laptop, telefon, SIM kart) her zaman tek tek kartla izlenir. Grup halindeki eşyanın bedeli, alındığında teslim alan maliyet merkezine gider yazılır ve amortismana girmez (D-158'den türetilen kural, bu dosyanın onayıyla kesinleşir).
+- Açıklama: El aletleri gibi düşük değerli eşyalar tek tek kartla değil, lokasyon başına adetle izlenir (ör. "Şantiye A'da 12 matkap"). Zimmetlenen eşyalar (laptop, telefon, SIM kart) her zaman tek tek kartla izlenir. Grup halindeki eşyanın bedeli, alındığında teslim alan maliyet merkezine gider yazılır ve amortismana girmez (D-158'den türetilen kural, sahip onayladı).
 - Kabul kriterleri:
   - [ ] Hangi kategorinin grup halinde, hangisinin tek tek izlendiği tanımlardan ayarlanır.
   - [ ] Grup eşyasının lokasyonlar arası transferi adetle yapılır ve geçmişte kalır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-EQP-004 — Kendi malı ve kiralık
 
@@ -49,7 +49,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Kabul kriterleri:
   - [ ] Kira süresi biterken sorumlusuna uyarı düşer.
   - [ ] Kiralık varlık amortismana girmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-EQP-005 — Satın almadan varlık kartına
 
@@ -58,7 +58,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Açıklama: Teslim alınan bir satın alma kalemi demirbaş ise varlık kartı, satın alma bilgileri (tedarikçi, bedel, tarih, fatura) dolu olarak açılır.
 - Kabul kriterleri:
   - [ ] Satın almadan açılan kart, satın alma kaydına bağlantı taşır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Lokasyon ve zimmet
 
@@ -70,7 +70,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Kabul kriterleri:
   - [ ] Bir varlık aynı anda iki lokasyonda görünmez.
   - [ ] Bir şantiyenin ekranında o an orada bulunan varlıklar listelenir (REQ-SIT-001).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-EQP-007 — Zimmet
 
@@ -79,7 +79,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Açıklama: Varlık bir kişiye zimmetlenir ve iade alınır; tarih ve durumu kaydedilir. Kişinin kartında üzerindeki zimmetler görünür.
 - Kabul kriterleri:
   - [ ] İşten ayrılış tarihi girilen personelin üzerindeki zimmetler sorumlusuna iade görevi olarak düşer.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-EQP-008 — Araç devir-teslim tutanağı
 
@@ -89,7 +89,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Kabul kriterleri:
   - [ ] İki tarafın onayı (veya kâğıt tutanak fotoğrafı) olmadan devir tamamlanmaz ve zimmet değişmez.
   - [ ] Km okuması bir önceki okumadan küçük girilemez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-EQP-009 — Araç kullanım ve yakıt hesabı
 
@@ -98,7 +98,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Açıklama: Km farkı ve yakıt kayıtlarından aracın kullanımı, km başı yakıt ve km başı maliyet hesaplanır.
 - Kabul kriterleri:
   - [ ] Km başı yakıt, aracın kendi ortalamasından belirgin saparsa uyarı üretilir; sapma eşiği merkezi kuraldır (REQ-WFL-032).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Maliyet
 
@@ -111,7 +111,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
   - [ ] Her günün payı ya bir şantiyeye ya atıl ekipman giderine yazılır; hiçbir gün boşta kalmaz, hiçbir gün iki kez yazılmaz.
   - [ ] Pay, çalışma günü bilgisi içeren kayıt onaylanınca yazılır.
   - [ ] Faydalı ömrü dolan varlık için amortisman yazılmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-EQP-011 — Çalışma günü nereden gelir
 
@@ -121,7 +121,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Kabul kriterleri:
   - [ ] Günlük kayıtta yalnızca o an o şantiyede bulunan ekipmanlar seçilebilir.
   - [ ] Şantiyede bulunup üst üste belirli gün seçilmeyen ekipman için "şantiyede boş bekliyor" uyarısı düşer; gün sayısı merkezi kuraldır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-EQP-012 — Atıl ekipman gideri
 
@@ -130,7 +130,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Açıklama: Çalışmayan günlerin amortisman payı hiçbir projeye yüklenmez; şirket genelinde ayrı "atıl ekipman gideri" satırında görünür. Hangi varlığın, nerede, kaç gün ve ne kadar bedelle boş beklediği okunur.
 - Kabul kriterleri:
   - [ ] Atıl ekipman gideri, varlık ve lokasyon bazında açılabilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-EQP-013 — Tamir ve arıza maliyeti
 
@@ -139,7 +139,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Açıklama: Arıza, tamir, yedek parça, servis, maliyet ve belge/fotoğraf ilgili varlığa, gerekiyorsa ilgili şantiyeye bağlanır. Fabrika günlük kaydındaki makine arızası (REQ-FAC-003) ve vinç arıza bildirimi de varlığa arıza kaydı olarak düşer.
 - Kabul kriterleri:
   - [ ] Bir varlığın toplam tamir maliyeti kartında görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-EQP-014 — Kullanılamaz hale gelen demirbaş
 
@@ -149,7 +149,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Kabul kriterleri:
   - [ ] Zayi kaydı neden ve fotoğraf olmadan kaydedilmez.
   - [ ] Zayi edilen varlık pasifleşir, silinmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## D. Bakım ve kontrol
 
@@ -161,7 +161,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Kabul kriterleri:
   - [ ] Süresi geçen zorunlu kontrol, "Dikkat" bölümünde (REQ-RPT-007) sebebi çözülene kadar kalır.
   - [ ] Ne kadar önce uyarılacağı kontrol türüne göre ayarlanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## E. Atıl kaynak
 
@@ -172,7 +172,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Açıklama: Her varlık için kaç gündür çalışmadığı görünür. Bu bilgi kaynak planlamasına (REQ-INT) beslenir.
 - Kabul kriterleri:
   - [ ] Atıl gün sayısı REQ-EQP-010'daki çalışma günlerinden hesaplanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-EQP-017 — Atıl kapasite fırsat uyarısı
 
@@ -181,7 +181,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Açıklama: Uzun süre boş duran vinç, araç, kalıp veya makine için "kiralama/dış iş fırsatı olabilir" uyarısı verilir. Gün eşiği merkezi kuraldır.
 - Kabul kriterleri:
   - [ ] Uyarıdan doğrudan yan gelir kaydına (REQ-FIN-012) geçilebilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## F. Vinç
 
@@ -192,7 +192,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Açıklama: Vinç operatörü telefonundan kendisine atanmış vinçleri ve günlük görevlerini görür; günlük kaydını ve arıza bildirimini girer.
 - Kabul kriterleri:
   - [ ] Operatör yalnızca kendisine atanmış vinçleri görür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-EQP-019 — Vinç günlük kaydı
 
@@ -202,7 +202,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Kabul kriterleri:
   - [ ] Yakıt tutarı fiş fotoğrafı olmadan gönderilemez.
   - [ ] Saat sayacı bir önceki okumadan küçük girilemez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-EQP-020 — Vinç yakıt ve kullanım göstergeleri
 
@@ -211,7 +211,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Açıklama: Çalışma saati ve yakıttan saat başı yakıt tüketimi ve kullanım oranı hesaplanır; olağan dışı yakıt tüketiminde uyarı üretilir. Eşik merkezi kuraldır.
 - Kabul kriterleri:
   - [ ] Uyarı, sapmanın olduğu günü ve kaydı gösterir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## G. Servis aracı
 
@@ -222,7 +222,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 - Açıklama: Servis/nakliye aracı için yakıt, amortisman, bakım ve dış nakliye geliri birlikte gösterilir; aracın şirkete net etkisi görülür. Kendi işlerimizde sağladığı nakliye tasarrufu hesaplanmaz (D-159).
 - Kabul kriterleri:
   - [ ] Net etki aylık ve kümülatif görünür, her kalem kaynağına açılır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 

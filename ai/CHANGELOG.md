@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-18 — EQP requirements confirmed
+
+- The owner confirmed REQ-EQP, including the derived rule that grouped items are expensed on purchase and not depreciated, and the added equipment section in REQ-SIT-003: 21 more requirements CONFIRMED, 263 in all. Next: HR.
+
+
 ## 2026-09-18 — EQP requirements
 
 - Eight equipment decisions (D-155…D-162). A crane or mold charges its daily depreciation to a site only on the days it works there — marked by the engineer in the daily site log, or taken from the crane log — and every other day lands in a company-wide idle equipment expense, never on a project. An asset that breaks is written off to the site it was on; hand tools are counted per location instead of carded; any asset can be rented; a vehicle changes hands only when both people confirm on their phones.
