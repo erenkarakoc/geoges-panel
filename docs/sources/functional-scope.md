@@ -1525,10 +1525,11 @@ Nakit olarak tahsil edilen gelir de kaybolmaması için açıkça kayda girilir 
 - yakıt,
 - amortisman,
 - bakım,
-- dış nakliye geliri,
-- kendi işlerinde sağladığı nakliye tasarrufu
+- dış nakliye geliri
 
 birlikte değerlendirilebilir.
+
+> **D-159 ile değişti (2026-09-18):** Önceki metinde listenin son kalemi "kendi işlerinde sağladığı nakliye tasarrufu" idi. Bu tasarruf hesaplanmaz. Bkz. REQ-EQP-021.
 
 Amaç aracın şirkete net etkisini görebilmektir.
 
@@ -1605,7 +1606,9 @@ Fabrika → şantiye, şantiye → şantiye veya şantiye → fabrika transferle
 
 ## 21.3. Günlük amortisman
 
-Bir ekipman şantiyeye gönderildiği tarihten itibaren günlük kullanım/yıpranma payı ilgili şantiyenin giderine dağıtılabilmelidir.
+Bir ekipmanın günlük kullanım/yıpranma payı, bir şantiyede çalıştığı günler için o şantiyenin giderine dağıtılır; çalışmadığı günler ayrı "atıl ekipman gideri"ne yazılır.
+
+> **D-155 ile değişti (2026-09-18):** Önceki metin payın ekipmanın şantiyeye gönderildiği tarihten itibaren her gün şantiyeye yazılmasını söylüyordu. Bkz. REQ-EQP-010, REQ-EQP-012.
 
 Böylece örneğin şirketin satın aldığı vinç veya kalıp “bedava kaynak” olarak görülmez; yatırım maliyeti projelerin gerçek kârlılığına yansır.
 

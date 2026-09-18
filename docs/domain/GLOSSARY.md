@@ -102,6 +102,15 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Ödeme | Payment | Bir firmaya yapılan, onaylı ve dekontla kapanan ödeme | — | transfer | PROPOSED | §22.8 |
 | Muhasebe aktarımı | Accounting Export | Muhasebeci/YMM programına verilen aylık dosya | — | sync | PROPOSED | D-153 |
 | Kapanış birimi | Closing Unit | Dönemini kendi kapatan birim: her şantiye, fabrika, genel | — | branch | PROPOSED | D-154 |
+| Grup halinde izlenen eşya | Asset Group | Lokasyon başına adetle izlenen düşük değerli eşya (ör. el aletleri) | — | bulk_item | PROPOSED | D-158 |
+| Kiralık varlık | Rented Asset | Kiralayan firma, bedel ve süreyle kaydedilen, amortismana girmeyen varlık | — | leased_item | PROPOSED | D-161 |
+| Devir-teslim tutanağı (varlık) | Asset Custody Record | Aracın veya varlığın el değiştirirken km, yakıt, fotoğraf ve iki taraf onayıyla düzenlenen tutanak | — | handover (işveren teslim-tesellümüne ayrılmış) | PROPOSED | D-160 |
+| Ekipman çalışma günü | Equipment Working Day | Ekipmanın bir şantiyede çalıştığı, amortismanın o şantiyeye yazıldığı gün | — | usage_day | PROPOSED | D-155, D-162 |
+| Atıl ekipman gideri | Idle Equipment Expense | Ekipmanın çalışmadığı günlerin amortisman payı; projelere yüklenmez | — | idle_cost | PROPOSED | D-156 |
+| Demirbaş zayii | Asset Write-Off | Kullanılamaz hale gelen varlığın kalan değerinin gidere yazılması | — | damaged_unit (panel zayiine ayrılmış) | PROPOSED | D-157 |
+| Periyodik kontrol | Periodic Inspection | Vinç fenni kontrolü, araç muayenesi, sigorta, bakım gibi zorunlu kontroller | — | check_up | PROPOSED | §21.5 |
+| Vinç günlük kaydı | Crane Daily Log | Vincin günlük çalışma saati, yakıt, arıza/bekleme ve iş kaydı | — | crane_report | PROPOSED | §21.7 |
+| Vinç operatörü | Crane Operator | Kendisine atanmış vinçlerin kaydını giren kişi | — | driver | PROPOSED | §21.7 |
 | Malzeme | Material | — | item (katalog satırı) | product | PROPOSED | |
 | Sarf malzeme | Consumable | — | — | supply | PROPOSED | |
 | Sarf reçetesi | Consumption Recipe | İş birimi başına standart sarf | bill of materials | — | PROPOSED | |

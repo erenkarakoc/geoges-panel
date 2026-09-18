@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-18 — EQP requirements
+
+- Eight equipment decisions (D-155…D-162). A crane or mold charges its daily depreciation to a site only on the days it works there — marked by the engineer in the daily site log, or taken from the crane log — and every other day lands in a company-wide idle equipment expense, never on a project. An asset that breaks is written off to the site it was on; hand tools are counted per location instead of carded; any asset can be rented; a vehicle changes hands only when both people confirm on their phones.
+- Two answers went against the recommendation and changed the scope, corrected in place with notes: depreciation by working day instead of every day on site (§21.3), and no savings figure for the service vehicle (§20.3). REQ-SIT-003 gains the equipment section the first one needs.
+- `REQ-EQP.md` (21) is written, DRAFT, with its catalog; nine proposed glossary terms were added first. One derived rule awaits confirmation: grouped items are expensed on purchase and not depreciated.
+
+
 ## 2026-09-18 — FIN requirements confirmed
 
 - The owner confirmed REQ-FIN, including the derived rule that the factory and the office close their own month: 30 more requirements CONFIRMED, 242 in all.

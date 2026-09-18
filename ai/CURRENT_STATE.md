@@ -33,6 +33,7 @@ None.
 See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
+- D-155…D-162 (2026-09-18, EQP round): depreciation to a site only on working days; idle days to a company-wide idle equipment expense; write-off to the site where the asset was; low-value items by count; no service-vehicle savings; custody record confirmed by both parties on the phone; any asset can be rented; working day marked in the daily site log
 - D-147…D-154 (2026-09-18, FIN round): unapproved quantity carries over; subcontractor paid on our approved production; no overhead allocation to projects (changes §15.1/§22.4 wording); client advance deducted from progress payments; collection date from the contract term; first expense entry wins; monthly accounting export; period close per site
 - D-142…D-146 (2026-09-18, Slice 2 rounds): landed cost for strips; weighted average per location; over-delivery tolerance; factory overhead by labour hours; factory log approval mandatory
 - D-139…D-141 (2026-09-18, ADM round): new list items usable at once, merged later; CBRT buying rate of the previous business day; past effective dates reach only unapproved transactions

@@ -202,6 +202,19 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — EQP requirement round (2026-09-18)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-155 | **Depreciation is charged to a site only for the days the equipment works there** (AI recommended every day on site); every other day goes to idle equipment expense. **Changes scope wording:** §21.3 said the daily share is charged from the day the equipment is sent to the site; corrected in place with a note | Owner 2026-09-18; §21.3 |
+| D-156 | **Depreciation of days not worked is a separate company-wide "idle equipment expense"**, never loaded onto a project, readable per asset and location | Owner 2026-09-18; §21.3 |
+| D-157 | **The remaining value of an asset that becomes unusable is charged to the site where it was**; an authorised person may move it elsewhere with a reason | Owner 2026-09-18; §21.4 |
+| D-158 | **Low-value items (e.g. hand tools) are tracked by count per location**, not one card each; assigned items (laptop, phone, SIM card) always get their own card. Derived consequence, to be confirmed with the requirement file: a grouped item is expensed to the receiving cost center on purchase and is not depreciated | Owner 2026-09-18; §21.1 |
+| D-159 | **The service vehicle's transport savings on our own jobs are not calculated** (AI recommended a defined market rate); its fuel, depreciation, maintenance and outside transport income are shown. **Changes scope wording:** §20.3 listed the savings; corrected in place with a note | Owner 2026-09-18; §20.3 |
+| D-160 | **A vehicle custody record is confirmed by both parties from their own accounts on the phone**, with time stamps; for a person without an account, a photo of the signed paper record | Owner 2026-09-18; §21.8 |
+| D-161 | **Any asset can be owned or rented**, not only cranes; for a rented asset the lessor, rent and period are kept and the rent is charged to the site where it is | Owner 2026-09-18; §21.7 |
+| D-162 | **The working day of equipment without a meter (e.g. molds) is marked in the daily site log**: the site engineer selects the equipment used that day; for cranes it comes from the crane daily log. Adds an equipment section to REQ-SIT-003 | Owner 2026-09-18; §21.3; D-155 |
+
 ## PHASE 01 — FIN requirement round (2026-09-18)
 
 | ID | Decision | Ref |

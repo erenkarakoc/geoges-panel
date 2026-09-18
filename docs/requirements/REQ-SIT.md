@@ -36,7 +36,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §9.4
 - Öncelik: Must · Kademe: T2
-- Açıklama: Kayıt şu bölümlerden oluşur: şantiye, tarih, hava, döküm, montaj, çelik şerit montajı, harpuşta ve diğer proje iş kalemleri, işveren teslim-tesellüm, puantaj/ekip, faaliyet saatleri, tüketilen malzemeler, zayi, saha harcamaları, notlar, fotoğraflar. Bölümlerin ekrandaki sırası ve adım adım giriş olup olmayacağı Phase 02'de kararlaştırılır (OQ-027 madde 3).
+- Açıklama: Kayıt şu bölümlerden oluşur: şantiye, tarih, hava, döküm, montaj, çelik şerit montajı, harpuşta ve diğer proje iş kalemleri, işveren teslim-tesellüm, puantaj/ekip, faaliyet saatleri, o gün kullanılan ekipmanlar (D-162, REQ-EQP-011), tüketilen malzemeler, zayi, saha harcamaları, notlar, fotoğraflar. Bölümlerin ekrandaki sırası ve adım adım giriş olup olmayacağı Phase 02'de kararlaştırılır (OQ-027 madde 3).
 - Kabul kriterleri:
   - [ ] Her bölüm ayrı ayrı doldurulup kaydedilebilir.
 - Durum: CONFIRMED
