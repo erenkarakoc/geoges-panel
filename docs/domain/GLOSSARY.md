@@ -118,6 +118,11 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | İşe giriş kontrol listesi | Onboarding Checklist | İşe girişte tamamlanması gereken evrak ve işler | — | hire_list | PROPOSED | §23.6 |
 | İşten çıkış kontrol listesi | Offboarding Checklist | Ayrılışta evrak, zimmet ve avans tamamlanmadan kapanmayan liste | — | exit_list | PROPOSED | §23.6 |
 | Günlük faaliyet raporu | Daily Activity Report | Üretim kaydı olmayan rollerin günlük iş raporu | — | daily_log (günlük saha kaydıyla karışır) | PROPOSED | §23.8 |
+| İletişim kaydı | Contact Log | Bir firmayla yapılan görüşmenin tarih, kişi, konu ve sonuç kaydı | — | call_log | PROPOSED | §5.1 |
+| Talep kaynağı | Lead Source | Talebin geldiği kanal: e-posta, telefon, WhatsApp, kendi bulduğumuz iş… | — | channel | PROPOSED | §5.1 |
+| Kayıp nedeni | Loss Reason | Kaybedilen talebin katalogdan seçilen nedeni | — | lost_cause | PROPOSED | §5 |
+| İşveren karnesi | Client Scorecard | İşverenin kayıtlardan hesaplanan ödeme, gecikme ve kârlılık geçmişi | — | rating, score | PROPOSED | D-171 |
+| Karne notu | Scorecard Note | Karneye eklenen tarihli, gerekçeli, silinmeyen not | — | comment | PROPOSED | D-171 |
 | Malzeme | Material | — | item (katalog satırı) | product | PROPOSED | |
 | Sarf malzeme | Consumable | — | — | supply | PROPOSED | |
 | Sarf reçetesi | Consumption Recipe | İş birimi başına standart sarf | bill of materials | — | PROPOSED | |

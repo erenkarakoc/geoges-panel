@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-18 — CRM requirements
+
+- Four CRM decisions (D-169…D-172), all as recommended. Requests from e-mail and WhatsApp are typed in on a quick-entry screen with the message attached — no mailbox reading, no WhatsApp link. The client scorecard is worked out from the records, with dated notes but no manual score. A won request opens a draft project already filled from the request and the accepted quote; the project starts at the contract stage and takes its earlier stages from the request (a derived rule, to be confirmed, that keeps REQ-PRJ-003 consistent).
+- `REQ-CRM.md` (14) is written, DRAFT, with its catalog; five proposed glossary terms were added first.
+
+
 ## 2026-09-18 — HR requirements confirmed
 
 - The owner confirmed REQ-HR, including the derived rule that a mid-month unit change splits the salary cost by date: 16 more requirements CONFIRMED, 279 in all. Next: CRM.
