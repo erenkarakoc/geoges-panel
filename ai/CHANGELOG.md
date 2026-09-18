@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-18 — HR requirements
+
+- Six HR decisions (D-163…D-168). The panel will calculate payroll itself, from gross to net, with tax brackets, SGK rates and the minimum wage kept as dated definitions — against the recommendation to take the figures from the accountant; the accountant still files the official returns and the two sets of figures are reconciled every month. This opens RISK-011: a payroll engine must keep up with the law and is proven against the accountant's sample payrolls. Salary cost stays with the unit a person is registered to, leave entitlement is typed in by HR, advances come off later payrolls, and salaries go out as a bank bulk payment file.
+- `REQ-HR.md` (16) is written, DRAFT, with its catalog; seven proposed glossary terms were added first. One derived rule awaits confirmation: a mid-month unit change splits the salary cost by date.
+
+
 ## 2026-09-18 — EQP requirements confirmed
 
 - The owner confirmed REQ-EQP, including the derived rule that grouped items are expensed on purchase and not depreciated, and the added equipment section in REQ-SIT-003: 21 more requirements CONFIRMED, 263 in all. Next: HR.

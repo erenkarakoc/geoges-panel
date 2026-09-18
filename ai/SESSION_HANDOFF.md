@@ -19,17 +19,19 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 - **Slice 1 and later files confirmed by the owner:** WFL, IAM, SIT, RPT, TSK (D-130…D-133), AUD (D-134, D-135), PRJ (D-136…D-138), ADM (D-139…D-141), INV, PUR, FAC (D-142…D-146) — 212 requirements CONFIRMED.
 - **REQ-FIN** — 30 requirements, D-147…D-154, CONFIRMED; scope §15.1/§22.4 corrected for D-149.
 - **REQ-EQP** — 21 requirements, D-155…D-162, CONFIRMED; scope §20.3/§21.3 corrected in place; REQ-SIT-003 gains an equipment section (D-162). Two answers went against the recommendation: no overhead allocation to projects (D-149, changes §15.1/§22.4 wording) and period close per site (D-154, with a derived rule for factory and office marked for confirmation).
+- **REQ-HR** — 16 requirements, D-163…D-168, DRAFT; RISK-011 (payroll engine) opened. Derived rule awaiting confirmation: mid-month unit change splits salary cost by date (D-164).
 - Validator gained checks for decision and requirement ids and six-column task rows; the rule text in PROJECT_RULES §21.1 now matches what the tool does.
 - Glossary: ~25 proposed terms added before use; non-canonical names fixed (`flow` → `workflow`, `daily_log` → `daily_site_log`, `waste` → `damaged_unit`).
 
 ## Not done / open
 
 - QTE round must ask whether quote estimates carry an overhead markup (§6.3; D-149 covers actual profit only).
-- Remaining Phase 01 modules: HR, CRM, QTE, CMP, QHS, MTG, SUP, DOC, PRF, INT, STR, NFR, and RPT §34 — each needs a round and a catalog (TASK-0044, TASK-0041).
+- Remaining Phase 01 modules: CRM, QTE, CMP, QHS, MTG, SUP, DOC, PRF, INT, STR, NFR, and RPT §34 — each needs a round and a catalog (TASK-0044, TASK-0041).
 - TASK-0043: rename `dashboard`/`widget` in code to match the glossary.
 - TASK-0039 (§ → REQ remap), which unblocks TASK-0027.
 - OQ-026 (password policy), OQ-027 items 3–4, OQ-007 (glossary confirmation) still open.
 
 ## Next session
 
-1. Continue with HR, then CRM, following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).
+1. Owner confirms or corrects REQ-HR (incl. the D-164 derived rule); mark CONFIRMED.
+2. Continue with CRM, then QTE (ask the §6.3 overhead-markup question), following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).

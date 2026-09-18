@@ -202,6 +202,17 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — HR requirement round (2026-09-18)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-163 | **The panel calculates payroll itself**, gross to net: SGK, income and stamp tax, minimum-wage exemption, other deductions (AI recommended taking the figures from the accountant). Tax brackets, SGK rates and ceiling and minimum wage are dated definitions. **AI note:** a payroll engine must follow every legal change and be proven against the accountant's figures; RISK-002 grows and RISK-011 is new | Owner 2026-09-18; §23.3 |
+| D-164 | **Salary cost goes to the unit the employee is registered to**, even when they worked on another site that month (AI recommended splitting by timesheet days). Derived consequence, to be confirmed with the requirement file: if the unit changes within a month, the cost is split between the two units by the effective dates | Owner 2026-09-18; §23.3 |
+| D-165 | **A salary advance is deducted from the next payroll or spread over several**; it passes an approval and the remaining advance shows on the employee card | Owner 2026-09-18; §23.3 |
+| D-166 | **Annual leave entitlement is entered by HR for each employee** (AI recommended calculating it from seniority) | Owner 2026-09-18; §23.5 |
+| D-167 | **Official payroll filings (SGK declaration, withholding return) stay with the accountant**; the panel's payroll goes into the monthly accounting export (D-153) and is reconciled | Owner 2026-09-18; §23.3, §22.9 |
+| D-168 | **Salaries are paid through a bank bulk payment file** produced from the approved payroll; a receipt marks the payroll paid | Owner 2026-09-18; §23.3 |
+
 ## PHASE 01 — EQP requirement round (2026-09-18)
 
 | ID | Decision | Ref |

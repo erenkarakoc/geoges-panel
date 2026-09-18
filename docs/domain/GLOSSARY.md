@@ -111,6 +111,13 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Periyodik kontrol | Periodic Inspection | Vinç fenni kontrolü, araç muayenesi, sigorta, bakım gibi zorunlu kontroller | — | check_up | PROPOSED | §21.5 |
 | Vinç günlük kaydı | Crane Daily Log | Vincin günlük çalışma saati, yakıt, arıza/bekleme ve iş kaydı | — | crane_report | PROPOSED | §21.7 |
 | Vinç operatörü | Crane Operator | Kendisine atanmış vinçlerin kaydını giren kişi | — | driver | PROPOSED | §21.7 |
+| Bordro parametresi | Payroll Parameter | Vergi dilimi, SGK oranı ve tavanı, asgari ücret gibi geçerlilik tarihli bordro tanımı | — | tax_setting | PROPOSED | D-163 |
+| Maaş avansı | Salary Advance | Personele verilen, sonraki bordrolardan kesilen avans | — | loan | PROPOSED | D-165 |
+| Banka toplu ödeme dosyası | Bank Payment File | Onaylı bordrodan bankaya yüklenmek üzere üretilen dosya | — | bank_export | PROPOSED | D-168 |
+| İzin bakiyesi | Leave Balance | Hak edilen ve kullanılan izin günlerinin farkı | — | vacation_days | PROPOSED | §23.5 |
+| İşe giriş kontrol listesi | Onboarding Checklist | İşe girişte tamamlanması gereken evrak ve işler | — | hire_list | PROPOSED | §23.6 |
+| İşten çıkış kontrol listesi | Offboarding Checklist | Ayrılışta evrak, zimmet ve avans tamamlanmadan kapanmayan liste | — | exit_list | PROPOSED | §23.6 |
+| Günlük faaliyet raporu | Daily Activity Report | Üretim kaydı olmayan rollerin günlük iş raporu | — | daily_log (günlük saha kaydıyla karışır) | PROPOSED | §23.8 |
 | Malzeme | Material | — | item (katalog satırı) | product | PROPOSED | |
 | Sarf malzeme | Consumable | — | — | supply | PROPOSED | |
 | Sarf reçetesi | Consumption Recipe | İş birimi başına standart sarf | bill of materials | — | PROPOSED | |
