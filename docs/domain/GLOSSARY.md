@@ -78,6 +78,20 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Sözleşme | Contract | — | — | agreement | PROPOSED | |
 | Yükümlülük | Obligation | Sözleşmeden doğan iş/tarih | — | duty, requirement | PROPOSED | |
 | Tedarik matrisi | Supply Responsibility Matrix | Kim neyi karşılıyor | — | — | PROPOSED | |
+| Tedarikçi | Supplier | Tedarikçi rolü taşıyan firma | — | vendor | PROPOSED | D-027 |
+| Satın alma siparişi | Purchase Order | Tedarikçiye verilen sipariş | — | po_order | PROPOSED | §18.3 |
+| Satın alma talebi | Purchase Request | Katalog içi veya dışı alım için iç talep | — | requisition | PROPOSED | §18.16 |
+| Tedarikçi teklifi | Supplier Quote | Bir tedarikçinin fiyat, termin ve koşul teklifi | — | offer | PROPOSED | §18.16 |
+| Fazla teslim | Over-Delivery | Siparişten fazla gelen miktar | — | surplus | PROPOSED | D-144 |
+| Malzeme çıkış talebi | Material Issue Request | Şantiyenin malzeme sevki için açtığı talep | — | requisition | PROPOSED | §18.7 |
+| Tır | Truck Load | Tek bir tırla yapılan sevkiyat parçası | — | vehicle_trip | PROPOSED | §18.11 |
+| Şerit kombinasyonu | Strip Combination | Bir uzunluk ihtiyacını karşılayan stok boyları bileşimi | — | cut_plan | PROPOSED | §18.14 |
+| Gelene kadarki maliyet | Landed Cost | Alış bedeli + galvaniz + stoğa gelene kadarki nakliye | — | total_cost | PROPOSED | D-142 |
+| Ağırlıklı ortalama maliyet | Weighted Average Cost | Lokasyon başına alışların ağırlıklı ortalaması | — | avg_price | PROPOSED | D-143 |
+| Düz lama | Flat Bar | Lug hammaddesi | — | plate | PROPOSED | §17.4 |
+| Fabrika günlük kaydı | Factory Daily Log | Fabrikanın günlük üretim ve hareket kaydı | — | factory_report | PROPOSED | §17.2 |
+| Gider dağıtımı | Overhead Allocation | Fabrika giderinin işlere işçilik saatiyle dağıtılması | — | cost_split | PROPOSED | D-145 |
+| Teknik iyileştirme işi | Technical Improvement Work | Fabrikadaki kalıp, aparat, geliştirme işleri | — | rnd_task | PROPOSED | §17.6 |
 | Malzeme | Material | — | item (katalog satırı) | product | PROPOSED | |
 | Sarf malzeme | Consumable | — | — | supply | PROPOSED | |
 | Sarf reçetesi | Consumption Recipe | İş birimi başına standart sarf | bill of materials | — | PROPOSED | |

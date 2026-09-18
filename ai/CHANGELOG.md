@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-18 — Slice 2 requirements: INV, PUR, FAC
+
+- The scope already fixes most of inventory — the costing order, freezing cost at consumption, negative stock with a critical warning, counts posted as adjustments, the locked opening stock. Five cost decisions remained (D-142…D-146): galvanising and inbound transport belong to a strip's cost; the average cost is kept per location (against the recommendation of one company-wide average), with transfers leaving at the source's average and their transport added at the destination — a derived rule marked for confirmation; over-delivery within tolerance is simply accepted; factory overhead is spread by labour hours; and the factory log, like the site log, counts only once approved.
+- `REQ-INV.md` (27), `REQ-PUR.md` (11) and `REQ-FAC.md` (10) are written, DRAFT, with their catalogs; fourteen proposed glossary terms were added first.
+
+
 ## 2026-09-18 — TSK, AUD, PRJ and ADM confirmed
 
 - The owner confirmed REQ-TSK, REQ-AUD, REQ-PRJ and REQ-ADM: 49 more requirements are CONFIRMED, 164 in all. Next come the Slice 2 modules — inventory, purchasing and the factory.

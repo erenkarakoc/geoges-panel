@@ -202,6 +202,16 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — Slice 2 requirement rounds: INV, PUR, FAC (2026-09-18)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-142 | **Landed cost: galvanising and inbound transport are part of the strip's unit cost**, so a site's consumption carries the real cost into the project result | Owner 2026-09-18; §18.15 |
+| D-143 | **Weighted average cost per location** (AI recommended company-wide per material). Derived consequence, to be confirmed with the requirement file: a transfer leaves at the source location's average and its transport cost is added at the destination | Owner 2026-09-18; §18.15; D-142 |
+| D-144 | **Over-delivery within tolerance is accepted automatically; above tolerance it needs approval or is returned**, and is held apart meanwhile | Owner 2026-09-18; §18.3, §18.11 |
+| D-145 | **Factory overhead is allocated to jobs by the labour hours spent on them**, then divided by each job's output to give the unit cost | Owner 2026-09-18; §17.5 |
+| D-146 | **The factory daily log must be approved, under the same rules as the site log**; nothing reaches stock or cost before approval | Owner 2026-09-18; §17.2 |
+
 ## PHASE 01 — ADM requirement round (2026-09-18)
 
 | ID | Decision | Ref |

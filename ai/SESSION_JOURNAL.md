@@ -30,3 +30,6 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-18 16:19:30Z · 6c9e96a0 · Write · `docs/requirements/REQ-PRJ.md`
 - 2026-09-18 16:27:01Z · 6c9e96a0 · Write · `docs/requirements/REQ-ADM.md`
 - 2026-09-18 16:28:13Z · 6c9e96a0 · Edit · `.githooks/pre-commit`
+- 2026-09-18 17:17:59Z · 6c9e96a0 · Write · `docs/requirements/REQ-INV.md`
+- 2026-09-18 17:18:25Z · 6c9e96a0 · Write · `docs/requirements/REQ-PUR.md`
+- 2026-09-18 17:18:50Z · 6c9e96a0 · Write · `docs/requirements/REQ-FAC.md`
