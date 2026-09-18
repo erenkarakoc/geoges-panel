@@ -49,8 +49,12 @@ Yapılandırılabilirliğin kontrolsüz genişlemesi. Önlem: yeni yapılandırm
 ## Geçiş (Migration) Notları
 Yerini alan ADR'lar eski kararı `Yerini aldı` olarak işaretler ve etki analizini içerir.
 
+## Değişiklik (CHG-006, 2026-09-18, sahip onaylı)
+
+**Serbest kayıt türü üreteci eklendi (D-079).** Yetkili kullanıcı, kendi alanları, başka kayıtlarla ilişkileri, ekran düzeni ve raporlarıyla yeni kayıt türü tanımlayabilir. Bu, "Ek alan ihtiyacı → belirlenmiş varlıklarda tipli özel alanlar" satırını genişletir ve bu ADR'nin reddettiği "her şey yapılandırılabilir" seçeneğine doğru bilinçli bir adımdır. **Çelişki açıkça kayda geçer:** tam bir low-code platforma dönüşmeyi önleyen sınır D-077'dir — hesaplar ve defter mantığı sabit kalır, kullanıcı tanımlı kayıtlar deftere yazmaz. Kullanıcı tanımlı kayıtlar panelin kendi yetki modelini kullanır (D-092), arama/rapor/giriş ekranına katılımları tanımda seçilir (D-093), yapıları değiştiğinde geçmiş veri silinmez (D-094). Üreteç ilk dilimin pilotundan sonra yapılır (D-105); mimari ve veri modeli Phase 03/04'te ona göre hazırlanır. Risk: RISK-010, RISK-002 büyüdü.
+
 ## Tarih
-2026-09-15
+2026-09-15 · CHG-006 eki 2026-09-18
 
 ## Durum
 Kabul edildi

@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 2026-09-18 — CHG-006 folded into the plan
+
+- The owner read the impact analysis and approved it. The record-type builder gets its own step, **09R**, after the Slice 1 pilot (D-105): no slice depends on it, so no module screen waits for it, and it is shaped by real use.
+- ADR-006 now carries the whole ruleset — the two new nodes, three-outcome approvals, free windowed conditions with their safeguards, the trigger list, the four ways to address a step, the authority model with its one hard rule (flow design only for full-visibility roles, enforced in code), publish controls, templates as copies, traceability, chained short flows, and the list of what the designer can never do. ADR-005 records, in so many words, that the record-type builder is a deliberate step toward what it once rejected, and names D-077 as the line that keeps the panel from becoming a low-code platform.
+- The roadmap gained CHG-006 scope in Phases 01, 02, 03, 04, 06, 07 and 08 and a new Phase 09R. TASK-0041 (capability catalog) and TASK-0042 (§45 as real flow definitions) were opened. §45 moved from `REQ-NFR` to `REQ-WFL`, closing the last open CHG-005 finding.
+- The palette test moved to `docs/workflows/README.md` with how each gap was closed; the root direction file was deleted, as it had said it would be.
+- A new validator check — every task row must have six columns — found three malformed rows on its first run (TASK-0025, TASK-0026, and TASK-0038 from this session), all fixed.
+- The owner's product-code freeze ended with this fold. ADR-007 applies as before: Phase 01 is still design.
+
+
+## 2026-09-18 — The workflow platform is decided, question by question (OQ-028 → CHG-006)
+
+- The owner answered all of OQ-028 in seven rounds: 28 questions, recorded as D-077…D-104 with a CHG-006 impact analysis. Plain-language question boxes, three or four at a time, each with a recommendation; where the owner went another way the AI's objection is written next to the decision rather than argued again.
+- Where it landed: calculations stay fixed and processes become configurable; code may be split finely but the controlled boundary stays at the 25 modules, with contract tests so a module can never silently break a flow built on it; a flow never writes the ledger; a running flow acts with system authority, made safe by allowing only full-visibility roles to build flows; approvals have three outcomes; conditions may look back over time freely; an end-to-end process is short flows triggering each other.
+- The owner chose the **free record-type builder** — people define their own record types with fields, relations, screens and reports — after being told twice what it costs. RISK-002 grows and RISK-010 is new.
+- The owner's note mid-round — the designer decides which roles and permission types touch each step, and roles are made of permission types — became D-097, D-098 and D-101: steps can be addressed by permission type, role, relationship or person; there is no temporary permission; the designer defines and assigns roles while designing.
+- A correction, recorded where it was made: two of the options in round 3 described the same phase order, so the owner's choice keeps the roadmap order unchanged, and the first note that it made RISK-005 worse was wrong.
+- E-mail as a flow trigger is deferred (DEF-006). The five shell tasks awaiting review are to be re-reviewed against these decisions (TASK-0040) before approval.
+- Nothing in the roadmap has moved yet: the fold waits for the owner's approval of the impact analysis and one open choice — where the record-type builder is built.
+
+
 ## 2026-09-17/18 — The records now check themselves (CHG-005)
 
 - An audit of the state system found **nine contradictions**. The roadmap was two days stale and did not contain CHG-003 or CHG-004 at all, although both were approved and largely built; `CODE ALLOWED` forbade code that had already shipped; Milestone M1 still promised a first screen that M0 had already delivered; Phase 02 was marked `NOT_STARTED` while D-054…D-070 decided most of it; Phase 07's scope listed finished work; ten tasks sat under the wrong heading; six "Last updated" stamps were wrong; hundreds of `§` citations pointed at a directory scheduled for deletion; and the §45 flows were filed under `REQ-NFR`. All are fixed or explicitly recorded.

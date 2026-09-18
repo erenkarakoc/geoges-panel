@@ -79,7 +79,8 @@ Flexibility is placed where change is known to happen, and everything else is ke
 - business rules, approval chains, thresholds → versioned data, effective-dated
 - roles, delegation, visibility → dynamic IAM
 - business types (work items, material types, product groups, templates) → catalogs, not enums
-- extra fields → typed custom fields on designated entities only
+- extra fields → typed custom fields; new record types → the record-type builder (D-079), bound by the normal permission model (D-092) and never touching ledger logic (D-077)
+- process connections between modules → user-composed workflows on published module capabilities, verified by contract tests (ADR-006, D-078)
 - providers (DB host, storage, jobs, notifications, exchange rates, weather) → ports & adapters
 - cross-module reactions → domain events via transactional outbox
 - stock, money, equipment movements → immutable ledgers; balances and reports are derived
@@ -182,7 +183,8 @@ Rules written only as prose depend on a model remembering them at the right mome
 7. Every `TASK-NNNN`, `REQ-*`, `D-NNN` and `OQ-NNN` referenced anywhere is defined somewhere.
 8. `Last updated:` in each `/ai` record is not older than that file's last commit date.
 9. Task ids referenced in `depends_on` exist.
-10. No record cites a path that does not exist, and — once TASK-0039 is done — no record cites `docs/sources/` by section number.
+10. Every task row in `ai/TASKS.md` has exactly six columns (added 2026-09-18 after it found three malformed rows).
+11. No record cites a path that does not exist, and — once TASK-0039 is done — no record cites `docs/sources/` by section number.
 
 A failure prints the file, the line and what to fix. Forward references — records citing files the roadmap has not produced yet, such as `docs/requirements/REQ-*.md` — are counted on one line rather than listed; `npm run records -- --verbose` lists them. A gate that prints forty lines on every commit stops being read. The validator is amended whenever a new class of contradiction is found; a contradiction found twice is a missing check.
 

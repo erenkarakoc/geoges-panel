@@ -10,7 +10,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 |---|---|---|---|
 | IAM | §2 | `docs/requirements/REQ-IAM.md` | — |
 | RPT (cockpit, reports) | §3, §14, §34 | `docs/requirements/REQ-RPT.md` | — |
-| WFL (approvals, rules, workflow) | §4, §13, §37, Mimari §6, §13 | `docs/requirements/REQ-WFL.md` | — |
+| WFL (approvals, rules, workflow, end-to-end flows, capability catalog, record-type builder) | §4, §13, §37, §45, Mimari §6, §13; CHG-006 (D-077…D-105) | `docs/requirements/REQ-WFL.md` | — |
 | CRM | §5 | `docs/requirements/REQ-CRM.md` | — |
 | QTE | §6 | `docs/requirements/REQ-QTE.md` | — |
 | PRJ | §7, §8, §10.1–10.2 | `docs/requirements/REQ-PRJ.md` | — |
@@ -34,12 +34,12 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | ADM (master data, calendar) | §36.1–§36.4, §23.9 | `docs/requirements/REQ-ADM.md` | — |
 | AUD (audit, revision requests) | §38, §37.1 | `docs/requirements/REQ-AUD.md` | — |
 | MIG (data import — DEFERRED) | §36.5, §33.4 import part | `docs/requirements/REQ-MIG.md` | — |
-| NFR (UI standards, alerts, platform) | §1, §39–§43, §40.2, §45, §46 | `docs/requirements/REQ-NFR.md` | — |
+| NFR (UI standards, alerts, platform) | §1, §39–§43, §40.2, §46 | `docs/requirements/REQ-NFR.md` | — |
 | NFR / platform — site-wide search (owner decision, no scope section) | D-044 | `docs/requirements/REQ-NFR.md` | — |
 
-## Known mis-filing (CHG-005 finding 9, pending CHG-006)
+## §45 moved (CHG-006, 2026-09-18)
 
-§45 (end-to-end flows) and §46 are mapped to `REQ-NFR` above. If CHG-006 is approved, those flows become workflow-engine templates and belong to `REQ-WFL`. The row is **not** moved yet, because the decision is open (OQ-028). Moving it is step 5 of `WORKFLOW_PLATFORM_DIRECTION.md` §13.
+§45 (end-to-end flows) moved from `REQ-NFR` to `REQ-WFL`: the flows are workflow-engine templates (D-086, D-089). This closes CHG-005 finding 9. The record-type builder (D-079) is also filed under WFL until Phase 03 names its owner module.
 
 ## Coverage rule
 

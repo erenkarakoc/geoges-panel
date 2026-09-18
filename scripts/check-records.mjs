@@ -107,6 +107,21 @@ const definedTasks = new Map(); // id -> { file, line }
     if (!row) continue;
     const [, id, , tier, status] = row;
 
+    // Six columns: ID · Title · Tier · Status · Depends on · Notes. A stray `|`
+    // splits the notes into a seventh cell that no reader or tool expects.
+    const cells = text
+      .trim()
+      .replace(/^\||\|$/g, "")
+      .split("|").length;
+    if (cells !== 6) {
+      fail(
+        file,
+        number,
+        `${id} has ${cells} columns, expected 6`,
+        "merge the extra cell into Notes, or escape a literal | as \\|",
+      );
+    }
+
     if (definedTasks.has(id)) {
       fail(
         file,
@@ -162,7 +177,8 @@ const PHASE_STATUSES = new Set([
   const file = "ai/MASTER_ROADMAP.md";
   const content = CONTENT.get(file) ?? "";
   for (const { number, text } of lines(content)) {
-    const row = text.match(/^\|\s*(\d{2})\s*\|[^|]*\|[^|]*\|\s*([A-Z_]+)\s*\|/);
+    // Phase ids are two digits, optionally with a letter for an inserted step (09R).
+    const row = text.match(/^\|\s*(\d{2}[A-Z]?)\s*\|[^|]*\|[^|]*\|\s*([A-Z_]+)\s*\|/);
     if (!row) continue;
     if (!PHASE_STATUSES.has(row[2])) {
       fail(

@@ -1,6 +1,6 @@
 # DEFERRED
 
-Last updated: 2026-09-15 · Deferred items are designed (where stated) but not built until reactivated by a recorded decision.
+Last updated: 2026-09-18 · Deferred items are designed (where stated) but not built until reactivated by a recorded decision.
 
 | ID | Item | Source | Reason | Design done in | Revisit at | Depends on |
 |---|---|---|---|---|---|---|
@@ -9,3 +9,4 @@ Last updated: 2026-09-15 · Deferred items are designed (where stated) but not b
 | DEF-003 | Native mobile application | Scope §40.2 | Web app must stabilize first | — | After Phase 19 | All slices |
 | DEF-004 | Migration from Supabase Cloud to self-hosted Supabase on own infrastructure | ADR-002 | Start managed; keep portable | Phase 03/05 portability rules | When cost, KVKK or control requires | Infra runbooks |
 | DEF-005 | Google Cloud Run workers for heavy processing | ADR-004 | Only if a workload needs it | — | When a job exceeds VPS capacity | Job port (Phase 03) |
+| DEF-006 | Starting a workflow from incoming e-mail (read the mailbox, verify the sender, extract a record from the content) | Scope §45.1 step 1; OQ-028 q24 | Owner decision D-103: not in the first release; the first step of "yeni işten tahsilata" is entered by a person, and manual start is always available | Phase 03 (keep the trigger model open to an external source) | After Slice 6 (CRM) pilot | WFL, CRM, email provider (OQ-015) |

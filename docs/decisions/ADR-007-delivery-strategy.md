@@ -43,6 +43,8 @@ Pilot bulguları CHG kayıtlarıyla tasarıma geri işlenir.
 
 **Değişiklik (CHG-005, 2026-09-17, sahip onaylı):** Sahip talimatıyla ürün kodu, CHG-005 (kayıt tutarlılığı) ve CHG-006 (iş akışı altyapısı yönü) kapanana kadar **donduruldu**. Bu süre boyunca yalnızca kayıt/doküman işi ve kayıtları denetleyen araç kodu yazılır.
 
+**Değişiklik (CHG-006, 2026-09-18, sahip onaylı):** Faz sırası değişmedi — iş akışı motoru ve tasarımcı temel altyapıdan sonra, modül dilimlerinden önce (D-088). Yeni bir yapım adımı eklendi: **kayıt türü üreteci, ilk dilimin pilotundan sonra** (D-105). CHG-005 ile konan ürün kodu dondurması CHG-006'nın işlenmesiyle sona erdi; bu ADR'nin "önce tasarım" kuralı aynen geçerlidir.
+
 ## Tarih
 2026-09-15
 

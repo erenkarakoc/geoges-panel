@@ -148,6 +148,60 @@ Decided by the owner in a four-round question session.
 
 > Questions 1–14 of the 2026-09-17 round (workflow platform direction) are **not** answered by this change request. They are tracked as OQ-028 with the reasoning in `WORKFLOW_PLATFORM_DIRECTION.md` at the repository root, and become CHG-006 once answered.
 
+### CHG-006 — Composition-first workflow platform (DECISIONS TAKEN 2026-09-18 — roadmap fold awaiting owner approval)
+
+- **Requested change (owner, 2026-09-17):** instead of building the end-to-end flows (§45) as ready-made coded flows, build an infrastructure on which authorised people compose flows themselves: every function is an independent module, and how modules connect and flow is a customisable action. Plus (2026-09-18): the designer decides which roles and permission types touch which point of a flow; roles are compositions of permission types.
+- **Reason:** processes change as the company grows; the owner wants to change them without code changes and without each module carrying its own approval logic.
+- **Question round:** OQ-028, seven rounds with the owner on 2026-09-17/18, 28 questions (14 on direction, 7 from the §45 palette test, 3 raised by the record-type-builder answer, 4 from the owner's note on roles). Reasoning, options and the palette test: `WORKFLOW_PLATFORM_DIRECTION.md` (root; deleted when this CHG is folded into the roadmap).
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-077 | **Three layers.** Calculations are fixed (ledger logic and derived data: "a collection reduces the party balance", "approved production flows into the progress payment"); processes are configurable (who approves, how many levels, thresholds, escalation, locks, notifications); catalogs stay admin settings (ADR-005) | OQ-028 q1 |
+| D-078 | **Two-level decomposition.** Code may be split as finely as wanted, but the **controlled boundary stays at the 25 modules**; parts inside one module call each other freely. Against incompatibility: every part's capability declaration (name, inputs, required permission) is verified against the code by automated contract tests, and CI fails on drift. A published capability is never removed or silently changed, only added or marked deprecated, because user-built flows depend on it | OQ-028 q2; owner asked for "200 parts plus a fix for incompatibility" |
+| D-079 | **Free record-type builder.** An authorised user can define a new record type with its own fields, relations to other records, screen layout and reports. Chosen twice by the owner after being told it roughly doubles the product and must shape the architecture from the start. **AI note:** RISK-002 grows; new RISK-010 | OQ-028 q3 |
+| D-080 | **A flow never writes the ledger.** No "issue invoice", "post payment" or "write stock movement" action exists in the catalog; the flow opens a task for the responsible person instead. This is not a limit on the designer's authority: the capability does not exist, as "grant permission at run time" does not. Designers are otherwise free on tasks, notifications, status, locks, escalation and drafts | OQ-028 q4 |
+| D-081 | **One permission builds and publishes a flow** (AI recommended two). Compensating controls on every publish: the owner is notified, the publish is audited (who, when, which version), and the flow stays flagged "new" for 7 days with its actions listed separately | OQ-028 q5 |
+| D-082 | **A running flow acts with system authority**, not the builder's. **AI objection recorded:** on its own this lets anyone who can build a flow read any data through it. Closed by D-083 | OQ-028 q6 |
+| D-083 | **The flow-design permission may only be granted to full-visibility roles** (the owner, and roles the owner gives it that already see everything). System authority therefore opens nothing the builder cannot already see, and no output-filtering mechanism is built. **Must be enforced in code** (a restricted role cannot be given the permission), not by policy: relaxing it later re-opens the leak described in D-082 | OQ-028 q6 follow-up |
+| D-084 | **Locks can be overridden by the owner and the general manager**, reason mandatory, audited, stakeholders notified | OQ-028 q7 |
+| D-085 | **Step-by-step wizard and box-and-arrow diagram together**, both editable, both views of the same definition. **AI note:** two-way editing costs more editor work than a wizard with a read-only diagram | OQ-028 q8 |
+| D-086 | **Company flows ship as templates; the flow in use is a copy.** Template updates never change a user's copy; a "new version available" notice appears; a copy can be reset to its template | OQ-028 q9 |
+| D-087 | **"Why was this opened" is always traceable.** Every task and notification carries the flow, step and record that produced it and links back to them. T1 | OQ-028 q10 |
+| D-088 | **Engine and designer both before the module slices.** This is the order the roadmap already has (Phase 07, then 08, then 09): phase order does not change. The AI's recommendation (pull the engine core into Phase 07) was not taken. **Correction:** two of the options offered in round 3 described the same order; the first recorded note that RISK-005 "grows" was wrong, it stays as it is today | OQ-028 q11 |
+| D-089 | **§45 flows are specified in Phase 02 as real flow definitions**, step by step, each step tested against the node palette, not as screen flows | OQ-028 q12 |
+| D-090 | **The CHG-004 shell work in REVIEW is re-reviewed** against these decisions instead of approved as it stands (TASK-0040). This delays the approval of TASK-0032…TASK-0037 | OQ-028 q13 |
+| D-091 | **The designer's out-of-scope list becomes a rule in ADR-006:** no free code, no direct database access, no ledger finalisation (D-080), **no node that grants a permission or role while a flow runs**, no sending data to external systems, no sensitive personal data in notification text. Design-time definition and assignment of permission types and roles is not excluded (D-098, D-101) | OQ-028 q14, refined by q29 |
+| D-092 | **User-defined record types use the panel's own permission model:** role-based read and write, site-level row visibility, sensitive-field marking, chosen at definition time | OQ-028 q26 |
+| D-093 | **Search, reports and the entry screen:** for each user-defined record type the definer chooses whether it appears in search, in reports and exports, and as a count on "Bugün" | OQ-028 q27 |
+| D-094 | **Changing a user-defined record type never destroys history.** A removed field is hidden and its past values are kept; who changed what is recorded for these records too | OQ-028 q28 |
+| D-095 | **New node: create a record or change its status**, drafts and status transitions only, never ledger finalisation (D-080). Closes palette gap B-1 | OQ-028 q19 |
+| D-096 | **New node: for each.** Iterates a list whose length is not known in advance (each custody item, each missing document). One level, no nesting. Closes gap B-2 | OQ-028 q20 |
+| D-097 | **A step's owner can be addressed four ways:** by permission type, by role, by relationship to the record ("the opener's manager", "the site's responsible engineer"), or by a named person | OQ-028 q29a |
+| D-098 | **There is no temporary permission.** Holding the required permission type or role is what lets a person act on a step. **The designer may define a new permission type and a new role for a flow while designing it** | OQ-028 q29b |
+| D-099 | **An approval has three outcomes:** approve (the flow continues), reject (the flow closes), send back for correction (returns to the submitter and comes back to the same approval once corrected). Backward edges are allowed. Closes gap B-3 | OQ-028 q21 |
+| D-100 | **Windowed conditions are free-form** ("this client delayed more than 3 times in 30 days"); the AI recommended predefined counters. No leak risk (D-083). Safeguards that do not restrict the owner: a time limit on condition queries, and the pre-publish test run shows the condition's real result on live data. Closes gap B-4 | OQ-028 q22 |
+| D-101 | **The designer can assign people to the roles they define, while designing** (AI recommended the admin screen). Assignments are written to the same record as admin-screen assignments and shown there, so who-sees-what is still read from one place | OQ-028 q29c |
+| D-102 | **External-party approval is a ready sub-flow template**, not a new node type: someone of ours takes the task, forwards it, records the answer with its document; reminder and escalation on timeout. No panel login for clients. Closes gap B-5 | OQ-028 q23 |
+| D-103 | **Triggers:** an event, a time or calendar rule (including "30 days before expiry"), a value crossing a threshold; manual start always available. **Starting a flow from incoming e-mail is not in the first release** (DEF-006). Closes gap B-6 | OQ-028 q24 |
+| D-104 | **An end-to-end process is built from short flows that trigger each other**, not one long definition, so each can be changed without touching work already in progress | OQ-028 q25 |
+| D-105 | **The record-type builder is built after the Slice 1 pilot**, not inside Phase 08. Module slices do not depend on it, so the first module screens are not delayed, and the builder is designed against real use. The data model is prepared for it from the start (Phase 03/04) | CHG-006 approval round, 2026-09-18 |
+
+**Impact analysis (PROJECT_RULES §9), proposed and awaiting owner approval before the roadmap is changed:**
+
+- **Requirements:** §45 moves from `REQ-NFR` to `REQ-WFL`. New requirement areas: capability catalog (every module), flow designer, trace view, record-type builder. The owner module of the record-type builder (`ADM` as an extension of custom fields, or a new platform module) is decided in Phase 03 through the naming process (ADR-010); it is not assumed here.
+- **Phase 01:** new mandatory deliverable per module, the **capability catalog**: events it publishes, actions it exposes, typed and classified fields that conditions may read.
+- **Phase 02:** §45 as flow definitions (D-089); designer UX with wizard and diagram (D-085); record-type builder UX; trace view; the 7-day "new flow" list; TASK-0040.
+- **Phase 03:** capability contract format and contract tests (D-078); engine architecture: triggers (D-103), approval outcomes (D-099), for-each (D-096), record node (D-095), windowed-condition safeguards (D-100), traceability (D-087), versioning and templates (D-086), authority model (D-082, D-083, D-097, D-098, D-101); record-type builder architecture.
+- **Phase 04:** schema for versioned flow definitions, running instances and their trace; capability registry; **storage model for user-defined record types** (the hardest data question this CHG raises) with RLS (D-092) and history (D-094).
+- **Phase 06:** new spikes: user-defined record types end to end (definition, storage, RLS, search, report); free-form windowed conditions under load.
+- **Phase 07:** order unchanged; dynamic IAM must support permission types and roles defined outside the admin screen (D-098, D-101).
+- **Phase 08:** order unchanged; scope grows with D-085, D-095, D-096, D-099, D-102.
+- **Record-type builder (D-105):** a new build step after the Slice 1 pilot (Phase 09); its architecture (Phase 03), storage model (Phase 04) and spike (Phase 06) still come first, so the data model is ready for it.
+- **Database, APIs, UI, permissions, tests:** as above. The engine and the builder are T1; the eight §45 flows become executable acceptance tests of the engine.
+- **Migration and backward compatibility:** no data exists yet. The sample approval queue (TASK-0037) is re-wired to the engine (TASK-0040).
+- **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
+- **Deferred:** DEF-006, e-mail triggers.
+
 ## Further decisions (2026-09-15)
 
 | ID | Decision | Ref |

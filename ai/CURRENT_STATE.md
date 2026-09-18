@@ -7,12 +7,12 @@ PROJECT STATUS:      BOOTSTRAP
 CURRENT PHASE:       PHASE 01 — Requirements & Domain Analysis
 CURRENT SUBPHASE:    DISCOVER / QUESTION
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0038 Record consistency and deterministic guards (CHG-005) — committed, awaiting owner review
-STATUS:              REVIEW
+CURRENT TASK:        TASK-0040 Re-review the CHG-004 shell work against CHG-006
+STATUS:              NOT_STARTED
 BRANCH:              main (infra/chg-005-record-consistency fast-forwarded into main 2026-09-18, 5c4ff54, and deleted; PR-less merge exception recorded in docs/standards/GIT_WORKFLOW.md)
 PARALLEL TRACK:      CHG-004 product transfer — 5 steps + sample work screens (TASK-0032…TASK-0037) REVIEW · presentation sandbox TASK-0030 REVIEW · navigation sandbox TASK-0031 DONE (deleted)
-CODE ALLOWED:        FROZEN for product code by owner instruction 2026-09-17 — no product code until CHG-005 (records + guards) and CHG-006 (workflow platform direction) are closed.
-                     Permitted meanwhile: records and documentation, and tooling code that enforces the records (scripts/check-records.mjs, .githooks/, hook scripts).
+CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 and CHG-006 are both folded. Normal ADR-007 rule applies again — Phase 01 is a design phase; product code resumes in Phase 07 or via an approved change request.
+                     Tooling code that enforces the records (scripts/, .githooks/) is always allowed.
                      Already-shipped exceptions that remain valid: development-only sandboxes (D-052) and the CHG-004 shell transfer (TASK-0032…TASK-0037, owner approved).
                      Note: TASK-0034 and TASK-0037 also shipped module-namespaced sample screens (modules/sit/ui, modules/wfl/ui, modules/tsk/ui). They are sample data behind the shell, approved as part of CHG-004, and are re-wired when SIT and the workflow engine exist.
 ```
@@ -21,9 +21,9 @@ CODE ALLOWED:        FROZEN for product code by owner instruction 2026-09-17 —
 Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. **Owner answers OQ-028** — 21 open questions in `WORKFLOW_PLATFORM_DIRECTION.md` (root): 14 on direction, 7 raised by the §45 palette test (§7.1 of that file). Nothing else in the plan moves until these are answered; no product code is written (owner instruction 2026-09-17).
-2. Then: write CHG-006, revise ADR-005/006/007, fold the direction into `ai/MASTER_ROADMAP.md`, delete the root direction file.
-3. Owner reviews the CHG-004 tasks still in REVIEW (TASK-0030, TASK-0032…TASK-0037).
+1. **TASK-0040:** re-review the CHG-004 shell work against the CHG-006 decisions (D-090); TASK-0030 and TASK-0032…TASK-0037 wait for it.
+2. Raise the pre-existing Prettier failure in `app-sidebar.tsx` with the owner now that the freeze has ended (KNOWN ISSUES).
+3. Phase 01 requirement rounds continue (TASK-0020, TASK-0021), now with the capability catalog per module (TASK-0041).
 4. OQ-027 items 3 and 4 (flow methods) still open.
 5. Phase 01 per-module requirement rounds (TASK-0020, TASK-0021) — no REQ file written yet.
 6. TASK-0018: re-check after 2026-10-15 that the worker keeps storing observations via the `CLAUDE_CODE_OAUTH_TOKEN` fallback (restart verified 2026-09-15; fallback not yet exercised). TASK-0019 DONE.
@@ -32,9 +32,11 @@ Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 00
 None.
 
 ## OPEN QUESTIONS
-See `ai/OPEN_QUESTIONS.md`. **OQ-028 (workflow platform direction) blocks everything** — 14 questions, reasoning in `WORKFLOW_PLATFORM_DIRECTION.md`. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
+See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
+- D-105 (2026-09-18): record-type builder built after the Slice 1 pilot (roadmap step 09R); CHG-006 approved and folded, product-code freeze ended
+- D-077…D-104 (2026-09-18, CHG-006, OQ-028): calculations fixed, processes configurable; 25 controlled module boundaries with contract tests; free record-type builder; flows never write the ledger; flows run with system authority, flow design only for full-visibility roles; three-outcome approvals; free windowed conditions; steps addressed by permission type/role/relationship/person; no temporary permission, designer defines and assigns roles; triggers event/calendar/threshold (e-mail deferred, DEF-006); end-to-end = chained short flows; phase order unchanged
 - D-072…D-076 (2026-09-17, CHG-005): roadmap is the single authority and is updated in the same session a CHG is approved; phase status vocabulary gains `PARTIALLY_DONE`; Milestone M1 redefined as the staging review; TASK-0027 (`docs/sources/` deletion) blocked until § references are remapped; record consistency is machine-checked (`npm run records`) and session continuity is hook-written, not model-remembered
 - D-070 (2026-09-17): approvals run as a queue and tasks list late/today/next with sample content; navigation sandbox deleted
 - D-069 (2026-09-17, CHG-004 step 5): phone navigation — bottom bar with the work layer and the primary action, modules in a searchable drawer
@@ -49,7 +51,7 @@ See `ai/OPEN_QUESTIONS.md`. **OQ-028 (workflow platform direction) blocks everyt
 - D-019…D-025: skill vendoring, skill set, Next.js guidance, plugin settings, roadmap approval with Milestone M1, Tailwind docs local-only, claude-mem telemetry off
 
 ## DEFERRED ITEMS
-DEF-001 Data import · DEF-002 Offline entry · DEF-003 Native mobile app · DEF-004 Self-hosted Supabase migration · DEF-005 Cloud Run workers
+DEF-001 Data import · DEF-002 Offline entry · DEF-003 Native mobile app · DEF-004 Self-hosted Supabase migration · DEF-005 Cloud Run workers · DEF-006 E-mail workflow triggers
 
 ## KNOWN ISSUES
 - **`npm run check` fails on committed `main` (found 2026-09-17, CHG-005 finding 10):** `src/platform/ui/app-shell/app-sidebar.tsx` is committed in a state Prettier rejects, so `format:check` fails even with a clean working tree. It predates this session — TASK-0032/0036 notes claim "check + build pass", which is no longer true of the committed tree. Not fixed here because product code is frozen (owner 2026-09-17); the fix is a Prettier reformat of that one file and nothing else. Raise with the owner before the freeze lifts.
@@ -66,11 +68,12 @@ DEF-001 Data import · DEF-002 Offline entry · DEF-003 Native mobile app · DEF
 | ID | Risk | Impact | Mitigation | Owner |
 |---|---|---|---|---|
 | RISK-001 | KVKK: sensitive employee data in Supabase Cloud EU region; no field-level encryption chosen | High (legal/financial) | EU region; strict RLS & data classification; minimize sensitive fields; legal review before real HR data | Owner |
-| RISK-002 | Very large first-release scope | High (schedule) | Design-first with traceability; vertical slices with pilots; re-evaluate after Phase 01 sizing | Owner + AI |
+| RISK-002 | Very large first-release scope — **grew 2026-09-18** with the free record-type builder (D-079) | High (schedule) | Design-first with traceability; vertical slices with pilots; re-evaluate after Phase 01 sizing; builder placement decided at CHG-006 approval | Owner + AI |
 | RISK-003 | Process overhead vs. single non-developer owner | Medium | Risk-tiered gates (ADR-008); batched question rounds | AI |
 | RISK-004 | Third-party skill / plugin supply chain | Medium | Vendored at audited commits; no installer CLI; claude-mem cloud sync forbidden | AI |
 | RISK-005 | Visual workflow designer complexity | Medium | Fixed node palette, engine-first, validation spike | AI |
 | RISK-006 | Provider lock-in to Supabase Cloud | Medium | Portability rules (ADR-002) | AI |
 | RISK-007 | claude-mem stores prompts/observations locally, shared across projects | Low–Medium | Local-only, telemetry off, no real personal data in sessions, `<private>` tags | AI |
+| RISK-010 | Free record-type builder (D-079): user-defined fields, relations, screens and reports need a storage model, RLS, search, reporting and a migration path for structures users change at will | High (scope, performance, data integrity) | Phase 03 architecture + Phase 04 storage decision + Phase 06 end-to-end spike before any build; D-092 (normal permission model), D-094 (history never destroyed) | AI |
 | RISK-009 | Records drift out of agreement with each other and with reality (9 contradictions found 2026-09-17: stale roadmap, dead milestone, mis-filed tasks, wrong "last updated" stamps, references to a file scheduled for deletion) | High (the plan stops being trustworthy, and an AI session bootstraps from a false picture) | `npm run records` in `npm run check` and in the pre-commit gate; CHG→roadmap rule in PROJECT_RULES §9; hook-written session journal | AI |
 | RISK-008 | Tailwind docs license (source-available, educational) for local AI use | Low | Owner-accepted local use only; never committed or redistributed (D-024) | Owner |

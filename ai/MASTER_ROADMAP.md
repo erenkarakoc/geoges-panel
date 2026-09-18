@@ -27,6 +27,7 @@ Module codes: see `docs/architecture/MODULE_MAP.md`.
 | 07 | Foundation Build | Build | PARTIALLY_DONE |
 | 08 | Workflow Engine & Visual Designer | Build | NOT_STARTED |
 | 09 | Slice 1 — Projects, Sites, Daily Log, Approvals, Cockpit | Build + Pilot | NOT_STARTED |
+| 09R | Record-Type Builder (after the Slice 1 pilot, D-105) | Build + Pilot | NOT_STARTED |
 | 10 | Slice 2 — Inventory, Weighing, Purchasing, Factory | Build + Pilot | NOT_STARTED |
 | 11 | Slice 3 — Progress Payments, Finance, Period Close | Build + Pilot | NOT_STARTED |
 | 12 | Slice 4 — Equipment, Vehicles, Cranes | Build + Pilot | NOT_STARTED |
@@ -51,7 +52,7 @@ Every approved change request must appear here, with the phase it changed. Analy
 | CHG-003 | Development-only structure presentation page | Added TASK-0030; sandbox code only, never ships (production 404). No phase moved | REVIEW |
 | CHG-004 | Compact navigation: header as a toolbar, work layer on the sidebar rail | Delivered part of **Phase 02** (navigation/IA, role home screen, top bar, mobile) and part of **Phase 07** (app shell) early, in five steps: TASK-0032…TASK-0037. Both phases are therefore `PARTIALLY_DONE` | REVIEW |
 | CHG-005 | Record consistency and deterministic guards | Rewrote the stale parts of this file, refiled `ai/TASKS.md`, redefined Milestone M1, blocked TASK-0027 behind TASK-0039, added `npm run records`, the pre-commit gate and the hook-written session journal | 2026-09-17/18 |
-| CHG-006 | Composition-first workflow platform (candidate) | **Not decided.** Would move the workflow engine core earlier and add a per-module capability catalog to Phases 01 and 03. Input: `WORKFLOW_PLATFORM_DIRECTION.md` (root), 21 open questions — 14 on direction, 7 from the §45 palette test | PROPOSED |
+| CHG-006 | Composition-first workflow platform | **Approved and folded 2026-09-18 (D-077…D-105).** Phase order unchanged (engine + designer stay in Phase 08, before the slices — D-088). Adds a per-module capability catalog to Phase 01, contract tests to Phase 03, a free record-type builder (D-079), built after the Slice 1 pilot (D-105), new spikes to Phase 06. Analysis in `ai/DECISIONS.md` | DONE 2026-09-18 |
 
 ## Work delivered ahead of its phase
 
@@ -143,7 +144,7 @@ STATUS: DONE
 - **Risks:** scope size (RISK-002); hidden calculation rules.
 - **Status:** `QUESTIONS_PENDING`. Glossary rounds 1–2 done (D-027…D-034); Slice 1 requirement rounds 1–3 done (D-035…D-041, D-048…D-050). No REQ file has been written yet — `docs/requirements/` holds only its README, so the phase's main deliverable is entirely outstanding.
 - **Exit blocker:** TASK-0027 (deleting `docs/sources/`) may not run until every `§` reference in the records has been remapped to a REQ id. See CHG-005.
-- **Note:** if CHG-006 is approved, this phase gains one deliverable per module — the capability catalog (events it publishes, actions it exposes, typed fields conditions may read).
+- **CHG-006 deliverable:** every module's **capability catalog** — events it publishes, actions it exposes, typed and classified fields conditions may read (TASK-0041). §45 is filed under `REQ-WFL`. Record-type builder requirements are written here too (D-079).
 
 ## PHASE 02 — UX, Information Architecture & User Flows
 
@@ -153,7 +154,7 @@ STATUS: DONE
 - **Deliverables:** `docs/ui-ux/*` flows and screen specs; list of required custom elements with owner approval.
 - **Acceptance:** every REQ with UI has a screen spec; every screen lists states and COSS components; owner approved key flows.
 - **Status:** `PARTIALLY_DONE`. CHG-004 delivered the navigation skeleton, the three-zone header, the conditional context row, the per-role "Bugün" entry screen and the phone bottom bar ahead of this phase (D-054…D-070, TASK-0032…TASK-0037). Those decisions stand and are not re-opened here. **Still owed:** screen inventory, the per-screen state matrix (initial, loading, empty, partial, error, permission denied, retry, destructive confirmation), list/detail/form standards (§41–§43), the daily site log table UX, the end-to-end flow specifications (§45) and the WCAG 2.2 AA targets.
-- **Note:** if CHG-006 is approved, the §45 flows are specified here as **workflow definition drafts** tested against the engine's node palette, not as screen flows.
+- **CHG-006 deliverables:** the eight §45 flows as **real flow definitions**, step by step, each tested against the node palette (D-089, TASK-0042); UX of the flow designer (wizard + diagram, both editable — D-085), the trace view (D-087), the "new flows" 7-day list (D-081) and the record-type builder (D-079); the CHG-004 re-review (TASK-0040).
 
 ## PHASE 03 — System Architecture
 
@@ -162,6 +163,7 @@ STATUS: DONE
 - **Dependencies:** Phase 01, Phase 02 (in parallel with late Phase 02 allowed).
 - **Deliverables:** ADRs, `docs/architecture/*`, feature specs skeletons per module.
 - **Acceptance:** all cross-cutting concerns have an ADR; each module has a boundary spec; spike list for Phase 06 defined.
+- **CHG-006 scope:** capability contract format and contract tests (D-078); engine architecture — triggers (D-103), approval outcomes (D-099), for-each (D-096), record node (D-095), windowed-condition safeguards (D-100), traceability (D-087), versioning and templates (D-086), authority model (D-082, D-083 enforced in code, D-097, D-098, D-101); record-type builder architecture and its owner module (ADM or a new platform module, via ADR-010 naming).
 
 ## PHASE 04 — Database Architecture
 
@@ -170,6 +172,7 @@ STATUS: DONE
 - **Dependencies:** Phase 03.
 - **Deliverables:** `docs/database/*` (ERD per module, table specs, RLS matrix, migration conventions).
 - **Acceptance:** every REQ with data maps to tables; RLS defined for every table; naming review passed.
+- **CHG-006 scope:** versioned flow definitions, running instances and their trace; capability registry; the **storage model for user-defined record types** with RLS (D-092) and non-destructive history (D-094) — the hardest data question of CHG-006 (RISK-010).
 
 ## PHASE 05 — Infrastructure, Environments & Operations Design
 
@@ -186,6 +189,7 @@ STATUS: DONE
 - **Dependencies:** Phases 03–05 drafts.
 - **Deliverables:** spike reports in `docs/architecture/spikes/`, ADR updates.
 - **Acceptance:** every candidate spike is PASS, FAIL (with ADR change) or explicitly waived by owner.
+- **CHG-006 spikes:** user-defined record types end to end (definition → storage → RLS → search → report); free-form windowed conditions under load.
 
 ## PHASE 07 — Foundation Build
 
@@ -194,13 +198,14 @@ STATUS: DONE
 - **Status:** `PARTIALLY_DONE`. Delivered ahead of the phase by M0 and CHG-004: scaffold, lint/boundary rules and test setup (TASK-0023), real Supabase authentication with TOTP 2FA and session guard (TASK-0024, TASK-0025), app shell with navigation registry, theme and brand tokens, role onboarding (TASK-0026, TASK-0032…TASK-0036). **Still owed:** CI pipeline, environments and staging deploy, dynamic roles / delegation / acting role / visibility, audit & history, revision-request core, documents & storage, outbox & jobs, notifications & tasks core, catalogs & custom fields, currency & calendar.
 - **Milestone M1 — first review on a real environment (CHG-001, redefined by CHG-005 2026-09-17):** the original M1 ("owner sees the authentication pages and the shell for the first time") was consumed by M0 and CHG-004, which the owner reviewed locally. M1 is now the **staging** milestone: the same screens plus the foundation services running on the deployed environment, with a proven deploy and rollback. What M1 still proves that local review did not: real environment configuration, secrets handling, session behaviour behind the reverse proxy, backup/restore path and rollback.
 - **Acceptance:** foundation features pass T1 gates; staging deploy with rollback proven; M1 review done on staging with owner feedback recorded.
+- **CHG-006:** dynamic IAM must support permission types and roles defined, and assigned, from the flow designer (D-098, D-101), and must refuse the flow-design permission to any role without full visibility (D-083).
 
 ## PHASE 08 — Workflow Engine & Visual Designer
 
 - **Scope:** workflow definitions (fixed node palette), versioning, execution engine, test-run, publish permissions, approval center integration, visual designer UI.
 - **Dependencies:** Phase 07.
 - **Acceptance:** default company flows (daily log approval, material issue, payment approval) defined and executed through the engine; the sample "Onaylar" screen delivered by TASK-0037 re-wired to the engine's real queue; T1 gate.
-- **Open:** CHG-006 proposes splitting this phase — engine core (definition model, execution, event backbone) into Phase 07, visual designer staying here — and adding a per-module capability catalog to Phases 01 and 03. Not decided; 14 open questions in `WORKFLOW_PLATFORM_DIRECTION.md` (root). Until it is decided, this phase stands as written.
+- **CHG-006 (approved 2026-09-18):** position unchanged (D-088). Scope grows: two-way editor (D-085), record node (D-095), for-each (D-096), three-outcome approvals (D-099), external-approval sub-flow template (D-102), publish controls (D-081), templates as copies (D-086), traceability (D-087). All eight §45 flows run as executable acceptance tests. The record-type builder is **not** here — see 09R.
 
 ## PHASES 09–18 — Module Slices
 
@@ -223,6 +228,15 @@ Each slice follows the same pattern:
 | 16 | Meetings & decisions, internal support tickets, archive (single-window search), reporting & exports | MTG, SUP, DOC, RPT | 09–15 |
 | 17 | Performance metrics, KPI catalog (existing KPI guide v2.0), rankings, bonus rules & approval | PRF | 09–16 |
 | 18 | Recommendations, acceleration scenarios, resource optimization, annual plans, budget vs actual, investment analysis, company health scorecard | INT, STR | 09–17 |
+
+## PHASE 09R — Record-Type Builder (CHG-006, D-105)
+
+- **Purpose:** let authorised users define new record types — fields, relations to other records, screen layout, reports — without code (D-079).
+- **Position:** after the Slice 1 pilot. Module slices do not depend on it, so the first module screens are not delayed, and the builder is shaped by real use.
+- **Dependencies:** Phase 03 architecture, Phase 04 storage model, Phase 06 spike (all already in scope), Phase 07 dynamic IAM, Phase 08 engine, Phase 09 pilot.
+- **Rules:** normal permission model (D-092); search/report/entry-screen inclusion chosen per type (D-093); structure changes never destroy history (D-094); user-defined records never write the ledger (D-077).
+- **Acceptance:** a type defined through the builder works end to end under RLS, appears where its definition says, survives a field removal with its history intact, and can be used by a flow; T1 gate.
+- **Risks:** RISK-010, RISK-002.
 
 ## PHASE 19 — Production Readiness & Company-wide Rollout
 
