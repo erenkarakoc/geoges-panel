@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2026-09-18 — Slice 2 requirements confirmed
+
+- The owner confirmed REQ-INV, REQ-PUR and REQ-FAC, including the derived transfer rule (a transfer leaves at the source average; its transport is added at the destination): 48 more requirements CONFIRMED, 212 in all. Next: FIN.
+
 ## 2026-09-18 — Slice 2 requirements: INV, PUR, FAC
 
 - The scope already fixes most of inventory — the costing order, freezing cost at consumption, negative stock with a critical warning, counts posted as adjustments, the locked opening stock. Five cost decisions remained (D-142…D-146): galvanising and inbound transport belong to a strip's cost; the average cost is kept per location (against the recommendation of one company-wide average), with transfers leaving at the source's average and their transport added at the destination — a derived rule marked for confirmation; over-delivery within tolerance is simply accepted; factory overhead is spread by labour hours; and the factory log, like the site log, counts only once approved.

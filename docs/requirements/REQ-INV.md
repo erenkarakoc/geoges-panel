@@ -1,6 +1,6 @@
 # REQ-INV — Stok, Malzeme Hareketleri, Kantar ve Maliyet
 
-Durum: DRAFT · 2026-09-18 · Modül: INV (Inventory)
+Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: INV (Inventory)
 
 Kaynaklar: Özellik Yapısı §18.1, §18.4–§18.15, §19, §20.1; ADR-005 (değişmez defterler); kararlar D-123, D-142, D-143.
 
@@ -19,7 +19,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Katalogdaki her malzeme (çelik şerit tipleri, düz lama/lug hammaddesi, lug, civata-somun, lastik takoz, kalıp yağı, EPDM, derz dolgusu, ankraj, diğer sarflar) için birim, kritik stok eşiği, gerekiyorsa boy/ölçü, şerit için genişlik × kalınlık, boy ve delik sayısı ve teorik birim ağırlık (kg/m veya kg/adet) tutulur.
 - Kabul kriterleri:
   - [ ] Teorik birim ağırlığı olmayan şerit ve lama malzemesi için kantar karşılaştırması yapılamadığı açıkça belirtilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-002 — Lokasyon ve süreç durumuna göre stok
 
@@ -28,7 +28,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Stok yalnızca şirket toplamı değildir; fabrika/depo, galvanizci, şantiyeler ve sevkiyatta ayrı ayrı görülür. Aynı malzeme süreç durumuna göre de ayrılır: hammadde, işlemde, galvanizde, hazır, sahada.
 - Kabul kriterleri:
   - [ ] Bir malzemenin şirket toplamı, lokasyonlardaki miktarların toplamına her zaman eşittir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-003 — Her hareket bir kayıttır; bakiye türetilir
 
@@ -38,7 +38,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Kabul kriterleri:
   - [ ] Stok miktarını doğrudan değiştiren bir ekran veya işlem yoktur.
   - [ ] Her hareket kaynağına (sipariş, günlük kayıt, sevkiyat, sayım…) bağlantı taşır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-004 — Fire aşama aşama görünür
 
@@ -47,7 +47,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Bir aşamaya giren ve çıkan miktar farklıysa fark fire olarak gösterilir: fabrikada işleme firesi, galvaniz sürecindeki fark ve sevkiyat farkı ayrı ayrı.
 - Kabul kriterleri:
   - [ ] Her fire kaydı hangi aşamada oluştuğunu taşır ve aşamalar ayrı toplanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Sevkiyat ve talepler
 
@@ -59,7 +59,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Kabul kriterleri:
   - [ ] Talep, sevkiyat ve teslim alım ayrı adımlardır; her biri kendi olayını yayımlar.
   - [ ] Teslim alınmayan sevkiyat "sevkiyatta" lokasyonunda kalır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-006 — Şantiyeler arası doğrudan sevkiyat
 
@@ -68,7 +68,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Malzeme ve ekipman fabrikaya dönmeden doğrudan başka şantiyeye sevk edilebilir; kayıtta kaynak ve hedef şantiye görünür.
 - Kabul kriterleri:
   - [ ] Doğrudan sevkiyat, iki şantiyenin stoğunu aynı anda ve tek hareket çiftiyle değiştirir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-007 — Kritik stok uyarısı
 
@@ -77,7 +77,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Her malzemenin kritik eşiği vardır. Uyarı mevcut stok, projenin kalan ihtiyacı, beklenen tüketim ve kritik seviyeye kalan miktar/zaman üzerinden verilir ("50×4 şerit stoğu kritik seviyeye yaklaşıyor; sipariş/talep oluştur"). Uyarı ilgili sorumluya, koordinatöre ve gerekirse sahiplere çıkar.
 - Kabul kriterleri:
   - [ ] Uyarı, kritik seviyeye kaç gün kaldığını beklenen tüketimden hesaplayarak gösterir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-008 — Proje sonu artık malzeme zayi değildir
 
@@ -86,7 +86,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Proje sonunda artan kullanılabilir malzeme kendiliğinden zayi sayılmaz. Seçenekler: fabrikaya iade, başka projeye transfer, sonraki proje için stok, uygunsa satış.
 - Kabul kriterleri:
   - [ ] Proje kapanırken şantiyede kalan stok için bu dört seçenekten biri seçilmeden kapanış tamamlanmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Kantar ve tır bazlı sevkiyat
 
@@ -97,7 +97,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Çelik şerit ve lamada miktar aşamaya göre farklı birimle izlenir: haddeciye sipariş kg/ton; haddeci çıkışı ve galvaniz giriş/çıkışı boy bazında kg; şantiyeye sevk ve sahada kullanım boy bazında adet ve metre. Birimler arası dönüşüm teorik ağırlıkla yapılır: genişlik × kalınlık × boy × çelik yoğunluğu.
 - Kabul kriterleri:
   - [ ] Aynı sevkiyat hem kg hem adet/metre olarak okunabilir; dönüşüm tanımlardan hesaplanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-010 — Tır bazında sevkiyat kaydı
 
@@ -107,7 +107,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Kabul kriterleri:
   - [ ] Bir tırda birden fazla boy satırı olabilir.
   - [ ] Her kantar fişi belge olarak kayda eklenir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-011 — Kantar farkı
 
@@ -116,7 +116,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Kantar tartısı teorik ağırlıkla karşılaştırılır; fark tanımlı toleransı aşarsa uyarı oluşur ve açıklama istenir. Çıkış ve varış kantarı arasındaki fark ayrıca sevkiyat farkı olarak gösterilir.
 - Kabul kriterleri:
   - [ ] Tolerans dışı farkı olan sevkiyat, açıklama girilmeden teslim alındı olarak kapatılamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-012 — Galvaniz ağırlık artışı fire değildir
 
@@ -125,7 +125,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Galvaniz dönüşündeki ağırlık artışı çinko kaplamadan kaynaklanır; fire sayılmaz, beklenen kaplama artışıyla karşılaştırılarak ayrı gösterilir.
 - Kabul kriterleri:
   - [ ] Galvaniz dönüşü fire hesabına girmez; beklenenden sapması ayrıca raporlanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-013 — Stok giriş ekranı özet kartları
 
@@ -134,7 +134,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Özet kartlar: haddeci için toplam sipariş kg / çıkan kg; galvanizci ve depo için giren / çıkan / kalan kg; şantiyeler için gelen / kullanılan / kalan adet.
 - Kabul kriterleri:
   - [ ] Kartlardaki değerler stok hareketlerinden hesaplanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## D. Sayım ve açılış
 
@@ -146,7 +146,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Kabul kriterleri:
   - [ ] Onaylanmayan sayım stoğu değiştirmez.
   - [ ] Fark, stoğun üzerine yazılarak değil düzeltme hareketiyle işlenir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-015 — Açılış stoku
 
@@ -155,7 +155,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Panel kullanılmaya başlandığında veya yeni lokasyon eklendiğinde mevcut stok birim maliyetiyle "açılış stoku" olarak girilir. Onaydan sonra kilitlenir; yalnızca revizyon talebiyle değişir (REQ-AUD-008).
 - Kabul kriterleri:
   - [ ] Onaylı açılış stoku doğrudan düzenlenemez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## E. Şerit kombinasyonu
 
@@ -167,7 +167,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Kabul kriterleri:
   - [ ] Aynı fireyi veren kombinasyonlar arasında daha az parçalı olan önerilir.
   - [ ] Öneri onaylanmadan hiçbir stok hareketi oluşmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## F. Tüketim maliyeti
 
@@ -178,7 +178,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Sahada veya fabrikada tüketilen her malzemenin maliyeti ilgili proje, şantiye veya fabrika maliyetine kendiliğinden yansır; ayrıca gider olarak girilmez.
 - Kabul kriterleri:
   - [ ] Aynı tüketim hem stoktan hem gider olarak iki kez maliyete giremez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-018 — Birim maliyet sırası
 
@@ -188,17 +188,17 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Kabul kriterleri:
   - [ ] Her tüketim hareketi maliyetini ve yöntemini taşır.
   - [ ] "Maliyet bulunamadı" durumundaki tüketim sıfır maliyetle sessizce geçmez; uyarı ve görev üretir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-019 — Ağırlıklı ortalama lokasyon başına
 
 - Kaynak: D-143
 - Öncelik: Must · Kademe: T1
-- Açıklama: Ağırlıklı ortalama maliyet her lokasyon için ayrı hesaplanır. Transferde malzeme çıktığı lokasyonun ortalama maliyetiyle çıkar; transferin taşıma ücreti vardığı lokasyonun maliyetine eklenir (D-142 ile tutarlı olarak türetildi, sahip onayında teyit edilir).
+- Açıklama: Ağırlıklı ortalama maliyet her lokasyon için ayrı hesaplanır. Transferde malzeme çıktığı lokasyonun ortalama maliyetiyle çıkar; transferin taşıma ücreti vardığı lokasyonun maliyetine eklenir (D-142 ile tutarlı olarak türetildi; sahip 2026-09-18 teyit etti).
 - Kabul kriterleri:
   - [ ] Aynı malzemenin iki lokasyondaki ortalama maliyeti farklı olabilir ve her biri ayrı görünür.
   - [ ] Transfer, kaynak lokasyonun ortalamasını değiştirmez; hedefinkini günceller.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-020 — Şeridin maliyetine galvaniz ve nakliye eklenir
 
@@ -207,7 +207,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Bir metre şeridin maliyeti çelik alış bedeli, galvaniz bedeli ve stoğa gelene kadarki nakliyeden oluşur. Şantiye şeridi kullandığında gerçek maliyeti proje kâr-zararına yansır.
 - Kabul kriterleri:
   - [ ] Galvaniz faturası ve nakliye bedeli, ilgili şerit partisinin birim maliyetine dağıtılır; ayrıca gider olarak yazılmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-021 — Maliyet tüketim anında donar
 
@@ -216,7 +216,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Maliyet tüketim anında dondurulur; sonradan girilen sipariş veya değişen fiyat geçmiş kâr-zararı değiştirmez.
 - Kabul kriterleri:
   - [ ] Geçmiş bir tüketimin maliyeti, sonradan girilen bir alışla değişmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-022 — Lug maliyeti ve geçici maliyet
 
@@ -225,7 +225,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Lug düz lamadan fabrikada üretildiği için maliyeti düz lama + fabrika işçilik, enerji ve fire payıdır. Fabrika maliyeti tam oluşana kadar düz lama maliyeti geçici olarak kullanılır ve "geçici" diye işaretlenir.
 - Kabul kriterleri:
   - [ ] "Geçici" işaretli maliyetler raporlarda ayırt edilir ve fabrika maliyeti kesinleşince işaret kalkar.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-023 — İşveren malzemesi maliyete yazılmaz
 
@@ -234,7 +234,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: İşverenin tedarik ettiği malzeme stokta miktar olarak izlenir fakat GEOGES maliyetine yazılmaz.
 - Kabul kriterleri:
   - [ ] İşveren malzemesinin tüketimi miktar olarak görünür, maliyeti sıfır ve "işveren" işaretlidir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-024 — Eksi stok
 
@@ -243,7 +243,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Stok eksiye düşerse tüketim yine kaydedilir, ancak kritik uyarı oluşur.
 - Kabul kriterleri:
   - [ ] Eksi stok "Dikkat" bölümünde görünür ve ilgili sorumluya görev düşer.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## G. Sarf
 
@@ -254,7 +254,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Sarf reçetesiyle hesaplanan tahmini sarf günlük kayda önerilir; kullanıcı gerçek sapmayı veya ekstra tüketimi girer (D-123). Sarf ekranında malzeme, birim, bugün kullanılan, bugüne kadar kullanılan, stok kalan ve kritik durum görünür.
 - Kabul kriterleri:
   - [ ] Sarf ekranındaki "stok kalan", o lokasyonun stok hareketlerinden hesaplanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INV-026 — Normalin üzerinde sarfiyat uyarısı
 
@@ -263,7 +263,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Açıklama: Normalin üzerinde sarfiyat (ör. kalıp yağı) uyarı olarak işaretlenir ve "Dikkat" bölümüne çıkar. Normal aralık merkezi kuraldır.
 - Kabul kriterleri:
   - [ ] Uyarı, reçetedeki beklenen miktar ile gerçekleşen arasındaki farka göre verilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## H. Fire ve hurda
 
@@ -275,7 +275,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 - Kabul kriterleri:
   - [ ] Tartım belgesi olmayan fire hurdaya ayrılamaz.
   - [ ] Satılan hurda miktarı, hurdaya ayrılan miktarı aşamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 

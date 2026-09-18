@@ -1,6 +1,6 @@
 # REQ-PUR — Tedarikçiler, Siparişler ve Satın Alma Talepleri
 
-Durum: DRAFT · 2026-09-18 · Modül: PUR (Purchasing)
+Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: PUR (Purchasing)
 
 Kaynaklar: Özellik Yapısı §18.2, §18.3, §18.16; kararlar D-027 (firma ve rolleri), D-144.
 
@@ -19,7 +19,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 - Açıklama: Haddeciler, galvanizciler ve diğer malzeme ve hizmet tedarikçileri kaydedilir. Tedarikçi, "tedarikçi" rolü taşıyan bir firmadır; aynı firma işveren veya müşteri de olabilir (D-027).
 - Kabul kriterleri:
   - [ ] Aynı firma için ikinci bir kayıt açılmaz; rolü eklenir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PUR-002 — Sipariş öncesi karşılaştırma
 
@@ -28,7 +28,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 - Açıklama: Sipariş öncesinde tedarikçilerin fiyat, termin süresi, miktar/tonaj ve teslim koşulları yan yana karşılaştırılır.
 - Kabul kriterleri:
   - [ ] Karşılaştırma siparişe bağlanır ve sipariş kaydında hangi tekliflerin değerlendirildiği görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Siparişler
 
@@ -39,7 +39,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 - Açıklama: Siparişte tedarikçi, malzeme, miktar, fiyat/tutar, para birimi, sipariş tarihi, beklenen termin, belge ve durum tutulur. Tutar ticari veridir.
 - Kabul kriterleri:
   - [ ] Dövizli siparişte tutar, sipariş günündeki kurla TL karşılığıyla birlikte saklanır (REQ-ADM-013).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PUR-004 — Sipariş durumu ve kısmi teslim
 
@@ -49,7 +49,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 - Kabul kriterleri:
   - [ ] Her teslim alım (tır) siparişe bağlıdır ve siparişin kalan miktarını azaltır.
   - [ ] Termini geçen ve tamamlanmayan sipariş gecikmiş olarak işaretlenir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PUR-005 — Teslim alınınca stok artar
 
@@ -58,7 +58,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 - Açıklama: Teslim alınan miktar stok hareketi olarak ilgili lokasyona girer.
 - Kabul kriterleri:
   - [ ] Teslim alımla stok girişi aynı işlemde olur; biri olmadan diğeri kalmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PUR-006 — Fazla teslim
 
@@ -68,7 +68,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 - Kabul kriterleri:
   - [ ] Toleransı aşan miktar, onay verilmeden kullanılabilir stoğa girmez.
   - [ ] Tolerans malzeme veya tedarikçi bazında ayarlanabilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Genel satın alma talebi
 
@@ -79,7 +79,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 - Açıklama: Malzeme kataloğu dışındaki alımlar (yedek parça, sanayi/tamir hizmeti, el aleti, ekipman, ofis ihtiyacı) şu akışla yürür: talep → fiyat araştırması → teklif karşılaştırma → onay → alım → teslim alma → fatura/ödeme.
 - Kabul kriterleri:
   - [ ] Onaylanmamış bir talep için alım kaydı açılamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PUR-008 — Talebin alanları
 
@@ -88,7 +88,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 - Açıklama: Talepte talep eden, ilgili birim/şantiye/ekipman, ihtiyaç açıklaması, miktar, aciliyet ve istenen tarih bulunur.
 - Kabul kriterleri:
   - [ ] Aciliyet ve istenen tarih, talebin onay kuyruğundaki sırasını etkiler.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PUR-009 — Teklifler yan yana
 
@@ -97,7 +97,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 - Açıklama: Fiyat araştırmasında birden fazla tedarikçi teklifi (fiyat, termin, koşul, belge) yan yana görülür.
 - Kabul kriterleri:
   - [ ] Seçilmeyen teklifler de talebin geçmişinde saklanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PUR-010 — Onay tutar eşiğine göre
 
@@ -106,7 +106,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 - Açıklama: Talebin onayı tutar eşiğine göre ilgili yöneticiye gider; eşikler ve onaylayıcılar iş akışında tanımlıdır.
 - Kabul kriterleri:
   - [ ] Eşik değiştiğinde yeni talepler yeni eşikle değerlendirilir; açık talepler başladıkları sürümle sürer (REQ-WFL-024).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PUR-011 — Teslim alınan kalem bağlanır
 
@@ -115,7 +115,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 - Açıklama: Teslim alınan kalem gerekiyorsa demirbaş kaydına (REQ-EQP) veya ilgili maliyet merkezine (şantiye, fabrika, ekipman, ofis) bağlanır.
 - Kabul kriterleri:
   - [ ] Maliyet merkezi seçilmeden teslim alma tamamlanmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 

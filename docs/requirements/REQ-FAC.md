@@ -1,6 +1,6 @@
 # REQ-FAC — Fabrika, Üretim Zincirleri ve Birim Maliyet
 
-Durum: DRAFT · 2026-09-18 · Modül: FAC (Factory)
+Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: FAC (Factory)
 
 Kaynaklar: Özellik Yapısı §17; kararlar D-145, D-146.
 
@@ -19,7 +19,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 - Açıklama: Fabrika panel döküm yeri değildir; çelik şerit, lug, kalıp/ekipman işleri ve diğer metal imalatların üretim ve maliyet merkezidir.
 - Kabul kriterleri:
   - [ ] Fabrika kaydında panel dökümü girişi yoktur.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FAC-002 — Fabrika ana görünümü
 
@@ -28,7 +28,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 - Açıklama: Fabrika ekranında bugün işlenen/delinen çelik şerit, tip ve boy dağılımı, üretilen lug, fire oranı, birim işleme maliyeti, adam-gün veya saat verimi, hammadde, işlemde, galvanizde ve sevke hazır miktarlar, günlük/aylık fabrika gideri, makine durumları, bekleyen bakım, dış iş ve yan gelirler görünür. Maliyet ve gider ticari veridir.
 - Kabul kriterleri:
   - [ ] Ticari yetkisi olmayan kullanıcı birim maliyet ve gider alanlarını görmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Fabrika günlük kaydı
 
@@ -39,7 +39,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 - Açıklama: Fabrika sorumlusu günlük olarak şunları girer: hangi şerit tipinden kaç adet/metre işlendiği, başlangıç/bitiş saatleri, lug üretim miktarı, haddeci mal girişi, galvanize çıkış, galvaniz dönüşü, şantiyeye sevk, fire, fabrika personel puantajı, makine arızası/bakımı, fabrika harcaması, yapılan tamir/tadilat/kalıp işi. Her iş için harcanan işçilik saati girilir (REQ-FAC-009 bunu kullanır).
 - Kabul kriterleri:
   - [ ] İşçilik saati girilmemiş üretim satırı eksik sayılır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FAC-004 — Fabrika kaydı onaya gider
 
@@ -48,7 +48,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 - Açıklama: Fabrika günlük kaydı, şantiye günlük kaydıyla aynı kurallarla onaya gider: tek eylemle gönderme, karar öncesi geri çekme, düzeltmeye geri gönderme ve gerekçe, geç giriş işareti, onaylı kaydın kilitlenmesi.
 - Kabul kriterleri:
   - [ ] Fabrika kaydı için onay adımı kapatılamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FAC-005 — Onaylanmadan hiçbir modüle yansımaz
 
@@ -57,7 +57,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 - Açıklama: Stok hareketleri, fire ve maliyet, fabrika kaydı onaylandığında işlenir; onay öncesi hiçbir modüle yansımaz.
 - Kabul kriterleri:
   - [ ] Onay bekleyen fabrika kaydının hareketleri stok bakiyesinde görünmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Üretim zincirleri
 
@@ -68,7 +68,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 - Açıklama: Çelik şerit uçtan uca izlenir: haddeci teklifi/siparişi → fabrikaya giriş → delme/işleme → galvanize çıkış → galvaniz dönüşü → şantiyeye sevk → sahada kullanım.
 - Kabul kriterleri:
   - [ ] Bir şerit partisinin zincirin hangi adımında olduğu ve her adımdaki miktarı görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FAC-007 — Lug zinciri
 
@@ -77,7 +77,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 - Açıklama: Lug uçtan uca izlenir: düz lama siparişi → fabrikaya giriş → kesme → delme → bükme → galvanize çıkış → galvaniz dönüşü → fabrika/şantiye sevki → kullanım.
 - Kabul kriterleri:
   - [ ] Her adımdaki fire ayrı görünür (REQ-INV-004).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## D. Maliyet
 
@@ -88,7 +88,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 - Açıklama: Fabrika maliyetinde işçilik, SGK, yemek, kira, elektrik, sarf malzeme, makine amortismanı, tamir/bakım ve nakliye dikkate alınır.
 - Kabul kriterleri:
   - [ ] Her gider kalemi aya ve fabrika maliyet merkezine bağlıdır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-FAC-009 — Birim maliyet: gider işçilik saatine göre dağıtılır
 
@@ -98,7 +98,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 - Kabul kriterleri:
   - [ ] Birim maliyet hesabının dökümü (gider, saat payı, üretim miktarı) görüntülenebilir.
   - [ ] Ay kapanınca geçici maliyetle yapılmış tüketimlerin fark düzeltmesi ayrı hareketle yazılır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## E. Teknik iyileştirme
 
@@ -109,7 +109,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 - Açıklama: Fabrikada yapılan kalıp tamiri/üretimi, makine-ekipman geliştirme, özel aparat imalatı, maliyet azaltıcı çözüm, yeni ürün/tasarım denemesi, kaynak/kesim/tadilat gibi işler kayıt altına alınır; harcanan saat ve malzeme bu işe yazılır.
 - Kabul kriterleri:
   - [ ] Teknik iyileştirme işine harcanan saat, birim maliyet dağıtımında ayrı bir iş olarak yer alır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 
