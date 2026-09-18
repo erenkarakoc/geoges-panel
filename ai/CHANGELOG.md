@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-18 — Every requirement says which layer it is in
+
+- The owner asked why the module questions were not workflow design. The answer is the three layers of D-077: records and calculations are fixed, processes are workflows, catalog values are settings. To make that visible, all 328 requirements now carry a layer line; 101 have a configurable part, named in its own line ("Akışla ayarlanan", "Tanımla ayarlanan"), so the owner can read what is in their hands without guessing.
+- Three descriptions that read like fixed behaviour were reworded as default workflows (REQ-TSK-006, REQ-CRM-007, REQ-CMP-013); the meaning is unchanged. REQ-CMP-013 now publishes `notice_letter.create_draft`, so a workflow can produce the notice letter.
+- The records validator refuses a requirement without a layer, or with a configurable layer that does not say what is configurable (D-181, PROJECT_RULES §21.1 item 12).
+
+
 ## 2026-09-18 — CMP requirements
 
 - Four contract decisions (D-177…D-180). Contracts cover clients, subcontractors and — beyond the recommendation — long-term supplier agreements, all as trackable terms rather than PDFs. An extension of time runs from request to the client's decision and only then moves the end date and the penalty; a late client obligation produces a draft notice letter that someone decides to send; a guarantee letter's bank commission is charged to its project.

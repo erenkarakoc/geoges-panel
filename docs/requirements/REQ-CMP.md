@@ -16,6 +16,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: §24; D-177
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: İşveren sözleşmeleri, taşeron sözleşmeleri ve uzun süreli tedarikçi anlaşmaları tutulur. Sözleşme yalnızca PDF olarak saklanmaz; önemli şartları izlenebilir kayıtlara dönüşür. Sözleşme bir firmaya (D-027) ve işveren/taşeron sözleşmesinde bir projeye bağlıdır.
 - Kabul kriterleri:
   - [ ] Her sözleşmede imzalı belge, taraflar, tarih ve durum bulunur.
@@ -26,6 +27,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: §24.1; D-029
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: İş kapsamı, teslim tarihi, iş süresi, ödeme koşulları ve vadesi (REQ-FIN-022), hakediş şartları, teminat türü ve oranı, teminat iadesi için gereken evraklar, gecikme cezası ve günlük cezai tutar, işveren avansı ve kesinti oranı (REQ-FIN-007), İSG yükümlülükleri, işveren ve GEOGES yükümlülükleri, gerekli belge ve gönderim tarihleri tanımlanır.
 - Kabul kriterleri:
   - [ ] Hakediş, nakit projeksiyonu ve ceza hesabı bu şartları sözleşmeden okur; aynı şart ikinci yerde girilmez.
@@ -35,6 +37,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: D-030, D-177; REQ-FIN-009
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Taşeron sözleşmesinde ödeme yöntemi (birim fiyat, götürü, gündelik), birim fiyatlar, kesintiler, iş kapsamı, süre ve tarafların yükümlülükleri tutulur. Taşeron hakedişi fiyatını bu sözleşmeden alır.
 - Kabul kriterleri:
   - [ ] Geçerli taşeron sözleşmesi olmayan ekip için taşeron hakedişi hazırlanamaz.
@@ -44,6 +47,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: D-177; REQ-PUR-003
 - Öncelik: Should · Kademe: T2
+- Katman: Sabit
 - Açıklama: Uzun süreli tedarikçi anlaşmasında malzeme, çerçeve fiyat, para birimi, teslim şartları ve geçerlilik süresi tutulur; yükümlülükleri diğer sözleşmeler gibi izlenir. O tedarikçiye sipariş açılırken çerçeve fiyat öneri olarak gelir; siparişteki fiyat farklıysa fark görünür (D-177'den türetilen kural, bu dosyanın onayıyla kesinleşir).
 - Kabul kriterleri:
   - [ ] Süresi biten anlaşmanın fiyatı öneri olarak gelmez; bitişten önce sorumlusuna uyarı düşer.
@@ -53,6 +57,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: §24.1; D-136 (aynı mantık)
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Sözleşmede değişiklik (zeyilname) olursa geçerlilik tarihli yeni sürüm açılır; önceki sürüm ve şartları silinmez. Her hesap, işlemin tarihinde geçerli sürümü kullanır (D-177 kapsamında türetilen kural, bu dosyanın onayıyla kesinleşir).
 - Kabul kriterleri:
   - [ ] Sürümler arasındaki şart farkları yan yana görülebilir.
@@ -64,6 +69,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: §24.2
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: uyarının ne kadar önce, kime gideceği ve eskalasyon zinciri
 - Açıklama: Her yükümlülükte ne yapılacağı, sorumlu taraf (GEOGES, işveren, taşeron veya tedarikçi), sorumlu kişi veya rol, son tarih, durum, ceza riski ve ilgili belge görünür. Süre yaklaşınca uyarı, geçince gecikme ve gerekirse kritik eskalasyon oluşur (REQ-TSK-006).
 - Kabul kriterleri:
   - [ ] Gecikmiş yükümlülük, sebebi çözülene kadar "Dikkat" bölümünde kalır (REQ-RPT-008).
@@ -73,6 +80,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: §24.5; REQ-SIT-024
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: İşverenin yükümlülükleri de izlenir: saha teslimi, dolgu, beton, demir, elektrik/su, ödeme ve diğer sözleşmesel yükümlülükler. Yerine getirilme zamanı teslim-tesellüm kayıtlarından ve tahsilattan gelir.
 - Kabul kriterleri:
   - [ ] İşveren yükümlülüğü gecikince işveren karnesine yansır (REQ-CRM-009).
@@ -82,6 +90,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: §24.3; REQ-WFL-007, REQ-WFL-028
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: listelenen tetikleyicilerin tamamı; her biri varsayılan akıştır. Sözleşmedeki tarihli yükümlülüklerin kayda dönüşmesi sabittir
 - Açıklama: Bir olayla doğan işler iş akışıyla kurulur. Varsayılan şirket akışları arasında: hakediş onaylandı → fatura görevi; ay sonu → bordro hazırlama/gönderme görevi; personel ayrılıyor → çıkış kontrol listesi; sertifika süresi yaklaşıyor → yenileme görevi; iş başlangıcı → teminat, SGK ve yer teslim yükümlülükleri.
 - Kabul kriterleri:
   - [ ] Sözleşme kaydedilince içindeki tarihli yükümlülükler kendiliğinden yükümlülük kaydına dönüşür.
@@ -91,6 +101,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: §24.4; REQ-WFL-029, REQ-WFL-030
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: hangi kilitlerin hangi geçişlerde kurulduğu; kilidin nedeninin gösterilmesi sabittir
 - Açıklama: Belirli işlerin sırası zorunlu tutulur: imzalı bordro tamamlanmadan maaş ödemesi (REQ-HR-012), hakediş onayı olmadan fatura, çıkış ve teminat evrakları tamamlanmadan personel çıkışının kapanması (REQ-HR-015). Kullanıcı işlemin neden kilitli olduğunu ve kilidi neyin açacağını açıkça görür.
 - Kabul kriterleri:
   - [ ] Kilitli işlemde eksik koşullar bağlantılarıyla listelenir.
@@ -102,6 +114,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: §24.1, §24.2
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: ceza riski uyarısının kime gideceği
 - Açıklama: Sözleşme bitiş tarihi ile beklenen bitiş (REQ-PRJ teorik süre) karşılaştırılır; aşılacak gün sayısı günlük cezai tutarla çarpılarak ceza riski gösterilir. Ceza riski ticari veridir.
 - Kabul kriterleri:
   - [ ] Ceza riski oluştuğunda proje sorumlusuna ve yönetime uyarı gider; risk tutarı değiştikçe güncellenir.
@@ -111,6 +125,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: D-178
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Süre uzatımı talebi gerekçesi ve gecikme dosyasıyla (REQ-CMP-012) kaydedilir. İşverenin kararı belgesiyle girilince sözleşme bitiş tarihi ve ceza hesabı yeni tarihe göre güncellenir; önceki tarihler geçmişte kalır.
 - Kabul kriterleri:
   - [ ] Karar girilmeden bitiş tarihi değişmez.
@@ -123,6 +138,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: §24.6; REQ-SIT-025; D-124
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Teslim-tesellüm saatleri ve sözleşme yükümlülükleri birleştirilerek gecikme dosyası hazırlanır: hangi tarihte ne beklendi, işveren ne zaman yerine getirdi, kaç saat/gün gecikme oldu, hangi kayıt, fotoğraf ve belge bunu destekliyor, tahmini maliyet etkisi. Dosya PDF olarak dışa aktarılır. Kanıt kendi kayıtlarımıza dayanır; işverenden imza alınmaz (D-124).
 - Kabul kriterleri:
   - [ ] Dosyadaki her gecikme satırı, kaynağı olan kayda bağlantı taşır.
@@ -132,7 +148,9 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: D-179
 - Öncelik: Must · Kademe: T2
-- Açıklama: İşveren yükümlülüğü gecikince uyarı ve görevin yanında, gecikmeyi kayıtlarla belgeleyen resmi bildirim yazısı taslağı (PDF) üretilir. Gönderilip gönderilmeyeceğine yetkili karar verir; gönderildiyse tarihi, yolu ve belgesi kaydedilir.
+- Katman: Sabit + Akış
+- Akışla ayarlanan: yazı taslağının ne zaman üretileceği ve kararın kime görev olarak düşeceği (varsayılan akış: işveren yükümlülüğü gecikmesi)
+- Açıklama: Panel, bir işveren gecikmesini kayıtlarla belgeleyen resmi bildirim yazısı taslağı (PDF) üretebilir; bu yetenek akışlara `notice_letter.create_draft` aksiyonuyla açıktır. Varsayılan akış, işveren yükümlülüğü gecikince taslağı üretir ve karar için yetkiliye görev açar. Gönderilip gönderilmeyeceğine yetkili karar verir; gönderildiyse tarihi, yolu ve belgesi kaydedilir.
 - Kabul kriterleri:
   - [ ] Gönderilen yazı gecikme dosyasına ve yükümlülüğe bağlanır.
   - [ ] Yazı şablonları yetkili kullanıcı tarafından güncellenebilir.
@@ -144,6 +162,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: §24.7; D-029
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: uzatma uyarısının ne kadar önce ve kime gideceği
 - Açıklama: Teminat mektubu (banka, tutar, para birimi, süre, iade), hakedişten teminat kesintisi (REQ-FIN-006) ve nakit teminat izlenir. İade için gereken evraklar listelenir; iş bitince iade süreci ve alacak görünür.
 - Kabul kriterleri:
   - [ ] Süresi bitecek teminat mektubu için uzatma uyarısı düşer.
@@ -154,6 +174,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: D-180
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Teminat mektubunun banka komisyonu, mektubun alındığı projenin gideridir ve mektup süresi boyunca dönem dönem yazılır.
 - Kabul kriterleri:
   - [ ] Mektup iade edilince komisyon yazımı durur.
@@ -163,6 +184,9 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: §31, §24.7; REQ-EQP-015, REQ-HR-003
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış + Tanım
+- Akışla ayarlanan: uyarı ve görevin kime düşeceği
+- Tanımla ayarlanan: belge türleri ve ne kadar önce uyarılacağı
 - Açıklama: Şirket ve şantiye resmi belgeleri, kurum evrakları ve kalite sertifikaları bitiş tarihleriyle tutulur. Ekipman kontrolleri ve personel belgeleriyle birlikte tüm süreli belgeler tek listede, yaklaşan ve geçen olarak görünür. Yaklaşan son tarih önceden görev ve uyarıya dönüşür.
 - Kabul kriterleri:
   - [ ] Liste belge türü, sahip (şirket, şantiye, ekipman, personel) ve kalan güne göre süzülür.
@@ -172,6 +196,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 - Kaynak: §24.7
 - Öncelik: Should · Kademe: T2
+- Katman: Sabit
 - Açıklama: Uyuşmazlık ve hak talebi dosyaları proje veya şirket bazında tutulur: konu, taraf, tarih, tutar, durum, ilgili gecikme dosyaları, yazışmalar ve belgeler.
 - Kabul kriterleri:
   - [ ] Uyuşmazlık işveren karnesine yansır (REQ-CRM-009).
@@ -202,6 +227,7 @@ Biçim: `docs/requirements/README.md`.
 | Kod | Ad | Girdi | Gereken yetki | İki kez çalışırsa | Yarıda kalırsa |
 |---|---|---|---|---|---|
 | `obligation.create` | Yükümlülük oluştur | sözleşme, ne yapılacak, sorumlu, son tarih | akışın sistem yetkisi | Aynı sözleşme, konu ve tarih için açık yükümlülük varsa onu döndürür | Yükümlülük açılmamış sayılır |
+| `notice_letter.create_draft` | Bildirim yazısı taslağı üret | proje, yükümlülük | akışın sistem yetkisi | Aynı yükümlülük için gönderilmemiş taslak varsa onu döndürür | Taslak üretilmemiş sayılır |
 
 ### Koşul alanları
 

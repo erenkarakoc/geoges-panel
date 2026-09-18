@@ -23,6 +23,9 @@ Modül başına bir dosya: `REQ-<MODUL>.md` (ör. `REQ-SIT.md`). Modül kodları
 - Modül: SIT
 - Öncelik: Must / Should / Could
 - Kademe: T1 / T2 / T3
+- Katman: Sabit / Akış / Tanım (birden fazlaysa " + " ile)
+- Akışla ayarlanan: ... (yalnızca katmanda Akış varsa)
+- Tanımla ayarlanan: ... (yalnızca katmanda Tanım varsa)
 - Açıklama: ...
 - İş kuralları: ...
 - Kabul kriterleri:
@@ -30,6 +33,16 @@ Modül başına bir dosya: `REQ-<MODUL>.md` (ör. `REQ-SIT.md`). Modül kodları
 - Bağlı: FEAT-..., TASK-...
 - Durum: DRAFT / CONFIRMED / DEFERRED (DEF-...) / SUPERSEDED
 ```
+
+### Katman (D-077, D-181)
+
+Her gereksinim hangi katmanda olduğunu söyler; böylece sahip neyin kendi elinde olduğunu okur:
+
+- **Sabit:** kayıtlar, alanlar ve hesaplar. Kodda sabittir; değişmesi kod değişikliği ister (ör. "tahsilat cari bakiyeyi azaltır").
+- **Akış:** kim onaylar, kaç kademe, eşik, ne zaman görev ve hatırlatma düşer, kime bildirim gider, ne kilitlenir. Panel bunları **varsayılan akış** olarak getirir; akış tasarımcısında kod yazmadan değişir.
+- **Tanım:** katalog değerleri, oranlar, süreler, şablonlar. "Tanımlar" ekranından ayarlanır.
+
+Katmanında Akış veya Tanım olan gereksinim, değiştirilebilen kısmı "Akışla ayarlanan" ve "Tanımla ayarlanan" satırlarında adıyla yazar. Bir süreç adımı gereksinimin açıklamasına sabit bir davranış gibi yazılmaz; varsayılan akış olarak adlandırılır ve modülün kataloğu o akışın ihtiyaç duyduğu olayı ve aksiyonu yayımlar. Kayıt denetimi (`npm run records`) katman satırı olmayan veya ayarlanan kısmı yazılmamış gereksinimi reddeder.
 
 Her gereksinim tek bir doğrulanabilir davranış anlatır. Kararsız noktalar gereksinime gömülmez, `ai/OPEN_QUESTIONS.md`'ye yazılır.
 

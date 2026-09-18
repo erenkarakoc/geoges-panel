@@ -16,6 +16,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §16.1
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: İşveren hakedişinde proje, dönem (ay), onaylı imalat miktarları, birim fiyatlar, brüt tutar, kesintiler, net tutar, para birimi ve hakediş belgesi tutulur. Hakedişi yetkili ticari, muhasebe veya koordinasyon rolü yönetir; günlük saha kaydından ayrı bir süreçtir. Tutarlar ticari veridir.
 - Kabul kriterleri:
   - [ ] Dövizli hakedişte tutar, TL karşılığıyla birlikte saklanır (REQ-ADM-013).
@@ -26,6 +27,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §16.1
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Dönemin onaylı saha üretimi, hakedişe miktar önerisi olarak kendiliğinden gelir. Yetkili kişi bir miktarı düzeltebilir; düzeltme gerekçe ister ve öneriyle yan yana görünür.
 - Kabul kriterleri:
   - [ ] Gerekçesiz miktar düzeltmesi kaydedilmez.
@@ -36,6 +38,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: D-147
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: İşveren sunulan miktardan azını onaylarsa aradaki fark kaybolmaz; bir sonraki hakedişte yeniden önerilir. Kaç aydır bekleyen devreden miktar olduğu görünür.
 - Kabul kriterleri:
   - [ ] Devreden miktar, bir sonraki hakediş önerisinde ayrı satır olarak ve ilk sunulduğu ayla birlikte görünür.
@@ -46,6 +49,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §16.2
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Hakediş şu durumlardan geçer: Hazırlandı → İşverene sunuldu → İşveren onayladı → Faturalandı → Tahsil edildi.
 - Kabul kriterleri:
   - [ ] Her durum geçişi tarihi ve yapanla hakedişin geçmişine yazılır.
@@ -56,6 +60,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §16.2
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Bir hakediş birden fazla tahsilatla kapanabilir; kalan açık alacak görünür. Hakediş, net tutarın tamamı tahsil edilince "Tahsil edildi" olur.
 - Kabul kriterleri:
   - [ ] Her tahsilat tarih, tutar, para birimi ve dekontla girilir ve işveren carisini azaltır (REQ-FIN-019).
@@ -65,6 +70,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §16.1; D-029, D-150
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Brüt tutardan teminat kesintisi, stopaj, işveren avansı kesintisi ve diğer kesintiler düşülerek net tutar bulunur. "İşveren karşılar ve GEOGES hakedişinden keser" olarak işaretlenmiş kalemler (REQ-PRJ) de kesinti olarak gelir. Oranlar projenin sözleşmesinden alınır.
 - Kabul kriterleri:
   - [ ] Teminat kesintisi, iş sonunda iade edilecek alacak olarak ayrı izlenir; toplam kesilen teminat projede görünür.
@@ -75,6 +81,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: D-150
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: İşverenden iş başında alınan avans kaydedilir ve sözleşmedeki oranla her hakedişten kesilerek kapanır. Kalan avans borcu projede görünür.
 - Kabul kriterleri:
   - [ ] Kesilen avans toplamı alınan avansı aşamaz.
@@ -85,6 +92,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §16.3
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış
+- Akışla ayarlanan: fatura görevinin kime düşeceği ve yönetim onayı gerekip gerekmediği (varsayılan akış: hakediş → fatura)
 - Açıklama: İşveren hakedişi onayladığında muhasebe birimine fatura görevi düşer. Faturanın kesilmesi için ayrıca yönetim onayı gerekip gerekmediği iş akışında tanımlanır.
 - Kabul kriterleri:
   - [ ] Fatura görevi, hakedişe bağlıdır; hakediş "Faturalandı" olunca görev kapanır.
@@ -96,6 +105,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §16.4; D-030, D-148
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: taşeron hakedişinin onay adımları
 - Açıklama: Taşeron hakedişi, işverenin onayını beklemeden, mühendisimizin onayladığı günlük kayıtlardaki üretimden hesaplanır. Ödeme yöntemi taşeron sözleşmesine göredir: birim fiyat (onaylı miktar × birim fiyat), götürü veya gündelik (D-030).
 - Kabul kriterleri:
   - [ ] İşveren bir miktarı kısarsa taşeron hakedişi kendiliğinden değişmez; fark projenin sonucunda görünür.
@@ -106,6 +117,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §16.4
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: İşveren ve taşeron hakedişleri aynı onaylı üretim verisinden hesaplanır; miktarlar ayrı ayrı girilmez.
 - Kabul kriterleri:
   - [ ] Bir dönem için işveren ve taşeron hakedişlerinin miktarları yan yana karşılaştırılabilir.
@@ -117,6 +129,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.2
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Gelir kaynakları hakediş tahsilatları, yan gelirler, hurda, dış nakliye, dış imalat, kiralama ve diğer gelirlerdir. Her gelirde tutar, para birimi, tarih, ilgili proje veya birim, faturalı/nakit bilgisi ve belge tutulur.
 - Kabul kriterleri:
   - [ ] Her gelir bir maliyet merkezine (proje, şantiye, fabrika, ekipman, genel) bağlıdır.
@@ -126,6 +139,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §20.2
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Hurda satışı, dış nakliye, dış kaynak/imalat, kaynak/kesim, ekipman ve kalıp kiralama, araçla dış hizmet ve diğer dış işler ortak yan gelir alanına girilir: iş türü, müşteri, miktar, birim fiyat, toplam, tarih, faturalı/nakit, ilgili araç/birim/personel ve belge.
 - Kabul kriterleri:
   - [ ] Nakit tahsil edilen yan gelir de kayda girilir ve resmi muhasebe mutabakatına dahildir (REQ-FIN-026).
@@ -136,6 +150,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.3, §15.1
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Taşeron hakedişi, malzeme tüketimi, ekipman amortismanı, bordro, saha harcaması, fabrika maliyeti ve bakım gibi giderler kaynak modülde onaylandığında finansa kendiliğinden gider olarak yazılır.
 - Kabul kriterleri:
   - [ ] Kendiliğinden gelen her gider, kaynak kaydına bağlantı taşır.
@@ -146,6 +161,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.3
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Ofis gideri, kira, seyahat, yemek, konaklama, avans ve diğer genel giderler elle, belgeyle girilir. Her gider bir maliyet merkezine bağlanır; hiçbir projeye ait olmayan gider "genel" merkeze yazılır.
 - Kabul kriterleri:
   - [ ] Maliyet merkezi seçilmeden gider kaydedilmez.
@@ -155,6 +171,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §9.4; REQ-SIT (saha harcaması)
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: saha harcamasının onay adımları ve eşikleri
 - Açıklama: Şantiyede girilen harcama, iş akışında tanımlı onaydan geçince şantiyenin gideri olarak yazılır.
 - Kabul kriterleri:
   - [ ] Onay bekleyen harcama gider toplamlarında görünmez; ayrı "onay bekleyen" olarak görünür.
@@ -164,6 +182,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.3; D-152
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Aynı harcama iki yoldan gelebilir (ör. önce şantiye fişi, sonra tedarikçi faturası). İlk giren kayıt gideri yazar; sonra gelen kayıt ona bağlanır ve tekrar gider yazmaz. Tutarlar farklıysa fark ayrı görünür.
 - Kabul kriterleri:
   - [ ] Aynı tedarikçi, yakın tarih ve benzer tutarla gelen kayıt, olası tekrar olarak işaretlenir ve bağlama önerilir.
@@ -176,6 +195,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.4, §15.1; D-149
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Proje kâr-zararı = gelir − (işçilik veya taşeron hakedişi + malzeme + yemek/konaklama + ekipman/amortisman + nakliye + operatör/vinç + saha harcaması + projeye doğrudan yazılmış diğer giderler). "Kim neyi karşılıyor" matrisi (REQ-PRJ) hangi kalemin gider olduğunu belirler. Ofis kirası ve genel müdürlük gibi genel giderler projelere **dağıtılmaz**; yalnızca şirket genelinde görünür (D-149).
 - Kabul kriterleri:
   - [ ] Kâr-zarar günlük, aylık ve kümülatif izlenebilir.
@@ -189,6 +209,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.6; D-027, D-033, D-034
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Her firmanın her para birimi için tek net yürüyen bakiyesi vardır; aynı firma hem işveren hem tedarikçiyse alacak ve borç netleşir. Her bakiye güncel TL karşılığıyla gösterilir (D-140).
 - Kabul kriterleri:
   - [ ] Kur farkı, bakiyeden ayrı hesaplanır ve gösterilir.
@@ -198,6 +219,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.6
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: İşveren tarafında hakedişler alacağı artırır, tahsilatlar azaltır. Tedarikçi tarafında sipariş ve gider borcu artırır, ödeme azaltır. Taşeron hakedişi taşeron carisine borç yazar.
 - Kabul kriterleri:
   - [ ] Cari kartında tarihli hareket dökümü, açıklama, artış/azalış, yürüyen bakiye, para birimi ve TL karşılığı görünür.
@@ -210,6 +232,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22, §22.1
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Finans ekranı şu sorulara cevap verir: param nerede, kim bana ne kadar borçlu, ben kime ne kadar borçluyum, hangi proje kâr/zarar ediyor, bu ay ne kadar gelir/gider var, önümüzdeki haftalarda nakit yeterli mi. Öne çıkan göstergeler: nakit pozisyonu, açık hakediş/alacak, bu ay gelir, bu ay gider, şirket geneli kâr-zarar, toplam alacak, toplam borç, yakın nakit açığı.
 - Kabul kriterleri:
   - [ ] Her gösterge, dökümüne inilerek açılabilir.
@@ -220,6 +243,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.7
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: projeksiyon süresi (varsayılan 8 hafta)
 - Açıklama: Önümüzdeki haftalar (varsayılan 8 hafta; süre ayarlanabilir) için her hafta giriş, çıkış, net ve kümülatif nakit gösterilir. Girişler: beklenen hakediş tahsilatları, planlı diğer gelirler. Çıkışlar: bordro, açık siparişler, tedarikçi ödemeleri, kira ve sabit giderler, yaklaşan sözleşme/yasal ödemeler, planlı nakit kalemleri.
 - Kabul kriterleri:
   - [ ] Planlı nakit kalemi (tek seferlik veya tekrarlayan) elle eklenebilir.
@@ -230,6 +255,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: D-151
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Bir hakedişin beklenen tahsil tarihi, sözleşmede belirtilen başlangıca (işveren onayı veya fatura tarihi) sözleşmedeki ödeme vadesi eklenerek hesaplanır. Yetkili kişi tarihi gerekçeyle değiştirebilir.
 - Kabul kriterleri:
   - [ ] Değiştirilen tarih, hesaplanan tarihle birlikte ve gerekçesiyle görünür.
@@ -240,6 +266,9 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.7
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış + Tanım
+- Akışla ayarlanan: uyarının kime gideceği
+- Tanımla ayarlanan: nakit eşiği
 - Açıklama: Kümülatif nakdin eşiğin altına düştüğü hafta önceden uyarılır; yönetim açığı hangi kalemlerin yarattığını görür. Eşik merkezi kuraldır (REQ-WFL-032).
 - Kabul kriterleri:
   - [ ] Uyarı, açığın beklendiği haftayı ve en büyük çıkış kalemlerini gösterir.
@@ -251,6 +280,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.8
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Muhasebe birimi fatura, irsaliye, ödeme listesi, cari, avans, dekont, ödeme durumu ve diğer muhasebe evrakını panelden takip eder. Gelen fatura ilgili siparişe, teslim alıma veya gidere bağlanır.
 - Kabul kriterleri:
   - [ ] Faturası gelmemiş teslim alımlar ve bağlanmamış faturalar listelenebilir.
@@ -260,6 +290,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.8
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: ödeme onayının adımları ve tutar eşikleri (varsayılan akış: ödeme onayı)
 - Açıklama: Bir ödeme, yönetimin iş akışında tanımladığı onay verilmeden "ödendi" olamaz. Ödeme dekontla kapanır ve ilgili cariyi azaltır.
 - Kabul kriterleri:
   - [ ] Onaysız ödeme için "ödendi" işlemi yoktur.
@@ -272,6 +304,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.9; D-153
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Panel resmi muhasebe programını taklit etmez; e-fatura, defter ve beyan muhasebeci/YMM tarafındadır. Panel her ay, muhasebecinin programının içeri alabildiği biçimde (ör. Excel) gelir, gider, fatura ve tahsilat/ödeme dosyası üretir. İki taraf karşılaştırıldıktan sonra sonuç panelde işaretlenir.
 - Kabul kriterleri:
   - [ ] Dışa aktarılan her kayıt, hangi dosyayla ve ne zaman aktarıldığını taşır.
@@ -284,6 +317,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.10; D-154
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Dönem kapanışı kapanış birimi bazındadır: her şantiye kendi ayını hazır olunca kapatır. Fabrika ve genel (ofis) de kendi kapanış birimidir (D-154'ten türetilen kural, sahip onayladı). Şirket geneli ay, son birim de kapanınca kesinleşir.
 - Kabul kriterleri:
   - [ ] Hangi birimin hangi ayı kapattığı ve hangilerinin beklediği tek listede görünür.
@@ -293,6 +327,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.10; REQ-AUD-010
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: hangi kalem türlerinin engelleyici, hangilerinin uyarı olduğu
 - Açıklama: Kapanıştan önce o birimin o aya ait açık işleri listelenir: onay bekleyen saha ve fabrika günlük kayıtları, onay bekleyen stok sayımları, sonuçlanmamış revizyon talepleri, hazırlanmamış hakediş veya bordro, eksik belge. Engelleyici kalem varsa dönem kapatılamaz ve neyin eksik olduğu gösterilir.
 - Kabul kriterleri:
   - [ ] Engelleyici kalemi olan birimde "kapat" işlemi çalışmaz ve kalemler bağlantılarıyla listelenir.
@@ -303,6 +339,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.10; D-141
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Kapanan birimin o ayki raporları "kesinleşmiş" işaretlenir. Kapalı döneme ait değişiklik yalnızca revizyon talebiyle (REQ-AUD) veya yetkili kişinin gerekçeyle dönemi yeniden açmasıyla yapılır. Kapanışla birlikte geçici birim maliyetler kesinleşir (REQ-FAC-009, REQ-INV-022).
 - Kabul kriterleri:
   - [ ] Kapalı döneme tarihli yeni kayıt doğrudan girilemez.
@@ -313,6 +350,9 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 - Kaynak: §22.10
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış + Tanım
+- Akışla ayarlanan: uyarı ve görevin kime düşeceği
+- Tanımla ayarlanan: son gün (varsayılan ayın 10'u)
 - Açıklama: Ayın belirli gününe kadar (varsayılan ayın 10'u; ayarlanabilir) kapatılmayan birim için sorumlusuna uyarı ve görev oluşur.
 - Kabul kriterleri:
   - [ ] Görev, birim kapanınca kendiliğinden kapanır.

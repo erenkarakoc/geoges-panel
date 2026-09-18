@@ -16,6 +16,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 - Kaynak: §5, §5.1
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: talep kaynakları
 - Açıklama: Şirkete ulaşan her temas kaydedilir. Kaynaklar: şirket bilgi e-postası, telefon, WhatsApp, personelin kendi bulduğu iş, kurum/ana firma görüşmesi, mevcut müşteri takip görüşmesi. Kaynak listesi tanımlardan genişletilebilir.
 - Kabul kriterleri:
   - [ ] Her talepte kaynak, kayıt tarihi ve kaydı açan kişi bulunur.
@@ -25,6 +27,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 - Kaynak: §5.1; D-170
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: dönüş görevinin açılması ve hatırlatması
 - Açıklama: Telefon ve WhatsApp temasları için telefondan da kullanılabilen hızlı kayıt ekranı vardır: kim aradı, hangi firma, ne istedi, kim ilgilenecek, ne zamana kadar dönüş yapılacak. Sonradan dönüşün yapılıp yapılmadığı ve sonuç eklenir. Ses kaydı tutulmaz. WhatsApp'a bağlantı kurulmaz; gerekirse ekran görüntüsü eklenir (D-170).
 - Kabul kriterleri:
   - [ ] Hızlı kayıt, ilgilenecek kişi ve dönüş tarihi seçilmeden kaydedilmez.
@@ -35,6 +39,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 - Kaynak: §5.1; D-169
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Bilgi e-postasına gelen teklif talebi, personel tarafından hızlı kayıt ekranından talep olarak açılır; e-posta ekleriyle birlikte kayda yüklenir. Panel e-posta kutusunu okumaz.
 - Kabul kriterleri:
   - [ ] Yüklenen e-postanın gönderen, tarih ve konu bilgisi talepte görünür.
@@ -44,6 +49,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 - Kaynak: §5.3; D-027
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Talep mevcut firma kaydına bağlanır; firma kayıtlı değilse yeni firma kaydı açılır. Aynı firma için ikinci kayıt açılmaz.
 - Kabul kriterleri:
   - [ ] Yeni firma adı girilirken benzer adlı mevcut firmalar önerilir.
@@ -53,6 +59,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 - Kaynak: §5.1
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Talebe bağlı olmayan görüşmeler de (kurum, ana firma, mevcut müşteri takibi) firmanın iletişim günlüğüne tarih, kişi, konu ve sonuçla yazılır.
 - Kabul kriterleri:
   - [ ] Firma kartında talepler ve görüşmeler tek zaman çizelgesinde görünür.
@@ -62,6 +69,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 - Kaynak: §5
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: talep aşamaları ve kayıp nedenleri
 - Açıklama: Talep şu aşamalardan geçer: Yeni → İnceleniyor → Teklif hazırlanıyor → Teklif verildi → Kazanıldı veya Kaybedildi. Aşamalar katalogdur ve ayarlanabilir.
 - Kabul kriterleri:
   - [ ] "Kaybedildi" kayıp nedeni seçilmeden işaretlenemez; nedenler katalogdur.
@@ -74,7 +83,9 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 - Kaynak: §5.2; REQ-TSK-006
 - Öncelik: Must · Kademe: T1
-- Açıklama: Dönüş tarihine kadar cevaplanmayan talep için ilgili kişiye hatırlatma gider; gecikme sürerse üst yönetime taşınır. Süreler merkezi kuraldır.
+- Katman: Akış
+- Akışla ayarlanan: hatırlatma zamanı, üst seviyeye taşıma zinciri ve süreleri (varsayılan akış: cevapsız talep)
+- Açıklama: Varsayılan "cevapsız talep" akışı: dönüş tarihine kadar cevaplanmayan talep için ilgili kişiye hatırlatma gider; gecikme sürerse üst yönetime taşınır. Süreler ve zincir akışta değiştirilir.
 - Kabul kriterleri:
   - [ ] Talep "İnceleniyor" veya sonraki bir aşamaya geçince hatırlatma durur.
 - Durum: CONFIRMED
@@ -83,6 +94,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 - Kaynak: §5.2; REQ-RPT-007
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Sahip "Bugün" ekranında cevapsız talepleri (ör. "2 gündür cevaplanmamış teklif talebi") görür; tıklayınca kime atandığını ve neden ilerlemediğini görür.
 - Kabul kriterleri:
   - [ ] Cevapsız talep, sebebi çözülene kadar "Dikkat" bölümünde kalır (REQ-RPT-008).
@@ -94,6 +106,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 - Kaynak: §5.3; D-171
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Her işverenin kartı zamanla karneye dönüşür. Kayıtlardan kendiliğinden hesaplananlar: geçmiş ve devam eden projeler, verilen teklifler, kazanılan/kaybedilen işler, ödeme ve tahsilat geçmişi, ortalama ödeme hızı, hakediş onay gecikmeleri, saha teslim/dolgu/beton/demir gecikmeleri, geçmiş işlerin gerçek kârlılığı, kesinti geçmişi. Ödeme ve kârlılık ticari veridir.
 - Kabul kriterleri:
   - [ ] Her gösterge, onu oluşturan kayıtlara açılabilir.
@@ -104,6 +117,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 - Kaynak: §5.3; D-171
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Yetkili kişi karneye tarihli ve gerekçeli not ekler (ör. sözleşme kaynaklı problem, uyuşmazlık). Not değiştirilmez; düzeltme yeni notla yapılır.
 - Kabul kriterleri:
   - [ ] Notta yazan kişi ve tarih görünür; not silinmez.
@@ -113,6 +127,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 - Kaynak: §5.3; REQ-QTE
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Aynı işverene teklif hazırlanırken karnenin özeti (ör. "geç ödüyor", "sahayı sık bekletiyor") teklif ekranında görünür, böylece ticari risk fiyat ve şartlara yansıtılabilir.
 - Kabul kriterleri:
   - [ ] Teklif ekranındaki özet, ticari yetkisi olmayan kullanıcıya ödeme ve kârlılık rakamlarını göstermez.
@@ -124,6 +139,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 - Kaynak: §5.4
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: uyarının ne kadar önce ve kime gideceği
 - Açıklama: İhale ve yeni iş fırsatları son tarihleriyle izlenir; son tarih yaklaşınca sorumlusuna ve yöneticisine uyarı gider.
 - Kabul kriterleri:
   - [ ] Son tarihi geçen ve teklif verilmemiş ihale "kaçırıldı" olarak işaretlenir.
@@ -133,6 +150,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 - Kaynak: §5.4; REQ-PRF
 - Öncelik: Should · Kademe: T2
+- Katman: Sabit
 - Açıklama: Kaçırılan ihale veya zamanında hazırlanmayan teklif, ilgili satış/teknik ofis kişisinin performans verisine geçer.
 - Kabul kriterleri:
   - [ ] Performansa geçen kayıt, kaçırılan ihaleye bağlantı taşır.
@@ -144,6 +162,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 - Kaynak: D-172; REQ-PRJ-003
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Uygulama işinde talep "Kazanıldı" işaretlenince talep ve kabul edilen teklifteki bilgilerle (işveren, kalemler, miktarlar, fiyatlar) taslak proje açılır; teknik ofis tamamlar. Proje "sözleşme" aşamasından başlar; önceki aşamalar (talep/fırsat, ön inceleme, teklif, görüşme/pazarlık) talebin geçmişinden gelir ve projenin geçmişinde görünür (D-172'den türetilen kural, sahip onayladı).
 - Kabul kriterleri:
   - [ ] Bir talepten yalnızca bir proje açılır; proje talebe ve teklife bağlantı taşır.

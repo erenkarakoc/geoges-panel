@@ -16,6 +16,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 - Kaynak: §7; D-138
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Bir proje tek şantiyeden oluşabilir veya birden fazla şantiyeye bölünebilir. Her şantiye tek bir projeye bağlıdır; aynı sahada iki ayrı sözleşme varsa iki ayrı şantiye kaydı açılır. Böylece maliyet, kâr-zarar ve hakediş her zaman tek projeye yazılır.
 - Kabul kriterleri:
   - [ ] Bir şantiye ikinci bir projeye bağlanamaz.
@@ -26,6 +27,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 - Kaynak: §7.1; REQ-IAM-011
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Proje kartında proje adı, işveren/ana firma, kurum/idare, şehir ve lokasyon, sözleşme bilgileri, sözleşme bedeli ve para birimi, başlangıç ve hedef bitiş tarihi, sözleşmedeki son bitiş tarihi, toplam hedef metraj, panel tipleri ve hedef adetleri, şerit tipleri ve hedef metrajları, diğer iş kalemleri, duvarlar ve duvar bazlı hedefler, sorumlu koordinatör, şantiyeler, iş modeli, teknik ofis durumu, kurum onay durumu, hakediş durumu, sözleşme yükümlülükleri ve proje dokümanları bulunur. Sözleşme bedeli ve hakediş tutarları ticari veridir.
 - Kabul kriterleri:
   - [ ] Ticari yetkisi olmayan kullanıcı sözleşme bedelini ve hakediş tutarlarını görmez.
@@ -35,6 +37,9 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 - Kaynak: §7.2; ADR-005
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış + Tanım
+- Akışla ayarlanan: aşama geçişlerinin onayı ve kilitleri
+- Tanımla ayarlanan: aşama kataloğu
 - Açıklama: Proje şu aşamalardan geçer: talep/fırsat, ön inceleme ve yaklaşık miktar, teklif, görüşme/pazarlık, sözleşme, teknik proje/statik hesap/kurum onayı, mobilizasyon ve saha kurulumu, uygulama/üretim, aylık hakedişler ve ara teslimler, tamamlama, kesin kabul/kapanış, teminat ve kapanış yükümlülüklerinin tamamlanması. Aşamalar bir katalogdur; aşama geçişleri iş akışlarıyla yönetilir ve kilitlenebilir (ör. yükümlülükler kapanmadan kapanış aşamasına geçilmez).
 - Kabul kriterleri:
   - [ ] Her aşama geçişi tarih ve kişiyle projenin geçmişinde görünür.
@@ -44,6 +49,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 - Kaynak: §7.3
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: matris kalemleri kataloğu
 - Açıklama: Her projede "kim neyi karşılıyor" tutulur: beton, demir, dolgu temini/serme/sıkıştırma, yemek, konaklama, kamp/konteyner, nakliye, vinç ve operatör, kalıp/demirbaş, çelik şerit ve sarf. Her kalem için seçenekler: işveren karşılar · GEOGES karşılar · işveren karşılar ve GEOGES hakedişinden keser. Kalemler katalogdur. Matris maliyet ve kâr-zarar hesabının girdisidir (REQ-FIN).
 - Kabul kriterleri:
   - [ ] Matriste bir kalemin değişmesi, değişiklik tarihinden sonraki maliyet hesabını etkiler; geçmiş dönemleri yeniden yazmaz.
@@ -53,6 +60,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 - Kaynak: §7.4
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış
+- Akışla ayarlanan: geciken teknik işte görevin kime düşeceği
 - Açıklama: Proje altında teknik ofisin işleri izlenir: proje çizimi, revizyonlar, statik hesap, metraj, kurum onay süreci, hakediş hazırlık desteği, teknik evraklar. Her işin teslim tarihi ve revizyon sayısı tutulur; geciken teknik işler görünür. Teslim süresi ve hata/revizyon sayısı performans değerlendirmesine girer (REQ-PRF).
 - Kabul kriterleri:
   - [ ] Teslim tarihi geçen teknik iş, sorumlusuna görev olarak düşer ve "Dikkat" bölümünde görünür.
@@ -64,6 +73,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 - Kaynak: §7.5
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Bir proje birden fazla duvardan oluşur (ör. "Kötekli Duvar 1 Sağ"). Duvar proje altında tanımlanır ve bir şantiyeye bağlanır. Her duvar için ad/kod, panel tipi başına hedef adet (duvar × panel tipi matrisi), şerit tipi ve boyuna göre hedef metraj, varsa diğer iş kalemlerinin hedefleri ve durum (başlamadı / devam ediyor / tamamlandı) tutulur.
 - Kabul kriterleri:
   - [ ] Bir duvar yalnızca kendi projesinin şantiyelerinden birine bağlanabilir.
@@ -73,6 +83,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 - Kaynak: §7.5, §10.2
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Projede panel tipi bazında hedef adet tutulur. Hedefler duvar bazında tanımlandığında proje hedefi duvarların toplamıdır; elle ayrıca girilmez.
 - Kabul kriterleri:
   - [ ] Bir duvarın hedefi değişince proje hedefi kendiliğinden değişir.
@@ -82,6 +93,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 - Kaynak: §7.5
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Panel dökümü duvardan bağımsız, panel tipine göre izlenir; montaj ve şerit kayıtları ilgili duvara bağlanır. İlerleme proje, şantiye ve duvar bazında ayrı ayrı görülür; "hangi duvar ne durumda, hangi duvarda şerit eksik kaldı?" sorusu cevaplanır.
 - Kabul kriterleri:
   - [ ] Her duvar için montaj ve şerit ilerlemesi, hedefine oranla görünür.
@@ -91,6 +103,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 - Kaynak: D-136; §7.4
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: revizyonun onaylayıcısı
 - Açıklama: Proje ve duvar hedefleri doğrudan değiştirilmez. Teknik ofis yeni bir proje revizyonu girer (ör. "Rev.2"); yetkili onaylayınca geçerli olur. Eski revizyonun hedefleri tarihiyle saklanır. Fazla döküm ve ilerleme, her zaman o gün geçerli olan revizyona göre hesaplanır. Böylece hedef büyütülerek fazla döküm gizlenemez.
 - Kabul kriterleri:
   - [ ] Onaylı hedeflerin doğrudan düzenlenebildiği bir ekran yoktur; yalnızca yeni revizyon.
@@ -104,6 +118,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 - Kaynak: §8.1
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Projede birbirinden ayrı üç süre görünür: sözleşme süresi ve sözleşme bitiş tarihi (işverene karşı resmî süre), normal teorik süre (mevcut ekip ve kaynaklarla beklenen süre), yönetim hedef süresi (daha hızlı bitirmek için konan iç hedef).
 - Kabul kriterleri:
   - [ ] Üç sürenin her biri ayrı girilir ve ayrı gösterilir; biri diğerinden türetilmez.
@@ -113,6 +128,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 - Kaynak: §8.2; D-137
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Şantiyenin günlük hedefleri (panel döküm adedi/m², panel montaj adedi/m², şerit montaj metresi, diğer iş kalemleri) seçilen süreden, kalan işten ve çalışma takviminden hesaplanır. Yetkili kişi gerekirse elle düzeltir; düzeltme kayıtta kalır. Üretim geride kaldıkça kalan günlerin hedefi yeniden hesaplanır.
 - Kabul kriterleri:
   - [ ] Tatil günlerine hedef verilmez.

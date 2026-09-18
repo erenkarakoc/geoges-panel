@@ -16,6 +16,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 - Kaynak: §18.2; D-027
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Haddeciler, galvanizciler ve diğer malzeme ve hizmet tedarikçileri kaydedilir. Tedarikçi, "tedarikçi" rolü taşıyan bir firmadır; aynı firma işveren veya müşteri de olabilir (D-027).
 - Kabul kriterleri:
   - [ ] Aynı firma için ikinci bir kayıt açılmaz; rolü eklenir.
@@ -25,6 +26,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 - Kaynak: §18.2
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Sipariş öncesinde tedarikçilerin fiyat, termin süresi, miktar/tonaj ve teslim koşulları yan yana karşılaştırılır.
 - Kabul kriterleri:
   - [ ] Karşılaştırma siparişe bağlanır ve sipariş kaydında hangi tekliflerin değerlendirildiği görünür.
@@ -36,6 +38,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 - Kaynak: §18.3
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Siparişte tedarikçi, malzeme, miktar, fiyat/tutar, para birimi, sipariş tarihi, beklenen termin, belge ve durum tutulur. Tutar ticari veridir.
 - Kabul kriterleri:
   - [ ] Dövizli siparişte tutar, sipariş günündeki kurla TL karşılığıyla birlikte saklanır (REQ-ADM-013).
@@ -45,6 +48,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 - Kaynak: §18.3, §18.11
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Sipariş şu durumlardan geçer: Verildi → Üretimde/Yolda → Teslim alındı. Bir sipariş birden fazla tırla kısım kısım gelebilir; sipariş, sipariş miktarı tamamen teslim alınana kadar açık kalır ve teslim alınan/kalan miktar görünür.
 - Kabul kriterleri:
   - [ ] Her teslim alım (tır) siparişe bağlıdır ve siparişin kalan miktarını azaltır.
@@ -55,6 +59,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 - Kaynak: §18.3; REQ-INV-003
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Teslim alınan miktar stok hareketi olarak ilgili lokasyona girer.
 - Kabul kriterleri:
   - [ ] Teslim alımla stok girişi aynı işlemde olur; biri olmadan diğeri kalmaz.
@@ -64,6 +69,9 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 - Kaynak: D-144
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış + Tanım
+- Akışla ayarlanan: toleransı aşan kısmın onaylayıcısı
+- Tanımla ayarlanan: tolerans, malzeme veya tedarikçi bazında
 - Açıklama: Siparişten fazla gelen miktar tanımlı tolerans içindeyse kendiliğinden kabul edilir ve stoğa girer. Toleransı aşan kısım yetkilinin onayıyla kabul edilir ya da iade edilir; onay beklenirken fazla miktar ayrı işaretlenir ve kullanılamaz.
 - Kabul kriterleri:
   - [ ] Toleransı aşan miktar, onay verilmeden kullanılabilir stoğa girmez.
@@ -76,6 +84,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 - Kaynak: §18.16
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış
+- Akışla ayarlanan: talebin onay adımları (varsayılan akış: satın alma talebi)
 - Açıklama: Malzeme kataloğu dışındaki alımlar (yedek parça, sanayi/tamir hizmeti, el aleti, ekipman, ofis ihtiyacı) şu akışla yürür: talep → fiyat araştırması → teklif karşılaştırma → onay → alım → teslim alma → fatura/ödeme.
 - Kabul kriterleri:
   - [ ] Onaylanmamış bir talep için alım kaydı açılamaz.
@@ -85,6 +95,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 - Kaynak: §18.16
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Talepte talep eden, ilgili birim/şantiye/ekipman, ihtiyaç açıklaması, miktar, aciliyet ve istenen tarih bulunur.
 - Kabul kriterleri:
   - [ ] Aciliyet ve istenen tarih, talebin onay kuyruğundaki sırasını etkiler.
@@ -94,6 +105,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 - Kaynak: §18.16
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Fiyat araştırmasında birden fazla tedarikçi teklifi (fiyat, termin, koşul, belge) yan yana görülür.
 - Kabul kriterleri:
   - [ ] Seçilmeyen teklifler de talebin geçmişinde saklanır.
@@ -103,6 +115,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 - Kaynak: §18.16; REQ-WFL-001
 - Öncelik: Must · Kademe: T2
+- Katman: Akış
+- Akışla ayarlanan: tutar eşikleri ve onaylayıcılar
 - Açıklama: Talebin onayı tutar eşiğine göre ilgili yöneticiye gider; eşikler ve onaylayıcılar iş akışında tanımlıdır.
 - Kabul kriterleri:
   - [ ] Eşik değiştiğinde yeni talepler yeni eşikle değerlendirilir; açık talepler başladıkları sürümle sürer (REQ-WFL-024).
@@ -112,6 +126,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 - Kaynak: §18.16
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Teslim alınan kalem gerekiyorsa demirbaş kaydına (REQ-EQP) veya ilgili maliyet merkezine (şantiye, fabrika, ekipman, ofis) bağlanır.
 - Kabul kriterleri:
   - [ ] Maliyet merkezi seçilmeden teslim alma tamamlanmaz.

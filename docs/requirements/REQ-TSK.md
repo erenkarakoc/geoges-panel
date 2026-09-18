@@ -16,6 +16,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 - Kaynak: §25.1; D-087
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Her görevde başlık, açıklama, sorumlu kişi veya rol, öncelik, son tarih, durum, görevin kaynağı, ilgili proje/birim ve gerekli belge veya eylem görünür. Kaynak, görevi elle veren kişi ya da görevi üreten akış, adım ve kayıttır.
 - Kabul kriterleri:
   - [ ] Kaynağı olmayan görev oluşturulamaz.
@@ -25,6 +26,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 - Kaynak: §25.1, §25.2
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış
+- Akışla ayarlanan: hangi olaydan kime, ne zaman ve hangi son tarihle görev açılacağı; listelenen otomatik görevlerin her biri bir varsayılan akıştır
 - Açıklama: Görevler elle verilebilir veya sistem tarafından otomatik oluşturulur. Otomatik kaynaklar arasında geciken saha onayı, kritik stok, atıl ekipman, geçen bakım tarihi, geciken hakediş/alacak, nakit açığı, sözleşme yükümlülüğü, bordro son tarihi, sertifika ve eğitim yenileme, İSG aksiyonu ve toplantı kararı vardır.
 - Kabul kriterleri:
   - [ ] Otomatik görevin kaynağında onu üreten olay veya akış adımı görünür.
@@ -34,6 +37,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 - Kaynak: D-130
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Kullanıcı, rol atamasının kapsamındaki (şantiye/proje/şirket) herkese seviyeden bağımsız olarak görev verebilir; kendine de verebilir. Kapsamı tüm şirket olan roller herkese verebilir.
 - Kabul kriterleri:
   - [ ] Kapsamı Kavaklı olan kullanıcı, Ilgaz'da çalışan birine görev veremez.
@@ -43,6 +47,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 - Kaynak: D-131
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Görevi veren, oluştururken "onayım gereksin" seçeneğini işaretleyebilir. İşaretlenmezse sorumlu "tamamlandı" dediğinde görev kapanır ve veren bildirim alır; veren gerekirse yeniden açar. İşaretlenirse sorumlu "tamamladım" der, görev veren onaylayınca kapanır.
 - Kabul kriterleri:
   - [ ] "Onayım gereksin" seçili görev, veren onaylamadan kapanmış görünmez.
@@ -53,6 +58,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 - Kaynak: §25.2
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Aynı sorun için tekrar tekrar görev açılmaz; sorun sürdükçe mevcut görev açık kalır. Sorun çözüldüğünde sistemin açtığı görev kendiliğinden kapanır.
 - Kabul kriterleri:
   - [ ] Aynı kaynak ve aynı sorun için ikinci bir açık görev oluşmaz.
@@ -65,7 +71,9 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 - Kaynak: §25.3; D-040; REQ-IAM-014, REQ-IAM-020
 - Öncelik: Must · Kademe: T1
-- Açıklama: Görev zamanında ele alınmazsa üst seviyeye çıkar. Varsayılan zincir Sorumlu → Koordinatör → Genel Müdür → Sahip'tir; zincir ve bekleme süreleri yönetimce değiştirilir. Sorumlunun etkin vekili varsa görev önce vekile gider; üst seviye rol hiyerarşisinden ve kişiye elle atanmış amirden bulunur.
+- Katman: Sabit + Akış
+- Akışla ayarlanan: eskalasyon zinciri ve bekleme süreleri (varsayılan: Sorumlu → Koordinatör → Genel Müdür → Sahip)
+- Açıklama: Görev zamanında ele alınmazsa üst seviyeye çıkar. Varsayılan zincir Sorumlu → Koordinatör → Genel Müdür → Sahip'tir; zincir ve bekleme süreleri eskalasyon akışında değiştirilir. Sorumlunun etkin vekili varsa görev önce vekile gider; üst seviye rol hiyerarşisinden ve kişiye elle atanmış amirden bulunur.
 - Kabul kriterleri:
   - [ ] Her eskalasyon, görevin geçmişinde kimden kime ve ne zaman olarak görünür.
   - [ ] Eskale olan görev ilk sorumlunun listesinden düşmez; ikisi de görür.
@@ -77,6 +85,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 - Kaynak: §25.4; D-070, D-106
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Kullanıcı bugün yapacaklarını, gecikenleri, yüksek öncelikleri ve kendisinden onay bekleyenleri görür; gecikenler en üsttedir. Her görev yapılacağı ekrana gider. Açık görev yoksa ekran boş durumunu gösterir.
 - Kabul kriterleri:
   - [ ] Gecikmiş görevler her zaman listenin en üstündedir.
@@ -88,6 +97,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 - Kaynak: D-087, D-097; REQ-WFL-013, REQ-WFL-033
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Görevin ve bildirimin kaynağına (akış, adım, kayıt veya veren kişi) ve kişiye hangi kuralla geldiğine tıklanarak gidilir.
 - Kabul kriterleri:
   - [ ] Bir akışın ürettiği görevden, akış örneğinin çalışma günlüğüne gidilebilir.
@@ -97,6 +107,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 - Kaynak: §25.5; D-063, D-106
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Üst alanda bildirim sayacı ve çekmecesi bulunur. Türler: yeni görev, görev gecikmesi, düzeltme isteği, onay talebi, kritik uyarı, rol ataması, belge süresi, stok riski, finansal risk. Her bildirim kaynağına gider. Bildirim yoksa çekmece "Bildirim yok." der.
 - Kabul kriterleri:
   - [ ] Sayaç yalnızca okunmamış bildirimleri sayar ve açık görev sayısından ayrıdır.
@@ -106,6 +117,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 - Kaynak: D-132; §25.5; OQ-016
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Her bildirim panelde görünür. Yeni görev, onay talebi ve kritik uyarı ayrıca telefona anında bildirim olarak düşer (uygulama yüklemeden, tarayıcı bildirimiyle). E-posta yalnızca günlük özet için kullanılır.
 - Kabul kriterleri:
   - [ ] Telefon bildirimine izin vermiş kullanıcı, panel kapalıyken de yeni görev, onay talebi ve kritik uyarıyı alır.
@@ -116,6 +128,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 - Kaynak: D-091; REQ-IAM-011
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Hiçbir bildirimin metnine (panel, telefon veya e-posta) hassas kişisel veri konmaz; yerine kayda giden bağlantı konur. Bu kural elle ve sistemce üretilen bütün bildirimler için geçerlidir.
 - Kabul kriterleri:
   - [ ] Hassas kişisel sınıftaki bir alan, bildirim metni üretilirken hiçbir yoldan metne giremez.
@@ -125,6 +138,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 - Kaynak: §25.6
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: her bildirim türünün anında mı özette mi gideceği
 - Açıklama: Kritik olaylar günlük özeti beklemeden anında bildirilir; acil olmayan bildirimler dikkat dağıtmamak için özette toplanabilir.
 - Kabul kriterleri:
   - [ ] Bir bildirim türünün "anında" mı "özette" mi gideceği ayarlanabilir; kritik uyarı her zaman anında gider.
@@ -134,6 +149,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 - Kaynak: D-133; §25.6
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: gönderim saati
 - Açıklama: Her kullanıcı sabah kendi işleriyle ilgili tek bir özet alır (dünden kalanlar, bugün yapılacaklar). Sahipler ayrıca şirketin dünkü durumunun özetini alır. Gönderim saati yönetimin ayarıdır (örnek varsayılan 07:30).
 - Kabul kriterleri:
   - [ ] Özet e-postayla ve panelde gelir; içeriği kişinin yetkisine göre süzülür.

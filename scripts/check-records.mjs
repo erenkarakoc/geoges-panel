@@ -285,6 +285,59 @@ const definedRequirements = new Set(
   ),
 );
 
+/**
+ * Every requirement states which layer it belongs to (D-077, D-181): `Sabit` (fixed in code),
+ * `Akış` (shipped as a default workflow the designer can change) or `Tanım` (a catalog value);
+ * a mixed requirement lists several, joined by " + ".
+ */
+const LAYERS = new Set(["Sabit", "Akış", "Tanım"]);
+for (const file of FILES.filter((name) => /^docs\/requirements\/REQ-[A-Z]{2,3}\.md$/.test(name))) {
+  const all = lines(CONTENT.get(file) ?? "");
+  all.forEach(({ number, text }, index) => {
+    const heading = text.match(/^###\s+(REQ-[A-Z]{2,3}-\d{3})\b/);
+    if (!heading) return;
+    const end = all.findIndex((line, i) => i > index && /^#{2,3}\s/.test(line.text));
+    const block = all.slice(index + 1, end === -1 ? undefined : end);
+    const layer = block.find((line) => /^- Katman:/.test(line.text));
+    if (!layer) {
+      fail(
+        file,
+        number,
+        `${heading[1]} has no "- Katman:" line`,
+        "add - Katman: Sabit | Akış | Tanım",
+      );
+      return;
+    }
+    const values = layer.text
+      .replace(/^- Katman:\s*/, "")
+      .split("+")
+      .map((value) => value.trim());
+    if (values.some((value) => !LAYERS.has(value))) {
+      fail(
+        file,
+        layer.number,
+        `${heading[1]} has an unknown layer "${values.join(" + ")}"`,
+        "use Sabit, Akış or Tanım, joined by +",
+      );
+    }
+    // A configurable layer must say which part is configurable, so the owner can read what is theirs.
+    for (const [value, label] of [
+      ["Akış", "Akışla ayarlanan"],
+      ["Tanım", "Tanımla ayarlanan"],
+    ]) {
+      const stated = block.some((line) => line.text.startsWith(`- ${label}:`));
+      if (values.includes(value) !== stated) {
+        fail(
+          file,
+          layer.number,
+          `${heading[1]}: "- ${label}:" must be present exactly when the layer includes ${value}`,
+          `add or remove the "- ${label}:" line`,
+        );
+      }
+    }
+  });
+}
+
 for (const file of FILES) {
   const content = CONTENT.get(file) ?? "";
   // A file may describe ids it does not define (the ID standard's examples, the REQ template).

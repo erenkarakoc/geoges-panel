@@ -18,6 +18,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: §23.1
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Her personel için ad-soyad, görev/pozisyon, rol, işe giriş ve ayrılış tarihi, aktif/ayrıldı durumu, baz maaş ve para birimi, SGK bilgisi, IBAN, kayıtlı olduğu birim (şantiye, fabrika, ofis), sözleşme/özlük belgeleri, zimmetler, izin geçmişi, bordro geçmişi, eğitim ve süreli belgeler tutulur.
 - Kabul kriterleri:
   - [ ] Personel kartı ile kullanıcı hesabı ayrı kayıtlardır; bir personelin hesabı olmayabilir.
@@ -28,6 +29,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: §23.1; REQ-IAM-011
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Maaş, SGK bilgisi, IBAN, sağlık raporu ve özlük belgeleri hassas kişisel veridir; yalnızca bu veri sınıfını görme izni olan roller (varsayılan: yetkili İK ve sahip) görür.
 - Kabul kriterleri:
   - [ ] Hassas izni olmayan kullanıcı bu alanları listelerde, dışa aktarmalarda ve kayıt geçmişinde de görmez (REQ-AUD-004).
@@ -37,6 +39,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: §23.1
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış
+- Akışla ayarlanan: uyarı ve yenileme görevinin ne kadar önce ve kime düşeceği
 - Açıklama: Eğitim sertifikası, sağlık raporu, operatör belgesi gibi süreli belgelerin bitiş tarihi yaklaşınca ve geçince uyarı üretilir.
 - Kabul kriterleri:
   - [ ] Süresi geçen zorunlu belge, sebebi çözülene kadar "Dikkat" bölümünde kalır (REQ-RPT-008).
@@ -48,6 +52,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: §23.2; REQ-SIT-026
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Şantiye personelinin puantajı onaylı günlük saha kayıtlarından gelir. Fabrika ve ofis personeli için puantaj elle girilir. Onaylı izinler puantaja kendiliğinden işlenir.
 - Kabul kriterleri:
   - [ ] Onaylanmamış günlük kaydın puantajı bordroya girmez.
@@ -58,6 +63,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: §23.2; REQ-ADM-012
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Her personel için aylık çalışma günü, saat, fazla mesai, izin ve devamsızlık görünür. Fazla mesai, çalışma takviminin kurallarıyla hesaplanır.
 - Kabul kriterleri:
   - [ ] Ayın puantajı, bordro hazırlanmadan önce İK tarafından kontrol edildi olarak işaretlenir.
@@ -69,6 +75,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: §23.3; D-163
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Panel, baz maaş ve puantajdan (çalışılan gün, fazla mesai, ücretsiz izin, devamsızlık) brüt ücreti, SGK primlerini, gelir ve damga vergisini, asgari ücret istisnasını ve diğer kesintileri hesaplayarak net ücreti bulur. Bordroda brüt, SGK, vergi, diğer kesintiler, net, dönem ve ödeme durumu tutulur.
 - Kabul kriterleri:
   - [ ] Her bordro satırının hesap dökümü (hangi oran, hangi matrah) görüntülenebilir.
@@ -79,6 +86,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: D-163; REQ-ADM-007, REQ-ADM-008
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: bordro parametreleri ve geçerlilik tarihleri
 - Açıklama: Gelir vergisi dilimleri, SGK prim oranları ve tavanı, damga vergisi oranı, asgari ücret ve istisna tutarları geçerlilik tarihli tanımlardır. Yeni değer girildiğinde yalnızca o tarihten sonraki, henüz onaylanmamış bordroları etkiler.
 - Kabul kriterleri:
   - [ ] Onaylanmış bordro, parametre değişince yeniden hesaplanmaz.
@@ -89,6 +98,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: §23.3
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: bordronun onay adımları
 - Açıklama: Bordro şu durumlardan geçer: Hazırlandı → Onaylandı → Ödendi. Onay iş akışında tanımlıdır.
 - Kabul kriterleri:
   - [ ] Onaylanan bordro kilitlenir; değişiklik revizyon talebiyle yapılır (REQ-AUD-007).
@@ -99,6 +110,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: §23.3; D-164
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Ödenen bordro, personelin kayıtlı olduğu birimin maliyet merkezine maaş gideri olarak yazılır; ay içinde başka şantiyede çalışması gideri değiştirmez. Birim ay içinde değişmişse gider, geçerlilik tarihlerine göre iki birime gün oranında bölünür (D-164'ten türetilen kural, sahip onayladı). İşveren SGK payı da giderdir.
 - Kabul kriterleri:
   - [ ] Maaş gideri bordro onaylanınca FIN'e yazılır (REQ-FIN-013).
@@ -108,6 +120,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: D-165
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış
+- Akışla ayarlanan: avansın onay adımları
 - Açıklama: Personele verilen maaş avansı iş akışındaki onaydan geçer, kaydedilir ve bir veya birkaç bordroya bölünerek kesilir. Kalan avans personel kartında görünür.
 - Kabul kriterleri:
   - [ ] Kesilen toplam, verilen avansı aşamaz.
@@ -118,6 +132,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: D-168
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Onaylanan bordrodan, şirketin çalıştığı bankanın kabul ettiği toplu ödeme dosyası üretilir. Muhasebe dosyayı bankaya yükler; dekont girilince bordro "Ödendi" olur.
 - Kabul kriterleri:
   - [ ] Onaylanmamış bordro için dosya üretilemez.
@@ -128,6 +143,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: §23.4
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış
+- Akışla ayarlanan: imzalı bordro kilidi ve son tarih görevi; hangi projede açık olduğu
 - Açıklama: Sözleşme veya şirket kuralı gerektiriyorsa imzalı bordrolar yüklenmeden maaş ödemesi tamamlanamaz. Bordroların belirli bir güne kadar işverene gönderilmesi gerekiyorsa muhasebeye son tarih görevi oluşur. Hangi projede bu şartların geçerli olduğu ayarlanır.
 - Kabul kriterleri:
   - [ ] Şart açık olan projede imzalı bordro yüklenmeden "Ödendi" işlemi çalışmaz.
@@ -137,6 +154,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: D-167; REQ-FIN-026
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: SGK bildirgesi ve muhtasar beyan gibi resmi bildirimleri muhasebeci kendi programından yapar. Panelin hesapladığı bordro tutarları aylık muhasebe aktarımına eklenir ve muhasebecininkiyle karşılaştırılır.
 - Kabul kriterleri:
   - [ ] Karşılaştırmada çıkan fark gerekçesiyle kaydedilir ve kapanana kadar açık kalem olarak görünür.
@@ -148,6 +166,9 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: §23.5; D-166
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış + Tanım
+- Akışla ayarlanan: iznin onay adımları
+- Tanımla ayarlanan: izin türleri
 - Açıklama: İzin türleri (yıllık, mazeret, rapor/hastalık, ücretsiz; liste tanımlardan genişletilebilir) ayrı izlenir. Personel talep eder, iş akışındaki onaydan geçer; kullanılan gün ve bakiye görünür. Yıllık izin hakkını İK her personel için elle girer.
 - Kabul kriterleri:
   - [ ] Bakiyeyi aşan yıllık izin talebi uyarıyla gösterilir.
@@ -160,6 +181,9 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: §23.6, §23.7; REQ-EQP-007, REQ-IAM-007
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış + Tanım
+- Akışla ayarlanan: çıkış sürecinin adımları (varsayılan akış: personel çıkışı)
+- Tanımla ayarlanan: giriş ve çıkış kontrol listelerinin maddeleri
 - Açıklama: İşe giriş ve işten çıkış zorunlu evrak listeleriyle yürür. Çıkışta imzalı evraklar, zimmet teslimleri, kalan avans, ileride gerekebilecek belgeler ve çıkış dokümanları tamamlanmadan süreç kapanmaz. Listeler tanımlardan ayarlanır.
 - Kabul kriterleri:
   - [ ] Ayrılan personelin üzerinde telefon, laptop, araç, ekipman veya başka demirbaş varsa kritik uyarı çıkar ve sebebi çözülene kadar kalır.
@@ -172,6 +196,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 - Kaynak: §23.8
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: rapor girmekle yükümlü roller
 - Açıklama: Üretim kaydı olmayan roller (ofis, teknik ofis, muhasebe, İK, koordinasyon) günde bir faaliyet raporu girer: yapılan işler satır satır, başlangıç/bitiş saati, öncelik ve durum (tamamlandı / devam ediyor / beklemede), ilgili proje veya görev, gün değerlendirmesi ve ertesi gün planı. Hangi rollerin yükümlü olduğu ayarlanır.
 - Kabul kriterleri:
   - [ ] Yöneticiler bağlı personelin raporlarını görür (REQ-IAM hiyerarşisi).

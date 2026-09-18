@@ -21,6 +21,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-077; Mimari §6, §13; ADR-005
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Defter mantığı ve türetilen veri (tahsilatın cari bakiyeyi azaltması, onaylı üretimin hakedişe akması, stok hareketinin stoğu değiştirmesi, maliyetin tüketimden hesaplanması) kodda sabittir. Kim onaylar, kaç kademe, eşikler, eskalasyon, kilitler ve bildirimler akış tanımlarında tutulur ve kod değişmeden değiştirilebilir.
 - Kabul kriterleri:
   - [ ] Hiçbir akış tanımı bir hesaplama kuralını değiştiremez; tasarımcıda buna karşılık gelen bir seçenek yoktur.
@@ -31,6 +32,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-080; ADR-006 (CHG-006)
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: "Fatura kes", "ödemeyi işle", "stok hareketi yaz" gibi para, stok veya zimmet defterine yazan bir aksiyon yetenek kataloğunda hiç bulunmaz. Akış bu durumlarda ilgili kişiye görev açar; kaydı insan tamamlar.
 - Kabul kriterleri:
   - [ ] Yetenek kataloğunda defter kesinleştiren bir aksiyon yayımlanamaz; sözleşme testi bunu reddeder (REQ-WFL-004).
@@ -43,6 +45,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-078; TASK-0041
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Her modül; yayımladığı olayları, sunduğu aksiyonları ve koşulların okuyabileceği tipli, veri sınıfı belli alanları kendi REQ dosyasının sonundaki yetenek kataloğunda ilan eder (`docs/requirements/README.md` şablonu). Tasarımcının sunduğu kutular yalnızca bu kataloglardan gelir.
 - Kabul kriterleri:
   - [ ] Tasarımcıdaki her olay, aksiyon ve koşul alanı bir modülün kataloğunda karşılığı olan bir kayda denk gelir.
@@ -53,6 +56,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-078
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Kontrollü modül sınırı 25 modüldedir; modül içindeki parçalar serbestçe incelir. Her yetenek ilanı otomatik sözleşme testleriyle koda karşı doğrulanır. Yayımlanmış bir yetenek silinmez ve sessizce değiştirilmez; yalnızca eklenir ya da "kullanımdan kalktı" işaretlenir.
 - Kabul kriterleri:
   - [ ] İlan ile kod arasındaki her ayrışma CI'ı kırar.
@@ -66,6 +70,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: ADR-006; D-095, D-096
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Akışlar yalnızca şu adımlarla kurulur: başlangıç/olay, onay, görev, koşul, süre/bekleme, bildirim, eskalasyon, paralel dal, birleşme, alt akış, kilit, bitiş, kayıt oluştur / durum değiştir, her biri için.
 - Kabul kriterleri:
   - [ ] Tasarımcı bu listenin dışında bir adım tipi sunmaz.
@@ -76,6 +81,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-091; ADR-006 (CHG-006)
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Serbest kod veya script çalıştırma, doğrudan veritabanı erişimi, defter kesinleştirme, akış çalışırken yetki veya rol verme, dış sisteme veri gönderme ve hassas kişisel veriyi bildirim metnine koyma yoktur. Tasarım sırasında yetki tipi ve rol tanımlamak ve atamak bu yasağın dışındadır (REQ-WFL-021).
 - Kabul kriterleri:
   - [ ] Bu altı işlemin hiçbiri için tasarımcıda bir adım, alan veya ayar yoktur.
@@ -86,6 +92,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-103; DEF-006
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Bir akış şu durumlarda kendiliğinden başlar: bir olay gerçekleştiğinde; belirli saatte veya takvim kuralına göre (bir tarihe X gün kala dahil); bir değer eşiği geçtiğinde. Yetkili kullanıcı her akışı elle de başlatabilir. Gelen e-postayla başlatma ilk sürümde yoktur (DEF-006).
 - Kabul kriterleri:
   - [ ] Her üç tetikleyici tipi ve elle başlatma, deneme çalıştırmasında örnek veriyle tetiklenebilir.
@@ -96,6 +103,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-100
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Koşullar yetenek kataloğundaki tipli alanları okur. Ayrıca istenen kayıtlar üzerinde istenen zaman aralığında serbestçe sayım ve toplam yapılabilir ("bu işveren son 30 günde 3'ten fazla geciktirdiyse"). Koşul sorgusunun süre sınırı vardır; süre aşılırsa akış hata ile durur ve hata kaydedilir.
 - Kabul kriterleri:
   - [ ] Geçmişe bakan bir koşul, yayından önceki deneme çalıştırmasında gerçek veri üzerindeki sonucunu gösterir.
@@ -106,6 +114,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-096
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Akış, uzunluğu önceden belli olmayan bir liste üzerinde her öğe için aynı adımları çalıştırabilir (her zimmet, her eksik evrak). Tek seviyedir; iç içe kullanılamaz.
 - Kabul kriterleri:
   - [ ] Personel çıkışı akışı (§45.4), her zimmet için ayrı kontrol üreterek kurulabilir.
@@ -116,6 +125,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-095, D-080
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Akış taslak kayıt oluşturabilir (ör. çıkış kontrol listesi) ve bir kaydın durumunu değiştirebilir (ör. "tamamlandı"). Defter kaydını kesinleştiremez.
 - Kabul kriterleri:
   - [ ] Akışın oluşturduğu kayıt taslak durumundadır ve kaydın geçmişinde onu oluşturan akış, sürüm ve adım görünür.
@@ -126,6 +136,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-104; §45
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Aylara yayılan bir süreç (ör. yeni işten tahsilata) birbirini tetikleyen kısa akışlardan kurulur; tek bir uzun akış tanımıyla kurulmaz. Böylece bir akış değiştiğinde yürüyen diğer işler etkilenmez.
 - Kabul kriterleri:
   - [ ] Bir akışın bitişi, başka bir akışı başlatan olayı yayımlayabilir.
@@ -138,6 +149,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: §4; D-070 (kuyruk düzeni); D-106
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Panelde tek bir Onay Merkezi vardır. Kullanıcı, yetkisine göre kendisini bekleyen bütün onayları burada görür. Bir kayıt ekranı doldurur; karar verildiğinde sıradaki kendiliğinden gelir. Bekleyen onay yoksa ekran boş durumunu gösterir.
 - Kabul kriterleri:
   - [ ] Kullanıcı yalnızca kendisine düşen onayları görür (REQ-WFL-017).
@@ -149,6 +161,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: §4; D-087, D-097
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Her onayda işlemin özeti, ilgili proje/birim, sorumlu kişi, miktar/tutar, varsa belge ve fotoğraf, kontrol edilmesi gereken tutarsızlıklar ve **bu onayın bu kişiye neden geldiği** (hangi akış, hangi adım, hangi adresleme kuralıyla) görünür.
 - Kabul kriterleri:
   - [ ] Her onayda kaynak akış, adım ve kayda giden bağlantı vardır.
@@ -159,6 +172,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-099; §4
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Onaylayıcı onaylar (akış ilerler), reddeder (akış kapanır) veya düzeltmeye geri gönderir (kayıt açana döner; düzeltildiğinde aynı onaya geri gelir).
 - Kabul kriterleri:
   - [ ] Üç sonuç da her onayda mevcuttur.
@@ -169,6 +183,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-107; §4; §13
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Reddeden ve düzeltmeye geri gönderen kişi gerekçe yazmadan işlemi tamamlayamaz. Gerekçe, kaydı açan kişiye neyi düzelteceğini açıkça söyler.
 - Kabul kriterleri:
   - [ ] Gerekçe alanı boşken ret ve geri gönderme yapılamaz.
@@ -179,6 +194,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: §13; §38
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Bir kaydın onay geçmişinde kimin ne zaman gönderdiği, kimin neden geri çevirdiği, hangi düzeltmenin yapıldığı ve ne zaman yeniden gönderildiği görünür.
 - Kabul kriterleri:
   - [ ] Her gönderme, karar ve yeniden gönderme; kişi, zaman ve gerekçeyle birlikte kaydın geçmişinde listelenir.
@@ -188,6 +204,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-097
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Bir adımı kimin yapacağı dört yolla belirlenir: yetki tipiyle, rolle, kayıtla ilişkiyle (kaydı açanın amiri, şantiyenin sorumlu mühendisi) veya belirli bir kişiyle.
 - Kabul kriterleri:
   - [ ] Dört adresleme yolu da tasarımcıda seçilebilir.
@@ -199,6 +216,8 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-102; §45.1, §45.5
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış
+- Akışla ayarlanan: dış taraf onayı alt akış şablonunun adımları, hatırlatma ve eskalasyon süreleri
 - Açıklama: İşveren veya resmî kurum gibi panele giriş yapmayan birinin onayı, hazır bir alt akış şablonuyla beklenir: bizden biri görevi alır, iletir, cevabı "onayladı / reddetti" olarak işaretleyip belgesini ekler; süre içinde cevap gelmezse hatırlatma ve eskalasyon işler. Dış taraflara panel girişi açılmaz.
 - Kabul kriterleri:
   - [ ] Şablon, tasarımcıda tek hamlede bir akışa eklenebilir.
@@ -211,6 +230,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-083
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Akış tasarlama yetkisi yalnızca sahip ve tüm veriyi görebilen rollere verilebilir. Bu, kodda zorlanır: kısıtlı görünürlüğü olan bir role bu yetki verilmeye çalışılırsa işlem reddedilir.
 - Kabul kriterleri:
   - [ ] Kısıtlı bir role akış tasarlama yetkisi atanamaz; deneme hata verir ve kaydedilir.
@@ -221,6 +241,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-082
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Çalışan bir akış, kurucusunun yetkisiyle sınırlı değildir; modüller arasında gerektiği veriyi okur. Bu, REQ-WFL-019 ile güvenlidir.
 - Kabul kriterleri:
   - [ ] Akış, kurucusunun göremeyeceği bir modülün verisini okuyarak koşul değerlendirebilir.
@@ -231,6 +252,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-098, D-101
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Tasarımcı, akışı kurarken o akış için yeni bir yetki tipi ve yeni bir rol tanımlayabilir ve rolü kişilere atayabilir. Atamalar, yönetici ekranındaki atamalarla aynı kayda yazılır ve orada da görünür.
 - Kabul kriterleri:
   - [ ] Tasarımcıdan yapılan bir rol ataması, "Kullanıcılar & Roller" ekranında aynı şekilde görünür ve oradan geri alınabilir.
@@ -241,6 +263,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-098
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Bir adımı yapabilmek için gereken yetki tipine veya role sahip olmak yeterlidir. Akış, bir adım süresince kimseye geçici yetki vermez.
 - Kabul kriterleri:
   - [ ] Bir kişinin görebildikleri, akış çalışırken değişmez; yalnızca rol atamalarıyla değişir.
@@ -250,6 +273,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-081
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Akışı kuran kişi canlıya da alır. Her yayında sahibe bildirim gider, yayın audit'e yazılır (kim, ne zaman, hangi sürüm) ve akış ilk 7 gün "yeni" işaretli kalır; o süredeki işlemleri ayrı bir listede görünür.
 - Kabul kriterleri:
   - [ ] Yayın anında sahibe bildirim gider.
@@ -260,6 +284,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: ADR-006
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Akış tanımları sürümlüdür. Yürüyen bir akış örneği, başladığı sürümle tamamlanır; yeni sürüm yalnızca yeni başlayan örneklere uygulanır.
 - Kabul kriterleri:
   - [ ] Yeni sürüm yayımlandığında yürüyen örneklerin hiçbiri yeni sürüme geçmez.
@@ -270,6 +295,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: ADR-006; D-100
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Bir akış, örnek veriyle deneme çalıştırması yapılmadan yayımlanamaz. Deneme, her adımın hangi kişiye düşeceğini, koşulların sonucunu ve üretilecek görev/bildirimleri gösterir; hiçbir gerçek kayıt oluşturmaz.
 - Kabul kriterleri:
   - [ ] Deneme çalıştırması yapılmamış veya son değişiklikten sonra tekrarlanmamış bir akışta "Yayınla" pasiftir.
@@ -282,6 +308,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-085
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Akış iki görünümle kurulur: adım adım soru-cevap ("Ne olunca başlasın? Kim onaylasın? Onaylanmazsa ne olsun?") ve kutu-ok şeması. İkisi de düzenlenebilir ve aynı tanımı gösterir. Ekran yerleşimi ve menüdeki yeri ayrı bir soru-cevap turunda kararlaştırılır (D-108).
 - Kabul kriterleri:
   - [ ] Bir görünümde yapılan değişiklik diğerinde aynı anda görünür.
@@ -291,6 +318,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-086
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Şirketin varsayılan akışları şablondur; kullanılan akış onun kopyasıdır. Şablon güncellendiğinde kopya kendiliğinden değişmez, "yeni sürüm var" bildirimi çıkar. Kopya şablona sıfırlanabilir.
 - Kabul kriterleri:
   - [ ] Şablon güncellemesi, değiştirilmiş kopyaları değiştirmez ve kopya sahibine bildirim üretir.
@@ -301,6 +329,8 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-089; §45; `docs/workflows/README.md`
 - Öncelik: Must · Kademe: T2
+- Katman: Akış
+- Akışla ayarlanan: listelenen varsayılan akışların tamamı; her biri şablondan kopya olarak gelir ve değiştirilebilir (REQ-WFL-027)
 - Açıklama: Panel şu şablonlarla gelir: günlük saha kaydı onayı, malzeme çıkış talebi, ödeme onayı, hakediş → fatura, personel çıkışı, revizyon talebi, stok sayımı onayı, satın alma talebi, teklif onayı ve §45'in sekiz uçtan uca süreci. §45 süreçleri motorun kabul testleridir.
 - Kabul kriterleri:
   - [ ] §45'in sekiz sürecinin her biri, TASK-0042'de yazılan tanımıyla motorda çalıştırılıp beklenen görevleri ve kayıtları üretir.
@@ -312,6 +342,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: ADR-006; §45.4
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Kilit, kaydı silmez veya gizlemez; yalnızca bir durum geçişini engeller ve sebebini ekranda yazar ("zimmet kapanmadan çıkış tamamlanamaz").
 - Kabul kriterleri:
   - [ ] Kilitli geçiş denendiğinde işlem yapılmaz ve kilidin sebebi ile kaynağı gösterilir.
@@ -321,6 +352,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-084
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Kilidi yalnızca sahip ve genel müdür aşabilir; gerekçe zorunludur, audit'e yazılır ve ilgililere bildirim gider.
 - Kabul kriterleri:
   - [ ] Sahip ve genel müdür dışında hiçbir rol kilidi aşamaz.
@@ -331,6 +363,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: §37
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Olağan dışı bir durumda kullanıcı istisnai manuel işlem için izin talep eder; yönetim yalnızca gerekli alan veya işlem için izin verir; değişikliğin nedeni zorunludur; kim, ne zaman, neden değiştirdi geçmişte kalır. Sahip bu istisna yetkisini açıp kapatabilir.
 - Kabul kriterleri:
   - [ ] İzin yalnızca talep edilen alan veya işlem için geçerlidir; kapsam dışı bir değişiklik reddedilir.
@@ -343,6 +376,8 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: Mimari §13; ADR-005
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: kuralların değerleri ve geçerlilik tarihleri
 - Açıklama: Şirket kuralları (ör. günlük kaydın en geç ertesi sabah 08:00'de girilmesi, zayide fotoğraf zorunluluğu, belirli tutarın üstündeki ödemenin sahip onayı istemesi) sistemin farklı yerlerine dağılmaz; veri olarak tek yerde tutulur ve geçerlilik tarihiyle sürümlenir. Geçmiş hesaplar, o tarihte geçerli kuralla yapılmış haliyle kalır.
 - Kabul kriterleri:
   - [ ] Bir kuralın değişmesi, önceki tarihlere ait kayıtların değerlendirmesini değiştirmez.
@@ -355,6 +390,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-087
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Akışın ürettiği her görev ve bildirim, onu üreten akışı, sürümü, adımı ve kaydı taşır ve oraya bağlantı verir. Görevin ve bildirimin gösterimi REQ-TSK'dadır; kaynağın taşınması burada.
 - Kabul kriterleri:
   - [ ] Akışın ürettiği hiçbir görev veya bildirim kaynak bilgisi olmadan oluşturulamaz.
@@ -364,6 +400,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 - Kaynak: D-087; ADR-006
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Her akış örneğinin hangi olayla başladığı, hangi adımlardan hangi sonuçla geçtiği, kime ne zaman düştüğü ve nerede durduğu bir çalışma günlüğünde görünür.
 - Kabul kriterleri:
   - [ ] Bir görevden, onu üreten akış örneğinin çalışma günlüğüne gidilebilir.
@@ -378,6 +415,7 @@ Yapımı Phase 09R'dir (ilk dilim pilotundan sonra, D-105). Mimarisi Phase 03'te
 
 - Kaynak: D-079
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Yetkili kullanıcı, kendi alanları, başka kayıtlarla ilişkileri, ekran düzeni ve raporlarıyla yeni bir kayıt türü tanımlar; tanımlanan tür akışlarda kullanılabilir.
 - Kabul kriterleri:
   - [ ] Tanımlanan bir tür için liste ve detay ekranı kod yazılmadan kullanılabilir hale gelir.
@@ -389,6 +427,7 @@ Yapımı Phase 09R'dir (ilk dilim pilotundan sonra, D-105). Mimarisi Phase 03'te
 
 - Kaynak: D-092
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Rol bazında görme ve yazma, şantiye bazında satır görünürlüğü ve hassas alan işaretleme, tür tanımlanırken seçilir ve diğer kayıtlarla aynı şekilde uygulanır.
 - Kabul kriterleri:
   - [ ] Yetkisi olmayan kullanıcı, kullanıcı tanımlı bir kaydı ne listede ne aramada ne raporda görür.
@@ -398,6 +437,7 @@ Yapımı Phase 09R'dir (ilk dilim pilotundan sonra, D-105). Mimarisi Phase 03'te
 
 - Kaynak: D-093
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Her tür için aramaya girip girmeyeceği, raporlara ve dışa aktarmaya katılıp katılmayacağı ve "Bugün"de sayısının görünüp görünmeyeceği ayrı ayrı seçilir.
 - Kabul kriterleri:
   - [ ] Seçimlerin her biri tek başına açılıp kapatılabilir ve hemen etkili olur.
@@ -407,6 +447,7 @@ Yapımı Phase 09R'dir (ilk dilim pilotundan sonra, D-105). Mimarisi Phase 03'te
 
 - Kaynak: D-094
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Bir alan kaldırıldığında geçmiş kayıtlardaki değerleri silinmez, yalnızca gösterilmez. Kim ne zaman değiştirdi bilgisi bu kayıtlar için de tutulur.
 - Kabul kriterleri:
   - [ ] Kaldırılan bir alanın geçmiş değeri kaydın geçmişinde okunabilir kalır.
@@ -416,6 +457,7 @@ Yapımı Phase 09R'dir (ilk dilim pilotundan sonra, D-105). Mimarisi Phase 03'te
 
 - Kaynak: D-077, D-080
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Kullanıcı tanımlı bir kayıt türü para, stok veya zimmet defterine hareket üretemez; hesaplama kurallarını değiştiremez.
 - Kabul kriterleri:
   - [ ] Üretecin alan tiplerinde defter hareketi oluşturan bir tip yoktur.

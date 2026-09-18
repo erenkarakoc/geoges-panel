@@ -202,6 +202,12 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — Layer scan of the requirement files (2026-09-18)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-181 | **Every requirement states its layer** — Sabit (fixed records and calculations), Akış (a default workflow the designer can change) or Tanım (a catalog value) — and names the configurable part in its own line. A process step is never written as fixed module behaviour; it is named as a default workflow and the module's catalog publishes what that workflow needs. Enforced by the records validator. Asked for by the owner after noticing that module questions were not workflow design; the scan of all 328 requirements found 101 with a configurable part, and three descriptions (REQ-TSK-006, REQ-CRM-007, REQ-CMP-013) were reworded without change of meaning; REQ-CMP-013 gained the catalog action `notice_letter.create_draft` | Owner 2026-09-18; D-077 |
+
 ## PHASE 01 — CMP requirement round (2026-09-18)
 
 | ID | Decision | Ref |

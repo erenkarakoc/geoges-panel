@@ -16,6 +16,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 
 - Kaynak: §3; D-056
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Her kullanıcının girişte açılan ekranı "Bugün"dür ve rolüne göre kurulur: sahipler ve genel müdür için yönetim görünümü (cockpit) ve "Dikkat", koordinatör için onay kuyruğu, saha mühendisi için günün kaydı, taşeron ekip başı için tek dar iş. Boş ekran biten işi gösterir.
 - Kabul kriterleri:
   - [ ] Girişten sonra her rol kendi "Bugün" ekranına düşer; ayrı bir cockpit giriş noktası yoktur.
@@ -26,6 +27,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 
 - Kaynak: §3, §3.3
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Her gösterge, satır ve uyarı tıklanarak kaynağına gidilir.
 - Kabul kriterleri:
   - [ ] "Bugün"deki hiçbir öğe kaynağa bağlantısız değildir.
@@ -35,6 +37,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 
 - Kaynak: §3.1; REQ-IAM-011
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Seçilebilecek göstergeler: aktif şantiye sayısı, bugün/dün üretim, bu ayki üretim, şirket geneli aylık kâr-zarar, nakit pozisyonu, toplam açık alacak, bekleyen onay, geciken görev, kritik uyarı, kritik stok, açık İSG olayı, süresi yaklaşan kalite/uyum belgesi, açık teklifler ve kazanma oranı, personel hareketleri, açık/geciken toplantı kararları. Her gösterge yetkiye göre süzülür; ticari göstergeleri yalnızca ticari yetkisi olan görür.
 - Kabul kriterleri:
   - [ ] Yetkisi olmayan kullanıcıya gösterge hiç gösterilmez; boş kutu kalmaz.
@@ -45,6 +48,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 
 - Kaynak: D-127; §3.1
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: her rolün varsayılan göstergeleri
 - Açıklama: Yetkili kişi her rol için varsayılan göstergeleri belirler. Kullanıcı kendi ekranında sıralamayı değiştirir, gösterge ekleyip çıkarır ve istediğinde varsayılana döner. Kimse yetkisinin dışındaki göstergeyi ekleyemez.
 - Kabul kriterleri:
   - [ ] Kullanıcının düzenlemesi yalnızca kendi ekranını etkiler.
@@ -55,6 +60,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 
 - Kaynak: D-065
 - Öncelik: Should · Kademe: T3
+- Katman: Sabit
 - Açıklama: Önde en fazla altı gösterge açık durur; diğerleri "Tüm göstergeler" altında katlanır. Önce iş bloğu, sonra göstergeler gelir.
 - Kabul kriterleri:
   - [ ] Altıdan fazla gösterge seçildiğinde fazlası katlanmış bölümde görünür.
@@ -65,6 +71,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 
 - Kaynak: §3.2; D-065
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Her aktif şantiyenin özeti (proje ve şantiye adı, günlük üretim, toplam ilerleme, hedefe göre durum, son veri giriş zamanı, son kaydın onay durumu, çift döküm bilgisi, kümülatif kâr-zarar, gecikme/bekleme sinyali, zayi/fire sinyali, kritik stok veya ekipman ihtiyacı) şantiye listesi ekranında gösterilir; "Bugün"de değil. Satıra tıklanınca şantiye detayı açılır. Kâr-zarar yalnızca ticari yetkililere görünür.
 - Kabul kriterleri:
   - [ ] Şantiye listesindeki her satır şantiye detayına gider.
@@ -76,6 +83,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 
 - Kaynak: §3.3
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: uyarıların eşikleri (REQ-RPT-009)
 - Açıklama: Yönetim görünümünde ayrı bir "Dikkat" bölümü vardır. Şu durumlar buraya çıkar: proje hedefinden fazla döküm; fazla üretimin gizlenmeye çalışılması; zayi oranının yükselmesi; fotoğrafsız veya açıklamasız zayi girişi girişimi; geciken saha onayı; uzun süre veri girilmeyen şantiye; işveren dolgusunun gecikmesi; olağan dışı sarfiyat veya kalıp yağı tüketimi; kritik stok; uzun süre atıl vinç/makine/araç; bakımı veya periyodik kontrolü geciken ekipman; geciken hakediş veya tahsilat; negatif/tehlikeli nakit pozisyonu; yaklaşan sözleşme cezası; süresi dolan sertifika veya eğitim; açık ciddi İSG olayı; geciken toplantı kararı; kapanmayan kritik görev. Her uyarı kaynağına gider.
 - Kabul kriterleri:
   - [ ] Listedeki her durum türü, ilgili modül olayı geldiğinde "Dikkat"te görünür.
@@ -85,6 +94,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 
 - Kaynak: D-126; §3.3; §10.6
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Bir uyarıyı kimse elle kapatamaz; sebebi ortadan kalkınca kendiliğinden düşer. Kullanıcı "gördüm" işareti koyabilir, uyarı yerinde kalır. Hiçbir rol bir uyarıyı sahiplerin görünümünden kaldıramaz.
 - Kabul kriterleri:
   - [ ] Uyarı için "kapat", "sil" veya "gizle" işlemi yoktur.
@@ -96,6 +106,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 
 - Kaynak: §3.3; REQ-WFL-032
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: eşik değerleri
 - Açıklama: "Zayi oranı yüksek", "uzun süre veri girilmedi", "uzun süre atıl" gibi eşikler merkezi kurallarda tutulur ve yetkili yönetimce ayarlanır; gereksinimde varsayılan değer yoktur. Tatil günleri veri girilmeyen gün sayısına katılmaz (D-038).
 - Kabul kriterleri:
   - [ ] Bir eşiğin değişmesi, değişiklikten sonraki değerlendirmeleri etkiler; geçmiş uyarıları yeniden yazmaz.
@@ -107,6 +119,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 
 - Kaynak: §3.4
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Ayrı bir ekran, seçilen zaman aralığı için (bugün, bu hafta, son 15 gün, bu ay) şu soruları veriyle cevaplar: şirket iyi mi kötü mü gidiyor; hangi proje hedefin gerisinde; hangi şantiye verimsiz; nerede bekleme var; hangi gider olağan dışı yükseldi; hangi stok kritik; hangi kaynak atıl; hangi alacak gecikti; hangi yükümlülük yaklaşıyor; hangi görev yapılmamış; yönetimin bugün neye müdahale etmesi gerekiyor.
 - Kabul kriterleri:
   - [ ] Zaman aralığı değiştiğinde tüm cevaplar o aralığa göre yeniden hesaplanır.
@@ -117,6 +130,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 
 - Kaynak: D-128
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Bu ekran ticari ve hassas veri içerdiği için yalnızca sahipler ve genel müdür tarafından görülür.
 - Kabul kriterleri:
   - [ ] Başka bir role ekranın yetkisi verilemez; deneme reddedilir.
@@ -128,6 +142,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 
 - Kaynak: §14.1
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Şantiye detayında toplam ilerleme %, günlük/kümülatif döküm, günlük/kümülatif montaj, kalan iş ve hedefe göre durum görünür; ticari yetkisi olana gelir, gider ve kâr-zarar da görünür.
 - Kabul kriterleri:
   - [ ] Ticari yetkisi olmayan kullanıcı gelir, gider ve kâr-zararı görmez.
@@ -137,6 +152,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 
 - Kaynak: §14.2; D-129
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Kart her zaman görünür ve şantiyenin maliyet etkenlerini ayırır: işveren dolgu beklemesi, yüksek zayi, hedefin altında ilerleme, yüksek saha harcaması, taşeron işçilik maliyeti, malzeme maliyeti, yemek/konaklama, kamp/kira, nakliye, vinç/operatör, ekipman amortismanı, fazla personel, atıl kapasite. Mümkün olduğunda her etkenin parasal etkisi gösterilir. Şantiye zarardayken veya kârlılık düşüşteyken kart en üste çıkar ve en büyük etkenler vurgulanır. Kart ticari veridir; ticari yetkisi olmayan kullanıcı görmez.
 - Kabul kriterleri:
   - [ ] Etkenlerin parasal toplamı, gösterilen gider toplamıyla açıklanabilir biçimde ilişkilidir; hesaplanamayan etken "hesaplanamadı" diye belirtilir, sıfır gösterilmez.
@@ -147,6 +163,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 
 - Kaynak: §14.3; D-038
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Şantiye detayında son günlerin listesi vardır: tarih, döküm, montaj, durum, onay/düzeltme, günlük gider/kâr-zarar (ticari yetkiliye), eksik kayıt uyarısı. Kayıt girilmeyen günler kolayca fark edilir; tatil günleri eksik sayılmaz.
 - Kabul kriterleri:
   - [ ] Kayıt girilmemiş iş günü listede boş satır olarak değil, belirgin bir "kayıt yok" satırı olarak görünür.

@@ -185,6 +185,7 @@ Rules written only as prose depend on a model remembering them at the right mome
 9. Task ids referenced in `depends_on` exist.
 10. Every task row in `ai/TASKS.md` has exactly six columns (added 2026-09-18 after it found three malformed rows).
 11. No record cites a path that does not exist, and — once TASK-0039 is done — no record cites `docs/sources/` by section number.
+12. Every requirement in `docs/requirements/REQ-*.md` carries a `- Katman:` line (`Sabit`, `Akış`, `Tanım`, joined by `+`), and states the configurable part in `- Akışla ayarlanan:` / `- Tanımla ayarlanan:` exactly when its layer includes Akış / Tanım (D-181).
 
 A failure prints the file, the line and what to fix. Forward references — records citing files the roadmap has not produced yet, such as `docs/requirements/REQ-*.md` — are counted on one line rather than listed; `npm run records -- --verbose` lists them. A gate that prints forty lines on every commit stops being read. The validator is amended whenever a new class of contradiction is found; a contradiction found twice is a missing check.
 

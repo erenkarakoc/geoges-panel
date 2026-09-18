@@ -16,6 +16,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.1; REQ-ADM-001
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: malzeme kataloğu ve kritik stok eşikleri
 - Açıklama: Katalogdaki her malzeme (çelik şerit tipleri, düz lama/lug hammaddesi, lug, civata-somun, lastik takoz, kalıp yağı, EPDM, derz dolgusu, ankraj, diğer sarflar) için birim, kritik stok eşiği, gerekiyorsa boy/ölçü, şerit için genişlik × kalınlık, boy ve delik sayısı ve teorik birim ağırlık (kg/m veya kg/adet) tutulur.
 - Kabul kriterleri:
   - [ ] Teorik birim ağırlığı olmayan şerit ve lama malzemesi için kantar karşılaştırması yapılamadığı açıkça belirtilir.
@@ -25,6 +27,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.4
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Stok yalnızca şirket toplamı değildir; fabrika/depo, galvanizci, şantiyeler ve sevkiyatta ayrı ayrı görülür. Aynı malzeme süreç durumuna göre de ayrılır: hammadde, işlemde, galvanizde, hazır, sahada.
 - Kabul kriterleri:
   - [ ] Bir malzemenin şirket toplamı, lokasyonlardaki miktarların toplamına her zaman eşittir.
@@ -34,6 +37,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.5; ADR-005
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Satın alma girişi, fabrika girişi, işleme, galvanize çıkış, galvaniz dönüşü, şantiye sevki, şantiyeler arası transfer, saha tüketimi, iade, fire ve hurda birer stok hareketidir. Stok miktarı bu hareketlerden hesaplanır; hiçbir yerde elle üzerine yazılmaz. Hareketler değiştirilmez, düzeltme ters hareketle yapılır.
 - Kabul kriterleri:
   - [ ] Stok miktarını doğrudan değiştiren bir ekran veya işlem yoktur.
@@ -44,6 +48,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.6
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Bir aşamaya giren ve çıkan miktar farklıysa fark fire olarak gösterilir: fabrikada işleme firesi, galvaniz sürecindeki fark ve sevkiyat farkı ayrı ayrı.
 - Kabul kriterleri:
   - [ ] Her fire kaydı hangi aşamada oluştuğunu taşır ve aşamalar ayrı toplanır.
@@ -55,6 +60,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.7; REQ-WFL
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: talebin onay adımları ve sahiplere giden sevk ve teslim bildirimleri (varsayılan akış: malzeme çıkış talebi)
 - Açıklama: Şantiyeye malzeme çıkışı için önce talep oluşturulur: şantiye talebi → yönetim onayı → sevkiyat → sahaya teslim/alım → stok güncellemesi. Onay kuralını sahipler bir iş akışıyla belirler. Sahipler yalnızca talebi değil, malzemenin gerçekten sevk edildiğini ve sahaya ulaştığını da bildirimden görür.
 - Kabul kriterleri:
   - [ ] Talep, sevkiyat ve teslim alım ayrı adımlardır; her biri kendi olayını yayımlar.
@@ -65,6 +72,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.8
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Malzeme ve ekipman fabrikaya dönmeden doğrudan başka şantiyeye sevk edilebilir; kayıtta kaynak ve hedef şantiye görünür.
 - Kabul kriterleri:
   - [ ] Doğrudan sevkiyat, iki şantiyenin stoğunu aynı anda ve tek hareket çiftiyle değiştirir.
@@ -74,6 +82,9 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.9
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış + Tanım
+- Akışla ayarlanan: uyarının kime gideceği (varsayılan: sorumlu, koordinatör, gerekirse sahipler)
+- Tanımla ayarlanan: kritik stok eşiği
 - Açıklama: Her malzemenin kritik eşiği vardır. Uyarı mevcut stok, projenin kalan ihtiyacı, beklenen tüketim ve kritik seviyeye kalan miktar/zaman üzerinden verilir ("50×4 şerit stoğu kritik seviyeye yaklaşıyor; sipariş/talep oluştur"). Uyarı ilgili sorumluya, koordinatöre ve gerekirse sahiplere çıkar.
 - Kabul kriterleri:
   - [ ] Uyarı, kritik seviyeye kaç gün kaldığını beklenen tüketimden hesaplayarak gösterir.
@@ -83,6 +94,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.10
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Proje sonunda artan kullanılabilir malzeme kendiliğinden zayi sayılmaz. Seçenekler: fabrikaya iade, başka projeye transfer, sonraki proje için stok, uygunsa satış.
 - Kabul kriterleri:
   - [ ] Proje kapanırken şantiyede kalan stok için bu dört seçenekten biri seçilmeden kapanış tamamlanmaz.
@@ -94,6 +106,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.11
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: teorik birim ağırlıklar
 - Açıklama: Çelik şerit ve lamada miktar aşamaya göre farklı birimle izlenir: haddeciye sipariş kg/ton; haddeci çıkışı ve galvaniz giriş/çıkışı boy bazında kg; şantiyeye sevk ve sahada kullanım boy bazında adet ve metre. Birimler arası dönüşüm teorik ağırlıkla yapılır: genişlik × kalınlık × boy × çelik yoğunluğu.
 - Kabul kriterleri:
   - [ ] Aynı sevkiyat hem kg hem adet/metre olarak okunabilir; dönüşüm tanımlardan hesaplanır.
@@ -103,6 +117,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.11
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Her sevkiyat tır bazında kaydedilir: tır/plaka ve kaçıncı tır olduğu, ilgili sipariş, çıkış ve varış noktası (haddeci, galvanizci, fabrika, şantiye), boy bazında adet ve kg (aynı tırda farklı boylar olabilir), kantar fişleri (haddeci çıkış, galvanizci giriş, galvanizci çıkış, şantiye giriş). Haddeci ve galvanizci listeleri tedarikçi tanımlarından gelir.
 - Kabul kriterleri:
   - [ ] Bir tırda birden fazla boy satırı olabilir.
@@ -113,6 +128,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.11
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: kantar toleransı
 - Açıklama: Kantar tartısı teorik ağırlıkla karşılaştırılır; fark tanımlı toleransı aşarsa uyarı oluşur ve açıklama istenir. Çıkış ve varış kantarı arasındaki fark ayrıca sevkiyat farkı olarak gösterilir.
 - Kabul kriterleri:
   - [ ] Tolerans dışı farkı olan sevkiyat, açıklama girilmeden teslim alındı olarak kapatılamaz.
@@ -122,6 +139,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.11
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: beklenen kaplama artışı
 - Açıklama: Galvaniz dönüşündeki ağırlık artışı çinko kaplamadan kaynaklanır; fire sayılmaz, beklenen kaplama artışıyla karşılaştırılarak ayrı gösterilir.
 - Kabul kriterleri:
   - [ ] Galvaniz dönüşü fire hesabına girmez; beklenenden sapması ayrıca raporlanır.
@@ -131,6 +150,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.11
 - Öncelik: Should · Kademe: T2
+- Katman: Sabit
 - Açıklama: Özet kartlar: haddeci için toplam sipariş kg / çıkan kg; galvanizci ve depo için giren / çıkan / kalan kg; şantiyeler için gelen / kullanılan / kalan adet.
 - Kabul kriterleri:
   - [ ] Kartlardaki değerler stok hareketlerinden hesaplanır.
@@ -142,6 +162,9 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.12
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış + Tanım
+- Akışla ayarlanan: sayımın onaylayıcısı (varsayılan akış: stok sayımı onayı)
+- Tanımla ayarlanan: kritik fark toleransı
 - Açıklama: Fabrika, depo, galvanizci ve şantiyelerde periyodik veya habersiz sayım yapılır. Sayımda lokasyon, tarih, sayan kişi, malzeme bazında sistem miktarı ve sayılan miktar, fark ve fark nedeni, gerekiyorsa fotoğraf tutulur. Sayım sorumlu yöneticinin onayına gider; onaylanan fark stok düzeltme hareketi olarak işlenir. Hedef sıfır farktır; tolerans dışı fark kritik uyarıdır. Sayım geçmişi ve lokasyon bazında fark eğilimi raporlanır.
 - Kabul kriterleri:
   - [ ] Onaylanmayan sayım stoğu değiştirmez.
@@ -152,6 +175,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.13
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: açılış stokunun onaylayıcısı
 - Açıklama: Panel kullanılmaya başlandığında veya yeni lokasyon eklendiğinde mevcut stok birim maliyetiyle "açılış stoku" olarak girilir. Onaydan sonra kilitlenir; yalnızca revizyon talebiyle değişir (REQ-AUD-008).
 - Kabul kriterleri:
   - [ ] Onaylı açılış stoku doğrudan düzenlenemez.
@@ -163,6 +188,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.14
 - Öncelik: Should · Kademe: T2
+- Katman: Sabit
 - Açıklama: Belirli bir uzunlukta şerit ihtiyacında stoktaki boylardan en uygun kombinasyon önerilir: önce en az fire (toplam boy − ihtiyaç), sonra en az parça sayısı. Stok yetmiyorsa eksik boy ve miktar için talep/sipariş önerisi üretilir. Öneriyi sevki planlayan kişi onaylar veya değiştirir.
 - Kabul kriterleri:
   - [ ] Aynı fireyi veren kombinasyonlar arasında daha az parçalı olan önerilir.
@@ -175,6 +201,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.15
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Sahada veya fabrikada tüketilen her malzemenin maliyeti ilgili proje, şantiye veya fabrika maliyetine kendiliğinden yansır; ayrıca gider olarak girilmez.
 - Kabul kriterleri:
   - [ ] Aynı tüketim hem stoktan hem gider olarak iki kez maliyete giremez.
@@ -184,6 +211,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.15
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Birim maliyet şu sırayla bulunur: alışların ağırlıklı ortalama maliyeti; yoksa son alış fiyatı; yoksa tanımlı manuel birim maliyet; hiçbiri yoksa "maliyet bulunamadı" uyarısı. Hangi yöntemle bulunduğu kayıtta görünür.
 - Kabul kriterleri:
   - [ ] Her tüketim hareketi maliyetini ve yöntemini taşır.
@@ -194,6 +222,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: D-143
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Ağırlıklı ortalama maliyet her lokasyon için ayrı hesaplanır. Transferde malzeme çıktığı lokasyonun ortalama maliyetiyle çıkar; transferin taşıma ücreti vardığı lokasyonun maliyetine eklenir (D-142 ile tutarlı olarak türetildi; sahip 2026-09-18 teyit etti).
 - Kabul kriterleri:
   - [ ] Aynı malzemenin iki lokasyondaki ortalama maliyeti farklı olabilir ve her biri ayrı görünür.
@@ -204,6 +233,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: D-142
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Bir metre şeridin maliyeti çelik alış bedeli, galvaniz bedeli ve stoğa gelene kadarki nakliyeden oluşur. Şantiye şeridi kullandığında gerçek maliyeti proje kâr-zararına yansır.
 - Kabul kriterleri:
   - [ ] Galvaniz faturası ve nakliye bedeli, ilgili şerit partisinin birim maliyetine dağıtılır; ayrıca gider olarak yazılmaz.
@@ -213,6 +243,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.15; REQ-ADM-007
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Maliyet tüketim anında dondurulur; sonradan girilen sipariş veya değişen fiyat geçmiş kâr-zararı değiştirmez.
 - Kabul kriterleri:
   - [ ] Geçmiş bir tüketimin maliyeti, sonradan girilen bir alışla değişmez.
@@ -222,6 +253,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.15; REQ-FAC-009
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Lug düz lamadan fabrikada üretildiği için maliyeti düz lama + fabrika işçilik, enerji ve fire payıdır. Fabrika maliyeti tam oluşana kadar düz lama maliyeti geçici olarak kullanılır ve "geçici" diye işaretlenir.
 - Kabul kriterleri:
   - [ ] "Geçici" işaretli maliyetler raporlarda ayırt edilir ve fabrika maliyeti kesinleşince işaret kalkar.
@@ -231,6 +263,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.15; REQ-PRJ-004
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: İşverenin tedarik ettiği malzeme stokta miktar olarak izlenir fakat GEOGES maliyetine yazılmaz.
 - Kabul kriterleri:
   - [ ] İşveren malzemesinin tüketimi miktar olarak görünür, maliyeti sıfır ve "işveren" işaretlidir.
@@ -240,6 +273,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §18.15
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: eksi stokta görevin kime düşeceği
 - Açıklama: Stok eksiye düşerse tüketim yine kaydedilir, ancak kritik uyarı oluşur.
 - Kabul kriterleri:
   - [ ] Eksi stok "Dikkat" bölümünde görünür ve ilgili sorumluya görev düşer.
@@ -251,6 +286,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §19; REQ-SIT-029
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Sarf reçetesiyle hesaplanan tahmini sarf günlük kayda önerilir; kullanıcı gerçek sapmayı veya ekstra tüketimi girer (D-123). Sarf ekranında malzeme, birim, bugün kullanılan, bugüne kadar kullanılan, stok kalan ve kritik durum görünür.
 - Kabul kriterleri:
   - [ ] Sarf ekranındaki "stok kalan", o lokasyonun stok hareketlerinden hesaplanır.
@@ -260,6 +296,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §19; §3.3
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: normal sarfiyat aralığı
 - Açıklama: Normalin üzerinde sarfiyat (ör. kalıp yağı) uyarı olarak işaretlenir ve "Dikkat" bölümüne çıkar. Normal aralık merkezi kuraldır.
 - Kabul kriterleri:
   - [ ] Uyarı, reçetedeki beklenen miktar ile gerçekleşen arasındaki farka göre verilir.
@@ -271,6 +309,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 - Kaynak: §20.1
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Hurdaya dönüşecek fire tartılır; tartım fişi, ekran görüntüsü veya ilgili belge fire kaydına eklenir. Zincir fire oluştu → tartıldı → hurdaya ayrıldı → satıldı → gelir kaydı oluştu şeklinde kapanır. "Ne kadar fire çıktı, ne kadar hurda satıldı, hangi fiyattan" soruları cevaplanır.
 - Kabul kriterleri:
   - [ ] Tartım belgesi olmayan fire hurdaya ayrılamaz.

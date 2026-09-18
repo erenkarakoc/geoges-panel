@@ -16,6 +16,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21, §21.1
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Şirkete ait her fiziksel varlık kayıtlıdır. Kartta ad, kategori, marka, model, üretim yılı, seri numarası veya plaka, satın alma tarihi, satın alma bedeli, para birimi, adet/birim, faydalı ömür, durum, lokasyon, zimmetli kişi, garanti, son ve sonraki bakım/periyodik kontrol, fatura, fotoğraf ve diğer belgeler tutulur. Satın alma bedeli ticari veridir.
 - Kabul kriterleri:
   - [ ] Aynı seri numarası veya plakayla ikinci kart açılmaz.
@@ -26,6 +27,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21.1
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: kategoriler, kategoriye göre kontrol türleri ve amortisman ömrü
 - Açıklama: Kategoriler merkezi tanımdır; başlangıç listesi: mobil vinç, kalıp, pres, kaynak makinesi, testere, tavan vinci, araç, konteyner, laptop, telefon, SIM kart, el aleti, diğer demirbaş. Kategoriye göre periyodik kontrol türleri ve amortisman ömrü önerilir.
 - Kabul kriterleri:
   - [ ] Yeni kategori tanımlardan eklenebilir; kullanılan kategori silinmez, pasifleştirilir.
@@ -35,6 +38,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: D-158
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: hangi kategorinin grup halinde izlendiği
 - Açıklama: El aletleri gibi düşük değerli eşyalar tek tek kartla değil, lokasyon başına adetle izlenir (ör. "Şantiye A'da 12 matkap"). Zimmetlenen eşyalar (laptop, telefon, SIM kart) her zaman tek tek kartla izlenir. Grup halindeki eşyanın bedeli, alındığında teslim alan maliyet merkezine gider yazılır ve amortismana girmez (D-158'den türetilen kural, sahip onayladı).
 - Kabul kriterleri:
   - [ ] Hangi kategorinin grup halinde, hangisinin tek tek izlendiği tanımlardan ayarlanır.
@@ -45,6 +50,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21.7; D-161
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: kira bitiş uyarısının ne kadar önce ve kime gideceği
 - Açıklama: Her varlık "kendi malı" veya "kiralık" olarak kaydedilir. Kiralık varlıkta kiralayan firma, kira bedeli, para birimi ve kira süresi tutulur; kira gideri, varlığın bulunduğu şantiyeye bulunduğu günler için yazılır.
 - Kabul kriterleri:
   - [ ] Kira süresi biterken sorumlusuna uyarı düşer.
@@ -55,6 +62,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §18.16; REQ-PUR-011
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Teslim alınan bir satın alma kalemi demirbaş ise varlık kartı, satın alma bilgileri (tedarikçi, bedel, tarih, fatura) dolu olarak açılır.
 - Kabul kriterleri:
   - [ ] Satın almadan açılan kart, satın alma kaydına bağlantı taşır.
@@ -66,6 +74,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21.2
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Bir varlığın hangi tarihlerde fabrikada, hangi şantiyede, bakımda veya başka lokasyonda olduğu görülür. Fabrika → şantiye, şantiye → şantiye ve şantiye → fabrika transferleri tarihle kaydedilir ve geçmişte kalır.
 - Kabul kriterleri:
   - [ ] Bir varlık aynı anda iki lokasyonda görünmez.
@@ -76,6 +85,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21.1, §21.8
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış
+- Akışla ayarlanan: iade görevinin kime düşeceği (varsayılan akış: personel çıkışı)
 - Açıklama: Varlık bir kişiye zimmetlenir ve iade alınır; tarih ve durumu kaydedilir. Kişinin kartında üzerindeki zimmetler görünür.
 - Kabul kriterleri:
   - [ ] İşten ayrılış tarihi girilen personelin üzerindeki zimmetler sorumlusuna iade görevi olarak düşer.
@@ -85,6 +96,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21.8; D-160
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Araç zimmetlenirken, iade alınırken veya iki kişi arasında devredilirken tarih, km okuması, yakıt seviyesi ve hasar durumunu gösteren fotoğraflarla tutanak düzenlenir. Tutanağı teslim eden ve teslim alan kendi hesabından telefonda onaylar; onaylar zamanıyla saklanır. Panel hesabı olmayan kişi için imzalı kâğıt tutanağın fotoğrafı yüklenir.
 - Kabul kriterleri:
   - [ ] İki tarafın onayı (veya kâğıt tutanak fotoğrafı) olmadan devir tamamlanmaz ve zimmet değişmez.
@@ -95,6 +107,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21.8
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: sapma eşiği
 - Açıklama: Km farkı ve yakıt kayıtlarından aracın kullanımı, km başı yakıt ve km başı maliyet hesaplanır.
 - Kabul kriterleri:
   - [ ] Km başı yakıt, aracın kendi ortalamasından belirgin saparsa uyarı üretilir; sapma eşiği merkezi kuraldır (REQ-WFL-032).
@@ -106,6 +120,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21.3; D-155
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Kendi malı varlığın günlük amortisman payı, satın alma bedelinin faydalı ömrüne bölünmesiyle bulunur. Bu pay yalnızca varlığın bir şantiyede çalıştığı günlerde o şantiyenin giderine yazılır. Çalışmadığı her gün (şantiyede boş beklerken, fabrikada, depoda veya bakımda) atıl ekipman giderine yazılır (REQ-EQP-012).
 - Kabul kriterleri:
   - [ ] Her günün payı ya bir şantiyeye ya atıl ekipman giderine yazılır; hiçbir gün boşta kalmaz, hiçbir gün iki kez yazılmaz.
@@ -117,6 +132,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: D-162; REQ-SIT-003
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: "boş bekliyor" uyarısının gün sayısı
 - Açıklama: Kalıp gibi sayaçsız ekipmanın o gün çalıştığı, saha mühendisinin günlük saha kaydında o gün kullanılan ekipmanları seçmesiyle belirlenir. Vinçte bu bilgi vinç günlük kaydından gelir (REQ-EQP-019).
 - Kabul kriterleri:
   - [ ] Günlük kayıtta yalnızca o an o şantiyede bulunan ekipmanlar seçilebilir.
@@ -127,6 +144,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21.3; D-156
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Çalışmayan günlerin amortisman payı hiçbir projeye yüklenmez; şirket genelinde ayrı "atıl ekipman gideri" satırında görünür. Hangi varlığın, nerede, kaç gün ve ne kadar bedelle boş beklediği okunur.
 - Kabul kriterleri:
   - [ ] Atıl ekipman gideri, varlık ve lokasyon bazında açılabilir.
@@ -136,6 +154,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21.4
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Arıza, tamir, yedek parça, servis, maliyet ve belge/fotoğraf ilgili varlığa, gerekiyorsa ilgili şantiyeye bağlanır. Fabrika günlük kaydındaki makine arızası (REQ-FAC-003) ve vinç arıza bildirimi de varlığa arıza kaydı olarak düşer.
 - Kabul kriterleri:
   - [ ] Bir varlığın toplam tamir maliyeti kartında görünür.
@@ -145,6 +164,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21.4; D-157
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Bir demirbaş kullanılamaz hale gelirse kalan değeri (bedel − yazılmış amortisman), o sırada bulunduğu şantiyenin gideri olur; şantiyede değilse atıl ekipman giderine yazılır. Yetkili kişi gerekçeyle başka maliyet merkezine aktarabilir. Yerine alınan parça ayrı varlık veya gider olarak izlenir.
 - Kabul kriterleri:
   - [ ] Zayi kaydı neden ve fotoğraf olmadan kaydedilmez.
@@ -157,6 +177,9 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21.5, §21.8
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış + Tanım
+- Akışla ayarlanan: uyarı ve yenileme görevinin kime düşeceği
+- Tanımla ayarlanan: kontrol türleri ve ne kadar önce uyarılacağı
 - Açıklama: Vinç fenni/periyodik kontrolleri, araç muayenesi, sigorta, makine bakımı ve diğer zorunlu kontroller için tarih veya km'ye göre yaklaşan ve geçen uyarılar üretilir.
 - Kabul kriterleri:
   - [ ] Süresi geçen zorunlu kontrol, "Dikkat" bölümünde (REQ-RPT-007) sebebi çözülene kadar kalır.
@@ -169,6 +192,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21.6
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Her varlık için kaç gündür çalışmadığı görünür. Bu bilgi kaynak planlamasına (REQ-INT) beslenir.
 - Kabul kriterleri:
   - [ ] Atıl gün sayısı REQ-EQP-010'daki çalışma günlerinden hesaplanır.
@@ -178,6 +202,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §20.4
 - Öncelik: Should · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: atıl gün eşiği
 - Açıklama: Uzun süre boş duran vinç, araç, kalıp veya makine için "kiralama/dış iş fırsatı olabilir" uyarısı verilir. Gün eşiği merkezi kuraldır.
 - Kabul kriterleri:
   - [ ] Uyarıdan doğrudan yan gelir kaydına (REQ-FIN-012) geçilebilir.
@@ -189,6 +215,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21.7
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Vinç operatörü telefonundan kendisine atanmış vinçleri ve günlük görevlerini görür; günlük kaydını ve arıza bildirimini girer.
 - Kabul kriterleri:
   - [ ] Operatör yalnızca kendisine atanmış vinçleri görür.
@@ -198,6 +225,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21.7
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: vinç günlük kaydının onaylayıcısı
 - Açıklama: Her vinç için günlük kayıtta şantiye ve operatör, çalışma saati (başlangıç/bitiş veya saat sayacı), yakıt miktarı ve tutarı ile yakıt fişi fotoğrafı, fotoğraflı arıza/bekleme bildirimi ve yapılan işler bulunur. Kayıt iş akışında tanımlı onaydan geçer; maliyet ve çalışma günü onaydan sonra işlenir.
 - Kabul kriterleri:
   - [ ] Yakıt tutarı fiş fotoğrafı olmadan gönderilemez.
@@ -208,6 +237,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §21.7
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: olağan dışı yakıt eşiği
 - Açıklama: Çalışma saati ve yakıttan saat başı yakıt tüketimi ve kullanım oranı hesaplanır; olağan dışı yakıt tüketiminde uyarı üretilir. Eşik merkezi kuraldır.
 - Kabul kriterleri:
   - [ ] Uyarı, sapmanın olduğu günü ve kaydı gösterir.
@@ -219,6 +250,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 - Kaynak: §20.3; D-159
 - Öncelik: Should · Kademe: T2
+- Katman: Sabit
 - Açıklama: Servis/nakliye aracı için yakıt, amortisman, bakım ve dış nakliye geliri birlikte gösterilir; aracın şirkete net etkisi görülür. Kendi işlerimizde sağladığı nakliye tasarrufu hesaplanmaz (D-159).
 - Kabul kriterleri:
   - [ ] Net etki aylık ve kümülatif görünür, her kalem kaynağına açılır.

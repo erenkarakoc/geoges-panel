@@ -16,6 +16,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §9.1
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Şantiye ekranında bağlı olduğu proje, sorumlu koordinatör, saha mühendisi, ekip/iş modeli, güncel ilerleme, hedefe kalan miktar, günlük üretim, son kayıt zamanı, stok durumu, ekipman durumu, bekleyen onay, işveren beklemesi ve zayi/fire görünür. Gelir, gider ve kâr-zarar yalnızca ticari yetkisi olan kullanıcıya görünür (REQ-IAM-011).
 - Kabul kriterleri:
   - [ ] Ticari yetkisi olmayan kullanıcı gelir, gider ve kâr-zarar alanlarını görmez; alanın yeri boş bırakılmaz, hiç gösterilmez.
@@ -27,6 +28,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §9.3
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Her şantiyenin her günü için tek bir ana günlük kayıt vardır. Aynı gün içindeki birden fazla döküm, montaj veya faaliyet bu kaydın içinde ayrı satırlar veya seanslar olarak tutulur. Kayıt bir kez girilir ve ilerleme, hakediş, stok tüketimi, puantaj, performans, kâr-zarar, bekleme analizi ve işveren gecikme kanıtını besler.
 - Kabul kriterleri:
   - [ ] Aynı şantiye ve gün için ikinci bir ana kayıt oluşturulamaz.
@@ -36,6 +38,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §9.4
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Kayıt şu bölümlerden oluşur: şantiye, tarih, hava, döküm, montaj, çelik şerit montajı, harpuşta ve diğer proje iş kalemleri, işveren teslim-tesellüm, puantaj/ekip, faaliyet saatleri, o gün kullanılan ekipmanlar (D-162, REQ-EQP-011), tüketilen malzemeler, zayi, saha harcamaları, notlar, fotoğraflar. Bölümlerin ekrandaki sırası ve adım adım giriş olup olmayacağı Phase 02'de kararlaştırılır (OQ-027 madde 3).
 - Kabul kriterleri:
   - [ ] Her bölüm ayrı ayrı doldurulup kaydedilebilir.
@@ -45,6 +48,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §9.2; D-035
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış
+- Akışla ayarlanan: günlük giriş görevinin kime düştüğü, yedek sırası ve şantiye veya dönem bazında başka role verilmesi (varsayılan: saha mühendisi → koordinatör → teknik ofis → İK)
 - Açıklama: Günlük kaydı girme sorumluluğu varsayılan olarak saha mühendisi → koordinatör → teknik ofis → İK sırasındadır; önceki kişi yoksa bir sonraki girer. Bu bir onay zinciri değildir. Yönetim sırayı değiştirebilir ve belirli bir şantiye veya dönem için giriş görevini başka bir role atayabilir. Formen veya ekip başına sınırlı giriş yetkisi verilebilir.
 - Kabul kriterleri:
   - [ ] Bir şantiye için giriş sorumlusu değiştirildiğinde değişiklik, tarihiyle birlikte kayda geçer.
@@ -54,6 +59,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: D-119
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Aynı günün kaydına yetkisi olan herkes kendi bölümlerini girer (ör. mühendis dökümü, formen puantajı). Kaydı onaya gönderen tek kişi günün giriş sorumlusudur. Her satırı kimin girdiği kayıtta görünür.
 - Kabul kriterleri:
   - [ ] İki kişi aynı kaydın farklı bölümlerini aynı anda girdiğinde biri diğerinin girişini silmez.
@@ -65,6 +71,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §9.5
 - Öncelik: Should · Kademe: T2
+- Katman: Sabit
 - Açıklama: Kayıt açıldığında kullanıcının yetkili olduğu şantiye, bugünün tarihi ve hava bilgisi hazır gelir ve düzenlenebilir. Hava bilgisi dış kaynaktan alınır; alınamazsa elle girilir.
 - Kabul kriterleri:
   - [ ] Hava servisi yanıt vermezse kayıt açılmaya devam eder ve hava alanı elle doldurulabilir.
@@ -74,6 +81,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §9.6
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Girilen her şey sürekli taslak olarak saklanır; telefon kapanır veya kullanıcı ekrandan çıkarsa girişler kaybolmaz.
 - Kabul kriterleri:
   - [ ] Girişin ortasında sayfa kapatılıp yeniden açıldığında son girilen değerler yerindedir.
@@ -83,6 +91,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §9.6
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: gönderilen kaydın hangi onaya gideceği (varsayılan akış: günlük saha kaydı onayı, koordinatör)
 - Açıklama: Kayıt "Koordinatör onayına gönder" gibi tek bir ana eylemle onaya gider. Gönderilen kayıt, karar verilene veya düzeltmeye geri gönderilene kadar değiştirilemez (geri çekme hariç, REQ-SIT-009).
 - Kabul kriterleri:
   - [ ] Gönderilmiş bir kaydın alanları, kayıt geri çekilmeden veya geri gönderilmeden düzenlenemez.
@@ -92,6 +102,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: D-120
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Gönderen, onaylayıcı karar vermeden önce kaydı geri çekip düzeltebilir ve yeniden gönderebilir. Geri çekme kaydın geçmişinde görünür.
 - Kabul kriterleri:
   - [ ] Karar verilmiş bir kayıt geri çekilemez.
@@ -102,6 +113,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: D-038
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: tatil günleri (çalışma takvimi) ve "çalışma yok" nedenleri
 - Açıklama: Çalışma takviminde tatil olarak işaretli günlerde günlük kayıt gerekmez. Başka bir günde iş yapılmadıysa, seçilen bir nedenle (hava, işveren beklemesi…) kısa bir "çalışma yok" kaydı zorunludur.
 - Kabul kriterleri:
   - [ ] Tatil gününde kayıt eksikliği uyarı üretmez.
@@ -112,6 +125,9 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: D-037
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış + Tanım
+- Akışla ayarlanan: süre kaçınca uyarının kime gideceği (varsayılan: giriş sorumlusu ve koordinatör)
+- Tanımla ayarlanan: giriş süresi, şantiye veya proje bazında
 - Açıklama: Günlük kaydın gönderilmesi gereken süre, yetkili yönetimce şantiye veya proje bazında ayarlanır; gereksinimde varsayılan değer yoktur. Süre kaçırılırsa uyarı oluşur.
 - Kabul kriterleri:
   - [ ] Süresi geçen ve gönderilmemiş kayıt için sorumluya ve koordinatöre uyarı düşer.
@@ -121,6 +137,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: D-122
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Süresi geçmiş bir günün kaydı sonradan girilebilir; kayıt kalıcı olarak "geç girildi" işaretini taşır. Koordinatör ve yönetim bunu görür; performans değerlendirmesinde sayılır.
 - Kabul kriterleri:
   - [ ] "Geç girildi" işareti kayıttan kaldırılamaz.
@@ -131,6 +148,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §13; §10.8
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Zorunlu alanları eksik olan kayıt onaya gönderilemez. Fotoğrafsız zayi satırı ve açıklamasız fazla döküm (REQ-SIT-019) eksik sayılır.
 - Kabul kriterleri:
   - [ ] Gönderme denendiğinde eksik alanlar bölüm bölüm listelenir.
@@ -142,6 +160,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §10, §10.1
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: panel tipleri (REQ-ADM-002)
 - Açıklama: Panel dökümü her zaman sahada yapılır; fabrika döküm yeri değildir. Panel tipleri (ad/kod, en, boy, panel başına m², gerekirse komşu tip ilişkisi) merkezi tanımlardan gelir. Kullanıcı m² değerini elle yazmaz.
 - Kabul kriterleri:
   - [ ] Döküm girişinde m² alanı yoktur; adet ve panel tipinden hesaplanır.
@@ -151,6 +171,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §10.2, §10.3, §44
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Döküm ekranı her panel tipinin bir satır olduğu hızlı bir tablodur: panel tipi, boyut, m²/adet, proje hedef adedi, proje hedef m², bugüne kadar dökülen, kalan, ilerleme %, bugün dökülen adet. "Bugün" alanı vurgulu giriş alanıdır. Altta gün toplamı (adet ve m²) anlık gösterilir. Hedefler duvar bazında tanımlıysa proje hedefi duvarların toplamıdır.
 - Kabul kriterleri:
   - [ ] "Bugün" alanına girilen her değer gün toplamını ve kalan miktarı hemen günceller.
@@ -160,6 +181,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §10.4
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Aynı gün birden fazla döküm seansı eklenebilir; her seans için panel tipi, adet, başlangıç, bitiş saati ve ısıtma kullanılıp kullanılmadığı tutulur. Çift döküm günleri performans ve kapasite analizinde ayrıca görünür.
 - Kabul kriterleri:
   - [ ] Bir günde birden fazla seans eklenebilir ve seansların toplamı gün toplamına eşittir.
@@ -169,6 +191,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §10.5
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Kurum onayı gelmeden işverenin talebiyle dökülen standart paneller "onay öncesi üretim" olarak işaretlenir. Onaylı proje geldiğinde bu adetler gerçek proje ihtiyacıyla karşılaştırılır.
 - Kabul kriterleri:
   - [ ] Onaylı proje sisteme girildiğinde, onay öncesi dökülen adetlerle ihtiyaç arasındaki fark panel tipi bazında listelenir.
@@ -178,6 +201,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §10.6; D-121
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: uyarının gideceği kişiler (varsayılan: saha mühendisi, koordinatör, sahipler); sahiplerden gizlenememesi sabittir
 - Açıklama: Onaylı proje miktarını aşan döküm girilebilir; satır kırmızıya döner ve açıklama yazılmadan kayıt onaya gönderilemez. Uyarı saha mühendisine, koordinatöre ve sahiplere gider. Koordinatör uyarıyı kapatarak sahiplerden gizleyemez.
 - Kabul kriterleri:
   - [ ] Hedefi aşan satır açıklamasız kaldıkça "Onaya gönder" çalışmaz.
@@ -188,6 +213,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §10.7
 - Öncelik: Should · Kademe: T2
+- Katman: Sabit + Akış
+- Akışla ayarlanan: önerinin hangi teknik personelin onayına gideceği
 - Açıklama: Bir panel tipinde fazla üretim oluşursa ve kalan proje ihtiyacı elveriyorsa, önce bir alt / bir üst, uygun değilse iki alt / iki üst tipte kullanılabilmesi için öneri üretilir. Bu yalnızca öneridir; teknik uygunluğu yetkili teknik personel onaylar.
 - Kabul kriterleri:
   - [ ] Öneri, teknik personel onaylamadan hiçbir hedefi veya stoğu değiştirmez.
@@ -197,6 +224,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §10.8
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Zayi kaydında panel tipi, adet, neden ve fotoğraf zorunludur. Fotoğrafsız zayi tamamlanmış sayılmaz.
 - Kabul kriterleri:
   - [ ] Fotoğrafı olmayan zayi satırı bulunan kayıt onaya gönderilemez.
@@ -208,6 +236,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §11.1
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Montaj için duvar, panel tipi, adet, m², başlangıç ve bitiş saati tutulur. Saatlerden panel/saat ve m²/saat hesaplanır; farklı formen, ekip ve taşeronların hızı karşılaştırılabilir.
 - Kabul kriterleri:
   - [ ] Başlangıç ve bitiş girildiğinde hız göstergeleri kendiliğinden hesaplanır.
@@ -217,6 +246,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §11.2
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: şerit tipleri ve boyları (REQ-ADM-003)
 - Açıklama: Şerit tipleri (ör. 40×4, 50×4, 50×5; genişlik, kalınlık, delik sayısı, standart boylar) merkezi tanımdır. Takipte duvar, şerit tipi, şerit boyu, adet, toplam metre ve başlangıç/bitiş saati kullanılır. Toplam metre boy × adetten hesaplanır.
 - Kabul kriterleri:
   - [ ] Toplam metre elle girilmez.
@@ -226,6 +257,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §11.3
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Harpuşta döküm ve montajı adet veya metre olarak izlenir; aynı yapı diğer proje iş kalemlerine de uygulanır.
 - Kabul kriterleri:
   - [ ] Bir proje kalemi için birim (adet veya metre) proje tanımında seçilir ve girişte o birim kullanılır.
@@ -237,6 +269,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §11.4; D-124
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Akış
+- Akışla ayarlanan: saatlerin onaylayıcısı (varsayılan: günlük kayıt onayıyla koordinatör)
 - Açıklama: Toprakarme döngüsündeki şu zamanlar saat saat tutulur: montaj başlangıç/bitiş, dolguya teslim saati, dolgudan geri alınma saati, şerit başlangıç/bitiş, beton talep/teslim saatleri, demir teslim saatleri. Saatleri bizim ekibimiz girer ve koordinatör onaylar; işverenden imza veya onay alınmaz. **Not (D-124):** kanıt yalnızca kendi kaydımıza dayandığı için işverenin itirazında kanıt gücü sınırlıdır; fotoğraf eklemek serbesttir.
 - Kabul kriterleri:
   - [ ] Her zaman kaydı saat ve dakika hassasiyetindedir ve kimin girdiği görünür.
@@ -247,6 +281,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §11.5; §45.5
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Teslim-tesellüm zamanlarından işveren kaynaklı bekleme süresi hesaplanır. Kaç ekip/kişinin beklediği, ekipmanın boşta kalıp kalmadığı, beklemenin tahmini maliyeti ve proje süresine etkisi gösterilir. Tahmini maliyet ticari veridir.
 - Kabul kriterleri:
   - [ ] Bekleme süresi, dolguya teslim ile geri alınma arasındaki süreden hesaplanır; elle girilmez.
@@ -259,6 +294,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §12.1
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Öz kaynak personel için hangi gün çalıştığı, kaç saat/gün çalıştığı ve izin/devamsızlık durumu günlük kayıtta tutulur; maaş ve SGK hesabı için İK'ya akar (REQ-HR).
 - Kabul kriterleri:
   - [ ] Onaylanan puantaj, İK'nın ilgili dönem puantajında görünür.
@@ -268,6 +304,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §12.2
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Performans ölçümü için döküm, montaj, şerit ve işveren dolgusunun başlangıç ve bitiş saatleri, taşeron şantiyeleri dahil her şantiyede tutulur. Bordro puantajından ayrıdır.
 - Kabul kriterleri:
   - [ ] Taşeron şantiyesinde bordro puantajı olmadan faaliyet saatleri girilebilir.
@@ -277,6 +314,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: D-125
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Taşeron şantiyelerinde günlük kayıtta sahada çalışan taşeron işçileri isimleriyle tutulur. **KVKK notu:** bu, şirket çalışanı olmayan kişilerin kişisel verisidir; RISK-001 kapsamında izlenir, hukuki inceleme yapılmadığı kayıtlıdır (D-050). İsimler iç veri sınıfındadır; SGK numarası, IBAN gibi hassas alanlar bu kayıtta tutulmaz.
 - Kabul kriterleri:
   - [ ] Taşeron işçisi kaydında hassas kişisel veri alanı yoktur.
@@ -289,6 +327,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §44; §45.3; D-123
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit + Tanım
+- Tanımla ayarlanan: sarf reçeteleri (REQ-ADM-004)
 - Açıklama: Tüketilen malzeme, günün üretiminden sarf reçeteleriyle hesaplanıp önerilir. Saha mühendisi gerçekte kullanılan miktarı girebilir; öneriyle arasındaki fark kayıtta işaretlenir ve koordinatör onayda görür.
 - Kabul kriterleri:
   - [ ] Önerilen ve girilen miktar yan yana saklanır; fark onay ekranında görünür.
@@ -299,6 +339,8 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §9.4; §45.3
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit + Akış
+- Akışla ayarlanan: saha harcamasının onay adımları (REQ-FIN-015)
 - Açıklama: Saha harcaması tutar, konu, belge (fiş/fatura fotoğrafı) ve açıklamayla girilir. Onayı ve finans kaydı REQ-FIN'dedir.
 - Kabul kriterleri:
   - [ ] Belgesi olmayan harcama işaretlenir ve onay ekranında görünür.
@@ -310,6 +352,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §13
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Onay ekranında en az şunlar görünür: üretim miktarları; başlangıç/bitiş saatleri; işveren teslim-tesellüm saatleri; panel hedefiyle günlük ve kümülatif üretim farkı; fazla döküm; zayi ve zorunlu fotoğraflar; malzeme tüketiminin üretimle uyumu (öneri–giriş farkı dahil); puantaj ve ekip bilgisi; saha harcamaları; eksik zorunlu alanlar; geç giriş işareti. Karar mekanizması REQ-WFL-014…016'dadır.
 - Kabul kriterleri:
   - [ ] Kontrol edilmesi gereken her tutarsızlık onay ekranında işaretli görünür.
@@ -319,6 +362,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §13; §9.3
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Onaylanan günlük veri şantiye ilerlemesine, stok tüketimine, hakediş hesabına, taşeron hakedişine, puantaja, performans değerlendirmesine, kâr-zarara ve yönetimin "Bugün" ekranına yansır. Bu yansıma bir olayla yapılır (`daily_site_log.approved`); modüller birbirinin verisine doğrudan yazmaz (ADR-001).
 - Kabul kriterleri:
   - [ ] Onaydan sonra her tüketici modül veriyi olay üzerinden alır; olay iki kez gelirse veri iki kez işlenmez.
@@ -328,6 +372,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §37.1
 - Öncelik: Must · Kademe: T1
+- Katman: Sabit
 - Açıklama: Onaylanmış günlük kayıt içerik olarak kilitlenir; değişiklik doğrudan yapılmaz, revizyon talebiyle yapılır (REQ-AUD).
 - Kabul kriterleri:
   - [ ] Onaylı kaydın hiçbir alanı ekrandan doğrudan düzenlenemez.
@@ -339,6 +384,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §15
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Her şantiyenin işçilik modeli tanımlanır: taşeron/götürü (ör. m² üzerinden birim fiyatla yalnızca işçilik) veya öz kaynak ekip. Model, puantaj ve faaliyet girişini ve maliyet hesabını belirler. Maliyet hesabı REQ-FIN'de, taşeron–öz kaynak karşılaştırması REQ-RPT/REQ-PRF'dedir.
 - Kabul kriterleri:
   - [ ] Modeli taşeron olan şantiyede bordro puantajı istenmez, faaliyet saatleri ve ekip listesi istenir.
@@ -350,6 +396,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 - Kaynak: §44
 - Öncelik: Must · Kademe: T2
+- Katman: Sabit
 - Açıklama: Döküm, montaj ve şerit bölümlerinde her ürün/iş tipi bir satırdır; proje hedefi, kümülatif gerçekleşen, kalan, ilerleme ve bugünkü giriş aynı ekranda görünür. Hedefi aşan satır belirgin kritik renge döner. Dar ekranda aynı veri kart biçiminde görünür. Az klavye, büyük dokunma alanı ve net toplamlar önceliklidir.
 - Kabul kriterleri:
   - [ ] 375 piksel genişlikte yatay kaydırma olmadan girilebilir.
