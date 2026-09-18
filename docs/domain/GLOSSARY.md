@@ -123,6 +123,13 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Kayıp nedeni | Loss Reason | Kaybedilen talebin katalogdan seçilen nedeni | — | lost_cause | PROPOSED | §5 |
 | İşveren karnesi | Client Scorecard | İşverenin kayıtlardan hesaplanan ödeme, gecikme ve kârlılık geçmişi | — | rating, score | PROPOSED | D-171 |
 | Karne notu | Scorecard Note | Karneye eklenen tarihli, gerekçeli, silinmeyen not | — | comment | PROPOSED | D-171 |
+| Teklif sürümü | Quote Version | Gönderilmiş teklifin değişmeyen sürümü (Rev.1, Rev.2…) | — | revision (proje revizyonuna ayrılmış) | PROPOSED | §6.8 |
+| Teklif şablonu | Quote Template | Teklif belgesinin sabit metinlerini taşıyan şablon | — | form | PROPOSED | §6.8 |
+| Tahmini maliyet | Estimated Cost | Teklif kaleminin geçmiş gerçek maliyetten önerilen veya elle girilen maliyeti | — | budget | PROPOSED | D-174 |
+| Hedef marj | Target Margin | Yetkilinin istediği en düşük kâr marjı | — | markup | PROPOSED | §6.4 |
+| Maliyet geri beslemesi | Cost Feedback | Tahmini ve gerçekleşen maliyetin karşılaştırılması | — | variance_report | PROPOSED | §6.7 |
+| Ders notu | Lesson Note | Tamamlanan işten sonraki tekliflere taşınan not | — | comment | PROPOSED | §6.7 |
+| Stok ayırma | Stock Reservation | Satış siparişi için stokta ayrılan, kullanılabilir sayılmayan miktar | — | hold, block | PROPOSED | D-175 |
 | Malzeme | Material | — | item (katalog satırı) | product | PROPOSED | |
 | Sarf malzeme | Consumable | — | — | supply | PROPOSED | |
 | Sarf reçetesi | Consumption Recipe | İş birimi başına standart sarf | bill of materials | — | PROPOSED | |

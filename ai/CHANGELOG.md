@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-18 — QTE requirements
+
+- Four quote decisions (D-173…D-176). Quote estimates, like project results, carry no share of general expenses — against the recommendation of a separate line — so §6.3 was corrected in place, and covering general costs is left to the target margin. Estimated costs are proposed from what the item actually cost last time; a sales order reserves its stock; each shipment of a product order gets its own invoice.
+- `REQ-QTE.md` (18) is written, DRAFT, with its catalog; seven proposed glossary terms were added first. REQ-CRM-014 now says outright that a won product quote becomes a sales order, not a project (§6.9). One derived rule awaits confirmation: when one of a request's quotes is won, its other open quotes are cancelled.
+
+
 ## 2026-09-18 — CRM requirements confirmed
 
 - The owner confirmed REQ-CRM, including the derived rule that a project opened from a won request starts at the contract stage: 14 more requirements CONFIRMED, 293 in all. Next: QTE.

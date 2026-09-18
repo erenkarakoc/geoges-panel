@@ -375,10 +375,11 @@ Tahmini maliyete ilgili olduğu ölçüde:
 - taşeron işçilik,
 - ekipman,
 - yemek/konaklama,
-- nakliye,
-- genel gider payı
+- nakliye
 
 dahil edilebilir.
+
+> **D-173 ile değişti (2026-09-18):** Önceki metinde listenin son kalemi "genel gider payı" idi. Teklif maliyetine genel gider payı eklenmez; genel gideri karşılamak hedef marjın işidir. Bkz. REQ-QTE-006.
 
 ## 6.4. Hedef marja göre fiyat önerisi
 

@@ -144,9 +144,10 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 - Kaynak: D-172; REQ-PRJ-003
 - Öncelik: Must · Kademe: T1
-- Açıklama: Talep "Kazanıldı" işaretlenince talep ve kabul edilen teklifteki bilgilerle (işveren, kalemler, miktarlar, fiyatlar) taslak proje açılır; teknik ofis tamamlar. Proje "sözleşme" aşamasından başlar; önceki aşamalar (talep/fırsat, ön inceleme, teklif, görüşme/pazarlık) talebin geçmişinden gelir ve projenin geçmişinde görünür (D-172'den türetilen kural, sahip onayladı).
+- Açıklama: Uygulama işinde talep "Kazanıldı" işaretlenince talep ve kabul edilen teklifteki bilgilerle (işveren, kalemler, miktarlar, fiyatlar) taslak proje açılır; teknik ofis tamamlar. Proje "sözleşme" aşamasından başlar; önceki aşamalar (talep/fırsat, ön inceleme, teklif, görüşme/pazarlık) talebin geçmişinden gelir ve projenin geçmişinde görünür (D-172'den türetilen kural, sahip onayladı).
 - Kabul kriterleri:
   - [ ] Bir talepten yalnızca bir proje açılır; proje talebe ve teklife bağlantı taşır.
+  - [ ] Ürün satışında proje açılmaz; kazanılan teklif satış siparişine döner (§6.9, REQ-QTE-014).
 - Durum: CONFIRMED
 
 ---

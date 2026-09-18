@@ -202,6 +202,15 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — QTE requirement round (2026-09-18)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-173 | **Quote cost estimates carry no general-expense share** (AI recommended a separate line excluded from feedback); covering general expenses is the target margin's job, the same logic as D-149. **Changes scope wording:** §6.3 listed "genel gider payı"; corrected in place with a note | Owner 2026-09-18; §6.3; D-149 |
+| D-174 | **A quote item's estimated cost is proposed from the company's latest actual unit cost** for that item; the preparer may change it and both values stay visible; with no data it is entered by hand | Owner 2026-09-18; §6.3, §6.7 |
+| D-175 | **A sales order reserves its quantity in stock**; reserved stock is not available to sites or other orders; the reservation lifts on shipment or cancellation | Owner 2026-09-18; §6.9 |
+| D-176 | **Each shipment of a sales order is invoiced separately**; shipped, invoiced and remaining quantities are shown | Owner 2026-09-18; §6.9 |
+
 ## PHASE 01 — CRM requirement round (2026-09-18)
 
 | ID | Decision | Ref |
@@ -241,7 +250,7 @@ Decided by the owner in a four-round question session.
 |---|---|---|
 | D-147 | **A quantity the client does not approve carries over** to the next progress payment and is proposed again; how many months it has waited is shown | Owner 2026-09-18; §16.1, §16.2 |
 | D-148 | **The subcontractor progress payment uses the production we approved**, not the quantity the client approved; the subcontractor does not wait for the client | Owner 2026-09-18; §16.4; D-030 |
-| D-149 | **General expenses (office rent, head office) are not allocated to projects** (AI recommended allocation by revenue share); project profit shows direct costs only and general expenses appear company-wide. **Changes scope wording:** §15.1 "genel gider payı" and §22.4 "proje payına düşen diğer giderler" no longer mean an overhead share; costs recorded directly on a project still count. The scope text of §15.1 and §22.4 was corrected in place with a note (owner request 2026-09-18). Out of this decision: the overhead markup in quote cost estimates (§6.3), asked in the QTE round | Owner 2026-09-18; §15.1, §22.4 |
+| D-149 | **General expenses (office rent, head office) are not allocated to projects** (AI recommended allocation by revenue share); project profit shows direct costs only and general expenses appear company-wide. **Changes scope wording:** §15.1 "genel gider payı" and §22.4 "proje payına düşen diğer giderler" no longer mean an overhead share; costs recorded directly on a project still count. The scope text of §15.1 and §22.4 was corrected in place with a note (owner request 2026-09-18). Extended to quote estimates by D-173 | Owner 2026-09-18; §15.1, §22.4 |
 | D-150 | **A client advance is recovered by deducting it from progress payments** at the contract's rate; the remaining advance is shown | Owner 2026-09-18; §16.1 |
 | D-151 | **The expected collection date is the contract's payment term** counted from client approval or invoice date as the contract states; an authorised person may change it with a reason | Owner 2026-09-18; §22.7 |
 | D-152 | **Duplicate expenses: the first entry books the expense**; a later receipt or invoice for the same spending is linked to it and books nothing; a difference in amount stays visible | Owner 2026-09-18; §22.3 |
