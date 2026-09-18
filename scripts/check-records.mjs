@@ -278,6 +278,45 @@ const DELETED_PATHS = (() => {
   return deleted;
 })();
 
+/** Requirement ids defined as `### REQ-XXX-NNN` headings in docs/requirements/REQ-*.md. */
+const definedRequirements = new Set(
+  FILES.filter((name) => /^docs\/requirements\/REQ-[A-Z]{2,3}\.md$/.test(name)).flatMap((name) =>
+    [...(CONTENT.get(name) ?? "").matchAll(/^###\s+(REQ-[A-Z]{2,3}-\d{3})\b/gm)].map((m) => m[1]),
+  ),
+);
+
+for (const file of FILES) {
+  const content = CONTENT.get(file) ?? "";
+  // A file may describe ids it does not define (the ID standard's examples, the REQ template).
+  const isStandard = file.startsWith("docs/standards/") || file === "docs/requirements/README.md";
+
+  for (const { number, text } of lines(content)) {
+    if (text.trimStart().startsWith(">") || isStandard) continue;
+
+    for (const match of text.matchAll(/\b(D-\d{3})\b/g)) {
+      if (!definedDecisions.has(match[1])) {
+        fail(
+          file,
+          number,
+          `${match[1]} is referenced but not defined in ai/DECISIONS.md`,
+          "add the decision row or correct the reference",
+        );
+      }
+    }
+
+    for (const match of text.matchAll(/\b(REQ-[A-Z]{2,3}-\d{3})\b/g)) {
+      if (!definedRequirements.has(match[1])) {
+        fail(
+          file,
+          number,
+          `${match[1]} is referenced but no docs/requirements/REQ-*.md defines it`,
+          "write the requirement or correct the reference",
+        );
+      }
+    }
+  }
+}
+
 for (const file of FILES) {
   const content = CONTENT.get(file) ?? "";
   // A file may describe ids it does not define (e.g. the ID standard's examples).

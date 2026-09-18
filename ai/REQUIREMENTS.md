@@ -1,6 +1,6 @@
 # REQUIREMENTS INDEX
 
-Status: SKELETON — requirement extraction happens in Phase 01 · Last updated: 2026-09-18
+Status: IN PROGRESS — requirement extraction in Phase 01; first file REQ-WFL (2026-09-18) · Last updated: 2026-09-18
 
 ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirement bodies are written in Turkish under `docs/requirements/`.
 
@@ -10,7 +10,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 |---|---|---|---|
 | IAM | §2 | `docs/requirements/REQ-IAM.md` | — |
 | RPT (cockpit, reports) | §3, §14, §34 | `docs/requirements/REQ-RPT.md` | — |
-| WFL (approvals, rules, workflow, end-to-end flows, capability catalog, record-type builder) | §4, §13, §37, §45, Mimari §6, §13; CHG-006 (D-077…D-105) | `docs/requirements/REQ-WFL.md` | — |
+| WFL (approvals, rules, workflow, end-to-end flows, capability catalog, record-type builder) | §4, §13, §37, §45, Mimari §6, §13; CHG-006 (D-077…D-105) | `docs/requirements/REQ-WFL.md` | 39 (DRAFT) |
 | CRM | §5 | `docs/requirements/REQ-CRM.md` | — |
 | QTE | §6 | `docs/requirements/REQ-QTE.md` | — |
 | PRJ | §7, §8, §10.1–10.2 | `docs/requirements/REQ-PRJ.md` | — |

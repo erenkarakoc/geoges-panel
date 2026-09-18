@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-18 — The first requirement file: REQ-WFL
+
+- Phase 01 produced its first requirement file. `docs/requirements/REQ-WFL.md` holds 39 requirements — layers, the capability catalog and its contract tests, the node palette and what the designer may never do, triggers and conditions, the approval centre with its three outcomes and mandatory reasons, authority and publishing, templates, locks and exceptions, central rules, traceability and the record-type builder — each with acceptance criteria and its source. No new questions were needed; OQ-028 was this module's round.
+- The capability catalog now has a template (`docs/requirements/README.md`), and REQ-WFL carries the first catalog.
+- The validator learned to check decision and requirement ids: a `D-NNN` or `REQ-XXX-NNN` that nothing defines now fails the check. `PROJECT_RULES` §21.1 claimed this already and also claimed that every decision is cited by an ADR, CHG or task — neither was implemented. The first is now true; the second was removed from the rule rather than left as a promise the tool does not keep.
+
+
 ## 2026-09-18 — The shell work is approved
 
 - The owner approved the eight tasks that were waiting: the presentation sandbox, the five steps of the navigation transfer, the emptied approval and task screens, and the CHG-005 record machinery. CHG-003, CHG-004 and CHG-005 are closed in the roadmap register, and nothing runs in parallel with Phase 01 any more.

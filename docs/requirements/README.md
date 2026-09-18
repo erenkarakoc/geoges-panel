@@ -1,6 +1,6 @@
 # Gereksinimler
 
-Durum: Phase 01'de doldurulacak · 2026-09-15
+Durum: Phase 01'de dolduruluyor · Son güncelleme: 2026-09-18
 
 ## Kaynaklar
 
@@ -32,3 +32,31 @@ Modül başına bir dosya: `REQ-<MODUL>.md` (ör. `REQ-SIT.md`). Modül kodları
 ```
 
 Her gereksinim tek bir doğrulanabilir davranış anlatır. Kararsız noktalar gereksinime gömülmez, `ai/OPEN_QUESTIONS.md`'ye yazılır.
+
+Gereksinim numaraları kayıt denetiminde doğrulanır: bir kayıtta geçen her `REQ-XXX-NNN`, burada `### REQ-XXX-NNN` başlığıyla tanımlı olmalıdır (`npm run records`).
+
+## Yetenek kataloğu şablonu (CHG-006, D-078, TASK-0041)
+
+Her `REQ-<MODUL>.md` dosyası, modülün iş akışı tasarımcısına sunduklarını sonunda bir **Yetenek kataloğu** bölümüyle ilan eder. Tasarımcıdaki her kutu bu kataloglardan gelir; ilan edilen her yetenek Phase 03'te tanımlanacak sözleşme testleriyle koda karşı doğrulanır. Yayımlanmış bir yetenek silinmez, yalnızca eklenir ya da "kullanımdan kalktı" işaretlenir.
+
+```text
+## Yetenek kataloğu — <MODUL>
+
+### Olaylar
+| Kod | Ad | Ne zaman | Taşıdığı alanlar | Veri sınıfı |
+
+### Aksiyonlar
+| Kod | Ad | Girdi | Gereken yetki | İki kez çalışırsa | Yarıda kalırsa |
+
+### Koşul alanları
+| Kod | Ad | Tip | Veri sınıfı |
+```
+
+- **Olay kodu:** `<entity>.<past_tense_verb>`, küçük harf (NAMING_CONVENTIONS): `daily_log.approved`.
+- **Aksiyon kodu (öneri, Phase 03'te sözleşme biçimiyle kesinleşir):** `<entity>.<verb>`: `task.open`, `approval.request`.
+- **Koşul alanı kodu:** `<entity>.<field>`: `daily_log.waste_count`.
+- **Veri sınıfı:** genel · iç · ticari · hassas kişisel. Hassas kişisel alan bildirim metnine konamaz (D-091).
+- **Aksiyonlar asla defter kesinleştirmez** (D-080); böyle bir aksiyon katalogda yayımlanamaz.
+- "İki kez çalışırsa" ve "yarıda kalırsa" sütunları, aksiyonun tekrarlanan ve kesilen çalıştırmalarda ne yaptığını söyler; motorun güvenilir çalışması buna dayanır.
+
+İlk örnek: `REQ-WFL.md` sonundaki katalog.

@@ -177,10 +177,10 @@ Rules written only as prose depend on a model remembering them at the right mome
 1. Every `TASK-NNNN` in `ai/TASKS.md` is unique and sits under a recognised phase/milestone heading.
 2. Every task status is in the §4 vocabulary; every phase status in the §9 vocabulary.
 3. Every `CHG-NNN` in `ai/DECISIONS.md` appears in the roadmap's change register.
-4. Every `D-NNN` is unique and cited by at least one ADR, CHG or task.
+4. Every `D-NNN` is unique.
 5. Every `OQ-NNN` in `ai/CURRENT_STATE.md` exists in `ai/OPEN_QUESTIONS.md`.
 6. Every `ADR-NNN` referenced anywhere exists as a file in `docs/decisions/`.
-7. Every `TASK-NNNN`, `REQ-*`, `D-NNN` and `OQ-NNN` referenced anywhere is defined somewhere.
+7. Every `TASK-NNNN`, `D-NNN`, `ADR-NNN` and `REQ-XXX-NNN` referenced in a record is defined (tasks in `ai/TASKS.md`, decisions in `ai/DECISIONS.md`, ADRs as files, requirements as `### REQ-…` headings in `docs/requirements/REQ-*.md`); every `OQ-NNN` named in `ai/CURRENT_STATE.md` exists in `ai/OPEN_QUESTIONS.md`. The ID standard and the REQ template are exempt, because they show example ids.
 8. `Last updated:` in each `/ai` record is not older than that file's last commit date.
 9. Task ids referenced in `depends_on` exist.
 10. Every task row in `ai/TASKS.md` has exactly six columns (added 2026-09-18 after it found three malformed rows).
