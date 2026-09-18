@@ -37,6 +37,9 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Harpuşta | Coping | Duvar üst başlığı | — | cap | PROPOSED | |
 | Dolgu | Backfill | İşverenin serip sıkıştırdığı dolgu | — | fill_material | PROPOSED | |
 | Teslim-tesellüm | Handover | Alanın işverene/işverenden teslimi | — | delivery | PROPOSED | `handover_to_client`, `handover_from_client` |
+| İşveren bekleme süresi | Client Wait Time | Dolguya teslim ile geri alınma arasında işveren kaynaklı geçen süre | — | delay, idle_time | PROPOSED | §11.5 |
+| Saha harcaması | Site Expense | Şantiyede yapılan, belgeyle girilen harcama | — | cost, spending | PROPOSED | §9.4 |
+| Geç giriş | Late Entry | Giriş süresi geçtikten sonra girilen günlük kayıt | — | overdue_log | PROPOSED | D-122 |
 | Günlük saha kaydı | Daily Site Log | Şantiyenin günlük ana kaydı | — | daily_report (resmi rapor ayrıdır) | PROPOSED | |
 | Resmi günlük rapor | Official Daily Report | Onaylı kayıttan üretilen PDF rapor | — | — | PROPOSED | |
 | Puantaj | Timesheet | Bordro amaçlı çalışma günü/saat kaydı | attendance | — | PROPOSED | |

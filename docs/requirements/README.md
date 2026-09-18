@@ -52,9 +52,10 @@ Her `REQ-<MODUL>.md` dosyası, modülün iş akışı tasarımcısına sunduklar
 | Kod | Ad | Tip | Veri sınıfı |
 ```
 
-- **Olay kodu:** `<entity>.<past_tense_verb>`, küçük harf (NAMING_CONVENTIONS): `daily_log.approved`.
+- **Olay kodu:** `<entity>.<past_tense_verb>`, küçük harf (NAMING_CONVENTIONS): `daily_site_log.approved`.
 - **Aksiyon kodu (öneri, Phase 03'te sözleşme biçimiyle kesinleşir):** `<entity>.<verb>`: `task.open`, `approval.request`.
-- **Koşul alanı kodu:** `<entity>.<field>`: `daily_log.waste_count`.
+- **Koşul alanı kodu:** `<entity>.<field>`: `daily_site_log.damaged_unit_count`.
+- **Terimler sözlükten gelir** (`docs/domain/GLOSSARY.md`); sözlükte yasaklı alternatif olan bir kelime (ör. `flow`, `waste`) kodda kullanılmaz.
 - **Veri sınıfı:** genel · iç · ticari · hassas kişisel. Hassas kişisel alan bildirim metnine konamaz (D-091).
 - **Aksiyonlar asla defter kesinleştirmez** (D-080); böyle bir aksiyon katalogda yayımlanamaz.
 - "İki kez çalışırsa" ve "yarıda kalırsa" sütunları, aksiyonun tekrarlanan ve kesilen çalıştırmalarda ne yaptığını söyler; motorun güvenilir çalışması buna dayanır.

@@ -55,7 +55,7 @@ flowchart TB
   PUR --> ADM
   INV --> PRJ
   INV --> PUR
-  SIT -. "events: daily_log.approved" .-> INV
+  SIT -. "events: daily_site_log.approved" .-> INV
   FAC --> INV
   EQP --> PRJ
   FIN --> SIT
@@ -97,7 +97,7 @@ flowchart TB
 
 | Olay | Yayınlayan | Tepki veren |
 |---|---|---|
-| `daily_log.approved` | SIT | INV (tüketim), FIN (hakediş önerisi, taşeron hakedişi, maliyet), HR (puantaj), PRF (metrikler), RPT (özetler) |
+| `daily_site_log.approved` | SIT | INV (tüketim), FIN (hakediş önerisi, taşeron hakedişi, maliyet), HR (puantaj), PRF (metrikler), RPT (özetler) |
 | `stock_movement.recorded` | INV | FIN (maliyet), RPT, INT (kritik stok) |
 | `progress_payment.approved_by_client` | FIN | TSK/WFL (fatura görevi) |
 | `employee.offboarding_started` | HR | CMP (tetikleyici checklist), EQP (zimmet kontrolü) |
@@ -106,4 +106,4 @@ flowchart TB
 | `certificate.expiring` | QHS | TSK (yenileme görevi) |
 | `period.closed` | FIN | RPT (kesinleşmiş raporlar) |
 
-Olay kataloğu Phase 01'de `docs/domain/` altında tamamlanır.
+Bu tablo yalnızca modüller arası ana akışları gösterir. Olayların tam listesi her modülün kendi `docs/requirements/REQ-<MODUL>.md` dosyasının sonundaki **yetenek kataloğudur** (D-078, TASK-0041); tek kaynak oradadır.

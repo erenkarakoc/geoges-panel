@@ -202,6 +202,20 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — SIT requirement round (2026-09-18, TASK-0021)
+
+Two rounds with the owner; the answers are written into `docs/requirements/REQ-SIT.md`.
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-119 | **Several people fill the same day's log, section by section**; only the day's responsible person submits it; every row records who entered it | Owner 2026-09-18; §9.2, §9.3 |
+| D-120 | **A submitted log can be recalled by its sender until the approver decides**; the recall is recorded | Owner 2026-09-18; §9.6 |
+| D-121 | **Over-casting can be entered but not submitted without an explanation**; the row turns red and the warning reaches the engineer, the coordinator and the owners, who cannot have it hidden from them | Owner 2026-09-18; §10.6 |
+| D-122 | **A missed day can be entered later**, permanently marked "late entry", visible to coordinator and management and counted in performance | Owner 2026-09-18; D-037 |
+| D-123 | **Consumption is suggested from the recipe and can be changed**; the difference is flagged and shown on the approval screen; stock moves by the entered amount | Owner 2026-09-18; §44, §45.3 |
+| D-124 | **Client handover times rest on our own record** (entered by our team, approved by the coordinator); no signature or approval is taken from the client. AI note: this limits the evidence if the client disputes a delay | Owner 2026-09-18; §11.4, §45.5 |
+| D-125 | **Subcontractor workers are recorded by name in the daily log.** KVKK note: personal data of non-employees, tracked under RISK-001 (no legal review, D-050); no sensitive fields (ID number, IBAN) are kept there | Owner 2026-09-18; §12, §15 |
+
 ## PHASE 01 — IAM requirement round (2026-09-18, TASK-0021)
 
 Two rounds with the owner; the answers are written into `docs/requirements/REQ-IAM.md`.

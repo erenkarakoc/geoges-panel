@@ -14,7 +14,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | CRM | §5 | `docs/requirements/REQ-CRM.md` | — |
 | QTE | §6 | `docs/requirements/REQ-QTE.md` | — |
 | PRJ | §7, §8, §10.1–10.2 | `docs/requirements/REQ-PRJ.md` | — |
-| SIT | §9–§13, §15, §44 | `docs/requirements/REQ-SIT.md` | — |
+| SIT | §9–§13, §15, §44 | `docs/requirements/REQ-SIT.md` | 35 (DRAFT) |
 | FIN (incl. progress payments, period close) | §16, §22 | `docs/requirements/REQ-FIN.md` | — |
 | FAC | §17 | `docs/requirements/REQ-FAC.md` | — |
 | INV | §18.1, §18.4–§18.15, §19, §20.1 | `docs/requirements/REQ-INV.md` | — |

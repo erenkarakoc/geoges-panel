@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-18 — REQ-SIT, and the event names follow the glossary
+
+- The site module got its round: seven decisions (D-119…D-125). Several people fill the same day's log section by section and one person submits it; the sender can recall it until the approver decides; over-casting can be entered but not submitted without an explanation; a missed day can still be entered, marked late for good; the suggested consumption can be corrected and the difference is shown to the approver.
+- Two answers went against the recommendation and are recorded with their cost: client handover times rest on our own record alone, which weakens the evidence in a dispute; and subcontractor workers are recorded by name, which is personal data of people who are not our employees and is tracked under RISK-001.
+- `docs/requirements/REQ-SIT.md` holds 35 requirements and a capability catalog.
+- The glossary names the daily log `Daily Site Log` and forbids `waste` because it is ambiguous (loss, damaged unit and scrap are three different things here). The naming standard, the module map, the catalog template and the presentation sandbox all still said `daily_log` or `waste`; they now say `daily_site_log` and `damaged_unit`. The module map also stopped promising an event catalog in `docs/domain/` — the catalogs live in the REQ files, one source.
+
+
 ## 2026-09-18 — REQ-IAM, and a banned word caught
 
 - IAM got its round: two sets of four plain-language questions, eight decisions (D-111…D-118). Roles are handed out with a scope — a site engineer for Kavaklı only — and the hierarchy runs between roles with a per-person override. Someone with two roles uses both at once and every action records which role it was taken under. The owner layer may be held by several partners, any one of whom completes an "owner approval". Commercial and sensitive visibility is granted module by module, delegation can come from the person or the manager, and access closes by itself on the leaving date.

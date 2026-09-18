@@ -265,7 +265,7 @@ export type DomainEvent = {
 
 export const domainEvents: readonly DomainEvent[] = [
   {
-    name: "daily_log.approved",
+    name: "daily_site_log.approved",
     label: "Günlük kayıt onaylandı",
     publisher: "SIT",
     reactors: ["INV", "FIN", "HR", "PRF", "RPT"],

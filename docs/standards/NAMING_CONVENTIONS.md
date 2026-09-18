@@ -49,7 +49,7 @@ Türkçe değişken, fonksiyon, sınıf, tablo, kolon, API, event, env değişke
 
 ## Event
 
-- `<entity>.<past_tense_verb>` biçimi, küçük harf: `daily_log.approved`, `stock_movement.recorded`, `progress_payment.submitted`.
+- `<entity>.<past_tense_verb>` biçimi, küçük harf: `daily_site_log.approved`, `stock_movement.recorded`, `progress_payment.submitted`.
 - Aynı olay farklı isimlerle temsil edilmez.
 
 ## Ortam değişkenleri ve altyapı
