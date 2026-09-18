@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-18 — The work layer stops pretending (TASK-0040)
+
+- The five shell tasks awaiting review were checked against the CHG-006 decisions. Three were untouched by them (context row, "Bugün", phone bar). The rest carried sample content that now contradicted the decisions: an approval queue with two outcomes where there are three, and tasks and notifications that could not say what produced them.
+- The owner chose to remove the samples rather than dress them up (D-106). "Onaylar" and "Görevler" show their empty states, the bell says "Bildirim yok." with no count, the badges show nothing, and the "Bugün" figures that mirrored those lists read zero — an empty list next to "3 bekleyen onay" would have been the same contradiction D-070 once fixed. An empty work block also stopped wearing the "Örnek veri" label, which only makes sense on sample rows.
+- What the real screens must do is recorded instead: three outcomes, a mandatory reason on reject and send-back (D-107), and a visible source on every approval, task and notification. The "İş Akışları" entry waits for its own question-and-brainstorm round (D-108).
+- `app-sidebar.tsx` is Prettier-clean again, so `npm run check` passes on the whole tree for the first time since TASK-0032.
+
+
 ## 2026-09-18 — CHG-006 folded into the plan
 
 - The owner read the impact analysis and approved it. The record-type builder gets its own step, **09R**, after the Slice 1 pilot (D-105): no slice depends on it, so no module screen waits for it, and it is shaped by real use.

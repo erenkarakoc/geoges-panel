@@ -130,14 +130,11 @@ export const workNavigation: readonly NavigationItem[] = [
 ];
 
 /**
- * SAMPLE DATA (owner decision 2026-09-16). There is no approval or task data yet, so the rail
- * badges show example numbers. Replace this map with the permission-filtered counts when WFL
- * and TSK deliver them; nothing else has to change.
+ * Badge counts for the work layer, keyed by entry id. Empty until WFL and TSK deliver
+ * permission-filtered counts; the sample numbers were removed at the owner's request (D-106).
+ * A missing key shows no badge.
  */
-export const sampleWorkCounts: Readonly<Record<string, number>> = {
-  approvals: 3,
-  tasks: 3,
-};
+export const workCounts: Readonly<Record<string, number>> = {};
 
 /**
  * Module groups of the functional scope §40.1, unchanged in name and order. The rail shows one

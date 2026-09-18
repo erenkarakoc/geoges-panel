@@ -19,7 +19,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   navigationRegistry,
   pickNavigationItems,
-  sampleWorkCounts,
+  workCounts,
   workNavigation,
 } from "@/platform/navigation/navigation-registry";
 import { matchesSearch } from "@/platform/navigation/search-text";
@@ -67,7 +67,7 @@ export function MobileBottomBar({
 
   const renderItem = (item: (typeof workItems)[number]) => {
     const isActive = pathname === item.href;
-    const count = sampleWorkCounts[item.id];
+    const count = workCounts[item.id];
     return (
       <Link
         aria-current={isActive ? "page" : undefined}

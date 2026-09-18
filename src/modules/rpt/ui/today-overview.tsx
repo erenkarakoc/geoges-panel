@@ -44,7 +44,8 @@ function WorkBlock({ work }: { work: TodayWork }) {
         <FrameHeader>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <FrameTitle>{work.title}</FrameTitle>
-            <SampleBadge />
+            {/* Only sample rows are sample data; an empty block has nothing to label (D-106). */}
+            {work.rows.length > 0 ? <SampleBadge /> : null}
           </div>
           <FrameDescription>{work.lead}</FrameDescription>
         </FrameHeader>

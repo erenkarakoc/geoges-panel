@@ -70,29 +70,8 @@ const ownerWork: TodayWork = {
 const coordinatorWork: TodayWork = {
   title: "Onay kuyruğu",
   lead: "Gün, kuyruğu boşaltmakla geçer (§4).",
-  rows: [
-    {
-      id: "kavakli-log",
-      title: "Kavaklı · 15 Eylül günlük kaydı",
-      note: "Zayi fotoğrafı eksik — kontrol edilmeli",
-      tone: "danger",
-      href: "/approvals",
-    },
-    {
-      id: "ilgaz-log",
-      title: "Ilgaz · 15 Eylül günlük kaydı",
-      note: "6 saat 20 dk bekleme, işveren dolgusu",
-      tone: "warning",
-      href: "/approvals",
-    },
-    {
-      id: "expense",
-      title: "Saha harcaması onayı",
-      note: "Kavaklı · 14.850 ₺ · fiş fotoğrafı eklendi",
-      tone: "neutral",
-      href: "/approvals",
-    },
-  ],
+  // Mirrors the approval centre, which has no sample records any more (D-106).
+  rows: [],
   action: { label: "Kuyruğa gir", href: "/approvals" },
   emptyText: "Kuyruk boş. Bugün temiz.",
 };

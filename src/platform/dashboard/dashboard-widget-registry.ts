@@ -87,7 +87,7 @@ export const dashboardWidgetRegistry: readonly DashboardWidget[] = [
   },
   {
     id: "pending-approvals",
-    sampleValue: "3",
+    sampleValue: "0",
     sampleUnit: "kayıt",
     critical: true,
     title: "Bekleyen onay",
@@ -97,7 +97,7 @@ export const dashboardWidgetRegistry: readonly DashboardWidget[] = [
   },
   {
     id: "overdue-tasks",
-    sampleValue: "1",
+    sampleValue: "0",
     sampleUnit: "görev",
     critical: true,
     title: "Geciken görev",

@@ -33,7 +33,7 @@ import {
 import {
   navigationRegistry,
   pickNavigationItems,
-  sampleWorkCounts,
+  workCounts,
   workNavigation,
 } from "@/platform/navigation/navigation-registry";
 import { rememberOpenGroups } from "@/platform/navigation/sidebar-group-preference";
@@ -146,7 +146,7 @@ export function AppSidebar({
               <SidebarMenu>
                 {workItems.map((item) => {
                   const isActive = pathname === item.href;
-                  const count = sampleWorkCounts[item.id];
+                  const count = workCounts[item.id];
                   return (
                     <SidebarMenuItem key={item.id}>
                       <SidebarMenuButton

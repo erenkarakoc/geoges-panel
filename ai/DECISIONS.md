@@ -202,6 +202,16 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## CHG-004 follow-up after CHG-006 (2026-09-18, TASK-0040)
+
+The owner reviewed the TASK-0040 findings and decided:
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-106 | **Sample data removed from the work layer.** "Onaylar" and "Görevler" show their empty states instead of sample records; the notification bell shows "Bildirim yok." with no count; the rail and phone badges show no numbers (`sampleWorkCounts` became an empty `workCounts`); the "Bugün" figures that mirrored those lists (coordinator's queue rows, "Bekleyen onay", "Geciken görev") are empty or zero, and an empty work block no longer carries the "Örnek veri" label. Supersedes D-059 and D-063, and the sample-screen part of D-070. The other "Bugün" sample figures (D-065) and the sample sites (D-064) are unchanged | Owner 2026-09-18; TASK-0040 |
+| D-107 | **Rejecting and sending back both require a reason.** Applies to the approval screen built with the engine (D-099) | Owner 2026-09-18; TASK-0040 |
+| D-108 | **No "İş Akışları" menu entry now.** Where the flow designer, templates and the "new flows" list live, and how they flow, is decided later in its own question-and-brainstorm round when Phase 02/08 reaches it; the owner asked for a clean UX flow rather than a placeholder | Owner 2026-09-18; TASK-0040 |
+
 ## Further decisions (2026-09-15)
 
 | ID | Decision | Ref |

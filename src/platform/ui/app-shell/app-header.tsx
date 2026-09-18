@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useState } from "react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Menu,
@@ -27,13 +26,11 @@ import {
 import { rememberSiteScope } from "@/platform/navigation/site-scope-preference";
 import { CommandPalette } from "@/platform/ui/app-shell/command-palette";
 import { PrimaryActionButton } from "@/platform/ui/app-shell/primary-action";
-import { sampleNotifications } from "@/platform/ui/app-shell/sample-notifications";
 
 /** What the header needs to know about the current seat; plain values from the server. */
 export type HeaderSeat = {
   primaryAction: string;
   sites: readonly string[];
-  notificationCount: number;
 };
 
 /**
@@ -124,7 +121,7 @@ export function AppHeader({
           label={primaryAction}
           labelClassName="hidden md:inline"
         />
-        <NotificationsButton count={seat.notificationCount} />
+        <NotificationsButton />
         {actions}
       </div>
     </header>
@@ -169,50 +166,20 @@ function SiteScopeSelector({
   );
 }
 
-/** Bell with sample notifications (D-063), marked as sample data in the list. */
-function NotificationsButton({ count }: { count: number }) {
-  const notifications = sampleNotifications.slice(0, count);
-
+/**
+ * Notifications. There is no notification service yet, so the list is empty; the sample entries
+ * were removed at the owner's request (D-106). Real notifications must say what produced them
+ * and link to it (D-087).
+ */
+function NotificationsButton() {
   return (
     <Popover>
-      <PopoverTrigger
-        render={
-          <Button
-            aria-label={`Bildirimler (${count} · örnek veri)`}
-            className="relative"
-            size="icon"
-            variant="ghost"
-          />
-        }
-      >
+      <PopoverTrigger render={<Button aria-label="Bildirimler" size="icon" variant="ghost" />}>
         <BellIcon aria-hidden="true" />
-        {count > 0 ? (
-          <Badge
-            className="pointer-events-none absolute -end-0.5 -top-0.5"
-            size="sm"
-            variant="destructive"
-          >
-            {count}
-          </Badge>
-        ) : null}
       </PopoverTrigger>
       <PopoverPopup align="end" className="w-80">
-        <div className="flex items-center justify-between gap-2">
-          <PopoverTitle className="text-base">Bildirimler</PopoverTitle>
-          <Badge variant="outline">Örnek veri</Badge>
-        </div>
-        {notifications.length > 0 ? (
-          <ul className="mt-3 flex flex-col gap-3">
-            {notifications.map((notification) => (
-              <li className="flex flex-col gap-0.5" key={notification.id}>
-                <span className="text-sm font-medium">{notification.title}</span>
-                <span className="text-xs text-muted-foreground">{notification.note}</span>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="mt-3 text-sm text-muted-foreground">Bildirim yok.</p>
-        )}
+        <PopoverTitle className="text-base">Bildirimler</PopoverTitle>
+        <p className="mt-3 text-sm text-muted-foreground">Bildirim yok.</p>
       </PopoverPopup>
     </Popover>
   );

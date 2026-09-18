@@ -51,7 +51,6 @@ export default async function AppLayout({ children, context }: LayoutProps<"/">)
       seat={{
         primaryAction: role.primaryAction,
         sites: role.sites,
-        notificationCount: role.notificationCount,
       }}
     >
       {children}

@@ -18,8 +18,6 @@ export type PreviewRole = {
   primaryAction: string;
   /** Sites the scope selector offers; a single site is shown as plain text. */
   sites: readonly string[];
-  /** Number of sample notifications behind the bell. */
-  notificationCount: number;
 };
 
 export const PREVIEW_ROLE_COOKIE = "dev_preview_role";
@@ -31,7 +29,6 @@ export const previewRoles: readonly PreviewRole[] = [
     permissions: "all",
     primaryAction: "Görev ver",
     sites: ["Tüm şantiyeler", "Kavaklı Şantiyesi", "Ilgaz Şantiyesi", "Sarıyar Şantiyesi"],
-    notificationCount: 6,
   },
   {
     id: "coordinator",
@@ -51,7 +48,6 @@ export const previewRoles: readonly PreviewRole[] = [
     ],
     primaryAction: "Kuyruğa gir",
     sites: ["Tüm şantiyelerim", "Kavaklı Şantiyesi", "Ilgaz Şantiyesi", "Sarıyar Şantiyesi"],
-    notificationCount: 4,
   },
   {
     id: "site-engineer",
@@ -65,7 +61,6 @@ export const previewRoles: readonly PreviewRole[] = [
     ],
     primaryAction: "Günü kaydet",
     sites: ["Kavaklı Şantiyesi"],
-    notificationCount: 2,
   },
   {
     id: "crew-lead",
@@ -73,7 +68,6 @@ export const previewRoles: readonly PreviewRole[] = [
     permissions: ["rpt.cockpit.view", "tsk.task.view", "sit.daily-site-log.view"],
     primaryAction: "Günü kaydet",
     sites: ["Kavaklı Şantiyesi"],
-    notificationCount: 1,
   },
 ];
 

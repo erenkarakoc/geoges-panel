@@ -7,7 +7,7 @@ import {
   findNavigationItemByHref,
   getVisibleNavigation,
   navigationRegistry,
-  sampleWorkCounts,
+  workCounts,
   pickNavigationItems,
   workNavigation,
 } from "@/platform/navigation/navigation-registry";
@@ -48,9 +48,9 @@ describe("workNavigation", () => {
     }
   });
 
-  it("counts sample badges only for entries that exist", () => {
+  it("counts badges only for entries that exist", () => {
     const ids = new Set(workNavigation.map((item) => item.id));
-    for (const id of Object.keys(sampleWorkCounts)) {
+    for (const id of Object.keys(workCounts)) {
       expect(ids.has(id)).toBe(true);
     }
   });

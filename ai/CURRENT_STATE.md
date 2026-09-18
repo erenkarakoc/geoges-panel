@@ -7,8 +7,8 @@ PROJECT STATUS:      BOOTSTRAP
 CURRENT PHASE:       PHASE 01 — Requirements & Domain Analysis
 CURRENT SUBPHASE:    DISCOVER / QUESTION
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0040 Re-review the CHG-004 shell work against CHG-006
-STATUS:              NOT_STARTED
+CURRENT TASK:        — (TASK-0040 done; owner review of the CHG-004 shell work is next)
+STATUS:              REVIEW
 BRANCH:              main (infra/chg-005-record-consistency fast-forwarded into main 2026-09-18, 5c4ff54, and deleted; PR-less merge exception recorded in docs/standards/GIT_WORKFLOW.md)
 PARALLEL TRACK:      CHG-004 product transfer — 5 steps + sample work screens (TASK-0032…TASK-0037) REVIEW · presentation sandbox TASK-0030 REVIEW · navigation sandbox TASK-0031 DONE (deleted)
 CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 and CHG-006 are both folded. Normal ADR-007 rule applies again — Phase 01 is a design phase; product code resumes in Phase 07 or via an approved change request.
@@ -21,9 +21,8 @@ CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 a
 Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. **TASK-0040:** re-review the CHG-004 shell work against the CHG-006 decisions (D-090); TASK-0030 and TASK-0032…TASK-0037 wait for it.
-2. Raise the pre-existing Prettier failure in `app-sidebar.tsx` with the owner now that the freeze has ended (KNOWN ISSUES).
-3. Phase 01 requirement rounds continue (TASK-0020, TASK-0021), now with the capability catalog per module (TASK-0041).
+1. Owner reviews the CHG-004 shell work, now aligned with CHG-006 (TASK-0030, TASK-0032…TASK-0037); TASK-0040 done (D-106…D-108).
+2. Phase 01 requirement rounds continue (TASK-0020, TASK-0021), now with the capability catalog per module (TASK-0041).
 4. OQ-027 items 3 and 4 (flow methods) still open.
 5. Phase 01 per-module requirement rounds (TASK-0020, TASK-0021) — no REQ file written yet.
 6. TASK-0018: re-check after 2026-10-15 that the worker keeps storing observations via the `CLAUDE_CODE_OAUTH_TOKEN` fallback (restart verified 2026-09-15; fallback not yet exercised). TASK-0019 DONE.
@@ -35,6 +34,7 @@ None.
 See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
+- D-106…D-108 (2026-09-18, TASK-0040): sample data removed from approvals, tasks, notifications and badges; reason required on reject and send-back; no "İş Akışları" menu entry until its own UX round
 - D-105 (2026-09-18): record-type builder built after the Slice 1 pilot (roadmap step 09R); CHG-006 approved and folded, product-code freeze ended
 - D-077…D-104 (2026-09-18, CHG-006, OQ-028): calculations fixed, processes configurable; 25 controlled module boundaries with contract tests; free record-type builder; flows never write the ledger; flows run with system authority, flow design only for full-visibility roles; three-outcome approvals; free windowed conditions; steps addressed by permission type/role/relationship/person; no temporary permission, designer defines and assigns roles; triggers event/calendar/threshold (e-mail deferred, DEF-006); end-to-end = chained short flows; phase order unchanged
 - D-072…D-076 (2026-09-17, CHG-005): roadmap is the single authority and is updated in the same session a CHG is approved; phase status vocabulary gains `PARTIALLY_DONE`; Milestone M1 redefined as the staging review; TASK-0027 (`docs/sources/` deletion) blocked until § references are remapped; record consistency is machine-checked (`npm run records`) and session continuity is hook-written, not model-remembered
@@ -54,7 +54,6 @@ See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and 
 DEF-001 Data import · DEF-002 Offline entry · DEF-003 Native mobile app · DEF-004 Self-hosted Supabase migration · DEF-005 Cloud Run workers · DEF-006 E-mail workflow triggers
 
 ## KNOWN ISSUES
-- **`npm run check` fails on committed `main` (found 2026-09-17, CHG-005 finding 10):** `src/platform/ui/app-shell/app-sidebar.tsx` is committed in a state Prettier rejects, so `format:check` fails even with a clean working tree. It predates this session — TASK-0032/0036 notes claim "check + build pass", which is no longer true of the committed tree. Not fixed here because product code is frozen (owner 2026-09-17); the fix is a Prettier reformat of that one file and nothing else. Raise with the owner before the freeze lifts.
 - claude-mem summarization depends on the Claude Code CLI login in `~/.claude/.credentials.json` (refresh token valid until 2026-10-15). If it lapses, observations silently stop with `OAuth session expired`; fix = owner re-login via CLI. On Windows the worker reads Windows Credential Manager first (absent, expected WARN), then falls back to the `CLAUDE_CODE_OAUTH_TOKEN` environment variable (v13.11.0 source). Safeguard tracked in TASK-0018.
 - Do not force-stop the claude-mem worker: its uvx/chroma-mcp children inherit and hold port 37777, blocking respawn. Prefer fully restarting the Claude app or Windows.
 - `Desktop\test\app` (out of scope) still pins claude-mem v12.3.6; running it against the shared DB reproduces `no such column: failed_at_epoch` errors.
