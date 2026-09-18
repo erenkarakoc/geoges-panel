@@ -92,6 +92,16 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Fabrika günlük kaydı | Factory Daily Log | Fabrikanın günlük üretim ve hareket kaydı | — | factory_report | PROPOSED | §17.2 |
 | Gider dağıtımı | Overhead Allocation | Fabrika giderinin işlere işçilik saatiyle dağıtılması | — | cost_split | PROPOSED | D-145 |
 | Teknik iyileştirme işi | Technical Improvement Work | Fabrikadaki kalıp, aparat, geliştirme işleri | — | rnd_task | PROPOSED | §17.6 |
+| Devreden miktar | Carried-Over Quantity | İşverenin onaylamadığı, sonraki hakedişte yeniden önerilen miktar | — | backlog | PROPOSED | D-147 |
+| İşveren avansı | Client Advance | İşverenden iş başında alınan, hakedişlerden kesilerek kapanan avans | — | prepayment | PROPOSED | D-150 |
+| Gelir | Income | Bir maliyet merkezine yazılan her gelir kaydı | — | revenue_item | PROPOSED | §22.2 |
+| Gider | Expense | Bir maliyet merkezine yazılan her gider kaydı | — | cost, spending | PROPOSED | §22.3 |
+| Genel gider | General Expense | Hiçbir projeye ait olmayan, projelere dağıtılmayan gider | — | overhead (fabrika gider dağıtımıyla karışır) | PROPOSED | D-149 |
+| Maliyet merkezi | Cost Center | Gelir ve giderin yazıldığı birim: proje, şantiye, fabrika, ekipman, genel | — | department | PROPOSED | §22.2 |
+| Nakit akışı projeksiyonu | Cash Flow Projection | Önümüzdeki haftaların beklenen giriş, çıkış ve kümülatif nakdi | — | forecast | PROPOSED | §22.7 |
+| Ödeme | Payment | Bir firmaya yapılan, onaylı ve dekontla kapanan ödeme | — | transfer | PROPOSED | §22.8 |
+| Muhasebe aktarımı | Accounting Export | Muhasebeci/YMM programına verilen aylık dosya | — | sync | PROPOSED | D-153 |
+| Kapanış birimi | Closing Unit | Dönemini kendi kapatan birim: her şantiye, fabrika, genel | — | branch | PROPOSED | D-154 |
 | Malzeme | Material | — | item (katalog satırı) | product | PROPOSED | |
 | Sarf malzeme | Consumable | — | — | supply | PROPOSED | |
 | Sarf reçetesi | Consumption Recipe | İş birimi başına standart sarf | bill of materials | — | PROPOSED | |

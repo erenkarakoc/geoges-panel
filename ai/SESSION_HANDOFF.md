@@ -16,18 +16,20 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
   - `REQ-SIT` — 35 requirements, D-119…D-125
   - `REQ-RPT` — 14 requirements, D-126…D-129 (§34 reports still to come)
   - Capability catalog template in `docs/requirements/README.md` (TASK-0041 IMPLEMENTING).
+- **Slice 1 and later files confirmed by the owner:** WFL, IAM, SIT, RPT, TSK (D-130…D-133), AUD (D-134, D-135), PRJ (D-136…D-138), ADM (D-139…D-141), INV, PUR, FAC (D-142…D-146) — 212 requirements CONFIRMED.
+- **REQ-FIN** — 30 requirements, D-147…D-154, DRAFT. Two answers went against the recommendation: no overhead allocation to projects (D-149, changes §15.1/§22.4 wording) and period close per site (D-154, with a derived rule for factory and office marked for confirmation).
 - Validator gained checks for decision and requirement ids and six-column task rows; the rule text in PROJECT_RULES §21.1 now matches what the tool does.
 - Glossary: ~25 proposed terms added before use; non-canonical names fixed (`flow` → `workflow`, `daily_log` → `daily_site_log`, `waste` → `damaged_unit`).
 
 ## Not done / open
 
-- **Owner confirmation of the four Slice 1 REQ files** (all DRAFT; TASK-0021 in REVIEW).
-- Remaining Phase 01 modules (PRJ, INV, PUR, FAC, EQP, FIN, HR, CRM, QTE, CMP, QHS, MTG, SUP, DOC, ADM, AUD, TSK, PRF, INT, STR, NFR) and RPT §34 — each needs a round and a catalog.
+- **Owner confirmation of REQ-FIN** (DRAFT), including the D-154 derived rule.
+- Remaining Phase 01 modules: EQP (incl. §20.3–§20.4), HR, CRM, QTE, CMP, QHS, MTG, SUP, DOC, PRF, INT, STR, NFR, and RPT §34 — each needs a round and a catalog (TASK-0044, TASK-0041).
 - TASK-0043: rename `dashboard`/`widget` in code to match the glossary.
-- TASK-0039 (§ → REQ remap) now has four REQ files to map to.
+- TASK-0039 (§ → REQ remap), which unblocks TASK-0027.
 - OQ-026 (password policy), OQ-027 items 3–4, OQ-007 (glossary confirmation) still open.
 
 ## Next session
 
-1. Owner confirms or corrects REQ-WFL, REQ-IAM, REQ-SIT, REQ-RPT.
-2. Continue Phase 01 module by module (suggested next: TSK and AUD, which Slice 1 depends on; then PRJ and ADM).
+1. Owner confirms or corrects REQ-FIN; mark it CONFIRMED and update the index count.
+2. Continue with EQP, then HR, following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).

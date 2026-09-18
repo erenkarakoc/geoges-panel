@@ -202,6 +202,19 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — FIN requirement round (2026-09-18)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-147 | **A quantity the client does not approve carries over** to the next progress payment and is proposed again; how many months it has waited is shown | Owner 2026-09-18; §16.1, §16.2 |
+| D-148 | **The subcontractor progress payment uses the production we approved**, not the quantity the client approved; the subcontractor does not wait for the client | Owner 2026-09-18; §16.4; D-030 |
+| D-149 | **General expenses (office rent, head office) are not allocated to projects** (AI recommended allocation by revenue share); project profit shows direct costs only and general expenses appear company-wide. **Changes scope wording:** §15.1 "genel gider payı" and §22.4 "proje payına düşen diğer giderler" no longer mean an overhead share; costs recorded directly on a project still count | Owner 2026-09-18; §15.1, §22.4 |
+| D-150 | **A client advance is recovered by deducting it from progress payments** at the contract's rate; the remaining advance is shown | Owner 2026-09-18; §16.1 |
+| D-151 | **The expected collection date is the contract's payment term** counted from client approval or invoice date as the contract states; an authorised person may change it with a reason | Owner 2026-09-18; §22.7 |
+| D-152 | **Duplicate expenses: the first entry books the expense**; a later receipt or invoice for the same spending is linked to it and books nothing; a difference in amount stays visible | Owner 2026-09-18; §22.3 |
+| D-153 | **Official accounting gets a monthly export file** in a format the accountant's program imports (e.g. Excel); the reconciliation result is marked in the panel. No direct integration in the first release | Owner 2026-09-18; §22.9 |
+| D-154 | **Each site closes its own period** (AI recommended one company-wide close). Derived consequence, to be confirmed with the requirement file: the factory and the general (office) cost center close as their own units, and the company month is final when the last unit closes | Owner 2026-09-18; §22.10 |
+
 ## PHASE 01 — Slice 2 requirement rounds: INV, PUR, FAC (2026-09-18)
 
 | ID | Decision | Ref |

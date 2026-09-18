@@ -33,3 +33,4 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-18 17:17:59Z · 6c9e96a0 · Write · `docs/requirements/REQ-INV.md`
 - 2026-09-18 17:18:25Z · 6c9e96a0 · Write · `docs/requirements/REQ-PUR.md`
 - 2026-09-18 17:18:50Z · 6c9e96a0 · Write · `docs/requirements/REQ-FAC.md`
+- 2026-09-18 18:59:56Z · 6c9e96a0 · Write · `docs/requirements/REQ-FIN.md`

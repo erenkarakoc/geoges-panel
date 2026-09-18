@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-18 — FIN requirements
+
+- Eight finance decisions (D-147…D-154). A quantity the client refuses carries over to the next month; subcontractors are paid on the production we approved, without waiting for the client; a client advance is recovered from progress payments; the expected collection date comes from the contract's term; when one spending arrives twice, the first entry books it and the second is linked; the accountant gets a monthly export file. Two answers went against the recommendation: general expenses are not spread over projects — which changes the scope's "overhead share" wording in §15.1 and §22.4 — and each site closes its own month, with the factory and the office as units of their own (a derived rule marked for confirmation).
+- `REQ-FIN.md` (30) is written, DRAFT, with its catalog; ten proposed glossary terms were added first.
+
+
 ## 2026-09-18 — Slice 2 requirements confirmed
 
 - The owner confirmed REQ-INV, REQ-PUR and REQ-FAC, including the derived transfer rule (a transfer leaves at the source average; its transport is added at the destination): 48 more requirements CONFIRMED, 212 in all. Next: FIN.
