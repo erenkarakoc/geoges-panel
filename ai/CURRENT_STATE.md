@@ -9,7 +9,7 @@ CURRENT SUBPHASE:    DISCOVER / QUESTION
 CURRENT FEATURE:     —
 CURRENT TASK:        — (TASK-0040 done; owner review of the CHG-004 shell work is next)
 STATUS:              REVIEW
-BRANCH:              main (infra/chg-005-record-consistency fast-forwarded into main 2026-09-18, 5c4ff54, and deleted; PR-less merge exception recorded in docs/standards/GIT_WORKFLOW.md)
+BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      CHG-004 product transfer — 5 steps + sample work screens (TASK-0032…TASK-0037) REVIEW · presentation sandbox TASK-0030 REVIEW · navigation sandbox TASK-0031 DONE (deleted)
 CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 and CHG-006 are both folded. Normal ADR-007 rule applies again — Phase 01 is a design phase; product code resumes in Phase 07 or via an approved change request.
                      Tooling code that enforces the records (scripts/, .githooks/) is always allowed.
@@ -34,6 +34,7 @@ None.
 See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
+- D-109 (2026-09-18): single branch — all work committed directly to `main`, no feature branches or PRs; `main` stays green on every commit
 - D-106…D-108 (2026-09-18, TASK-0040): sample data removed from approvals, tasks, notifications and badges; reason required on reject and send-back; no "İş Akışları" menu entry until its own UX round
 - D-105 (2026-09-18): record-type builder built after the Slice 1 pilot (roadmap step 09R); CHG-006 approved and folded, product-code freeze ended
 - D-077…D-104 (2026-09-18, CHG-006, OQ-028): calculations fixed, processes configurable; 25 controlled module boundaries with contract tests; free record-type builder; flows never write the ledger; flows run with system authority, flow design only for full-visibility roles; three-outcome approvals; free windowed conditions; steps addressed by permission type/role/relationship/person; no temporary permission, designer defines and assigns roles; triggers event/calendar/threshold (e-mail deferred, DEF-006); end-to-end = chained short flows; phase order unchanged

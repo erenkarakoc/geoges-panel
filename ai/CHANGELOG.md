@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-18 — One branch (D-109)
+
+- The owner removed the separate-branch rule: work goes straight to `main` in small, frequent commits. The two direct-to-`main` exceptions written down earlier the same day are now simply the rule.
+- What keeps that safe is that `main` must be green on every commit — `npm run check` before committing, the pre-commit gate for the records, and, once CI exists, no new work on top of a red build. Spike branches stay, and stay unmerged, because spike code never becomes product code (ADR-007).
+
+
 ## 2026-09-18 — The work layer stops pretending (TASK-0040)
 
 - The five shell tasks awaiting review were checked against the CHG-006 decisions. Three were untouched by them (context row, "Bugün", phone bar). The rest carried sample content that now contradicted the decisions: an approval queue with two outcomes where there are three, and tasks and notifications that could not say what produced them.

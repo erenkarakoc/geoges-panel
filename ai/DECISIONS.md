@@ -212,6 +212,12 @@ The owner reviewed the TASK-0040 findings and decided:
 | D-107 | **Rejecting and sending back both require a reason.** Applies to the approval screen built with the engine (D-099) | Owner 2026-09-18; TASK-0040 |
 | D-108 | **No "İş Akışları" menu entry now.** Where the flow designer, templates and the "new flows" list live, and how they flow, is decided later in its own question-and-brainstorm round when Phase 02/08 reaches it; the owner asked for a clean UX flow rather than a placeholder | Owner 2026-09-18; TASK-0040 |
 
+## Git workflow (2026-09-18)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-109 | **Single branch.** Work is committed directly to `main` in small, frequent commits; the separate-branch and pull-request rule is removed. `main` must stay green on every commit (`npm run check` before committing; the pre-commit gate enforces record consistency). The only other branch allowed is a throwaway `spike/` branch that is never merged, because spike code never becomes product code (ADR-007). Supersedes the branching part of `docs/standards/GIT_WORKFLOW.md` and the direct-to-`main` exceptions recorded on 2026-09-18 | Owner 2026-09-18 |
+
 ## Further decisions (2026-09-15)
 
 | ID | Decision | Ref |
