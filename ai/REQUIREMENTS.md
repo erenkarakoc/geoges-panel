@@ -23,7 +23,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | EQP | §21 | `docs/requirements/REQ-EQP.md` | — |
 | HR | §23 | `docs/requirements/REQ-HR.md` | — |
 | CMP | §24, §31 | `docs/requirements/REQ-CMP.md` | — |
-| TSK (tasks, notifications, escalation) | §25.1–§25.6 | `docs/requirements/REQ-TSK.md` | — |
+| TSK (tasks, notifications, escalation) | §25.1–§25.6 | `docs/requirements/REQ-TSK.md` | 13 (DRAFT) |
 | SUP | §25.7 | `docs/requirements/REQ-SUP.md` | — |
 | INT | §26, §27, §8.3 | `docs/requirements/REQ-INT.md` | — |
 | PRF | §28 | `docs/requirements/REQ-PRF.md` | — |
@@ -32,7 +32,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | DOC | §33 | `docs/requirements/REQ-DOC.md` | — |
 | STR | §35 | `docs/requirements/REQ-STR.md` | — |
 | ADM (master data, calendar) | §36.1–§36.4, §23.9 | `docs/requirements/REQ-ADM.md` | — |
-| AUD (audit, revision requests) | §38, §37.1 | `docs/requirements/REQ-AUD.md` | — |
+| AUD (audit, revision requests) | §38, §37.1 | `docs/requirements/REQ-AUD.md` | 10 (DRAFT) |
 | MIG (data import — DEFERRED) | §36.5, §33.4 import part | `docs/requirements/REQ-MIG.md` | — |
 | NFR (UI standards, alerts, platform) | §1, §39–§43, §40.2, §46 | `docs/requirements/REQ-NFR.md` | — |
 | NFR / platform — site-wide search (owner decision, no scope section) | D-044 | `docs/requirements/REQ-NFR.md` | — |

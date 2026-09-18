@@ -202,6 +202,19 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — TSK and AUD requirement rounds (2026-09-18)
+
+One round each; the answers are written into `docs/requirements/REQ-TSK.md` and `docs/requirements/REQ-AUD.md`.
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-130 | **A manual task can be given to anyone within the giver's own scope**, regardless of level (AI recommended: subordinates and self, owners and GM to anyone). A site engineer can therefore assign a task to their coordinator | Owner 2026-09-18; §25.1 |
+| D-131 | **How a manual task closes is chosen when it is given**: with "my approval required" the giver closes it; without, the assignee closes it and the giver is notified | Owner 2026-09-18; §25.1 |
+| D-132 | **Channels: everything in the panel; new task, approval request and critical alert also as an instant phone notification (browser push, no app); e-mail only for the daily digest.** Answers OQ-016 | Owner 2026-09-18; §25.5; OQ-016 |
+| D-133 | **Daily digest: every user gets their own; owners also get the company's** | Owner 2026-09-18; §25.6 |
+| D-134 | **Nothing is ever deleted or anonymised, personal data included**, even on request or at the end of a retention period (AI recommended anonymising the identifying fields). **Legal risk:** KVKK erasure and anonymisation rights cannot be met; recorded under RISK-001 and brought back to the owner with it before real HR data is entered (D-050) | Owner 2026-09-18; §38; KVKK |
+| D-135 | **The company-wide audit log screen is for the owners only.** A record's own history stays visible to whoever can see the record, filtered by data class | Owner 2026-09-18; §38, §2.4 |
+
 ## PHASE 01 — RPT requirement round (2026-09-18, TASK-0021)
 
 One round with the owner; the answers are written into `docs/requirements/REQ-RPT.md`. §34 (reports and exports) gets its own round later in Phase 01.

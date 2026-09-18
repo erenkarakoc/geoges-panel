@@ -46,7 +46,7 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 | OQ-013 | Offsite backup target for database and R2 files. |
 | OQ-014 | Error tracking & monitoring tool. |
 | OQ-015 | Email: provider of `info@` mailbox and transactional sender; which domain (`geoges.com` vs `geogespanel.com`)? |
-| OQ-016 | Web push notifications in the first (online-only) release? |
+| OQ-016 | ANSWERED 2026-09-18 → D-132: yes — new task, approval request and critical alert go to the phone as browser push; e-mail only for the daily digest. |
 | OQ-017 | Package manager and runtime: npm (installed) vs pnpm/bun; Node 24 LTS? — Provisional for M0 (2026-09-16): npm 11 + Node 24 (`engines.node >=24`), exact-pinned versions and committed lockfile; final decision in Phase 05/07. |
 
 ## Product — non-blocking until Phase 01/02

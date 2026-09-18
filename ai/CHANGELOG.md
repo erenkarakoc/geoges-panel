@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-18 — REQ-TSK and REQ-AUD
+
+- Tasks and notifications: a manual task can go to anyone in the giver's scope; whoever gives it decides whether it needs their approval to close; everything shows in the panel, while new tasks, approval requests and critical alerts also reach the phone as a browser notification, and e-mail carries only the morning digest — which every user now gets for their own work, the owners also for the company. That answers OQ-016.
+- Audit: nothing is ever deleted, and — the owner's choice against the recommendation — personal data is never anonymised either. That leaves KVKK erasure requests unanswerable; it is written into RISK-001 and REQ-AUD-003 makes sure it returns to the owner before real HR data is entered. The company-wide audit screen is for the owners alone, and an audit entry can be changed by no one, owners included.
+- `REQ-TSK.md` (13) and `REQ-AUD.md` (10) are written, DRAFT. TASK-0044 now tracks the remaining modules.
+
+
 ## 2026-09-18 — Slice 1 requirements confirmed
 
 - The owner confirmed REQ-WFL, REQ-IAM, REQ-SIT and REQ-RPT: 115 requirements move from DRAFT to CONFIRMED and TASK-0021 is done. Phase 01 continues with TSK and AUD, the two modules Slice 1 leans on.

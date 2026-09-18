@@ -97,6 +97,11 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Kayıt türü üreteci | Record Type Builder | Kullanıcının yeni kayıt türü tanımladığı araç | — | form_builder | PROPOSED | D-079 |
 | Kullanıcı tanımlı kayıt türü | Custom Record Type | Üreteçle tanımlanmış kayıt türü | — | custom_entity | PROPOSED | D-079 |
 | İş akışı | Workflow | Tanımlı süreç | — | process, flow (kodda) | PROPOSED | |
+| Bildirim | Notification | Kullanıcıya bir olayı haber veren ileti | — | alert, message | PROPOSED | |
+| Telefon bildirimi | Push Notification | Tarayıcı üzerinden telefona anında giden bildirim | web push | sms | PROPOSED | D-132 |
+| Günlük özet | Daily Digest | Kişiye sabah giden tek özet ileti | — | report, summary_mail | PROPOSED | D-133 |
+| Denetim kaydı | Audit Log | Değiştirilemeyen işlem kaydı | — | history_table, log | PROPOSED | D-135 |
+| Kayıt geçmişi | Record History | Bir kaydın alan alan değişiklik geçmişi | — | changelog, versions | PROPOSED | §38 |
 | Görev | Task | Sorumluya atanan iş | — | job, todo | PROPOSED | Geliştirme görevleri `TASK-NNNN` ID'si ile karışmaması için kodda `work_task` Phase 04'te değerlendirilir |
 | Eskalasyon | Escalation | — | — | — | PROPOSED | |
 | Demirbaş / Varlık | Asset | Envanter kalemi (makine, araç, laptop…) | — | fixture, inventory_item | PROPOSED | |
