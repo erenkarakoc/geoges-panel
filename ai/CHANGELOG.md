@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-18 — QTE requirements confirmed
+
+- The owner confirmed REQ-QTE, including the derived rule that a won quote cancels the request's other open quotes: 18 more requirements CONFIRMED, 311 in all. Next: CMP.
+
+
 ## 2026-09-18 — QTE requirements
 
 - Four quote decisions (D-173…D-176). Quote estimates, like project results, carry no share of general expenses — against the recommendation of a separate line — so §6.3 was corrected in place, and covering general costs is left to the target margin. Estimated costs are proposed from what the item actually cost last time; a sales order reserves its stock; each shipment of a product order gets its own invoice.

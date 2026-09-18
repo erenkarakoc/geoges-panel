@@ -1,6 +1,6 @@
 # REQ-QTE — Teklif, Maliyet Geri Beslemesi ve Ürün Satışı
 
-Durum: DRAFT · 2026-09-18 · Modül: QTE (Quotes & Sales)
+Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: QTE (Quotes & Sales)
 
 Kaynaklar: Özellik Yapısı §6; kararlar D-027, D-140, D-149, D-173…D-176.
 
@@ -20,17 +20,17 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Kabul kriterleri:
   - [ ] Kalemler ürün/iş kataloğundan seçilir; katalog dışı kalem gerekçeyle eklenir.
   - [ ] Geçerlilik tarihi geçen gönderilmiş teklif için sorumlusuna uyarı düşer.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QTE-002 — Teklif durumları ve talebin aşaması
 
 - Kaynak: §6.1; REQ-CRM-006
 - Öncelik: Must · Kademe: T1
-- Açıklama: Teklif şu durumlardan geçer: Hazırlanıyor → Gönderildi → Görüşme/Pazarlık → Kazanıldı / Kaybedildi / İptal. Teklifin durumu bağlı talebin aşamasını günceller: teklif gönderilince talep "Teklif verildi" olur; teklif kazanılınca veya kaybedilince talep de öyle olur. Bir talebin birden fazla teklifi olabilir; biri kazanılınca diğer açık teklifler "İptal" olur (bu kural kapsamdan türetildi, bu dosyanın onayıyla kesinleşir).
+- Açıklama: Teklif şu durumlardan geçer: Hazırlanıyor → Gönderildi → Görüşme/Pazarlık → Kazanıldı / Kaybedildi / İptal. Teklifin durumu bağlı talebin aşamasını günceller: teklif gönderilince talep "Teklif verildi" olur; teklif kazanılınca veya kaybedilince talep de öyle olur. Bir talebin birden fazla teklifi olabilir; biri kazanılınca diğer açık teklifler "İptal" olur (kapsamdan türetilen kural, sahip onayladı).
 - Kabul kriterleri:
   - [ ] "Kaybedildi" kayıp nedeni seçilmeden işaretlenemez.
   - [ ] Her durum geçişi tarih ve kişiyle teklifin geçmişinde görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QTE-003 — Teklif sürümleri
 
@@ -39,7 +39,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Açıklama: Gönderilmiş bir teklif değiştirilecekse yeni sürüm açılır (Rev.1, Rev.2…). Gönderilen her sürüm belgesiyle birlikte saklanır ve sürümler yan yana karşılaştırılabilir.
 - Kabul kriterleri:
   - [ ] Gönderilmiş sürümün içeriği değiştirilemez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Fiyat oluşturma
 
@@ -50,7 +50,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Açıklama: Teklif öncesinde boykesit, enkesit ve plan incelenerek çıkarılan yaklaşık miktarlar kaydedilir ve teklif kalemlerine aktarılır. Birim fiyat girilirken şehir, kurum, bölge, piyasa koşulları, işveren dinamiği ve proje şartları not olarak kalemle birlikte tutulur.
 - Kabul kriterleri:
   - [ ] Yaklaşık miktarların kaynağı olan çizimler teklife belge olarak eklenebilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QTE-005 — Tahmini maliyet geçmiş gerçek maliyetten önerilir
 
@@ -59,7 +59,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Açıklama: Her kalemin tahmini birim maliyeti, şirketin o kalem için son gerçekleşen birim maliyetinden önerilir. Teklifi hazırlayan öneriyi değiştirebilir; önerilen ve girilen değer yan yana görünür. Veri yoksa maliyet elle girilir.
 - Kabul kriterleri:
   - [ ] Önerinin hangi projeden ve hangi döneme ait gerçek maliyetten geldiği görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QTE-006 — "Bu fiyata alırsam ne kazanırım?"
 
@@ -68,7 +68,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Açıklama: Her kalemde tahmini maliyet ile satış fiyatı karşılaştırılır; teklifin tahmini toplam maliyeti, tahmini kârı ve kâr marjı gösterilir. Tahmini maliyete ilgili olduğu ölçüde malzeme, fabrika işleme, saha işçiliği, taşeron işçilik, ekipman, yemek/konaklama ve nakliye girer. Genel gider payı eklenmez; genel gideri karşılamak hedef marjın işidir (D-173, D-149 ile aynı mantık).
 - Kabul kriterleri:
   - [ ] Maliyet dökümü kalem ve maliyet türü bazında görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QTE-007 — Hedef marja göre fiyat önerisi
 
@@ -77,7 +77,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Açıklama: Yetkili kullanıcı hedef marjı girer (ör. "en az %25"); panel tahmini maliyetten önerilen satış fiyatını hesaplar.
 - Kabul kriterleri:
   - [ ] Hedef marjın altında kalan teklif gönderilirken uyarı verilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QTE-008 — Çoklu para birimi
 
@@ -86,7 +86,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Açıklama: Aynı teklifte farklı para birimleri olabilir (ör. panel TL/m², çelik şerit USD/metre). Karşılaştırmada TL karşılığı gösterilir; kalemin kendi para birimi korunur. Kur, önceki iş gününün TCMB alış kurudur; yetkili kullanıcı gerekçeyle elle kur girebilir.
 - Kabul kriterleri:
   - [ ] Teklifte kullanılan kur ve tarihi teklif kaydında saklanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Tekliften projeye
 
@@ -97,7 +97,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Açıklama: Kazanılan uygulama teklifi yeniden girilmez: yeni projenin başlangıç bilgisini oluşturur (REQ-CRM-014) veya mevcut bir projeye bağlanır.
 - Kabul kriterleri:
   - [ ] Projenin kalemleri, miktarları ve birim fiyatları kazanılan teklif sürümünden gelir ve o sürüme bağlantı taşır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## D. Maliyet geri beslemesi
 
@@ -109,7 +109,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Kabul kriterleri:
   - [ ] Sapma kalem ve maliyet türü bazında açılabilir.
   - [ ] Sapması belirlenen eşiği aşan tamamlanmış işte "maliyet neden aşıldı" açıklaması istenir; eşik merkezi kuraldır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QTE-011 — Ders notları sonraki tekliflere taşınır
 
@@ -118,7 +118,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Açıklama: Tamamlanan işe "ders/not" yazılır. Aynı kalemi veya aynı işvereni içeren yeni teklif hazırlanırken ilgili notlar teklif ekranında görünür.
 - Kabul kriterleri:
   - [ ] Not, yazıldığı işe ve kaleme bağlantı taşır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## E. Teklif belgesi
 
@@ -130,7 +130,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Kabul kriterleri:
   - [ ] Üretilen belge teklif kaydına kendiliğinden eklenir.
   - [ ] Tahmini maliyet ve marj belgede hiçbir zaman yer almaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QTE-013 — Teklif şablonları
 
@@ -139,7 +139,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Açıklama: Şablonlar iki gruptur. Uygulama teklifleri: Toprakarme duvar, Gabion duvar, Otokorkuluk sistemi, Çelik ağ şev koruması. Ürün teklifleri: Geonet, Geogrid, Çelik şerit, Geomembran (HDPE), Geocell. Sabit metinler şablondan, değişken bilgiler teklif kaydından gelir. Yetkili kullanıcı yeni şablon ve ürün grubu ekler, şablon metinlerini günceller.
 - Kabul kriterleri:
   - [ ] Şablon değişikliği daha önce üretilmiş belgeleri değiştirmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## F. Ürün satışı
 
@@ -150,7 +150,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Açıklama: Şantiyesi olmayan malzeme satışında (geogrid, geomembran, çelik şerit vb.) kazanılan teklif proje ve şantiye açılmadan satış siparişine döner. Zincir: Teklif → Satış siparişi → Tedarik/üretim → Müşteriye sevk → Fatura → Tahsilat.
 - Kabul kriterleri:
   - [ ] Satış siparişinin kalemleri ve fiyatları kazanılan teklif sürümünden gelir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QTE-015 — Satış siparişi kaydı
 
@@ -159,7 +159,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Açıklama: Satış siparişinde müşteri, kalemler, fiyat, para birimi, teslim şekli ve tarihi, sevk irsaliyesi ve teslim/kantar belgeleri tutulur. Sevk stoktan veya tedarikçiden doğrudan müşteriye yapılabilir.
 - Kabul kriterleri:
   - [ ] Tedarikçiden doğrudan sevkte ilgili satın alma siparişi (REQ-PUR) satış siparişine bağlanır ve stok hareketi oluşmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QTE-016 — Satış siparişi stok ayırır
 
@@ -168,7 +168,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Açıklama: Stoktan karşılanacak satış siparişinin miktarı açıldığında stokta ayrılır; ayrılan miktar şantiyelere ve başka siparişlere kullanılabilir stok olarak görünmez. Sevk edilince ayırma kalkar ve stok düşer; sipariş iptal edilirse ayırma kalkar.
 - Kabul kriterleri:
   - [ ] Stok ekranında her lokasyon için toplam, ayrılmış ve kullanılabilir miktar ayrı görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QTE-017 — Her sevkiyat ayrı faturalanır
 
@@ -177,7 +177,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Açıklama: Sipariş birkaç sevkiyatta gidebilir; her sevkiyatta giden miktar için muhasebeye fatura görevi oluşur. Siparişin sevk edilen, faturalanan ve kalan kısmı görünür.
 - Kabul kriterleri:
   - [ ] Fatura görevi sevkiyata bağlıdır; fatura girilince görev kapanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QTE-018 — Sipariş bazında maliyet ve kâr
 
@@ -186,7 +186,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 - Açıklama: Satış siparişinin maliyeti (stoktan çıkışta lokasyonun ağırlıklı ortalaması, doğrudan sevkte alış bedeli, nakliye) ve kârı sipariş bazında izlenir; teklifteki tahminle geri besleme aynı mantıkla yapılır (REQ-QTE-010).
 - Kabul kriterleri:
   - [ ] Sipariş kapandığında tahmini ve gerçekleşen kâr yan yana görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 

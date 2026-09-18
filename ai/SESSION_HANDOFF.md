@@ -21,7 +21,7 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 - **REQ-EQP** — 21 requirements, D-155…D-162, CONFIRMED; scope §20.3/§21.3 corrected in place; REQ-SIT-003 gains an equipment section (D-162). Two answers went against the recommendation: no overhead allocation to projects (D-149, changes §15.1/§22.4 wording) and period close per site (D-154, with a derived rule for factory and office marked for confirmation).
 - **REQ-HR** — 16 requirements, D-163…D-168, CONFIRMED; RISK-011 (payroll engine) opened.
 - **REQ-CRM** — 14 requirements, D-169…D-172, CONFIRMED.
-- **REQ-QTE** — 18 requirements, D-173…D-176, DRAFT; scope §6.3 corrected (D-173); REQ-CRM-014 clarified. Derived rule awaiting confirmation: a won quote cancels the request's other open quotes (REQ-QTE-002).
+- **REQ-QTE** — 18 requirements, D-173…D-176, CONFIRMED; scope §6.3 corrected (D-173); REQ-CRM-014 clarified.
 - Validator gained checks for decision and requirement ids and six-column task rows; the rule text in PROJECT_RULES §21.1 now matches what the tool does.
 - Glossary: ~25 proposed terms added before use; non-canonical names fixed (`flow` → `workflow`, `daily_log` → `daily_site_log`, `waste` → `damaged_unit`).
 
@@ -34,5 +34,4 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 
 ## Next session
 
-1. Owner confirms or corrects REQ-QTE (incl. the REQ-QTE-002 derived rule); mark CONFIRMED.
-2. Continue with CMP, following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).
+1. Continue with CMP, following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).
