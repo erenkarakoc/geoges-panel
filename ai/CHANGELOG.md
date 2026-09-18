@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2026-09-18 — The gate checks what is actually committed
+
+- `REQ-ADM.md` was left out of its own commit: `git commit -a` does not pick up new files, and the gate passed because its checks read the working tree, where the file was. It was committed straight after. The gate now refuses a commit while untracked files sit in the tracked folders, so the same slip cannot recur.
+
 ## 2026-09-18 — REQ-ADM
 
 - Master data: a new list item is usable the moment it is added — after the similar ones are shown — and duplicates are merged later without losing their history; the exchange rate is the previous business day's CBRT buying rate, and a missing rate stops dollar transactions from being quietly priced at an old one; a price may be back-dated, but only unapproved transactions feel it.

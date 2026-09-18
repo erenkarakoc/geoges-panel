@@ -16,6 +16,17 @@ if ! command -v node >/dev/null 2>&1; then
   exit 1
 fi
 
+# The checks below read the working tree, not the commit. A new file that was never added
+# would pass them and still be missing from the commit (it happened on 2026-09-18 with
+# `git commit -a`). So a commit is refused while such files exist.
+untracked=$(git ls-files --others --exclude-standard -- ai docs scripts src .githooks .claude/settings.json package.json)
+if [ -n "$untracked" ]; then
+  echo "pre-commit: these files are not added, so this commit would leave them out:" >&2
+  echo "$untracked" >&2
+  echo "Add them (git add) or ignore them, then commit again." >&2
+  exit 1
+fi
+
 npm run --silent check:commit || {
   echo "" >&2
   echo "pre-commit: the check failed — commit refused. main must stay green (D-109, D-110)." >&2
