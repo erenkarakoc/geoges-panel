@@ -1,6 +1,6 @@
 # Uçtan Uca Akış Tanımları
 
-Durum: TASLAK (eksikler D-222 ile kapandı; sahip onayı bekleniyor) · Son güncelleme: 2026-09-19
+Durum: CONFIRMED (sahip, 2026-09-19; D-222) · Son güncelleme: 2026-09-19
 
 Sekiz uçtan uca süreç (REQ-WFL-011, REQ-WFL-028) burada **gerçek akış tanımı** olarak yazılır ve her adım palete karşı sınanır (D-089, TASK-0042). 2026-09-17 sınamasının (`docs/workflows/README.md`) yeni düğümlerle tekrarıdır. Bu tanımlar Phase 08'de motorun kabul testleri olur (REQ-WFL-028).
 

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — End-to-end flows confirmed
+
+- The owner confirmed the eight flow definitions; they become the engine's acceptance tests in Phase 08. Next: the flow designer round (D-108).
+
+
 ## 2026-09-19 — The eight end-to-end processes as real flows
 
 - `docs/workflows/END_TO_END_FLOWS.md` writes each of the eight processes as short flows that trigger one another, step by step, naming the exact event, action and node each step uses. The step palette covered everything. Four places lacked an event or action a module should publish (quote, payment and stock count sent for approval; opening the leaving checklist); the owner had them added. A client wait beyond the contract's allowed time now counts against that client obligation automatically, the daily site log can be returned but not rejected, and a "for each" step works over records linked to the one that started the flow (D-222). Next: the owner reviews the definitions, then the flow designer round (D-108).
