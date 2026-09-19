@@ -47,3 +47,4 @@ Only items whose quality gate passed are listed here.
 | 2026-09-19 | TASK-0047 | Slice order and pilot approach confirmed (D-216) | T2 PASS (owner confirmed) |
 | 2026-09-19 | PHASE 01 | Requirements & Domain Analysis — all deliverables in; KVKK inventory deferred (DEF-007) | Phase exit approved by the owner |
 | 2026-09-19 | TASK-0048 | Screen inventory (`docs/ui-ux/SCREEN_INVENTORY.md`), every requirement on a screen | T2 PASS (owner confirmed; coverage script clean) |
+| 2026-09-19 | TASK-0049 | List, detail and form patterns (`docs/ui-ux/SCREEN_PATTERNS.md`) | T2 PASS (owner confirmed) |

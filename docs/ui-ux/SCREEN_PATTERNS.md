@@ -1,6 +1,6 @@
 # Standart Ekran Kalıpları: Liste, Detay, Form
 
-Durum: TASLAK · Son güncelleme: 2026-09-19
+Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-19
 
 Ekran envanterindeki (`docs/ui-ux/SCREEN_INVENTORY.md`) her L, D ve F ekranı bu üç kalıptan birini kullanır (REQ-NFR-006, REQ-NFR-013…015). Kalıplar CHG-004 kabuğunun üzerine oturur: üst bar, açık kayıtta ikinci satır (bağlam satırı, D-064), çalışma katmanı ve telefonda alt çubuk (D-054…D-070) değişmez. Bileşenlerin hepsi projede kurulu COSS bileşenleridir; özel bileşen gerekmez (ADR-009). Kararlar: D-219.
 

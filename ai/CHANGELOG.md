@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Screen patterns confirmed
+
+- The owner confirmed `docs/ui-ux/SCREEN_PATTERNS.md` (TASK-0049). Next: the daily site log screen, including OQ-027 item 3.
+
+
 ## 2026-09-19 — Standard screen patterns
 
 - `docs/ui-ux/SCREEN_PATTERNS.md` defines the list, detail and form patterns every module uses, each mapped to COSS components already installed — no custom component was needed. The owner chose section tabs with collapsible parts for detail screens, pages on desktop and "Daha fazla göster" on phones, and short forms in a dialog with long ones as full pages under a fixed save bar (D-219).
