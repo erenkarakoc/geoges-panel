@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-19 — NFR requirements, the last module round
+
+- Four platform decisions (D-209…D-212): at most one hour of data may be lost in a major failure (the owner accepted an hour against the recommended fifteen minutes) and the panel is back within four hours; the interface stays Turkish only; and the system is sized for 50–150 signed-in users.
+- `REQ-NFR.md` (20) gathers the cross-cutting rules: no record means not done; the panel is the only official record; the panel keeps working when an outside source fails, except that the exchange rate follows REQ-ADM-013 and never silently falls back; every §39 alert maps to a catalog event; the §46 management questions must each have a screen in the Phase 02 inventory; the standard list, detail and form screens; accessibility; and the four platform decisions.
+
+
 ## 2026-09-19 — RPT §34 confirmed
 
 - The owner confirmed REQ-RPT-015…023: REQ-RPT is complete (23), 418 requirements CONFIRMED in all. Next: NFR, the last module round.

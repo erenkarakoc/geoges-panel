@@ -33,6 +33,7 @@ None.
 See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
+- D-209…D-212 (2026-09-19, NFR round): RPO ≤ 1 h, RTO ≤ 4 h, Turkish-only interface, sizing for 50–150 users
 - D-206…D-208 (2026-09-19, RPT §34 round): daily site report produced on approval, sent to the client by a person; ready-made reports with filters and saved views; scheduled reports to internal users only, as a workflow
 - D-202…D-205 (2026-09-19, STR round): budget per month × cost center × expense type; nominal TL with an inflation-adjusted view; simple and discounted payback; health scorecard as colours per area with no overall score
 - D-199…D-201 (2026-09-19, MTG/DOC/SUP round): meeting visibility by role scope; minutes final when saved; archive search includes contents and text recognition of scans (outside-service question deferred to Phase 03)

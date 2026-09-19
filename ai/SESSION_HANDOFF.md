@@ -29,6 +29,7 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 - **REQ-MTG (8), REQ-DOC (10), REQ-SUP (5)** — D-199…D-201, CONFIRMED 2026-09-19.
 - **REQ-STR** — 8 requirements, D-202…D-205, CONFIRMED 2026-09-19.
 - **REQ-RPT §34** — REQ-RPT-015…023, D-206…D-208, CONFIRMED 2026-09-19.
+- **REQ-NFR** — 20 requirements, D-209…D-212, DRAFT. Last module round of Phase 01.
 - **Layer scan (D-181)** — all 328 requirements tagged Sabit / Akış / Tanım; 101 name a configurable part; three descriptions reworded (REQ-TSK-006, REQ-CRM-007, REQ-CMP-013); validator enforces the tag. New modules must carry the tag from the start. Derived rules awaiting confirmation: framework price proposed on orders (REQ-CMP-004); contract amendment as a new version (REQ-CMP-005).
 - Validator gained checks for decision and requirement ids and six-column task rows; the rule text in PROJECT_RULES §21.1 now matches what the tool does.
 - Glossary: ~25 proposed terms added before use; non-canonical names fixed (`flow` → `workflow`, `daily_log` → `daily_site_log`, `waste` → `damaged_unit`).
@@ -42,4 +43,5 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 
 ## Next session
 
-1. Continue with NFR, following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).
+1. Owner confirms or corrects REQ-NFR; mark CONFIRMED.
+2. Phase 01 exit: TASK-0039 (§ → REQ remap), OQ-007 glossary confirmation, then TASK-0027, following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).

@@ -34,8 +34,8 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | ADM (master data, calendar, panel and strip type catalogs, exchange rate) | §36.1–§36.4, §23.9, §10.1, §11.2 (type definitions), §22.5 (rate) | `docs/requirements/REQ-ADM.md` | 15 (CONFIRMED) |
 | AUD (audit, revision requests) | §38, §37.1 | `docs/requirements/REQ-AUD.md` | 10 (CONFIRMED) |
 | MIG (data import — DEFERRED) | §36.5, §33.4 import part | `docs/requirements/REQ-MIG.md` | — |
-| NFR (UI standards, alerts, platform) | §1, §39–§43, §40.2, §46 | `docs/requirements/REQ-NFR.md` | — |
-| NFR / platform — site-wide search (owner decision, no scope section) | D-044 | `docs/requirements/REQ-NFR.md` | — |
+| NFR (UI standards, alerts, platform) | §1, §39–§43, §40.2, §46 | `docs/requirements/REQ-NFR.md` | 20 (DRAFT) |
+| NFR / platform — site-wide search (owner decision, no scope section) | D-044 | `docs/requirements/REQ-NFR.md` | NFR-012 |
 
 ## Section remaps (2026-09-18)
 

@@ -202,6 +202,15 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — NFR requirement round (2026-09-19)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-209 | **At most one hour of data may be lost in a major failure** (RPO ≤ 1 h; AI recommended 15 minutes); backups sit away from the server | Owner 2026-09-19; §33.4; Phase 05 |
+| D-210 | **The panel is back within four hours of a major failure** (RTO ≤ 4 h), with written and rehearsed restore steps | Owner 2026-09-19; Phase 05 |
+| D-211 | **The interface, generated documents and notifications are Turkish only**; code, database and API names stay English, so a language can be added later | Owner 2026-09-19; PROJECT_RULES |
+| D-212 | **Sizing assumption: 50–150 signed-in users within two years** (management, office, engineers, coordinators, foremen and subcontractor crew leads); used for Phase 05 cost and Phase 06 load tests | Owner 2026-09-19; Phase 05 |
+
 ## PHASE 01 — RPT §34 requirement round (2026-09-19)
 
 | ID | Decision | Ref |
