@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Workflow engine architecture
+
+- `docs/architecture/WORKFLOW_ENGINE.md` turns ADR-006 and the CHG-006 decisions into a buildable design: versioned JSON definitions, instances that finish on the version they started with, waits that survive a restart, a dry trial run that still evaluates conditions against real data, and limits that stop a badly built flow from opening five thousand tasks (D-235, TASK-0059).
+
+
 ## 2026-09-20 — Event backbone
 
 - `docs/architecture/EVENT_BACKBONE.md` settles how modules react to each other: the event is written with the change itself, so an approved daily log can never fail to reach stock; repeats are harmless; failures retry, then land in a dead-letter list that raises a critical notification instead of showing anyone an error; replays rebuild reports without re-sending old notifications (D-234, TASK-0058).
