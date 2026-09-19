@@ -333,6 +333,7 @@ Biçim: `docs/requirements/README.md`.
 | `shipment.dispatched` | Sevkiyat çıktı | Tır yola çıktığında | sevkiyat, çıkış, varış | iç |
 | `shipment.received` | Sevkiyat teslim alındı | Varışta teslim alındığında | sevkiyat, teslim alan, fark | iç |
 | `weighbridge_difference.exceeded` | Kantar farkı toleransı aştı | Tartı teorik ağırlıktan tolerans dışında saptığında | sevkiyat, fark % | iç |
+| `stock_count.submitted` | Sayım onaya sunuldu | Sayım tamamlanıp onaya gönderildiğinde (D-222) | lokasyon, sayan, fark | iç |
 | `stock_count.approved` | Sayım onaylandı | Sayım onaylandığında | lokasyon, fark | iç |
 
 ### Aksiyonlar

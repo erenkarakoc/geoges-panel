@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — The eight end-to-end processes as real flows
+
+- `docs/workflows/END_TO_END_FLOWS.md` writes each of the eight processes as short flows that trigger one another, step by step, naming the exact event, action and node each step uses. The step palette covered everything. Four places lacked an event or action a module should publish (quote, payment and stock count sent for approval; opening the leaving checklist); the owner had them added. A client wait beyond the contract's allowed time now counts against that client obligation automatically, the daily site log can be returned but not rejected, and a "for each" step works over records linked to the one that started the flow (D-222). Next: the owner reviews the definitions, then the flow designer round (D-108).
+
+
 ## 2026-09-19 — Screen states confirmed
 
 - The owner confirmed the state matrix. Opening a record you may not see by link now says so plainly ("Bu kaydı görme yetkiniz yok") instead of pretending it does not exist; search and lists still never show it (D-221). Typed input survives a dropped connection. Next: the eight end-to-end flows with the flow designer.

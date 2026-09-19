@@ -84,6 +84,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 - Açıklama: İşverenin yükümlülükleri de izlenir: saha teslimi, dolgu, beton, demir, elektrik/su, ödeme ve diğer sözleşmesel yükümlülükler. Yerine getirilme zamanı teslim-tesellüm kayıtlarından ve tahsilattan gelir.
 - Kabul kriterleri:
   - [ ] İşveren yükümlülüğü gecikince işveren karnesine yansır (REQ-CRM-009).
+  - [ ] Sözleşmede süreli bir işveren yükümlülüğü varsa (ör. dolgu geri teslim süresi), bu süreyi aşan işveren beklemesini (REQ-SIT-025) panel kendiliğinden o yükümlülüğe bağlar ve yükümlülüğü gecikmiş sayar; `client_obligation.delayed` yayımlanır. Sonrası (yazı taslağı, görev) akıştır (D-222).
 - Durum: CONFIRMED
 
 ### REQ-CMP-008 — Sözleşmeden doğan tetikleyiciler

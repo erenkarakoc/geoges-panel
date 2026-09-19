@@ -375,6 +375,7 @@ Biçim: `docs/requirements/README.md`.
 | `collection.recorded` | Tahsilat girildi | Tahsilat kaydedildiğinde | firma, tutar, kalan alacak | ticari |
 | `client_progress_payment.overdue` | Tahsilat gecikti | Beklenen tarih geçtiğinde | proje, dönem, gecikme günü, kalan | ticari |
 | `subcontractor_progress_payment.prepared` | Taşeron hakedişi hazırlandı | Hazırlandığında | şantiye, taşeron, dönem, tutar | ticari |
+| `payment.submitted_for_approval` | Ödeme onaya sunuldu | Hazırlanan ödeme onaya sunulduğunda (D-222) | firma, tutar, hazırlayan | ticari |
 | `payment.approved` | Ödeme onaylandı | Ödeme onaylandığında | firma, tutar | ticari |
 | `payment.completed` | Ödeme yapıldı | Dekontla kapandığında | firma, tutar | ticari |
 | `expense.possible_duplicate` | Olası tekrar gider | Tekrar şüphesi bulunduğunda | iki kayıt, fark | ticari |

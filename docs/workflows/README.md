@@ -106,4 +106,4 @@ tasarım kuralı.
 | B-5 dış taraf onayı | Hazır alt akış şablonu; işverene panel girişi yok (D-102) |
 | B-6 tetikleyici tipleri | Olay, saat/takvim, eşik; elle başlatma her zaman; e-posta ertelendi — DEF-006 (D-103) |
 
-Phase 02'de (TASK-0042) sınama yeni düğümlerle sekiz akışın tamamı için yeniden yapılır; boşluk kalmamalıdır.
+Phase 02'de (TASK-0042) sınama yeni düğümlerle sekiz akışın tamamı için yeniden yapıldı: palet eksiği çıkmadı, dört katalog eksiği ve bir bağlama kuralı sahip kararıyla kapandı (D-222). Tanımlar: `docs/workflows/END_TO_END_FLOWS.md`.

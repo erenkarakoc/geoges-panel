@@ -115,7 +115,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Kaynak: D-096
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
-- Açıklama: Akış, uzunluğu önceden belli olmayan bir liste üzerinde her öğe için aynı adımları çalıştırabilir (her zimmet, her eksik evrak). Tek seviyedir; iç içe kullanılamaz.
+- Açıklama: Akış, uzunluğu önceden belli olmayan bir liste üzerinde her öğe için aynı adımları çalıştırabilir (her zimmet, her eksik evrak). Liste, tetikleyen kayda bağlı kayıtların sorgusudur (ör. "bu personelin açık zimmetleri"); koşullardaki sorguyla aynı düzenektir ve aynı süre sınırına tabidir (REQ-WFL-008, D-222). Tek seviyedir; iç içe kullanılamaz.
 - Kabul kriterleri:
  - [ ] Personel çıkışı akışı (REQ-IAM-007), her zimmet için ayrı kontrol üreterek kurulabilir.
   - [ ] Bir "her biri için" adımının içine ikinci bir "her biri için" konamaz.

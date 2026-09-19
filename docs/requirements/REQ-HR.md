@@ -231,6 +231,7 @@ Biçim: `docs/requirements/README.md`.
 
 | Kod | Ad | Girdi | Gereken yetki | İki kez çalışırsa | Yarıda kalırsa |
 |---|---|---|---|---|---|
+| `offboarding_checklist.create_draft` | Çıkış kontrol listesini aç | personel, ayrılış tarihi | akışın sistem yetkisi | Aynı personel için açık liste varsa onu döndürür | Liste açılmamış sayılır; tekrar çalıştırılabilir |
 | `payroll.create_draft` | Taslak bordro hazırla | dönem, birim | akışın sistem yetkisi | Aynı dönem ve birim için açık bordro varsa onu döndürür | Taslak açılmamış sayılır |
 
 Akış bordroyu onaylayamaz ve ödeyemez; bunları bir insan yapar.

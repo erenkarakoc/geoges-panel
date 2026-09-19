@@ -220,6 +220,7 @@ Biçim: `docs/requirements/README.md`.
 
 | Kod | Ad | Ne zaman | Taşıdığı alanlar | Veri sınıfı |
 |---|---|---|---|---|
+| `quote.submitted_for_approval` | Teklif onaya sunuldu | Hazırlayan bir sürümü gönderim öncesi onaya sunduğunda (D-222) | teklif, sürüm, firma, toplam, tahmini marj | ticari |
 | `quote.sent` | Teklif gönderildi | Bir sürüm gönderildiğinde | teklif, sürüm, firma, toplam | ticari |
 | `quote.below_target_margin` | Teklif hedef marjın altında | Gönderilirken marj hedefin altındaysa | teklif, marj, hedef | ticari |
 | `quote.expiring` | Teklif geçerliliği bitiyor | Uyarı süresine girildiğinde | teklif, geçerlilik tarihi | iç |

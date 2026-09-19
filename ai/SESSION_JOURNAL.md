@@ -58,3 +58,5 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-19 15:50:36Z · 6c9e96a0 · Write · `docs/ui-ux/SCREEN_PATTERNS.md`
 - 2026-09-19 16:22:36Z · 6c9e96a0 · Write · `docs/ui-ux/screens/SCR-021-daily-site-log.md`
 - 2026-09-19 16:25:25Z · 6c9e96a0 · Write · `docs/ui-ux/SCREEN_STATES.md`
+- 2026-09-19 19:03:32Z · 6c9e96a0 · Write · `docs/workflows/END_TO_END_FLOWS.md`
+- 2026-09-19 19:03:38Z · 6c9e96a0 · Edit · `docs/workflows/END_TO_END_FLOWS.md`
