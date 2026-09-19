@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Platform schema
+
+- `docs/database/SCHEMA-PLATFORM.md` lays out the tables the whole panel stands on: users, dynamic roles and scoped assignments (a delegation is simply a dated assignment), append-only audit, documents that always belong to a record, versioned flow definitions with their running instances and approvals, tasks that cannot duplicate themselves for the same problem, dated rules and catalogs, and the shared outbox, job and search tables. The full-visibility flag sits on the role itself, so the rule that only a fully visible role may design flows is a database constraint rather than a promise (TASK-0066).
+
+
 ## 2026-09-20 — Phase 04 opens with the database conventions
 
 - `docs/database/CONVENTIONS.md` settles the rules every table will follow: nothing is ever deleted, every table carries its scope column and a row-level-security policy, ledgers only ever gain rows, and history goes through one channel instead of each module inventing its own. The owner chose rounding at the line so screen, invoice and accountant agree, and foreign-currency amounts keep the rate and date that produced their lira value (D-243, D-244). Phase 04 work is filed as TASK-0065…TASK-0072.
