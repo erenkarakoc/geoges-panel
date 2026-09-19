@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Permission matrix confirmed
+
+- The owner confirmed the default role templates in `docs/domain/PERMISSION_MATRIX.md` (TASK-0045). Next: the domain model per module (TASK-0046).
+
+
 ## 2026-09-19 — Permission matrix draft; KVKK inventory deferred
 
 - The owner asked not to get stuck on KVKK now. The KVKK data inventory, a Phase 01 deliverable, is deferred rather than dropped (D-214, DEF-007): it becomes part of the check before the first real personal data is entered, where RISK-001 already returns to the owner.

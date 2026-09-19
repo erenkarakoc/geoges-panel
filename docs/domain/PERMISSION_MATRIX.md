@@ -1,6 +1,6 @@
 # Yetki Matrisi — Varsayılan Rol Şablonları
 
-Durum: TASLAK · Son güncelleme: 2026-09-19
+Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-19
 
 Bu tablo panelin **ilk kurulumda gelen** rol şablonlarını gösterir. Roller dinamiktir: sahip yeni rol tanımlar, yetkileri değiştirir ve kişiye özel istisna verir (REQ-IAM-009, REQ-IAM-010, REQ-IAM-015). Rol bir kişiye **kapsamla** verilir: tüm şirket, belirli şantiyeler veya projeler (REQ-IAM-012). Ticari ve hassas kişisel veriyi görme izni modül modül verilir (REQ-IAM-011). Sahip her şeyi görür ve görünürlüğü kısıtlanamaz (REQ-IAM-023). Akış tasarlama yalnızca tam görünürlüklü rollere verilebilir (REQ-IAM-017, REQ-WFL-019). Kararlar: D-111, D-115, D-214, D-215.
 

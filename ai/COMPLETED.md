@@ -42,3 +42,4 @@ Only items whose quality gate passed are listed here.
 | 2026-09-19 | TASK-0020 | Glossary confirmation (OQ-007): all 234 terms CONFIRMED | T2 PASS (owner confirmed) |
 | 2026-09-19 | TASK-0014 | Glossary skeleton carried to completion | T2 PASS (owner confirmed via TASK-0020) |
 | 2026-09-19 | TASK-0027 | `docs/sources/` removed (text at Git tag `scope-archive`); path references repointed | T3 PASS (owner approved; validator green) |
+| 2026-09-19 | TASK-0045 | Role × module × data-class permission matrix (`docs/domain/PERMISSION_MATRIX.md`) | T1 PASS (owner confirmed) |
