@@ -24,7 +24,7 @@ Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006,
 
 ## NEXT TASK
 1. Phase 02: agree the work plan with the owner — screen inventory (must answer every management question of REQ-NFR-004), per-screen state matrix, list/detail/form standards (REQ-NFR-013…015), daily site log table UX with OQ-027 item 3, the eight end-to-end flows as real definitions (TASK-0042), flow designer / trace view / record-type builder UX, WCAG 2.2 AA targets.
-2. OQ-027 item 3 (stepped daily-log entry) is answered inside Phase 02; item 4 is implemented by REQ-TSK-007/-008.
+2. OQ-027 closed 2026-09-19 (D-220).
 3. TASK-0043: rename `dashboard`/`widget` in code to match the glossary.
 4. TASK-0018: re-check after 2026-10-15 that the worker keeps storing observations via the `CLAUDE_CODE_OAUTH_TOKEN` fallback.
 
@@ -32,7 +32,7 @@ Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006,
 None.
 
 ## OPEN QUESTIONS
-See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-027 item 3 (stepped daily-log entry, Phase 02), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
+See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
 - 2026-09-19: Phase 01 still open — all exit deliverables in — permission matrix (TASK-0045, D-215), domain model (TASK-0046), slice order and pilots (TASK-0047, D-216); awaiting owner approval of the exit; KVKK inventory deferred (D-214, DEF-007)

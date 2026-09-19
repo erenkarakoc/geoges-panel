@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Daily site log screen
+
+- The owner chose stepped entry by default, with a section list for those who want it, and a day strip across the top coloured by each day's state (D-220). `docs/ui-ux/screens/SCR-021-daily-site-log.md` lays out the fifteen sections with the rules each carries, how two people enter one day, recall and correction, and every state — built from installed COSS components. This answers the last open item of OQ-027, which is now closed. One derived rule awaits confirmation: the view a person chose is remembered.
+
+
 ## 2026-09-19 — Screen patterns confirmed
 
 - The owner confirmed `docs/ui-ux/SCREEN_PATTERNS.md` (TASK-0049). Next: the daily site log screen, including OQ-027 item 3.
