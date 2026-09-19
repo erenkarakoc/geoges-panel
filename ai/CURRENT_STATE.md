@@ -1,6 +1,6 @@
 # CURRENT STATE
 
-Last updated: 2026-09-18
+Last updated: 2026-09-19
 
 ```text
 PROJECT STATUS:      BOOTSTRAP
@@ -33,6 +33,7 @@ None.
 See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
+- D-182…D-185 (2026-09-19, QHS round): failed lot only warns; no health data for OHS incidents (REQ-HR consequence open); PPE issued by count with the person's confirmation; serious accident or open critical OHS finding voids the period's speed/bonus target, near misses never count against anyone
 - D-181 (2026-09-18, layer scan): every requirement tagged Sabit / Akış / Tanım with the configurable part named; enforced by the validator
 - D-177…D-180 (2026-09-18, CMP round): client, subcontractor and supplier contracts; extension of time as request → decision → new date; notice-letter draft on client delay; guarantee commission charged to the project
 - D-173…D-176 (2026-09-18, QTE round): no general-expense share in quote estimates (changes §6.3); estimated cost proposed from actual cost; sales orders reserve stock; each shipment invoiced separately

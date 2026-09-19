@@ -202,6 +202,15 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — QHS requirement round (2026-09-19)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-182 | **A material lot that fails a test only raises a warning and a decision task** (AI recommended a quarantine); the lot stays usable and the authorised decision is written to it with a reason | Owner 2026-09-19; §29.1 |
+| D-183 | **No health information is kept for OHS incidents** (AI recommended a separate sensitive field): injury type, medical report, treatment and lost days stay outside the panel; names and the account of the event are internal data. **Open consequence:** REQ-HR-002 and REQ-HR-014 still rely on medical reports; asked with the QHS file | Owner 2026-09-19; §30.1; RISK-001 |
+| D-184 | **PPE is issued to a person by count**: it leaves stock like a consumable, the person's card records what and when, and the person confirms on the phone; PPE needing periodic inspection (e.g. harness) is carded as an asset. Derived consequence, to be confirmed with the requirement file: a person without an account signs a paper record whose photo is uploaded, as in D-160 | Owner 2026-09-19; §30.3 |
+| D-185 | **Safety over speed and bonus:** a serious accident or an open critical OHS finding in a period means the site's speed and bonus target for that period is not met; near misses and minor events do not affect it, and reporting a near miss never counts against anyone | Owner 2026-09-19; §30.4, §8.4 |
+
 ## PHASE 01 — Layer scan of the requirement files (2026-09-18)
 
 | ID | Decision | Ref |

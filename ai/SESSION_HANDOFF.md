@@ -23,6 +23,7 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 - **REQ-CRM** — 14 requirements, D-169…D-172, CONFIRMED.
 - **REQ-QTE** — 18 requirements, D-173…D-176, CONFIRMED; scope §6.3 corrected (D-173); REQ-CRM-014 clarified.
 - **REQ-CMP** — 17 requirements, D-177…D-180, CONFIRMED 2026-09-19.
+- **REQ-QHS** — 16 requirements, D-182…D-185, DRAFT. Awaiting: derived PPE paper-record rule (REQ-QHS-015); whether REQ-HR-002/-014 keep medical reports given D-183.
 - **Layer scan (D-181)** — all 328 requirements tagged Sabit / Akış / Tanım; 101 name a configurable part; three descriptions reworded (REQ-TSK-006, REQ-CRM-007, REQ-CMP-013); validator enforces the tag. New modules must carry the tag from the start. Derived rules awaiting confirmation: framework price proposed on orders (REQ-CMP-004); contract amendment as a new version (REQ-CMP-005).
 - Validator gained checks for decision and requirement ids and six-column task rows; the rule text in PROJECT_RULES §21.1 now matches what the tool does.
 - Glossary: ~25 proposed terms added before use; non-canonical names fixed (`flow` → `workflow`, `daily_log` → `daily_site_log`, `waste` → `damaged_unit`).
@@ -36,4 +37,5 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 
 ## Next session
 
-1. Continue with QHS, following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).
+1. Owner confirms or corrects REQ-QHS and answers the REQ-HR health-data question; mark CONFIRMED.
+2. Continue with PRF, following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).

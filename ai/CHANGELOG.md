@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-19 — QHS requirements
+
+- Four quality and safety decisions (D-182…D-185). A lot that fails a test stays usable and raises a decision task rather than a quarantine; no health information is kept for accidents — which leaves a question for REQ-HR, where medical reports still appear; PPE is handed out by count and confirmed by the person on the phone; and a serious accident or an open critical OHS finding voids a site's speed and bonus target for the period, while reporting a near miss never counts against anyone.
+- `REQ-QHS.md` (16) is written, DRAFT, layer-tagged from the start, with its catalog; eleven proposed glossary terms were added first. One derived rule awaits confirmation: a person without an account signs a paper PPE record.
+
+
 ## 2026-09-19 — CMP and the layer scan confirmed
 
 - The owner confirmed REQ-CMP with both derived rules (framework price proposed on orders; a contract amendment is a new dated version) and the layer scan of D-181 with its three rewordings: 17 more requirements CONFIRMED, 328 in all. Next: QHS.

@@ -27,7 +27,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | SUP | §25.7 | `docs/requirements/REQ-SUP.md` | — |
 | INT | §26, §27, §8.3, §8.4 | `docs/requirements/REQ-INT.md` | — |
 | PRF | §28 | `docs/requirements/REQ-PRF.md` | — |
-| QHS | §29, §30 | `docs/requirements/REQ-QHS.md` | — |
+| QHS | §29, §30 | `docs/requirements/REQ-QHS.md` | 16 (DRAFT) |
 | MTG | §32 | `docs/requirements/REQ-MTG.md` | — |
 | DOC | §33 | `docs/requirements/REQ-DOC.md` | — |
 | STR | §35 | `docs/requirements/REQ-STR.md` | — |

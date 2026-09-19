@@ -1,6 +1,6 @@
 # Terim Sözlüğü (Glossary)
 
-Durum: TASLAK — önerilen terimler Phase 01'de sahiple kesinleşir (OQ-007) · Son güncelleme: 2026-09-18
+Durum: TASLAK — önerilen terimler Phase 01'de sahiple kesinleşir (OQ-007) · Son güncelleme: 2026-09-19
 
 Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** kullanılır. Durum sütunu: `PROPOSED` (önerildi), `CONFIRMED` (kesinleşti), `OPEN` (tartışmalı).
 
@@ -138,6 +138,17 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Bildirim yazısı | Notice Letter | İşverene gönderilen resmi gecikme bildirimi | — | warning_letter | PROPOSED | D-179 |
 | Teminat mektubu komisyonu | Guarantee Commission | Teminat mektubu için bankaya ödenen, projeye yazılan komisyon | — | bank_fee | PROPOSED | D-180 |
 | Uyuşmazlık dosyası | Dispute File | Hak talebi veya uyuşmazlık kaydı ve belgeleri | — | case | PROPOSED | §24.7 |
+| Test sertifikası | Test Certificate | Bir partinin laboratuvar/kurum test sonucu ve belgesi | Sertifika (UI) | cert, report | PROPOSED | §29.1 |
+| Parti (malzeme) | Material Lot | Aynı üretim veya teslimden gelen, birlikte izlenen malzeme miktarı | Lot (UI) | batch (döküm seansına ayrılmış) | PROPOSED | §29.1 |
+| Kalite kontrolü | Quality Check | Sahada yapılan ölçüm veya uygunluk kontrolü kaydı | — | inspection (periyodik kontrole ayrılmış) | PROPOSED | §29.3 |
+| Kök neden | Root Cause | Uygunsuzluğun asıl sebebi | — | reason | PROPOSED | §29.4 |
+| İç denetim bulgusu | Internal Audit Finding | İç denetimde tespit edilen bulgu; uygunsuzluk kayıt türü | — | audit_log (denetim kaydına ayrılmış) | PROPOSED | §29.4 |
+| Müşteri şikâyeti | Customer Complaint | Müşteri veya işveren geri bildirimi; uygunsuzluk kayıt türü | — | ticket | PROPOSED | §29.4 |
+| İSG olayı | OHS Incident | Kaza veya ramak kala kaydı | — | accident (tür değeridir) | PROPOSED | §30.1 |
+| Eğitim kaydı | Training Record | Personelin aldığı eğitim, tarihi ve geçerliliği | — | course | PROPOSED | §30.2 |
+| Günlük İSG kontrol listesi | OHS Checklist | Şantiye/fabrikanın günlük İSG kontrol maddeleri | — | safety_form | PROPOSED | §30.3 |
+| Risk değerlendirmesi | Risk Assessment | Şantiye/fabrika İSG risk değerlendirme belgesi | — | risk (uygunsuzluk kayıt türüyle karışır) | PROPOSED | §30.3 |
+| KKD teslimi | PPE Issue | KKD'nin kişiye adetle verilmesi ve kişinin onayı | — | ppe_assignment (demirbaş zimmetiyle karışır) | PROPOSED | D-184 |
 | Malzeme | Material | — | item (katalog satırı) | product | PROPOSED | |
 | Sarf malzeme | Consumable | — | — | supply | PROPOSED | |
 | Sarf reçetesi | Consumption Recipe | İş birimi başına standart sarf | bill of materials | — | PROPOSED | |
@@ -198,5 +209,5 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Bugün (giriş ekranı) | Today Screen | Her rolün girişte açılan, role göre kurulan ekranı | — | dashboard, home | PROPOSED | D-056. Kodda hâlâ `/dashboard` ve `dashboard-widget-registry` adları var — TASK-0043 |
 | Gösterge | Indicator | "Bugün"de ve raporlarda gösterilen tek sayı | — | widget (kavram adı olarak), metric | PROPOSED | Kodda şimdilik `widget` — TASK-0043 |
 | Dikkat öğesi | Attention Item | Gizlenemeyen, yalnızca sebebi çözülünce kapanan kritik uyarı | — | alert, alarm | PROPOSED | D-126 |
-| Zarar tanısı | Loss Diagnosis | Şantiye maliyetini etkenlerine ayıran kart | — | root_cause | PROPOSED | §14.2, D-129 |
+| Zarar tanısı | Loss Diagnosis | Şantiye maliyetini etkenlerine ayıran kart | — | root_cause (uygunsuzluğun kök nedenine ayrılmış) | PROPOSED | §14.2, D-129 |
 | Cockpit | Owner Cockpit | Sahip yönetim ekranı | — | dashboard (genel ekranlar için) | PROPOSED | |
