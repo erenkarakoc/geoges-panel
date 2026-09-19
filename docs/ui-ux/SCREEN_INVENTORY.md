@@ -25,6 +25,7 @@ Panelin bütün ekranları, her birinin karşıladığı gereksinimler ve varsay
 | SCR-010 | Bugün | P | `/dashboard` | REQ-RPT-001…005, REQ-RPT-007…009, REQ-CRM-008, REQ-PRJ-011 | Herkes (role göre kurulur) |
 | SCR-011 | Sistem gözü (Bugün içinde ikinci sekme) | S | `/dashboard` | REQ-RPT-010, REQ-RPT-011 | SAH, GM |
 | SCR-012 | Onaylar (kuyruk) | Ö | `/approvals` | REQ-WFL-012…016, REQ-WFL-031, REQ-SIT-031, REQ-IAM-020, REQ-IAM-025, REQ-IAM-026 | Önüne onay düşen herkes |
+| SCR-192 | Revizyon talepleri (Onaylar'da sekme, D-223) | S | `/approvals/revision-requests` | REQ-AUD-007…010 | Onaylayıcılar; talep eden kendi talebi |
 | SCR-013 | Görevler | L | `/tasks` | REQ-TSK-001…008 | Herkes |
 | SCR-014 | Görev ver | F | `/tasks/new` | REQ-TSK-003, REQ-TSK-004 | Herkes (kapsamı kadar) |
 | SCR-015 | Bildirim çekmecesi | Ç | üst bar | REQ-TSK-009…012, REQ-NFR-009 | Herkes |
@@ -143,17 +144,18 @@ Günlük özet e-postası (REQ-TSK-013) ve telefon bildirimleri (REQ-TSK-010, RE
 
 ## Yönetim
 
+Menü şeridinde grup değildir: kullanıcı menüsündeki "Yönetim" girişiyle açılan, solda kendi alt menüsü olan tek sayfadır (D-223, `docs/ui-ux/ADMINISTRATION.md`). Revizyon talepleri Onaylar'ın sekmesidir (SCR-192, yukarıda).
+
 | ID | Ekran | Tür | Adres | Gereksinimler | Roller |
 |---|---|---|---|---|---|
-| SCR-190 | Tanımlar (panel ve şerit tipleri, reçeteler, kataloglar, özel alanlar, takvim, kur, bordro parametreleri, KPI kataloğu, teklif şablonları, kontrol listeleri, eşikler ve kurallar) | Ö | `/master-data` | REQ-ADM-001…015, REQ-HR-007, REQ-PRF-008…010, REQ-PRF-014, REQ-QTE-013, REQ-WFL-031 (istisna yetkisini açıp kapatma), REQ-WFL-032, REQ-NFR-005 | SAH, GM; TO, MUH, IK kendi katalogları |
-| SCR-191 | Kullanıcılar & Roller | Ö | `/users-roles` | REQ-IAM-002, REQ-IAM-006…017, REQ-IAM-020…024 | SAH; GM ve IK görür |
-| SCR-192 | Revizyon talepleri | L | `/revision-requests` | REQ-AUD-007…010 | Onaylayıcılar; talep eden kendi talebi |
-| SCR-193 | Denetim kayıtları | L | `/audit-log` | REQ-AUD-005, REQ-AUD-006, REQ-IAM-008 | SAH |
-| SCR-194 | Veri aktarımı | — | `/data-import` | ertelendi (DEF-001) | — |
-
-## Yeri ayrı turda belirlenecek ekranlar (D-108)
-
-Akış tasarımcısı (soru-cevap ve şema görünümü), deneme çalıştırması, yayın, "yeni akışlar" listesi, akış şablonları, akış izleme (çalışma günlüğü), dış taraf onayı şablonu ve kayıt türü üreteci. D-108 gereği bunların menüdeki yeri ve birbirine nasıl bağlandığı kendi soru turunda kararlaştırılır (Phase 02 işi 6). Karşıladıkları gereksinimler: REQ-WFL-001…011, REQ-WFL-017…030, REQ-WFL-033…039.
+| SCR-190 | Tanımlar (panel ve şerit tipleri, reçeteler, kataloglar, özel alanlar, takvim, kur, bordro parametreleri, KPI kataloğu, teklif şablonları, kontrol listeleri, eşikler ve kurallar) | Ö | `/admin/master-data` | REQ-ADM-001…015, REQ-HR-007, REQ-PRF-008…010, REQ-PRF-014, REQ-QTE-013, REQ-WFL-031 (istisna yetkisini açıp kapatma), REQ-WFL-032, REQ-NFR-005 | SAH, GM; TO, MUH, IK kendi katalogları |
+| SCR-191 | Kullanıcılar & Roller | Ö | `/admin/users-roles` | REQ-IAM-002, REQ-IAM-006…017, REQ-IAM-020…024 | SAH; GM ve IK görür |
+| SCR-193 | Denetim kayıtları | L | `/admin/audit-log` | REQ-AUD-005, REQ-AUD-006, REQ-IAM-008 | SAH |
+| SCR-195 | İş akışları: Akışlar, Şablonlar, Yeni akışlar | L | `/admin/workflows` | REQ-WFL-018, REQ-WFL-023, REQ-WFL-027, REQ-WFL-028 | Akış tasarlama yetkisi olanlar |
+| SCR-196 | Akış tasarımcısı, deneme çalıştırması, yayın | Ö | `/admin/workflows/[id]` | REQ-WFL-001…011, REQ-WFL-017, REQ-WFL-019…026, REQ-WFL-029, REQ-WFL-030 | Akış tasarlama yetkisi olanlar |
+| SCR-197 | Çalışma günlüğü | L | `/admin/workflows/runs` | REQ-WFL-033, REQ-WFL-034 | Akış tasarlama yetkisi olanlar |
+| SCR-198 | Kayıt türleri | Ö | `/admin/record-types` | REQ-WFL-035…039 | pilot sonrası (D-105) |
+| SCR-194 | Veri aktarımı | — | `/admin/data-import` | ertelendi (DEF-001) | — |
 
 ## Yönetimin soruları → ekranlar (REQ-NFR-004)
 

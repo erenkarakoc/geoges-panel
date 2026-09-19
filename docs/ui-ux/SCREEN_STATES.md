@@ -4,7 +4,7 @@ Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-19
 
 Her ekranın ilk açılış, yükleniyor, başarılı, boş, kısmi, hata, yetki yok, tekrar dene ve geri dönülmez işlem onayı durumları (`docs/ui-ux/DESIGN_SYSTEM_RULES.md` §6). Ortak davranış kalıplarda tanımlıdır ve **her ekrana kendiliğinden uygulanır** (`docs/ui-ux/SCREEN_PATTERNS.md`): liste için bölüm 1, detay için bölüm 2, form için bölüm 3. Bu tablo yalnızca ekrana özgü olanı yazar: boş durumun metni ve eylemi, ekranın özel durumları. Günlük saha kaydının durumları kendi belgesindedir (`docs/ui-ux/screens/SCR-021-daily-site-log.md`).
 
-Kapsam: envanterdeki 104 etkin ekran. SCR-021 bu tabloda yoktur, durumları kendi belgesinin 5. bölümündedir. Veri aktarımı (SCR-194) ertelendiği için tabloda yoktur. Görev: TASK-0051 · Kararlar: D-221.
+Kapsam: envanterdeki etkin ekranlar. SCR-021 bu tabloda yoktur, durumları kendi belgesinin 5. bölümündedir. Veri aktarımı (SCR-194) ertelendiği, kayıt türleri (SCR-198) pilot sonrasına kaldığı için tabloda yoktur. Görev: TASK-0051 · Kararlar: D-221.
 
 ## Her ekran için ortak kurallar
 
@@ -120,7 +120,10 @@ Kapsam: envanterdeki 104 etkin ekran. SCR-021 bu tabloda yoktur, durumları kend
 | SCR-162 Kararlar | "Açık karar yok" | Geciken kararlar vurgulu |
 | SCR-170 Arşiv | "Sonuç bulunamadı" | Metin tanıması süren belge "okunuyor" |
 | SCR-180 Destek talepleri | "Destek talebi yok" → "Talep aç" | Cevapsız talep vurgulu |
+| SCR-195 İş akışları | "Henüz akış yok" → "Şablondan başla" | Şablonun yeni sürümü: "yeni sürüm var"; ilk 7 gün "yeni" rozeti |
+| SCR-196 Akış tasarımcısı | Yeni akış: tek başlangıç kutusu ve "Ne olunca başlasın?" sorusu | Hatalı adım kutuda işaretli; deneme sonrası değişiklik varsa yayın yeniden deneme ister; yürüyen örnekler eski sürümle sürer |
+| SCR-197 Çalışma günlüğü | "Bu süzgeçle akış örneği yok" | Hata ile duran örnek en üstte, nedeniyle |
 | SCR-190 Tanımlar | Boş katalog: "Bu listede kalem yok" → "Kalem ekle" | Kullanılan kalem silinmez, pasifleşir; benzer kalem önerisi |
 | SCR-191 Kullanıcılar & Roller | — | Tam görünürlüğü olmayan role akış tasarlama verilemez; sahip görünürlüğü kısıtlanamaz |
-| SCR-192 Revizyon talepleri | "Bekleyen revizyon talebi yok" | Eski ve yeni değer yan yana |
+| SCR-192 Revizyon talepleri (Onaylar sekmesi) | "Bekleyen revizyon talebi yok" | Eski ve yeni değer yan yana |
 | SCR-193 Denetim kayıtları | "Bu süzgeçle kayıt yok" | Salt okunur, düzenleme yok |
