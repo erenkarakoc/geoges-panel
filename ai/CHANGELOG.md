@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Event backbone
+
+- `docs/architecture/EVENT_BACKBONE.md` settles how modules react to each other: the event is written with the change itself, so an approved daily log can never fail to reach stock; repeats are harmless; failures retry, then land in a dead-letter list that raises a critical notification instead of showing anyone an error; replays rebuild reports without re-sending old notifications (D-234, TASK-0058).
+
+
 ## 2026-09-20 — Module boundaries
 
 - `docs/architecture/MODULE_BOUNDARIES.md` fixes what a module owns and how two modules may talk: queries and commands for what the user must see at once, events for everything else, and never another module's tables. Reporting, intelligence and strategy read a rebuildable read model fed by events instead of querying fifteen modules per screen (D-233). Capability declarations become contract tests that break CI when code and declaration drift (TASK-0057).
