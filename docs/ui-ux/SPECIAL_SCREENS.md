@@ -1,13 +1,13 @@
 # Özel Ekranların Yerleşimi ve Bileşenleri
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Liste, detay ve form ekranları bileşenlerini kalıplardan alır (`docs/ui-ux/SCREEN_PATTERNS.md`). Bu belge, kalıba uymayan ekranların (envanterde Ö, P, S, Ç) yerleşimini ve kullandıkları COSS bileşenlerini yazar. Durumları `docs/ui-ux/SCREEN_STATES.md`'dedir. Bileşen adları projede kurulu COSS bileşenleridir (`src/components/ui`). `Figure` projenin sayı bileşenidir (D-067). "Grafik" onaylı özel öğedir (`docs/ui-ux/CUSTOM_ELEMENTS.md`, D-226).
 
 Kendi belgesi olanlar burada tekrar edilmez:
 - SCR-021 günlük saha kaydı: `docs/ui-ux/screens/SCR-021-daily-site-log.md`
 - SCR-195…198 Yönetim, akışlar ve kayıt türleri: `docs/ui-ux/ADMINISTRATION.md`
-- SCR-016 arama ve komut paleti: TASK-0029
+- SCR-016 arama ve komut paleti: `docs/ui-ux/SEARCH.md`
 
 Veri aktarımı (SCR-194) ertelenmiştir.
 

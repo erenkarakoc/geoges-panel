@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Last Phase 02 designs confirmed
+
+- The owner confirmed the special screens, the search design and the bottom band. Next: the Phase 02 exit summary.
+
+
 ## 2026-09-20 — Last Phase 02 designs: special screens, search, bottom band
 
 - The owner confirmed the custom-element list (TASK-0055).

@@ -1,6 +1,6 @@
 # Site İçi Arama
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Üst bardaki arama kutusu ve Ctrl+K (Apple klavyede ⌘K) ile açılan komut paleti (SCR-016). Gereksinim REQ-NFR-012; kararlar D-044 ve D-227; görev TASK-0029. Bileşen COSS `Command`'dır ve COSS örneğinin görünümü birebir korunur (D-060b). Kabuk bugün yalnız sayfa ve modül arıyor (`src/platform/ui/app-shell/command-palette.tsx`). Bu belge tam hâlini tarif eder; kayıt araması modüller geldikçe açılır.
 
