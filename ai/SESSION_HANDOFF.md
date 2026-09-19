@@ -43,4 +43,4 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 
 ## Next session
 
-1. Phase 01 exit work is done: glossary confirmed (OQ-007), § remap (TASK-0039, D-213), architecture principles in `docs/architecture/PRINCIPLES.md`, `docs/sources/` removed 2026-09-19 (TASK-0027; Git tag `scope-archive`). Phase 01 is NOT yet complete: four deliverables remain — permission matrix, per-module domain model, KVKK data inventory, slice order and pilot users (see the roadmap's Phase 01 status).
+1. Phase 01 exit work is done: glossary confirmed (OQ-007), § remap (TASK-0039, D-213), architecture principles in `docs/architecture/PRINCIPLES.md`, `docs/sources/` removed 2026-09-19 (TASK-0027; Git tag `scope-archive`). Phase 01 is NOT yet complete: permission matrix draft awaits owner confirmation (TASK-0045), then domain model (TASK-0046) and slice order / pilot users (TASK-0047). KVKK inventory deferred (D-214, DEF-007).

@@ -202,6 +202,13 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — Exit deliverables (2026-09-19)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-214 | **The KVKK personal-data inventory does not hold up Phase 01** (owner: "KVKK'ye takılmamamız lazım şu aşamada"). It is deferred, not dropped (DEF-007): it must be done before the first real personal data is entered — the same checkpoint where RISK-001 and D-134 go back to the owner (D-050, REQ-AUD-003) | Owner 2026-09-19; D-050; RISK-001 |
+| D-215 | **Default role templates, four open cells:** the general manager sees sensitive personnel data (salary, IBAN, SGK) by default (AI recommended HR and owners only; REQ-HR-002 reworded); a coordinator sees the commercial data of their own sites (P&L, income/expense, subcontractor unit prices); the technical office sees quote prices, estimated cost and margin (AI recommended quantities only); purchasing & logistics sees order prices, supplier quotes and the supplier account, not project P&L, client accounts or cash. Matrix: `docs/domain/PERMISSION_MATRIX.md` | Owner 2026-09-19; REQ-IAM-011 |
+
 ## PHASE 01 — Scope reference remap (2026-09-19)
 
 | ID | Decision | Ref |

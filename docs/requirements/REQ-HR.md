@@ -30,7 +30,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Kaynak: REQ-IAM-011
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
-- Açıklama: Maaş, SGK bilgisi, IBAN, özlük belgeleri ve sağlık raporunun var olduğu bilgisiyle tarihleri hassas kişisel veridir; sağlık raporunun kendisi panelde saklanmaz, panel dışında tutulur (D-186); yalnızca bu veri sınıfını görme izni olan roller (varsayılan: yetkili İK ve sahip) görür.
+- Açıklama: Maaş, SGK bilgisi, IBAN, özlük belgeleri ve sağlık raporunun var olduğu bilgisiyle tarihleri hassas kişisel veridir; sağlık raporunun kendisi panelde saklanmaz, panel dışında tutulur (D-186); yalnızca bu veri sınıfını görme izni olan roller (varsayılan: yetkili İK, genel müdür ve sahip; D-215) görür.
 - Kabul kriterleri:
   - [ ] Hassas izni olmayan kullanıcı bu alanları listelerde, dışa aktarmalarda ve kayıt geçmişinde de görmez (REQ-AUD-004).
 - Durum: CONFIRMED

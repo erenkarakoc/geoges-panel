@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-19 — Permission matrix draft; KVKK inventory deferred
+
+- The owner asked not to get stuck on KVKK now. The KVKK data inventory, a Phase 01 deliverable, is deferred rather than dropped (D-214, DEF-007): it becomes part of the check before the first real personal data is entered, where RISK-001 already returns to the owner.
+- `docs/domain/PERMISSION_MATRIX.md` drafts the default role templates — fifteen roles against every module, with what each sees, enters and whether it sees commercial or sensitive data. The requirements settled most cells; the owner answered the four they did not (D-215): the general manager sees salaries by default (REQ-HR-002 reworded), coordinators see their own sites' costs, the technical office sees quote prices and margins, purchasing sees order prices and the supplier account. The whole matrix awaits the owner's confirmation (TASK-0045); the domain model (TASK-0046) and pilot users (TASK-0047) are the other two open exit items.
+
+
 ## 2026-09-19 — `docs/sources/` removed
 
 - With the owner's approval the three starting documents — the functional scope, the architecture principles and the original engineering protocol — were removed from the repository (TASK-0027). Nothing is lost: their text is at Git tag `scope-archive`, the scope's sections are mapped to requirements at the end of `docs/requirements/README.md`, the principles live in `docs/architecture/PRINCIPLES.md`, and the protocol in `ai/PROJECT_RULES.md`. Every record that named one of the files now says where it went.
