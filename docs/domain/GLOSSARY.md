@@ -207,9 +207,9 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Bordro satırı | Payroll Line | Bordroda bir kişinin brüt, SGK, vergi, kesinti ve net satırı | — | payslip (belgeyle karışır) | CONFIRMED | REQ-HR-006 |
 | Teklif kalemi | Quote Line | Teklif sürümünde kalem, miktar, fiyat ve tahmini maliyet | — | offer_item | CONFIRMED | REQ-QTE-001 |
 | Satış siparişi sevkiyatı | Sales Order Shipment | Satış siparişinin tek sevkiyatı; fatura görevi buna bağlıdır | — | delivery (teslim alımla karışır) | CONFIRMED | REQ-QTE-017 |
-| KPI sonucu | KPI Result | Bir kişinin bir aydaki tek KPI değeri; hesaplanan veya amir puanı ve gerekçesi | — | kpi_value | PROPOSED | REQ-PRF-002 |
-| Destek mesajı | Support Message | Destek talebinin altındaki mesaj ve ekleri | — | comment | PROPOSED | REQ-SUP-002 |
-| Talep sevki | Ticket Referral | Destek talebinin üst pozisyona sevki | — | forward | PROPOSED | REQ-SUP-003 |
+| KPI sonucu | KPI Result | Bir kişinin bir aydaki tek KPI değeri; hesaplanan veya amir puanı ve gerekçesi | — | kpi_value | CONFIRMED | REQ-PRF-002 |
+| Destek mesajı | Support Message | Destek talebinin altındaki mesaj ve ekleri | — | comment | CONFIRMED | REQ-SUP-002 |
+| Talep sevki | Ticket Referral | Destek talebinin üst pozisyona sevki | — | forward | CONFIRMED | REQ-SUP-003 |
 | Malzeme | Material | — | item (katalog satırı) | product | CONFIRMED | |
 | Sarf malzeme | Consumable | — | — | supply | CONFIRMED | |
 | Sarf reçetesi | Consumption Recipe | İş birimi başına standart sarf | bill of materials | — | CONFIRMED | |

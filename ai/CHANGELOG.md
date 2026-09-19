@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Domain model complete
+
+- The owner confirmed batch 4. `docs/domain/DOMAIN_MODEL.md` now covers 24 modules — main records, relations and the rules that must never break, each tied to its requirement — and the glossary gained 32 structural record names along the way, all confirmed (TASK-0046). One Phase 01 item remains: slice order and pilot users (TASK-0047).
+
+
 ## 2026-09-19 — Domain model, batch 4
 
 - The owner confirmed batch 3 and its six record names. Batch 4 — meetings, support, performance, recommendations and strategy — completes `docs/domain/DOMAIN_MODEL.md`, with three new record names proposed in the glossary.

@@ -1,6 +1,6 @@
 # Alan Modeli
 
-Durum: Parti 1–3 CONFIRMED (sahip, 2026-09-19); Parti 4 (MTG, SUP, PRF, INT, STR) TASLAK · Son güncelleme: 2026-09-19
+Durum: CONFIRMED (sahip, 2026-09-19) — 24 modül, dört partide · Son güncelleme: 2026-09-19
 
 Her modülün **ana kayıtları**, aralarındaki **ilişkiler** ve hiçbir koşulda bozulmaması gereken **değişmez kurallar** (invariant). Kayıt adları sözlüğün kod adlarıdır (`docs/domain/GLOSSARY.md`); her kural onu doğuran gereksinime bağlıdır. Olaylar, aksiyonlar ve koşul alanları her modülün `docs/requirements/REQ-<MODÜL>.md` dosyasındaki yetenek kataloğundadır; burada tekrarlanmaz. Tablolar, sütunlar ve satır görünürlüğü Phase 04'te bu modelden türetilir (TASK-0046).
 
