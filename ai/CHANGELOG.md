@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Commercial and finance schema
+
+- `docs/database/SCHEMA-COMMERCIAL-FINANCE.md` covers leads, quotes and the money. A sent quote version is immutable; income, expense and party ledgers only gain rows; a closed period refuses new rows outright instead of trusting the application to remember; and "the person who prepared a payment cannot approve it" is a check constraint, not a policy someone can forget. An amount with no exchange rate is simply waiting for one, so there is never a second source of truth about whether it was converted (TASK-0068).
+
+
 ## 2026-09-20 — Operations schema
 
 - `docs/database/SCHEMA-OPERATIONS.md` gives projects, sites, stock, purchasing, the factory and equipment their tables. The daily site log becomes one parent row plus a table per section, so two people can fill different sections of the same day without overwriting each other. Stock is a ledger: rows are only ever added, a correction is a reversing row, and the balance is rebuildable. Targets hang off a project revision, so a new revision never rewrites the old numbers (TASK-0067).
