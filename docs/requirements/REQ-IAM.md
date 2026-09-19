@@ -40,7 +40,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: iki adımlı girişin zorunlu olduğu roller
-- Açıklama: İkinci adım bir doğrulama uygulamasıdır (TOTP); SMS kullanılmaz. Hangi rollerde zorunlu olduğu yöneticinin ayarıdır; sahip, genel müdür ve ticari veya hassas veriye erişen roller için zorunlu tutulabilir. Kaybolan cihaz için kurtarma yöntemi Phase 03'te tasarlanır.
+- Açıklama: İkinci adım bir doğrulama uygulamasıdır (TOTP); SMS kullanılmaz. Hangi rollerde zorunlu olduğu yöneticinin ayarıdır; sahip, genel müdür ve ticari veya hassas veriye erişen roller için zorunlu tutulabilir. Kaybolan cihaz için kurtarma: 10 tek kullanımlık kurtarma kodu ve yetkilinin sıfırlaması, ikisi birden (D-236; `docs/architecture/PERMISSIONS.md`).
 - Kabul kriterleri:
   - [ ] İki adımın zorunlu olduğu bir rolü taşıyan kullanıcı, ikinci adımı tamamlamadan panelin hiçbir sayfasına erişemez.
 - Bağlı: TASK-0025

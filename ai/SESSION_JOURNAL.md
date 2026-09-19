@@ -69,3 +69,4 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-19 23:35:11Z · 6c9e96a0 · Write · `docs/architecture/MODULE_BOUNDARIES.md`
 - 2026-09-19 23:36:20Z · 6c9e96a0 · Write · `docs/architecture/EVENT_BACKBONE.md`
 - 2026-09-19 23:37:46Z · 6c9e96a0 · Write · `docs/architecture/WORKFLOW_ENGINE.md`
+- 2026-09-19 23:40:02Z · 6c9e96a0 · Write · `docs/architecture/PERMISSIONS.md`

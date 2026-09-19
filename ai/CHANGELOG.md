@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Permission architecture
+
+- `docs/architecture/PERMISSIONS.md` sets how the panel decides who may do what: roles combine instead of forcing a person to switch hats, every assignment carries its scope, and the check runs in three places so a missed check in one cannot leak data. Commercial and sensitive fields leave the query entirely for those without the right. A lost phone is recoverable two ways — one-time codes and a manager reset, both audited (D-236, TASK-0060).
+
+
 ## 2026-09-20 — Workflow engine architecture
 
 - `docs/architecture/WORKFLOW_ENGINE.md` turns ADR-006 and the CHG-006 decisions into a buildable design: versioned JSON definitions, instances that finish on the version they started with, waits that survive a restart, a dry trial run that still evaluates conditions against real data, and limits that stop a badly built flow from opening five thousand tasks (D-235, TASK-0059).
