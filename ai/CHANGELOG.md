@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Operations schema
+
+- `docs/database/SCHEMA-OPERATIONS.md` gives projects, sites, stock, purchasing, the factory and equipment their tables. The daily site log becomes one parent row plus a table per section, so two people can fill different sections of the same day without overwriting each other. Stock is a ledger: rows are only ever added, a correction is a reversing row, and the balance is rebuildable. Targets hang off a project revision, so a new revision never rewrites the old numbers (TASK-0067).
+
+
 ## 2026-09-20 — Platform schema
 
 - `docs/database/SCHEMA-PLATFORM.md` lays out the tables the whole panel stands on: users, dynamic roles and scoped assignments (a delegation is simply a dated assignment), append-only audit, documents that always belong to a record, versioned flow definitions with their running instances and approvals, tasks that cannot duplicate themselves for the same problem, dated rules and catalogs, and the shared outbox, job and search tables. The full-visibility flag sits on the role itself, so the rule that only a fully visible role may design flows is a database constraint rather than a promise (TASK-0066).

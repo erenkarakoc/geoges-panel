@@ -81,3 +81,4 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-19 23:47:40Z · 6c9e96a0 · Write · `docs/decisions/ADR-018-live-updates-as-signals.md`
 - 2026-09-19 23:53:15Z · 6c9e96a0 · Write · `docs/database/CONVENTIONS.md`
 - 2026-09-19 23:55:00Z · 6c9e96a0 · Write · `docs/database/SCHEMA-PLATFORM.md`
+- 2026-09-19 23:56:25Z · 6c9e96a0 · Write · `docs/database/SCHEMA-OPERATIONS.md`
