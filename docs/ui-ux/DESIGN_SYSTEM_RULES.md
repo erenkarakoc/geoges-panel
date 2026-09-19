@@ -135,6 +135,7 @@ Sahip isteği (2026-09-16): COSS UI / Tailwind varsayılanlarının dışına ç
 | 18b | Onay ekranı | — | Onay merkezi liste değil **kuyruk**: tek kayıt ekranı doldurur, karar verilince sıradaki gelir, kuyruk bitince "Bugün temiz" boş durumu | D-070, REQ-WFL-012…015; sahip isteği 2026-09-17 | `modules/wfl/ui/approval-queue.tsx` |
 | 19a | Odak halkası rengi (açık tema) | `--ring` neutral-400; açık zeminde 2,25:1 | `--ring` neutral-600 (6,8:1); koyu tema değişmez. **Phase 07'de uygulanacak** (TASK-0054) | WCAG 2.2 AA 1.4.11, sahip kararı D-225 | `brand.css` |
 | 19b | Akış şeması alanı (özgün element) | COSS'ta kutu-ok şeması bileşeni yok | Akış tasarımcısının ana alanı: adım kutuları, çıkış okları, oklar arasında "+"; adım soruları COSS `Sheet` / `Drawer` içinde. **Phase 08'de yapılacak** | Sahip onayı D-224; SCR-196 | — |
+| 19c | Grafikler (özgün element) | COSS'ta grafik bileşeni yok | Sütun ve çizgi grafik her yerde, "Bugün" dahil (16a'daki kaldırma geri alındı). Kurallar: `docs/ui-ux/CUSTOM_ELEMENTS.md`. **Henüz yapılmadı** | Sahip onayı D-066, D-226 | — |
 
 Bilinen, henüz giderilmemiş fark: COSS sidebar'ın mobil başlığı ("Sidebar") ve kenar çubuğu ipucu ("Toggle Sidebar") İngilizce kalır; COSS dosyası değiştirilmeden düzeltilemez.
 

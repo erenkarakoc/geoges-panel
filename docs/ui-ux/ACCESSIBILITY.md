@@ -1,6 +1,6 @@
 # Erişilebilirlik Hedefleri
 
-Durum: TASLAK · Son güncelleme: 2026-09-19
+Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-19
 
 Hedef **WCAG 2.2 AA**'dır (REQ-NFR-016, `docs/ui-ux/DESIGN_SYSTEM_RULES.md` §8). Bu belge, hedefin bu panelde ne demek olduğunu ve nasıl sınandığını yazar. Kalite kapısındaki "Accessibility" satırı (`docs/standards/QUALITY_GATES.md`) bu belgeye göre geçer veya kalır. Kararlar: D-225.
 

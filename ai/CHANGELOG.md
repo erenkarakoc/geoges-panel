@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-19 — Accessibility confirmed; custom-element list
+
+- The owner confirmed the accessibility targets (TASK-0053).
+- `docs/ui-ux/CUSTOM_ELEMENTS.md` lists every element the screen designs need beyond COSS: the particle figure, charts, and the flow diagram canvas. The owner wants charts everywhere, the "Bugün" screen included, which brings back what was removed on 2026-09-17 (D-226). Every chart keeps its numbers readable without the picture. Awaiting owner review (TASK-0055).
+
+
 ## 2026-09-19 — Accessibility targets
 
 - `docs/ui-ux/ACCESSIBILITY.md` says what WCAG 2.2 AA means for this panel: touch targets of 44 px, at least 24 px with a mouse, every screen usable by keyboard, colour never the only signal. The owner chose automatic testing only. Checking the theme found one real problem: in the light theme the keyboard focus ring is too faint (2.25:1). It becomes a darker grey in Phase 07 (D-225, TASK-0054). The flow diagram canvas is approved as a custom element (D-224). Awaiting owner review (TASK-0053).
