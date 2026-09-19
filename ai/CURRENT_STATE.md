@@ -1,31 +1,33 @@
 # CURRENT STATE
 
-Last updated: 2026-09-19
+Last updated: 2026-09-20
 
 ```text
 PROJECT STATUS:      DESIGN
-CURRENT PHASE:       PHASE 02 — UX, Information Architecture & User Flows (Phase 01 DONE 2026-09-19)
+CURRENT PHASE:       PHASE 03 — System Architecture (Phase 02 DONE 2026-09-20, owner approved)
 CURRENT SUBPHASE:    PLANNING
 CURRENT FEATURE:     —
-CURRENT TASK:        Phase 02 work plan (see the roadmap's Phase 02 "Still owed" list)
+CURRENT TASK:        Phase 03 work plan (module boundaries, event backbone, workflow engine architecture, rules and permission architecture)
 STATUS:              DESIGNING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
-CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 and CHG-006 are both folded. Normal ADR-007 rule applies — Phase 02 is a design phase; product code resumes in Phase 07 or via an approved change request.
+CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 and CHG-006 are both folded. Normal ADR-007 rule applies — Phase 03 is a design phase; product code resumes in Phase 07 or via an approved change request.
                      Tooling code that enforces the records (scripts/, .githooks/) is always allowed.
                      Already-shipped exceptions that remain valid: development-only sandboxes (D-052) and the CHG-004 shell transfer (TASK-0032…TASK-0037, owner approved).
                      Note: TASK-0034 and TASK-0037 also shipped module-namespaced sample screens (modules/sit/ui, modules/wfl/ui, modules/tsk/ui). They are sample data behind the shell, approved as part of CHG-004, and are re-wired when SIT and the workflow engine exist.
 ```
 
 ## LAST COMPLETED TASK
-Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements in 26 files with layers and capability catalogs; scope mapped and `docs/sources/` removed (tag `scope-archive`); glossary 266 CONFIRMED terms; permission matrix; domain model for 24 modules; architecture principles; slice order and pilot approach (D-216). KVKK data inventory deferred (D-214, DEF-007).
+Phase 02 DONE (2026-09-20, owner approved): screen inventory, list/detail/form patterns with the bottom band, the daily site log screen, the per-screen state matrix, the eight end-to-end flows as real definitions, the administration page and flow designer, WCAG 2.2 AA targets, the custom-element list, the special screens and the search UX (TASK-0042, TASK-0048…TASK-0056, D-217…D-228).
+
+Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements in 26 files with layers and capability catalogs; scope mapped and `docs/sources/` removed (tag `scope-archive`); glossary 266 CONFIRMED terms; permission matrix; domain model for 24 modules; architecture principles; slice order and pilot approach (D-216). KVKK data inventory deferred (D-214, DEF-007).
 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Phase 02: agree the work plan with the owner — screen inventory (must answer every management question of REQ-NFR-004), per-screen state matrix, list/detail/form standards (REQ-NFR-013…015), daily site log table UX with OQ-027 item 3, the eight end-to-end flows as real definitions (TASK-0042), flow designer / trace view / record-type builder UX, WCAG 2.2 AA targets.
-2. OQ-027 closed 2026-09-19 (D-220).
-3. TASK-0043: rename `dashboard`/`widget` in code to match the glossary.
+1. Phase 03: agree the work plan with the owner — module public APIs and boundary specs, event backbone (outbox, dispatch, idempotency, retries), workflow engine architecture (ADR-006 with CHG-006: triggers D-103, approval outcomes D-099, for-each D-096, record node D-095, windowed conditions D-100, traceability D-087, versioning and templates D-086, authority model D-082/D-083), rules and configuration model with effective dating, custom fields, search architecture (TASK-0029), the storage direction for user-defined record types, and the Phase 06 spike list.
+2. OQ-026 (password policy) is answered in Phase 03.
+3. TASK-0043: rename `dashboard`/`widget` in code to match the glossary (Phase 07).
 4. TASK-0018: re-check after 2026-10-15 that the worker keeps storing observations via the `CLAUDE_CODE_OAUTH_TOKEN` fallback.
 
 ## BLOCKED BY

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Phase 02 DONE
+
+- The owner approved the Phase 02 exit. Every screen of the panel now has its place, its states, its components and, where it needed one, its own design; the eight end-to-end processes are written as flow definitions the engine will be tested against; the custom elements are limited to three and all approved. Carried forward by decision: the record-type builder after the pilot, search architecture in Phase 03, and the code changes (menu move, focus ring, bottom-band slot, renames) in Phase 07. Phase 03 — system architecture — starts.
+
+
 ## 2026-09-20 — Last Phase 02 designs confirmed
 
 - The owner confirmed the special screens, the search design and the bottom band. Next: the Phase 02 exit summary.

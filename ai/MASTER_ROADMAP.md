@@ -1,6 +1,6 @@
 # MASTER ROADMAP
 
-Status: APPROVED by owner (2026-09-15, incl. CHG-001 resolution) · Last updated: 2026-09-19
+Status: APPROVED by owner (2026-09-15, incl. CHG-001 resolution) · Last updated: 2026-09-20
 
 **This file is the single authority for the plan.** Every other record derives from it and may not contradict it:
 `ai/TASKS.md` says who does what and in which state, `ai/DECISIONS.md` + ADRs say why, `ai/CURRENT_STATE.md` says where we are right now, `ai/REQUIREMENTS.md` says what is wanted. An approved change request is written into this file **in the same session it is approved** (`ai/PROJECT_RULES.md` §9); a change request that is not in this file may not be implemented. Consistency is machine-checked by `npm run records` (`scripts/check-records.mjs`), not by memory.
@@ -19,8 +19,8 @@ Module codes: see `docs/architecture/MODULE_MAP.md`.
 |---|---|---|---|
 | 00 | Project Bootstrap & AI Infrastructure | Setup | DONE |
 | 01 | Requirements & Domain Analysis | Design | DONE |
-| 02 | UX, Information Architecture & User Flows | Design | PARTIALLY_DONE |
-| 03 | System Architecture | Design | NOT_STARTED |
+| 02 | UX, Information Architecture & User Flows | Design | DONE |
+| 03 | System Architecture | Design | IN_PROGRESS |
 | 04 | Database Architecture | Design | NOT_STARTED |
 | 05 | Infrastructure, Environments & Operations Design | Design | NOT_STARTED |
 | 06 | Validation Spikes | Validate | NOT_STARTED |
@@ -153,14 +153,15 @@ STATUS: DONE
 - **Dependencies:** Phase 01.
 - **Deliverables:** `docs/ui-ux/*` flows and screen specs; list of required custom elements with owner approval.
 - **Acceptance:** every REQ with UI has a screen spec; every screen lists states and COSS components; owner approved key flows.
-- **Status:** `PARTIALLY_DONE` — **current phase since 2026-09-19.** CHG-004 delivered the navigation skeleton, the three-zone header, the conditional context row, the per-role "Bugün" entry screen and the phone bottom bar ahead of this phase (D-054…D-070, TASK-0032…TASK-0037). Those decisions stand and are not re-opened here. **Still owed:** screen inventory, the per-screen state matrix (initial, loading, empty, partial, error, permission denied, retry, destructive confirmation), list/detail/form standards (REQ-NFR-013…015), the daily site log table UX, the end-to-end flow specifications (REQ-WFL-011, REQ-WFL-028) and the WCAG 2.2 AA targets.
+- **Status:** `DONE` — owner approved the exit 2026-09-20. **Delivered:** screen inventory of every screen with its requirements and default roles (`docs/ui-ux/SCREEN_INVENTORY.md`, TASK-0048, D-217, D-218); list, detail and form patterns on COSS components (`SCREEN_PATTERNS.md`, TASK-0049, D-219) with the functional bottom band (section 4, TASK-0028, D-228); the daily site log entry screen (`screens/SCR-021-daily-site-log.md`, TASK-0050, D-220); the per-screen state matrix (`SCREEN_STATES.md`, TASK-0051, D-221); the eight end-to-end processes as chained flow definitions with no palette gap (`docs/workflows/END_TO_END_FLOWS.md`, TASK-0042, D-222); the administration page, flow designer, run log and record-type placement (`ADMINISTRATION.md`, TASK-0052, D-223 — closes D-108); WCAG 2.2 AA targets and their testing (`ACCESSIBILITY.md`, TASK-0053, D-225); the custom-element list (`CUSTOM_ELEMENTS.md`, TASK-0055, D-224, D-226); the special screens' layouts and components (`SPECIAL_SCREENS.md`, TASK-0056); site-wide search UX (`SEARCH.md`, TASK-0029 Phase 02 part, D-227). CHG-004 delivered the navigation skeleton, the three-zone header, the conditional context row, the per-role "Bugün" entry screen and the phone bottom bar ahead of this phase (D-054…D-070, TASK-0032…TASK-0037). **Carried forward:** the record-type builder's detailed screen comes after the Slice 1 pilot (D-105); search architecture is Phase 03 (TASK-0029); the menu move, the light-theme focus ring, the bottom-band slot and the `dashboard`/`widget` rename are Phase 07 (D-223, TASK-0054, TASK-0028, TASK-0043).
 - **CHG-006 deliverables:** the eight end-to-end flows (REQ-WFL-011, REQ-WFL-028) as **real flow definitions**, step by step, each tested against the node palette (D-089, TASK-0042); UX of the flow designer (wizard + diagram, both editable — D-085), the trace view (D-087), the "new flows" 7-day list (D-081) and the record-type builder (D-079); the CHG-004 re-review (TASK-0040).
 
 ## PHASE 03 — System Architecture
 
 - **Purpose:** define module boundaries, contracts and cross-cutting mechanisms.
 - **Scope:** module public APIs; event backbone (outbox, dispatch, idempotency, retries); workflow engine architecture (ADR-006); rules/configuration model with effective dating; custom fields; feature flags; ports & adapters (auth, storage, jobs, notifications, exchange rate, weather, email, PDF); authentication & authorization design (multi-role, delegation, acting role, owner layer, visibility of commercial/sensitive data, immediate session revocation, 2FA); background jobs; search; notifications (in-app, web push); PDF/Excel generation; observability; architecture fitness tests; data access approach (supabase-js vs direct Postgres client — OQ-020).
-- **Dependencies:** Phase 01, Phase 02 (in parallel with late Phase 02 allowed).
+- **Dependencies:** Phase 01, Phase 02 (both DONE).
+- **Status:** `IN_PROGRESS` — **current phase since 2026-09-20.**
 - **Deliverables:** ADRs, `docs/architecture/*`, feature specs skeletons per module.
 - **Acceptance:** all cross-cutting concerns have an ADR; each module has a boundary spec; spike list for Phase 06 defined.
 - **CHG-006 scope:** capability contract format and contract tests (D-078); engine architecture — triggers (D-103), approval outcomes (D-099), for-each (D-096), record node (D-095), windowed-condition safeguards (D-100), traceability (D-087), versioning and templates (D-086), authority model (D-082, D-083 enforced in code, D-097, D-098, D-101); record-type builder architecture and its owner module (ADM or a new platform module, via ADR-010 naming).
