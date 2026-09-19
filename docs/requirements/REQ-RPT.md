@@ -1,8 +1,8 @@
 # REQ-RPT — "Bugün", Sahip Görünümü ve Şantiye Detayı
 
-Durum: KISMEN CONFIRMED (001…014 sahip, 2026-09-18; 015…023 DRAFT) · 2026-09-19 · Modül: RPT (Reporting & Cockpit)
+Durum: CONFIRMED (sahip; 001…014 2026-09-18, 015…023 2026-09-19) · 2026-09-19 · Modül: RPT (Reporting & Cockpit)
 
-Kaynaklar: Özellik Yapısı §3, §14, §34; kararlar D-056, D-065, D-106, D-126…D-129, D-206…D-208. REQ-RPT-001…014 CONFIRMED (sahip, 2026-09-18); §34 bölümü (REQ-RPT-015…023) DRAFT, 2026-09-19.
+Kaynaklar: Özellik Yapısı §3, §14, §34; kararlar D-056, D-065, D-106, D-126…D-129, D-206…D-208. §34 bölümü (REQ-RPT-015…023) 2026-09-19'da eklendi.
 
 **Sınır.** RPT kendi verisini üretmez; diğer modüllerin olaylarından ve kayıtlarından türetir. Şantiye genel ekranındaki temel bilgiler REQ-SIT-001'dedir; şantiye listesi ve özet tablosu SIT ekranlarındadır (REQ-RPT-006). Uyarı eşikleri merkezi kurallardır (REQ-WFL-032). Kâr-zarar ve maliyet hesabı REQ-FIN'dedir; RPT yalnızca gösterir ve etkenlere ayırır.
 
@@ -179,7 +179,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Açıklama: Raporlar günlük, haftalık, 15 günlük, aylık, seçilen dönem ve proje başlangıcından bugüne olarak üretilir.
 - Kabul kriterleri:
   - [ ] Aynı rapor, dönem seçimi değiştirilerek yeniden hesaplanır; tatil günleri çalışma takvimine göre dikkate alınır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-016 — Hazır rapor konuları
 
@@ -189,7 +189,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Açıklama: Hazır raporlar: şirket kâr-zarar, proje kâr-zarar, üretim miktarları, hedef-gerçekleşen, kişi/ekip/şantiye verimi, fire/zayi, stok tüketimi, malzeme maliyet trendi, fabrika birim maliyet, ekipman kullanım/atıl gün, hakediş ve tahsilat, cari, nakit projeksiyonu, performans/KPI, sözleşme yükümlülükleri, kalite/İSG, yan gelirler. Yeni rapor türü eklemek geliştirme ister; kullanıcı tanımlı kayıt türlerinin raporları REQ-WFL-035'tedir (D-207).
 - Kabul kriterleri:
   - [ ] Her rapor kullanıcının kapsamına ve veri sınıfı izinlerine göre süzülür; ticari rapor ticari yetkisi olmayana görünmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-017 — Filtre ve kayıtlı görünüm
 
@@ -199,7 +199,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Açıklama: Kullanıcı hazır raporda dönem, proje, şantiye, kişi, ekip gibi filtreleri seçer, sütun gizler ve bu hali ad vererek kaydeder. Kayıtlı görünüm kişiseldir; yetkili kişi bir görünümü role paylaşabilir.
 - Kabul kriterleri:
   - [ ] Paylaşılan görünüm, her kullanıcıya kendi yetkisiyle süzülmüş olarak açılır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-018 — Trend ve karşılaştırma
 
@@ -209,7 +209,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Açıklama: Bu ay geçen aya göre, şantiye A şantiye B'ye göre, ekip A ekip B'ye göre ve aynı tip iş geçmiş projeye göre karşılaştırılır.
 - Kabul kriterleri:
   - [ ] Karşılaştırılan iki tarafın dönemi ve kapsamı başlıkta açıkça yazar.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-019 — PDF ve Excel dışa aktarım
 
@@ -220,7 +220,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Kabul kriterleri:
   - [ ] Dışa aktarım, kullanıcının ekranda görebildiğinden fazlasını içermez.
   - [ ] Her dışa aktarım kim, ne zaman ve hangi rapor bilgisiyle denetim kaydına yazılır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-020 — Resmi günlük saha raporu
 
@@ -231,7 +231,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Kabul kriterleri:
   - [ ] Onaylanmamış kayıttan resmi rapor üretilmez.
   - [ ] Revizyonla değişen kaydın raporu yeni sürüm olarak üretilir; önceki sürüm saklanır (REQ-DOC-005).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-021 — Günlük raporu işverene bir kişi gönderir
 
@@ -242,7 +242,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Kabul kriterleri:
   - [ ] Hiçbir akış günlük raporu dış bir adrese gönderemez.
   - [ ] Raporun işverene gönderilip gönderilmediği rapor listesinde görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-022 — Geçmiş günlük raporlar
 
@@ -252,7 +252,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Açıklama: Geçmiş günlük raporlar tarih ve şantiyeye göre listelenir ve seçilen aralık toplu olarak dışa aktarılır.
 - Kabul kriterleri:
   - [ ] Toplu dışa aktarım yalnızca kullanıcının görebildiği şantiyelerin raporlarını içerir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-RPT-023 — Zamanlı raporlar iç kullanıcılara akışla gider
 
@@ -264,7 +264,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
 - Kabul kriterleri:
   - [ ] Alıcı listesinde yalnızca panel kullanıcıları seçilebilir.
   - [ ] Yetkisi olmayan alıcıya rapor boş değil, hiç gönderilmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 

@@ -9,7 +9,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | Module | Source sections (`docs/sources/functional-scope.md`; "Mimari §" = `docs/sources/architecture-principles.md`) | REQ file | REQ count |
 |---|---|---|---|
 | IAM | §2 | `docs/requirements/REQ-IAM.md` | 27 (CONFIRMED) |
-| RPT (cockpit, reports) | §3, §14, §34 | `docs/requirements/REQ-RPT.md` | 23 (001…014 CONFIRMED; §34 part 015…023 DRAFT) |
+| RPT (cockpit, reports) | §3, §14, §34 | `docs/requirements/REQ-RPT.md` | 23 (CONFIRMED) |
 | WFL (approvals, rules, workflow, end-to-end flows, capability catalog, record-type builder) | §4, §13, §37, §45, Mimari §6, §13; CHG-006 (D-077…D-105) | `docs/requirements/REQ-WFL.md` | 39 (CONFIRMED) |
 | CRM | §5 | `docs/requirements/REQ-CRM.md` | 14 (CONFIRMED) |
 | QTE | §6 | `docs/requirements/REQ-QTE.md` | 18 (CONFIRMED) |
