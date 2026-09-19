@@ -74,3 +74,8 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-19 23:42:49Z · 6c9e96a0 · Write · `docs/architecture/PORTS_AND_SERVICES.md`
 - 2026-09-19 23:44:05Z · 6c9e96a0 · Write · `docs/architecture/RECORD_TYPES.md`
 - 2026-09-19 23:45:15Z · 6c9e96a0 · Write · `docs/architecture/spikes/README.md`
+- 2026-09-19 23:47:00Z · 6c9e96a0 · Write · `docs/decisions/ADR-014-transactional-outbox.md`
+- 2026-09-19 23:47:11Z · 6c9e96a0 · Write · `docs/decisions/ADR-015-direct-postgres-access.md`
+- 2026-09-19 23:47:21Z · 6c9e96a0 · Write · `docs/decisions/ADR-016-user-defined-record-storage.md`
+- 2026-09-19 23:47:31Z · 6c9e96a0 · Write · `docs/decisions/ADR-017-search-in-postgres.md`
+- 2026-09-19 23:47:40Z · 6c9e96a0 · Write · `docs/decisions/ADR-018-live-updates-as-signals.md`

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Five new ADRs
+
+- The Phase 03 decisions that cut across every module are now ADRs of their own: ADR-014 (events written with the change that caused them), ADR-015 (direct database access without giving up row-level security), ADR-016 (how a user-defined record is stored), ADR-017 (search stays in PostgreSQL) and ADR-018 (live updates carry a signal, not data). Each records what was refused and which spike will confirm it (D-242).
+
+
 ## 2026-09-20 — Phase 06 spike list
 
 - `docs/architecture/spikes/README.md` turns every risky Phase 03 decision into a question with a pass mark: does row-level security hold for a multi-role user, does the outbox lose nothing when the queue restarts, does a dry run behave exactly like a real one, can a user-defined record type survive fifty thousand rows, does Turkish search find "Söğüt" when someone types "sogut", does a photo finish uploading after the connection drops. A spike that fails sends its decision back to Phase 03 before anything is built on it (TASK-0064).
