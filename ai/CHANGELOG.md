@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — STR confirmed
+
+- The owner confirmed REQ-STR with both derived rules: 8 more requirements CONFIRMED, 409 in all. Next: RPT §34, then NFR.
+
+
 ## 2026-09-19 — STR requirements
 
 - Four strategy decisions (D-202…D-205), all as recommended: a budget at the same detail as the books (month, cost center, expense type); nominal TL with an optional CPI-adjusted view that never changes a record; investment payback shown both simple and discounted, fed by rent paid, idle days and utilisation; and a health scorecard of colours per area with every colour explainable, and no single company score.
