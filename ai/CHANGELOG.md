@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Domain model, batch 2
+
+- The owner confirmed batch 1 and its seventeen record names. Batch 2 adds inventory, purchasing, factory and finance to `docs/domain/DOMAIN_MODEL.md`, with six new record names proposed in the glossary.
+
+
 ## 2026-09-19 — Domain model, batch 1
 
 - `docs/domain/DOMAIN_MODEL.md` starts with six rules common to every module and the platform and first-slice modules (IAM, AUD, DOC, WFL, TSK, ADM, PRJ, SIT, RPT): their main records, how they relate, and the rules that must never break, each tied to the requirement it comes from. Seventeen structural record names were added to the glossary first, as PROPOSED.

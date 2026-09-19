@@ -1,6 +1,6 @@
 # Alan Modeli
 
-Durum: TASLAK — Parti 1 (platform ve ilk dilim) · Son güncelleme: 2026-09-19
+Durum: Parti 1 CONFIRMED (sahip, 2026-09-19); Parti 2 (INV, PUR, FAC, FIN) TASLAK · Son güncelleme: 2026-09-19
 
 Her modülün **ana kayıtları**, aralarındaki **ilişkiler** ve hiçbir koşulda bozulmaması gereken **değişmez kurallar** (invariant). Kayıt adları sözlüğün kod adlarıdır (`docs/domain/GLOSSARY.md`); her kural onu doğuran gereksinime bağlıdır. Olaylar, aksiyonlar ve koşul alanları her modülün `docs/requirements/REQ-<MODÜL>.md` dosyasındaki yetenek kataloğundadır; burada tekrarlanmaz. Tablolar, sütunlar ve satır görünürlüğü Phase 04'te bu modelden türetilir (TASK-0046).
 
@@ -178,3 +178,96 @@ Ortak kurallar (her modül için geçerli):
 - **RPT-K3** Resmi günlük rapor yalnız onaylı kayıttan üretilir ve ticari veri içermez (REQ-RPT-020).
 - **RPT-K4** Hiçbir akış günlük raporu dış adrese gönderemez (REQ-RPT-021).
 - **RPT-K5** Dışa aktarım ekranda görülebilenden fazlasını içermez ve denetime yazılır (REQ-RPT-019).
+
+---
+
+## INV — Stok ve malzeme
+
+**Ana kayıtlar**
+
+| Kayıt | Anlamı |
+|---|---|
+| `Material` | Katalogdaki malzeme; birim, kritik eşik, ölçüler, teorik birim ağırlık |
+| `Location` | Fabrika, depo, galvanizci, şantiye veya "sevkiyatta" |
+| `StockMovement` | Tek bir stok hareketi: tür, miktar, lokasyon, süreç durumu, birim maliyet ve yöntemi, kaynak kayıt |
+| `MaterialLot` | Birlikte izlenen parti (şerit partisi, galvaniz dönüşü) |
+| `Shipment` / `TruckLoad` | Sevkiyat ve tır; boy satırları, kantar fişleri, çıkış/varış |
+| `MaterialIssueRequest` | Şantiyenin malzeme çıkış talebi |
+| `StockCount` | Fiziki sayım: sistem ve sayılan miktar, fark nedeni |
+| `OpeningStock` | Başlangıç bakiyesi ve birim maliyeti |
+| `StockReservation` | Satış siparişi için ayrılan miktar |
+
+**İlişkiler:** `StockMovement` N—1 `Material`, N—1 `Location`, N—1 kaynak kayıt (sipariş, günlük kayıt, sevkiyat, sayım, revizyon); `Shipment` 1—N `TruckLoad` 1—N `StockMovement`; `MaterialLot` 1—N `StockMovement`.
+
+**Değişmez kurallar**
+
+- **INV-K1** Stok miktarı yalnız hareketlerden hesaplanır; üzerine yazılmaz; düzeltme ters hareket veya düzeltme hareketidir (REQ-INV-003, REQ-INV-014).
+- **INV-K2** Şirket toplamı lokasyonların toplamına her zaman eşittir (REQ-INV-002).
+- **INV-K3** Her tüketim hareketi maliyetini ve maliyet yöntemini taşır; maliyet tüketim anında donar (REQ-INV-018, REQ-INV-021).
+- **INV-K4** Ağırlıklı ortalama lokasyon başınadır; transfer kaynak lokasyonun ortalamasıyla çıkar, taşıma ücreti hedefe eklenir (REQ-INV-019).
+- **INV-K5** Aynı tüketim hem stoktan hem gider olarak iki kez maliyete giremez (REQ-INV-017).
+- **INV-K6** Maliyeti bulunamayan tüketim sıfır maliyetle sessizce geçmez (REQ-INV-018).
+- **INV-K7** Onaylanmamış sayım stoğu değiştirmez; onaylı açılış stoku doğrudan düzenlenemez (REQ-INV-014, REQ-INV-015).
+- **INV-K8** Tolerans dışı kantar farkı açıklama girilmeden kapatılamaz (REQ-INV-011).
+- **INV-K9** Satılan hurda, hurdaya ayrılandan fazla olamaz; tartım belgesi olmadan fire hurdaya ayrılamaz (REQ-INV-027).
+- **INV-K10** Ayrılmış stok kullanılabilir stok sayılmaz (REQ-QTE-016).
+
+## PUR — Satın alma
+
+**Ana kayıtlar:** `Supplier` (tedarikçi rolündeki `Party`) · `PurchaseOrder` (tedarikçi, kalemler, fiyat, para birimi, termin, durum) · `GoodsReceipt` (tır bazında teslim alım) · `OverDelivery` · `PurchaseRequest` (talep, aciliyet, istenen tarih, maliyet merkezi) · `SupplierQuote`.
+
+**İlişkiler:** `PurchaseOrder` N—1 `Party`; `PurchaseOrder` 1—N `GoodsReceipt` 1—N `StockMovement` (INV); `PurchaseRequest` 1—N `SupplierQuote`; `PurchaseRequest` 0—1 `PurchaseOrder`.
+
+**Değişmez kurallar**
+
+- **PUR-K1** Aynı firma için ikinci kayıt açılmaz; rol eklenir (REQ-PUR-001, D-027).
+- **PUR-K2** Teslim alım ve stok girişi aynı işlemdedir; biri olmadan diğeri kalmaz (REQ-PUR-005).
+- **PUR-K3** Toleransı aşan fazla teslim onay olmadan kullanılabilir stoğa girmez (REQ-PUR-006).
+- **PUR-K4** Onaylanmamış talep için alım kaydı açılamaz (REQ-PUR-007).
+- **PUR-K5** Teslim alma, maliyet merkezi seçilmeden tamamlanmaz (REQ-PUR-011).
+
+## FAC — Fabrika
+
+**Ana kayıtlar:** `FactoryDailyLog` (günlük üretim, saatler, durum) · `ProductionEntry` (iş türü: şerit işleme, lug, teknik iyileştirme; miktar ve işçilik saati) · `FactoryCostPeriod` (ayın giderleri, saat payları, birim maliyet; geçici/kesin) · `TechnicalImprovementWork`.
+
+**İlişkiler:** `FactoryDailyLog` 1—N `ProductionEntry`; onaylı kayıt 1—N `StockMovement` (INV); `FactoryCostPeriod` 1—N birim maliyet (iş türü başına).
+
+**Değişmez kurallar**
+
+- **FAC-K1** Fabrikada panel dökümü yoktur (REQ-FAC-001).
+- **FAC-K2** Fabrika kaydı onaylanmadan hiçbir hareketi stoğa, fireye veya maliyete yansımaz; onay adımı kapatılamaz (REQ-FAC-004, REQ-FAC-005).
+- **FAC-K3** İşçilik saati olmayan üretim satırı eksiktir (REQ-FAC-003).
+- **FAC-K4** Ay kapanana kadar birim maliyet geçicidir; kapanınca fark ayrı hareketle düzeltilir (REQ-FAC-009).
+
+## FIN — Finans
+
+**Ana kayıtlar**
+
+| Kayıt | Anlamı |
+|---|---|
+| `ClientProgressPayment` | İşveren hakedişi: proje, dönem, kalemler, brüt, kesintiler, net, durum |
+| `ProgressPaymentLine` | Hakediş kalemi: önerilen ve düzeltilen miktar, gerekçe, devreden miktar |
+| `Deduction` | Teminat, stopaj, avans ve diğer kesinti satırı |
+| `SubcontractorProgressPayment` | Taşeron hakedişi |
+| `ClientAdvance` | İşveren avansı ve kalan bakiyesi |
+| `Collection` / `Payment` | Tahsilat ve ödeme; dekont |
+| `Income` / `Expense` | Gelir ve gider kaydı; maliyet merkezi, kaynak kayıt |
+| `PartyAccountEntry` | Cari hareketi: firma, para birimi, tutar, TL karşılığı |
+| `CashFlowItem` | Nakit projeksiyonunda planlı kalem |
+| `ClosingUnit` / `PeriodClose` | Kapanış birimi ve ay kapanışı; yeniden açma gerekçesi |
+| `AccountingExport` | Aylık muhasebe dosyası ve mutabakat farkları |
+
+**İlişkiler:** `ClientProgressPayment` N—1 `Project`, 1—N `ProgressPaymentLine`, 1—N `Deduction`, 1—N `Collection`; `Expense` N—1 `CostCenter` ve N—1 kaynak kayıt; `PartyAccountEntry` N—1 `Party`; `PeriodClose` N—1 `ClosingUnit`.
+
+**Değişmez kurallar**
+
+- **FIN-K1** Bir proje ve dönem için tek açık işveren hakedişi vardır (REQ-FIN-001).
+- **FIN-K2** Net tutar kesinti satırlarından hesaplanır, elle yazılmaz (REQ-FIN-006).
+- **FIN-K3** Aynı miktar iki hakedişte birden onaylanmış sayılmaz; onaylanmayan miktar devreder (REQ-FIN-003).
+- **FIN-K4** Hakediş durumu atlanamaz; faturalanmamış hakediş tahsil edilmiş olamaz (REQ-FIN-004).
+- **FIN-K5** Kesilen avans alınan avansı aşamaz (REQ-FIN-007).
+- **FIN-K6** Kaynak kaydı onaylanmadan gider yazılmaz; aynı harcama iki kez gider olmaz (REQ-FIN-013, REQ-FIN-016).
+- **FIN-K7** Her gelir ve gider bir maliyet merkezine bağlıdır; genel gider projelere dağıtılmaz (REQ-FIN-011, REQ-FIN-014, REQ-FIN-017).
+- **FIN-K8** Cari hareketi silinmez; yanlış hareket ters kayıtla düzeltilir; firma başına para birimi bazında tek net bakiye vardır (REQ-FIN-018, REQ-FIN-019).
+- **FIN-K9** Onaysız ödeme "ödendi" olamaz; hazırlayan kendi ödemesini onaylayamaz (REQ-FIN-025).
+- **FIN-K10** Engelleyici kalemi olan birim dönemini kapatamaz; kapalı döneme doğrudan kayıt girilemez; yeniden açma gerekçe ister (REQ-FIN-028, REQ-FIN-029).

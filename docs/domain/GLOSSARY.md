@@ -178,23 +178,29 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Yatırım analizi | Investment Analysis | Yeni ekipman alımının maliyet, kazanç ve geri dönüş hesabı | — | roi_report | CONFIRMED | REQ-STR-005 |
 | Geri dönüş süresi | Payback Period | Yatırımın kendini ödediği süre; basit ve indirgenmiş | — | roi | CONFIRMED | D-204 |
 | Şirket sağlık karnesi | Company Health Scorecard | Şirketin başlık başına renkli genel durumu | — | score (işveren karnesiyle karışır) | CONFIRMED | D-205 |
-| Merkezi kural | Business Rule | Tek yerde, tarihli sürümle tutulan şirket kuralı değeri | — | setting (tanımla karışır) | PROPOSED | REQ-WFL-032 |
-| Döküm satırı | Casting Entry | Bir döküm seansında panel tipi başına adet | — | pour_row | PROPOSED | REQ-SIT-015 |
-| Tüketim satırı | Consumption Entry | Günlük kayıtta önerilen ve girilen malzeme tüketimi | — | usage | PROPOSED | REQ-SIT-029 |
-| Kullanıcı tanımlı kayıt | Custom Record | Kayıt türü üreteciyle tanımlanmış türün bir kaydı | — | dynamic_entity | PROPOSED | REQ-WFL-035 |
-| Ekipman kullanım satırı | Equipment Use Entry | Günlük kayıtta o gün kullanılan ekipman | — | equipment_log | PROPOSED | REQ-EQP-011 |
-| Teslim-tesellüm saati | Handover Time | Dolgu, beton, demir teslim ve geri alma zamanı | — | delivery_time | PROPOSED | REQ-SIT-024 |
-| Gösterge seçimi | Indicator Selection | Rol varsayılanı ve kişinin kendi gösterge düzeni | — | widget_config | PROPOSED | REQ-RPT-004 |
-| Montaj satırı | Installation Entry | Panel montajı: duvar, tip, adet, saatler | — | mount_row | PROPOSED | REQ-SIT-021 |
-| Elle belirlenen amir | Manager Override | Bir kişi için rol hiyerarşisinden önce gelen amir | — | boss_override | PROPOSED | REQ-IAM-014 |
-| Kişisel istisna | Personal Exception | Sahibin bir kişiye tanıdığı ek veya eksik erişim | — | user_permission | PROPOSED | REQ-IAM-015 |
-| Kayıtlı rapor görünümü | Saved Report View | Filtre ve sütunlarıyla adlandırılmış rapor görünümü | — | report_preset | PROPOSED | REQ-RPT-017 |
-| Şerit montaj satırı | Strip Installation Entry | Şerit montajı: duvar, tip, boy, adet, metre | — | strip_row | PROPOSED | REQ-SIT-022 |
-| Taşeron işçisi | Subcontractor Worker | Günlük kayıtta adıyla tutulan taşeron çalışanı; hassas alan yok | — | worker (personelle karışır) | PROPOSED | REQ-SIT-028 |
-| Tedarik matrisi satırı | Supply Responsibility | Tedarik matrisinde bir kalemin kimde olduğu | — | responsibility | PROPOSED | REQ-PRJ-004 |
-| Puantaj satırı | Timesheet Entry | Bir kişinin bir günlük puantaj kaydı | — | attendance | PROPOSED | REQ-SIT-026 |
-| Akış adımı çalışması | Workflow Step Run | Bir akış örneğinin bir adımdaki çalışması | — | step_log | PROPOSED | REQ-WFL-034 |
-| Akış sürümü | Workflow Version | Yayımlanmış akış tanımı sürümü | — | revision (proje revizyonuna ayrılmış) | PROPOSED | REQ-WFL-024 |
+| Merkezi kural | Business Rule | Tek yerde, tarihli sürümle tutulan şirket kuralı değeri | — | setting (tanımla karışır) | CONFIRMED | REQ-WFL-032 |
+| Döküm satırı | Casting Entry | Bir döküm seansında panel tipi başına adet | — | pour_row | CONFIRMED | REQ-SIT-015 |
+| Tüketim satırı | Consumption Entry | Günlük kayıtta önerilen ve girilen malzeme tüketimi | — | usage | CONFIRMED | REQ-SIT-029 |
+| Kullanıcı tanımlı kayıt | Custom Record | Kayıt türü üreteciyle tanımlanmış türün bir kaydı | — | dynamic_entity | CONFIRMED | REQ-WFL-035 |
+| Ekipman kullanım satırı | Equipment Use Entry | Günlük kayıtta o gün kullanılan ekipman | — | equipment_log | CONFIRMED | REQ-EQP-011 |
+| Teslim-tesellüm saati | Handover Time | Dolgu, beton, demir teslim ve geri alma zamanı | — | delivery_time | CONFIRMED | REQ-SIT-024 |
+| Gösterge seçimi | Indicator Selection | Rol varsayılanı ve kişinin kendi gösterge düzeni | — | widget_config | CONFIRMED | REQ-RPT-004 |
+| Montaj satırı | Installation Entry | Panel montajı: duvar, tip, adet, saatler | — | mount_row | CONFIRMED | REQ-SIT-021 |
+| Elle belirlenen amir | Manager Override | Bir kişi için rol hiyerarşisinden önce gelen amir | — | boss_override | CONFIRMED | REQ-IAM-014 |
+| Kişisel istisna | Personal Exception | Sahibin bir kişiye tanıdığı ek veya eksik erişim | — | user_permission | CONFIRMED | REQ-IAM-015 |
+| Kayıtlı rapor görünümü | Saved Report View | Filtre ve sütunlarıyla adlandırılmış rapor görünümü | — | report_preset | CONFIRMED | REQ-RPT-017 |
+| Şerit montaj satırı | Strip Installation Entry | Şerit montajı: duvar, tip, boy, adet, metre | — | strip_row | CONFIRMED | REQ-SIT-022 |
+| Taşeron işçisi | Subcontractor Worker | Günlük kayıtta adıyla tutulan taşeron çalışanı; hassas alan yok | — | worker (personelle karışır) | CONFIRMED | REQ-SIT-028 |
+| Tedarik matrisi satırı | Supply Responsibility | Tedarik matrisinde bir kalemin kimde olduğu | — | responsibility | CONFIRMED | REQ-PRJ-004 |
+| Puantaj satırı | Timesheet Entry | Bir kişinin bir günlük puantaj kaydı | — | attendance | CONFIRMED | REQ-SIT-026 |
+| Akış adımı çalışması | Workflow Step Run | Bir akış örneğinin bir adımdaki çalışması | — | step_log | CONFIRMED | REQ-WFL-034 |
+| Akış sürümü | Workflow Version | Yayımlanmış akış tanımı sürümü | — | revision (proje revizyonuna ayrılmış) | CONFIRMED | REQ-WFL-024 |
+| Nakit kalemi | Cash Flow Item | Nakit projeksiyonunda planlı tek seferlik veya tekrarlayan kalem | — | cash_line | PROPOSED | REQ-FIN-021 |
+| Fabrika maliyet dönemi | Factory Cost Period | Ayın fabrika giderleri, saat payları ve birim maliyetleri; geçici veya kesin | — | cost_month | PROPOSED | REQ-FAC-009 |
+| Teslim alım | Goods Receipt | Bir siparişin tır bazında teslim alınması | — | delivery (sevkiyatla karışır) | PROPOSED | REQ-PUR-004 |
+| Cari hareketi | Party Account Entry | Bir firmanın carisindeki tek hareket | — | ledger_line | PROPOSED | REQ-FIN-019 |
+| Üretim satırı | Production Entry | Fabrika günlük kaydında iş türü başına miktar ve işçilik saati | — | output_row | PROPOSED | REQ-FAC-003 |
+| Hakediş kalemi | Progress Payment Line | Hakedişte önerilen ve düzeltilen miktar, gerekçe, devreden miktar | — | invoice_line | PROPOSED | REQ-FIN-002 |
 | Malzeme | Material | — | item (katalog satırı) | product | CONFIRMED | |
 | Sarf malzeme | Consumable | — | — | supply | CONFIRMED | |
 | Sarf reçetesi | Consumption Recipe | İş birimi başına standart sarf | bill of materials | — | CONFIRMED | |
