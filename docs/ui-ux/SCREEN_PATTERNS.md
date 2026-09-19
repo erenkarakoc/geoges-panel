@@ -73,7 +73,7 @@ Her kalıpta geçerli ortak kurallar:
 - **İlgili kayıtlar** bağlantıdır: tıklanınca o kaydın detayı açılır (ör. hakedişten projeye, sevkiyattan siparişe).
 - **Telefonda** kilit rakamlar ikişerli ızgaraya iner; sekmeler yatay kayan şerittir (DESIGN_SYSTEM_RULES §4.1 madde 17c); eylem menüsü `Drawer` olur.
 
-**Durumlar:** yükleniyor (başlık ve bölüm iskeleti) · bulunamadı ("Kayıt bulunamadı veya iptal edildi" ve listeye dönüş) · yetki yok (kayıt varlığını belli etmeden aynı "bulunamadı" görünümü, REQ-DOC-003 ile aynı ilke) · kısmi (yüklenemeyen bölümde "Tekrar dene") · hata (toast + tekrar dene).
+**Durumlar:** yükleniyor (başlık ve bölüm iskeleti) · bulunamadı ("Kayıt bulunamadı veya iptal edildi" ve listeye dönüş) · yetki yok ("Bu kaydı görme yetkiniz yok" ve listeye dönüş; sahip kararıyla değişti, D-221; arama ve listelerde yetkisiz kayıt yine hiç görünmez, REQ-DOC-003) · kısmi (yüklenemeyen bölümde "Tekrar dene") · hata (toast + tekrar dene).
 
 ## 3. Form kalıbı (REQ-NFR-015)
 

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Screen states confirmed
+
+- The owner confirmed the state matrix. Opening a record you may not see by link now says so plainly ("Bu kaydı görme yetkiniz yok") instead of pretending it does not exist; search and lists still never show it (D-221). Typed input survives a dropped connection. Next: the eight end-to-end flows with the flow designer.
+
+
 ## 2026-09-19 — Per-screen states (draft)
 
 - `docs/ui-ux/SCREEN_STATES.md` writes down, for every screen, what it says when it is empty and what it offers to do, and the states only that screen has (a record already decided by someone else, a period that cannot close yet, a price still waiting for its exchange rate). Common rules cover loading, errors, missing permission and a lost connection once for all screens. Awaiting owner review (TASK-0051).

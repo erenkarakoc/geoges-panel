@@ -1,18 +1,18 @@
 # Ekran Durumları
 
-Durum: TASLAK · Son güncelleme: 2026-09-19
+Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-19
 
 Her ekranın ilk açılış, yükleniyor, başarılı, boş, kısmi, hata, yetki yok, tekrar dene ve geri dönülmez işlem onayı durumları (`docs/ui-ux/DESIGN_SYSTEM_RULES.md` §6). Ortak davranış kalıplarda tanımlıdır ve **her ekrana kendiliğinden uygulanır** (`docs/ui-ux/SCREEN_PATTERNS.md`): liste için bölüm 1, detay için bölüm 2, form için bölüm 3. Bu tablo yalnızca ekrana özgü olanı yazar: boş durumun metni ve eylemi, ekranın özel durumları. Günlük saha kaydının durumları kendi belgesindedir (`docs/ui-ux/screens/SCR-021-daily-site-log.md`).
 
-Kapsam: envanterdeki 104 etkin ekran. SCR-021 bu tabloda yoktur, durumları kendi belgesinin 5. bölümündedir. Veri aktarımı (SCR-194) ertelendiği için tabloda yoktur. Görev: TASK-0051.
+Kapsam: envanterdeki 104 etkin ekran. SCR-021 bu tabloda yoktur, durumları kendi belgesinin 5. bölümündedir. Veri aktarımı (SCR-194) ertelendiği için tabloda yoktur. Görev: TASK-0051 · Kararlar: D-221.
 
 ## Her ekran için ortak kurallar
 
 - **Yükleniyor:** içeriğin yerinde iskelet (`Skeleton`); gezinme ve araç çubuğu kullanılabilir. Yükleme 10 saniyeyi geçerse "Beklenenden uzun sürüyor" ve "Tekrar dene".
 - **Hata:** kısa, Türkçe, ne yapılacağını söyleyen toast; ekranda "Tekrar dene". Teknik hata kodu kullanıcıya gösterilmez, destek talebine eklenir.
 - **Kısmi:** yüklenebilen bölümler gösterilir; yüklenemeyen bölümde "Bu bölüm yüklenemedi" ve "Tekrar dene".
-- **Yetki yok:** menüde görünmeyen ekrana adresle gelinirse "Bu ekranı görme yetkiniz yok" ve "Bugün"e dönüş. Görme yetkisi olmayan bir **kayda** gelinirse kaydın varlığı belli edilmez: "Kayıt bulunamadı" görünür (REQ-DOC-003 ilkesi).
-- **Bağlantı yok:** üstte "Bağlantı yok" uyarısı; okunmuş ekran okunabilir kalır, kaydetme ve gönderme bağlantı gelince yapılır. Uzun formlarda girilenler bu sırada cihazda taslak olarak korunur ki kaybolmasın (REQ-NFR-015, REQ-SIT-007); bu çevrimdışı çalışma değildir, çevrimdışı kayıt ve gönderim ertelenmiştir (DEF-002).
+- **Yetki yok:** menüde görünmeyen ekrana adresle gelinirse "Bu ekranı görme yetkiniz yok" ve "Bugün"e dönüş. Görme yetkisi olmayan bir **kayda** bağlantıyla gelinirse "Bu kaydı görme yetkiniz yok" ve listeye dönüş görünür (D-221). Arama sonuçlarında, listelerde, sayılarda ve toplu indirmede yetkisiz kayıt hiç görünmez (REQ-DOC-003).
+- **Bağlantı yok (D-221):** üstte "Bağlantı yok" uyarısı; okunmuş ekran okunabilir kalır, kaydetme ve gönderme bağlantı gelince yapılır. Uzun formlarda girilenler bu sırada cihazda taslak olarak korunur ki kaybolmasın (REQ-NFR-015, REQ-SIT-007); bu çevrimdışı çalışma değildir, çevrimdışı kayıt ve gönderim ertelenmiştir (DEF-002).
 - **Geri dönülmez işlem onayı** (`AlertDialog`): iptal etme, geri çekme, onaya gönderme sonrası kilit, dönem kapatma, ödeme yapıldı işaretleme, bordro kesinleştirme. Silme işlemi panelde yoktur (REQ-AUD-002).
 - **Başarılı:** toast; kayıt açıkken durum rozeti güncellenir.
 
@@ -20,7 +20,7 @@ Kapsam: envanterdeki 104 etkin ekran. SCR-021 bu tabloda yoktur, durumları kend
 
 | Ekran | Boş durum (metin → eylem) | Özel durumlar |
 |---|---|---|
-| SCR-001 Giriş | — | Hatalı giriş: tek genel mesaj, hangi alanın yanlış olduğu söylenmez (REQ-IAM-001); geçici kilit: kalan süre (REQ-IAM-005); hesap pasif: "Hesabınız kapalı" |
+| SCR-001 Giriş | — | Hatalı giriş: tek genel mesaj, hangi alanın yanlış olduğu söylenmez (REQ-IAM-001); geçici kilit: kalan süre (REQ-IAM-005); hesap pasif: yalnız doğru paroladan sonra "Hesabınız kapalı" (D-221) |
 | SCR-002 İki adımlı doğrulama | — | Yanlış kod; süresi geçmiş kod; kurulum gerektiren ilk giriş (karekod) |
 | SCR-003 Parola sıfırlama | — | Bağlantı gönderildi (e-posta var olsun olmasın aynı mesaj); süresi dolmuş bağlantı |
 | SCR-004 Rol yönlendirmesi | — | Birden fazla yeni rol: her rol için ayrı adım |
