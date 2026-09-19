@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Phase 03 DONE
+
+- The owner approved the Phase 03 exit. The panel now has an architecture: what a module owns and how two of them talk, how an event survives a crash, how a flow definition and a running instance stay apart, how permission is decided in three places, how a rule changed today leaves last March alone, where data comes from and how it is searched, and how a record type someone invents next year is stored without changing the schema. Sixteen spikes will test the risky half before anything is built on it. Phase 04 — database architecture — starts.
+
+
 ## 2026-09-20 — Five new ADRs
 
 - The Phase 03 decisions that cut across every module are now ADRs of their own: ADR-014 (events written with the change that caused them), ADR-015 (direct database access without giving up row-level security), ADR-016 (how a user-defined record is stored), ADR-017 (search stays in PostgreSQL) and ADR-018 (live updates carry a signal, not data). Each records what was refused and which spike will confirm it (D-242).

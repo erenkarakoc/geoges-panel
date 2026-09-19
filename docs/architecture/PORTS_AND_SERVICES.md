@@ -1,6 +1,6 @@
 # Portlar, Veri Erişimi ve Ortak Servisler
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Panelin dış dünyaya ve veritabanına nasıl bağlandığı. Taşınabilirlik kuralı ADR-002 ve ADR-003'ten gelir: iş mantığı standart PostgreSQL ve uygulama katmanında yaşar, sağlayıcıya özgü her şey bir portun arkasındadır. Görev: TASK-0062. Kararlar: D-238, D-239, D-240.
 

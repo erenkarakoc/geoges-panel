@@ -4,21 +4,23 @@ Last updated: 2026-09-20
 
 ```text
 PROJECT STATUS:      DESIGN
-CURRENT PHASE:       PHASE 03 — System Architecture (Phase 02 DONE 2026-09-20, owner approved)
+CURRENT PHASE:       PHASE 04 — Database Architecture (Phase 03 DONE 2026-09-20, owner approved)
 CURRENT SUBPHASE:    PLANNING
 CURRENT FEATURE:     —
-CURRENT TASK:        Phase 03 work plan (module boundaries, event backbone, workflow engine architecture, rules and permission architecture)
+CURRENT TASK:        Phase 04 work plan (schema per module, ledgers, RLS policies, audit and history tables, migration conventions)
 STATUS:              DESIGNING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
-CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 and CHG-006 are both folded. Normal ADR-007 rule applies — Phase 03 is a design phase; product code resumes in Phase 07 or via an approved change request.
+CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 and CHG-006 are both folded. Normal ADR-007 rule applies — Phase 04 is a design phase; product code resumes in Phase 07 or via an approved change request.
                      Tooling code that enforces the records (scripts/, .githooks/) is always allowed.
                      Already-shipped exceptions that remain valid: development-only sandboxes (D-052) and the CHG-004 shell transfer (TASK-0032…TASK-0037, owner approved).
                      Note: TASK-0034 and TASK-0037 also shipped module-namespaced sample screens (modules/sit/ui, modules/wfl/ui, modules/tsk/ui). They are sample data behind the shell, approved as part of CHG-004, and are re-wired when SIT and the workflow engine exist.
 ```
 
 ## LAST COMPLETED TASK
-Phase 02 DONE (2026-09-20, owner approved): screen inventory, list/detail/form patterns with the bottom band, the daily site log screen, the per-screen state matrix, the eight end-to-end flows as real definitions, the administration page and flow designer, WCAG 2.2 AA targets, the custom-element list, the special screens and the search UX (TASK-0042, TASK-0048…TASK-0056, D-217…D-228).
+Phase 03 DONE (2026-09-20, owner approved): module boundaries and contracts, event backbone, workflow engine architecture, permission architecture, configuration and custom fields, ports and data access, storage direction for user-defined record types, and the 16 Phase 06 spikes (TASK-0057…TASK-0064, D-230…D-242, ADR-014…018; OQ-020 and OQ-026 closed).
+
+Earlier: Phase 02 DONE (2026-09-20, owner approved): screen inventory, list/detail/form patterns with the bottom band, the daily site log screen, the per-screen state matrix, the eight end-to-end flows as real definitions, the administration page and flow designer, WCAG 2.2 AA targets, the custom-element list, the special screens and the search UX (TASK-0042, TASK-0048…TASK-0056, D-217…D-228).
 
 Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements in 26 files with layers and capability catalogs; scope mapped and `docs/sources/` removed (tag `scope-archive`); glossary 266 CONFIRMED terms; permission matrix; domain model for 24 modules; architecture principles; slice order and pilot approach (D-216). KVKK data inventory deferred (D-214, DEF-007).
 

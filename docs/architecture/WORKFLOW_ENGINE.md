@@ -1,6 +1,6 @@
 # İş Akışı Motoru Mimarisi
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 ADR-006 ve CHG-006 kararlarının (D-077…D-105) mimarisi. Ne yapacağı REQ-WFL'de, nasıl görüneceği `docs/ui-ux/ADMINISTRATION.md`'de, hangi akışların hazır geleceği `docs/workflows/END_TO_END_FLOWS.md`'de yazılıdır. Bu belge motorun iç yapısını belirler. Görev: TASK-0059. Kararlar: D-235.
 

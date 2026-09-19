@@ -1,6 +1,6 @@
 # Kural, Katalog ve Özel Alan Mimarisi
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Panelin "ayarlanabilir" yanının mimarisi: kataloglar, tarihli kurallar, özel alanlar ve özellik anahtarları. Üç katman kuralı (Sabit / Akış / Tanım, D-077) her gereksinimin başında yazılıdır; burası Tanım katmanının nasıl çalıştığını belirler. Görev: TASK-0061. Kararlar: D-237.
 

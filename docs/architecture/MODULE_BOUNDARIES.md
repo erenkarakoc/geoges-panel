@@ -1,6 +1,6 @@
 # Modül Sınırları ve Sözleşmeler
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Modüler monolitte (ADR-001) bir modülün nerede bittiğini, dışarıya neyi açtığını ve başka modülle nasıl konuştuğunu belirler. Modül listesi ve bağımlılık grafiği: `docs/architecture/MODULE_MAP.md`. Yetenek katalogları (olay, aksiyon, koşul alanı) her modülün `docs/requirements/REQ-<KOD>.md` dosyasının sonundadır; tek kaynak orasıdır (D-078). Görev: TASK-0057. Kararlar: D-233.
 

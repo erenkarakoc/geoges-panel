@@ -55,3 +55,11 @@ Only items whose quality gate passed are listed here.
 | 2026-09-19 | TASK-0053 | Accessibility targets (WCAG 2.2 AA) | T2 PASS (owner confirmed) |
 | 2026-09-19 | TASK-0055 | Custom-element list | T2 PASS (owner confirmed) |
 | 2026-09-20 | TASK-0056 | Special-screen layouts and COSS components | T2 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0057 | Module boundaries and contracts | T2 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0058 | Event backbone architecture | T1 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0059 | Workflow engine architecture | T1 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0060 | Identity, permission and visibility architecture | T1 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0061 | Configuration, rules and custom fields | T2 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0062 | Ports, data access, search and live updates | T2 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0063 | Storage direction for user-defined record types | T1 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0064 | Phase 06 spike list | T2 PASS (owner confirmed) |

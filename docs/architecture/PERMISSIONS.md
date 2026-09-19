@@ -1,6 +1,6 @@
 # Kimlik, Yetki ve Görünürlük Mimarisi
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 REQ-IAM'in ve yetki matrisinin (`docs/domain/PERMISSION_MATRIX.md`) mimarisi: kim kimdir, bir işlemin yapılıp yapılamayacağına nerede karar verilir, veri nasıl süzülür. Görev: TASK-0060. Kararlar: D-230, D-236.
 

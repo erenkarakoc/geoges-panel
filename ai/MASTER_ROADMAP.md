@@ -20,8 +20,8 @@ Module codes: see `docs/architecture/MODULE_MAP.md`.
 | 00 | Project Bootstrap & AI Infrastructure | Setup | DONE |
 | 01 | Requirements & Domain Analysis | Design | DONE |
 | 02 | UX, Information Architecture & User Flows | Design | DONE |
-| 03 | System Architecture | Design | IN_PROGRESS |
-| 04 | Database Architecture | Design | NOT_STARTED |
+| 03 | System Architecture | Design | DONE |
+| 04 | Database Architecture | Design | IN_PROGRESS |
 | 05 | Infrastructure, Environments & Operations Design | Design | NOT_STARTED |
 | 06 | Validation Spikes | Validate | NOT_STARTED |
 | 07 | Foundation Build | Build | PARTIALLY_DONE |
@@ -178,7 +178,7 @@ STATUS: DONE
 - **Purpose:** define module boundaries, contracts and cross-cutting mechanisms.
 - **Scope:** module public APIs; event backbone (outbox, dispatch, idempotency, retries); workflow engine architecture (ADR-006); rules/configuration model with effective dating; custom fields; feature flags; ports & adapters (auth, storage, jobs, notifications, exchange rate, weather, email, PDF); authentication & authorization design (multi-role, delegation, acting role, owner layer, visibility of commercial/sensitive data, immediate session revocation, 2FA); background jobs; search; notifications (in-app, web push); PDF/Excel generation; observability; architecture fitness tests; data access approach (supabase-js vs direct Postgres client — OQ-020).
 - **Dependencies:** Phase 01, Phase 02 (both DONE).
-- **Status:** `IN_PROGRESS` — **current phase since 2026-09-20.**
+- **Status:** `DONE` — owner approved the exit 2026-09-20. **Delivered:** module boundaries, the three surfaces a module exposes and contract tests (`docs/architecture/MODULE_BOUNDARIES.md`, TASK-0057, D-233); event backbone with a transactional outbox (`EVENT_BACKBONE.md`, TASK-0058, D-234, ADR-014); workflow engine architecture (`WORKFLOW_ENGINE.md`, TASK-0059, D-235); identity, permission and visibility (`PERMISSIONS.md`, TASK-0060, D-230, D-236); configuration, dated rules and custom fields (`CONFIGURATION.md`, TASK-0061, D-237); ports, data access, search and live updates (`PORTS_AND_SERVICES.md`, TASK-0062, D-238…D-240, ADR-015, ADR-017, ADR-018); storage direction for user-defined record types (`RECORD_TYPES.md`, TASK-0063, D-241, ADR-016); and the 16 Phase 06 spikes (`spikes/README.md`, TASK-0064). OQ-020 and OQ-026 closed.
 - **Deliverables:** ADRs, `docs/architecture/*`, feature specs skeletons per module.
 - **Acceptance:** all cross-cutting concerns have an ADR; each module has a boundary spec; spike list for Phase 06 defined.
 - **CHG-006 scope:** capability contract format and contract tests (D-078); engine architecture — triggers (D-103), approval outcomes (D-099), for-each (D-096), record node (D-095), windowed-condition safeguards (D-100), traceability (D-087), versioning and templates (D-086), authority model (D-082, D-083 enforced in code, D-097, D-098, D-101); record-type builder architecture and its owner module (ADM or a new platform module, via ADR-010 naming).
@@ -187,7 +187,8 @@ STATUS: DONE
 
 - **Purpose:** design the full domain schema before implementation.
 - **Scope:** entities for all modules (purpose, ownership, relationships, constraints, indexes, permissions, RLS, audit, history, soft delete, retention); ledgers; effective-dated configuration tables; outbox; audit tables; RLS policy model; migration strategy (expand/contract, additive-first); seed/reference data; sensitive data columns.
-- **Dependencies:** Phase 03.
+- **Dependencies:** Phase 03 (DONE).
+- **Status:** `IN_PROGRESS` — **current phase since 2026-09-20.**
 - **Deliverables:** `docs/database/*` (ERD per module, table specs, RLS matrix, migration conventions).
 - **Acceptance:** every REQ with data maps to tables; RLS defined for every table; naming review passed.
 - **CHG-006 scope:** versioned flow definitions, running instances and their trace; capability registry; the **storage model for user-defined record types** with RLS (D-092) and non-destructive history (D-094) — the hardest data question of CHG-006 (RISK-010).

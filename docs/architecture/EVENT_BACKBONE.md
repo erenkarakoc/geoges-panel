@@ -1,6 +1,6 @@
 # Olay Altyapısı
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Modüller arası her tepki ve akış motorunun her tetiklenmesi olaylarla yürür (`docs/architecture/MODULE_BOUNDARIES.md` bölüm 3, REQ-WFL-007). Bu belge olayın nasıl yayımlandığını, nasıl teslim edildiğini ve hata olunca ne olduğunu belirler. Görev: TASK-0058. Kararlar: D-234. Olayların listesi modüllerin yetenek kataloglarındadır (D-078).
 

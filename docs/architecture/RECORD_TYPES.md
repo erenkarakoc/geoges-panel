@@ -1,6 +1,6 @@
 # Kullanıcı Tanımlı Kayıt Türleri — Saklama Yönü
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 D-079 ile kabul edilen serbest kayıt türü oluşturucunun veri tarafı. CHG-006'nın en zor sorusu ve RISK-010'un konusu. Bu belge yönü belirler; şema Phase 04'te, deneme Phase 06'da, ekran ve yapım Phase 09R'de (pilot sonrası, D-105). Gereksinimler: REQ-WFL-035…039. Görev: TASK-0063. Kararlar: D-241.
 
