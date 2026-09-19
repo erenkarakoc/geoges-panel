@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Phase 06 spike list
+
+- `docs/architecture/spikes/README.md` turns every risky Phase 03 decision into a question with a pass mark: does row-level security hold for a multi-role user, does the outbox lose nothing when the queue restarts, does a dry run behave exactly like a real one, can a user-defined record type survive fifty thousand rows, does Turkish search find "Söğüt" when someone types "sogut", does a photo finish uploading after the connection drops. A spike that fails sends its decision back to Phase 03 before anything is built on it (TASK-0064).
+
+
 ## 2026-09-20 — Storage direction for user-defined record types
 
 - The hardest question CHG-006 raised now has an answer: a user-defined record is one row whose fields live in JSONB, with scope and status as real columns, so a single security policy covers every type and nobody is changing the database schema by filling in a form. Fields retire instead of disappearing, so old records keep their meaning (D-241, TASK-0063). Schema in Phase 04, spike in Phase 06, screens after the pilot.
