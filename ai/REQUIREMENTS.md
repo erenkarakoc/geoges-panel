@@ -1,6 +1,6 @@
 # REQUIREMENTS INDEX
 
-Status: COMPLETE for Phase 01 — 438 requirements in 26 files, all CONFIRMED; MIG deferred (DEF-001) · Last updated: 2026-09-19
+Status: COMPLETE for Phase 01 — 438 requirements in 26 files, all CONFIRMED; MIG deferred (DEF-001) · Last updated: 2026-09-20
 
 ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirement bodies are written in Turkish under `docs/requirements/`.
 

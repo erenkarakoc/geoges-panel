@@ -1,6 +1,6 @@
 # DEFERRED
 
-Last updated: 2026-09-19 · Deferred items are designed (where stated) but not built until reactivated by a recorded decision.
+Last updated: 2026-09-20 · Deferred items are designed (where stated) but not built until reactivated by a recorded decision.
 
 | ID | Item | Source | Reason | Design done in | Revisit at | Depends on |
 |---|---|---|---|---|---|---|

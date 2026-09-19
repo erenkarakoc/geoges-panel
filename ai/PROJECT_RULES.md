@@ -1,6 +1,6 @@
 # PROJECT RULES
 
-Status: ACTIVE · Owner: project owner · Last updated: 2026-09-19
+Status: ACTIVE · Owner: project owner · Last updated: 2026-09-20
 
 These rules are a working protocol, not advice. Source: the original engineering protocol (`AI_Destekli_Proje_Gelistirme_Ana_Promptu.md`, later `docs/sources/ai-development-protocol.md`, removed 2026-09-19; Git tag `scope-archive`), revised by the Phase 00 decision round (see `ai/DECISIONS.md`). Where this file and the original prompt differ, this file wins.
 

@@ -1,6 +1,6 @@
 # OPEN QUESTIONS
 
-Last updated: 2026-09-19 · Format: `OQ-NNN` · Blocking = blocks the stated phase
+Last updated: 2026-09-20 · Format: `OQ-NNN` · Blocking = blocks the stated phase
 
 IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no missing records).
 

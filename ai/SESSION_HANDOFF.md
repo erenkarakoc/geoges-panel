@@ -43,6 +43,8 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 
 ## Next session
 
+0. **Roadmap changed 2026-09-20 (D-229):** the ten module slices are now seven (phases 09–15; 16–18 retired, 19 unchanged). The roadmap also carries an effort estimate measured from the first six days (~72–101 working days left).
+
 1. **Phase 02 is DONE** (owner approved 2026-09-20); **Phase 03 — System Architecture is the current phase.** Product code stays frozen until Phase 07 (ADR-007).
 2. Phase 03 scope: module public APIs and boundary specs; event backbone (outbox, dispatch, idempotency, retries); workflow engine architecture (ADR-006 + CHG-006 decisions D-077…D-105); rules and configuration model with effective dating; custom fields; search architecture (TASK-0029); storage direction for user-defined record types; ports and adapters; the Phase 06 spike list. OQ-026 (password policy) is answered here.
 3. Work the same way as in Phase 01 and 02: read the scope, ask only genuinely open business questions (3-4 per box, plain Turkish, recommended option first), record answers as D-NNN, write the document, update the records, commit, then ask the owner to confirm.

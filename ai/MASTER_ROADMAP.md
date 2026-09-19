@@ -30,13 +30,10 @@ Module codes: see `docs/architecture/MODULE_MAP.md`.
 | 09R | Record-Type Builder (after the Slice 1 pilot, D-105) | Build + Pilot | NOT_STARTED |
 | 10 | Slice 2 — Inventory, Weighing, Purchasing, Factory | Build + Pilot | NOT_STARTED |
 | 11 | Slice 3 — Progress Payments, Finance, Period Close | Build + Pilot | NOT_STARTED |
-| 12 | Slice 4 — Equipment, Vehicles, Cranes | Build + Pilot | NOT_STARTED |
-| 13 | Slice 5 — HR, Timesheets, Payroll | Build + Pilot | NOT_STARTED |
-| 14 | Slice 6 — CRM, Quotes, Quote Documents, Product Sales | Build + Pilot | NOT_STARTED |
-| 15 | Slice 7 — Contracts & Compliance, Quality, OHS, CAPA | Build + Pilot | NOT_STARTED |
-| 16 | Slice 8 — Meetings, Support, Archive, Reporting | Build + Pilot | NOT_STARTED |
-| 17 | Slice 9 — Performance, KPI, Bonus | Build + Pilot | NOT_STARTED |
-| 18 | Slice 10 — Intelligence, Optimization, Strategy | Build + Pilot | NOT_STARTED |
+| 12 | Slice 4 — Equipment, Cranes, HR, Timesheets, Payroll | Build + Pilot | NOT_STARTED |
+| 13 | Slice 5 — CRM, Quotes, Quote Documents, Product Sales | Build + Pilot | NOT_STARTED |
+| 14 | Slice 6 — Contracts & Compliance, Quality, OHS, Meetings, Support | Build + Pilot | NOT_STARTED |
+| 15 | Slice 7 — Archive, Reporting, Performance & Bonus, Intelligence, Strategy | Build + Pilot | NOT_STARTED |
 | 19 | Production Readiness & Company-wide Rollout | Release | NOT_STARTED |
 
 **Milestone M0 — early first screen (CHG-002, approved 2026-09-15) — DONE 2026-09-16, owner approved:** runs in parallel with Phase 01. Real Supabase Auth (sign-in, 2FA, password reset), new-role onboarding, app shell and empty dashboard skeleton, local only. Built as the first part of the Phase 07 foundation, not throwaway. Plan: `docs/features/m0-early-first-screen-plan.md`; tasks TASK-0022…TASK-0026.
@@ -55,11 +52,11 @@ Measured so far (2026-09-15…20, six days, 135 commits): Phase 00 half a day; P
 | 08 Workflow engine & designer | 6–9 |
 | 09 Slice 1 | 7–10 |
 | 09R Record-type builder | 5–7 |
-| 10–18 Nine slices | 40–55 |
+| 10–15 Six slices | 36–49 |
 | 19 Production readiness & rollout | 4–6 |
-| **Total** | **~76–108** |
+| **Total** | **~72–101** |
 
-This is effort, not a schedule; no target date exists (D-049). Four things move it: build work is slower per unit than design work; pilots need calendar time for real users; owner answer latency; and Phase 08, the least predictable phase (RISK-005). Re-estimate after slice 2, when build velocity is measured rather than inferred.
+This is effort, not a schedule; no target date exists (D-049). It already accounts for merging ten slices into seven (D-229), which removes three build-test-acceptance-pilot cycles. Four things move it: build work is slower per unit than design work; pilots need calendar time for real users; owner answer latency; and Phase 08, the least predictable phase (RISK-005). Re-estimate after slice 2, when build velocity is measured rather than inferred.
 
 ## Change request register
 
@@ -228,7 +225,7 @@ STATUS: DONE
 - **Acceptance:** default company flows (daily log approval, material issue, payment approval) defined and executed through the engine; the sample "Onaylar" screen delivered by TASK-0037 re-wired to the engine's real queue; T1 gate.
 - **CHG-006 (approved 2026-09-18):** position unchanged (D-088). Scope grows: two-way editor (D-085), record node (D-095), for-each (D-096), three-outcome approvals (D-099), external-approval sub-flow template (D-102), publish controls (D-081), templates as copies (D-086), traceability (D-087). All eight REQ-WFL-011, REQ-WFL-028 flows run as executable acceptance tests. The record-type builder is **not** here — see 09R.
 
-## PHASES 09–18 — Module Slices
+## PHASES 09–15 — Module Slices
 
 Each slice follows the same pattern:
 1. Feature decision summary per feature (question round if gaps remain from Phase 01–04).
@@ -244,13 +241,12 @@ Phase 09 exit adds one condition (D-216): the pilot site and pilot users (roles 
 | 09 | Projects, sites, walls, master data, daily site log (casting, installation, strips, handover times, activity & timesheet entries, waste, expenses, photos), approvals & corrections, site detail & "why are we losing money", owner cockpit, official daily report | PRJ, SIT, ADM, RPT (partial) | 07, 08 |
 | 10 | Material catalog, weighing & truck shipments, stock ledger, stock counts, opening stock, strip combination, consumption costing, suppliers & purchase orders, purchase requests, factory daily log & unit cost, scrap & ancillary income | INV, PUR, FAC | 09 |
 | 11 | Client & subcontractor progress payments, income/expense, party ledgers, cash-flow projection, multi-currency, invoices/receipts tracking, period close | FIN | 09, 10 |
-| 12 | Asset register, locations & transfers, depreciation, maintenance & periodic inspections, crane daily log & operator screen, vehicle assignment & handover, idle resources | EQP | 09, 11 |
-| 13 | Personnel file, timesheets, payroll, leave, onboarding/offboarding checklists, custody warnings, activity reports, work calendar | HR | 09, 11, 12 |
-| 14 | Leads & communication log, client scorecard, tenders, quotes & margin, quote documents (PDF templates), cost feedback, product sales orders | CRM, QTE | 09, 10, 11 |
-| 15 | Contract terms, obligations, conditional triggers, dependency locks, client delay evidence, certificates, OHS incidents & trainings, nonconformity/CAPA, periodic document expiry | CMP, QHS | 09, 13 |
-| 16 | Meetings & decisions, internal support tickets, archive (single-window search), reporting & exports | MTG, SUP, DOC, RPT | 09–15 |
-| 17 | Performance metrics, KPI catalog (existing KPI guide v2.0), rankings, bonus rules & approval | PRF | 09–16 |
-| 18 | Recommendations, acceleration scenarios, resource optimization, annual plans, budget vs actual, investment analysis, company health scorecard | INT, STR | 09–17 |
+| 12 | Asset register, locations & transfers, depreciation, maintenance & periodic inspections, crane daily log & operator screen, vehicle handover, idle resources; personnel file, timesheets, payroll, leave, onboarding/offboarding checklists, custody warnings, activity reports, work calendar | EQP, HR | 09, 11 |
+| 13 | Leads & communication log, client scorecard, tenders, quotes & margin, quote documents (PDF templates), cost feedback, product sales orders | CRM, QTE | 09, 10, 11 |
+| 14 | Contract terms, obligations, conditional triggers, dependency locks, client delay evidence, certificates, OHS incidents & trainings, nonconformity/CAPA, periodic document expiry; meetings & decisions; internal support tickets | CMP, QHS, MTG, SUP | 09, 12 |
+| 15 | Archive (single-window search, OCR), reporting & exports, performance metrics and KPI catalog, rankings, bonus rules & approval, recommendations, acceleration scenarios, resource optimization, annual plans, budget vs actual, investment analysis, company health scorecard | DOC, RPT, PRF, INT, STR | 09–14 |
+
+Ten slices were merged into seven on 2026-09-20 at the owner's request (D-229): equipment joins HR, meetings and support join compliance and quality, and archive, reporting, performance, intelligence and strategy — all of them views and calculations over data the earlier slices produce — become the last slice. Phase numbers 16–18 are retired and never reused; Phase 19 keeps its number so that every reference to it stays valid. Slice 7 is the largest of the merged set; if the pilots show it is too heavy it can be split again, which is a roadmap change, not a scope change.
 
 ## PHASE 09R — Record-Type Builder (CHG-006, D-105)
 

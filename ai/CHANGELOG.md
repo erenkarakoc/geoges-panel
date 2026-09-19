@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Ten slices become seven
+
+- The owner asked whether the plan had been overcomplicated. The answer given: the record keeping is heavy but cheap (six days for every requirement, screen and flow), while the real weight sits in the product scope — the workflow engine with its designer, and the record-type builder, which doubles the product (D-079). Of three simplifications offered, the owner took one: merge the ten module slices into seven (D-229). Equipment joins HR, meetings and support join compliance and quality, and the reporting, performance, intelligence and strategy work becomes one last slice. The roadmap also gained an effort estimate measured from the first six days.
+
+
 ## 2026-09-20 — Phase 02 DONE
 
 - The owner approved the Phase 02 exit. Every screen of the panel now has its place, its states, its components and, where it needed one, its own design; the eight end-to-end processes are written as flow definitions the engine will be tested against; the custom elements are limited to three and all approved. Carried forward by decision: the record-type builder after the pilot, search architecture in Phase 03, and the code changes (menu move, focus ring, bottom-band slot, renames) in Phase 07. Phase 03 — system architecture — starts.
