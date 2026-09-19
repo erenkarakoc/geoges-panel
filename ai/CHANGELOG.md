@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Accessibility targets
+
+- `docs/ui-ux/ACCESSIBILITY.md` says what WCAG 2.2 AA means for this panel: touch targets of 44 px, at least 24 px with a mouse, every screen usable by keyboard, colour never the only signal. The owner chose automatic testing only. Checking the theme found one real problem: in the light theme the keyboard focus ring is too faint (2.25:1). It becomes a darker grey in Phase 07 (D-225, TASK-0054). The flow diagram canvas is approved as a custom element (D-224). Awaiting owner review (TASK-0053).
+
+
 ## 2026-09-19 — Administration page confirmed
 
 - The owner confirmed the administration page and flow designer design. Next: WCAG 2.2 AA targets, then the custom-element list (which will carry the flow diagram canvas).

@@ -52,7 +52,7 @@ Liste kalıbı (`docs/ui-ux/SCREEN_PATTERNS.md` bölüm 1), üç sekmeyle:
 
 **Yetki.** Tasarımcıyı yalnız akış tasarlama yetkisi olan açar; bu yetki yalnız tam görünürlüklü rollere verilebilir (REQ-WFL-019). Tasarım sırasında yeni yetki tipi ve rol tanımlanabilir ve atanabilir (REQ-WFL-021).
 
-**Özel bileşen.** COSS'ta kutu-ok şeması bileşeni yoktur. Şema alanı özel bir arayüz öğesidir (ADR-009) ve özel öğe listesinde sahibin onayına sunulur (Phase 02 işi 8). Yan panel, alt panel, menüler, pencereler ve formlar COSS bileşenleridir (`Sheet`, `Drawer`, `Menu`, `AlertDialog`, `Field`, `Select`, `Combobox`, `NumberField`).
+**Özel bileşen.** COSS'ta kutu-ok şeması bileşeni yoktur. Şema alanı özel bir arayüz öğesidir (ADR-009); sahip 2026-09-19'da onayladı (D-224). Yan panel, alt panel, menüler, pencereler ve formlar COSS bileşenleridir (`Sheet`, `Drawer`, `Menu`, `AlertDialog`, `Field`, `Select`, `Combobox`, `NumberField`).
 
 ## 4. Çalışma günlüğü (SCR-197)
 
