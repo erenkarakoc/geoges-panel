@@ -58,4 +58,4 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 | OQ-022 | ANSWERED 2026-09-16 → D-049: no target date; not schedule-driven. |
 | OQ-023 | ANSWERED 2026-09-15 → D-041: owner-designated delegate for an owner-defined period; all actions reported to the owner. |
 | OQ-024 | ANSWERED 2026-09-16 → D-050: no legal review commissioned; RISK-001 stays open and is raised again before real HR data is entered. |
-| OQ-026 | Password policy (minimum length, complexity, expiry) and account lockout after repeated failures (REQ-AUD-006, REQ-IAM-001, REQ-IAM-003…006, REQ-IAM-008). M0 uses a provisional 8-character minimum in `auth-schemas.ts`; Supabase enforces its own project policy on top. Decide in Phase 03 security design and align the Supabase project setting with it. |
+| OQ-026 | **ANSWERED 2026-09-20 → D-230:** at least 8 characters with a complexity requirement, no expiry, common passwords refused; session 30 days, 3 days of inactivity ends it; temporary lockout after repeated failures stays as REQ-IAM-005 with admin-set numbers. | — | — |

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Phase 03 opens
+
+- Four owner decisions start the architecture: passwords stay at eight characters with a complexity rule (the owner chose this over the longer-but-simpler rule the AI recommended, objection recorded), sessions last 30 days and end after three days of inactivity (D-230, closing OQ-026); nothing is deleted by time (D-231); and only the approval counter, the bell and the approval queue update live, everything else on refresh (D-232). Phase 03 work is filed as TASK-0057…TASK-0064.
+
+
 ## 2026-09-20 — Ten slices become seven
 
 - The owner asked whether the plan had been overcomplicated. The answer given: the record keeping is heavy but cheap (six days for every requirement, screen and flow), while the real weight sits in the product scope — the workflow engine with its designer, and the record-type builder, which doubles the product (D-079). Of three simplifications offered, the owner took one: merge the ten module slices into seven (D-229). Equipment joins HR, meetings and support join compliance and quality, and the reporting, performance, intelligence and strategy work becomes one last slice. The roadmap also gained an effort estimate measured from the first six days.
