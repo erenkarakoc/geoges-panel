@@ -1,6 +1,6 @@
 # REQ-PRF — Performans, KPI, Sıralama ve Prim
 
-Durum: DRAFT · 2026-09-19 · Modül: PRF (Performance)
+Durum: CONFIRMED (sahip, 2026-09-19) · 2026-09-19 · Modül: PRF (Performance)
 
 Kaynaklar: Özellik Yapısı §28; kararlar D-153, D-185, D-187…D-194.
 
@@ -21,7 +21,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Açıklama: Yalnızca saha değil bütün organizasyon ölçülür; herkes kendi işinin objektif metrikleriyle değerlendirilir. Başlangıç metrikleri: saha mühendisi, formen ve ekip için doğrulanmış üretim m², panel/saat, zamanında veri girişi, kayıt eksiksizliği, zayi/fire oranı, onaya zamanında gönderme, kalite, İSG uyumu; koordinatör için sorumlu şantiyelerin operasyonel performansı, geciken onay sayısı, sorun çözme süresi, veri disiplini; fabrika için üretim miktarı, birim maliyet, fire, makine duruşu, veri kalitesi, zamanında sevkiyat; teknik ofis için çizim/revizyon teslim süresi, gecikme, hata/revizyon oranı, teklif/metraj hazırlama süresi; satış için teklif sayısı, yanıt süresi, kazanma oranı, kaçırılan fırsat/ihale, tekliflerin sonradan gerçek kârlılığı; muhasebe için hakediş/fatura/ödeme işlerinin zamanında yapılması, yükümlülüklerin kaçırılmaması, hata oranı; İK için bordro ve SGK süreçlerinin zamanında olması, eksik evrak, izin/zimmet/çıkış süreçlerinin doğru tamamlanması.
 - Kabul kriterleri:
   - [ ] Bir kişinin puanında yalnızca kendi pozisyonuna tanımlı KPI'lar yer alır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRF-002 — Hesaplanabilen KPI panel verisinden gelir
 
@@ -32,7 +32,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Kabul kriterleri:
   - [ ] Hesaplanan bir KPI değeri elle üzerine yazılamaz.
   - [ ] Her KPI'nın veri kaynağı (hangi kayıt, hangi hesap) katalogda görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRF-003 — Hesaplanamayan KPI'yı doğrudan amir gerekçeyle puanlar
 
@@ -43,7 +43,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Kabul kriterleri:
   - [ ] Elle girilen puan gerekçesiz kaydedilmez.
   - [ ] Kimse kendi elle KPI puanını giremez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRF-004 — Sağlıklı skor tek boyutlu değildir
 
@@ -54,7 +54,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Açıklama: Skor yalnızca hıza bağlanmaz; doğrulanmış çıktı, kalite, zayi, güvenlik ve zamanında ve eksiksiz veri boyutlarından oluşur.
 - Kabul kriterleri:
   - [ ] Hız veya üretim boyutunun ağırlığı tek başına skorun tamamı olamaz; en az bir kalite veya güvenlik boyutu her skora girer.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRF-005 — Zamanında bildirmek her zaman gizlemekten iyidir
 
@@ -64,7 +64,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Açıklama: Kötü haberi zamanında ve doğru bildiren kişi cezalandırılmaz; sorunu gizlemek veya veriyi geciktirmek olumsuz etkiler. Aynı sorun için zamanında yapılan bildirim, geç yapılan bildirimden veya hiç bildirilmemekten her zaman daha yüksek puan verir. Ramak kala bildirimi hiçbir hesapta olumsuz sayılmaz (REQ-QHS-011).
 - Kabul kriterleri:
   - [ ] Geç girilen kayıt (REQ-SIT-012) ve sonradan ortaya çıkan gizlenmiş sorun, zamanında bildirilen aynı sorundan daha düşük puan verir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRF-006 — Koordinatörün puanına kâr-zarar girmez
 
@@ -74,7 +74,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Açıklama: Koordinatör yalnızca kendi kontrolündeki davranış ve sonuçlarla puanlanır: sorumlu şantiyelerin operasyonel performansı, onay süresi, geciken onay sayısı, sorun çözme süresi, veri disiplini. Sorumlu şantiyelerin kâr-zararı koordinatörün puanına hiçbir biçimde girmez.
 - Kabul kriterleri:
   - [ ] Koordinatör KPI'ları arasında kâr, marj veya maliyet tabanlı bir KPI tanımlanamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRF-007 — Erken veri girişi yalnızca tam ve doğru kayıtta ödüllendirilir
 
@@ -85,7 +85,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Açıklama: Tam ve doğru kayıt temel şarttır. Bu şart sağlanıyorsa erken veri girişi küçük bir bonus verir; düzeltmeye geri gönderilen veya eksik erken kayıt bonus almaz.
 - Kabul kriterleri:
   - [ ] Düzeltmeye geri gönderilmiş kayıt için erken giriş bonusu verilmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. KPI kataloğu
 
@@ -98,7 +98,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Açıklama: KPI kataloğu panelde sıfırdan tanımlanır; mevcut Excel kılavuzu aktarılmaz (D-187). Her KPI için kod (ör. GM01, SM-01), ad, süreç, pozisyon, ağırlık %, hedef, puanlama tipi ve veri kaynağı (hesaplanan veya amir puanı) tutulur. Başlangıç pozisyonları: Genel Müdür, Genel Müdür Yardımcısı, Genel Koordinatör, Şantiyeler Koordinatörü, Teknik Ofis, Saha Mühendisi, Formen, İşçi, Bekçi, Temizlik Görevlisi; pozisyon listesi genişletilebilir.
 - Kabul kriterleri:
   - [ ] Bir pozisyonun KPI ağırlıklarının toplamı %100 değilse katalog kaydedilmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRF-009 — Uygunsuzluk ve DÖF puanı besler
 
@@ -108,7 +108,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Açıklama: Uygunsuzluk, DÖF, risk, iç denetim ve müşteri geri bildirimi kayıtları (hedef gün, gerçek gün, tekrar) ilgili pozisyonun KPI'larını besler; geciken ve tekrar eden kayıtlar puanı düşürür.
 - Kabul kriterleri:
   - [ ] Puan dökümünde etkileyen her uygunsuzluk kaydı bağlantısıyla görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRF-010 — Katalog değişikliği geçmişi bozmaz
 
@@ -118,7 +118,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Açıklama: Katalog, ağırlıklar, hedefler ve puan bantları geçerlilik tarihiyle değişir; kapanmış dönemlerin puanları ve primleri, o dönemde geçerli tanımlarla hesaplanmış haliyle kalır.
 - Kabul kriterleri:
   - [ ] Bir ağırlık değişikliği, değişiklikten önceki ayların puanlarını değiştirmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Puan ve dönem
 
@@ -128,10 +128,10 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: puan bantları ve prim oranları (varsayılan: ≥ 90 Mükemmel +%10; 80–89 İyi +%5; 70–79 Geliştirilmeli, prim yok; < 70 Kritik)
-- Açıklama: Her kişinin puanı her ay 0–100 aralığında hesaplanır ve bandıyla gösterilir. Ay içinde pozisyonu değişen kişinin puanı, her pozisyonda geçirdiği gün oranında birleştirilir (D-189'dan türetilen kural, bu dosyanın onayıyla kesinleşir).
+- Açıklama: Her kişinin puanı her ay 0–100 aralığında hesaplanır ve bandıyla gösterilir. Ay içinde pozisyonu değişen kişinin puanı, her pozisyonda geçirdiği gün oranında birleştirilir (türetilen kural, sahip onayladı).
 - Kabul kriterleri:
   - [ ] Puan dökümü KPI, ağırlık, hedef, gerçekleşen ve katkı olarak açılabilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRF-012 — Puan amir ve yönetimce kesinleşir; itiraz yoktur
 
@@ -142,7 +142,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Açıklama: Ayın puanı, elle KPI'lar girildikten sonra amir ve yönetim tarafından kesinleştirilir. Kişi puanını ve dökümünü görür; panelde itiraz süreci yoktur (D-191).
 - Kabul kriterleri:
   - [ ] Kesinleşen puan yalnızca revizyon talebiyle değişir (REQ-AUD-008).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRF-013 — Kritik puanda gelişim görüşmesi
 
@@ -153,7 +153,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Açıklama: Aylık puanı "Kritik" (< 70) olan kişi için amirine görüşme ve gelişim planı yazma görevi düşer; plan kişinin kartında kalır. Kritik durum yalnızca kişinin kendisi, amirleri ve İK tarafından görülür.
 - Kabul kriterleri:
   - [ ] Kritik puan hiçbir sıralama veya karşılaştırma ekranında gösterilmez (REQ-PRF-019).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## D. Hedefler ve prim
 
@@ -165,7 +165,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Açıklama: Hedefler genel şirket hedefi, rol hedefi ve kişiye özel hedef olarak tanımlanır. Kişiye özel hedef varsa rol ve genel hedeften önce gelir.
 - Kabul kriterleri:
   - [ ] Bir KPI için hangi düzeyin hedefinin kullanıldığı puan dökümünde görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRF-015 — Prim kuralları
 
@@ -176,7 +176,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Açıklama: Prim; hedefi aşma, skor eşiği, belirli metriği gerçekleştirme veya projeyi erken bitirme koşullarına bağlanır; sabit tutar veya oran olabilir. Güvenlik şartı sağlanmayan dönemde hız ve prim hedefi başarılı sayılmaz (REQ-QHS-016).
 - Kabul kriterleri:
   - [ ] Prim hesabının dökümü (kural, koşul, taban, oran) görüntülenebilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRF-016 — Oran kişinin baz maaşına uygulanır
 
@@ -186,7 +186,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Açıklama: Oranlı prim, kişinin o ayki baz maaşı üzerinden hesaplanır. Prim tutarı maaşla aynı veri sınıfındadır: maaşı göremeyen kullanıcı prim tutarını da göremez (REQ-HR-002).
 - Kabul kriterleri:
   - [ ] Hassas izni olmayan kullanıcı prim tutarını hiçbir ekranda, raporda veya dışa aktarmada görmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRF-017 — Prim aylık hesaplanır ve onaylanır
 
@@ -197,7 +197,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Açıklama: Prim her ay, kesinleşen puandan ve prim kurallarından hesaplanır; yönetim gözden geçirip onaylar. Onaylanmamış prim ödenemez.
 - Kabul kriterleri:
   - [ ] Onaylanan prim, onay anındaki kural ve puanla hesaplanmış haliyle kalır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRF-018 — Prim bordro dışı ödenir, muhasebeye aktarılır
 
@@ -207,7 +207,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Açıklama: Onaylanan prim bordroya girmez; ayrı ödeme olarak izlenir ve dekontla kapanır. Her prim ödemesi kişi, dönem ve tutarla aylık muhasebe aktarımına ayrı satır olarak girer; vergi ve SGK işlemini muhasebeci yapar. Prim gideri kişinin kayıtlı olduğu birime yazılır (REQ-HR-009 ile aynı kural). **Not:** prim hukuken ücrettir; muhasebe aktarımına girmesi bu yüzden zorunludur (D-188).
 - Kabul kriterleri:
   - [ ] Ödenmiş ama muhasebe aktarımına girmemiş prim, kapanış kontrol listesinde açık madde olur (REQ-FIN-028).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## E. Görünürlük
 
@@ -221,17 +221,17 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Kabul kriterleri:
   - [ ] Sıralama ekranı yalnızca üst dilimi veya kişinin kendi yerini gösterir; alt sıralar isimle listelenmez.
   - [ ] Kişi başkalarının KPI dökümünü görmez; yalnızca amirleri ve İK görür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-PRF-020 — Taşeron ekipleri karşılaştırılır, prim almaz
 
 - Kaynak: §28.1, §15.3; REQ-SIT-021
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit
-- Açıklama: Taşeron ekipleri hız, kalite ve zayi bakımından öz kaynak ekiplerle karşılaştırılır; ancak şirket çalışanı olmadıkları için KPI puanı ve prim almazlar (§28 kapsamından türetilen kural, bu dosyanın onayıyla kesinleşir).
+- Açıklama: Taşeron ekipleri hız, kalite ve zayi bakımından öz kaynak ekiplerle karşılaştırılır; ancak şirket çalışanı olmadıkları için KPI puanı ve prim almazlar (türetilen kural, sahip onayladı).
 - Kabul kriterleri:
   - [ ] Taşeron ekip başı için prim hesabı yapılmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 

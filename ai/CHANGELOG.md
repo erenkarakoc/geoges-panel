@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — PRF confirmed
+
+- The owner confirmed REQ-PRF with both derived rules (a mid-month position change blends the score by days; subcontractor crews are compared but get no score or bonus): 20 more requirements CONFIRMED, 364 in all. Next: INT.
+
+
 ## 2026-09-19 — PRF requirements
 
 - Eight performance decisions (D-187…D-194), four against the recommendation. The KPI catalog starts empty in the panel instead of importing the Excel guide; scores and bonuses are both monthly; there is no objection process; and site profit never enters a coordinator's score. Two of these changed the scope's wording (§28.2, §28.11), corrected in place with notes.
