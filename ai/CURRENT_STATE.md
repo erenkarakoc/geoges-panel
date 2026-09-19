@@ -33,6 +33,7 @@ None.
 See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
+- D-202…D-205 (2026-09-19, STR round): budget per month × cost center × expense type; nominal TL with an inflation-adjusted view; simple and discounted payback; health scorecard as colours per area with no overall score
 - D-199…D-201 (2026-09-19, MTG/DOC/SUP round): meeting visibility by role scope; minutes final when saved; archive search includes contents and text recognition of scans (outside-service question deferred to Phase 03)
 - D-195…D-198 (2026-09-19, INT round): rule-based recommendations only, no AI model and no data leaving the panel; scenario limits mark a scenario "not recommended"; an approved scenario flows into targets, tasks and bonus rules; a dismissed recommendation is closed with a reason
 - D-187…D-194 (2026-09-19, PRF round): KPI catalog defined from scratch (changes §28.11); bonus paid outside payroll but always in the accounting export; score and bonus monthly; manual KPIs by the direct manager; no objection process; coordinator never scored on profit (changes §28.2); critical score opens a development meeting; bonus on base salary

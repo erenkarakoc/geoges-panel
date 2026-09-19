@@ -202,6 +202,15 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — STR requirement round (2026-09-19)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-202 | **The annual budget is planned per month × cost center × expense type** and compared with actuals at the same detail. Derived consequences, to be confirmed with the requirement file: an approved budget is locked and changed only by a new budget revision that keeps the first; annual targets double as the performance module's company target | Owner 2026-09-19; §35.1, §35.2 |
+| D-203 | **Figures are shown in nominal TL with an optional inflation-adjusted view** using the monthly CPI (TÜFE); the view never changes a record | Owner 2026-09-19; §35.2 |
+| D-204 | **Investment payback is shown two ways**: simple payback and discounted payback at a catalog rate; inputs come from panel data (rent paid, idle days, utilisation) | Owner 2026-09-19; §35.3 |
+| D-205 | **The company health scorecard is a colour per area from defined thresholds**, each colour explainable down to its indicators; there is no single overall company score | Owner 2026-09-19; §35.5 |
+
 ## PHASE 01 — MTG, DOC, SUP requirement round (2026-09-19)
 
 | ID | Decision | Ref |

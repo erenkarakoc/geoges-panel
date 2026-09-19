@@ -30,7 +30,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | QHS | §29, §30 | `docs/requirements/REQ-QHS.md` | 16 (CONFIRMED) |
 | MTG | §32 | `docs/requirements/REQ-MTG.md` | 8 (CONFIRMED) |
 | DOC | §33 | `docs/requirements/REQ-DOC.md` | 10 (CONFIRMED) |
-| STR | §35 | `docs/requirements/REQ-STR.md` | — |
+| STR | §35 | `docs/requirements/REQ-STR.md` | 8 (DRAFT) |
 | ADM (master data, calendar, panel and strip type catalogs, exchange rate) | §36.1–§36.4, §23.9, §10.1, §11.2 (type definitions), §22.5 (rate) | `docs/requirements/REQ-ADM.md` | 15 (CONFIRMED) |
 | AUD (audit, revision requests) | §38, §37.1 | `docs/requirements/REQ-AUD.md` | 10 (CONFIRMED) |
 | MIG (data import — DEFERRED) | §36.5, §33.4 import part | `docs/requirements/REQ-MIG.md` | — |

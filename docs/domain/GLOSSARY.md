@@ -170,6 +170,14 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Arşiv | Archive | Tüm belgeleri yetkiye göre tek pencerede arayan ekran | — | drive, repository | PROPOSED | §33.2 |
 | Sınıflandırılmamış belge | Unclassified Document | Aktarımda kayda bağlanamayan, geçici alanda tutulan belge | — | orphan | PROPOSED | §33.4, DEF-001 |
 | Metin tanıma | Text Recognition | Taranmış belge ve fotoğraftaki yazının okunması | OCR | scan_text | PROPOSED | D-201 |
+| Yıllık hedef | Annual Target | Şirketin yıllık ciro, kâr, kapasite ve benzeri hedefi | — | goal | PROPOSED | §35.1 |
+| Bütçe | Budget | Ay, maliyet merkezi ve gider türü bazında planlanan gelir ve gider | — | plan (genel) | PROPOSED | D-202 |
+| Revize bütçe | Budget Revision | Onaylı bütçenin yıl içindeki yeni sürümü; ilk bütçe silinmez | — | revision (proje revizyonuna ayrılmış) | PROPOSED | §35.2 |
+| Bütçe sapması | Budget Variance | Bütçe ile gerçekleşen arasındaki fark | — | deviation | PROPOSED | §35.2 |
+| Enflasyona göre düzeltilmiş görünüm | Inflation-Adjusted View | Rakamların TÜFE ile bugünün lirasına çevrilmiş gösterimi | — | real_value | PROPOSED | D-203 |
+| Yatırım analizi | Investment Analysis | Yeni ekipman alımının maliyet, kazanç ve geri dönüş hesabı | — | roi_report | PROPOSED | §35.3 |
+| Geri dönüş süresi | Payback Period | Yatırımın kendini ödediği süre; basit ve indirgenmiş | — | roi | PROPOSED | D-204 |
+| Şirket sağlık karnesi | Company Health Scorecard | Şirketin başlık başına renkli genel durumu | — | score (işveren karnesiyle karışır) | PROPOSED | D-205 |
 | Malzeme | Material | — | item (katalog satırı) | product | PROPOSED | |
 | Sarf malzeme | Consumable | — | — | supply | PROPOSED | |
 | Sarf reçetesi | Consumption Recipe | İş birimi başına standart sarf | bill of materials | — | PROPOSED | |

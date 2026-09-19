@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-19 — STR requirements
+
+- Four strategy decisions (D-202…D-205), all as recommended: a budget at the same detail as the books (month, cost center, expense type); nominal TL with an optional CPI-adjusted view that never changes a record; investment payback shown both simple and discounted, fed by rent paid, idle days and utilisation; and a health scorecard of colours per area with every colour explainable, and no single company score.
+- `REQ-STR.md` (8) is written, DRAFT, layer-tagged, with its catalog; eight proposed glossary terms were added first. Two derived rules await confirmation: an approved budget changes only by a revision that keeps the first, and annual targets double as the company target in performance.
+
+
 ## 2026-09-19 — MTG, DOC, SUP confirmed
 
 - The owner confirmed REQ-MTG, REQ-DOC and REQ-SUP with both derived rules: 23 more requirements CONFIRMED, 401 in all. Next: STR.
