@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Corporate schema
+
+- `docs/database/SCHEMA-CORPORATE.md` covers people, contracts, quality and safety, meetings and support. Sensitive personnel columns — identity number, IBAN, salary — live in a separate table, so the ordinary personnel list never touches them. A medical report keeps only its existence and dates, never a diagnosis. A nonconformity cannot close without a root cause and an action, and a safety check cannot record "not compliant" without saying why (TASK-0069).
+
+
 ## 2026-09-20 — Commercial and finance schema
 
 - `docs/database/SCHEMA-COMMERCIAL-FINANCE.md` covers leads, quotes and the money. A sent quote version is immutable; income, expense and party ledgers only gain rows; a closed period refuses new rows outright instead of trusting the application to remember; and "the person who prepared a payment cannot approve it" is a check constraint, not a policy someone can forget. An amount with no exchange rate is simply waiting for one, so there is never a second source of truth about whether it was converted (TASK-0068).
