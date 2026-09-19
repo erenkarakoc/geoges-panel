@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Screen inventory confirmed
+
+- The owner confirmed the inventory and asked for a separate "Raporlar" entry instead of reports opening only from module screens; it sits in the work layer below "Görevler" (SCR-017, D-218). Next: the list, detail and form standards.
+
+
 ## 2026-09-19 — Screen inventory (Phase 02 starts)
 
 - `docs/ui-ux/SCREEN_INVENTORY.md` lists every screen of the panel inside the menu CHG-004 already built: what kind of screen it is, its address, the requirements it carries and who sees it by default. A script confirmed that all 438 requirements land on a screen, apart from eight platform rules listed as screen-less, and each of the 26 management questions now points at the screen that answers it. The owner placed the strategy screen under Finans and made "Sistem gözü" a second tab of the owner's "Bugün" (D-217); the flow designer and the record-type builder keep their own round (D-108). Screens get `SCR-<NNN>` ids.

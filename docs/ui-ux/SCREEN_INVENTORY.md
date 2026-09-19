@@ -1,8 +1,8 @@
 # Ekran Envanteri
 
-Durum: TASLAK · Son güncelleme: 2026-09-19
+Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-19
 
-Panelin bütün ekranları, her birinin karşıladığı gereksinimler ve varsayılan olarak kimin gördüğü. Menü yapısı CHG-004'te kuruldu (D-054…D-070) ve burada değişmez; iki ekranın yeri 2026-09-19'da belirlendi (D-217). Roller `docs/domain/PERMISSION_MATRIX.md` kısaltmalarıyla yazılır; "Herkes" rolün kapsamı kadar demektir. Her ekranın durum matrisi (yükleniyor, boş, hata, yetki yok…) ve COSS bileşenleri bu envanterin sonraki adımında eklenir.
+Panelin bütün ekranları, her birinin karşıladığı gereksinimler ve varsayılan olarak kimin gördüğü. Menü yapısı CHG-004'te kuruldu (D-054…D-070) ve burada değişmez; iki ekranın yeri ve ayrı "Raporlar" girişi 2026-09-19'da belirlendi (D-217, D-218). Roller `docs/domain/PERMISSION_MATRIX.md` kısaltmalarıyla yazılır; "Herkes" rolün kapsamı kadar demektir. Her ekranın durum matrisi (yükleniyor, boş, hata, yetki yok…) ve COSS bileşenleri bu envanterin sonraki adımında eklenir.
 
 **Tür:** L liste · D detay · F form veya giriş · P pano (özet göstergeler) · Ö özel ekran · Ç çekmece veya pencere · S sekme (bir ekranın içinde).
 
@@ -29,6 +29,7 @@ Panelin bütün ekranları, her birinin karşıladığı gereksinimler ve varsay
 | SCR-014 | Görev ver | F | `/tasks/new` | REQ-TSK-003, REQ-TSK-004 | Herkes (kapsamı kadar) |
 | SCR-015 | Bildirim çekmecesi | Ç | üst bar | REQ-TSK-009…012, REQ-NFR-009 | Herkes |
 | SCR-016 | Arama ve komut paleti | Ç | üst bar, kısayol | REQ-NFR-012 | Herkes |
+| SCR-017 | Raporlar (çalışma katmanında, Görevler'in altında) | L | `/reports` | REQ-RPT-015…019, REQ-RPT-023 | Herkes yetkisi olan raporları görür; hiç raporu yoksa öğe görünmez |
 
 Günlük özet e-postası (REQ-TSK-013) ve telefon bildirimleri (REQ-TSK-010, REQ-NFR-008) ekran değil, bildirim kanalıdır.
 
@@ -191,4 +192,4 @@ Akış tasarımcısı (soru-cevap ve şema görünümü), deneme çalıştırmas
 
 ## Raporlar
 
-Hazır raporlar (REQ-RPT-015…019, REQ-RPT-023) her modülün liste ve pano ekranlarından ve SCR-010'daki göstergelerden açılır; dışa aktarım ve kayıtlı görünüm bütün L ve P ekranlarında ortaktır. Ayrı bir "Raporlar" menüsü yoktur; menü yapısı CHG-004'te sabittir.
+Hazır raporların hepsi SCR-017 "Raporlar" ekranında toplanır (D-218); her modülün liste ve pano ekranlarından da ilgili rapora doğrudan geçilir. Dışa aktarım ve kayıtlı görünüm bütün L ve P ekranlarında ortaktır.
