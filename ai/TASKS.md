@@ -25,7 +25,7 @@ Last updated: 2026-09-19 · Format: `docs/standards/ID_STANDARDS.md`
 
 | ID | Title | Tier | Status | Depends on | Notes |
 |---|---|---|---|---|---|
-| TASK-0020 | Glossary confirmation rounds (OQ-007) | T2 | QUESTIONS_PENDING | TASK-0014 | Round 1 (2026-09-15): D-027 Party with roles, D-028 fire/zayi/hurda, D-029 guarantee types, D-030 subcontractor payment methods. Round 2: D-031 panel course, D-032 single lug type, D-033 one net party balance, D-034 per-currency balances. All OPEN terms closed; PROPOSED terms continue per module |
+| TASK-0020 | Glossary confirmation rounds (OQ-007) | T2 | DONE | TASK-0014 | Round 1 (2026-09-15): D-027 Party with roles, D-028 fire/zayi/hurda, D-029 guarantee types, D-030 subcontractor payment methods. Round 2: D-031 panel course, D-032 single lug type, D-033 one net party balance, D-034 per-currency balances. All OPEN terms closed; PROPOSED terms continue per module 2026-09-19: owner confirmed all 219 PROPOSED terms in four rounds of grouped questions (15 groups); 234 terms CONFIRMED, none PROPOSED or OPEN. |
 
 ## CHG-005 — Record consistency and deterministic guards
 
@@ -83,7 +83,7 @@ These deliver **Phase 02** (navigation, IA, role entry screen, top bar, mobile) 
 | TASK-0011 | Initial commit and push to GitHub | T3 | DONE | TASK-0002…TASK-0010 | Commit `deb14ef` |
 | TASK-0012 | Module map & dependency graph | T2 | DONE | TASK-0003 | Owner approved 2026-09-15 (draft; finalized in Phase 03) |
 | TASK-0013 | UI/UX design-system, COSS and devl.dev rules | T2 | DONE | TASK-0003 | Owner approved 2026-09-15 |
-| TASK-0014 | Glossary skeleton with proposed canonical terms | T2 | QUESTIONS_PENDING | TASK-0003 | Skeleton delivered (Phase 00 exit criterion met); term confirmation carried into Phase 01 via OQ-007 |
+| TASK-0014 | Glossary skeleton with proposed canonical terms | T2 | DONE | TASK-0003 | Skeleton delivered (Phase 00 exit criterion met); term confirmation carried into Phase 01 via OQ-007 2026-09-19: owner confirmed all 219 PROPOSED terms in four rounds of grouped questions (15 groups); 234 terms CONFIRMED, none PROPOSED or OPEN. |
 | TASK-0015 | Identify project-specific skill needs | T3 | DONE | TASK-0007 | `ai/AI_SKILLS.md` |
 | TASK-0016 | Initialize Tailwind docs snapshot locally (git-ignored) | T2 | DONE | TASK-0008 | Owner consent D-024; tailwindcss.com @ `7f92c22` |
 | TASK-0017 | Impact analysis and decision for CHG-001 (early preview of auth + app shell) | T2 | DONE | TASK-0004 | Resolved: Milestone M1 in Phase 07 |

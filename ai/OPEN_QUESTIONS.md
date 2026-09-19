@@ -8,7 +8,7 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 
 | ID | Category | Question | Proposed answer | Blocks |
 |---|---|---|---|---|
-| OQ-007 | Domain | Confirm or correct proposed canonical English terms in `docs/domain/GLOSSARY.md`. Rounds 1–2 answered 2026-09-15 (D-027…D-034); no OPEN terms remain. Remaining PROPOSED terms are reviewed per module during Phase 01 requirement rounds. | Continue in Phase 01 question rounds | Phase 01 exit |
+| OQ-007 | Domain | **ANSWERED 2026-09-19:** the owner confirmed all remaining PROPOSED terms (219) in grouped rounds; the glossary holds 234 CONFIRMED terms. Rounds 1–2 (2026-09-15) gave D-027…D-034. | Continue in Phase 01 question rounds | Phase 01 exit |
 
 ## Phase 01/03 — workflow platform direction (ANSWERED 2026-09-18 → CHG-006, D-077…D-104)
 

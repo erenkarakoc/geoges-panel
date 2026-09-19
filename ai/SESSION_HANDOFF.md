@@ -43,4 +43,4 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 
 ## Next session
 
-1. Phase 01 exit: OQ-007 glossary confirmation (TASK-0020); TASK-0027 (check architecture principles are carried by ADRs, owner approval, then remove `docs/sources/`). TASK-0039 DONE 2026-09-19 (D-213), following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).
+1. Phase 01 exit: glossary confirmed 2026-09-19 (OQ-007 closed); TASK-0027 (check architecture principles are carried by ADRs, owner approval, then remove `docs/sources/`). TASK-0039 DONE 2026-09-19 (D-213), following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).

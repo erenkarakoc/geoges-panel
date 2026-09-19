@@ -39,3 +39,5 @@ Only items whose quality gate passed are listed here.
 | 2026-09-19 | TASK-0044 | Requirement files for all remaining modules (PRJ, ADM, TSK, AUD, INV, PUR, FAC, FIN, EQP, HR, CRM, QTE, CMP, QHS, PRF, INT, MTG, DOC, SUP, STR, NFR, RPT REQ-RPT-015), D-130…D-212 | T1 PASS (owner confirmed each file) |
 | 2026-09-19 | TASK-0041 | Capability catalog in every module requirement file | T2 PASS (records validator green; owner confirmed with each file) |
 | 2026-09-19 | TASK-0039 | Every functional-scope § citation remapped to REQ ids; section map; § rule in the validator | T2 PASS (validator green; negative test caught a bare §) |
+| 2026-09-19 | TASK-0020 | Glossary confirmation (OQ-007): all 234 terms CONFIRMED | T2 PASS (owner confirmed) |
+| 2026-09-19 | TASK-0014 | Glossary skeleton carried to completion | T2 PASS (owner confirmed via TASK-0020) |

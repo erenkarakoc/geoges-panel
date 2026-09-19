@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Glossary confirmed
+
+- The owner confirmed the 219 proposed glossary terms in four rounds of grouped questions (15 groups, shown by their Turkish name and meaning). A script checked that the terms shown were exactly the terms pending — none left out, none extra — before marking them. The glossary now holds 234 CONFIRMED terms and no PROPOSED or OPEN ones; OQ-007, TASK-0020 and TASK-0014 are closed. A new term still starts PROPOSED and is confirmed with the module that introduces it.
+
+
 ## 2026-09-19 — The records cite requirements, not scope sections (TASK-0039)
 
 - Before the functional scope leaves the repository, every citation of it was replaced by the requirements that now carry it: 835 citation chains in 41 files. A tool did it, not a hand: it built the map of all 243 scope headings from the requirement files' source lines first, and kept that map at the end of `docs/requirements/README.md` as the one record allowed to hold section numbers. The scope itself stays readable at Git tag `scope-archive`.
