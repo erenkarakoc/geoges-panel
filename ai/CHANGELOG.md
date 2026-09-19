@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Daily site log screen confirmed
+
+- The owner confirmed SCR-021 with its four added details (a "no work in this section today" option, skipping the rest on a no-work day, showing who is editing a section, remembering the chosen view). Next: the per-screen state matrix.
+
+
 ## 2026-09-19 — Daily site log screen
 
 - The owner chose stepped entry by default, with a section list for those who want it, and a day strip across the top coloured by each day's state (D-220). `docs/ui-ux/screens/SCR-021-daily-site-log.md` lays out the fifteen sections with the rules each carries, how two people enter one day, recall and correction, and every state — built from installed COSS components. This answers the last open item of OQ-027, which is now closed. One derived rule awaits confirmation: the view a person chose is remembered.

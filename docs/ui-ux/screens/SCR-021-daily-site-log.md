@@ -1,6 +1,6 @@
 # SCR-021 — Günlük Saha Kaydı Girişi
 
-Durum: TASLAK · Son güncelleme: 2026-09-19
+Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-19
 
 Adres: `/daily-site-logs/[id]` · Tür: özel ekran · Roller: KO, SM, FO; TEB yalnız kendi bölümü (`docs/domain/PERMISSION_MATRIX.md`) · Kararlar: D-220.
 
@@ -21,7 +21,7 @@ Gereksinimler: REQ-SIT-002…030, REQ-SIT-033, REQ-SIT-035, REQ-EQP-011, REQ-INV
 
 - **Adım adım (varsayılan):** bölümler sırayla tek tek gelir. Kişi yalnız girmeye yetkili olduğu bölümleri görür; ör. formen için puantaj ve ekip. Her adımın altında "Bugün bu bölümde iş yok" seçeneği vardır ve bölümü boş ama tamamlanmış sayar; zorunlu bölümlerde bu seçenek yoktur. Son adım özettir: günün toplamları, uyarılar, eksikler ve gönder düğmesi.
 - **Bölüm listesi:** aynı bölümler, her birinin durumu (boş, dolu, eksik, "iş yok") ve kimin girdiğiyle listelenir. Dokununca bölüm açılır, kaydedilince listeye dönülür. Birden fazla kişinin girdiği günlerde ve düzeltme sırasında hızlı erişim içindir.
-- Kişinin seçtiği görünüm hatırlanır; her yeni kayıt o görünümle açılır (D-220'den türetilen kural, bu belgenin onayıyla kesinleşir).
+- Kişinin seçtiği görünüm hatırlanır; her yeni kayıt o görünümle açılır (D-220'den türetilen kural, sahip onayladı).
 - İki görünüm aynı veriyi gösterir; biri diğerinin kısayoludur.
 
 ## 3. Bölümler ve sırası
