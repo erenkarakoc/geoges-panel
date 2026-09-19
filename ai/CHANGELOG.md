@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — INT confirmed
+
+- The owner confirmed REQ-INT: 14 more requirements CONFIRMED, 378 in all. Next: MTG.
+
+
 ## 2026-09-19 — INT requirements
 
 - Four decisions (D-195…D-198), all as recommended. Recommendations come from defined rules with their reasoning and figures always visible — no AI model, no data leaving the panel. An acceleration scenario that crosses a defined limit (legal overtime, casting per mold count, an open critical OHS finding) is marked "not recommended" and cannot be chosen; an approved scenario becomes the project's management target and flows into daily targets, tasks and a bonus rule; a recommendation not acted on is closed with a reason and returns only if things change markedly.

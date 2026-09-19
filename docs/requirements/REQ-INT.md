@@ -1,6 +1,6 @@
 # REQ-INT — Öneriler, Kaynak Optimizasyonu ve Hızlandırma Senaryoları
 
-Durum: DRAFT · 2026-09-19 · Modül: INT (Intelligence)
+Durum: CONFIRMED (sahip, 2026-09-19) · 2026-09-19 · Modül: INT (Intelligence)
 
 Kaynaklar: Özellik Yapısı §8.3, §8.4, §26, §27; kararlar D-149, D-185, D-195…D-198.
 
@@ -20,7 +20,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 - Açıklama: Panel "şimdi ne yapmak daha mantıklı?" sorusunu destekler. Öneriler önem derecesine göre sıralanır; her öneride sorun veya fırsat, gerekçe, beklenen etki ve ilgili ekrana geçiş bulunur.
 - Kabul kriterleri:
   - [ ] Her öneriden, dayandığı kayıtlara ve ilgili ekrana tek adımda gidilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INT-002 — Öneriler tanımlı kurallardan üretilir
 
@@ -32,7 +32,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 - Kabul kriterleri:
   - [ ] Her öneride, hangi kuralın hangi değerlerle tetiklendiği okunur.
   - [ ] Öneri üretimi hiçbir dış hizmete veri göndermez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INT-003 — Başlangıç öneri türleri
 
@@ -42,7 +42,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 - Açıklama: Başlangıç türleri: atıl vinç ve başka şantiyede ihtiyaç; kritik seviyeye inen malzeme için sipariş; zarardaki proje ve başlıca nedenleri ("Niye zarardayız?" kartından); N gündür bekleyen hakediş veya alacak; zayıflayan nakit ve hızlandırılabilecek tahsilatlar; uzun süredir onay bekleyen saha kaydı; normalin üzerinde sarf tüketimi; mevcut üretim hızına göre tahmini proje bitiş tarihi.
 - Kabul kriterleri:
   - [ ] Her tür, kaynak modülün kataloğundaki olay veya koşul alanına dayanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INT-004 — Öneri karar vermez
 
@@ -52,7 +52,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 - Açıklama: Öneri sistemi yönetici adına karar vermez ve hiçbir kaydı değiştirmez; gerekçeli tavsiye üretir. Bir öneriyi uygulamak her zaman bir insanın işlemiyle başlar.
 - Kabul kriterleri:
   - [ ] INT'in hiçbir işlemi stok, ekipman, personel, hedef veya para kaydını doğrudan değiştirmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INT-005 — Uygulanmayan öneri gerekçeyle kapanır
 
@@ -64,7 +64,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 - Kabul kriterleri:
   - [ ] Gerekçesiz kapatma yapılamaz.
   - [ ] Yeniden gelen öneri, önceki kapatmayı ve gerekçesini gösterir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INT-006 — Öneri yetkiye göre görünür
 
@@ -74,7 +74,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 - Açıklama: Kullanıcı yalnızca rol kapsamındaki (şantiye, proje, şirket) ve veri sınıfı iznine uyan önerileri görür. Ticari veri içeren öneri (kâr etkisi, maliyet) yalnızca ticari yetkisi olana görünür.
 - Kabul kriterleri:
   - [ ] Ticari yetkisi olmayan kullanıcı bir öneriyi görebiliyorsa, önerinin ticari rakamları gizlenir; öneri ticari rakam olmadan anlamsızsa hiç gösterilmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Kaynak optimizasyonu
 
@@ -86,7 +86,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 - Açıklama: Şantiyeler, fabrika, araçlar, ekipman ve personel ortak kaynak havuzu olarak değerlendirilir. Panel aynı anda hangi şantiyede işin yavaş olduğunu, nerede ekipmanın beklediğini veya eksik olduğunu, hangi makine, kalıp veya vincin boş olduğunu ve nerede personel fazlası veya eksiği olduğunu karşılaştırır.
 - Kabul kriterleri:
   - [ ] Atıl kaynak ile darboğaz aynı ekranda eşleştirilmiş olarak görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INT-008 — Transfer önerisinin hesabı
 
@@ -96,7 +96,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 - Açıklama: Transfer önerisinde kaynağın mevcut yerde neden atıl kaldığı, hedefteki darboğaz, iki şantiye arası nakliye ve yakıt maliyeti, transferle beklenen üretim artışı ve şirket toplam kârına net etki hesaplanır. Kaynağın bulunduğu şantiyenin yakında o kaynağa yeniden ihtiyaç duyup duymayacağı, o şantiyenin planından değerlendirilir ve öneride gösterilir.
 - Kabul kriterleri:
   - [ ] Kaynak şantiyenin yakın planında ihtiyaç varsa öneri bunu ve tarihini açıkça belirtir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INT-009 — Personel optimizasyonu hesabı
 
@@ -106,7 +106,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 - Açıklama: Ekip ve personel değişikliklerinin maaş, SGK, yemek, konaklama ve nakliye etkileri hesaplanır. Taşeron şantiyede GEOGES'in karşıladığı SGK, yemek ve konaklama gibi destekler de hesaba girer.
 - Kabul kriterleri:
   - [ ] Hesap, kişi bazında maaş göstermez; yalnızca toplam etkiyi gösterir (REQ-HR-002).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INT-010 — Kabul edilen transfer talimat olarak başlar
 
@@ -117,7 +117,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 - Açıklama: Kaynak transferi kendiliğinden yapılmaz. Yönetici veya koordinatör öneriyi onaylayarak talimatı başlatır; transferin kaydı ilgili modülde bir insanın işlemiyle yapılır.
 - Kabul kriterleri:
   - [ ] Onaylanan öneri, yapılan transfer kaydına bağlanır; öneri transfer tamamlanınca kapanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Hızlandırma senaryoları
 
@@ -130,7 +130,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 - Kabul kriterleri:
   - [ ] Her senaryonun hesap dökümü kalem kalem açılabilir.
   - [ ] Kullanıcının değiştirdiği girdi, hesaplanan değerle birlikte görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INT-012 — En kârlı ve uygulanabilir senaryo önerilir
 
@@ -140,7 +140,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 - Açıklama: Panel en hızlı senaryoyu değil, "önerilmez" işareti olmayanlar arasında net kârlılık etkisi en yüksek senaryoyu önerir.
 - Kabul kriterleri:
   - [ ] "Önerilmez" işaretli senaryo, net etkisi ne olursa olsun önerilen senaryo olamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INT-013 — Tanımlı sınırı aşan senaryo "önerilmez" olur
 
@@ -152,7 +152,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 - Kabul kriterleri:
   - [ ] "Önerilmez" işaretinin nedeni sınırın adı, sınır değeri ve senaryodaki değerle birlikte görünür.
   - [ ] "Önerilmez" senaryo seçilemez (REQ-INT-014).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-INT-014 — Seçilen senaryo onayla hedeflere işler
 
@@ -164,7 +164,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 - Kabul kriterleri:
   - [ ] Onaylanmamış senaryo hiçbir hedefi değiştirmez.
   - [ ] Hedefin hangi senaryodan geldiği projenin geçmişinde görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 
