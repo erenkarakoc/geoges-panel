@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-19 — MTG, DOC and SUP requirements
+
+- Three decisions (D-199…D-201), all beyond the recommendation. Meetings are visible by role scope — a site meeting to everyone who sees the site; minutes are final as soon as they are saved, with no approval or objection window; and archive search reads document contents, including text recognition of scanned papers and photos. Whether recognition may send documents to an outside service is left as an owner question for Phase 03.
+- `REQ-MTG.md` (8), `REQ-DOC.md` (10) and `REQ-SUP.md` (5) are written, DRAFT, layer-tagged, with catalogs; seven proposed glossary terms were added first. Two derived rules await confirmation: a new meeting on the same project brings the earlier meetings' open decisions onto its agenda, and a resolved support ticket closes by itself if its opener does nothing.
+
+
 ## 2026-09-19 — INT confirmed
 
 - The owner confirmed REQ-INT: 14 more requirements CONFIRMED, 378 in all. Next: MTG.

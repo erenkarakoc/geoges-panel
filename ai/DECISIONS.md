@@ -202,6 +202,14 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — MTG, DOC, SUP requirement round (2026-09-19)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-199 | **Meeting visibility follows role scope** (AI recommended participants plus owners): a meeting tied to a project or site is visible to everyone who sees that scope; an untied meeting only to its participants; owners see all; a decision's owner always sees their own decision | Owner 2026-09-19; §32 |
+| D-200 | **Meeting minutes are final when saved**, with no participant approval or objection period (AI recommended an objection window); later changes go through a revision request | Owner 2026-09-19; §32.1 |
+| D-201 | **Archive search covers document contents including text recognition of scanned documents and photos** (AI recommended contents without text recognition in the first release). **AI note:** if recognition needs an outside service, sending documents out is a separate owner decision in Phase 03; RISK-002 grows slightly | Owner 2026-09-19; §33.2 |
+
 ## PHASE 01 — INT requirement round (2026-09-19)
 
 | ID | Decision | Ref |

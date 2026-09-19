@@ -24,12 +24,12 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | HR | §23 | `docs/requirements/REQ-HR.md` | 16 (CONFIRMED) |
 | CMP | §24, §31 | `docs/requirements/REQ-CMP.md` | 17 (CONFIRMED) |
 | TSK (tasks, notifications, escalation) | §25.1–§25.6 | `docs/requirements/REQ-TSK.md` | 13 (CONFIRMED) |
-| SUP | §25.7 | `docs/requirements/REQ-SUP.md` | — |
+| SUP | §25.7 | `docs/requirements/REQ-SUP.md` | 5 (DRAFT) |
 | INT | §26, §27, §8.3, §8.4 | `docs/requirements/REQ-INT.md` | 14 (CONFIRMED) |
 | PRF | §28 | `docs/requirements/REQ-PRF.md` | 20 (CONFIRMED) |
 | QHS | §29, §30 | `docs/requirements/REQ-QHS.md` | 16 (CONFIRMED) |
-| MTG | §32 | `docs/requirements/REQ-MTG.md` | — |
-| DOC | §33 | `docs/requirements/REQ-DOC.md` | — |
+| MTG | §32 | `docs/requirements/REQ-MTG.md` | 8 (DRAFT) |
+| DOC | §33 | `docs/requirements/REQ-DOC.md` | 10 (DRAFT) |
 | STR | §35 | `docs/requirements/REQ-STR.md` | — |
 | ADM (master data, calendar, panel and strip type catalogs, exchange rate) | §36.1–§36.4, §23.9, §10.1, §11.2 (type definitions), §22.5 (rate) | `docs/requirements/REQ-ADM.md` | 15 (CONFIRMED) |
 | AUD (audit, revision requests) | §38, §37.1 | `docs/requirements/REQ-AUD.md` | 10 (CONFIRMED) |

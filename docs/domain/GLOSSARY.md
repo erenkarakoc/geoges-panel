@@ -163,6 +163,13 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Kaynak transfer önerisi | Resource Transfer Suggestion | Atıl kaynağın darboğaza aktarılması için maliyet-kazanç hesabıyla öneri | — | move_order | PROPOSED | §27.2 |
 | Hızlandırma senaryosu | Acceleration Scenario | Projeyi hızlandırma seçeneği ve süre-maliyet hesabı | — | what_if | PROPOSED | §8.3 |
 | Senaryo sınırı | Scenario Limit | Aşıldığında senaryoyu "önerilmez" yapan tanımlı sınır | — | cap | PROPOSED | D-196 |
+| Toplantı | Meeting | Tarih, katılımcı, gündem ve notlarıyla toplantı kaydı | — | session (döküm seansıyla karışır) | PROPOSED | §32.1 |
+| Toplantı tutanağı | Meeting Minutes | Toplantının kaydedilince kesinleşen notları | — | report | PROPOSED | D-200 |
+| Belge | Document | Bir kayda bağlı dosya | Evrak (UI) | file (genel dosya için), attachment | PROPOSED | §33 |
+| Belge sürümü | Document Version | Aynı belgenin yeni yüklemesi; öncekiler saklanır | — | revision (proje revizyonuna ayrılmış) | PROPOSED | §33.4 |
+| Arşiv | Archive | Tüm belgeleri yetkiye göre tek pencerede arayan ekran | — | drive, repository | PROPOSED | §33.2 |
+| Sınıflandırılmamış belge | Unclassified Document | Aktarımda kayda bağlanamayan, geçici alanda tutulan belge | — | orphan | PROPOSED | §33.4, DEF-001 |
+| Metin tanıma | Text Recognition | Taranmış belge ve fotoğraftaki yazının okunması | OCR | scan_text | PROPOSED | D-201 |
 | Malzeme | Material | — | item (katalog satırı) | product | PROPOSED | |
 | Sarf malzeme | Consumable | — | — | supply | PROPOSED | |
 | Sarf reçetesi | Consumption Recipe | İş birimi başına standart sarf | bill of materials | — | PROPOSED | |
