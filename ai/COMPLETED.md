@@ -53,3 +53,4 @@ Only items whose quality gate passed are listed here.
 | 2026-09-19 | TASK-0042 | Eight end-to-end flows as flow definitions | T2 PASS (owner confirmed) |
 | 2026-09-19 | TASK-0052 | Administration page and flow designer UX | T2 PASS (owner confirmed) |
 | 2026-09-19 | TASK-0053 | Accessibility targets (WCAG 2.2 AA) | T2 PASS (owner confirmed) |
+| 2026-09-19 | TASK-0055 | Custom-element list | T2 PASS (owner confirmed) |

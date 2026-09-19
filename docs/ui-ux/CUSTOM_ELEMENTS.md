@@ -1,6 +1,6 @@
 # Özel Arayüz Öğeleri
 
-Durum: TASLAK · Son güncelleme: 2026-09-19
+Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-20
 
 Arayüz yalnız COSS UI ve Tailwind ile yapılır; COSS'ta karşılığı olmayan her öğe sahibin onayıyla yapılır (ADR-009, `docs/ui-ux/DESIGN_SYSTEM_RULES.md` §1). Bu liste, Phase 02 ekran tasarımlarının gerektirdiği özel öğelerin tamamıdır (Phase 02 teslimi). Yeni bir özel öğe ancak bu listeye sahip onayıyla eklenir.
 

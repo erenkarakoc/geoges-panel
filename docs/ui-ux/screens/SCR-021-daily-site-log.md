@@ -1,6 +1,6 @@
 # SCR-021 — Günlük Saha Kaydı Girişi
 
-Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-19
+Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-20
 
 Adres: `/daily-site-logs/[id]` · Tür: özel ekran · Roller: KO, SM, FO; TEB yalnız kendi bölümü (`docs/domain/PERMISSION_MATRIX.md`) · Kararlar: D-220.
 
@@ -14,7 +14,7 @@ Gereksinimler: REQ-SIT-002…030, REQ-SIT-033, REQ-SIT-035, REQ-EQP-011, REQ-INV
 | Gün şeridi | Son günler yan yana; her günün durumu renk ve simgeyle (onaylı, onay bekliyor, düzeltmede, eksik, tatil, çalışma yok); en sağda eski günler için takvim | `ScrollArea` içinde `Button`, `Popover` + `Calendar` |
 | Görünüm seçici | "Adım adım" / "Bölüm listesi" | `ToggleGroup` |
 | İçerik | Seçili görünüme göre adım veya bölüm listesi | aşağıda |
-| Kaydet çubuğu | Adım adım: "Geri" · "İleri" · adım sayısı; son adımda "Koordinatör onayına gönder". Bölüm listesi: "Koordinatör onayına gönder" ve eksik bölüm sayısı | kart altı sabit bant (TASK-0028), `Button`, `Progress` |
+| Kaydet çubuğu | Adım adım: "Geri" · "İleri" · adım sayısı; son adımda "Koordinatör onayına gönder". Bölüm listesi: "Koordinatör onayına gönder" ve eksik bölüm sayısı | alt bant (`docs/ui-ux/SCREEN_PATTERNS.md` bölüm 4), `Button`, `Progress` |
 | Düzeltme uyarısı | Kayıt düzeltmeye geri gönderildiyse en üstte gerekçe ve hangi bölümün düzeltileceği | `Alert` |
 
 ## 2. İki görünüm (D-220)

@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-09-20 — Last Phase 02 designs: special screens, search, bottom band
+
+- The owner confirmed the custom-element list (TASK-0055).
+- `docs/ui-ux/SPECIAL_SCREENS.md` gives every screen that fits no list, detail or form pattern its layout and COSS components; nothing new outside COSS was needed (TASK-0056).
+- `docs/ui-ux/SEARCH.md` designs the search box: grouped results, quick actions by permission, document contents left to the archive (D-227, TASK-0029).
+- The bottom band now carries the actions of forms, the daily log, the approval queue, bulk selection and — at the owner's choice — detail screens; on phones it replaces the navigation bar while shown (D-228, TASK-0028).
+- All three await owner review; then the Phase 02 exit summary.
+
+
 ## 2026-09-19 — Accessibility confirmed; custom-element list
 
 - The owner confirmed the accessibility targets (TASK-0053).

@@ -1,6 +1,6 @@
 # Standart Ekran Kalıpları: Liste, Detay, Form
 
-Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-19
+Durum: CONFIRMED (sahip, 2026-09-19; alt bant bölümü D-228, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Ekran envanterindeki (`docs/ui-ux/SCREEN_INVENTORY.md`) her L, D ve F ekranı bu üç kalıptan birini kullanır (REQ-NFR-006, REQ-NFR-013…015). Kalıplar CHG-004 kabuğunun üzerine oturur: üst bar, açık kayıtta ikinci satır (bağlam satırı, D-064), çalışma katmanı ve telefonda alt çubuk (D-054…D-070) değişmez. Bileşenlerin hepsi projede kurulu COSS bileşenleridir; özel bileşen gerekmez (ADR-009). Kararlar: D-219.
 
@@ -59,7 +59,8 @@ Her kalıpta geçerli ortak kurallar:
 
 | Bölge | İçerik | COSS |
 |---|---|---|
-| Başlık alanı | Geri dönüş · kayıt adı · durum rozeti · kilit rakamlar (2–4) · eylemler (birincil düğme + "…" menüsü) | `Breadcrumb` veya geri `Button`, `Badge`, `Figure`, `Menu` |
+| Başlık alanı | Geri dönüş · kayıt adı · durum rozeti · kilit rakamlar (2–4) · "…" menüsü (seyrek eylemler: iptal et, dışa aktar, kopyala) | `Breadcrumb` veya geri `Button`, `Badge`, `Figure`, `Menu` |
+| Alt bant | Kaydın birincil ve ikincil eylemleri (ör. "Hakedişi onaya sun", "Düzenle", "Revizyon talep et"); bölüm 4 (D-228) | `Button` |
 | Bölüm sekmeleri | Büyük kayıtlarda üst barın ikinci satırında (D-064); her sekme kendi adresidir, paylaşılabilir | `Tabs` (bağlantı olarak) |
 | Sekme içeriği | Aç/kapa alt bölümler; en önemlisi açık gelir | `Accordion` / `Collapsible` içinde `Frame` |
 | Sabit bölümler | Her kayıtta: "Belgeler" ve "İşlem geçmişi" (REQ-DOC-001, REQ-AUD-001) | `Frame`, `Table` |
@@ -92,12 +93,29 @@ Her kalıpta geçerli ortak kurallar:
 - **Hesaplanan alanlar** giriş alanı değildir; yanında "hesaplanır" işaretiyle salt okunur gösterilir (ilke 8, `docs/architecture/PRINCIPLES.md`).
 - **Akıllı öneri:** önerilen değer (ör. reçeteden tüketim, geçmiş maliyet) alanın içinde gelir; kullanıcı değiştirirse önerilen değer yanında görünmeye devam eder (REQ-SIT-029, REQ-QTE-005).
 - **Taslak:** girilen her şey kendiliğinden taslak olarak saklanır; sayfa kapanıp açılınca değerler yerindedir (REQ-NFR-015, REQ-SIT-007). Kaydedilmemiş değişiklikle ayrılmaya çalışılırsa uyarı çıkar.
-- **Kaydet çubuğu:** uzun formlarda uygulama kartının altında sabit durur (TASK-0028 işlevsel alt bant): birincil eylem (ör. "Onaya gönder"), ikincil eylemler ("Taslak olarak bırak", seri girişte "Kaydet ve yeni ekle") ve varsa eksik alan sayısı. Telefonda alt çubuğun hemen üstündedir.
+- **Kaydet çubuğu:** uzun formlarda alt banttır (bölüm 4): birincil eylem (ör. "Onaya gönder"), ikincil eylemler ("Taslak olarak bırak", seri girişte "Kaydet ve yeni ekle") ve varsa eksik alan sayısı.
 - **Gönderim:** gönderirken düğme yükleniyor durumuna geçer ve ikinci gönderim engellenir; sunucu hatası toast'tır, alan hataları alanlarına dağıtılır ve ilk hatalı alana odaklanılır.
 - **Eksik zorunlu alan** varken gönderilemez; denenirse eksikler grup grup listelenir (REQ-SIT-013).
 - **Klavye:** sekme sırası görsel sırayla aynıdır; Enter kısa formda gönderir, uzun formda yalnız kaydet çubuğundaki düğmeyle gönderilir.
 
 **Durumlar:** ilk açılış (taslak varsa geri yüklenir ve bu belirtilir) · kaydediliyor · kaydedildi (toast) · doğrulama hatası (alan altında) · sunucu hatası (toast + girişler korunur) · yetki yok (form açılmaz) · kilitli kayıt (form yerine "Revizyon talep et").
+
+## 4. Alt bant (TASK-0028, D-228)
+
+Uygulama kartının altında sabit duran işlevsel bant. İçerik altından kayar; içeriğe bandın yüksekliği kadar alt boşluk verilir, hiçbir şey arkasında kalmaz. Odaklanan öğe bandın altında kalmaz (`docs/ui-ux/ACCESSIBILITY.md`).
+
+| Nerede | İçerik |
+|---|---|
+| Uzun form | Birincil eylem, ikincil eylemler, eksik alan sayısı |
+| Detay ekranı | Kaydın birincil ve ikincil eylemleri; seyrek eylemler başlıktaki "…" menüsünde kalır |
+| Günlük saha kaydı (SCR-021) | Geri · İleri · adım sayısı; son adımda gönder |
+| Onay kuyruğu (SCR-012) | Onayla · Düzeltmeye gönder · Reddet |
+| Liste, satır seçiliyken | Seçili sayısı ve toplu işlemler; seçim kalkınca bant kalkar |
+
+- Yalnız eylemi olan ekranda bant vardır. Kullanıcının yapamayacağı eylem bantta da görünmez; hiç eylemi yoksa bant basılmaz.
+- Birincil eylem sağdadır ve marka rengindedir. İkincil eylemler solundadır. Telefonda birincil eylem tam genişliğe yakındır, ikinciller "…" içine iner.
+- **Telefonda** bant varken alt gezinme çubuğu gizlenir; altta yalnız bant durur. Geri ile çıkılınca çubuk geri gelir (D-228).
+- Bileşenler: `Button`, `Menu` / `Drawer` (telefonda ikinciller), `Badge` (eksik sayısı). Kabuktaki yer, isteğe bağlı bir alt bant yuvasıdır (app shell). Phase 07'de kurulur.
 
 ---
 
