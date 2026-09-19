@@ -37,7 +37,7 @@ Last updated: 2026-09-19 · Format: `docs/standards/ID_STANDARDS.md`
 
 | ID | Title | Tier | Status | Depends on | Notes |
 |---|---|---|---|---|---|
-| TASK-0042 | The eight REQ-WFL-011, REQ-WFL-028 flows as real flow definitions, tested step by step against the node palette | T2 | NOT_STARTED | TASK-0041 | CHG-006, D-089, D-104. Each end-to-end process written as short flows that trigger each other; each step marked core / palette / gap. Redo of the 2026-09-17 palette test (`docs/workflows/README.md`) with the new nodes (D-095, D-096, D-099, D-102); no gap may remain. The definitions become the engine's acceptance tests in Phase 08 |
+| TASK-0042 | The eight end-to-end flows (REQ-WFL-011, REQ-WFL-028) as real flow definitions, tested step by step against the node palette | T2 | NOT_STARTED | TASK-0041 | CHG-006, D-089, D-104. Each end-to-end process written as short flows that trigger each other; each step marked core / palette / gap. Redo of the 2026-09-17 palette test (`docs/workflows/README.md`) with the new nodes (D-095, D-096, D-099, D-102); no gap may remain. The definitions become the engine's acceptance tests in Phase 08 |
 
 ## CHG-003 / CHG-004 — early UX and shell delivery
 

@@ -3,26 +3,28 @@
 Last updated: 2026-09-19
 
 ```text
-PROJECT STATUS:      BOOTSTRAP
-CURRENT PHASE:       PHASE 01 — Requirements & Domain Analysis
-CURRENT SUBPHASE:    DISCOVER / QUESTION
+PROJECT STATUS:      DESIGN
+CURRENT PHASE:       PHASE 02 — UX, Information Architecture & User Flows (Phase 01 DONE 2026-09-19)
+CURRENT SUBPHASE:    PLANNING
 CURRENT FEATURE:     —
-CURRENT TASK:        Phase 01 requirement work — TSK and AUD rounds, with their capability catalogs (TASK-0041)
-STATUS:              QUESTIONS_PENDING
+CURRENT TASK:        Phase 02 work plan (see the roadmap's Phase 02 "Still owed" list)
+STATUS:              DESIGNING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
-CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 and CHG-006 are both folded. Normal ADR-007 rule applies again — Phase 01 is a design phase; product code resumes in Phase 07 or via an approved change request.
+CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 and CHG-006 are both folded. Normal ADR-007 rule applies — Phase 02 is a design phase; product code resumes in Phase 07 or via an approved change request.
                      Tooling code that enforces the records (scripts/, .githooks/) is always allowed.
                      Already-shipped exceptions that remain valid: development-only sandboxes (D-052) and the CHG-004 shell transfer (TASK-0032…TASK-0037, owner approved).
                      Note: TASK-0034 and TASK-0037 also shipped module-namespaced sample screens (modules/sit/ui, modules/wfl/ui, modules/tsk/ui). They are sample data behind the shell, approved as part of CHG-004, and are re-wired when SIT and the workflow engine exist.
 ```
 
 ## LAST COMPLETED TASK
-Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
+Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements in 26 files with layers and capability catalogs; scope mapped and `docs/sources/` removed (tag `scope-archive`); glossary 266 CONFIRMED terms; permission matrix; domain model for 24 modules; architecture principles; slice order and pilot approach (D-216). KVKK data inventory deferred (D-214, DEF-007).
+
+Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Phase 01 continues module by module, each with its question round and capability catalog (TASK-0041): TSK and AUD now, then PRJ and ADM, then the rest; RPT REQ-RPT-015 gets its own round.
-2. OQ-027 items 3 and 4 (flow methods) still open (Phase 02).
+1. Phase 02: agree the work plan with the owner — screen inventory (must answer every management question of REQ-NFR-004), per-screen state matrix, list/detail/form standards (REQ-NFR-013…015), daily site log table UX with OQ-027 item 3, the eight end-to-end flows as real definitions (TASK-0042), flow designer / trace view / record-type builder UX, WCAG 2.2 AA targets.
+2. OQ-027 item 3 (stepped daily-log entry) is answered inside Phase 02; item 4 is implemented by REQ-TSK-007/-008.
 3. TASK-0043: rename `dashboard`/`widget` in code to match the glossary.
 4. TASK-0018: re-check after 2026-10-15 that the worker keeps storing observations via the `CLAUDE_CODE_OAUTH_TOKEN` fallback.
 
@@ -30,7 +32,7 @@ Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 00
 None.
 
 ## OPEN QUESTIONS
-See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
+See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-027 item 3 (stepped daily-log entry, Phase 02), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
 - 2026-09-19: Phase 01 still open — all exit deliverables in — permission matrix (TASK-0045, D-215), domain model (TASK-0046), slice order and pilots (TASK-0047, D-216); awaiting owner approval of the exit; KVKK inventory deferred (D-214, DEF-007)

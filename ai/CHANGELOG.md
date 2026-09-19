@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Phase 01 closed
+
+- The owner approved the exit of Phase 01. What it leaves behind: 438 confirmed requirements in 26 files, each with its layer and its capability catalog; every scope section mapped to them and the source folder removed; a confirmed glossary of 266 terms; the permission matrix; a domain model of 24 modules; the architecture principles; and the slice order with a sample-data pilot plan. The KVKK data inventory waits for the real-data gate (DEF-007). Phase 02 — screens, information architecture and user flows — is now the current phase.
+
+
 ## 2026-09-19 — Slice order and pilots
 
 - The owner kept the slice order as planned and chose to pilot every slice on sample data only, against the recommendation of a real site after the sample run: real company data first enters at the Phase 19 rollout, after the KVKK check (D-216). The pilot site and people are named before slice 1's build ends, now an exit condition of Phase 09. With this every Phase 01 deliverable is in; the phase awaits the owner's exit approval.
