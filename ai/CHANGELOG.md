@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Storage direction for user-defined record types
+
+- The hardest question CHG-006 raised now has an answer: a user-defined record is one row whose fields live in JSONB, with scope and status as real columns, so a single security policy covers every type and nobody is changing the database schema by filling in a form. Fields retire instead of disappearing, so old records keep their meaning (D-241, TASK-0063). Schema in Phase 04, spike in Phase 06, screens after the pilot.
+
+
 ## 2026-09-20 — Ports, data access, search and live updates
 
 - `docs/architecture/PORTS_AND_SERVICES.md` names every outside dependency and puts it behind a port, so a provider can be swapped without touching a module. Data access becomes a direct PostgreSQL connection so a record and its event are written together, with row-level security kept per transaction (D-238, closing OQ-020). Search stays inside PostgreSQL with Turkish spelling tolerance and the same permission filtering (D-239). Live updates carry a signal, never data — the screen fetches with the viewer's own rights (D-240).

@@ -72,3 +72,4 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-19 23:40:02Z · 6c9e96a0 · Write · `docs/architecture/PERMISSIONS.md`
 - 2026-09-19 23:41:23Z · 6c9e96a0 · Write · `docs/architecture/CONFIGURATION.md`
 - 2026-09-19 23:42:49Z · 6c9e96a0 · Write · `docs/architecture/PORTS_AND_SERVICES.md`
+- 2026-09-19 23:44:05Z · 6c9e96a0 · Write · `docs/architecture/RECORD_TYPES.md`
