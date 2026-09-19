@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Configuration architecture
+
+- `docs/architecture/CONFIGURATION.md` fixes how the adjustable half of the panel behaves: a price or threshold changed in June never disturbs a March progress payment, because rules carry validity dates and approved records keep the version they used. Custom fields are allowed on reference records and refused on ledger records, so no free-text field can blur a cost or a payroll figure (D-237, TASK-0061).
+
+
 ## 2026-09-20 — Permission architecture
 
 - `docs/architecture/PERMISSIONS.md` sets how the panel decides who may do what: roles combine instead of forcing a person to switch hats, every assignment carries its scope, and the check runs in three places so a missed check in one cannot leak data. Commercial and sensitive fields leave the query entirely for those without the right. A lost phone is recoverable two ways — one-time codes and a manager reset, both audited (D-236, TASK-0060).

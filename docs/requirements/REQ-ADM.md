@@ -107,7 +107,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: özel alanlar ve veri sınıfları
-- Açıklama: Belirlenmiş kayıt türlerine yetkili kişi tipli özel alan ekleyebilir (metin, sayı, tarih, seçim, evet/hayır). Hangi kayıt türlerinin özel alan alacağı Phase 03 mimarisinde belirlenir. Yeni kayıt türü tanımlamak bu gereksinimin değil, kayıt türü üretecinin konusudur (REQ-WFL-035).
+- Açıklama: Belirlenmiş kayıt türlerine yetkili kişi tipli özel alan ekleyebilir (metin, sayı, tarih, seçim, evet/hayır). Hangi kayıt türlerinin özel alan alacağı belirlendi (D-237): referans kayıtlar alır, defter ve onay zinciri taşıyan kayıtlar almaz (`docs/architecture/CONFIGURATION.md`). Yeni kayıt türü tanımlamak bu gereksinimin değil, kayıt türü üretecinin konusudur (REQ-WFL-035).
 - Kabul kriterleri:
   - [ ] Özel alanın veri sınıfı tanımlanırken seçilir ve görünürlük buna göre süzülür (REQ-IAM-011).
 - Durum: CONFIRMED
