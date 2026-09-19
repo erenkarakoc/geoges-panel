@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-19 — PRF requirements
+
+- Eight performance decisions (D-187…D-194), four against the recommendation. The KPI catalog starts empty in the panel instead of importing the Excel guide; scores and bonuses are both monthly; there is no objection process; and site profit never enters a coordinator's score. Two of these changed the scope's wording (§28.2, §28.11), corrected in place with notes.
+- The bonus is paid outside payroll — but because a bonus is wages in law, every payment enters the accountant's monthly file; a percentage bonus runs on base salary and is as sensitive as the salary. A KPI the panel cannot compute is scored by the direct manager with a reason; a critical score opens a development meeting that only the person, their managers and HR can see.
+- `REQ-PRF.md` (20) is written, DRAFT, layer-tagged, with its catalog; eight proposed glossary terms were added first. Two derived rules await confirmation: a mid-month position change blends the score by days, and subcontractor crews are compared but get no score or bonus.
+
+
 ## 2026-09-19 — QHS confirmed; medical reports leave the panel
 
 - The owner confirmed REQ-QHS with its derived PPE paper-record rule: 16 more requirements CONFIRMED, 344 in all.

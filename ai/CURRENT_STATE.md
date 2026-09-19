@@ -33,6 +33,7 @@ None.
 See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
+- D-187…D-194 (2026-09-19, PRF round): KPI catalog defined from scratch (changes §28.11); bonus paid outside payroll but always in the accounting export; score and bonus monthly; manual KPIs by the direct manager; no objection process; coordinator never scored on profit (changes §28.2); critical score opens a development meeting; bonus on base salary
 - D-182…D-185 (2026-09-19, QHS round): failed lot only warns; no health data for OHS incidents (REQ-HR consequence open); PPE issued by count with the person's confirmation; D-186: HR keeps only the existence and dates of medical reports; serious accident or open critical OHS finding voids the period's speed/bonus target, near misses never count against anyone
 - D-181 (2026-09-18, layer scan): every requirement tagged Sabit / Akış / Tanım with the configurable part named; enforced by the validator
 - D-177…D-180 (2026-09-18, CMP round): client, subcontractor and supplier contracts; extension of time as request → decision → new date; notice-letter draft on client delay; guarantee commission charged to the project

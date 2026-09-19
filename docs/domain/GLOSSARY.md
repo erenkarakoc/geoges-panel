@@ -149,6 +149,14 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Günlük İSG kontrol listesi | OHS Checklist | Şantiye/fabrikanın günlük İSG kontrol maddeleri | — | safety_form | PROPOSED | §30.3 |
 | Risk değerlendirmesi | Risk Assessment | Şantiye/fabrika İSG risk değerlendirme belgesi | — | risk (uygunsuzluk kayıt türüyle karışır) | PROPOSED | §30.3 |
 | KKD teslimi | PPE Issue | KKD'nin kişiye adetle verilmesi ve kişinin onayı | — | ppe_assignment (demirbaş zimmetiyle karışır) | PROPOSED | D-184 |
+| KPI (performans göstergesi) | Key Performance Indicator (KPI) | Bir pozisyonun kodlu, ağırlıklı ve hedefli ölçütü (ör. SM-01) | KPI | metric (genel ölçü için) | PROPOSED | §28.11 |
+| Performans puanı | Performance Score | Kişinin aylık 0–100 puanı | — | rating | PROPOSED | D-189 |
+| Puan bandı | Score Band | Puan aralığı ve karşılığı (Mükemmel, İyi, Geliştirilmeli, Kritik) | — | grade | PROPOSED | §28.11 |
+| Performans hedefi | Performance Target | Şirket, rol veya kişi düzeyindeki KPI hedefi | — | goal | PROPOSED | §28.10 |
+| Prim kuralı | Bonus Rule | Primi bir koşula ve tutara/orana bağlayan kural | — | incentive | PROPOSED | §28.10 |
+| Prim | Bonus | Performansa bağlı, bordro dışı ödenen ek ödeme | — | premium, incentive | PROPOSED | D-188 |
+| Gelişim planı | Development Plan | Kritik puandan sonra amirin kişiyle yazdığı plan | — | pip | PROPOSED | D-193 |
+| Performans sıralaması | Performance Ranking | Benzer roller arasında olumlu performansın gösterimi | — | leaderboard | PROPOSED | §28.9 |
 | Malzeme | Material | — | item (katalog satırı) | product | PROPOSED | |
 | Sarf malzeme | Consumable | — | — | supply | PROPOSED | |
 | Sarf reçetesi | Consumption Recipe | İş birimi başına standart sarf | bill of materials | — | PROPOSED | |

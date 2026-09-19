@@ -2298,8 +2298,9 @@ Metrikler örneğin:
 - sorumlu şantiyelerin toplam performansı,
 - geciken onay sayısı,
 - sorun çözme süresi,
-- veri disiplini,
-- sorumlu şantiyelerin kârlılığına etkisi.
+- veri disiplini.
+
+> **D-192 ile değişti (2026-09-19):** Önceki metinde listenin son kalemi "sorumlu şantiyelerin kârlılığına etkisi" idi. Şantiye kâr-zararı koordinatörün puanına hiçbir biçimde girmez. Bkz. REQ-PRF-006.
 
 Koordinatör kötü kâr-zararın kendi kontrolü dışındaki nedenleri yüzünden otomatik cezalandırılmamalı; örneğin geciken onay veya çözülmeyen görev gibi kendi kontrolündeki davranışlar ayrı ölçülmelidir.
 
@@ -2396,7 +2397,9 @@ Prim sabit tutar veya oran olabilir. Hesaplanan prim yönetim tarafından gözde
 
 ## 28.11. Başlangıç KPI kataloğu (mevcut KPI kılavuzu v2.0)
 
-Şirkette Excel ile kullanılan KPI sistemi panelin başlangıç kataloğu olarak aktarılır ve bundan sonra panelde yönetilir.
+KPI kataloğu panelde sıfırdan tanımlanır ve panelde yönetilir.
+
+> **D-187 ile değişti (2026-09-19):** Önceki metin şirkette Excel ile kullanılan KPI sisteminin (kılavuz v2.0) başlangıç kataloğu olarak aktarılacağını söylüyordu. Excel aktarılmaz; aşağıdaki pozisyonlar ve örnekler başlangıç çerçevesidir. Bkz. REQ-PRF-008.
 
 Kapsanan pozisyonlar: Genel Müdür, Genel Müdür Yardımcısı, Genel Koordinatör, Şantiyeler Koordinatörü, Teknik Ofis, Saha Mühendisi, Formen, İşçi, Bekçi, Temizlik Görevlisi.
 

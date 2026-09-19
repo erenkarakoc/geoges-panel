@@ -202,6 +202,19 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — PRF requirement round (2026-09-19)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-187 | **The KPI catalog is defined from scratch in the panel**; the existing Excel KPI guide v2.0 is not imported (AI recommended importing it). **Changes scope wording:** §28.11 said the guide is transferred as the starting catalog; corrected in place with a note | Owner 2026-09-19; §28.11 |
+| D-188 | **The bonus is paid outside payroll**, as a separate payment closed by a receipt (AI recommended paying it through payroll). **AI note:** a bonus is wages in law; so every bonus payment enters the monthly accounting export (D-153) as its own line and the accountant handles tax and SGK — confirmed by the owner in the same round. The expense goes to the person's registered unit | Owner 2026-09-19; §28.10 |
+| D-189 | **Score and bonus are both monthly** (AI recommended a monthly score with a quarterly bonus). Derived consequence, to be confirmed with the requirement file: a person who changes position within a month gets a score blended by days in each position | Owner 2026-09-19; §28.10 |
+| D-190 | **A KPI the panel cannot calculate is scored by the direct manager with a reason**; the manager's manager sees it; people without accounts are scored the same way | Owner 2026-09-19; §28.11 |
+| D-191 | **There is no objection process for scores** (AI recommended a reasoned objection decided by the manager's manager); scores are finalised by the manager and management and change only by revision request | Owner 2026-09-19; §28 |
+| D-192 | **Site profit and loss never enters the coordinator's score** (AI recommended including it with client-caused factors removed); the coordinator is scored only on what they control. **Changes scope wording:** §28.2 listed "sorumlu şantiyelerin kârlılığına etkisi"; corrected in place with a note | Owner 2026-09-19; §28.2 |
+| D-193 | **A critical score (< 70) opens a development-meeting task** for the manager; the plan stays on the person's card and is visible only to the person, their managers and HR | Owner 2026-09-19; §28.11 |
+| D-194 | **A percentage bonus is calculated on the person's monthly base salary**; the bonus amount is sensitive data like the salary | Owner 2026-09-19; §28.10, §28.11 |
+
 ## PHASE 01 — QHS requirement round (2026-09-19)
 
 | ID | Decision | Ref |

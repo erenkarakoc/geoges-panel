@@ -26,7 +26,7 @@ ID format: `REQ-<MODULE>-<NNN>` (see `docs/standards/ID_STANDARDS.md`). Requirem
 | TSK (tasks, notifications, escalation) | §25.1–§25.6 | `docs/requirements/REQ-TSK.md` | 13 (CONFIRMED) |
 | SUP | §25.7 | `docs/requirements/REQ-SUP.md` | — |
 | INT | §26, §27, §8.3, §8.4 | `docs/requirements/REQ-INT.md` | — |
-| PRF | §28 | `docs/requirements/REQ-PRF.md` | — |
+| PRF | §28 | `docs/requirements/REQ-PRF.md` | 20 (DRAFT) |
 | QHS | §29, §30 | `docs/requirements/REQ-QHS.md` | 16 (CONFIRMED) |
 | MTG | §32 | `docs/requirements/REQ-MTG.md` | — |
 | DOC | §33 | `docs/requirements/REQ-DOC.md` | — |

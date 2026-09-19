@@ -24,6 +24,7 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 - **REQ-QTE** — 18 requirements, D-173…D-176, CONFIRMED; scope §6.3 corrected (D-173); REQ-CRM-014 clarified.
 - **REQ-CMP** — 17 requirements, D-177…D-180, CONFIRMED 2026-09-19.
 - **REQ-QHS** — 16 requirements, D-182…D-186, CONFIRMED 2026-09-19; REQ-HR-002/-003/-014 reworded (D-186: only existence and dates of medical reports).
+- **REQ-PRF** — 20 requirements, D-187…D-194, DRAFT; scope §28.2/§28.11 corrected. Awaiting: derived rules REQ-PRF-011 (mid-month position change) and REQ-PRF-020 (subcontractor crews no bonus).
 - **Layer scan (D-181)** — all 328 requirements tagged Sabit / Akış / Tanım; 101 name a configurable part; three descriptions reworded (REQ-TSK-006, REQ-CRM-007, REQ-CMP-013); validator enforces the tag. New modules must carry the tag from the start. Derived rules awaiting confirmation: framework price proposed on orders (REQ-CMP-004); contract amendment as a new version (REQ-CMP-005).
 - Validator gained checks for decision and requirement ids and six-column task rows; the rule text in PROJECT_RULES §21.1 now matches what the tool does.
 - Glossary: ~25 proposed terms added before use; non-canonical names fixed (`flow` → `workflow`, `daily_log` → `daily_site_log`, `waste` → `damaged_unit`).
@@ -37,4 +38,5 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 
 ## Next session
 
-1. Continue with PRF, following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).
+1. Owner confirms or corrects REQ-PRF (incl. two derived rules); mark CONFIRMED.
+2. Continue with INT, following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).
