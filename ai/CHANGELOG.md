@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Screen inventory (Phase 02 starts)
+
+- `docs/ui-ux/SCREEN_INVENTORY.md` lists every screen of the panel inside the menu CHG-004 already built: what kind of screen it is, its address, the requirements it carries and who sees it by default. A script confirmed that all 438 requirements land on a screen, apart from eight platform rules listed as screen-less, and each of the 26 management questions now points at the screen that answers it. The owner placed the strategy screen under Finans and made "Sistem gözü" a second tab of the owner's "Bugün" (D-217); the flow designer and the record-type builder keep their own round (D-108). Screens get `SCR-<NNN>` ids.
+
+
 ## 2026-09-19 — Phase 01 closed
 
 - The owner approved the exit of Phase 01. What it leaves behind: 438 confirmed requirements in 26 files, each with its layer and its capability catalog; every scope section mapped to them and the source folder removed; a confirmed glossary of 266 terms; the permission matrix; a domain model of 24 modules; the architecture principles; and the slice order with a sample-data pilot plan. The KVKK data inventory waits for the real-data gate (DEF-007). Phase 02 — screens, information architecture and user flows — is now the current phase.

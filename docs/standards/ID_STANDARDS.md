@@ -17,6 +17,7 @@ ID'ler kalıcıdır: silinen veya iptal edilen kaydın ID'si yeniden kullanılma
 | Risk | `RISK-<NNN>` | `RISK-001` | `ai/CURRENT_STATE.md` |
 | Spike | `SPIKE-<NNN>` | `SPIKE-003` | `docs/architecture/spikes/` |
 | Bilinen hata | `BUG-<NNN>` | `BUG-017` | `ai/CURRENT_STATE.md` / GitHub Issues |
+| Ekran | `SCR-<NNN>` (bölüm bazında onluk bloklar) | `SCR-021` | `docs/ui-ux/SCREEN_INVENTORY.md` |
 
 `<MODUL>` kodları `docs/architecture/MODULE_MAP.md` içindeki 3 harfli kodlardır.
 
