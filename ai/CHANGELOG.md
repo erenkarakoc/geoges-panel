@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Slice order and pilots
+
+- The owner kept the slice order as planned and chose to pilot every slice on sample data only, against the recommendation of a real site after the sample run: real company data first enters at the Phase 19 rollout, after the KVKK check (D-216). The pilot site and people are named before slice 1's build ends, now an exit condition of Phase 09. With this every Phase 01 deliverable is in; the phase awaits the owner's exit approval.
+
+
 ## 2026-09-19 — Domain model complete
 
 - The owner confirmed batch 4. `docs/domain/DOMAIN_MODEL.md` now covers 24 modules — main records, relations and the rules that must never break, each tied to its requirement — and the glossary gained 32 structural record names along the way, all confirmed (TASK-0046). One Phase 01 item remains: slice order and pilot users (TASK-0047).

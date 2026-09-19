@@ -142,7 +142,7 @@ STATUS: DONE
 - **Deliverables:** `docs/requirements/REQ-*.md`, `ai/REQUIREMENTS.md` index, `docs/domain/*` (domain model, events catalog, business rules), confirmed `GLOSSARY.md`, permission matrix.
 - **Acceptance:** every section of the functional scope maps to ≥1 REQ; no REQ without owner module; owner has approved business rules marked T1.
 - **Risks:** scope size (RISK-002); hidden calculation rules.
-- **Status:** `QUESTIONS_PENDING` (2026-09-19). **Done:** REQ extraction for every module — 26 files, 438 requirements, all CONFIRMED, each layer-tagged (D-181) with its capability catalog (TASK-0041, TASK-0044; MIG deferred, DEF-001); data classification (general / internal / commercial / sensitive personal) applied in every requirement and catalog; glossary confirmed (234 terms, OQ-007); every scope section mapped to requirements and `docs/sources/` removed (TASK-0039, TASK-0027, D-213); architecture principles in `docs/architecture/PRINCIPLES.md`. **Still open before exit:** (1) the role × module × data-class permission matrix — done, `docs/domain/PERMISSION_MATRIX.md` confirmed 2026-09-19 (TASK-0045); (2) a domain model per module — done, `docs/domain/DOMAIN_MODEL.md` confirmed 2026-09-19 (TASK-0046); (3) confirmation of slice order and pilot users (D-048 names none yet, TASK-0047). The KVKK personal-data inventory is deferred to the real-data gate (D-214, DEF-007).
+- **Status:** `QUESTIONS_PENDING` (2026-09-19). **Done:** REQ extraction for every module — 26 files, 438 requirements, all CONFIRMED, each layer-tagged (D-181) with its capability catalog (TASK-0041, TASK-0044; MIG deferred, DEF-001); data classification (general / internal / commercial / sensitive personal) applied in every requirement and catalog; glossary confirmed (234 terms, OQ-007); every scope section mapped to requirements and `docs/sources/` removed (TASK-0039, TASK-0027, D-213); architecture principles in `docs/architecture/PRINCIPLES.md`. **Still open before exit:** (1) the role × module × data-class permission matrix — done, `docs/domain/PERMISSION_MATRIX.md` confirmed 2026-09-19 (TASK-0045); (2) a domain model per module — done, `docs/domain/DOMAIN_MODEL.md` confirmed 2026-09-19 (TASK-0046); (3) slice order and pilot users — done: order confirmed, pilots on sample data, pilot people named before slice 1 ends (D-216, TASK-0047). The KVKK personal-data inventory is deferred to the real-data gate (D-214, DEF-007).
 - **Exit blocker (resolved 2026-09-19):** TASK-0027 could not run until every `§` reference was remapped to a REQ id (CHG-005). TASK-0039 remapped them (D-213) and `docs/sources/` was removed on 2026-09-19; Git tag `scope-archive` keeps the text.
 - **CHG-006 deliverable:** every module's **capability catalog** — events it publishes, actions it exposes, typed and classified fields conditions may read (TASK-0041). REQ-WFL-011, REQ-WFL-028 is filed under `REQ-WFL`. Record-type builder requirements are written here too (D-079).
 
@@ -214,7 +214,9 @@ Each slice follows the same pattern:
 2. Implementation plans for T1/T2 tasks.
 3. Build → test → self-review → documentation.
 4. Staging acceptance by owner.
-5. Pilot with real users; feedback recorded as change requests.
+5. Pilot with real users on sample data (D-216); feedback recorded as change requests. Real company data enters only at the Phase 19 rollout, after the KVKK check (D-214, DEF-007).
+
+Phase 09 exit adds one condition (D-216): the pilot site and pilot users (roles and people) are named by the owner before slice 1's build ends.
 
 | Phase | Slice | Main modules | Depends on |
 |---|---|---|---|

@@ -33,7 +33,7 @@ None.
 See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
-- 2026-09-19: Phase 01 still open — permission matrix (TASK-0045, D-215) and domain model (TASK-0046) confirmed; open: slice order and pilot users (TASK-0047); KVKK inventory deferred (D-214, DEF-007)
+- 2026-09-19: Phase 01 still open — all exit deliverables in — permission matrix (TASK-0045, D-215), domain model (TASK-0046), slice order and pilots (TASK-0047, D-216); awaiting owner approval of the exit; KVKK inventory deferred (D-214, DEF-007)
 - 2026-09-19: glossary confirmed by the owner — 234 terms CONFIRMED, OQ-007 closed
 - D-213 (2026-09-19, TASK-0039): every scope § citation replaced by REQ ids; section map in `docs/requirements/README.md`; scope at Git tag `scope-archive`; validator rejects an unnamed §
 - D-209…D-212 (2026-09-19, NFR round): RPO ≤ 1 h, RTO ≤ 4 h, Turkish-only interface, sizing for 50–150 users
