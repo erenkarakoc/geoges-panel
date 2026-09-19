@@ -1,6 +1,6 @@
 # Alan Modeli
 
-Durum: Parti 1 CONFIRMED (sahip, 2026-09-19); Parti 2 (INV, PUR, FAC, FIN) TASLAK · Son güncelleme: 2026-09-19
+Durum: Parti 1–2 CONFIRMED (sahip, 2026-09-19); Parti 3 (EQP, HR, CRM, QTE, CMP, QHS) TASLAK · Son güncelleme: 2026-09-19
 
 Her modülün **ana kayıtları**, aralarındaki **ilişkiler** ve hiçbir koşulda bozulmaması gereken **değişmez kurallar** (invariant). Kayıt adları sözlüğün kod adlarıdır (`docs/domain/GLOSSARY.md`); her kural onu doğuran gereksinime bağlıdır. Olaylar, aksiyonlar ve koşul alanları her modülün `docs/requirements/REQ-<MODÜL>.md` dosyasındaki yetenek kataloğundadır; burada tekrarlanmaz. Tablolar, sütunlar ve satır görünürlüğü Phase 04'te bu modelden türetilir (TASK-0046).
 
@@ -271,3 +271,90 @@ Ortak kurallar (her modül için geçerli):
 - **FIN-K8** Cari hareketi silinmez; yanlış hareket ters kayıtla düzeltilir; firma başına para birimi bazında tek net bakiye vardır (REQ-FIN-018, REQ-FIN-019).
 - **FIN-K9** Onaysız ödeme "ödendi" olamaz; hazırlayan kendi ödemesini onaylayamaz (REQ-FIN-025).
 - **FIN-K10** Engelleyici kalemi olan birim dönemini kapatamaz; kapalı döneme doğrudan kayıt girilemez; yeniden açma gerekçe ister (REQ-FIN-028, REQ-FIN-029).
+
+---
+
+## EQP — Ekipman ve araçlar
+
+**Ana kayıtlar:** `Asset` (demirbaş/varlık kartı: kategori, bedel, faydalı ömür, kendi malı/kiralık, durum) · `AssetGroup` (lokasyon başına adetle izlenen düşük değerli eşya) · `RentedAsset` (kiralayan, bedel, süre) · `AssetLocationPeriod` (hangi tarihler arasında nerede) · `AssetAssignment` (zimmet) · `AssetCustodyRecord` (devir-teslim tutanağı, iki taraf onayı) · `EquipmentWorkingDay` · `PeriodicInspection` · `Breakdown` (arıza ve tamir) · `AssetWriteOff` · `CraneDailyLog`.
+
+**İlişkiler:** `Asset` 1—N `AssetLocationPeriod` N—1 `Location` veya `Site`; `Asset` 1—N `AssetAssignment` N—1 `Employee`; `Asset` 1—N `EquipmentWorkingDay` N—1 `Site` (kaynağı `EquipmentUseEntry` veya `CraneDailyLog`); `Asset` 1—N `PeriodicInspection`, `Breakdown`.
+
+**Değişmez kurallar**
+
+- **EQP-K1** Aynı seri numarası veya plakayla ikinci kart açılmaz (REQ-EQP-001).
+- **EQP-K2** Bir varlık aynı anda iki lokasyonda bulunmaz (REQ-EQP-006).
+- **EQP-K3** Kendi malı varlığın her günü ya bir şantiyeye (çalıştığı gün) ya atıl ekipman giderine yazılır; hiçbir gün boş kalmaz, hiçbir gün iki kez yazılmaz; kiralık varlık ve grup eşyası amortismana girmez (REQ-EQP-003, REQ-EQP-004, REQ-EQP-010).
+- **EQP-K4** İki tarafın onayı (veya kâğıt tutanak fotoğrafı) olmadan devir tamamlanmaz ve zimmet değişmez (REQ-EQP-008).
+- **EQP-K5** Km ve saat sayacı bir önceki okumadan küçük girilemez (REQ-EQP-008, REQ-EQP-019).
+- **EQP-K6** Zayi edilen varlık pasifleşir, silinmez; kalan değeri bir maliyet merkezine yazılır (REQ-EQP-014).
+
+## HR — Personel ve bordro
+
+**Ana kayıtlar:** `Employee` (personel kartı, kayıtlı birim ve geçerlilik tarihleri) · `Timesheet` (aylık puantaj; kaynağı `TimesheetEntry` veya elle giriş) · `Payroll` ve `PayrollLine` (bordro ve kişi satırı: brüt, SGK, vergi, kesinti, net, durum) · `PayrollParameter` · `SalaryAdvance` · `BankPaymentFile` · `Leave` ve `LeaveBalance` · `OnboardingChecklist` ve `OffboardingChecklist` · `TrainingRecord` · `DailyActivityReport` · sağlık raporunun yalnız varlığı ve tarihleri.
+
+**İlişkiler:** `Employee` 0—1 `User` (IAM); `Employee` 1—N `PayrollLine` N—1 `Payroll`; `PayrollLine` N—1 `PayrollParameter` sürümü; `Employee` 1—N `Leave`, `SalaryAdvance`, `AssetAssignment` (EQP).
+
+**Değişmez kurallar**
+
+- **HR-K1** Hassas alanlar (maaş, SGK, IBAN, prim) yalnız hassas izni olan role görünür; listede, dışa aktarımda ve geçmişte de (REQ-HR-002).
+- **HR-K2** Sağlık raporunun kendisi panelde saklanmaz; yalnız varlığı ve tarihleri (REQ-HR-002, D-186).
+- **HR-K3** Onaylanmış bordro parametre değişince yeniden hesaplanmaz; onaylanan bordro kilitlidir (REQ-HR-007, REQ-HR-008).
+- **HR-K4** Bordroyu hazırlayan kendi bordrosunu onaylayamaz; onaylanmamış bordro için ödeme dosyası üretilemez (REQ-HR-008, REQ-HR-011).
+- **HR-K5** Kesilen avans verilen avansı aşamaz (REQ-HR-010).
+- **HR-K6** Onaylanmamış günlük kaydın puantajı bordroya girmez (REQ-HR-004).
+- **HR-K7** Ayrılan personelin üzerinde zimmet veya avans varsa çıkış listesi kapanmaz (REQ-HR-015).
+
+## CRM — Talepler ve müşteriler
+
+**Ana kayıtlar:** `Party` (firma; rolleri: işveren, müşteri, tedarikçi…) · `Lead` (talep: kaynak, ilgilenecek kişi, dönüş tarihi, aşama, kayıp nedeni) · `ContactLog` · `ClientScorecard` (hesaplanan görünüm) · `ScorecardNote` · `Tender`.
+
+**İlişkiler:** `Lead` N—1 `Party`; `Lead` 1—N `Quote` (QTE); `Lead` 0—1 `Project` (PRJ); `Party` 1—N `ContactLog`, `ScorecardNote`.
+
+**Değişmez kurallar**
+
+- **CRM-K1** Bir gerçek firma için tek `Party` kaydı vardır (REQ-CRM-004, D-027).
+- **CRM-K2** "Kaybedildi" kayıp nedeni olmadan işaretlenmez (REQ-CRM-006).
+- **CRM-K3** Karne notu değiştirilmez ve silinmez; karnede elle puan yoktur (REQ-CRM-009, REQ-CRM-010).
+- **CRM-K4** Bir talepten yalnız bir proje açılır; ürün satışında proje açılmaz (REQ-CRM-014).
+
+## QTE — Teklif ve ürün satışı
+
+**Ana kayıtlar:** `Quote` (durum, tür: uygulama/ürün, hedef marj) · `QuoteVersion` (gönderilmiş, değişmez sürüm ve belgesi) · `QuoteLine` (kalem, miktar, birim fiyat, para birimi, önerilen ve girilen tahmini maliyet) · `QuoteTemplate` · `LessonNote` · `SalesOrder` ve `SalesOrderShipment`.
+
+**İlişkiler:** `Quote` N—1 `Lead`; `Quote` 1—N `QuoteVersion` 1—N `QuoteLine`; kazanılan `QuoteVersion` 0—1 `Project` veya 0—1 `SalesOrder`; `SalesOrder` 1—N `StockReservation` (INV) ve `SalesOrderShipment`.
+
+**Değişmez kurallar**
+
+- **QTE-K1** Gönderilmiş sürüm değiştirilemez; değişiklik yeni sürümdür (REQ-QTE-003).
+- **QTE-K2** Bir talebin teklifi kazanılınca diğer açık teklifleri iptal olur (REQ-QTE-002).
+- **QTE-K3** Tahmini maliyet ve marj teklif belgesinde hiçbir zaman yer almaz (REQ-QTE-012).
+- **QTE-K4** Projenin veya satış siparişinin kalemleri kazanılan sürümden gelir ve ona bağlıdır (REQ-QTE-009, REQ-QTE-014).
+- **QTE-K5** Tedarikçiden doğrudan sevkte stok hareketi oluşmaz (REQ-QTE-015).
+
+## CMP — Sözleşme ve uyum
+
+**Ana kayıtlar:** `Contract` (tür: işveren, taşeron, tedarikçi çerçeve) · `ContractAmendment` (tarihli yeni sürüm) · `Obligation` (sorumlu taraf, son tarih, durum, ceza riski) · `ExtensionOfTime` · `ClientDelayFile` · `NoticeLetter` · `Guarantee` (mektup, kesinti, nakit) · `GuaranteeCommission` · `DisputeFile` · süreli resmi belge.
+
+**İlişkiler:** `Contract` N—1 `Party`, N—0..1 `Project`; `Contract` 1—N `ContractAmendment`, `Obligation`; `ExtensionOfTime` N—1 `Contract`; `NoticeLetter` N—1 `Obligation`.
+
+**Değişmez kurallar**
+
+- **CMP-K1** Her hesap işlem tarihinde geçerli sözleşme sürümünü kullanır; önceki sürüm silinmez (REQ-CMP-005).
+- **CMP-K2** Geçerli taşeron sözleşmesi olmayan ekip için taşeron hakedişi hazırlanamaz (REQ-CMP-003).
+- **CMP-K3** Sözleşme bitiş tarihi yalnız işverenin süre uzatımı kararı girilince değişir (REQ-CMP-011).
+- **CMP-K4** Hakediş, nakit projeksiyonu ve ceza hesabı şartları sözleşmeden okur; aynı şart ikinci yerde girilmez (REQ-CMP-002).
+
+## QHS — Kalite ve İSG
+
+**Ana kayıtlar:** `TestCertificate` · `MaterialLot` (INV ile ortak) · `QualityCheck` · `Nonconformity` (tür, etki seviyesi, kök neden, tekrar mı) · `CorrectiveAction` (DÖF aksiyonu) · `OhsIncident` (kaza veya ramak kala; sağlık bilgisi yok) · `TrainingRecord` · `OhsChecklist` · `RiskAssessment` · `PpeIssue`.
+
+**İlişkiler:** `TestCertificate` N—1 `MaterialLot`; `Nonconformity` 1—N `CorrectiveAction` 1—1 `Task` (TSK); `Nonconformity` 0—1 önceki `Nonconformity` (tekrar); `PpeIssue` N—1 `Employee` ve 1—1 `StockMovement` (INV).
+
+**Değişmez kurallar**
+
+- **QHS-K1** Kök neden ve en az bir aksiyon olmadan, açık aksiyonu varken uygunsuzluk kapanmaz (REQ-QHS-005, REQ-QHS-006).
+- **QHS-K2** İSG olayında sağlık bilgisi için alan veya belge türü yoktur (REQ-QHS-009).
+- **QHS-K3** Ramak kala hiçbir performans veya prim hesabında olumsuz sayılmaz (REQ-QHS-011).
+- **QHS-K4** Ciddi kaza veya açık kritik İSG bulgusu olan dönemde şantiyenin hız ve prim hedefi başarılı sayılmaz (REQ-QHS-016).
+- **QHS-K5** "Kaldı" sonucu partiyi bloke etmez, ama kararı girilene kadar parti işaretli görünür (REQ-QHS-003).

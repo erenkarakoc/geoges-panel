@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Domain model, batch 3
+
+- The owner confirmed batch 2 and its six record names. Batch 3 adds equipment, HR, CRM, quotes, contracts and quality/OHS to `docs/domain/DOMAIN_MODEL.md`, with six new record names proposed in the glossary.
+
+
 ## 2026-09-19 — Domain model, batch 2
 
 - The owner confirmed batch 1 and its seventeen record names. Batch 2 adds inventory, purchasing, factory and finance to `docs/domain/DOMAIN_MODEL.md`, with six new record names proposed in the glossary.
