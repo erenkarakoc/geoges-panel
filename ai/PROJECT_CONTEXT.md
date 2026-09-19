@@ -1,6 +1,6 @@
 # PROJECT CONTEXT
 
-Last updated: 2026-09-18
+Last updated: 2026-09-19
 
 ## Company
 
@@ -27,11 +27,11 @@ Excel, WhatsApp and Drive are not used as record systems; the panel replaces the
 
 | File | Role |
 |---|---|
-| `docs/sources/functional-scope.md` (was `Geoges Panel Özellik Yapısı.md`) | Functional scope (46 sections) — primary requirement source |
-| `docs/sources/architecture-principles.md` (was `Geoges Panel Mimari.md`) | Architectural principles (single source of truth, event-centric, workflow engine, audit, permissions) |
-| `docs/sources/ai-development-protocol.md` (was `AI_Destekli_Proje_Gelistirme_Ana_Promptu.md`) | Engineering protocol, revised into `ai/PROJECT_RULES.md` |
+| Functional scope (was `Geoges Panel Özellik Yapısı.md`; removed 2026-09-19, Git tag `scope-archive`) | 46 sections, now carried by `docs/requirements/` (map at the end of its README) |
+| Architecture principles (was `Geoges Panel Mimari.md`; removed 2026-09-19, Git tag `scope-archive`) | Now carried by `docs/architecture/PRINCIPLES.md` and the ADRs |
+| Engineering protocol (was `AI_Destekli_Proje_Gelistirme_Ana_Promptu.md`; removed 2026-09-19, Git tag `scope-archive`) | Revised into `ai/PROJECT_RULES.md` |
 
-These sources are temporary and are removed at Phase 01 exit once fully decomposed (TASK-0027, `docs/sources/README.md`).
+The three source files were removed from the repository at Phase 01 exit (TASK-0027, 2026-09-19) after being fully decomposed; Git tag `scope-archive` keeps their text.
 
 Older attempts in `../eski/` were analyzed to extract missed requirements (already merged into the functional scope). **Their code is out of scope and must not be reused** (ADR-007).
 

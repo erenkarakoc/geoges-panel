@@ -2,7 +2,7 @@
 
 Durum: Kalıcı · Son güncelleme: 2026-09-19
 
-Bu belge, sahibin başlangıçta verdiği mimari yaklaşım belgesinin (Git'te `scope-archive` etiketinde, `docs/sources/architecture-principles.md`) kalıcı karşılığıdır. Kaynak klasör kaldırıldıktan sonra (TASK-0027) ilkelerin bağlayıcı hali buradadır. Her ilke kısa ifadesiyle ve **nerede karşılandığıyla** yazılmıştır; henüz ayrıntılı bir kararı olmayan ilke, hangi fazda somutlaşacağıyla birlikte kayıtlıdır ve o fazın tasarımı bu ilkeye uymak zorundadır.
+Bu belge, sahibin başlangıçta verdiği mimari yaklaşım belgesinin (eskiden `docs/sources/architecture-principles.md`; 2026-09-19'da kaldırıldı, metni Git'te `scope-archive` etiketinde) kalıcı karşılığıdır. İlkelerin bağlayıcı hali buradadır (TASK-0027). Her ilke kısa ifadesiyle ve **nerede karşılandığıyla** yazılmıştır; henüz ayrıntılı bir kararı olmayan ilke, hangi fazda somutlaşacağıyla birlikte kayıtlıdır ve o fazın tasarımı bu ilkeye uymak zorundadır.
 
 Ana karar: GEOGES Panel çok sayıda bağımsız küçük uygulama değil, **tek sistem içinde sınırları çok net modüller** olarak kurulur. En kritik üç omurga: tek gerçek veri kaynağı, merkezi iş akışı ve kural motoru, değiştirilemez ve geriye dönük izlenebilir denetim geçmişi.
 

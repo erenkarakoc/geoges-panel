@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — `docs/sources/` removed
+
+- With the owner's approval the three starting documents — the functional scope, the architecture principles and the original engineering protocol — were removed from the repository (TASK-0027). Nothing is lost: their text is at Git tag `scope-archive`, the scope's sections are mapped to requirements at the end of `docs/requirements/README.md`, the principles live in `docs/architecture/PRINCIPLES.md`, and the protocol in `ai/PROJECT_RULES.md`. Every record that named one of the files now says where it went.
+
+
 ## 2026-09-19 — Architecture principles have a permanent home
 
 - Before the source folder goes, its fifteen architecture principles were checked one by one against the records. Twelve are already carried by an ADR, a decision or requirements. Three were only implied — one master record per fact, people enter facts and the system computes results, reports read from summary views — so `docs/architecture/PRINCIPLES.md` now states all fifteen and the layer model, each with where it is decided, and binds the three open ones to the phase that must honour them (Phase 04 data model, Phase 02 forms, Phase 03 read models).
@@ -506,7 +511,7 @@
 
 ## 2026-09-16 — Source documents moved out of repo root
 
-- Owner request (clean root): `Geoges Panel Özellik Yapısı.md` → `docs/sources/functional-scope.md`, `Geoges Panel Mimari.md` → `docs/sources/architecture-principles.md`, `AI_Destekli_Proje_Gelistirme_Ana_Promptu.md` → `docs/sources/ai-development-protocol.md` (`git mv`, history kept). Added `docs/sources/README.md` (old-name mapping, deletion conditions).
+- Owner request (clean root): `Geoges Panel Özellik Yapısı.md` → `docs/sources/functional-scope.md`, `Geoges Panel Mimari.md` → `docs/sources/architecture-principles.md` (all three removed 2026-09-19, Git tag `scope-archive`), `AI_Destekli_Proje_Gelistirme_Ana_Promptu.md` → `docs/sources/ai-development-protocol.md` (`git mv`, history kept). Added `docs/sources/README.md` (old-name mapping, deletion conditions).
 - References updated in `README.md`, `ai/PROJECT_RULES.md`, `ai/PROJECT_CONTEXT.md`, `ai/REQUIREMENTS.md`, `docs/requirements/README.md`, `docs/README.md`. Historical changelog entries keep the old names. TASK-0027 tracks deletion at Phase 01 exit.
 
 ## 2026-09-16 — Milestone M0: CHG-002 approved, scaffold (branch `feature/m0-early-first-screen`)

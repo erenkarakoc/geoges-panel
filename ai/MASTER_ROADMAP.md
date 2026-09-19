@@ -143,7 +143,7 @@ STATUS: DONE
 - **Acceptance:** every section of the functional scope maps to ≥1 REQ; no REQ without owner module; owner has approved business rules marked T1.
 - **Risks:** scope size (RISK-002); hidden calculation rules.
 - **Status:** `QUESTIONS_PENDING`. Glossary rounds 1–2 done (D-027…D-034); Slice 1 requirement rounds 1–3 done (D-035…D-041, D-048…D-050). No REQ file has been written yet — `docs/requirements/` holds only its README, so the phase's main deliverable is entirely outstanding.
-- **Exit blocker:** TASK-0027 (deleting `docs/sources/`) may not run until every `§` reference in the records has been remapped to a REQ id. See CHG-005.
+- **Exit blocker (resolved 2026-09-19):** TASK-0027 could not run until every `§` reference was remapped to a REQ id (CHG-005). TASK-0039 remapped them (D-213) and `docs/sources/` was removed on 2026-09-19; Git tag `scope-archive` keeps the text.
 - **CHG-006 deliverable:** every module's **capability catalog** — events it publishes, actions it exposes, typed and classified fields conditions may read (TASK-0041). REQ-WFL-011, REQ-WFL-028 is filed under `REQ-WFL`. Record-type builder requirements are written here too (D-079).
 
 ## PHASE 02 — UX, Information Architecture & User Flows

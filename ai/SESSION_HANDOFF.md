@@ -43,4 +43,4 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 
 ## Next session
 
-1. Phase 01 exit: glossary confirmed 2026-09-19 (OQ-007 closed); TASK-0027 (architecture check done, `docs/architecture/PRINCIPLES.md`; owner approval, then remove `docs/sources/` and repoint its ~27 path references to tag `scope-archive`). TASK-0039 DONE 2026-09-19 (D-213), following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).
+1. Phase 01 exit work is done: glossary confirmed (OQ-007), § remap (TASK-0039, D-213), architecture principles in `docs/architecture/PRINCIPLES.md`, `docs/sources/` removed 2026-09-19 (TASK-0027; Git tag `scope-archive`). Next: owner review of the Phase 01 exit and the move to Phase 02.

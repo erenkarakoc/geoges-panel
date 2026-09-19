@@ -4,11 +4,8 @@ Durum: Phase 01'de dolduruluyor · Son güncelleme: 2026-09-19
 
 ## Kaynaklar
 
-- `docs/sources/functional-scope.md` (fonksiyonel kapsam, birincil kaynak; "Özellik Yapısı §N")
-- `docs/sources/architecture-principles.md` (mimari ilkeler; atıfları eşleme tablosunun başında)
+- Fonksiyonel kapsam (Özellik Yapısı) ve mimari ilkeler: Phase 01 sonunda depodan kaldırıldı (TASK-0027, 2026-09-19); metinleri Git'te `scope-archive` etiketinde. Kapsamın bölümleri bu dosyanın sonundaki eşleme tablosuyla gereksinimlere bağlıdır; mimari ilkeler `docs/architecture/PRINCIPLES.md`'dedir.
 - Phase 00 ve Phase 01 kararları (`ai/DECISIONS.md`)
-
-Bu dosyalar ayrıştırılıp REQ kayıtlarına dönüştükten sonra `docs/sources/` klasörü silinir (TASK-0027). Kaldırmadan önce `ai/REQUIREMENTS.md` kapsama tablosunda her bölümün tamamlandığı doğrulanır.
 
 ## Dosya düzeni
 
@@ -77,9 +74,9 @@ Her `REQ-<MODUL>.md` dosyası, modülün iş akışı tasarımcısına sunduklar
 
 ## Kapsam eşleme tablosu (TASK-0039, D-075)
 
-Özellik Yapısı (`docs/sources/functional-scope.md`) Phase 01 sonunda kaldırılır (TASK-0027); metni Git geçmişinde, `scope-archive` etiketinde okunur. Kayıtlar artık kapsamın bölüm numarasına değil, o bölümü karşılayan gereksinimlere atıf yapar. Bu tablo her bölümün hangi gereksinimlere dağıldığını gösteren kalıcı eşlemedir ve bölüm numarası taşımasına izin verilen tek kayıttır. "Eşleme" sütunu, gereksinimin bölüme doğrudan mı, alt bölümleri üzerinden mi, yoksa üst bölümü üzerinden mi bağlandığını söyler.
+Özellik Yapısı (eskiden `docs/sources/functional-scope.md`) Phase 01 sonunda depodan kaldırıldı (TASK-0027, 2026-09-19); metni Git'te `scope-archive` etiketinde okunur. Kayıtlar artık kapsamın bölüm numarasına değil, o bölümü karşılayan gereksinimlere atıf yapar. Bu tablo her bölümün hangi gereksinimlere dağıldığını gösteren kalıcı eşlemedir ve bölüm numarası taşımasına izin verilen tek kayıttır. "Eşleme" sütunu, gereksinimin bölüme doğrudan mı, alt bölümleri üzerinden mi, yoksa üst bölümü üzerinden mi bağlandığını söyler.
 
-Mimari ilkeler belgesine (`docs/sources/architecture-principles.md`) yapılan iki atıf şöyle taşındı: Mimari §6 (iş akışı motoru) → ADR-006; Mimari §13 (merkezi kurallar) → REQ-WFL-032.
+Mimari ilkeler belgesine (eskiden `docs/sources/architecture-principles.md`, kaldırıldı) yapılan iki atıf şöyle taşındı: Mimari §6 (iş akışı motoru) → ADR-006; Mimari §13 (merkezi kurallar) → REQ-WFL-032.
 
 | Bölüm | Başlık | Gereksinimler | Eşleme |
 |---|---|---|---|

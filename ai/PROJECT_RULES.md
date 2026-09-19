@@ -2,13 +2,13 @@
 
 Status: ACTIVE · Owner: project owner · Last updated: 2026-09-19
 
-These rules are a working protocol, not advice. Source: `docs/sources/ai-development-protocol.md` (originally `AI_Destekli_Proje_Gelistirme_Ana_Promptu.md`), revised by the Phase 00 decision round (see `ai/DECISIONS.md`). Where this file and the original prompt differ, this file wins.
+These rules are a working protocol, not advice. Source: the original engineering protocol (`AI_Destekli_Proje_Gelistirme_Ana_Promptu.md`, later `docs/sources/ai-development-protocol.md`, removed 2026-09-19; Git tag `scope-archive`), revised by the Phase 00 decision round (see `ai/DECISIONS.md`). Where this file and the original prompt differ, this file wins.
 
 ---
 
 ## 1. Scope protection
 
-- Everything agreed in `docs/sources/functional-scope.md`, `docs/sources/architecture-principles.md` and recorded decisions is in scope. After these sources are removed (TASK-0027), the REQ records, ADRs and `docs/` are the scope of record.
+- Everything agreed in the original functional scope and architecture principles (removed from the repository 2026-09-19, Git tag `scope-archive`) and in recorded decisions is in scope. After these sources are removed (TASK-0027), the REQ records, ADRs and `docs/` are the scope of record.
 - No agreed feature may be silently removed, simplified, changed, deferred or substituted.
 - Deferral is allowed only as a recorded `DEFERRED` item (`ai/DEFERRED.md`) with reason, revisit phase and dependencies.
 - "Let's do it this way for now / we'll fix it later" is not allowed without a `DEFERRED` or `OPEN_QUESTIONS` record.
