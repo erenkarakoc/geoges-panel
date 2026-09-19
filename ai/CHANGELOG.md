@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-19 — RPT §34 requirements
+
+- Three reporting decisions (D-206…D-208), all as recommended. The official daily site report is produced as soon as the log is approved but goes to the client only when a person sends it, so no workflow ever mails data out; reports are ready-made with filters and saved views rather than a report designer; and scheduled reports reach internal users only, each copy filtered by its reader's permissions. Scheduling is a workflow with a new catalog action, `report.send_to_users`, in keeping with D-181.
+- REQ-RPT gains REQ-RPT-015…023, DRAFT, layer-tagged; the first fourteen stay confirmed.
+
+
 ## 2026-09-19 — STR confirmed
 
 - The owner confirmed REQ-STR with both derived rules: 8 more requirements CONFIRMED, 409 in all. Next: RPT §34, then NFR.

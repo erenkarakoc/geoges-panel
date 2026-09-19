@@ -202,6 +202,14 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — RPT §34 requirement round (2026-09-19)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-206 | **The official daily site report is produced on approval but sent to the client by a person** (download, or "send by e-mail" to the client addresses on the project), and the sending is recorded; no workflow sends it out, keeping REQ-WFL-006 intact | Owner 2026-09-19; §34.5 |
+| D-207 | **Reports are ready-made with filters and saved views**; users do not design new report types (user-defined record types keep their own reports, REQ-WFL-035) | Owner 2026-09-19; §34.2 |
+| D-208 | **Scheduled reports go to internal users only**, each filtered by the recipient's permissions; scheduling is a workflow (calendar trigger + `report.send_to_users`), per D-181 | Owner 2026-09-19; §34; D-181 |
+
 ## PHASE 01 — STR requirement round (2026-09-19)
 
 | ID | Decision | Ref |

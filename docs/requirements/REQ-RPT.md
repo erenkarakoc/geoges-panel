@@ -1,8 +1,8 @@
 # REQ-RPT — "Bugün", Sahip Görünümü ve Şantiye Detayı
 
-Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: RPT (Reporting & Cockpit)
+Durum: KISMEN CONFIRMED (001…014 sahip, 2026-09-18; 015…023 DRAFT) · 2026-09-19 · Modül: RPT (Reporting & Cockpit)
 
-Kaynaklar: Özellik Yapısı §3, §14; kararlar D-056, D-065, D-106, D-126…D-129. **Kapsam dışı (henüz):** §34 raporlar ve dışa aktarım, ayrı bir soru turuyla Phase 01 içinde bu dosyaya eklenecek.
+Kaynaklar: Özellik Yapısı §3, §14, §34; kararlar D-056, D-065, D-106, D-126…D-129, D-206…D-208. REQ-RPT-001…014 CONFIRMED (sahip, 2026-09-18); §34 bölümü (REQ-RPT-015…023) DRAFT, 2026-09-19.
 
 **Sınır.** RPT kendi verisini üretmez; diğer modüllerin olaylarından ve kayıtlarından türetir. Şantiye genel ekranındaki temel bilgiler REQ-SIT-001'dedir; şantiye listesi ve özet tablosu SIT ekranlarındadır (REQ-RPT-006). Uyarı eşikleri merkezi kurallardır (REQ-WFL-032). Kâr-zarar ve maliyet hesabı REQ-FIN'dedir; RPT yalnızca gösterir ve etkenlere ayırır.
 
@@ -169,6 +169,103 @@ Terimler (`docs/domain/GLOSSARY.md`): Today Screen, Owner Cockpit, Indicator, At
   - [ ] Kayıt girilmemiş iş günü listede boş satır olarak değil, belirgin bir "kayıt yok" satırı olarak görünür.
 - Durum: CONFIRMED
 
+## E. Raporlar ve analitik (§34)
+
+### REQ-RPT-015 — Zaman bazlı raporlar
+
+- Kaynak: §34, §34.1
+- Öncelik: Must · Kademe: T1
+- Katman: Sabit
+- Açıklama: Raporlar günlük, haftalık, 15 günlük, aylık, seçilen dönem ve proje başlangıcından bugüne olarak üretilir.
+- Kabul kriterleri:
+  - [ ] Aynı rapor, dönem seçimi değiştirilerek yeniden hesaplanır; tatil günleri çalışma takvimine göre dikkate alınır.
+- Durum: DRAFT
+
+### REQ-RPT-016 — Hazır rapor konuları
+
+- Kaynak: §34.2
+- Öncelik: Must · Kademe: T1
+- Katman: Sabit
+- Açıklama: Hazır raporlar: şirket kâr-zarar, proje kâr-zarar, üretim miktarları, hedef-gerçekleşen, kişi/ekip/şantiye verimi, fire/zayi, stok tüketimi, malzeme maliyet trendi, fabrika birim maliyet, ekipman kullanım/atıl gün, hakediş ve tahsilat, cari, nakit projeksiyonu, performans/KPI, sözleşme yükümlülükleri, kalite/İSG, yan gelirler. Yeni rapor türü eklemek geliştirme ister; kullanıcı tanımlı kayıt türlerinin raporları REQ-WFL-035'tedir (D-207).
+- Kabul kriterleri:
+  - [ ] Her rapor kullanıcının kapsamına ve veri sınıfı izinlerine göre süzülür; ticari rapor ticari yetkisi olmayana görünmez.
+- Durum: DRAFT
+
+### REQ-RPT-017 — Filtre ve kayıtlı görünüm
+
+- Kaynak: D-207
+- Öncelik: Must · Kademe: T2
+- Katman: Sabit
+- Açıklama: Kullanıcı hazır raporda dönem, proje, şantiye, kişi, ekip gibi filtreleri seçer, sütun gizler ve bu hali ad vererek kaydeder. Kayıtlı görünüm kişiseldir; yetkili kişi bir görünümü role paylaşabilir.
+- Kabul kriterleri:
+  - [ ] Paylaşılan görünüm, her kullanıcıya kendi yetkisiyle süzülmüş olarak açılır.
+- Durum: DRAFT
+
+### REQ-RPT-018 — Trend ve karşılaştırma
+
+- Kaynak: §34.3
+- Öncelik: Must · Kademe: T2
+- Katman: Sabit
+- Açıklama: Bu ay geçen aya göre, şantiye A şantiye B'ye göre, ekip A ekip B'ye göre ve aynı tip iş geçmiş projeye göre karşılaştırılır.
+- Kabul kriterleri:
+  - [ ] Karşılaştırılan iki tarafın dönemi ve kapsamı başlıkta açıkça yazar.
+- Durum: DRAFT
+
+### REQ-RPT-019 — PDF ve Excel dışa aktarım
+
+- Kaynak: §34.4
+- Öncelik: Must · Kademe: T1
+- Katman: Sabit
+- Açıklama: Uygun raporlar PDF ve Excel olarak dışa aktarılır; işveren gecikme dosyası (REQ-CMP-012) ve yönetim raporları yazdırılabilir biçimdedir.
+- Kabul kriterleri:
+  - [ ] Dışa aktarım, kullanıcının ekranda görebildiğinden fazlasını içermez.
+  - [ ] Her dışa aktarım kim, ne zaman ve hangi rapor bilgisiyle denetim kaydına yazılır.
+- Durum: DRAFT
+
+### REQ-RPT-020 — Resmi günlük saha raporu
+
+- Kaynak: §34.5
+- Öncelik: Must · Kademe: T1
+- Katman: Sabit
+- Açıklama: Günlük saha kaydı onaylanınca standart biçimde PDF günlük saha raporu kendiliğinden üretilir ve arşive eklenir (REQ-DOC-001). Raporda şantiye, proje, işveren, tarih, hava ve sıcaklık; personel sayıları (mühendis, formen, işçi, vinç operatörü, bekçi vb.); vinç sayıları (kendi malı / kiralık); gelen beton ve yakıt miktarları; panel tipi bazında döküm durumu (bugün / kümülatif / kalan); montaj ve şerit durumu; duvar bazında çelik şerit montaj icmali; notlar ve sorumlu kişiler bulunur. Rapor ticari veri içermez.
+- Kabul kriterleri:
+  - [ ] Onaylanmamış kayıttan resmi rapor üretilmez.
+  - [ ] Revizyonla değişen kaydın raporu yeni sürüm olarak üretilir; önceki sürüm saklanır (REQ-DOC-005).
+- Durum: DRAFT
+
+### REQ-RPT-021 — Günlük raporu işverene bir kişi gönderir
+
+- Kaynak: §34.5; D-206
+- Öncelik: Must · Kademe: T2
+- Katman: Sabit
+- Açıklama: Rapor işverene kendiliğinden gönderilmez. Yetkili kişi raporu indirip gönderir ya da "e-postayla gönder" ile projede kayıtlı işveren adreslerine yollar; gönderim kim, ne zaman ve kime bilgisiyle kaydedilir. Bu, akışların dış sisteme veri göndermeme kuralıyla (REQ-WFL-006) uyumludur.
+- Kabul kriterleri:
+  - [ ] Hiçbir akış günlük raporu dış bir adrese gönderemez.
+  - [ ] Raporun işverene gönderilip gönderilmediği rapor listesinde görünür.
+- Durum: DRAFT
+
+### REQ-RPT-022 — Geçmiş günlük raporlar
+
+- Kaynak: §34.5
+- Öncelik: Must · Kademe: T2
+- Katman: Sabit
+- Açıklama: Geçmiş günlük raporlar tarih ve şantiyeye göre listelenir ve seçilen aralık toplu olarak dışa aktarılır.
+- Kabul kriterleri:
+  - [ ] Toplu dışa aktarım yalnızca kullanıcının görebildiği şantiyelerin raporlarını içerir.
+- Durum: DRAFT
+
+### REQ-RPT-023 — Zamanlı raporlar iç kullanıcılara akışla gider
+
+- Kaynak: D-208
+- Öncelik: Should · Kademe: T2
+- Katman: Sabit + Akış
+- Akışla ayarlanan: hangi raporun, hangi takvimle ve hangi iç kullanıcılara gideceği (takvim tetikleyicisi + `report.send_to_users` aksiyonu)
+- Açıklama: Bir rapor belirli aralıklarla panel kullanıcılarına e-posta ve panel bildirimiyle gönderilebilir (ör. her pazartesi haftalık yönetim raporu sahiplere). Bu bir akıştır; RPT aksiyonu yayımlar. Her alıcı raporu kendi yetkisiyle süzülmüş olarak alır. Dış adreslere zamanlı gönderim yoktur.
+- Kabul kriterleri:
+  - [ ] Alıcı listesinde yalnızca panel kullanıcıları seçilebilir.
+  - [ ] Yetkisi olmayan alıcıya rapor boş değil, hiç gönderilmez.
+- Durum: DRAFT
+
 ---
 
 ## Yetenek kataloğu — RPT
@@ -181,10 +278,16 @@ Biçim: `docs/requirements/README.md`. RPT türetilmiş veriyi yayımlar; akış
 |---|---|---|---|---|
 | `attention_item.raised` | Dikkat öğesi oluştu | Bir uyarı durumu ortaya çıktığında | tür, kaynak kayıt, şantiye | iç |
 | `attention_item.resolved` | Dikkat öğesi kapandı | Sebebi ortadan kalktığında | tür, kaynak kayıt, açık kaldığı süre | iç |
+| `daily_site_report.generated` | Günlük saha raporu üretildi | Günlük kayıt onaylanınca | şantiye, tarih, sürüm | iç |
+| `daily_site_report.sent_to_client` | Günlük rapor işverene gönderildi | Kişi gönderdiğinde | şantiye, tarih, gönderen | iç |
 
 ### Aksiyonlar
 
-Yok. RPT hiçbir kaydı değiştirmez.
+| Kod | Ad | Girdi | Gereken yetki | İki kez çalışırsa | Yarıda kalırsa |
+|---|---|---|---|---|---|
+| `report.send_to_users` | Raporu kullanıcılara gönder | rapor veya kayıtlı görünüm, dönem, alıcı kullanıcılar | akışın sistem yetkisi; her alıcıya kendi yetkisiyle süzülür | Aynı rapor, dönem ve alıcıya ikinci kez gönderilmez | Gönderilmeyen alıcılar kaydedilir ve tekrar denenir |
+
+RPT bu aksiyon dışında hiçbir kaydı değiştirmez; aksiyon yalnızca panel kullanıcılarına gönderir.
 
 ### Koşul alanları
 
