@@ -41,6 +41,26 @@ Module codes: see `docs/architecture/MODULE_MAP.md`.
 
 **Milestone M0 — early first screen (CHG-002, approved 2026-09-15) — DONE 2026-09-16, owner approved:** runs in parallel with Phase 01. Real Supabase Auth (sign-in, 2FA, password reset), new-role onboarding, app shell and empty dashboard skeleton, local only. Built as the first part of the Phase 07 foundation, not throwaway. Plan: `docs/features/m0-early-first-screen-plan.md`; tasks TASK-0022…TASK-0026.
 
+## Effort estimate (2026-09-20, from measured velocity)
+
+Measured so far (2026-09-15…20, six days, 135 commits): Phase 00 half a day; Phase 01 about 3.5 days (438 requirements, glossary, permission matrix, domain model) while M0 and CHG-004…006 ran alongside; Phase 02 about 1.5 days (108 screens, patterns, states, eight flows, accessibility). The only measurement of build speed is M0 + CHG-004: real authentication with 2FA plus the app shell in about two days, roughly a fifth of Phase 07.
+
+| Phases | Estimate (working days) |
+|---|---|
+| 03 System architecture | 2–3 |
+| 04 Database architecture | 2–3 |
+| 05 Infrastructure & operations | 1–2 |
+| 06 Validation spikes | 1–2 |
+| 07 Foundation build (remainder) | 8–11 |
+| 08 Workflow engine & designer | 6–9 |
+| 09 Slice 1 | 7–10 |
+| 09R Record-type builder | 5–7 |
+| 10–18 Nine slices | 40–55 |
+| 19 Production readiness & rollout | 4–6 |
+| **Total** | **~76–108** |
+
+This is effort, not a schedule; no target date exists (D-049). Four things move it: build work is slower per unit than design work; pilots need calendar time for real users; owner answer latency; and Phase 08, the least predictable phase (RISK-005). Re-estimate after slice 2, when build velocity is measured rather than inferred.
+
 ## Change request register
 
 Every approved change request must appear here, with the phase it changed. Analyses live in `ai/DECISIONS.md`.
