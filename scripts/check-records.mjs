@@ -462,14 +462,19 @@ for (const file of FILES) {
       // A record that describes the removal is allowed to name what it removed.
       const describesRemoval =
         /\b(removed?|deleted?|no longer exists|replaced by|silindi|kaldırıld)/i.test(text);
-      if (DELETED_PATHS.has(target) && !describesRemoval) {
+      // A folder counts as deleted when files under it were deleted and it is gone.
+      const wasDeleted =
+        DELETED_PATHS.has(target) ||
+        (candidate.endsWith("/") &&
+          [...DELETED_PATHS].some((path) => path.startsWith(`${target}/`)));
+      if (wasDeleted && !describesRemoval) {
         fail(
           file,
           number,
           `cites \`${candidate}\`, which was deleted from the repository`,
           "point at what replaced it, or say in the line that it no longer exists",
         );
-      } else {
+      } else if (!wasDeleted) {
         notes.push(`${file}:${number} cites \`${candidate}\`, which does not exist yet`);
       }
     }

@@ -3,6 +3,7 @@
 ## 2026-09-19 — `docs/sources/` removed
 
 - With the owner's approval the three starting documents — the functional scope, the architecture principles and the original engineering protocol — were removed from the repository (TASK-0027). Nothing is lost: their text is at Git tag `scope-archive`, the scope's sections are mapped to requirements at the end of `docs/requirements/README.md`, the principles live in `docs/architecture/PRINCIPLES.md`, and the protocol in `ai/PROJECT_RULES.md`. Every record that named one of the files now says where it went.
+- The validator was wrong about removed paths in two ways, both fixed: a line that describes a removal was still listed as a "forward reference to a file not written yet", and a citation of a deleted folder (`docs/sources/`) was not recognised as deleted at all. A deliberate bad line now fails for both a deleted file and a deleted folder.
 
 
 ## 2026-09-19 — Architecture principles have a permanent home
