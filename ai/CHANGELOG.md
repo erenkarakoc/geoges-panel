@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-19 — Every module has confirmed requirements
+
+- The owner confirmed REQ-NFR. With it the module rounds of Phase 01 are finished: 26 requirement files, 438 requirements, all CONFIRMED, each with its layer and its capability catalog. TASK-0044 and TASK-0041 are done. Only data import (MIG) waits, deferred by DEF-001.
+- What still stands between Phase 01 and its exit: remapping § references to requirement ids (TASK-0039), which then lets `docs/sources/` be removed (TASK-0027); glossary confirmation (OQ-007, TASK-0020); OQ-027 item 3 (Phase 02) and OQ-026 (Phase 03).
+
+
 ## 2026-09-19 — NFR requirements, the last module round
 
 - Four platform decisions (D-209…D-212): at most one hour of data may be lost in a major failure (the owner accepted an hour against the recommended fifteen minutes) and the panel is back within four hours; the interface stays Turkish only; and the system is sized for 50–150 signed-in users.
