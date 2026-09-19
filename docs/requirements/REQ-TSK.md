@@ -2,9 +2,9 @@
 
 Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: TSK (Tasks & Notifications)
 
-Kaynaklar: Özellik Yapısı §25.1–§25.6; kararlar D-040, D-087, D-091, D-097, D-106, D-130…D-133; OQ-016 (cevaplandı, D-132).
+Kaynaklar: kararlar D-040, D-087, D-091, D-097, D-106, D-130…D-133; OQ-016 (cevaplandı, D-132).
 
-**Sınır.** Görevi ve bildirimi iş akışları da üretir (REQ-WFL); TSK onları tutar, gösterir, hatırlatır ve eskale eder. Onay kararları REQ-WFL-012…016'dadır; "Görevlerim" yalnızca bekleyen onayları listeler. İç destek talepleri (§25.7) REQ-SUP'tadır. Erken ve doğru giriş için performans katkısı (§25.6) REQ-PRF'dedir.
+**Sınır.** Görevi ve bildirimi iş akışları da üretir (REQ-WFL); TSK onları tutar, gösterir, hatırlatır ve eskale eder. Onay kararları REQ-WFL-012…016'dadır; "Görevlerim" yalnızca bekleyen onayları listeler. İç destek talepleri (REQ-SUP-001…005) REQ-SUP'tadır. Erken ve doğru giriş için performans katkısı REQ-PRF'dedir.
 
 Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Digest, Push Notification.
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 ### REQ-TSK-001 — Görevin alanları
 
-- Kaynak: §25.1; D-087
+- Kaynak: D-087
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Her görevde başlık, açıklama, sorumlu kişi veya rol, öncelik, son tarih, durum, görevin kaynağı, ilgili proje/birim ve gerekli belge veya eylem görünür. Kaynak, görevi elle veren kişi ya da görevi üreten akış, adım ve kayıttır.
@@ -24,7 +24,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 ### REQ-TSK-002 — Elle ve sistemce oluşan görevler
 
-- Kaynak: §25.1, §25.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: hangi olaydan kime, ne zaman ve hangi son tarihle görev açılacağı; listelenen otomatik görevlerin her biri bir varsayılan akıştır
@@ -56,7 +56,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 ### REQ-TSK-005 — Sistem görevleri kopyalanmaz, sorun çözülünce kapanır
 
-- Kaynak: §25.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Aynı sorun için tekrar tekrar görev açılmaz; sorun sürdükçe mevcut görev açık kalır. Sorun çözüldüğünde sistemin açtığı görev kendiliğinden kapanır.
@@ -69,7 +69,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 ### REQ-TSK-006 — Zamanında ele alınmayan görev üst seviyeye çıkar
 
-- Kaynak: §25.3; D-040; REQ-IAM-014, REQ-IAM-020
+- Kaynak: D-040; REQ-IAM-014, REQ-IAM-020
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: eskalasyon zinciri ve bekleme süreleri (varsayılan: Sorumlu → Koordinatör → Genel Müdür → Sahip)
@@ -83,7 +83,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 ### REQ-TSK-007 — "Görevlerim" ekranı
 
-- Kaynak: §25.4; D-070, D-106
+- Kaynak: D-070, D-106
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Kullanıcı bugün yapacaklarını, gecikenleri, yüksek öncelikleri ve kendisinden onay bekleyenleri görür; gecikenler en üsttedir. Her görev yapılacağı ekrana gider. Açık görev yoksa ekran boş durumunu gösterir.
@@ -105,7 +105,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 ### REQ-TSK-009 — Bildirim merkezi
 
-- Kaynak: §25.5; D-063, D-106
+- Kaynak: D-063, D-106
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Üst alanda bildirim sayacı ve çekmecesi bulunur. Türler: yeni görev, görev gecikmesi, düzeltme isteği, onay talebi, kritik uyarı, rol ataması, belge süresi, stok riski, finansal risk. Her bildirim kaynağına gider. Bildirim yoksa çekmece "Bildirim yok." der.
@@ -115,7 +115,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 ### REQ-TSK-010 — Kanal: panel ve telefona anında bildirim
 
-- Kaynak: D-132; §25.5; OQ-016
+- Kaynak: D-132; OQ-016
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Her bildirim panelde görünür. Yeni görev, onay talebi ve kritik uyarı ayrıca telefona anında bildirim olarak düşer (uygulama yüklemeden, tarayıcı bildirimiyle). E-posta yalnızca günlük özet için kullanılır.
@@ -136,7 +136,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 ### REQ-TSK-012 — Kritik anında, acil olmayan özetlenir
 
-- Kaynak: §25.6
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: her bildirim türünün anında mı özette mi gideceği
@@ -147,7 +147,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Task, Notification, Escalation, Daily Dige
 
 ### REQ-TSK-013 — Günlük özet
 
-- Kaynak: D-133; §25.6
+- Kaynak: D-133
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: gönderim saati

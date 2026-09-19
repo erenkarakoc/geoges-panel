@@ -2,9 +2,9 @@
 
 Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: ADM (Master Data & Settings)
 
-Kaynaklar: Özellik Yapısı §36.1–§36.4, §23.9, §22.5 (kur), §10.1, §11.2 (tip tanımları); ADR-005; kararlar D-139…D-141.
+Kaynaklar: (kur), REQ-SIT-014, REQ-SIT-022 (tip tanımları); ADR-005; kararlar D-139…D-141.
 
-**Sınır.** §36.1'deki listede ADM'e ait olmayanlar da var; bunlar kendi modüllerinde tutulur ama aynı "Tanımlar" alanından ulaşılır: roller (REQ-IAM), onay zincirleri ve eskalasyon kuralları (REQ-WFL, REQ-TSK), tedarikçiler (REQ-PUR), teklif belge şablonları (REQ-QTE), KPI kataloğu ve puan bantları (REQ-PRF), revizyona tabi kayıt türleri (REQ-AUD). Çoklu para birimiyle muhasebe ve cari REQ-FIN'dedir; ADM yalnızca kuru sağlar. Veri aktarımı (§36.5) ertelendi (DEF-001).
+**Sınır.** 'deki listede ADM'e ait olmayanlar da var; bunlar kendi modüllerinde tutulur ama aynı "Tanımlar" alanından ulaşılır: roller (REQ-IAM), onay zincirleri ve eskalasyon kuralları (REQ-WFL, REQ-TSK), tedarikçiler (REQ-PUR), teklif belge şablonları (REQ-QTE), KPI kataloğu ve puan bantları (REQ-PRF), revizyona tabi kayıt türleri (REQ-AUD). Çoklu para birimiyle muhasebe ve cari REQ-FIN'dedir; ADM yalnızca kuru sağlar. Veri aktarımı ertelendi (DEF-001).
 
 Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Consumption Recipe, Unit Price, Custom Field, Working Calendar, Exchange Rate.
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 
 ### REQ-ADM-001 — Tanımlar tek yerden yönetilir
 
-- Kaynak: §36, §36.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: listelenen tanımların hepsi
@@ -25,7 +25,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 
 ### REQ-ADM-002 — Panel tipi tanımı
 
-- Kaynak: §10.1, §36.1
+- Kaynak: REQ-SIT-014
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: panel tipleri
@@ -37,7 +37,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 
 ### REQ-ADM-003 — Çelik şerit tipi tanımı
 
-- Kaynak: §11.2, §36.1
+- Kaynak: REQ-SIT-022
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: şerit tipleri ve boyları
@@ -48,7 +48,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 
 ### REQ-ADM-004 — Sarf reçeteleri
 
-- Kaynak: §36.1; §44; REQ-SIT-029
+- Kaynak: REQ-SIT-015, REQ-SIT-029, REQ-SIT-035; REQ-SIT-029
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: sarf reçeteleri
@@ -59,7 +59,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 
 ### REQ-ADM-005 — Genel veya projeye özel tanım
 
-- Kaynak: §36.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: tanımın genel mi projeye özel mi olduğu
@@ -70,7 +70,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 
 ### REQ-ADM-006 — Kendini geliştiren ortak listeler
 
-- Kaynak: §36.3; D-139
+- Kaynak: D-139
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: ortak liste kalemleri ve birleştirmeler
@@ -82,7 +82,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 
 ### REQ-ADM-007 — Geçmişi bozmayan değişiklik
 
-- Kaynak: §36.4, §22.5; ADR-005
+- Kaynak: ADR-005
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Tanımlar ve fiyatlar geçerlilik tarihiyle sürümlenir. Bugün yapılan bir değişiklik, geçmişte onaylanmış işlemlerin hesabını değiştirmez (Haziran'daki fiyat değişikliği Mart hakedişini bozmaz).
@@ -116,7 +116,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 
 ### REQ-ADM-010 — Şirket takvimi
 
-- Kaynak: §23.9
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: şirket takvimi
@@ -127,7 +127,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 
 ### REQ-ADM-011 — Birime veya şantiyeye özel takvim
 
-- Kaynak: §23.9
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: birime veya şantiyeye özel takvimler
@@ -138,7 +138,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 
 ### REQ-ADM-012 — Takvimi kullanan hesaplar
 
-- Kaynak: §23.9; REQ-SIT-010, REQ-PRJ-011, REQ-WFL-007
+- Kaynak: REQ-SIT-010, REQ-PRJ-011, REQ-WFL-007
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Puantaj, fazla mesai, geç veri girişi, son tarihler, nakit projeksiyonu, günlük hedefler ve takvime bağlı akış tetikleyicileri bu takvimi kullanır.
@@ -150,7 +150,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 
 ### REQ-ADM-013 — Günlük kur: önceki iş gününün TCMB döviz alış kuru
 
-- Kaynak: §22.5; D-140
+- Kaynak: D-140
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: kur alınamayınca görevin kime düşeceği
@@ -161,7 +161,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 
 ### REQ-ADM-014 — Elle kur girişi
 
-- Kaynak: §22.5
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Gerekli özel durumda yetkili kullanıcı elle kur girer; kim, ne zaman ve neden girdiği kayda geçer.
@@ -171,7 +171,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Catalog Item, Panel Type, Strip Type, Cons
 
 ### REQ-ADM-015 — Geçmiş kayıtların kuru korunur
 
-- Kaynak: §22.5
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Bir işlemde kullanılan kur, işlemle birlikte saklanır; daha sonra kur düzeltilse bile onaylanmış işlemin hesabı değişmez.

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-19 — The records cite requirements, not scope sections (TASK-0039)
+
+- Before the functional scope leaves the repository, every citation of it was replaced by the requirements that now carry it: 835 citation chains in 41 files. A tool did it, not a hand: it built the map of all 243 scope headings from the requirement files' source lines first, and kept that map at the end of `docs/requirements/README.md` as the one record allowed to hold section numbers. The scope itself stays readable at Git tag `scope-archive`.
+- Section signs that belong to other documents were left alone and, where they did not say so, now name their document (DESIGN_SYSTEM_RULES, PROJECT_RULES, ADRs, the original protocol). The requirements index and the module map lost their section columns, which the map replaces.
+- The owner chose this over keeping the citations with a map (D-213). The validator now fails on any § that does not name its document. TASK-0039 is done and TASK-0027 is unblocked; what it still needs is a check that the architecture principles are all carried by ADRs, and owner approval.
+
+
 ## 2026-09-19 — Every module has confirmed requirements
 
 - The owner confirmed REQ-NFR. With it the module rounds of Phase 01 are finished: 26 requirement files, 438 requirements, all CONFIRMED, each with its layer and its capability catalog. TASK-0044 and TASK-0041 are done. Only data import (MIG) waits, deferred by DEF-001.
@@ -9,15 +16,15 @@
 ## 2026-09-19 — NFR requirements, the last module round
 
 - Four platform decisions (D-209…D-212): at most one hour of data may be lost in a major failure (the owner accepted an hour against the recommended fifteen minutes) and the panel is back within four hours; the interface stays Turkish only; and the system is sized for 50–150 signed-in users.
-- `REQ-NFR.md` (20) gathers the cross-cutting rules: no record means not done; the panel is the only official record; the panel keeps working when an outside source fails, except that the exchange rate follows REQ-ADM-013 and never silently falls back; every §39 alert maps to a catalog event; the §46 management questions must each have a screen in the Phase 02 inventory; the standard list, detail and form screens; accessibility; and the four platform decisions.
+- `REQ-NFR.md` (20) gathers the cross-cutting rules: no record means not done; the panel is the only official record; the panel keeps working when an outside source fails, except that the exchange rate follows REQ-ADM-013 and never silently falls back; every REQ-NFR-005 alert maps to a catalog event; the REQ-NFR-004 management questions must each have a screen in the Phase 02 inventory; the standard list, detail and form screens; accessibility; and the four platform decisions.
 
 
-## 2026-09-19 — RPT §34 confirmed
+## 2026-09-19 — RPT REQ-RPT-015 confirmed
 
 - The owner confirmed REQ-RPT-015…023: REQ-RPT is complete (23), 418 requirements CONFIRMED in all. Next: NFR, the last module round.
 
 
-## 2026-09-19 — RPT §34 requirements
+## 2026-09-19 — RPT REQ-RPT-015 requirements
 
 - Three reporting decisions (D-206…D-208), all as recommended. The official daily site report is produced as soon as the log is approved but goes to the client only when a person sends it, so no workflow ever mails data out; reports are ready-made with filters and saved views rather than a report designer; and scheduled reports reach internal users only, each copy filtered by its reader's permissions. Scheduling is a workflow with a new catalog action, `report.send_to_users`, in keeping with D-181.
 - REQ-RPT gains REQ-RPT-015…023, DRAFT, layer-tagged; the first fourteen stay confirmed.
@@ -25,7 +32,7 @@
 
 ## 2026-09-19 — STR confirmed
 
-- The owner confirmed REQ-STR with both derived rules: 8 more requirements CONFIRMED, 409 in all. Next: RPT §34, then NFR.
+- The owner confirmed REQ-STR with both derived rules: 8 more requirements CONFIRMED, 409 in all. Next: RPT REQ-RPT-015, then NFR.
 
 
 ## 2026-09-19 — STR requirements
@@ -64,7 +71,7 @@
 
 ## 2026-09-19 — PRF requirements
 
-- Eight performance decisions (D-187…D-194), four against the recommendation. The KPI catalog starts empty in the panel instead of importing the Excel guide; scores and bonuses are both monthly; there is no objection process; and site profit never enters a coordinator's score. Two of these changed the scope's wording (§28.2, §28.11), corrected in place with notes.
+- Eight performance decisions (D-187…D-194), four against the recommendation. The KPI catalog starts empty in the panel instead of importing the Excel guide; scores and bonuses are both monthly; there is no objection process; and site profit never enters a coordinator's score. Two of these changed the scope's wording (REQ-PRF-001…002, REQ-PRF-006, REQ-PRF-008…011, REQ-PRF-013), corrected in place with notes.
 - The bonus is paid outside payroll — but because a bonus is wages in law, every payment enters the accountant's monthly file; a percentage bonus runs on base salary and is as sensitive as the salary. A KPI the panel cannot compute is scored by the direct manager with a reason; a critical score opens a development meeting that only the person, their managers and HR can see.
 - `REQ-PRF.md` (20) is written, DRAFT, layer-tagged, with its catalog; eight proposed glossary terms were added first. Two derived rules await confirmation: a mid-month position change blends the score by days, and subcontractor crews are compared but get no score or bonus.
 
@@ -106,8 +113,8 @@
 
 ## 2026-09-18 — QTE requirements
 
-- Four quote decisions (D-173…D-176). Quote estimates, like project results, carry no share of general expenses — against the recommendation of a separate line — so §6.3 was corrected in place, and covering general costs is left to the target margin. Estimated costs are proposed from what the item actually cost last time; a sales order reserves its stock; each shipment of a product order gets its own invoice.
-- `REQ-QTE.md` (18) is written, DRAFT, with its catalog; seven proposed glossary terms were added first. REQ-CRM-014 now says outright that a won product quote becomes a sales order, not a project (§6.9). One derived rule awaits confirmation: when one of a request's quotes is won, its other open quotes are cancelled.
+- Four quote decisions (D-173…D-176). Quote estimates, like project results, carry no share of general expenses — against the recommendation of a separate line — so REQ-QTE-005…006 was corrected in place, and covering general costs is left to the target margin. Estimated costs are proposed from what the item actually cost last time; a sales order reserves its stock; each shipment of a product order gets its own invoice.
+- `REQ-QTE.md` (18) is written, DRAFT, with its catalog; seven proposed glossary terms were added first. REQ-CRM-014 now says outright that a won product quote becomes a sales order, not a project (REQ-QTE-014…015, REQ-QTE-018). One derived rule awaits confirmation: when one of a request's quotes is won, its other open quotes are cancelled.
 
 
 ## 2026-09-18 — CRM requirements confirmed
@@ -140,19 +147,19 @@
 ## 2026-09-18 — EQP requirements
 
 - Eight equipment decisions (D-155…D-162). A crane or mold charges its daily depreciation to a site only on the days it works there — marked by the engineer in the daily site log, or taken from the crane log — and every other day lands in a company-wide idle equipment expense, never on a project. An asset that breaks is written off to the site it was on; hand tools are counted per location instead of carded; any asset can be rented; a vehicle changes hands only when both people confirm on their phones.
-- Two answers went against the recommendation and changed the scope, corrected in place with notes: depreciation by working day instead of every day on site (§21.3), and no savings figure for the service vehicle (§20.3). REQ-SIT-003 gains the equipment section the first one needs.
+- Two answers went against the recommendation and changed the scope, corrected in place with notes: depreciation by working day instead of every day on site (REQ-EQP-010, REQ-EQP-012), and no savings figure for the service vehicle (REQ-EQP-021). REQ-SIT-003 gains the equipment section the first one needs.
 - `REQ-EQP.md` (21) is written, DRAFT, with its catalog; nine proposed glossary terms were added first. One derived rule awaits confirmation: grouped items are expensed on purchase and not depreciated.
 
 
 ## 2026-09-18 — FIN requirements confirmed
 
 - The owner confirmed REQ-FIN, including the derived rule that the factory and the office close their own month: 30 more requirements CONFIRMED, 242 in all.
-- The contradiction D-149 left in the scope is fixed at its source: §15.1 no longer lists an overhead share among a site's costs, and the §22.4 formula counts only costs recorded directly on the project. Both places carry a note naming D-149. The overhead markup in quote estimates (§6.3) is a different question and goes to the QTE round.
+- The contradiction D-149 left in the scope is fixed at its source: REQ-FIN-013, REQ-FIN-017 no longer lists an overhead share among a site's costs, and the REQ-FIN-017 formula counts only costs recorded directly on the project. Both places carry a note naming D-149. The overhead markup in quote estimates (REQ-QTE-005…006) is a different question and goes to the QTE round.
 
 
 ## 2026-09-18 — FIN requirements
 
-- Eight finance decisions (D-147…D-154). A quantity the client refuses carries over to the next month; subcontractors are paid on the production we approved, without waiting for the client; a client advance is recovered from progress payments; the expected collection date comes from the contract's term; when one spending arrives twice, the first entry books it and the second is linked; the accountant gets a monthly export file. Two answers went against the recommendation: general expenses are not spread over projects — which changes the scope's "overhead share" wording in §15.1 and §22.4 — and each site closes its own month, with the factory and the office as units of their own (a derived rule marked for confirmation).
+- Eight finance decisions (D-147…D-154). A quantity the client refuses carries over to the next month; subcontractors are paid on the production we approved, without waiting for the client; a client advance is recovered from progress payments; the expected collection date comes from the contract's term; when one spending arrives twice, the first entry books it and the second is linked; the accountant gets a monthly export file. Two answers went against the recommendation: general expenses are not spread over projects — which changes the scope's "overhead share" wording in REQ-FIN-013, REQ-FIN-017 and REQ-FIN-017 — and each site closes its own month, with the factory and the office as units of their own (a derived rule marked for confirmation).
 - `REQ-FIN.md` (30) is written, DRAFT, with its catalog; ten proposed glossary terms were added first.
 
 
@@ -200,7 +207,7 @@
 ## 2026-09-18 — REQ-RPT; Slice 1 has its requirements
 
 - One round, four decisions, all as recommended (D-126…D-129): an attention item closes only when its cause is gone — nobody can dismiss it, only mark it seen; indicators come from a per-role default that each person can adjust; the "company through the system" view is for the owners and the general manager; the loss diagnosis card is always there and jumps to the top when a site is losing money.
-- `docs/requirements/REQ-RPT.md` holds 14 requirements. Reports and exports (§34) are left for their own round.
+- `docs/requirements/REQ-RPT.md` holds 14 requirements. Reports and exports (REQ-RPT-015) are left for their own round.
 - With it, the four modules of Slice 1 — WFL, IAM, SIT, RPT — have requirement files: 115 requirements, all DRAFT until the owner confirms them.
 - The glossary gained the entry screen, indicator, attention item and loss diagnosis. It forbids `dashboard` for general screens, which the code still uses for "Bugün"; that rename is TASK-0043 rather than a silent change.
 
@@ -255,7 +262,7 @@
 
 - The owner read the impact analysis and approved it. The record-type builder gets its own step, **09R**, after the Slice 1 pilot (D-105): no slice depends on it, so no module screen waits for it, and it is shaped by real use.
 - ADR-006 now carries the whole ruleset — the two new nodes, three-outcome approvals, free windowed conditions with their safeguards, the trigger list, the four ways to address a step, the authority model with its one hard rule (flow design only for full-visibility roles, enforced in code), publish controls, templates as copies, traceability, chained short flows, and the list of what the designer can never do. ADR-005 records, in so many words, that the record-type builder is a deliberate step toward what it once rejected, and names D-077 as the line that keeps the panel from becoming a low-code platform.
-- The roadmap gained CHG-006 scope in Phases 01, 02, 03, 04, 06, 07 and 08 and a new Phase 09R. TASK-0041 (capability catalog) and TASK-0042 (§45 as real flow definitions) were opened. §45 moved from `REQ-NFR` to `REQ-WFL`, closing the last open CHG-005 finding.
+- The roadmap gained CHG-006 scope in Phases 01, 02, 03, 04, 06, 07 and 08 and a new Phase 09R. TASK-0041 (capability catalog) and TASK-0042 (REQ-WFL-011, REQ-WFL-028 as real flow definitions) were opened. REQ-WFL-011, REQ-WFL-028 moved from `REQ-NFR` to `REQ-WFL`, closing the last open CHG-005 finding.
 - The palette test moved to `docs/workflows/README.md` with how each gap was closed; the root direction file was deleted, as it had said it would be.
 - A new validator check — every task row must have six columns — found three malformed rows on its first run (TASK-0025, TASK-0026, and TASK-0038 from this session), all fixed.
 - The owner's product-code freeze ended with this fold. ADR-007 applies as before: Phase 01 is still design.
@@ -274,7 +281,7 @@
 
 ## 2026-09-17/18 — The records now check themselves (CHG-005)
 
-- An audit of the state system found **nine contradictions**. The roadmap was two days stale and did not contain CHG-003 or CHG-004 at all, although both were approved and largely built; `CODE ALLOWED` forbade code that had already shipped; Milestone M1 still promised a first screen that M0 had already delivered; Phase 02 was marked `NOT_STARTED` while D-054…D-070 decided most of it; Phase 07's scope listed finished work; ten tasks sat under the wrong heading; six "Last updated" stamps were wrong; hundreds of `§` citations pointed at a directory scheduled for deletion; and the §45 flows were filed under `REQ-NFR`. All are fixed or explicitly recorded.
+- An audit of the state system found **nine contradictions**. The roadmap was two days stale and did not contain CHG-003 or CHG-004 at all, although both were approved and largely built; `CODE ALLOWED` forbade code that had already shipped; Milestone M1 still promised a first screen that M0 had already delivered; Phase 02 was marked `NOT_STARTED` while D-054…D-070 decided most of it; Phase 07's scope listed finished work; ten tasks sat under the wrong heading; six "Last updated" stamps were wrong; hundreds of `§` citations pointed at a directory scheduled for deletion; and the REQ-WFL-011, REQ-WFL-028 flows were filed under `REQ-NFR`. All are fixed or explicitly recorded.
 - **The roadmap is now the single authority** and says so in its own header. It gained a change-request register (CHG-001…CHG-006, each with the phases it moved) and a "work delivered ahead of its phase" table, so no phase is entered believing its scope is untouched. Phases 02 and 07 are `PARTIALLY_DONE`, each listing what was delivered and what it still owes.
 - **Milestone M1 was redefined rather than cancelled** (D-074): its original content was consumed locally by M0 and CHG-004, so it becomes the staging milestone — the same screens plus foundation services on a deployed environment, with proven deploy and rollback. What local review never proved: environment configuration, secrets handling, session behaviour behind the proxy, restore and rollback.
 - **`docs/sources/` may no longer be deleted on schedule** (D-075). TASK-0027 is `BLOCKED` behind a new TASK-0039 that remaps every `§` citation to a REQ id. Deleting first would have stripped the reasoning out of the decision record.
@@ -282,7 +289,7 @@
 - `.githooks/pre-commit` runs it in strict mode and refuses an inconsistent commit; strict mode also requires that a record changed in the commit carries today's stamp. Enabled once per clone with `git config core.hooksPath .githooks`, recorded in `docs/standards/GIT_WORKFLOW.md`.
 - **Session continuity stopped depending on a model remembering to write a handoff.** `ai/SESSION_JOURNAL.md` is append-only and written by a `PostToolUse` hook after every file change, so a session that is cut off still leaves an accurate record; a `SessionStart` hook prints a resume block — uncommitted diff, journal tail, unfinished tasks, records verdict — in that order, because the first two are facts the harness recorded and the handoff is only a claim the previous model made.
 - Product code is **frozen** by owner instruction until CHG-005 and CHG-006 are closed. The workflow-platform direction is written up in `WORKFLOW_PLATFORM_DIRECTION.md` at the repository root with 21 open questions (OQ-028); it is a proposal, not a decision, and the file deletes itself into the roadmap once answered.
-- **The §45 flows were walked against the engine's node palette** at the owner's request, step by step, before anything is built on it. Two of the eight (toplantı kararı, sertifika/İSG) are fully expressible with ADR-006's twelve nodes; the other six exposed **six gaps** — no node creates or updates a record, no node iterates a list ("her zimmet için"), the approval node's reject and send-back outputs are undefined, conditions cannot read a windowed count ("son 30 günde 3 gecikme"), there is no way to wait on an approval from someone who is not a system user (the client, a public authority), and the trigger types are not written down. It also produced a design rule worth more than the gaps: an end-to-end flow is **several short flows chained by events**, not one long definition — 45.1 spans months and eight modules, and modelling it as a single running instance would create process instances that stay open for months and break on every version change.
+- **The REQ-WFL-011, REQ-WFL-028 flows were walked against the engine's node palette** at the owner's request, step by step, before anything is built on it. Two of the eight (toplantı kararı, sertifika/İSG) are fully expressible with ADR-006's twelve nodes; the other six exposed **six gaps** — no node creates or updates a record, no node iterates a list ("her zimmet için"), the approval node's reject and send-back outputs are undefined, conditions cannot read a windowed count ("son 30 günde 3 gecikme"), there is no way to wait on an approval from someone who is not a system user (the client, a public authority), and the trigger types are not written down. It also produced a design rule worth more than the gaps: an end-to-end flow is **several short flows chained by events**, not one long definition — 45.1 spans months and eight modules, and modelling it as a single running instance would create process instances that stay open for months and break on every version change.
 
 
 ## 2026-09-17 — The app wears one mark, and the name is text
@@ -320,15 +327,15 @@
 - The header's menu button and its primary action are desktop-only now, so a phone has one way to navigate instead of two. The top bar keeps the page name, the search icon, notifications, theme and the account.
 - The primary action moved into one component that both the header and the bottom bar render, so its behaviour has a single implementation. On a phone it is the plus alone — a round 44px button, its name kept as the accessible label — which gives the four navigation entries their room back.
 - Found on the phone: on a site detail the section you were in could start off screen in the scrolling strip. The active section now scrolls itself into view whenever it changes.
-- This refines scope §40.2, which describes a hamburger drawer on phones. The drawer survives as the module grid; what changed is that the screens people use every day no longer live behind it.
+- This refines REQ-NFR-008, which describes a hamburger drawer on phones. The drawer survives as the module grid; what changed is that the screens people use every day no longer live behind it.
 
 
 ## 2026-09-17 — "Bugün" replaces the cockpit, and the rail stops jumping (CHG-004 step 4, TASK-0035)
 
 - `/dashboard` is now "Bugün": the seat's own work on the left, its six key figures on the right, the other nine behind a fold, then two charts and the site list. The M0 "Cockpit" heading is gone — the header already names the page, so the body opens with the date.
 - Work first, figures second, and every work row reaches its own source: the owner's "Dikkat" rows lead to the pour, the site, the finance screen; the coordinator's lead into the approval queue; the site engineer's into today's log.
-- Charts arrived as an approved custom element (COSS has none) without adding a charting library: at this size a bar is a box, so the chart is built from plain elements that keep their rounded ends crisp, take theme tokens directly and carry their own hover text. One series, no legend, only the last value labelled; a day with no work draws no bar, because a sliver would read as "a little"; profit is green and loss red, as those colours mean everywhere else (§40.5).
-- Found on screen and fixed everywhere: Geist Mono has no ₺ glyph, so the symbol was falling back to another font and sitting badly against the digits. §4 now reads "only the number is mono" — units and symbols are set in the body font by one shared `Figure` component, which the money component of §4 will build on. As a side effect "318 panel" no longer reads as code.
+- Charts arrived as an approved custom element (COSS has none) without adding a charting library: at this size a bar is a box, so the chart is built from plain elements that keep their rounded ends crisp, take theme tokens directly and carry their own hover text. One series, no legend, only the last value labelled; a day with no work draws no bar, because a sliver would read as "a little"; profit is green and loss red, as those colours mean everywhere else (REQ-NFR-011).
+- Found on screen and fixed everywhere: Geist Mono has no ₺ glyph, so the symbol was falling back to another font and sitting badly against the digits. DESIGN_SYSTEM_RULES §4 now reads "only the number is mono" — units and symbols are set in the body font by one shared `Figure` component, which the money component of DESIGN_SYSTEM_RULES §4 will build on. As a side effect "318 panel" no longer reads as code.
 - Rail refinements from the owner's review: a user who has never touched the menu finds the first group open (a remembered choice still wins, including leaving everything closed); labels are clipped and fade instead of wrapping onto a second line during the 200ms animation; the two logos cross-fade inside a head of fixed height; the app card animates its margin with the rail instead of snapping; and the separator no longer carries its own margins, which had been giving the menu a horizontal scrollbar.
 - The sidebar head also gave up COSS's own 8px padding: the logo now occupies the same 56px band as the app header, so it starts level with the card's top edge instead of 8px below it, in both the expanded and the icon state. The square mark grew from 32px to 40px along the way — 48px, which matched the long logo exactly, turned out to be too heavy for the rail.
 - Sample data is still sample data, and says so: every figure block carries an "Örnek veri" badge. The objection stands on the record — a panel that shows invented numbers can be mistaken for a real one.
@@ -374,21 +381,21 @@
 - `@xyflow/react` 12.11.6 added (MIT, exact-pinned, D-053) for the viewport and edge plumbing only; the nodes and links are our own components and stylesheet, so none of its default look survives. Mermaid was rejected because it owns its rendering and would have dictated the visual style.
 - Code shrank from 2351 to 1949 lines with no content lost — the 496-line data file is untouched; the five section components and 942 lines of hand-written layout CSS were replaced.
 - Owner request: the page speaks the product's visual language. The sandbox palette, radius and fonts now read the app's global custom properties instead of carrying their own hex values, and its dark-mode block is gone because those tokens already switch. Inheriting a CSS variable is not an import, so the code isolation (D-052) is untouched.
-- Group colours stay five distinct hues: they carry which layer a module belongs to, so collapsing them lost information. Four of the five are app tokens (`--muted-foreground`, `--primary`, `--success`, `--warning`); the fifth has no equivalent and is the page's only literal colour, with a dark value of its own. Noted for later: green and amber also mean status elsewhere in the product (§4), so a module is never coloured by state here.
+- Group colours stay five distinct hues: they carry which layer a module belongs to, so collapsing them lost information. Four of the five are app tokens (`--muted-foreground`, `--primary`, `--success`, `--warning`); the fifth has no equivalent and is the page's only literal colour, with a dark value of its own. Noted for later: green and amber also mean status elsewhere in the product (DESIGN_SYSTEM_RULES §4), so a module is never coloured by state here.
 - Icons sit on the plates themselves — a plate has room for one, where a dot did not.
-- A roles sidebar was added on the left, opposite the module detail on the right. The records hold no role-to-module link, so rather than inventing one the panel derives it: each module now states which classes of data it carries, and who may see which class is already recorded (§2.4, §2.5). Selecting FIN therefore answers "Saha Mühendisi görmez" from the decisions, not from a guess. A module carrying mixed classes reports "kısmen görür". Picking a flow answers the same question for the flow: the classes its modules carry together are judged as one, so the left panel follows the flow tabs as well as the map. The data-class field is the one inference on the page and is labelled as a proposal; the permission matrix is settled in Phase 01.
+- A roles sidebar was added on the left, opposite the module detail on the right. The records hold no role-to-module link, so rather than inventing one the panel derives it: each module now states which classes of data it carries, and who may see which class is already recorded (REQ-AUD-006, REQ-IAM-011…012, REQ-IAM-022…024). Selecting FIN therefore answers "Saha Mühendisi görmez" from the decisions, not from a guess. A module carrying mixed classes reports "kısmen görür". Picking a flow answers the same question for the flow: the classes its modules carry together are judged as one, so the left panel follows the flow tabs as well as the map. The data-class field is the one inference on the page and is labelled as a proposal; the permission matrix is settled in Phase 01.
 - Roles, the visibility matrix and the role rules moved out of the right panel into the new one; with nothing selected it lists all six roles. Roles gained icons, and visibility is shown with eye / eye-off / question icons rather than words alone.
-- Each flow gained a sentence saying what it actually achieves, replacing a lead that only described the screen ("Kesitte aydınlanan 2 modül bu akışta sırayla devreye giriyor"). The sentences summarise each flow's own recorded steps (§45), so "Yeni işten tahsilata" now reads as turning a customer request into contracted work, production, a progress payment and finally collected money. The module count moved to a secondary line.
+- Each flow gained a sentence saying what it actually achieves, replacing a lead that only described the screen ("Kesitte aydınlanan 2 modül bu akışta sırayla devreye giriyor"). The sentences summarise each flow's own recorded steps (REQ-WFL-011, REQ-WFL-028), so "Yeni işten tahsilata" now reads as turning a customer request into contracted work, production, a progress payment and finally collected money. The module count moved to a secondary line.
 - Technical event ids (`daily_log.approved` and the like) no longer appear on screen; the human label and the modules it sets off are enough for a presentation. They stay in the data as the record link.
 - Shared elements are COSS components rather than hand-made ones (owner request): `Badge`, `Button`, `Toggle` for the flow selector, `Table` for the visibility matrix and `ScrollArea` for the reading panel. The ESLint boundary was widened for this — a sandbox may now import the COSS UI layer, still nothing from modules or platform, and still nothing may import a sandbox. Only the section itself (bands, plates, links) stays custom, which is what D-052 approved.
 
 ## 2026-09-16 — Development-only structure presentation (CHG-003, TASK-0030)
 
-- New page at `/presentation`, linked from the account menu, summarising the whole application: module map with connections, cross-module events, the end-to-end flows of scope §45, roles and visibility, and the daily log approval cycle. Visualisation first, no detail.
+- New page at `/presentation`, linked from the account menu, summarising the whole application: module map with connections, cross-module events, the end-to-end flows of REQ-WFL-011, REQ-WFL-028, roles and visibility, and the daily log approval cycle. Visualisation first, no detail.
 - Built as a sandbox (D-052): `src/sandbox/presentation/` holds its own data, CSS Modules styles and components. ESLint boundaries enforce the isolation in both directions — the sandbox imports nothing from the app (not even COSS UI), and nothing may import the sandbox. Removing the folder, the route, the menu item and the lint element removes the feature completely.
 - Production returns 404 for the route and the menu entry is hidden there, so the page never ships. In development it still requires a signed-in session.
 - The custom shapes and SVG connector lines are approved for this sandbox only; the COSS-only rule (ADR-009) continues to apply to the product itself.
-- Content is sourced from `docs/architecture/MODULE_MAP.md`, scope §2/§9/§13/§45 and decisions D-035…D-040; roles show only what the scope states and mark the rest as decided in Phase 01. It has to be updated when those records change.
+- Content is sourced from `docs/architecture/MODULE_MAP.md`, REQ-AUD-006, REQ-FIN-015, REQ-IAM-001, REQ-IAM-003…006, REQ-IAM-008…015, REQ-IAM-018, REQ-IAM-022…024, REQ-IAM-026…027, REQ-SIT-001…004, REQ-SIT-006…008, REQ-SIT-013, REQ-SIT-030…032, REQ-WFL-011, REQ-WFL-015…016, REQ-WFL-028 and decisions D-035…D-040; roles show only what the scope states and mark the rest as decided in Phase 01. It has to be updated when those records change.
 
 ## 2026-09-16 — AI attribution removed from history
 
@@ -409,7 +416,7 @@
 
 ## 2026-09-16 — Two-factor removal, onboarding entry in the account menu
 
-- The second factor can now be removed. Supabase only allows this from an `aal2` session, so the action checks the level itself before calling and gives a plain reason when it is not met. `/two-factor` gained a third mode: a verified session now lands on a management view instead of being redirected to the dashboard (sign-in still goes straight there). Removal is confirmed in an `AlertDialog` (§1.1) and reported as a toast (§13); the screen falls back to the setup view afterwards.
+- The second factor can now be removed. Supabase only allows this from an `aal2` session, so the action checks the level itself before calling and gives a plain reason when it is not met. `/two-factor` gained a third mode: a verified session now lands on a management view instead of being redirected to the dashboard (sign-in still goes straight there). Removal is confirmed in an `AlertDialog` (DESIGN_SYSTEM_RULES §1.1) and reported as a toast (DESIGN_SYSTEM_RULES §13); the screen falls back to the setup view afterwards.
 - Two contract tests added: removal is refused before the factor has been cleared, and accepted once the session is at `aal2`.
 - The account menu links to the role onboarding screen.
 
@@ -441,7 +448,7 @@
 ## 2026-09-16 — Owner notes: COSS surfaces, site-wide search
 
 - D-045: COSS `Frame`, `Drawer`, `Dialog`, `Menu`, `Sheet` used wherever needed; usage table in `docs/ui-ux/DESIGN_SYSTEM_RULES.md` §1.1.
-- D-044: comprehensive site-wide search as a COSS `Command` palette, permission-aware; not in the functional scope (only archive §33.2 and list §41 search), recorded as scope extension. `ai/REQUIREMENTS.md` NFR row added; TASK-0029 (T1) planned across Phases 01–03.
+- D-044: comprehensive site-wide search as a COSS `Command` palette, permission-aware; not in the functional scope (only archive REQ-DOC-002, REQ-DOC-004 and list REQ-NFR-013 search), recorded as scope extension. `ai/REQUIREMENTS.md` NFR row added; TASK-0029 (T1) planned across Phases 01–03.
 
 ## 2026-09-16 — Fixed-height shell, drag rail, Geist, footer rework
 
@@ -480,12 +487,12 @@
 
 ## 2026-09-16 — M0 app shell, cockpit skeleton, onboarding (TASK-0026, REVIEW)
 
-- Registries: navigation (§40.1, D-026 "Şantiye" labels, permission per item), dashboard widgets (§3.1–§3.3); `AccessPolicy` with M0 preview policy so real IAM plugs in without UI changes.
+- Registries: navigation (REQ-NFR-007, D-026 "Şantiye" labels, permission per item), dashboard widgets (REQ-INV-026, REQ-RPT-002…004, REQ-RPT-006…009); `AccessPolicy` with M0 preview policy so real IAM plugs in without UI changes.
 - App shell on COSS Sidebar (collapsible icon mode, mobile drawer closes on navigation), top bar with Açık/Koyu/Sistem theme menu (`next-themes` 0.4.6), GEOGES brand tokens in a separate `brand.css`.
 - 25 module placeholder pages generated from the registry; cockpit empty card skeleton; static new-role onboarding with step indicator.
 - Root layout: `lang="tr"`, Inter/Geist Mono with `latin-ext` (Turkish characters), noindex metadata.
 - 9 unit tests; typecheck, lint (boundaries), format, build pass; browser-verified in light/dark and desktop/mobile with no console errors.
-- OQ-025 raised: §40.1 menu has no Projects (PRJ) or CRM entries.
+- OQ-025 raised: REQ-NFR-007 menu has no Projects (PRJ) or CRM entries.
 
 ## 2026-09-16 — Source documents moved out of repo root
 
@@ -503,8 +510,8 @@
 - `docs/domain/GLOSSARY.md`: added Party, Customer, Subcontractor Payment Method, Letter of Guarantee, Retention, Cash Guarantee; confirmed Client, Subcontracted Labor, Guarantee, Process Loss, Damaged Unit, Scrap.
 - OQ-007 partially answered; TASK-0020 opened.
 - Round 2: D-031 Kademe = Panel Course, D-032 lug single standard type, D-033 one net party account balance, D-034 per-currency balances with TRY equivalent. Glossary: Panel Course, Tie Strip Lug, Party Account confirmed; no OPEN terms remain.
-- Committed `157c22a`. Slice 1 requirement rounds 1–2 (TASK-0021): D-035 §9.2 chain = entry fallback order, coordinator approves; D-036 email + password login; D-037 deadline configured in panel, no fixed default; D-038 holidays exempt, otherwise "no work" log with reason; D-039 company email for employees, personal allowed for subcontractor crew leads; D-040 delegate → escalation, all role/approval settings admin-configurable; D-041 owner delegate (OQ-023 answered).
-- D-042: COSS Origin examples prioritized as design reference for advanced components, rebuilt with COSS UI/Particles (Origin verified Radix-based legacy, MIT). Updated `docs/ui-ux/DESIGN_SYSTEM_RULES.md` (§2 priority, new §3.1) and ADR-009 note.
+- Committed `157c22a`. Slice 1 requirement rounds 1–2 (TASK-0021): D-035 REQ-SIT-004 chain = entry fallback order, coordinator approves; D-036 email + password login; D-037 deadline configured in panel, no fixed default; D-038 holidays exempt, otherwise "no work" log with reason; D-039 company email for employees, personal allowed for subcontractor crew leads; D-040 delegate → escalation, all role/approval settings admin-configurable; D-041 owner delegate (OQ-023 answered).
+- D-042: COSS Origin examples prioritized as design reference for advanced components, rebuilt with COSS UI/Particles (Origin verified Radix-based legacy, MIT). Updated `docs/ui-ux/DESIGN_SYSTEM_RULES.md` (DESIGN_SYSTEM_RULES §2 priority, new DESIGN_SYSTEM_RULES §3.1) and ADR-009 note.
 - After Windows restart (23:25): TASK-0019 verified DONE (no terminal launches on worker `git` calls); TASK-0018 partially verified (new worker, 0 auth errors, observations #403–#405; env fallback untested until 2026-10-15).
 
 ## 2026-09-15 — Şantiye label, claude-mem window flash fix (uncommitted)

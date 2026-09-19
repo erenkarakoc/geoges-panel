@@ -2,9 +2,9 @@
 
 Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: AUD (Audit & History)
 
-Kaynaklar: Özellik Yapısı §37.1, §38; kararlar D-050, D-134, D-135; REQ-IAM-008.
+Kaynaklar: REQ-SIT-033, REQ-WFL-016; kararlar D-050, D-134, D-135; REQ-IAM-008.
 
-**Sınır.** Hangi olayların denetime yazılacağını her modül kendi gereksiniminde söyler (ör. REQ-IAM-008, REQ-WFL-020); AUD onları saklar ve gösterir. İstisnai manuel işlem izni (§37) REQ-WFL-031'dedir.
+**Sınır.** Hangi olayların denetime yazılacağını her modül kendi gereksiniminde söyler (ör. REQ-IAM-008, REQ-WFL-020); AUD onları saklar ve gösterir. İstisnai manuel işlem izni (REQ-WFL-031) REQ-WFL-031'dedir.
 
 Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Request.
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 
 ### REQ-AUD-001 — Her kaydın geçmişi
 
-- Kaynak: §38
+- Kaynak: REQ-WFL-016
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Bir kayıtta kimin oluşturduğu, ne zaman oluşturduğu, kimin değiştirdiği, önceki ve yeni değer, değişikliğin nedeni, kimin onayladığı, kimin düzeltme istediği ve hangi belgenin eklendiği görülebilir.
@@ -24,7 +24,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 
 ### REQ-AUD-002 — Hiçbir kayıt görünmez şekilde silinmez
 
-- Kaynak: §38
+- Kaynak: REQ-WFL-016
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Yanlış kayıt silinmez; iptal edilir ve düzeltme geçmişiyle korunur. İptal edilen kayıt listelerde varsayılan olarak gizlenebilir ama her zaman bulunabilir.
@@ -45,7 +45,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 
 ### REQ-AUD-004 — Geçmişi kaydı görebilen görür, alan bazında süzülür
 
-- Kaynak: §38; REQ-IAM-011
+- Kaynak: REQ-WFL-016; REQ-IAM-011
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Bir kaydın geçmişini o kaydı görebilen herkes görür. Geçmişteki değerler de kullanıcının veri sınıfı izinlerine göre süzülür: maaşı göremeyen, maaş alanının eski ve yeni değerini de göremez.
@@ -55,7 +55,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 
 ### REQ-AUD-005 — Denetim kaydı değiştirilemez
 
-- Kaynak: §38 (amaç: "arkamdan ne değiştirildi?"); ADR-005 (değişmez defterler)
+- Kaynak: REQ-WFL-016 (amaç: "arkamdan ne değiştirildi?"); ADR-005 (değişmez defterler)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Denetim kaydı yalnızca eklenir; sahipler dahil kimse bir denetim kaydını değiştiremez veya silemez.
@@ -67,7 +67,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 
 ### REQ-AUD-006 — "Denetim Kayıtları" ekranını yalnızca sahipler görür
 
-- Kaynak: D-135; §2.4, §2.8
+- Kaynak: D-135; REQ-IAM-001, REQ-IAM-003…006, REQ-IAM-008, REQ-IAM-022…024
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Şirket genelinde kimin neyi, ne zaman ve neden değiştirdiğini; giriş ve yetki olaylarını (REQ-IAM-008) gösteren ekranı yalnızca sahip katmanındaki kişiler görür. Kişi, kayıt türü, zaman aralığı ve işlem türüne göre süzülür.
@@ -80,7 +80,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 
 ### REQ-AUD-007 — Onaylı kayıtlar kilitlidir
 
-- Kaynak: §37.1
+- Kaynak: REQ-SIT-033
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: kayıt türü başına revizyon talebinin onaylayıcısı (varsayılan akış: revizyon talebi)
@@ -91,7 +91,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 
 ### REQ-AUD-008 — Revizyon talebinin adımları
 
-- Kaynak: §37.1
+- Kaynak: REQ-SIT-033
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: talebin onaylayıcısı, kademe sayısı ve bildirimler (varsayılan akış: revizyon talebi)
@@ -103,7 +103,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 
 ### REQ-AUD-009 — Onaylanan revizyon etkilenen hesapları fark kadar düzeltir
 
-- Kaynak: §37.1; D-077
+- Kaynak: REQ-SIT-033; D-077
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Revizyon onaylandığında etkilenen hesaplar (stok, maliyet, hakediş, performans) değişiklik kadar düzeltilir. Önceki değerler silinmez; düzeltme ayrı bir hareket olarak yazılır ve revizyon talebine bağlanır.
@@ -114,10 +114,10 @@ Terimler (`docs/domain/GLOSSARY.md`): Audit Log, Record History, Revision Reques
 
 ### REQ-AUD-010 — Revizyon geçmişi ve bekleyen revizyonlar görünür
 
-- Kaynak: §37.1
+- Kaynak: REQ-SIT-033
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
-- Açıklama: Kaydın ekranında revizyon geçmişi görünür. Bekleyen revizyon talepleri Onay Merkezi'nde, yönetimin "Bugün" ekranında ve dönem kapanışı kontrol listesinde (§22.10, REQ-FIN) görünür.
+- Açıklama: Kaydın ekranında revizyon geçmişi görünür. Bekleyen revizyon talepleri Onay Merkezi'nde, yönetimin "Bugün" ekranında ve dönem kapanışı kontrol listesinde (REQ-FIN-027…030, REQ-FIN) görünür.
 - Kabul kriterleri:
   - [ ] Bekleyen revizyon talebi olan bir dönem, kapanış kontrol listesinde açık madde olarak görünür.
 - Durum: CONFIRMED

@@ -2,13 +2,13 @@
 
 Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: WFL (Workflow & Rules)
 
-Kaynaklar: Özellik Yapısı §4, §13 (onay mekanizması), §37 (§37.1 hariç), §45; Mimari §6, §13; ADR-005, ADR-006 (CHG-006 ekiyle); kararlar D-077…D-108 (OQ-028, TASK-0040).
+Kaynaklar: REQ-SIT-013, REQ-SIT-031…032 (onay mekanizması), (REQ-AUD-007…010, REQ-SIT-033 hariç); ADR-005, ADR-006 (CHG-006 ekiyle); kararlar D-077…D-108 (OQ-028, TASK-0040).
 
 **Sınır.** Bu dosya iş akışı motorunu, onay mekanizmasını, merkezi kuralları ve kayıt türü üretecini kapsar. Başka dosyalara ait olanlar:
 
-- Günlük saha kaydının onay ekranında görülecek kontroller (üretim, saatler, zayi, puantaj…) → REQ-SIT (§13 içerik kısmı).
-- Görev kaydı, bildirim merkezi, eskalasyonun yürütülmesi, günlük özet → REQ-TSK (§25). WFL yalnızca görevi ve bildirimi **üretir** ve kaynağını taşır.
-- Onaylı kayıtlar için revizyon talebi → REQ-AUD (§37.1).
+- Günlük saha kaydının onay ekranında görülecek kontroller (üretim, saatler, zayi, puantaj…) → REQ-SIT (REQ-SIT-013, REQ-SIT-031…032 içerik kısmı).
+- Görev kaydı, bildirim merkezi, eskalasyonun yürütülmesi, günlük özet → REQ-TSK (REQ-SUP-001…005, REQ-TSK-001…002, REQ-TSK-005…007, REQ-TSK-009…010, REQ-TSK-012…013). WFL yalnızca görevi ve bildirimi **üretir** ve kaynağını taşır.
+- Onaylı kayıtlar için revizyon talebi → REQ-AUD (REQ-AUD-007…010, REQ-SIT-033).
 - Kullanıcı, rol ve yetki tipi kayıtları → REQ-IAM. WFL bunları kullanır ve tasarımcıdan tanımlanmalarını ister (REQ-WFL-021).
 
 Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bir platform modülü); o zamana kadar gereksinimleri burada durur (REQ-WFL-035…039).
@@ -19,7 +19,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 ### REQ-WFL-001 — Hesaplar sabit, süreçler akış olarak tanımlanır
 
-- Kaynak: D-077; Mimari §6, §13; ADR-005
+- Kaynak: D-077; ADR-006, REQ-WFL-032; ADR-005
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Defter mantığı ve türetilen veri (tahsilatın cari bakiyeyi azaltması, onaylı üretimin hakedişe akması, stok hareketinin stoğu değiştirmesi, maliyetin tüketimden hesaplanması) kodda sabittir. Kim onaylar, kaç kademe, eşikler, eskalasyon, kilitler ve bildirimler akış tanımlarında tutulur ve kod değişmeden değiştirilebilir.
@@ -117,7 +117,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 - Katman: Sabit
 - Açıklama: Akış, uzunluğu önceden belli olmayan bir liste üzerinde her öğe için aynı adımları çalıştırabilir (her zimmet, her eksik evrak). Tek seviyedir; iç içe kullanılamaz.
 - Kabul kriterleri:
-  - [ ] Personel çıkışı akışı (§45.4), her zimmet için ayrı kontrol üreterek kurulabilir.
+ - [ ] Personel çıkışı akışı (REQ-IAM-007), her zimmet için ayrı kontrol üreterek kurulabilir.
   - [ ] Bir "her biri için" adımının içine ikinci bir "her biri için" konamaz.
 - Durum: CONFIRMED
 
@@ -134,7 +134,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 ### REQ-WFL-011 — Uçtan uca süreçler kısa akışların zinciridir
 
-- Kaynak: D-104; §45
+- Kaynak: D-104
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Aylara yayılan bir süreç (ör. yeni işten tahsilata) birbirini tetikleyen kısa akışlardan kurulur; tek bir uzun akış tanımıyla kurulmaz. Böylece bir akış değiştiğinde yürüyen diğer işler etkilenmez.
@@ -147,7 +147,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 ### REQ-WFL-012 — Tek Onay Merkezi, kuyruk düzeninde
 
-- Kaynak: §4; D-070 (kuyruk düzeni); D-106
+- Kaynak: D-070 (kuyruk düzeni); D-106
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Panelde tek bir Onay Merkezi vardır. Kullanıcı, yetkisine göre kendisini bekleyen bütün onayları burada görür. Bir kayıt ekranı doldurur; karar verildiğinde sıradaki kendiliğinden gelir. Bekleyen onay yoksa ekran boş durumunu gösterir.
@@ -159,7 +159,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 ### REQ-WFL-013 — Her onayda görülecekler
 
-- Kaynak: §4; D-087, D-097
+- Kaynak: D-087, D-097
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Her onayda işlemin özeti, ilgili proje/birim, sorumlu kişi, miktar/tutar, varsa belge ve fotoğraf, kontrol edilmesi gereken tutarsızlıklar ve **bu onayın bu kişiye neden geldiği** (hangi akış, hangi adım, hangi adresleme kuralıyla) görünür.
@@ -170,7 +170,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 ### REQ-WFL-014 — Onayın üç sonucu
 
-- Kaynak: D-099; §4
+- Kaynak: D-099
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Onaylayıcı onaylar (akış ilerler), reddeder (akış kapanır) veya düzeltmeye geri gönderir (kayıt açana döner; düzeltildiğinde aynı onaya geri gelir).
@@ -181,7 +181,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 ### REQ-WFL-015 — Ret ve geri göndermede gerekçe zorunlu
 
-- Kaynak: D-107; §4; §13
+- Kaynak: D-107; REQ-SIT-013, REQ-SIT-031…032
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Reddeden ve düzeltmeye geri gönderen kişi gerekçe yazmadan işlemi tamamlayamaz. Gerekçe, kaydı açan kişiye neyi düzelteceğini açıkça söyler.
@@ -192,7 +192,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 ### REQ-WFL-016 — Onay ve düzeltme geçmişi
 
-- Kaynak: §13; §38
+- Kaynak: REQ-SIT-013, REQ-SIT-031…032; REQ-AUD-001…002, REQ-AUD-004…005
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Bir kaydın onay geçmişinde kimin ne zaman gönderdiği, kimin neden geri çevirdiği, hangi düzeltmenin yapıldığı ve ne zaman yeniden gönderildiği görünür.
@@ -214,7 +214,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 ### REQ-WFL-018 — Dış taraf onayı
 
-- Kaynak: D-102; §45.1, §45.5
+- Kaynak: D-102; REQ-SIT-025
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: dış taraf onayı alt akış şablonunun adımları, hatırlatma ve eskalasyon süreleri
@@ -327,20 +327,20 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 ### REQ-WFL-028 — Varsayılan şirket akışları
 
-- Kaynak: D-089; §45; `docs/workflows/README.md`
+- Kaynak: D-089; `docs/workflows/README.md`
 - Öncelik: Must · Kademe: T2
 - Katman: Akış
 - Akışla ayarlanan: listelenen varsayılan akışların tamamı; her biri şablondan kopya olarak gelir ve değiştirilebilir (REQ-WFL-027)
-- Açıklama: Panel şu şablonlarla gelir: günlük saha kaydı onayı, malzeme çıkış talebi, ödeme onayı, hakediş → fatura, personel çıkışı, revizyon talebi, stok sayımı onayı, satın alma talebi, teklif onayı ve §45'in sekiz uçtan uca süreci. §45 süreçleri motorun kabul testleridir.
+- Açıklama: Panel şu şablonlarla gelir: günlük saha kaydı onayı, malzeme çıkış talebi, ödeme onayı, hakediş → fatura, personel çıkışı, revizyon talebi, stok sayımı onayı, satın alma talebi, teklif onayı ve sekiz uçtan uca süreç. süreçleri motorun kabul testleridir.
 - Kabul kriterleri:
-  - [ ] §45'in sekiz sürecinin her biri, TASK-0042'de yazılan tanımıyla motorda çalıştırılıp beklenen görevleri ve kayıtları üretir.
+ - [ ] 'in sekiz sürecinin her biri, TASK-0042'de yazılan tanımıyla motorda çalıştırılıp beklenen görevleri ve kayıtları üretir.
 - Durum: CONFIRMED
 
 ## G. Kilit ve istisna
 
 ### REQ-WFL-029 — Bağımlılık kilidi
 
-- Kaynak: ADR-006; §45.4
+- Kaynak: ADR-006; REQ-IAM-007
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Kilit, kaydı silmez veya gizlemez; yalnızca bir durum geçişini engeller ve sebebini ekranda yazar ("zimmet kapanmadan çıkış tamamlanamaz").
@@ -361,7 +361,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 ### REQ-WFL-031 — İstisnai manuel işlem izni
 
-- Kaynak: §37
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Olağan dışı bir durumda kullanıcı istisnai manuel işlem için izin talep eder; yönetim yalnızca gerekli alan veya işlem için izin verir; değişikliğin nedeni zorunludur; kim, ne zaman, neden değiştirdi geçmişte kalır. Sahip bu istisna yetkisini açıp kapatabilir.
@@ -374,7 +374,7 @@ Kayıt türü üretecinin sahibi modül Phase 03'te belirlenir (ADM veya yeni bi
 
 ### REQ-WFL-032 — Kurallar merkezi ve tarih bazlı sürümlü
 
-- Kaynak: Mimari §13; ADR-005
+- Kaynak: REQ-WFL-032; ADR-005
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: kuralların değerleri ve geçerlilik tarihleri

@@ -1,6 +1,6 @@
 # PROJECT RULES
 
-Status: ACTIVE · Owner: project owner · Last updated: 2026-09-18
+Status: ACTIVE · Owner: project owner · Last updated: 2026-09-19
 
 These rules are a working protocol, not advice. Source: `docs/sources/ai-development-protocol.md` (originally `AI_Destekli_Proje_Gelistirme_Ana_Promptu.md`), revised by the Phase 00 decision round (see `ai/DECISIONS.md`). Where this file and the original prompt differ, this file wins.
 
@@ -184,7 +184,7 @@ Rules written only as prose depend on a model remembering them at the right mome
 8. `Last updated:` in each `/ai` record is not older than that file's last commit date.
 9. Task ids referenced in `depends_on` exist.
 10. Every task row in `ai/TASKS.md` has exactly six columns (added 2026-09-18 after it found three malformed rows).
-11. No record cites a path that does not exist, and — once TASK-0039 is done — no record cites `docs/sources/` by section number.
+11. No record cites a path that does not exist, and no record cites a section (`§N`) without naming the document it belongs to (PROJECT_RULES, DESIGN_SYSTEM_RULES, an ADR, GIT_WORKFLOW, the original protocol, or "bu belgenin"); functional-scope sections are cited by REQ id, and the only place that keeps scope section numbers is the map in `docs/requirements/README.md` (TASK-0039, D-213).
 12. Every requirement in `docs/requirements/REQ-*.md` carries a `- Katman:` line (`Sabit`, `Akış`, `Tanım`, joined by `+`), and states the configurable part in `- Akışla ayarlanan:` / `- Tanımla ayarlanan:` exactly when its layer includes Akış / Tanım (D-181).
 
 A failure prints the file, the line and what to fix. Forward references — records citing files the roadmap has not produced yet, such as `docs/requirements/REQ-*.md` — are counted on one line rather than listed; `npm run records -- --verbose` lists them. A gate that prints forty lines on every commit stops being read. The validator is amended whenever a new class of contradiction is found; a contradiction found twice is a missing check.

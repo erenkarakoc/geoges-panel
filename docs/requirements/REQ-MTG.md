@@ -2,7 +2,7 @@
 
 Durum: CONFIRMED (sahip, 2026-09-19) · 2026-09-19 · Modül: MTG (Meetings)
 
-Kaynaklar: Özellik Yapısı §32; kararlar D-199, D-200.
+Kaynaklar: kararlar D-199, D-200.
 
 **Sınır.** Görevin kendisi ve eskalasyon REQ-TSK'dadır; toplantı kararından açılan iş bir görevdir. "Dikkat" bölümü REQ-RPT-007'dedir. Toplantı belgeleri arşivde de görünür (REQ-DOC).
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Meeting, Meeting Minutes, Meeting Decision
 
 ### REQ-MTG-001 — Toplantı kaydı
 
-- Kaynak: §32, §32.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Toplantılar sözlü hafızada kalmaz. Her toplantıda tarih, başlık, katılımcılar, gündem ve notlar tutulur; toplantı isteğe bağlı olarak bir projeye veya şantiyeye bağlanır.
@@ -46,7 +46,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Meeting, Meeting Minutes, Meeting Decision
 
 ### REQ-MTG-004 — Karar kaydı
 
-- Kaynak: §32.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Her kararda ne karar verildiği, sorumlu kişi veya rol, son tarih, durum ve belge/ek bulunur.
@@ -56,7 +56,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Meeting, Meeting Minutes, Meeting Decision
 
 ### REQ-MTG-005 — Karar görev açar
 
-- Kaynak: §32.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: görevin hatırlatması ve eskalasyonu
@@ -67,7 +67,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Meeting, Meeting Minutes, Meeting Decision
 
 ### REQ-MTG-006 — Tüm kararlar tek listede
 
-- Kaynak: §32.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: geciken kararın uyarısının kime gideceği
@@ -78,7 +78,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Meeting, Meeting Minutes, Meeting Decision
 
 ### REQ-MTG-007 — Karar ve görevi birlikte kapanır
 
-- Kaynak: §32.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Karar tamamlandığında ona bağlı görev de kapanır; görev tamamlandığında karar da tamamlanır. "Geçen toplantıda bunu konuşmuştuk, ne oldu?" sorusunun cevabı kararın geçmişindedir.
@@ -88,10 +88,10 @@ Terimler (`docs/domain/GLOSSARY.md`): Meeting, Meeting Minutes, Meeting Decision
 
 ### REQ-MTG-008 — Önceki toplantının açık kararları gündeme gelir
 
-- Kaynak: §32.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit
-- Açıklama: Aynı projeye veya şantiyeye bağlı yeni bir toplantı açılınca, önceki toplantılarda alınmış ve hâlâ açık olan kararlar gündemde ayrı bir bölüm olarak gelir (§32.3'ten türetilen kural, sahip onayladı).
+- Açıklama: Aynı projeye veya şantiyeye bağlı yeni bir toplantı açılınca, önceki toplantılarda alınmış ve hâlâ açık olan kararlar gündemde ayrı bir bölüm olarak gelir ('ten türetilen kural, sahip onayladı).
 - Kabul kriterleri:
   - [ ] Gündeme gelen her açık karar, alındığı toplantıya bağlantı taşır.
 - Durum: CONFIRMED

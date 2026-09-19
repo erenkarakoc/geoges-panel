@@ -21,7 +21,7 @@ CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 a
 Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Phase 01 continues module by module, each with its question round and capability catalog (TASK-0041): TSK and AUD now, then PRJ and ADM, then the rest; RPT §34 gets its own round.
+1. Phase 01 continues module by module, each with its question round and capability catalog (TASK-0041): TSK and AUD now, then PRJ and ADM, then the rest; RPT REQ-RPT-015 gets its own round.
 2. OQ-027 items 3 and 4 (flow methods) still open (Phase 02).
 3. TASK-0043: rename `dashboard`/`widget` in code to match the glossary.
 4. TASK-0018: re-check after 2026-10-15 that the worker keeps storing observations via the `CLAUDE_CODE_OAUTH_TOKEN` fallback.
@@ -33,20 +33,21 @@ None.
 See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-007 (glossary), OQ-027 items 3–4 (flow methods), OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
 
 ## RECENT DECISIONS
+- D-213 (2026-09-19, TASK-0039): every scope § citation replaced by REQ ids; section map in `docs/requirements/README.md`; scope at Git tag `scope-archive`; validator rejects an unnamed §
 - D-209…D-212 (2026-09-19, NFR round): RPO ≤ 1 h, RTO ≤ 4 h, Turkish-only interface, sizing for 50–150 users
-- D-206…D-208 (2026-09-19, RPT §34 round): daily site report produced on approval, sent to the client by a person; ready-made reports with filters and saved views; scheduled reports to internal users only, as a workflow
+- D-206…D-208 (2026-09-19, RPT REQ-RPT-015 round): daily site report produced on approval, sent to the client by a person; ready-made reports with filters and saved views; scheduled reports to internal users only, as a workflow
 - D-202…D-205 (2026-09-19, STR round): budget per month × cost center × expense type; nominal TL with an inflation-adjusted view; simple and discounted payback; health scorecard as colours per area with no overall score
 - D-199…D-201 (2026-09-19, MTG/DOC/SUP round): meeting visibility by role scope; minutes final when saved; archive search includes contents and text recognition of scans (outside-service question deferred to Phase 03)
 - D-195…D-198 (2026-09-19, INT round): rule-based recommendations only, no AI model and no data leaving the panel; scenario limits mark a scenario "not recommended"; an approved scenario flows into targets, tasks and bonus rules; a dismissed recommendation is closed with a reason
-- D-187…D-194 (2026-09-19, PRF round): KPI catalog defined from scratch (changes §28.11); bonus paid outside payroll but always in the accounting export; score and bonus monthly; manual KPIs by the direct manager; no objection process; coordinator never scored on profit (changes §28.2); critical score opens a development meeting; bonus on base salary
+- D-187…D-194 (2026-09-19, PRF round): KPI catalog defined from scratch (changes REQ-PRF-002, REQ-PRF-008…011, REQ-PRF-013); bonus paid outside payroll but always in the accounting export; score and bonus monthly; manual KPIs by the direct manager; no objection process; coordinator never scored on profit (changes REQ-PRF-001, REQ-PRF-006); critical score opens a development meeting; bonus on base salary
 - D-182…D-185 (2026-09-19, QHS round): failed lot only warns; no health data for OHS incidents (REQ-HR consequence open); PPE issued by count with the person's confirmation; D-186: HR keeps only the existence and dates of medical reports; serious accident or open critical OHS finding voids the period's speed/bonus target, near misses never count against anyone
 - D-181 (2026-09-18, layer scan): every requirement tagged Sabit / Akış / Tanım with the configurable part named; enforced by the validator
 - D-177…D-180 (2026-09-18, CMP round): client, subcontractor and supplier contracts; extension of time as request → decision → new date; notice-letter draft on client delay; guarantee commission charged to the project
-- D-173…D-176 (2026-09-18, QTE round): no general-expense share in quote estimates (changes §6.3); estimated cost proposed from actual cost; sales orders reserve stock; each shipment invoiced separately
+- D-173…D-176 (2026-09-18, QTE round): no general-expense share in quote estimates (changes REQ-QTE-005…006); estimated cost proposed from actual cost; sales orders reserve stock; each shipment invoiced separately
 - D-169…D-172 (2026-09-18, CRM round): e-mail and WhatsApp requests entered by hand; client scorecard from records plus reasoned notes; a won request opens a pre-filled draft project
 - D-163…D-168 (2026-09-18, HR round): the panel calculates payroll itself (RISK-011); salary cost to the registered unit; salary advance deducted from payroll; leave entitlement entered by HR; official filings stay with the accountant; bank bulk payment file
 - D-155…D-162 (2026-09-18, EQP round): depreciation to a site only on working days; idle days to a company-wide idle equipment expense; write-off to the site where the asset was; low-value items by count; no service-vehicle savings; custody record confirmed by both parties on the phone; any asset can be rented; working day marked in the daily site log
-- D-147…D-154 (2026-09-18, FIN round): unapproved quantity carries over; subcontractor paid on our approved production; no overhead allocation to projects (changes §15.1/§22.4 wording); client advance deducted from progress payments; collection date from the contract term; first expense entry wins; monthly accounting export; period close per site
+- D-147…D-154 (2026-09-18, FIN round): unapproved quantity carries over; subcontractor paid on our approved production; no overhead allocation to projects (changes REQ-FIN-013, REQ-FIN-017 wording); client advance deducted from progress payments; collection date from the contract term; first expense entry wins; monthly accounting export; period close per site
 - D-142…D-146 (2026-09-18, Slice 2 rounds): landed cost for strips; weighted average per location; over-delivery tolerance; factory overhead by labour hours; factory log approval mandatory
 - D-139…D-141 (2026-09-18, ADM round): new list items usable at once, merged later; CBRT buying rate of the previous business day; past effective dates reach only unapproved transactions
 - D-136…D-138 (2026-09-18, PRJ round): targets change only through an approved project revision; daily targets calculated and correctable; a site belongs to one project

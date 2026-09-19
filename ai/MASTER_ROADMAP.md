@@ -1,6 +1,6 @@
 # MASTER ROADMAP
 
-Status: APPROVED by owner (2026-09-15, incl. CHG-001 resolution) · Last updated: 2026-09-18
+Status: APPROVED by owner (2026-09-15, incl. CHG-001 resolution) · Last updated: 2026-09-19
 
 **This file is the single authority for the plan.** Every other record derives from it and may not contradict it:
 `ai/TASKS.md` says who does what and in which state, `ai/DECISIONS.md` + ADRs say why, `ai/CURRENT_STATE.md` says where we are right now, `ai/REQUIREMENTS.md` says what is wanted. An approved change request is written into this file **in the same session it is approved** (`ai/PROJECT_RULES.md` §9); a change request that is not in this file may not be implemented. Consistency is machine-checked by `npm run records` (`scripts/check-records.mjs`), not by memory.
@@ -144,17 +144,17 @@ STATUS: DONE
 - **Risks:** scope size (RISK-002); hidden calculation rules.
 - **Status:** `QUESTIONS_PENDING`. Glossary rounds 1–2 done (D-027…D-034); Slice 1 requirement rounds 1–3 done (D-035…D-041, D-048…D-050). No REQ file has been written yet — `docs/requirements/` holds only its README, so the phase's main deliverable is entirely outstanding.
 - **Exit blocker:** TASK-0027 (deleting `docs/sources/`) may not run until every `§` reference in the records has been remapped to a REQ id. See CHG-005.
-- **CHG-006 deliverable:** every module's **capability catalog** — events it publishes, actions it exposes, typed and classified fields conditions may read (TASK-0041). §45 is filed under `REQ-WFL`. Record-type builder requirements are written here too (D-079).
+- **CHG-006 deliverable:** every module's **capability catalog** — events it publishes, actions it exposes, typed and classified fields conditions may read (TASK-0041). REQ-WFL-011, REQ-WFL-028 is filed under `REQ-WFL`. Record-type builder requirements are written here too (D-079).
 
 ## PHASE 02 — UX, Information Architecture & User Flows
 
 - **Purpose:** design how every role works with the system before building it.
-- **Scope:** navigation/IA, role home screens, end-to-end flows (§45 of scope), screen inventory, per-screen state matrix (initial, loading, empty, partial, error, permission denied, retry, destructive confirmation), COSS component mapping, list/detail/form standards, daily site log table UX, cockpit, notification and approval center UX, responsive behavior (desktop/tablet/mobile), accessibility targets (WCAG 2.2 AA), brand tokens.
+- **Scope:** navigation/IA, role home screens, end-to-end flows (REQ-WFL-011, REQ-WFL-028 of scope), screen inventory, per-screen state matrix (initial, loading, empty, partial, error, permission denied, retry, destructive confirmation), COSS component mapping, list/detail/form standards, daily site log table UX, cockpit, notification and approval center UX, responsive behavior (desktop/tablet/mobile), accessibility targets (WCAG 2.2 AA), brand tokens.
 - **Dependencies:** Phase 01.
 - **Deliverables:** `docs/ui-ux/*` flows and screen specs; list of required custom elements with owner approval.
 - **Acceptance:** every REQ with UI has a screen spec; every screen lists states and COSS components; owner approved key flows.
-- **Status:** `PARTIALLY_DONE`. CHG-004 delivered the navigation skeleton, the three-zone header, the conditional context row, the per-role "Bugün" entry screen and the phone bottom bar ahead of this phase (D-054…D-070, TASK-0032…TASK-0037). Those decisions stand and are not re-opened here. **Still owed:** screen inventory, the per-screen state matrix (initial, loading, empty, partial, error, permission denied, retry, destructive confirmation), list/detail/form standards (§41–§43), the daily site log table UX, the end-to-end flow specifications (§45) and the WCAG 2.2 AA targets.
-- **CHG-006 deliverables:** the eight §45 flows as **real flow definitions**, step by step, each tested against the node palette (D-089, TASK-0042); UX of the flow designer (wizard + diagram, both editable — D-085), the trace view (D-087), the "new flows" 7-day list (D-081) and the record-type builder (D-079); the CHG-004 re-review (TASK-0040).
+- **Status:** `PARTIALLY_DONE`. CHG-004 delivered the navigation skeleton, the three-zone header, the conditional context row, the per-role "Bugün" entry screen and the phone bottom bar ahead of this phase (D-054…D-070, TASK-0032…TASK-0037). Those decisions stand and are not re-opened here. **Still owed:** screen inventory, the per-screen state matrix (initial, loading, empty, partial, error, permission denied, retry, destructive confirmation), list/detail/form standards (REQ-NFR-013…015), the daily site log table UX, the end-to-end flow specifications (REQ-WFL-011, REQ-WFL-028) and the WCAG 2.2 AA targets.
+- **CHG-006 deliverables:** the eight REQ-WFL-011, REQ-WFL-028 flows as **real flow definitions**, step by step, each tested against the node palette (D-089, TASK-0042); UX of the flow designer (wizard + diagram, both editable — D-085), the trace view (D-087), the "new flows" 7-day list (D-081) and the record-type builder (D-079); the CHG-004 re-review (TASK-0040).
 
 ## PHASE 03 — System Architecture
 
@@ -205,7 +205,7 @@ STATUS: DONE
 - **Scope:** workflow definitions (fixed node palette), versioning, execution engine, test-run, publish permissions, approval center integration, visual designer UI.
 - **Dependencies:** Phase 07.
 - **Acceptance:** default company flows (daily log approval, material issue, payment approval) defined and executed through the engine; the sample "Onaylar" screen delivered by TASK-0037 re-wired to the engine's real queue; T1 gate.
-- **CHG-006 (approved 2026-09-18):** position unchanged (D-088). Scope grows: two-way editor (D-085), record node (D-095), for-each (D-096), three-outcome approvals (D-099), external-approval sub-flow template (D-102), publish controls (D-081), templates as copies (D-086), traceability (D-087). All eight §45 flows run as executable acceptance tests. The record-type builder is **not** here — see 09R.
+- **CHG-006 (approved 2026-09-18):** position unchanged (D-088). Scope grows: two-way editor (D-085), record node (D-095), for-each (D-096), three-outcome approvals (D-099), external-approval sub-flow template (D-102), publish controls (D-081), templates as copies (D-086), traceability (D-087). All eight REQ-WFL-011, REQ-WFL-028 flows run as executable acceptance tests. The record-type builder is **not** here — see 09R.
 
 ## PHASES 09–18 — Module Slices
 

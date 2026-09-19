@@ -22,4 +22,4 @@ Silindikten sonra da Git geçmişinden erişilebilir kalır.
 
 ## Silme engeli (CHG-005, D-075)
 
-Bu klasör **TASK-0039 tamamlanmadan silinemez.** Kayıtların gövdesi buraya bölüm numarasıyla atıf yapıyor (§9.4, §40.2, §45 gibi). Numaralar REQ kimliklerine taşınmadan silme yapılırsa yüzlerce kararın dayanağı kaybolur. TASK-0027 bu yüzden `BLOCKED` durumundadır.
+TASK-0039 2026-09-19'da tamamlandı (D-213): kayıtlar artık bu klasöre bölüm numarasıyla değil gereksinim numarasıyla atıf yapıyor; bölüm → gereksinim eşlemesi `docs/requirements/README.md` sonundadır ve metin Git'te `scope-archive` etiketinde kalır. TASK-0027'nin kalan koşulları: mimari ilkelerin ADR'larda veya `docs/architecture/` altında karşılandığının denetlenmesi ve sahip onayı.

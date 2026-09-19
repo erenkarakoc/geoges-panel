@@ -2,7 +2,7 @@
 
 Durum: CONFIRMED (sahip, 2026-09-19) · 2026-09-19 · Modül: STR (Strategy)
 
-Kaynaklar: Özellik Yapısı §35; kararlar D-149, D-202…D-205.
+Kaynaklar: kararlar D-149, D-202…D-205.
 
 **Sınır.** Gerçekleşen gelir ve gider REQ-FIN'den, kaynak kullanımı ve atıl günler REQ-EQP'den okunur. Proje hızlandırma senaryoları REQ-INT'tedir; STR şirket düzeyindeki senaryoları tutar. Performans hedefleri REQ-PRF-014'tedir. Bütün ekranlar ticari veridir (REQ-IAM-011).
 
@@ -14,28 +14,28 @@ Terimler (`docs/domain/GLOSSARY.md`): Annual Target, Budget, Budget Revision, Bu
 
 ### REQ-STR-001 — Yıllık hedefler
 
-- Kaynak: §35.1; REQ-PRF-014
+- Kaynak: REQ-PRF-014
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
-- Açıklama: Yıllık ciro, kâr, proje sayısı, kapasite, fabrika verimi, teklif/kazanma ve personel/organizasyon hedefleri tutulur. Bu hedefler performans modülündeki "genel şirket hedefi" olarak da kullanılır (REQ-PRF-014; §35.1'den türetilen kural, sahip onayladı).
+- Açıklama: Yıllık ciro, kâr, proje sayısı, kapasite, fabrika verimi, teklif/kazanma ve personel/organizasyon hedefleri tutulur. Bu hedefler performans modülündeki "genel şirket hedefi" olarak da kullanılır (REQ-PRF-014; 'den türetilen kural, sahip onayladı).
 - Kabul kriterleri:
   - [ ] Her hedefin yıl içindeki gerçekleşmesi aylık olarak izlenebilir.
 - Durum: CONFIRMED
 
 ### REQ-STR-002 — Bütçe ay, maliyet merkezi ve gider türü ayrıntısında
 
-- Kaynak: §35.2; D-202
+- Kaynak: D-202
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: bütçenin ve revize bütçenin onay adımları
-- Açıklama: Yıllık bütçe, gelir ve gider için her ay, her maliyet merkezi (proje, şantiye, fabrika, ekipman, genel) ve gider türü bazında planlanır. Onaylanan bütçe kilitlenir; yıl içindeki değişiklik "revize bütçe" olarak yeni sürümle yapılır ve ilk bütçe silinmez (§35.2'den türetilen kural, sahip onayladı).
+- Açıklama: Yıllık bütçe, gelir ve gider için her ay, her maliyet merkezi (proje, şantiye, fabrika, ekipman, genel) ve gider türü bazında planlanır. Onaylanan bütçe kilitlenir; yıl içindeki değişiklik "revize bütçe" olarak yeni sürümle yapılır ve ilk bütçe silinmez ('den türetilen kural, sahip onayladı).
 - Kabul kriterleri:
   - [ ] Gerçekleşen, hem ilk bütçeyle hem son revize bütçeyle ayrı ayrı karşılaştırılabilir.
 - Durum: CONFIRMED
 
 ### REQ-STR-003 — Bütçe ile gerçekleşen
 
-- Kaynak: §35.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: uyarı verilecek sapma eşiği
@@ -60,7 +60,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Annual Target, Budget, Budget Revision, Bu
 
 ### REQ-STR-005 — Yatırım analizi
 
-- Kaynak: §35.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit
 - Açıklama: Yeni vinç, kalıp, makine, araç veya üretim ekipmanı alımında maliyet, beklenen kapasite artışı, tasarruf ve geri dönüş analiz edilir. Girdiler panel verisinden gelir: benzer ekipman için ödenen kira, atıl günler, kullanım oranı, darboğaz yüzünden kaybedilen üretim (REQ-INT-007). Kullanıcı girdileri değiştirebilir.
@@ -81,7 +81,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Annual Target, Budget, Budget Revision, Bu
 
 ### REQ-STR-007 — Şirket düzeyinde senaryolar
 
-- Kaynak: §35.4; REQ-INT-011
+- Kaynak: REQ-INT-011
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit
 - Açıklama: "Bir vinç daha alırsak?", "Kalıp sayısını artırırsak?", "Fabrika kapasitesini yükseltirsek?", "Bu projeyi daha erken bitirirsek?" gibi yönetim senaryoları veriye dayalı karşılaştırılır. Proje düzeyindeki hızlandırma hesabı REQ-INT'teki hesabı kullanır.
@@ -93,7 +93,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Annual Target, Budget, Budget Revision, Bu
 
 ### REQ-STR-008 — Başlık başına renkli sağlık karnesi
 
-- Kaynak: §35.5; D-205
+- Kaynak: D-205
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: her başlığın göstergeleri ve renk eşikleri

@@ -2,7 +2,7 @@
 
 Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: PUR (Purchasing)
 
-Kaynaklar: Özellik Yapısı §18.2, §18.3, §18.16; kararlar D-027 (firma ve rolleri), D-144.
+Kaynaklar: REQ-EQP-005; kararlar D-027 (firma ve rolleri), D-144.
 
 **Sınır.** Teslim alınan malın stoğa girişi REQ-INV'dedir. Fatura, ödeme ve tedarikçi carisi REQ-FIN'dedir. Onay eşikleri ve onaylayıcılar iş akışıdır (REQ-WFL). Teslim alınan kalemin demirbaş kaydı REQ-EQP'dedir.
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 ### REQ-PUR-001 — Tedarikçi kaydı
 
-- Kaynak: §18.2; D-027
+- Kaynak: D-027
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Haddeciler, galvanizciler ve diğer malzeme ve hizmet tedarikçileri kaydedilir. Tedarikçi, "tedarikçi" rolü taşıyan bir firmadır; aynı firma işveren veya müşteri de olabilir (D-027).
@@ -24,7 +24,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 ### REQ-PUR-002 — Sipariş öncesi karşılaştırma
 
-- Kaynak: §18.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Sipariş öncesinde tedarikçilerin fiyat, termin süresi, miktar/tonaj ve teslim koşulları yan yana karşılaştırılır.
@@ -36,7 +36,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 ### REQ-PUR-003 — Sipariş kaydı
 
-- Kaynak: §18.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Siparişte tedarikçi, malzeme, miktar, fiyat/tutar, para birimi, sipariş tarihi, beklenen termin, belge ve durum tutulur. Tutar ticari veridir.
@@ -46,7 +46,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 ### REQ-PUR-004 — Sipariş durumu ve kısmi teslim
 
-- Kaynak: §18.3, §18.11
+- Kaynak: REQ-INV-009…013
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Sipariş şu durumlardan geçer: Verildi → Üretimde/Yolda → Teslim alındı. Bir sipariş birden fazla tırla kısım kısım gelebilir; sipariş, sipariş miktarı tamamen teslim alınana kadar açık kalır ve teslim alınan/kalan miktar görünür.
@@ -57,7 +57,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 ### REQ-PUR-005 — Teslim alınınca stok artar
 
-- Kaynak: §18.3; REQ-INV-003
+- Kaynak: REQ-INV-003
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Teslim alınan miktar stok hareketi olarak ilgili lokasyona girer.
@@ -82,7 +82,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 ### REQ-PUR-007 — Katalog dışı alımlar da panelden yürür
 
-- Kaynak: §18.16
+- Kaynak: REQ-EQP-005
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: talebin onay adımları (varsayılan akış: satın alma talebi)
@@ -93,7 +93,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 ### REQ-PUR-008 — Talebin alanları
 
-- Kaynak: §18.16
+- Kaynak: REQ-EQP-005
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Talepte talep eden, ilgili birim/şantiye/ekipman, ihtiyaç açıklaması, miktar, aciliyet ve istenen tarih bulunur.
@@ -103,7 +103,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 ### REQ-PUR-009 — Teklifler yan yana
 
-- Kaynak: §18.16
+- Kaynak: REQ-EQP-005
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Fiyat araştırmasında birden fazla tedarikçi teklifi (fiyat, termin, koşul, belge) yan yana görülür.
@@ -113,7 +113,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 ### REQ-PUR-010 — Onay tutar eşiğine göre
 
-- Kaynak: §18.16; REQ-WFL-001
+- Kaynak: REQ-EQP-005; REQ-WFL-001
 - Öncelik: Must · Kademe: T2
 - Katman: Akış
 - Akışla ayarlanan: tutar eşikleri ve onaylayıcılar
@@ -124,7 +124,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Supplier, Rolling Mill Supplier, Ga
 
 ### REQ-PUR-011 — Teslim alınan kalem bağlanır
 
-- Kaynak: §18.16
+- Kaynak: REQ-EQP-005
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Teslim alınan kalem gerekiyorsa demirbaş kaydına (REQ-EQP) veya ilgili maliyet merkezine (şantiye, fabrika, ekipman, ofis) bağlanır.

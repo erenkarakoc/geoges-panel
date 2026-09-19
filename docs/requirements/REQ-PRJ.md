@@ -2,9 +2,9 @@
 
 Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: PRJ (Projects)
 
-Kaynaklar: Özellik Yapısı §7, §8.1, §8.2, §10.2; kararlar D-136…D-138.
+Kaynaklar: REQ-SIT-015; kararlar D-136…D-138.
 
-**Sınır.** Panel tipi ve şerit tipi tanımları merkezi katalogdur (REQ-ADM, §10.1, §11.2). Hızlandırma ve süre-maliyet senaryoları (§8.3, §8.4) REQ-INT'dedir. Sözleşme şartları ve yükümlülükleri REQ-CMP'dedir; proje kartı onları gösterir. Hakediş REQ-FIN'dedir. Döküm, montaj ve şerit girişleri REQ-SIT'tedir; PRJ hedefleri ve ilerlemenin hedefe oranını tutar. Duvar bazlı özetlerin resmi günlük rapora basılması REQ-RPT §34'tedir.
+**Sınır.** Panel tipi ve şerit tipi tanımları merkezi katalogdur (REQ-ADM, REQ-ADM-002…003, REQ-SIT-014, REQ-SIT-022). Hızlandırma ve süre-maliyet senaryoları (REQ-INT-011…014) REQ-INT'dedir. Sözleşme şartları ve yükümlülükleri REQ-CMP'dedir; proje kartı onları gösterir. Hakediş REQ-FIN'dedir. Döküm, montaj ve şerit girişleri REQ-SIT'tedir; PRJ hedefleri ve ilerlemenin hedefe oranını tutar. Duvar bazlı özetlerin resmi günlük rapora basılması REQ-RPT REQ-RPT-015'tedir.
 
 Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, Supply Responsibility Matrix, Project Revision, Technical Office Item, Project Stage, Contract Duration, Theoretical Duration, Management Target Duration, Daily Target.
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 ### REQ-PRJ-001 — Proje birden fazla şantiyeye bölünür, şantiye tek projenindir
 
-- Kaynak: §7; D-138
+- Kaynak: D-138
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Bir proje tek şantiyeden oluşabilir veya birden fazla şantiyeye bölünebilir. Her şantiye tek bir projeye bağlıdır; aynı sahada iki ayrı sözleşme varsa iki ayrı şantiye kaydı açılır. Böylece maliyet, kâr-zarar ve hakediş her zaman tek projeye yazılır.
@@ -25,7 +25,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 ### REQ-PRJ-002 — Proje kartı
 
-- Kaynak: §7.1; REQ-IAM-011
+- Kaynak: REQ-IAM-011
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Proje kartında proje adı, işveren/ana firma, kurum/idare, şehir ve lokasyon, sözleşme bilgileri, sözleşme bedeli ve para birimi, başlangıç ve hedef bitiş tarihi, sözleşmedeki son bitiş tarihi, toplam hedef metraj, panel tipleri ve hedef adetleri, şerit tipleri ve hedef metrajları, diğer iş kalemleri, duvarlar ve duvar bazlı hedefler, sorumlu koordinatör, şantiyeler, iş modeli, teknik ofis durumu, kurum onay durumu, hakediş durumu, sözleşme yükümlülükleri ve proje dokümanları bulunur. Sözleşme bedeli ve hakediş tutarları ticari veridir.
@@ -35,7 +35,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 ### REQ-PRJ-003 — Proje aşamaları
 
-- Kaynak: §7.2; ADR-005
+- Kaynak: ADR-005
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış + Tanım
 - Akışla ayarlanan: aşama geçişlerinin onayı ve kilitleri
@@ -47,7 +47,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 ### REQ-PRJ-004 — Tedarik/sorumluluk matrisi
 
-- Kaynak: §7.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: matris kalemleri kataloğu
@@ -58,7 +58,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 ### REQ-PRJ-005 — Teknik ofis işleri
 
-- Kaynak: §7.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: geciken teknik işte görevin kime düşeceği
@@ -71,7 +71,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 ### REQ-PRJ-006 — Duvarlar
 
-- Kaynak: §7.5
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Bir proje birden fazla duvardan oluşur (ör. "Kötekli Duvar 1 Sağ"). Duvar proje altında tanımlanır ve bir şantiyeye bağlanır. Her duvar için ad/kod, panel tipi başına hedef adet (duvar × panel tipi matrisi), şerit tipi ve boyuna göre hedef metraj, varsa diğer iş kalemlerinin hedefleri ve durum (başlamadı / devam ediyor / tamamlandı) tutulur.
@@ -81,7 +81,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 ### REQ-PRJ-007 — Proje hedefi duvarların toplamıdır
 
-- Kaynak: §7.5, §10.2
+- Kaynak: REQ-SIT-015
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Projede panel tipi bazında hedef adet tutulur. Hedefler duvar bazında tanımlandığında proje hedefi duvarların toplamıdır; elle ayrıca girilmez.
@@ -91,7 +91,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 ### REQ-PRJ-008 — İlerleme proje, şantiye ve duvar bazında
 
-- Kaynak: §7.5
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Panel dökümü duvardan bağımsız, panel tipine göre izlenir; montaj ve şerit kayıtları ilgili duvara bağlanır. İlerleme proje, şantiye ve duvar bazında ayrı ayrı görülür; "hangi duvar ne durumda, hangi duvarda şerit eksik kaldı?" sorusu cevaplanır.
@@ -101,7 +101,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 ### REQ-PRJ-009 — Hedefler proje revizyonuyla değişir
 
-- Kaynak: D-136; §7.4
+- Kaynak: D-136
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: revizyonun onaylayıcısı
@@ -116,7 +116,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 ### REQ-PRJ-010 — Üç ayrı süre
 
-- Kaynak: §8.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Projede birbirinden ayrı üç süre görünür: sözleşme süresi ve sözleşme bitiş tarihi (işverene karşı resmî süre), normal teorik süre (mevcut ekip ve kaynaklarla beklenen süre), yönetim hedef süresi (daha hızlı bitirmek için konan iç hedef).
@@ -126,7 +126,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Project, Site, Wall, Authority, Quantity, 
 
 ### REQ-PRJ-011 — Günlük hedefler hesaplanır, yetkili düzeltir
 
-- Kaynak: §8.2; D-137
+- Kaynak: D-137
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Şantiyenin günlük hedefleri (panel döküm adedi/m², panel montaj adedi/m², şerit montaj metresi, diğer iş kalemleri) seçilen süreden, kalan işten ve çalışma takviminden hesaplanır. Yetkili kişi gerekirse elle düzeltir; düzeltme kayıtta kalır. Üretim geride kaldıkça kalan günlerin hedefi yeniden hesaplanır.

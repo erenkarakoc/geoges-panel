@@ -2,7 +2,7 @@
 
 Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: INV (Inventory)
 
-Kaynaklar: Özellik Yapısı §18.1, §18.4–§18.15, §19, §20.1; ADR-005 (değişmez defterler); kararlar D-123, D-142, D-143.
+Kaynaklar: REQ-PUR-004; ADR-005 (değişmez defterler); kararlar D-123, D-142, D-143.
 
 **Sınır.** Malzeme kataloğunun kalemleri ADM'de tanımlanır (REQ-ADM-001); INV onların stok davranışını tutar. Tedarikçiler, siparişler ve satın alma talepleri REQ-PUR'dadır. Fabrikanın işleme kaydı ve birim maliyeti REQ-FAC'tadır. Hurda satışının gelir kaydı ve cari REQ-FIN'dedir. Malzeme çıkış talebinin onay kuralı bir iş akışıdır (REQ-WFL).
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-001 — Malzemenin stok bilgileri
 
-- Kaynak: §18.1; REQ-ADM-001
+- Kaynak: REQ-ADM-001
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: malzeme kataloğu ve kritik stok eşikleri
@@ -25,7 +25,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-002 — Lokasyon ve süreç durumuna göre stok
 
-- Kaynak: §18.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Stok yalnızca şirket toplamı değildir; fabrika/depo, galvanizci, şantiyeler ve sevkiyatta ayrı ayrı görülür. Aynı malzeme süreç durumuna göre de ayrılır: hammadde, işlemde, galvanizde, hazır, sahada.
@@ -35,7 +35,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-003 — Her hareket bir kayıttır; bakiye türetilir
 
-- Kaynak: §18.5; ADR-005
+- Kaynak: ADR-005
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Satın alma girişi, fabrika girişi, işleme, galvanize çıkış, galvaniz dönüşü, şantiye sevki, şantiyeler arası transfer, saha tüketimi, iade, fire ve hurda birer stok hareketidir. Stok miktarı bu hareketlerden hesaplanır; hiçbir yerde elle üzerine yazılmaz. Hareketler değiştirilmez, düzeltme ters hareketle yapılır.
@@ -46,7 +46,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-004 — Fire aşama aşama görünür
 
-- Kaynak: §18.6
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Bir aşamaya giren ve çıkan miktar farklıysa fark fire olarak gösterilir: fabrikada işleme firesi, galvaniz sürecindeki fark ve sevkiyat farkı ayrı ayrı.
@@ -58,7 +58,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-005 — Malzeme çıkış talebi
 
-- Kaynak: §18.7; REQ-WFL
+- Kaynak: REQ-WFL
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: talebin onay adımları ve sahiplere giden sevk ve teslim bildirimleri (varsayılan akış: malzeme çıkış talebi)
@@ -70,7 +70,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-006 — Şantiyeler arası doğrudan sevkiyat
 
-- Kaynak: §18.8
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Malzeme ve ekipman fabrikaya dönmeden doğrudan başka şantiyeye sevk edilebilir; kayıtta kaynak ve hedef şantiye görünür.
@@ -80,7 +80,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-007 — Kritik stok uyarısı
 
-- Kaynak: §18.9
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış + Tanım
 - Akışla ayarlanan: uyarının kime gideceği (varsayılan: sorumlu, koordinatör, gerekirse sahipler)
@@ -92,7 +92,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-008 — Proje sonu artık malzeme zayi değildir
 
-- Kaynak: §18.10
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Proje sonunda artan kullanılabilir malzeme kendiliğinden zayi sayılmaz. Seçenekler: fabrikaya iade, başka projeye transfer, sonraki proje için stok, uygunsa satış.
@@ -104,7 +104,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-009 — Aşamaya göre birim ve teorik ağırlık
 
-- Kaynak: §18.11
+- Kaynak: REQ-PUR-004
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: teorik birim ağırlıklar
@@ -115,7 +115,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-010 — Tır bazında sevkiyat kaydı
 
-- Kaynak: §18.11
+- Kaynak: REQ-PUR-004
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Her sevkiyat tır bazında kaydedilir: tır/plaka ve kaçıncı tır olduğu, ilgili sipariş, çıkış ve varış noktası (haddeci, galvanizci, fabrika, şantiye), boy bazında adet ve kg (aynı tırda farklı boylar olabilir), kantar fişleri (haddeci çıkış, galvanizci giriş, galvanizci çıkış, şantiye giriş). Haddeci ve galvanizci listeleri tedarikçi tanımlarından gelir.
@@ -126,7 +126,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-011 — Kantar farkı
 
-- Kaynak: §18.11
+- Kaynak: REQ-PUR-004
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: kantar toleransı
@@ -137,7 +137,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-012 — Galvaniz ağırlık artışı fire değildir
 
-- Kaynak: §18.11
+- Kaynak: REQ-PUR-004
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: beklenen kaplama artışı
@@ -148,7 +148,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-013 — Stok giriş ekranı özet kartları
 
-- Kaynak: §18.11
+- Kaynak: REQ-PUR-004
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit
 - Açıklama: Özet kartlar: haddeci için toplam sipariş kg / çıkan kg; galvanizci ve depo için giren / çıkan / kalan kg; şantiyeler için gelen / kullanılan / kalan adet.
@@ -160,7 +160,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-014 — Fiziki stok sayımı
 
-- Kaynak: §18.12
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış + Tanım
 - Akışla ayarlanan: sayımın onaylayıcısı (varsayılan akış: stok sayımı onayı)
@@ -173,7 +173,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-015 — Açılış stoku
 
-- Kaynak: §18.13
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: açılış stokunun onaylayıcısı
@@ -186,7 +186,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-016 — Şerit kombinasyon önerisi
 
-- Kaynak: §18.14
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit
 - Açıklama: Belirli bir uzunlukta şerit ihtiyacında stoktaki boylardan en uygun kombinasyon önerilir: önce en az fire (toplam boy − ihtiyaç), sonra en az parça sayısı. Stok yetmiyorsa eksik boy ve miktar için talep/sipariş önerisi üretilir. Öneriyi sevki planlayan kişi onaylar veya değiştirir.
@@ -199,7 +199,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-017 — Tüketim maliyeti kendiliğinden yansır
 
-- Kaynak: §18.15
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Sahada veya fabrikada tüketilen her malzemenin maliyeti ilgili proje, şantiye veya fabrika maliyetine kendiliğinden yansır; ayrıca gider olarak girilmez.
@@ -209,7 +209,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-018 — Birim maliyet sırası
 
-- Kaynak: §18.15
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Birim maliyet şu sırayla bulunur: alışların ağırlıklı ortalama maliyeti; yoksa son alış fiyatı; yoksa tanımlı manuel birim maliyet; hiçbiri yoksa "maliyet bulunamadı" uyarısı. Hangi yöntemle bulunduğu kayıtta görünür.
@@ -241,7 +241,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-021 — Maliyet tüketim anında donar
 
-- Kaynak: §18.15; REQ-ADM-007
+- Kaynak: REQ-ADM-007
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Maliyet tüketim anında dondurulur; sonradan girilen sipariş veya değişen fiyat geçmiş kâr-zararı değiştirmez.
@@ -251,7 +251,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-022 — Lug maliyeti ve geçici maliyet
 
-- Kaynak: §18.15; REQ-FAC-009
+- Kaynak: REQ-FAC-009
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Lug düz lamadan fabrikada üretildiği için maliyeti düz lama + fabrika işçilik, enerji ve fire payıdır. Fabrika maliyeti tam oluşana kadar düz lama maliyeti geçici olarak kullanılır ve "geçici" diye işaretlenir.
@@ -261,7 +261,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-023 — İşveren malzemesi maliyete yazılmaz
 
-- Kaynak: §18.15; REQ-PRJ-004
+- Kaynak: REQ-PRJ-004
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: İşverenin tedarik ettiği malzeme stokta miktar olarak izlenir fakat GEOGES maliyetine yazılmaz.
@@ -271,7 +271,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-024 — Eksi stok
 
-- Kaynak: §18.15
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: eksi stokta görevin kime düşeceği
@@ -284,7 +284,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-025 — Sarf ekranı
 
-- Kaynak: §19; REQ-SIT-029
+- Kaynak: REQ-SIT-029
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Sarf reçetesiyle hesaplanan tahmini sarf günlük kayda önerilir; kullanıcı gerçek sapmayı veya ekstra tüketimi girer (D-123). Sarf ekranında malzeme, birim, bugün kullanılan, bugüne kadar kullanılan, stok kalan ve kritik durum görünür.
@@ -294,7 +294,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-026 — Normalin üzerinde sarfiyat uyarısı
 
-- Kaynak: §19; §3.3
+- Kaynak: REQ-RPT-002, REQ-RPT-007…009
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: normal sarfiyat aralığı
@@ -307,7 +307,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Material, Location, Stock Movement, Shipme
 
 ### REQ-INV-027 — Fireden hurda satışına kapanan zincir
 
-- Kaynak: §20.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Hurdaya dönüşecek fire tartılır; tartım fişi, ekran görüntüsü veya ilgili belge fire kaydına eklenir. Zincir fire oluştu → tartıldı → hurdaya ayrıldı → satıldı → gelir kaydı oluştu şeklinde kapanır. "Ne kadar fire çıktı, ne kadar hurda satıldı, hangi fiyattan" soruları cevaplanır.

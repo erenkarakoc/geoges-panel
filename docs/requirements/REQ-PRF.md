@@ -2,7 +2,7 @@
 
 Durum: CONFIRMED (sahip, 2026-09-19) · 2026-09-19 · Modül: PRF (Performance)
 
-Kaynaklar: Özellik Yapısı §28; kararlar D-153, D-185, D-187…D-194.
+Kaynaklar: kararlar D-153, D-185, D-187…D-194.
 
 **Sınır.** PRF kendi ham verisini üretmez; diğer modüllerin kayıtlarından ve olaylarından hesaplar (günlük saha kaydı, geç giriş, onay süreleri, görevler, uygunsuzluk ve DÖF, İSG olayları, teknik ofis işleri, teklifler, hakediş ve bordro süreleri). Ramak kala ve güvenlik kuralları REQ-QHS-011 ve REQ-QHS-016'dadır. Maaş ve muhasebe aktarımı REQ-HR ve REQ-FIN'dedir. Onay ve görev mekanizması REQ-WFL ve REQ-TSK'dadır.
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-001 — Herkes kendi işinin metrikleriyle ölçülür
 
-- Kaynak: §28, §28.1–§28.6
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: pozisyon başına KPI'lar, ağırlıkları ve hedefleri (REQ-PRF-008)
@@ -25,7 +25,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-002 — Hesaplanabilen KPI panel verisinden gelir
 
-- Kaynak: §28.11
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Panel verisinden hesaplanabilen her KPI elle girilmez; kaynağı olan kayıtlardan kendiliğinden hesaplanır. Her KPI değeri, onu oluşturan kayıtlara açılabilir.
@@ -47,7 +47,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-004 — Sağlıklı skor tek boyutlu değildir
 
-- Kaynak: §28.7
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: boyutların ağırlıkları
@@ -58,7 +58,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-005 — Zamanında bildirmek her zaman gizlemekten iyidir
 
-- Kaynak: §28.7; D-185
+- Kaynak: D-185
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Kötü haberi zamanında ve doğru bildiren kişi cezalandırılmaz; sorunu gizlemek veya veriyi geciktirmek olumsuz etkiler. Aynı sorun için zamanında yapılan bildirim, geç yapılan bildirimden veya hiç bildirilmemekten her zaman daha yüksek puan verir. Ramak kala bildirimi hiçbir hesapta olumsuz sayılmaz (REQ-QHS-011).
@@ -68,7 +68,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-006 — Koordinatörün puanına kâr-zarar girmez
 
-- Kaynak: §28.2; D-192
+- Kaynak: D-192
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Koordinatör yalnızca kendi kontrolündeki davranış ve sonuçlarla puanlanır: sorumlu şantiyelerin operasyonel performansı, onay süresi, geciken onay sayısı, sorun çözme süresi, veri disiplini. Sorumlu şantiyelerin kâr-zararı koordinatörün puanına hiçbir biçimde girmez.
@@ -78,7 +78,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-007 — Erken veri girişi yalnızca tam ve doğru kayıtta ödüllendirilir
 
-- Kaynak: §28.8
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: erken giriş bonusunun büyüklüğü
@@ -91,7 +91,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-008 — Katalog panelde tanımlanır
 
-- Kaynak: §28.11; D-187
+- Kaynak: D-187
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: KPI kataloğunun tamamı
@@ -102,7 +102,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-009 — Uygunsuzluk ve DÖF puanı besler
 
-- Kaynak: §28.11; REQ-QHS-008
+- Kaynak: REQ-QHS-008
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Uygunsuzluk, DÖF, risk, iç denetim ve müşteri geri bildirimi kayıtları (hedef gün, gerçek gün, tekrar) ilgili pozisyonun KPI'larını besler; geciken ve tekrar eden kayıtlar puanı düşürür.
@@ -112,7 +112,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-010 — Katalog değişikliği geçmişi bozmaz
 
-- Kaynak: §28.11; REQ-ADM-007
+- Kaynak: REQ-ADM-007
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Katalog, ağırlıklar, hedefler ve puan bantları geçerlilik tarihiyle değişir; kapanmış dönemlerin puanları ve primleri, o dönemde geçerli tanımlarla hesaplanmış haliyle kalır.
@@ -124,7 +124,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-011 — Aylık puan ve bantlar
 
-- Kaynak: §28.11; D-189
+- Kaynak: D-189
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: puan bantları ve prim oranları (varsayılan: ≥ 90 Mükemmel +%10; 80–89 İyi +%5; 70–79 Geliştirilmeli, prim yok; < 70 Kritik)
@@ -146,7 +146,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-013 — Kritik puanda gelişim görüşmesi
 
-- Kaynak: §28.11; D-193
+- Kaynak: D-193
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: gelişim görüşmesi görevinin kime ve hangi sürede düşeceği (varsayılan: doğrudan amir, 10 gün)
@@ -159,7 +159,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-014 — Üç düzeyde hedef
 
-- Kaynak: §28.10
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Hedefler genel şirket hedefi, rol hedefi ve kişiye özel hedef olarak tanımlanır. Kişiye özel hedef varsa rol ve genel hedeften önce gelir.
@@ -169,7 +169,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-015 — Prim kuralları
 
-- Kaynak: §28.10
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: prim kuralları (hedefi aşma, skor eşiği, belirli metriği gerçekleştirme, proje erken bitirme), tutar veya oranları
@@ -190,7 +190,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-017 — Prim aylık hesaplanır ve onaylanır
 
-- Kaynak: §28.10; D-189
+- Kaynak: D-189
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: primin onay adımları
@@ -213,7 +213,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-019 — Sağlıklı sıralama görünürlüğü
 
-- Kaynak: §28.9
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: sıralamanın kimlere ve hangi rollerde açık olduğu (sahip politikayı açıp kapatır)
@@ -225,7 +225,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 
 ### REQ-PRF-020 — Taşeron ekipleri karşılaştırılır, prim almaz
 
-- Kaynak: §28.1, §15.3; REQ-SIT-021
+- Kaynak: REQ-SIT-021
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit
 - Açıklama: Taşeron ekipleri hız, kalite ve zayi bakımından öz kaynak ekiplerle karşılaştırılır; ancak şirket çalışanı olmadıkları için KPI puanı ve prim almazlar (türetilen kural, sahip onayladı).

@@ -41,7 +41,7 @@ Tanım modeli JSON şemasıyla sürümlenir; şema değişiklikleri eski tanıml
 
 ## Değişiklik (CHG-006, 2026-09-18, sahip onaylı)
 
-Sahip, §45 akışlarının hazır kodlanmış akışlar yerine kullanıcıların kendi kurabileceği bir altyapı üzerinde kurulmasını istedi. Yedi turluk soru-cevapla (OQ-028) alınan kararlar bu ADR'yi şöyle genişletir. Kararların tamamı ve gerekçeleri: `ai/DECISIONS.md`, CHG-006, D-077…D-105.
+Sahip, uçtan uca akışların (REQ-WFL-011, REQ-WFL-028) hazır kodlanmış akışlar yerine kullanıcıların kendi kurabileceği bir altyapı üzerinde kurulmasını istedi. Yedi turluk soru-cevapla (OQ-028) alınan kararlar bu ADR'yi şöyle genişletir. Kararların tamamı ve gerekçeleri: `ai/DECISIONS.md`, CHG-006, D-077…D-105.
 
 **Katmanlar (D-077).** Hesaplar sabittir (defter mantığı, türetilen veri). Süreçler değiştirilebilir (kim onaylar, kaç kademe, eşikler, eskalasyon, kilitler, bildirimler). Kataloglar yönetici ayarıdır.
 

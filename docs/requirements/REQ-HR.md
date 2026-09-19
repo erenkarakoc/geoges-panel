@@ -2,9 +2,9 @@
 
 Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: HR (Human Resources)
 
-Kaynaklar: Özellik Yapısı §23.1–§23.8; kararlar D-050, D-117, D-134, D-163…D-168; RISK-001.
+Kaynaklar: kararlar D-050, D-117, D-134, D-163…D-168; RISK-001.
 
-**Sınır.** Çalışma takvimi, tatiller ve fazla mesai kuralları REQ-ADM-010…012'dedir (§23.9). Şantiye personelinin puantajı günlük saha kaydında girilir (REQ-SIT-026); HR onu okur. Ayrılış tarihinde erişimin kapanması REQ-IAM-007'dedir. Zimmet kaydı REQ-EQP-007'dedir. Maaş giderinin muhasebesi, ödeme ve muhasebe aktarımı REQ-FIN'dedir. Performans değerlendirmesi REQ-PRF'dedir. Onay mekanizması REQ-WFL'dedir.
+**Sınır.** Çalışma takvimi, tatiller ve fazla mesai kuralları REQ-ADM-010…012'dedir (REQ-ADM-010…012). Şantiye personelinin puantajı günlük saha kaydında girilir (REQ-SIT-026); HR onu okur. Ayrılış tarihinde erişimin kapanması REQ-IAM-007'dedir. Zimmet kaydı REQ-EQP-007'dedir. Maaş giderinin muhasebesi, ödeme ve muhasebe aktarımı REQ-FIN'dedir. Performans değerlendirmesi REQ-PRF'dedir. Onay mekanizması REQ-WFL'dedir.
 
 **KVKK.** Bu modül gerçek kişisel ve hassas veri tutar (maaş, SGK, IBAN). Sağlık belgesinin kendisi panelde saklanmaz; yalnızca varlığı ve tarihleri tutulur (D-186). Gerçek İK verisi girilmeden önce RISK-001 ve D-134 (hiçbir verinin silinmemesi) sahibe yeniden sunulur (D-050, REQ-AUD-003).
 
@@ -16,7 +16,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 ### REQ-HR-001 — Personel kartı
 
-- Kaynak: §23.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Her personel için ad-soyad, görev/pozisyon, rol, işe giriş ve ayrılış tarihi, aktif/ayrıldı durumu, baz maaş ve para birimi, SGK bilgisi, IBAN, kayıtlı olduğu birim (şantiye, fabrika, ofis), sözleşme/özlük belgeleri, zimmetler, izin geçmişi, bordro geçmişi, eğitim ve süreli belgeler tutulur.
@@ -27,7 +27,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 ### REQ-HR-002 — Hassas alanlar
 
-- Kaynak: §23.1; REQ-IAM-011
+- Kaynak: REQ-IAM-011
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Maaş, SGK bilgisi, IBAN, özlük belgeleri ve sağlık raporunun var olduğu bilgisiyle tarihleri hassas kişisel veridir; sağlık raporunun kendisi panelde saklanmaz, panel dışında tutulur (D-186); yalnızca bu veri sınıfını görme izni olan roller (varsayılan: yetkili İK ve sahip) görür.
@@ -37,7 +37,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 ### REQ-HR-003 — Süreli belge uyarıları
 
-- Kaynak: §23.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: uyarı ve yenileme görevinin ne kadar önce ve kime düşeceği
@@ -50,7 +50,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 ### REQ-HR-004 — Puantajın kaynakları
 
-- Kaynak: §23.2; REQ-SIT-026
+- Kaynak: REQ-SIT-026
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Şantiye personelinin puantajı onaylı günlük saha kayıtlarından gelir. Fabrika ve ofis personeli için puantaj elle girilir. Onaylı izinler puantaja kendiliğinden işlenir.
@@ -61,7 +61,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 ### REQ-HR-005 — Aylık puantaj görünümü
 
-- Kaynak: §23.2; REQ-ADM-012
+- Kaynak: REQ-ADM-012
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Her personel için aylık çalışma günü, saat, fazla mesai, izin ve devamsızlık görünür. Fazla mesai, çalışma takviminin kurallarıyla hesaplanır.
@@ -73,7 +73,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 ### REQ-HR-006 — Panel bordroyu kendisi hesaplar
 
-- Kaynak: §23.3; D-163
+- Kaynak: D-163
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Panel, baz maaş ve puantajdan (çalışılan gün, fazla mesai, ücretsiz izin, devamsızlık) brüt ücreti, SGK primlerini, gelir ve damga vergisini, asgari ücret istisnasını ve diğer kesintileri hesaplayarak net ücreti bulur. Bordroda brüt, SGK, vergi, diğer kesintiler, net, dönem ve ödeme durumu tutulur.
@@ -96,7 +96,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 ### REQ-HR-008 — Bordro durumu
 
-- Kaynak: §23.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: bordronun onay adımları
@@ -108,7 +108,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 ### REQ-HR-009 — Maaş gideri kayıtlı birime yazılır
 
-- Kaynak: §23.3; D-164
+- Kaynak: D-164
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Ödenen bordro, personelin kayıtlı olduğu birimin maliyet merkezine maaş gideri olarak yazılır; ay içinde başka şantiyede çalışması gideri değiştirmez. Birim ay içinde değişmişse gider, geçerlilik tarihlerine göre iki birime gün oranında bölünür (D-164'ten türetilen kural, sahip onayladı). İşveren SGK payı da giderdir.
@@ -141,7 +141,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 ### REQ-HR-012 — İmzalı bordro şartı ve son tarih görevi
 
-- Kaynak: §23.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: imzalı bordro kilidi ve son tarih görevi; hangi projede açık olduğu
@@ -164,7 +164,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 ### REQ-HR-014 — İzin talebi, onay ve bakiye
 
-- Kaynak: §23.5; D-166
+- Kaynak: D-166
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış + Tanım
 - Akışla ayarlanan: iznin onay adımları
@@ -179,7 +179,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 ### REQ-HR-015 — Giriş ve çıkış kontrol listeleri
 
-- Kaynak: §23.6, §23.7; REQ-EQP-007, REQ-IAM-007
+- Kaynak: REQ-EQP-007, REQ-IAM-007
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış + Tanım
 - Akışla ayarlanan: çıkış sürecinin adımları (varsayılan akış: personel çıkışı)
@@ -194,7 +194,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 
 ### REQ-HR-016 — Günlük faaliyet raporu
 
-- Kaynak: §23.8
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: rapor girmekle yükümlü roller

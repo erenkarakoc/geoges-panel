@@ -2,9 +2,9 @@
 
 Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: SIT (Site Operations)
 
-Kaynaklar: Özellik Yapısı §9, §10, §11, §12, §13 (onay ekranının içeriği), §15 (iş modeli ayarı), §44; kararlar D-035, D-037, D-038, D-119…D-125. Açık: OQ-027 madde 3 (günlük kaydın adım adım girişi, Phase 02).
+Kaynaklar: REQ-ADM-003, REQ-FIN-015, REQ-WFL-015…016 (onay ekranının içeriği), (iş modeli ayarı), REQ-ADM-004; kararlar D-035, D-037, D-038, D-119…D-125. Açık: OQ-027 madde 3 (günlük kaydın adım adım girişi, Phase 02).
 
-**Sınır.** Onay mekanizması (üç sonuç, gerekçe, kuyruk, geçmiş) REQ-WFL-012…016'dadır; burada yalnızca onay ekranında görülecek kontroller var. Onaylı kaydın değiştirilmesi revizyon talebiyle olur (REQ-AUD, §37.1). Şantiye detay ekranı ve "Niye zarardayız?" analizi REQ-RPT'dedir (§14). Taşeron şantiyesinin kâr-zarar hesabı REQ-FIN'dedir (§15.1); SIT yalnızca iş modelini tutar. Panel tipleri ve şerit tipleri merkezi tanımdır (REQ-ADM); proje ve duvar hedefleri REQ-PRJ'dedir.
+**Sınır.** Onay mekanizması (üç sonuç, gerekçe, kuyruk, geçmiş) REQ-WFL-012…016'dadır; burada yalnızca onay ekranında görülecek kontroller var. Onaylı kaydın değiştirilmesi revizyon talebiyle olur (REQ-AUD, REQ-AUD-007…010). Şantiye detay ekranı ve "Niye zarardayız?" analizi REQ-RPT'dedir (REQ-RPT-012…014). Taşeron şantiyesinin kâr-zarar hesabı REQ-FIN'dedir (REQ-FIN-013, REQ-FIN-017); SIT yalnızca iş modelini tutar. Panel tipleri ve şerit tipleri merkezi tanımdır (REQ-ADM); proje ve duvar hedefleri REQ-PRJ'dedir.
 
 Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting, Casting Session, Double Casting Day, Pre-Approval Casting, Over-Casting, Damaged Unit, Panel Installation, Strip Installation, Steel Strip, Coping, Handover, Client Wait Time, Timesheet, Activity Time Entry, Consumable, Consumption Recipe, Site Expense, Late Entry, Subcontractor.
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-001 — Şantiye genel bilgileri
 
-- Kaynak: §9.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Şantiye ekranında bağlı olduğu proje, sorumlu koordinatör, saha mühendisi, ekip/iş modeli, güncel ilerleme, hedefe kalan miktar, günlük üretim, son kayıt zamanı, stok durumu, ekipman durumu, bekleyen onay, işveren beklemesi ve zayi/fire görünür. Gelir, gider ve kâr-zarar yalnızca ticari yetkisi olan kullanıcıya görünür (REQ-IAM-011).
@@ -26,7 +26,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-002 — Her şantiye için her gün tek ana kayıt
 
-- Kaynak: §9.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Her şantiyenin her günü için tek bir ana günlük kayıt vardır. Aynı gün içindeki birden fazla döküm, montaj veya faaliyet bu kaydın içinde ayrı satırlar veya seanslar olarak tutulur. Kayıt bir kez girilir ve ilerleme, hakediş, stok tüketimi, puantaj, performans, kâr-zarar, bekleme analizi ve işveren gecikme kanıtını besler.
@@ -36,7 +36,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-003 — Günlük kaydın bölümleri
 
-- Kaynak: §9.4
+- Kaynak: REQ-FIN-015
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Kayıt şu bölümlerden oluşur: şantiye, tarih, hava, döküm, montaj, çelik şerit montajı, harpuşta ve diğer proje iş kalemleri, işveren teslim-tesellüm, puantaj/ekip, faaliyet saatleri, o gün kullanılan ekipmanlar (D-162, REQ-EQP-011), tüketilen malzemeler, zayi, saha harcamaları, notlar, fotoğraflar. Bölümlerin ekrandaki sırası ve adım adım giriş olup olmayacağı Phase 02'de kararlaştırılır (OQ-027 madde 3).
@@ -46,7 +46,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-004 — Giriş sorumluluğu sırası
 
-- Kaynak: §9.2; D-035
+- Kaynak: D-035
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: günlük giriş görevinin kime düştüğü, yedek sırası ve şantiye veya dönem bazında başka role verilmesi (varsayılan: saha mühendisi → koordinatör → teknik ofis → İK)
@@ -69,7 +69,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-006 — Hazır gelen başlangıç bilgileri
 
-- Kaynak: §9.5
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit
 - Açıklama: Kayıt açıldığında kullanıcının yetkili olduğu şantiye, bugünün tarihi ve hava bilgisi hazır gelir ve düzenlenebilir. Hava bilgisi dış kaynaktan alınır; alınamazsa elle girilir.
@@ -79,7 +79,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-007 — Sürekli taslak kaydı
 
-- Kaynak: §9.6
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Girilen her şey sürekli taslak olarak saklanır; telefon kapanır veya kullanıcı ekrandan çıkarsa girişler kaybolmaz.
@@ -89,7 +89,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-008 — Tek eylemle onaya gönderme
 
-- Kaynak: §9.6
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: gönderilen kaydın hangi onaya gideceği (varsayılan akış: günlük saha kaydı onayı, koordinatör)
@@ -146,7 +146,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-013 — Zorunlu alanlar tamamlanmadan gönderilemez
 
-- Kaynak: §13; §10.8
+- Kaynak: REQ-WFL-015…016
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Zorunlu alanları eksik olan kayıt onaya gönderilemez. Fotoğrafsız zayi satırı ve açıklamasız fazla döküm (REQ-SIT-019) eksik sayılır.
@@ -158,7 +158,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-014 — Panel tipleri merkezi tanımdan gelir
 
-- Kaynak: §10, §10.1
+- Kaynak: REQ-ADM-002
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: panel tipleri (REQ-ADM-002)
@@ -169,7 +169,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-015 — Günlük döküm tablosu
 
-- Kaynak: §10.2, §10.3, §44
+- Kaynak: REQ-ADM-004, REQ-PRJ-007
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Döküm ekranı her panel tipinin bir satır olduğu hızlı bir tablodur: panel tipi, boyut, m²/adet, proje hedef adedi, proje hedef m², bugüne kadar dökülen, kalan, ilerleme %, bugün dökülen adet. "Bugün" alanı vurgulu giriş alanıdır. Altta gün toplamı (adet ve m²) anlık gösterilir. Hedefler duvar bazında tanımlıysa proje hedefi duvarların toplamıdır.
@@ -179,7 +179,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-016 — Çift döküm seansları
 
-- Kaynak: §10.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Aynı gün birden fazla döküm seansı eklenebilir; her seans için panel tipi, adet, başlangıç, bitiş saati ve ısıtma kullanılıp kullanılmadığı tutulur. Çift döküm günleri performans ve kapasite analizinde ayrıca görünür.
@@ -189,7 +189,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-017 — Kurum onayı öncesi döküm
 
-- Kaynak: §10.5
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Kurum onayı gelmeden işverenin talebiyle dökülen standart paneller "onay öncesi üretim" olarak işaretlenir. Onaylı proje geldiğinde bu adetler gerçek proje ihtiyacıyla karşılaştırılır.
@@ -199,7 +199,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-018 — Fazla döküm açıklamasız gönderilemez
 
-- Kaynak: §10.6; D-121
+- Kaynak: REQ-RPT-008; D-121
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: uyarının gideceği kişiler (varsayılan: saha mühendisi, koordinatör, sahipler); sahiplerden gizlenememesi sabittir
@@ -211,7 +211,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-019 — Fazla panel için komşu tip önerisi
 
-- Kaynak: §10.7
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: önerinin hangi teknik personelin onayına gideceği
@@ -222,7 +222,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-020 — Zayi panel
 
-- Kaynak: §10.8
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Zayi kaydında panel tipi, adet, neden ve fotoğraf zorunludur. Fotoğrafsız zayi tamamlanmış sayılmaz.
@@ -234,7 +234,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-021 — Panel montajı ve hız
 
-- Kaynak: §11.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Montaj için duvar, panel tipi, adet, m², başlangıç ve bitiş saati tutulur. Saatlerden panel/saat ve m²/saat hesaplanır; farklı formen, ekip ve taşeronların hızı karşılaştırılabilir.
@@ -244,7 +244,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-022 — Çelik şerit montajı
 
-- Kaynak: §11.2
+- Kaynak: REQ-ADM-003
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: şerit tipleri ve boyları (REQ-ADM-003)
@@ -255,7 +255,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-023 — Harpuşta ve diğer proje kalemleri
 
-- Kaynak: §11.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Harpuşta döküm ve montajı adet veya metre olarak izlenir; aynı yapı diğer proje iş kalemlerine de uygulanır.
@@ -267,7 +267,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-024 — Teslim-tesellüm saatleri
 
-- Kaynak: §11.4; D-124
+- Kaynak: D-124
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: saatlerin onaylayıcısı (varsayılan: günlük kayıt onayıyla koordinatör)
@@ -279,7 +279,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-025 — İşveren kaynaklı bekleme analizi
 
-- Kaynak: §11.5; §45.5
+- Kaynak: REQ-WFL-018
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Teslim-tesellüm zamanlarından işveren kaynaklı bekleme süresi hesaplanır. Kaç ekip/kişinin beklediği, ekipmanın boşta kalıp kalmadığı, beklemenin tahmini maliyeti ve proje süresine etkisi gösterilir. Tahmini maliyet ticari veridir.
@@ -292,7 +292,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-026 — Bordro puantajı
 
-- Kaynak: §12.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Öz kaynak personel için hangi gün çalıştığı, kaç saat/gün çalıştığı ve izin/devamsızlık durumu günlük kayıtta tutulur; maaş ve SGK hesabı için İK'ya akar (REQ-HR).
@@ -302,7 +302,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-027 — Faaliyet saatleri
 
-- Kaynak: §12.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Performans ölçümü için döküm, montaj, şerit ve işveren dolgusunun başlangıç ve bitiş saatleri, taşeron şantiyeleri dahil her şantiyede tutulur. Bordro puantajından ayrıdır.
@@ -325,7 +325,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-029 — Sarf reçeteden önerilir, değiştirilebilir, fark işaretlenir
 
-- Kaynak: §44; §45.3; D-123
+- Kaynak: REQ-ADM-004; D-123
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: sarf reçeteleri (REQ-ADM-004)
@@ -337,7 +337,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-030 — Saha harcaması
 
-- Kaynak: §9.4; §45.3
+- Kaynak: REQ-FIN-015
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: saha harcamasının onay adımları (REQ-FIN-015)
@@ -350,7 +350,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-031 — Koordinatörün onay ekranında görecekleri
 
-- Kaynak: §13
+- Kaynak: REQ-WFL-015…016
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Onay ekranında en az şunlar görünür: üretim miktarları; başlangıç/bitiş saatleri; işveren teslim-tesellüm saatleri; panel hedefiyle günlük ve kümülatif üretim farkı; fazla döküm; zayi ve zorunlu fotoğraflar; malzeme tüketiminin üretimle uyumu (öneri–giriş farkı dahil); puantaj ve ekip bilgisi; saha harcamaları; eksik zorunlu alanlar; geç giriş işareti. Karar mekanizması REQ-WFL-014…016'dadır.
@@ -360,7 +360,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-032 — Onaylanan veri diğer modüllere dağılır
 
-- Kaynak: §13; §9.3
+- Kaynak: REQ-WFL-015…016
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Onaylanan günlük veri şantiye ilerlemesine, stok tüketimine, hakediş hesabına, taşeron hakedişine, puantaja, performans değerlendirmesine, kâr-zarara ve yönetimin "Bugün" ekranına yansır. Bu yansıma bir olayla yapılır (`daily_site_log.approved`); modüller birbirinin verisine doğrudan yazmaz (ADR-001).
@@ -370,7 +370,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-033 — Onaylı kayıt kilitlenir
 
-- Kaynak: §37.1
+- Kaynak: REQ-AUD-007…010
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Onaylanmış günlük kayıt içerik olarak kilitlenir; değişiklik doğrudan yapılmaz, revizyon talebiyle yapılır (REQ-AUD).
@@ -382,7 +382,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-034 — Şantiyenin işçilik modeli
 
-- Kaynak: §15
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Her şantiyenin işçilik modeli tanımlanır: taşeron/götürü (ör. m² üzerinden birim fiyatla yalnızca işçilik) veya öz kaynak ekip. Model, puantaj ve faaliyet girişini ve maliyet hesabını belirler. Maliyet hesabı REQ-FIN'de, taşeron–öz kaynak karşılaştırması REQ-RPT/REQ-PRF'dedir.
@@ -394,7 +394,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Daily Site Log, Panel Type, Panel Casting,
 
 ### REQ-SIT-035 — Sahaya özel tablo ekranı
 
-- Kaynak: §44
+- Kaynak: REQ-ADM-004
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Döküm, montaj ve şerit bölümlerinde her ürün/iş tipi bir satırdır; proje hedefi, kümülatif gerçekleşen, kalan, ilerleme ve bugünkü giriş aynı ekranda görünür. Hedefi aşan satır belirgin kritik renge döner. Dar ekranda aynı veri kart biçiminde görünür. Az klavye, büyük dokunma alanı ve net toplamlar önceliklidir.

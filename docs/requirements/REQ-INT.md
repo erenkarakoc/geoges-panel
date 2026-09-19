@@ -2,7 +2,7 @@
 
 Durum: CONFIRMED (sahip, 2026-09-19) · 2026-09-19 · Modül: INT (Intelligence)
 
-Kaynaklar: Özellik Yapısı §8.3, §8.4, §26, §27; kararlar D-149, D-185, D-195…D-198.
+Kaynaklar: kararlar D-149, D-185, D-195…D-198.
 
 **Sınır.** INT kendi verisini üretmez; diğer modüllerin kayıtlarından hesaplar ve **önerir, karar vermez**. Kaynak transferinin kendisi REQ-EQP-006'da ve REQ-INV-006'da, personel görevlendirmesi REQ-HR'da bir insanın işlemiyle yapılır. "Dikkat" uyarıları REQ-RPT-007'dedir; öneri listesi ondan ayrıdır. Proje süreleri ve günlük hedefler REQ-PRJ-010 ve REQ-PRJ-011'dedir; prim kuralları REQ-PRF-015'tedir; güvenlik şartı REQ-QHS-016'dadır.
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 
 ### REQ-INT-001 — Öncelikli öneri listesi
 
-- Kaynak: §26, §26.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Panel "şimdi ne yapmak daha mantıklı?" sorusunu destekler. Öneriler önem derecesine göre sıralanır; her öneride sorun veya fırsat, gerekçe, beklenen etki ve ilgili ekrana geçiş bulunur.
@@ -36,7 +36,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 
 ### REQ-INT-003 — Başlangıç öneri türleri
 
-- Kaynak: §26.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Başlangıç türleri: atıl vinç ve başka şantiyede ihtiyaç; kritik seviyeye inen malzeme için sipariş; zarardaki proje ve başlıca nedenleri ("Niye zarardayız?" kartından); N gündür bekleyen hakediş veya alacak; zayıflayan nakit ve hızlandırılabilecek tahsilatlar; uzun süredir onay bekleyen saha kaydı; normalin üzerinde sarf tüketimi; mevcut üretim hızına göre tahmini proje bitiş tarihi.
@@ -46,7 +46,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 
 ### REQ-INT-004 — Öneri karar vermez
 
-- Kaynak: §26.2, §27.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Öneri sistemi yönetici adına karar vermez ve hiçbir kaydı değiştirmez; gerekçeli tavsiye üretir. Bir öneriyi uygulamak her zaman bir insanın işlemiyle başlar.
@@ -68,7 +68,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 
 ### REQ-INT-006 — Öneri yetkiye göre görünür
 
-- Kaynak: §26; REQ-IAM-011, REQ-IAM-012
+- Kaynak: REQ-IAM-011, REQ-IAM-012
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Kullanıcı yalnızca rol kapsamındaki (şantiye, proje, şirket) ve veri sınıfı iznine uyan önerileri görür. Ticari veri içeren öneri (kâr etkisi, maliyet) yalnızca ticari yetkisi olana görünür.
@@ -80,7 +80,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 
 ### REQ-INT-007 — Atıl kaynak ve darboğaz eşleştirmesi
 
-- Kaynak: §27, §27.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Şantiyeler, fabrika, araçlar, ekipman ve personel ortak kaynak havuzu olarak değerlendirilir. Panel aynı anda hangi şantiyede işin yavaş olduğunu, nerede ekipmanın beklediğini veya eksik olduğunu, hangi makine, kalıp veya vincin boş olduğunu ve nerede personel fazlası veya eksiği olduğunu karşılaştırır.
@@ -90,7 +90,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 
 ### REQ-INT-008 — Transfer önerisinin hesabı
 
-- Kaynak: §27.2, §27.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Transfer önerisinde kaynağın mevcut yerde neden atıl kaldığı, hedefteki darboğaz, iki şantiye arası nakliye ve yakıt maliyeti, transferle beklenen üretim artışı ve şirket toplam kârına net etki hesaplanır. Kaynağın bulunduğu şantiyenin yakında o kaynağa yeniden ihtiyaç duyup duymayacağı, o şantiyenin planından değerlendirilir ve öneride gösterilir.
@@ -100,7 +100,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 
 ### REQ-INT-009 — Personel optimizasyonu hesabı
 
-- Kaynak: §27.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit
 - Açıklama: Ekip ve personel değişikliklerinin maaş, SGK, yemek, konaklama ve nakliye etkileri hesaplanır. Taşeron şantiyede GEOGES'in karşıladığı SGK, yemek ve konaklama gibi destekler de hesaba girer.
@@ -110,7 +110,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 
 ### REQ-INT-010 — Kabul edilen transfer talimat olarak başlar
 
-- Kaynak: §27.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: transfer önerisinin onaylayıcısı ve onaydan sonra açılan görevler (varsayılan: koordinatör onaylar, lojistik sorumlusuna transfer görevi)
@@ -123,7 +123,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 
 ### REQ-INT-011 — Senaryo karşılaştırması
 
-- Kaynak: §8.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Bir proje için senaryolar yan yana karşılaştırılır: mevcut ekipmanla devam, ikinci vinç ekleme, ek personel, çift döküm düzeni, paralel ekip, belirli bir prim havuzu. Her senaryoda tahmini yeni bitiş tarihi, ek ekipman maliyeti, ek personel maliyeti, prim maliyeti, erken bitişten kurtarılan maaş/SGK/yemek/konaklama, erken boşalan vinç/kalıp/makine değeri, kaynakların yeni işe aktarılma fırsatı ve net kârlılık etkisi hesaplanır. Senaryo girdileri gerçekleşen üretim hızından ve maliyetlerden gelir; kullanıcı değiştirebilir.
@@ -134,7 +134,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 
 ### REQ-INT-012 — En kârlı ve uygulanabilir senaryo önerilir
 
-- Kaynak: §8.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Panel en hızlı senaryoyu değil, "önerilmez" işareti olmayanlar arasında net kârlılık etkisi en yüksek senaryoyu önerir.
@@ -144,7 +144,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 
 ### REQ-INT-013 — Tanımlı sınırı aşan senaryo "önerilmez" olur
 
-- Kaynak: §8.4; D-196, D-185
+- Kaynak: D-196, D-185
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: sınır değerleri (yasal fazla mesai sınırı, kişi başı günlük en fazla çalışma saati, kalıp sayısına göre günlük en fazla döküm ve diğerleri)
@@ -156,7 +156,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 
 ### REQ-INT-014 — Seçilen senaryo onayla hedeflere işler
 
-- Kaynak: §8.4; D-197
+- Kaynak: D-197
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: senaryonun onaylayıcısı ve onaydan sonra açılan görevler

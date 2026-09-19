@@ -14,21 +14,21 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
   - `REQ-WFL` — 39 requirements, from OQ-028/CHG-006 (no new round)
   - `REQ-IAM` — 27 requirements, D-111…D-118
   - `REQ-SIT` — 35 requirements, D-119…D-125
-  - `REQ-RPT` — 14 requirements, D-126…D-129 (§34 reports still to come)
+ - `REQ-RPT` — 14 requirements, D-126…D-129 (REQ-RPT-015 reports still to come)
   - Capability catalog template in `docs/requirements/README.md` (TASK-0041 IMPLEMENTING).
 - **Slice 1 and later files confirmed by the owner:** WFL, IAM, SIT, RPT, TSK (D-130…D-133), AUD (D-134, D-135), PRJ (D-136…D-138), ADM (D-139…D-141), INV, PUR, FAC (D-142…D-146) — 212 requirements CONFIRMED.
-- **REQ-FIN** — 30 requirements, D-147…D-154, CONFIRMED; scope §15.1/§22.4 corrected for D-149.
-- **REQ-EQP** — 21 requirements, D-155…D-162, CONFIRMED; scope §20.3/§21.3 corrected in place; REQ-SIT-003 gains an equipment section (D-162). Two answers went against the recommendation: no overhead allocation to projects (D-149, changes §15.1/§22.4 wording) and period close per site (D-154, with a derived rule for factory and office marked for confirmation).
+- **REQ-FIN** — 30 requirements, D-147…D-154, CONFIRMED; REQ-FIN-013, REQ-FIN-017 corrected for D-149.
+- **REQ-EQP** — 21 requirements, D-155…D-162, CONFIRMED; REQ-EQP-010, REQ-EQP-012, REQ-EQP-021 corrected in place; REQ-SIT-003 gains an equipment section (D-162). Two answers went against the recommendation: no overhead allocation to projects (D-149, changes REQ-FIN-013, REQ-FIN-017 wording) and period close per site (D-154, with a derived rule for factory and office marked for confirmation).
 - **REQ-HR** — 16 requirements, D-163…D-168, CONFIRMED; RISK-011 (payroll engine) opened.
 - **REQ-CRM** — 14 requirements, D-169…D-172, CONFIRMED.
-- **REQ-QTE** — 18 requirements, D-173…D-176, CONFIRMED; scope §6.3 corrected (D-173); REQ-CRM-014 clarified.
+- **REQ-QTE** — 18 requirements, D-173…D-176, CONFIRMED; REQ-QTE-005…006 corrected (D-173); REQ-CRM-014 clarified.
 - **REQ-CMP** — 17 requirements, D-177…D-180, CONFIRMED 2026-09-19.
 - **REQ-QHS** — 16 requirements, D-182…D-186, CONFIRMED 2026-09-19; REQ-HR-002/-003/-014 reworded (D-186: only existence and dates of medical reports).
-- **REQ-PRF** — 20 requirements, D-187…D-194, CONFIRMED 2026-09-19; scope §28.2/§28.11 corrected.
+- **REQ-PRF** — 20 requirements, D-187…D-194, CONFIRMED 2026-09-19; REQ-PRF-001…002, REQ-PRF-006, REQ-PRF-008…011, REQ-PRF-013 corrected.
 - **REQ-INT** — 14 requirements, D-195…D-198, CONFIRMED 2026-09-19.
 - **REQ-MTG (8), REQ-DOC (10), REQ-SUP (5)** — D-199…D-201, CONFIRMED 2026-09-19.
 - **REQ-STR** — 8 requirements, D-202…D-205, CONFIRMED 2026-09-19.
-- **REQ-RPT §34** — REQ-RPT-015…023, D-206…D-208, CONFIRMED 2026-09-19.
+- **REQ-RPT REQ-RPT-015** — REQ-RPT-015…023, D-206…D-208, CONFIRMED 2026-09-19.
 - **REQ-NFR** — 20 requirements, D-209…D-212, CONFIRMED 2026-09-19. All module rounds done: 26 files, 438 requirements CONFIRMED; TASK-0044 and TASK-0041 DONE.
 - **Layer scan (D-181)** — all 328 requirements tagged Sabit / Akış / Tanım; 101 name a configurable part; three descriptions reworded (REQ-TSK-006, REQ-CRM-007, REQ-CMP-013); validator enforces the tag. New modules must carry the tag from the start. Derived rules awaiting confirmation: framework price proposed on orders (REQ-CMP-004); contract amendment as a new version (REQ-CMP-005).
 - Validator gained checks for decision and requirement ids and six-column task rows; the rule text in PROJECT_RULES §21.1 now matches what the tool does.
@@ -36,11 +36,11 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 
 ## Not done / open
 
-- Remaining Phase 01 modules: CRM, QTE, CMP, QHS, MTG, SUP, DOC, PRF, INT, STR, NFR, and RPT §34 — each needs a round and a catalog (TASK-0044, TASK-0041).
+- Remaining Phase 01 modules: CRM, QTE, CMP, QHS, MTG, SUP, DOC, PRF, INT, STR, NFR, and RPT REQ-RPT-015 — each needs a round and a catalog (TASK-0044, TASK-0041).
 - TASK-0043: rename `dashboard`/`widget` in code to match the glossary.
 - TASK-0039 (§ → REQ remap), which unblocks TASK-0027.
 - OQ-026 (password policy), OQ-027 items 3–4, OQ-007 (glossary confirmation) still open.
 
 ## Next session
 
-1. Phase 01 exit: TASK-0039 (§ → REQ remap), OQ-007 glossary confirmation, then TASK-0027, following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).
+1. Phase 01 exit: OQ-007 glossary confirmation (TASK-0020); TASK-0027 (check architecture principles are carried by ADRs, owner approval, then remove `docs/sources/`). TASK-0039 DONE 2026-09-19 (D-213), following the same pattern (scope → open questions only → D-NNN → REQ file with catalog → glossary first → records → commit).

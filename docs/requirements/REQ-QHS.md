@@ -2,9 +2,9 @@
 
 Durum: CONFIRMED (sahip, 2026-09-19) · 2026-09-19 · Modül: QHS (Quality, Health & Safety)
 
-Kaynaklar: Özellik Yapısı §29, §30; kararlar D-050, D-134, D-182…D-186; RISK-001.
+Kaynaklar: kararlar D-050, D-134, D-182…D-186; RISK-001.
 
-**Sınır.** Görev, eskalasyon ve bildirim mekanizması REQ-TSK'dadır; onay ve kilitler REQ-WFL'dedir. Personelin süreli belgeleri REQ-HR-003'te, tüm süreli belgelerin tek listesi REQ-CMP-016'dadır. KKD stoğu REQ-INV'de, periyodik kontrollü ekipman REQ-EQP'dedir. Performans ve prim hesabı REQ-PRF'dedir; QHS o hesaba hangi olayın nasıl gireceğini söyler. Hızlandırma senaryolarındaki kalite ve İSG sınırı (§8.4) REQ-INT'tedir.
+**Sınır.** Görev, eskalasyon ve bildirim mekanizması REQ-TSK'dadır; onay ve kilitler REQ-WFL'dedir. Personelin süreli belgeleri REQ-HR-003'te, tüm süreli belgelerin tek listesi REQ-CMP-016'dadır. KKD stoğu REQ-INV'de, periyodik kontrollü ekipman REQ-EQP'dedir. Performans ve prim hesabı REQ-PRF'dedir; QHS o hesaba hangi olayın nasıl gireceğini söyler. Hızlandırma senaryolarındaki kalite ve İSG sınırı (REQ-INT-013…014) REQ-INT'tedir.
 
 Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Check, Nonconformity, Corrective and Preventive Action (CAPA), Root Cause, Internal Audit Finding, Customer Complaint, OHS Incident, Near Miss, Training Record, OHS Checklist, Risk Assessment, Personal Protective Equipment (PPE), PPE Issue.
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-001 — Test ve sertifika kaydı
 
-- Kaynak: §29, §29.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: test ve sertifika türleri (başlangıç: galvaniz kaplama, çekme/kopma dayanımı, boyut kontrolü, beton testleri, diğer laboratuvar/kurum testleri)
@@ -25,7 +25,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-002 — Sertifika durumu ve yenileme
 
-- Kaynak: §29.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: yenileme görevinin ne kadar önce ve kime açılacağı
@@ -36,7 +36,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-003 — "Kaldı" sonucu uyarı ve karar ister
 
-- Kaynak: §29.1; D-182
+- Kaynak: D-182
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: uyarının ve karar görevinin kime düşeceği (varsayılan: kalite sorumlusu ve koordinatör)
@@ -50,7 +50,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-004 — Saha kalite kontrol kayıtları
 
-- Kaynak: §29.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: kontrol türleri (başlangıç: beton priz/mukavemet, panel kalite kontrolü, montaj kot/aks/terazi, kurum onayı, imalat uygunluğu) ve projede hangilerinin gerektiği
@@ -63,7 +63,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-005 — Uygunsuzluk ve DÖF kaydı
 
-- Kaynak: §29.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: kayıt türleri (başlangıç: uygunsuzluk, DÖF, risk, iç denetim bulgusu, müşteri geri bildirimi/şikâyet)
@@ -75,7 +75,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-006 — Aksiyonlar görev olur, süreyi aşan eskale olur
 
-- Kaynak: §29.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: aksiyon görevlerinin kime düşeceği, eskalasyon zinciri ve kapatma onayının onaylayıcısı
@@ -86,7 +86,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-007 — Tekrar eden uygunsuzluk
 
-- Kaynak: §29.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Aynı birim veya süreçte aynı türde tekrar eden uygunsuzluk işaretlenir ve ayrıca raporlanır. Kayıt açılırken benzer geçmiş kayıtlar önerilir; kullanıcı tekrar olduğunu işaretlerse önceki kayda bağlanır.
@@ -96,7 +96,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-008 — Uygunsuzluk performansa yansır
 
-- Kaynak: §29.4; REQ-PRF
+- Kaynak: REQ-PRF
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Uygunsuzluk kayıtları, sayısı, etki seviyesi, tekrar ve çözüm süresiyle ilgili pozisyonun performans verisine geçer. Ağırlıklar REQ-PRF'dedir.
@@ -108,7 +108,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-009 — Ramak kala ve kaza kaydı
 
-- Kaynak: §30.1; D-183
+- Kaynak: D-183
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Her olayda olay türü (ramak kala, kaza), tarih ve saat, şantiye veya fabrika, açıklama, ciddiyet, ilgili, yaralanan ve tanık kişilerin adları, alınan aksiyon, durum, fotoğraf ve belge tutulur. Yaralanmanın türü, sağlık raporu, tedavi ve iş göremezlik bilgisi panelde tutulmaz; bu belgeler panel dışında saklanır (D-183). Kişi adları iç veridir.
@@ -119,7 +119,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-010 — Olay aksiyonları ve ciddi kaza
 
-- Kaynak: §30.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: aksiyon görevlerinin kime düşeceği ve ciddi kazanın kime, hangi öncelikle bildirileceği (varsayılan: sahipler ve genel müdür, anında)
@@ -130,7 +130,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-011 — Ramak kala bildirimi hiçbir yerde cezalandırılmaz
 
-- Kaynak: §30.4; D-185
+- Kaynak: D-185
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Ramak kala bildirmek, bildirenin, şantiyenin veya ekibin hiçbir performans, sıralama veya prim hesabında olumsuz sayılmaz. Amaç ramak kalaların saklanmamasıdır.
@@ -142,7 +142,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-012 — Eğitim kayıtları
 
-- Kaynak: §30.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış + Tanım
 - Akışla ayarlanan: yenileme görevinin ne kadar önce ve kime açılacağı
@@ -156,7 +156,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-013 — Günlük İSG kontrol listesi
 
-- Kaynak: §30.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit + Akış + Tanım
 - Akışla ayarlanan: "uygun değil" işaretlenen maddeden kime görev açılacağı
@@ -168,7 +168,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-014 — Risk değerlendirmesi
 
-- Kaynak: §30.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: gözden geçirme tarihinden ne kadar önce ve kime görev açılacağı
@@ -179,7 +179,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-015 — KKD kişiye adetle teslim edilir
 
-- Kaynak: §30.3; D-184
+- Kaynak: D-184
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: KKD türleri ve hangilerinin periyodik kontrol isteyen demirbaş olarak izlendiği
@@ -193,7 +193,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 
 ### REQ-QHS-016 — Ciddi kaza veya açık kritik bulgu hedefi geçersiz kılar
 
-- Kaynak: §30.4; D-185
+- Kaynak: D-185
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Bir dönemde şantiyede ciddi kaza olduysa veya kapatılmamış kritik İSG bulgusu (kritik etki seviyeli İSG uygunsuzluğu) varsa, o şantiyenin o dönemki hız ve prim hedefi "başarılı" sayılmaz. Ramak kala ve hafif olaylar hedefi etkilemez (REQ-QHS-011).

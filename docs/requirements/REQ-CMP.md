@@ -2,7 +2,7 @@
 
 Durum: CONFIRMED (sahip, 2026-09-19) · 2026-09-18 · Modül: CMP (Contracts & Compliance)
 
-Kaynaklar: Özellik Yapısı §24, §31; kararlar D-029, D-030, D-124, D-177…D-180.
+Kaynaklar: kararlar D-029, D-030, D-124, D-177…D-180.
 
 **Sınır.** Koşullu tetikleyiciler ve bağımlılık kilitlerinin mekanizması iş akışıdır (REQ-WFL-007, REQ-WFL-028…030); CMP hangi kuralların sözleşmeden doğduğunu tutar. Teslim-tesellüm saatleri ve işveren bekleme analizi REQ-SIT-024 ve REQ-SIT-025'tedir. Teminat kesintisinin hakedişten düşülmesi REQ-FIN-006'dadır. Ekipmanın periyodik kontrolleri REQ-EQP-015'te, personelin süreli belgeleri REQ-HR-003'tedir; CMP şirket ve şantiye belgelerini tutar ve hepsini tek listede gösterir. Sözleşme süresi ve teorik süre REQ-PRJ'dedir.
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 ### REQ-CMP-001 — Üç tür sözleşme, izlenebilir şartlar
 
-- Kaynak: §24; D-177
+- Kaynak: D-177
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: İşveren sözleşmeleri, taşeron sözleşmeleri ve uzun süreli tedarikçi anlaşmaları tutulur. Sözleşme yalnızca PDF olarak saklanmaz; önemli şartları izlenebilir kayıtlara dönüşür. Sözleşme bir firmaya (D-027) ve işveren/taşeron sözleşmesinde bir projeye bağlıdır.
@@ -25,7 +25,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 ### REQ-CMP-002 — İşveren sözleşmesinin şartları
 
-- Kaynak: §24.1; D-029
+- Kaynak: D-029
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: İş kapsamı, teslim tarihi, iş süresi, ödeme koşulları ve vadesi (REQ-FIN-022), hakediş şartları, teminat türü ve oranı, teminat iadesi için gereken evraklar, gecikme cezası ve günlük cezai tutar, işveren avansı ve kesinti oranı (REQ-FIN-007), İSG yükümlülükleri, işveren ve GEOGES yükümlülükleri, gerekli belge ve gönderim tarihleri tanımlanır.
@@ -55,7 +55,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 ### REQ-CMP-005 — Sözleşme değişikliği yeni sürümdür
 
-- Kaynak: §24.1; D-136 (aynı mantık)
+- Kaynak: D-136 (aynı mantık)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Sözleşmede değişiklik (zeyilname) olursa geçerlilik tarihli yeni sürüm açılır; önceki sürüm ve şartları silinmez. Her hesap, işlemin tarihinde geçerli sürümü kullanır (D-177'den türetilen kural, sahip onayladı).
@@ -67,7 +67,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 ### REQ-CMP-006 — Yükümlülük kaydı
 
-- Kaynak: §24.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: uyarının ne kadar önce, kime gideceği ve eskalasyon zinciri
@@ -78,7 +78,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 ### REQ-CMP-007 — İşveren yükümlülükleri
 
-- Kaynak: §24.5; REQ-SIT-024
+- Kaynak: REQ-SIT-024
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: İşverenin yükümlülükleri de izlenir: saha teslimi, dolgu, beton, demir, elektrik/su, ödeme ve diğer sözleşmesel yükümlülükler. Yerine getirilme zamanı teslim-tesellüm kayıtlarından ve tahsilattan gelir.
@@ -88,7 +88,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 ### REQ-CMP-008 — Sözleşmeden doğan tetikleyiciler
 
-- Kaynak: §24.3; REQ-WFL-007, REQ-WFL-028
+- Kaynak: REQ-WFL-007, REQ-WFL-028
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: listelenen tetikleyicilerin tamamı; her biri varsayılan akıştır. Sözleşmedeki tarihli yükümlülüklerin kayda dönüşmesi sabittir
@@ -99,7 +99,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 ### REQ-CMP-009 — Bağımlılık kilitleri ve nedeni
 
-- Kaynak: §24.4; REQ-WFL-029, REQ-WFL-030
+- Kaynak: REQ-WFL-029, REQ-WFL-030
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: hangi kilitlerin hangi geçişlerde kurulduğu; kilidin nedeninin gösterilmesi sabittir
@@ -112,7 +112,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 ### REQ-CMP-010 — Gecikme cezası riski
 
-- Kaynak: §24.1, §24.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: ceza riski uyarısının kime gideceği
@@ -136,7 +136,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 ### REQ-CMP-012 — İşveren gecikme dosyası
 
-- Kaynak: §24.6; REQ-SIT-025; D-124
+- Kaynak: REQ-SIT-025; D-124
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Teslim-tesellüm saatleri ve sözleşme yükümlülükleri birleştirilerek gecikme dosyası hazırlanır: hangi tarihte ne beklendi, işveren ne zaman yerine getirdi, kaç saat/gün gecikme oldu, hangi kayıt, fotoğraf ve belge bunu destekliyor, tahmini maliyet etkisi. Dosya PDF olarak dışa aktarılır. Kanıt kendi kayıtlarımıza dayanır; işverenden imza alınmaz (D-124).
@@ -160,7 +160,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 ### REQ-CMP-014 — Teminat takibi
 
-- Kaynak: §24.7; D-029
+- Kaynak: D-029
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: uzatma uyarısının ne kadar önce ve kime gideceği
@@ -182,7 +182,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 ### REQ-CMP-016 — Süreli belgeler tek listede
 
-- Kaynak: §31, §24.7; REQ-EQP-015, REQ-HR-003
+- Kaynak: REQ-EQP-015, REQ-HR-003
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış + Tanım
 - Akışla ayarlanan: uyarı ve görevin kime düşeceği
@@ -194,7 +194,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Contract, Contract Amendment, Framework Ag
 
 ### REQ-CMP-017 — Uyuşmazlık dosyaları
 
-- Kaynak: §24.7
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit
 - Açıklama: Uyuşmazlık ve hak talebi dosyaları proje veya şirket bazında tutulur: konu, taraf, tarih, tutar, durum, ilgili gecikme dosyaları, yazışmalar ve belgeler.

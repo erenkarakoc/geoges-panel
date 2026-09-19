@@ -49,8 +49,8 @@ src/
   lib/, hooks/    COSS'un yardımcı dosyaları (CLI yönetir)
   platform/
     access/     AccessPolicy arayüzü (M0 önizleme politikası; gerçek politika IAM'den gelir)
-    navigation/ navigation-registry.ts (sol menü, §40.1)
-    dashboard/  dashboard-widget-registry.ts (cockpit kartları, §3.1–§3.3)
+ navigation/ navigation-registry.ts (sol menü, REQ-NFR-007)
+ dashboard/ dashboard-widget-registry.ts (cockpit kartları, REQ-INV-026, REQ-RPT-002…004, REQ-RPT-006…009)
     ui/         app-shell, tema (brand.css), modül yer tutucu sayfası
     supabase/   browser ve server istemcileri (TASK-0025)
   proxy.ts     oturum yenileme ve korumalı sayfa yönlendirmesi
@@ -76,7 +76,7 @@ Tablo oluşturulmaz. Yalnızca Supabase Auth kullanılır. Yetki kararlarında `
 - **Parola sıfırlama:** e-posta isteği, gönderildi bilgisi, yeni parola belirleme.
 - **Yeni rol yönlendirmesi:** adım göstergeli tanıtım (devl.dev onboarding ilhamı). Roller henüz tasarlanmadığı için içerik statik ve "örnek" diye işaretlidir.
 - **Uygulama kabuğu:** sol dikey menü (boş modül sayfaları), üst bar (kullanıcı, çıkış, tema), açık/koyu mod, mobil görünüm.
-- **Dashboard:** boş kart iskeleti; kart başlıkları kapsam §3.1'deki göstergelerden gelir, rakam yoktur.
+- **Dashboard:** boş kart iskeleti; kart başlıkları REQ-RPT-003…004'deki göstergelerden gelir, rakam yoktur.
 - Her ekranda yükleniyor, hata ve boş durumları; klavye kullanımı; WCAG 2.2 AA kontrastı.
 
 ## 8. Güvenlik
@@ -86,7 +86,7 @@ Tablo oluşturulmaz. Yalnızca Supabase Auth kullanılır. Yetki kararlarında `
 - `.env.local` Git'e girmez; paket sürümleri sabitlenir ve `package-lock.json` commit edilir.
 - Uygulama arama motorlarına kapalıdır (`robots` + `X-Robots-Tag: noindex`, ADR-012).
 - Supabase'in varsayılan e-posta servisi yalnızca proje ekibine gönderir ve saatte 2 e-postayla sınırlıdır. Önizlemede parola sıfırlama yalnızca sahip adresiyle denenir; üretimde özel SMTP gerekir (OQ-015).
-- Bilinen boşluklar (Phase 03/07'de tasarlanır): hesap kilitleme politikası (§2.8), 2FA kurtarma yöntemi, anında oturum kapatma, denetim kaydı.
+- Bilinen boşluklar (Phase 03/07'de tasarlanır): hesap kilitleme politikası (REQ-AUD-006, REQ-IAM-001, REQ-IAM-003…006, REQ-IAM-008), 2FA kurtarma yöntemi, anında oturum kapatma, denetim kaydı.
 
 ## 9. Testler
 

@@ -2,7 +2,7 @@
 
 Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: CRM (Leads & Client Relations)
 
-Kaynaklar: Özellik Yapısı §5; kararlar D-027, D-103, D-169…D-172.
+Kaynaklar: kararlar D-027, D-103, D-169…D-172.
 
 **Sınır.** Firma kaydının kendisi (tek kayıt, roller) D-027'dir ve ortaktır. Teklifin hazırlanması ve fiyat REQ-QTE'dedir. Proje ve aşamaları REQ-PRJ'dedir. Hatırlatma ve üst seviyeye taşıma mekanizması REQ-TSK-006'dadır. Ödeme ve tahsilat verisi REQ-FIN'den okunur. Kaçırılan ihalenin performansa yansıması REQ-PRF'dedir. E-postadan akış başlatmak ilk sürümde yoktur (D-103, DEF-006).
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 ### REQ-CRM-001 — Hiçbir temas hafızada kalmaz
 
-- Kaynak: §5, §5.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: talep kaynakları
@@ -25,7 +25,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 ### REQ-CRM-002 — Hızlı kayıt ekranı
 
-- Kaynak: §5.1; D-170
+- Kaynak: D-170
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: dönüş görevinin açılması ve hatırlatması
@@ -37,7 +37,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 ### REQ-CRM-003 — E-postadan talep elle açılır
 
-- Kaynak: §5.1; D-169
+- Kaynak: D-169
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Bilgi e-postasına gelen teklif talebi, personel tarafından hızlı kayıt ekranından talep olarak açılır; e-posta ekleriyle birlikte kayda yüklenir. Panel e-posta kutusunu okumaz.
@@ -47,7 +47,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 ### REQ-CRM-004 — Talep firmaya bağlanır
 
-- Kaynak: §5.3; D-027
+- Kaynak: D-027
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Talep mevcut firma kaydına bağlanır; firma kayıtlı değilse yeni firma kaydı açılır. Aynı firma için ikinci kayıt açılmaz.
@@ -57,7 +57,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 ### REQ-CRM-005 — İletişim günlüğü
 
-- Kaynak: §5.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Talebe bağlı olmayan görüşmeler de (kurum, ana firma, mevcut müşteri takibi) firmanın iletişim günlüğüne tarih, kişi, konu ve sonuçla yazılır.
@@ -67,7 +67,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 ### REQ-CRM-006 — Talebin aşamaları
 
-- Kaynak: §5
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: talep aşamaları ve kayıp nedenleri
@@ -81,7 +81,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 ### REQ-CRM-007 — Cevapsız talep hatırlatılır ve yukarı taşınır
 
-- Kaynak: §5.2; REQ-TSK-006
+- Kaynak: REQ-TSK-006
 - Öncelik: Must · Kademe: T1
 - Katman: Akış
 - Akışla ayarlanan: hatırlatma zamanı, üst seviyeye taşıma zinciri ve süreleri (varsayılan akış: cevapsız talep)
@@ -92,7 +92,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 ### REQ-CRM-008 — Sahip cevapsız talepleri görür
 
-- Kaynak: §5.2; REQ-RPT-007
+- Kaynak: REQ-RPT-007
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Sahip "Bugün" ekranında cevapsız talepleri (ör. "2 gündür cevaplanmamış teklif talebi") görür; tıklayınca kime atandığını ve neden ilerlemediğini görür.
@@ -104,7 +104,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 ### REQ-CRM-009 — İşveren karnesi kayıtlardan hesaplanır
 
-- Kaynak: §5.3; D-171
+- Kaynak: D-171
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Her işverenin kartı zamanla karneye dönüşür. Kayıtlardan kendiliğinden hesaplananlar: geçmiş ve devam eden projeler, verilen teklifler, kazanılan/kaybedilen işler, ödeme ve tahsilat geçmişi, ortalama ödeme hızı, hakediş onay gecikmeleri, saha teslim/dolgu/beton/demir gecikmeleri, geçmiş işlerin gerçek kârlılığı, kesinti geçmişi. Ödeme ve kârlılık ticari veridir.
@@ -115,7 +115,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 ### REQ-CRM-010 — Karneye gerekçeli not
 
-- Kaynak: §5.3; D-171
+- Kaynak: D-171
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Yetkili kişi karneye tarihli ve gerekçeli not ekler (ör. sözleşme kaynaklı problem, uyuşmazlık). Not değiştirilmez; düzeltme yeni notla yapılır.
@@ -125,7 +125,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 ### REQ-CRM-011 — Karne teklifte görünür
 
-- Kaynak: §5.3; REQ-QTE
+- Kaynak: REQ-QTE
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Aynı işverene teklif hazırlanırken karnenin özeti (ör. "geç ödüyor", "sahayı sık bekletiyor") teklif ekranında görünür, böylece ticari risk fiyat ve şartlara yansıtılabilir.
@@ -137,7 +137,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 ### REQ-CRM-012 — İhale ve fırsat son tarihleri
 
-- Kaynak: §5.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: uyarının ne kadar önce ve kime gideceği
@@ -148,7 +148,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 
 ### REQ-CRM-013 — Kaçırılan ihale performansa yansır
 
-- Kaynak: §5.4; REQ-PRF
+- Kaynak: REQ-PRF
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit
 - Açıklama: Kaçırılan ihale veya zamanında hazırlanmayan teklif, ilgili satış/teknik ofis kişisinin performans verisine geçer.
@@ -166,7 +166,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Party, Client, Lead, Contact Log, Lead Sou
 - Açıklama: Uygulama işinde talep "Kazanıldı" işaretlenince talep ve kabul edilen teklifteki bilgilerle (işveren, kalemler, miktarlar, fiyatlar) taslak proje açılır; teknik ofis tamamlar. Proje "sözleşme" aşamasından başlar; önceki aşamalar (talep/fırsat, ön inceleme, teklif, görüşme/pazarlık) talebin geçmişinden gelir ve projenin geçmişinde görünür (D-172'den türetilen kural, sahip onayladı).
 - Kabul kriterleri:
   - [ ] Bir talepten yalnızca bir proje açılır; proje talebe ve teklife bağlantı taşır.
-  - [ ] Ürün satışında proje açılmaz; kazanılan teklif satış siparişine döner (§6.9, REQ-QTE-014).
+ - [ ] Ürün satışında proje açılmaz; kazanılan teklif satış siparişine döner (REQ-QTE-014…015, REQ-QTE-018, REQ-QTE-014).
 - Durum: CONFIRMED
 
 ---

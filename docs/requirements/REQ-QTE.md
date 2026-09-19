@@ -2,7 +2,7 @@
 
 Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: QTE (Quotes & Sales)
 
-Kaynaklar: Özellik Yapısı §6; kararlar D-027, D-140, D-149, D-173…D-176.
+Kaynaklar: kararlar D-027, D-140, D-149, D-173…D-176.
 
 **Sınır.** Talep, işveren karnesi ve kazanılan işten proje açılması REQ-CRM'dedir (REQ-CRM-011, REQ-CRM-014). Kur kuralı REQ-ADM-013 ve REQ-ADM-014'tedir. Stok hareketleri REQ-INV'de, tedarikçi siparişi REQ-PUR'dadır. Fatura, tahsilat ve cari REQ-FIN'dedir. Teklif onayı gerekip gerekmediği iş akışıdır (REQ-WFL).
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-001 — Teklif kaydı
 
-- Kaynak: §6.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: geçerlilik uyarısının ne kadar önce ve kime gideceği
@@ -26,7 +26,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-002 — Teklif durumları ve talebin aşaması
 
-- Kaynak: §6.1; REQ-CRM-006
+- Kaynak: REQ-CRM-006
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Teklif şu durumlardan geçer: Hazırlanıyor → Gönderildi → Görüşme/Pazarlık → Kazanıldı / Kaybedildi / İptal. Teklifin durumu bağlı talebin aşamasını günceller: teklif gönderilince talep "Teklif verildi" olur; teklif kazanılınca veya kaybedilince talep de öyle olur. Bir talebin birden fazla teklifi olabilir; biri kazanılınca diğer açık teklifler "İptal" olur (kapsamdan türetilen kural, sahip onayladı).
@@ -37,7 +37,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-003 — Teklif sürümleri
 
-- Kaynak: §6.8
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Gönderilmiş bir teklif değiştirilecekse yeni sürüm açılır (Rev.1, Rev.2…). Gönderilen her sürüm belgesiyle birlikte saklanır ve sürümler yan yana karşılaştırılabilir.
@@ -49,7 +49,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-004 — Yaklaşık proje miktarları
 
-- Kaynak: §6.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Teklif öncesinde boykesit, enkesit ve plan incelenerek çıkarılan yaklaşık miktarlar kaydedilir ve teklif kalemlerine aktarılır. Birim fiyat girilirken şehir, kurum, bölge, piyasa koşulları, işveren dinamiği ve proje şartları not olarak kalemle birlikte tutulur.
@@ -59,7 +59,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-005 — Tahmini maliyet geçmiş gerçek maliyetten önerilir
 
-- Kaynak: §6.3, §6.7; D-174
+- Kaynak: D-174
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Her kalemin tahmini birim maliyeti, şirketin o kalem için son gerçekleşen birim maliyetinden önerilir. Teklifi hazırlayan öneriyi değiştirebilir; önerilen ve girilen değer yan yana görünür. Veri yoksa maliyet elle girilir.
@@ -69,7 +69,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-006 — "Bu fiyata alırsam ne kazanırım?"
 
-- Kaynak: §6.3; D-173
+- Kaynak: D-173
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Her kalemde tahmini maliyet ile satış fiyatı karşılaştırılır; teklifin tahmini toplam maliyeti, tahmini kârı ve kâr marjı gösterilir. Tahmini maliyete ilgili olduğu ölçüde malzeme, fabrika işleme, saha işçiliği, taşeron işçilik, ekipman, yemek/konaklama ve nakliye girer. Genel gider payı eklenmez; genel gideri karşılamak hedef marjın işidir (D-173, D-149 ile aynı mantık).
@@ -79,7 +79,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-007 — Hedef marja göre fiyat önerisi
 
-- Kaynak: §6.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Yetkili kullanıcı hedef marjı girer (ör. "en az %25"); panel tahmini maliyetten önerilen satış fiyatını hesaplar.
@@ -89,7 +89,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-008 — Çoklu para birimi
 
-- Kaynak: §6.5; REQ-ADM-013, REQ-ADM-014
+- Kaynak: REQ-ADM-013, REQ-ADM-014
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Aynı teklifte farklı para birimleri olabilir (ör. panel TL/m², çelik şerit USD/metre). Karşılaştırmada TL karşılığı gösterilir; kalemin kendi para birimi korunur. Kur, önceki iş gününün TCMB alış kurudur; yetkili kullanıcı gerekçeyle elle kur girebilir.
@@ -101,7 +101,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-009 — Kazanılan uygulama teklifi projeye geçer
 
-- Kaynak: §6.6; REQ-CRM-014
+- Kaynak: REQ-CRM-014
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Kazanılan uygulama teklifi yeniden girilmez: yeni projenin başlangıç bilgisini oluşturur (REQ-CRM-014) veya mevcut bir projeye bağlanır.
@@ -113,7 +113,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-010 — Tahmin ile gerçekleşen karşılaştırılır
 
-- Kaynak: §6.7
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: açıklama istenen sapma eşiği
@@ -125,7 +125,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-011 — Ders notları sonraki tekliflere taşınır
 
-- Kaynak: §6.7
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit
 - Açıklama: Tamamlanan işe "ders/not" yazılır. Aynı kalemi veya aynı işvereni içeren yeni teklif hazırlanırken ilgili notlar teklif ekranında görünür.
@@ -137,7 +137,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-012 — Teklif belgesi panelde üretilir
 
-- Kaynak: §6.8
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Teklif kaydından kurumsal görünümlü PDF üretilir; Word'de yeniden yazılmaz. Belgede kapak ve logo, muhatap firma ve kişi, proje adı, teklif tarihi ve numarası, iş tanımı ve kapsam maddeleri, kalem tablosu (tanım, birim, miktar, birim fiyat, para birimi), ticari şartlar (yemek/konaklama kimde, ödeme, geçerlilik vb.) ve imzalayan kişi bulunur.
@@ -148,7 +148,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-013 — Teklif şablonları
 
-- Kaynak: §6.8
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: teklif şablonları ve ürün grupları
@@ -161,7 +161,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-014 — Kazanılan ürün teklifi satış siparişine döner
 
-- Kaynak: §6.9
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Şantiyesi olmayan malzeme satışında (geogrid, geomembran, çelik şerit vb.) kazanılan teklif proje ve şantiye açılmadan satış siparişine döner. Zincir: Teklif → Satış siparişi → Tedarik/üretim → Müşteriye sevk → Fatura → Tahsilat.
@@ -171,7 +171,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-015 — Satış siparişi kaydı
 
-- Kaynak: §6.9
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Satış siparişinde müşteri, kalemler, fiyat, para birimi, teslim şekli ve tarihi, sevk irsaliyesi ve teslim/kantar belgeleri tutulur. Sevk stoktan veya tedarikçiden doğrudan müşteriye yapılabilir.
@@ -202,7 +202,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Quote, Quote Version, Quote Template, Esti
 
 ### REQ-QTE-018 — Sipariş bazında maliyet ve kâr
 
-- Kaynak: §6.9
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Satış siparişinin maliyeti (stoktan çıkışta lokasyonun ağırlıklı ortalaması, doğrudan sevkte alış bedeli, nakliye) ve kârı sipariş bazında izlenir; teklifteki tahminle geri besleme aynı mantıkla yapılır (REQ-QTE-010).

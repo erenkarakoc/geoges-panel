@@ -2,9 +2,9 @@
 
 Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: FIN (Finance)
 
-Kaynaklar: Özellik Yapısı §15.1 (maliyet kalemleri), §16, §20.2, §22; kararlar D-027, D-029, D-030, D-033, D-034, D-140, D-141, D-147…D-154.
+Kaynaklar: (maliyet kalemleri); kararlar D-027, D-029, D-030, D-033, D-034, D-140, D-141, D-147…D-154.
 
-**Sınır.** Onay mekanizması ve ödeme onay eşikleri iş akışıdır (REQ-WFL). Tedarikçi siparişi ve satın alma REQ-PUR'dadır; stok maliyeti REQ-INV'de, fabrika birim maliyeti REQ-FAC'tadır. Bordro ve puantaj REQ-HR'dadır; ekipman amortismanı, servis aracı ve atıl kapasite (§20.3, §20.4) REQ-EQP'dedir. Teminat mektubunun kendisi ve sözleşme vadesi REQ-CMP'dedir. Kur kuralı REQ-ADM-013'tedir. FIN hesaplar; göstergeler ve "Niye zarardayız?" analizi REQ-RPT'dedir. Onaylı kaydın değiştirilmesi revizyon talebiyle olur (REQ-AUD).
+**Sınır.** Onay mekanizması ve ödeme onay eşikleri iş akışıdır (REQ-WFL). Tedarikçi siparişi ve satın alma REQ-PUR'dadır; stok maliyeti REQ-INV'de, fabrika birim maliyeti REQ-FAC'tadır. Bordro ve puantaj REQ-HR'dadır; ekipman amortismanı, servis aracı ve atıl kapasite (REQ-EQP-017, REQ-EQP-021) REQ-EQP'dedir. Teminat mektubunun kendisi ve sözleşme vadesi REQ-CMP'dedir. Kur kuralı REQ-ADM-013'tedir. FIN hesaplar; göstergeler ve "Niye zarardayız?" analizi REQ-RPT'dedir. Onaylı kaydın değiştirilmesi revizyon talebiyle olur (REQ-AUD).
 
 Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Progress Payment, Carried-Over Quantity, Deduction, Retention, Withholding Tax, Client Advance, Collection, Income, Ancillary Income, Expense, General Expense, Cost Center, Party Account, Cash Flow Projection, Payment, Accounting Export, Period Close, Closing Unit.
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-001 — Hakediş kaydı
 
-- Kaynak: §16.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: İşveren hakedişinde proje, dönem (ay), onaylı imalat miktarları, birim fiyatlar, brüt tutar, kesintiler, net tutar, para birimi ve hakediş belgesi tutulur. Hakedişi yetkili ticari, muhasebe veya koordinasyon rolü yönetir; günlük saha kaydından ayrı bir süreçtir. Tutarlar ticari veridir.
@@ -25,7 +25,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-002 — Onaylı üretim öneri olarak gelir
 
-- Kaynak: §16.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Dönemin onaylı saha üretimi, hakedişe miktar önerisi olarak kendiliğinden gelir. Yetkili kişi bir miktarı düzeltebilir; düzeltme gerekçe ister ve öneriyle yan yana görünür.
@@ -47,7 +47,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-004 — Hakediş durum zinciri
 
-- Kaynak: §16.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Hakediş şu durumlardan geçer: Hazırlandı → İşverene sunuldu → İşveren onayladı → Faturalandı → Tahsil edildi.
@@ -58,7 +58,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-005 — Kısmi tahsilat
 
-- Kaynak: §16.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Bir hakediş birden fazla tahsilatla kapanabilir; kalan açık alacak görünür. Hakediş, net tutarın tamamı tahsil edilince "Tahsil edildi" olur.
@@ -68,7 +68,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-006 — Kesintiler
 
-- Kaynak: §16.1; D-029, D-150
+- Kaynak: D-029, D-150
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Brüt tutardan teminat kesintisi, stopaj, işveren avansı kesintisi ve diğer kesintiler düşülerek net tutar bulunur. "İşveren karşılar ve GEOGES hakedişinden keser" olarak işaretlenmiş kalemler (REQ-PRJ) de kesinti olarak gelir. Oranlar projenin sözleşmesinden alınır.
@@ -90,7 +90,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-008 — İşveren onayı fatura görevi açar
 
-- Kaynak: §16.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: fatura görevinin kime düşeceği ve yönetim onayı gerekip gerekmediği (varsayılan akış: hakediş → fatura)
@@ -103,7 +103,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-009 — Taşeron hakedişi bizim onayladığımız üretimden
 
-- Kaynak: §16.4; D-030, D-148
+- Kaynak: D-030, D-148
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: taşeron hakedişinin onay adımları
@@ -115,7 +115,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-010 — İki hakediş aynı veriden
 
-- Kaynak: §16.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: İşveren ve taşeron hakedişleri aynı onaylı üretim verisinden hesaplanır; miktarlar ayrı ayrı girilmez.
@@ -127,7 +127,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-011 — Gelir kaydı
 
-- Kaynak: §22.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Gelir kaynakları hakediş tahsilatları, yan gelirler, hurda, dış nakliye, dış imalat, kiralama ve diğer gelirlerdir. Her gelirde tutar, para birimi, tarih, ilgili proje veya birim, faturalı/nakit bilgisi ve belge tutulur.
@@ -137,7 +137,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-012 — Yan gelir ve dış işler
 
-- Kaynak: §20.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Hurda satışı, dış nakliye, dış kaynak/imalat, kaynak/kesim, ekipman ve kalıp kiralama, araçla dış hizmet ve diğer dış işler ortak yan gelir alanına girilir: iş türü, müşteri, miktar, birim fiyat, toplam, tarih, faturalı/nakit, ilgili araç/birim/personel ve belge.
@@ -148,7 +148,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-013 — Sistemden kendiliğinden gelen giderler
 
-- Kaynak: §22.3, §15.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Taşeron hakedişi, malzeme tüketimi, ekipman amortismanı, bordro, saha harcaması, fabrika maliyeti ve bakım gibi giderler kaynak modülde onaylandığında finansa kendiliğinden gider olarak yazılır.
@@ -159,7 +159,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-014 — Elle girilen giderler
 
-- Kaynak: §22.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Ofis gideri, kira, seyahat, yemek, konaklama, avans ve diğer genel giderler elle, belgeyle girilir. Her gider bir maliyet merkezine bağlanır; hiçbir projeye ait olmayan gider "genel" merkeze yazılır.
@@ -169,7 +169,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-015 — Saha harcamasının onayı
 
-- Kaynak: §9.4; REQ-SIT (saha harcaması)
+- Kaynak: REQ-SIT-003, REQ-SIT-030; REQ-SIT (saha harcaması)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: saha harcamasının onay adımları ve eşikleri
@@ -180,7 +180,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-016 — Aynı gider iki kez sayılmaz
 
-- Kaynak: §22.3; D-152
+- Kaynak: D-152
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Aynı harcama iki yoldan gelebilir (ör. önce şantiye fişi, sonra tedarikçi faturası). İlk giren kayıt gideri yazar; sonra gelen kayıt ona bağlanır ve tekrar gider yazmaz. Tutarlar farklıysa fark ayrı görünür.
@@ -193,7 +193,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-017 — Proje kâr-zararı doğrudan giderlerle
 
-- Kaynak: §22.4, §15.1; D-149
+- Kaynak: D-149
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Proje kâr-zararı = gelir − (işçilik veya taşeron hakedişi + malzeme + yemek/konaklama + ekipman/amortisman + nakliye + operatör/vinç + saha harcaması + projeye doğrudan yazılmış diğer giderler). "Kim neyi karşılıyor" matrisi (REQ-PRJ) hangi kalemin gider olduğunu belirler. Ofis kirası ve genel müdürlük gibi genel giderler projelere **dağıtılmaz**; yalnızca şirket genelinde görünür (D-149).
@@ -207,7 +207,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-018 — Firma başına para birimi bazında tek net cari
 
-- Kaynak: §22.6; D-027, D-033, D-034
+- Kaynak: D-027, D-033, D-034
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Her firmanın her para birimi için tek net yürüyen bakiyesi vardır; aynı firma hem işveren hem tedarikçiyse alacak ve borç netleşir. Her bakiye güncel TL karşılığıyla gösterilir (D-140).
@@ -217,7 +217,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-019 — Cari hareketleri
 
-- Kaynak: §22.6
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: İşveren tarafında hakedişler alacağı artırır, tahsilatlar azaltır. Tedarikçi tarafında sipariş ve gider borcu artırır, ödeme azaltır. Taşeron hakedişi taşeron carisine borç yazar.
@@ -230,7 +230,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-020 — Finans ana ekranı
 
-- Kaynak: §22, §22.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Finans ekranı şu sorulara cevap verir: param nerede, kim bana ne kadar borçlu, ben kime ne kadar borçluyum, hangi proje kâr/zarar ediyor, bu ay ne kadar gelir/gider var, önümüzdeki haftalarda nakit yeterli mi. Öne çıkan göstergeler: nakit pozisyonu, açık hakediş/alacak, bu ay gelir, bu ay gider, şirket geneli kâr-zarar, toplam alacak, toplam borç, yakın nakit açığı.
@@ -241,7 +241,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-021 — Haftalık nakit projeksiyonu
 
-- Kaynak: §22.7
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: projeksiyon süresi (varsayılan 8 hafta)
@@ -264,7 +264,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-023 — Nakit açığı önceden uyarılır
 
-- Kaynak: §22.7
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış + Tanım
 - Akışla ayarlanan: uyarının kime gideceği
@@ -278,7 +278,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-024 — Muhasebe evrakı takibi
 
-- Kaynak: §22.8
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Muhasebe birimi fatura, irsaliye, ödeme listesi, cari, avans, dekont, ödeme durumu ve diğer muhasebe evrakını panelden takip eder. Gelen fatura ilgili siparişe, teslim alıma veya gidere bağlanır.
@@ -288,7 +288,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-025 — Ödeme onaysız tamamlanmaz
 
-- Kaynak: §22.8
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: ödeme onayının adımları ve tutar eşikleri (varsayılan akış: ödeme onayı)
@@ -302,7 +302,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-026 — Muhasebeciye dışa aktarma ve mutabakat
 
-- Kaynak: §22.9; D-153
+- Kaynak: D-153
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Panel resmi muhasebe programını taklit etmez; e-fatura, defter ve beyan muhasebeci/YMM tarafındadır. Panel her ay, muhasebecinin programının içeri alabildiği biçimde (ör. Excel) gelir, gider, fatura ve tahsilat/ödeme dosyası üretir. İki taraf karşılaştırıldıktan sonra sonuç panelde işaretlenir.
@@ -315,7 +315,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-027 — Her şantiye kendi dönemini kapatır
 
-- Kaynak: §22.10; D-154
+- Kaynak: D-154
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Dönem kapanışı kapanış birimi bazındadır: her şantiye kendi ayını hazır olunca kapatır. Fabrika ve genel (ofis) de kendi kapanış birimidir (D-154'ten türetilen kural, sahip onayladı). Şirket geneli ay, son birim de kapanınca kesinleşir.
@@ -325,7 +325,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-028 — Kapanış kontrol listesi
 
-- Kaynak: §22.10; REQ-AUD-010
+- Kaynak: REQ-AUD-010
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: hangi kalem türlerinin engelleyici, hangilerinin uyarı olduğu
@@ -337,7 +337,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-029 — Kapanan dönem kesinleşir ve kilitlenir
 
-- Kaynak: §22.10; D-141
+- Kaynak: D-141
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Kapanan birimin o ayki raporları "kesinleşmiş" işaretlenir. Kapalı döneme ait değişiklik yalnızca revizyon talebiyle (REQ-AUD) veya yetkili kişinin gerekçeyle dönemi yeniden açmasıyla yapılır. Kapanışla birlikte geçici birim maliyetler kesinleşir (REQ-FAC-009, REQ-INV-022).
@@ -348,7 +348,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Client Progress Payment, Subcontractor Pro
 
 ### REQ-FIN-030 — Geciken kapanış için uyarı ve görev
 
-- Kaynak: §22.10
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış + Tanım
 - Akışla ayarlanan: uyarı ve görevin kime düşeceği

@@ -2,7 +2,7 @@
 
 Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: EQP (Equipment & Assets)
 
-Kaynaklar: Özellik Yapısı §20.3, §20.4, §21; kararlar D-155…D-162.
+Kaynaklar: kararlar D-155…D-162.
 
 **Sınır.** Gelir ve giderin muhasebesi, cari ve dönem kapanışı REQ-FIN'dedir; EQP amortisman, kira, tamir ve atıl maliyeti üretir, FIN onları yazar (REQ-FIN-013). Dış nakliye ve kiralama gelirinin kaydı REQ-FIN-012'dedir. Satın alma REQ-PUR'dadır. Günlük saha kaydının kendisi REQ-SIT'tedir; EQP ondan hangi ekipmanın çalıştığını okur. Onay mekanizması REQ-WFL'dedir. Kategori listesi merkezi tanımdır (REQ-ADM).
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-001 — Varlık kartı
 
-- Kaynak: §21, §21.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Şirkete ait her fiziksel varlık kayıtlıdır. Kartta ad, kategori, marka, model, üretim yılı, seri numarası veya plaka, satın alma tarihi, satın alma bedeli, para birimi, adet/birim, faydalı ömür, durum, lokasyon, zimmetli kişi, garanti, son ve sonraki bakım/periyodik kontrol, fatura, fotoğraf ve diğer belgeler tutulur. Satın alma bedeli ticari veridir.
@@ -25,7 +25,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-002 — Kategoriler
 
-- Kaynak: §21.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: kategoriler, kategoriye göre kontrol türleri ve amortisman ömrü
@@ -48,7 +48,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-004 — Kendi malı ve kiralık
 
-- Kaynak: §21.7; D-161
+- Kaynak: D-161
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: kira bitiş uyarısının ne kadar önce ve kime gideceği
@@ -60,7 +60,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-005 — Satın almadan varlık kartına
 
-- Kaynak: §18.16; REQ-PUR-011
+- Kaynak: REQ-PUR-007…011; REQ-PUR-011
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Teslim alınan bir satın alma kalemi demirbaş ise varlık kartı, satın alma bilgileri (tedarikçi, bedel, tarih, fatura) dolu olarak açılır.
@@ -72,7 +72,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-006 — Lokasyon ve transfer geçmişi
 
-- Kaynak: §21.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Bir varlığın hangi tarihlerde fabrikada, hangi şantiyede, bakımda veya başka lokasyonda olduğu görülür. Fabrika → şantiye, şantiye → şantiye ve şantiye → fabrika transferleri tarihle kaydedilir ve geçmişte kalır.
@@ -83,7 +83,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-007 — Zimmet
 
-- Kaynak: §21.1, §21.8
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: iade görevinin kime düşeceği (varsayılan akış: personel çıkışı)
@@ -94,7 +94,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-008 — Araç devir-teslim tutanağı
 
-- Kaynak: §21.8; D-160
+- Kaynak: D-160
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Araç zimmetlenirken, iade alınırken veya iki kişi arasında devredilirken tarih, km okuması, yakıt seviyesi ve hasar durumunu gösteren fotoğraflarla tutanak düzenlenir. Tutanağı teslim eden ve teslim alan kendi hesabından telefonda onaylar; onaylar zamanıyla saklanır. Panel hesabı olmayan kişi için imzalı kâğıt tutanağın fotoğrafı yüklenir.
@@ -105,7 +105,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-009 — Araç kullanım ve yakıt hesabı
 
-- Kaynak: §21.8
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: sapma eşiği
@@ -118,7 +118,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-010 — Amortisman yalnızca çalıştığı günler şantiyeye
 
-- Kaynak: §21.3; D-155
+- Kaynak: D-155
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Kendi malı varlığın günlük amortisman payı, satın alma bedelinin faydalı ömrüne bölünmesiyle bulunur. Bu pay yalnızca varlığın bir şantiyede çalıştığı günlerde o şantiyenin giderine yazılır. Çalışmadığı her gün (şantiyede boş beklerken, fabrikada, depoda veya bakımda) atıl ekipman giderine yazılır (REQ-EQP-012).
@@ -142,7 +142,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-012 — Atıl ekipman gideri
 
-- Kaynak: §21.3; D-156
+- Kaynak: D-156
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Çalışmayan günlerin amortisman payı hiçbir projeye yüklenmez; şirket genelinde ayrı "atıl ekipman gideri" satırında görünür. Hangi varlığın, nerede, kaç gün ve ne kadar bedelle boş beklediği okunur.
@@ -152,7 +152,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-013 — Tamir ve arıza maliyeti
 
-- Kaynak: §21.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Arıza, tamir, yedek parça, servis, maliyet ve belge/fotoğraf ilgili varlığa, gerekiyorsa ilgili şantiyeye bağlanır. Fabrika günlük kaydındaki makine arızası (REQ-FAC-003) ve vinç arıza bildirimi de varlığa arıza kaydı olarak düşer.
@@ -162,7 +162,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-014 — Kullanılamaz hale gelen demirbaş
 
-- Kaynak: §21.4; D-157
+- Kaynak: D-157
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Bir demirbaş kullanılamaz hale gelirse kalan değeri (bedel − yazılmış amortisman), o sırada bulunduğu şantiyenin gideri olur; şantiyede değilse atıl ekipman giderine yazılır. Yetkili kişi gerekçeyle başka maliyet merkezine aktarabilir. Yerine alınan parça ayrı varlık veya gider olarak izlenir.
@@ -175,7 +175,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-015 — Periyodik kontrol, muayene, sigorta ve bakım uyarıları
 
-- Kaynak: §21.5, §21.8
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış + Tanım
 - Akışla ayarlanan: uyarı ve yenileme görevinin kime düşeceği
@@ -190,7 +190,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-016 — Kaç gündür atıl
 
-- Kaynak: §21.6
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Her varlık için kaç gündür çalışmadığı görünür. Bu bilgi kaynak planlamasına (REQ-INT) beslenir.
@@ -200,7 +200,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-017 — Atıl kapasite fırsat uyarısı
 
-- Kaynak: §20.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: atıl gün eşiği
@@ -213,7 +213,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-018 — Vinç operatör ekranı
 
-- Kaynak: §21.7
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Vinç operatörü telefonundan kendisine atanmış vinçleri ve günlük görevlerini görür; günlük kaydını ve arıza bildirimini girer.
@@ -223,7 +223,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-019 — Vinç günlük kaydı
 
-- Kaynak: §21.7
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: vinç günlük kaydının onaylayıcısı
@@ -235,7 +235,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-020 — Vinç yakıt ve kullanım göstergeleri
 
-- Kaynak: §21.7
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: olağan dışı yakıt eşiği
@@ -248,7 +248,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Asset, Equipment, Asset Group, Rented Asse
 
 ### REQ-EQP-021 — Servis aracının net etkisi
 
-- Kaynak: §20.3; D-159
+- Kaynak: D-159
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit
 - Açıklama: Servis/nakliye aracı için yakıt, amortisman, bakım ve dış nakliye geliri birlikte gösterilir; aracın şirkete net etkisi görülür. Kendi işlerimizde sağladığı nakliye tasarrufu hesaplanmaz (D-159).

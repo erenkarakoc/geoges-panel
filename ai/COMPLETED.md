@@ -36,5 +36,6 @@ Only items whose quality gate passed are listed here.
 | 2026-09-18 | TASK-0038 | CHG-005 record consistency fixes, validator, pre-commit gate, session journal | T2 PASS (owner approved) |
 | 2026-09-18 | TASK-0040 | CHG-004 shell work re-reviewed against CHG-006; sample data removed | T2 PASS (check green, browser-verified) |
 | 2026-09-18 | TASK-0021 | Slice 1 requirement files: REQ-WFL (39), REQ-IAM (27), REQ-SIT (35), REQ-RPT (14) with capability catalogs | T1 PASS (owner confirmed) |
-| 2026-09-19 | TASK-0044 | Requirement files for all remaining modules (PRJ, ADM, TSK, AUD, INV, PUR, FAC, FIN, EQP, HR, CRM, QTE, CMP, QHS, PRF, INT, MTG, DOC, SUP, STR, NFR, RPT §34), D-130…D-212 | T1 PASS (owner confirmed each file) |
+| 2026-09-19 | TASK-0044 | Requirement files for all remaining modules (PRJ, ADM, TSK, AUD, INV, PUR, FAC, FIN, EQP, HR, CRM, QTE, CMP, QHS, PRF, INT, MTG, DOC, SUP, STR, NFR, RPT REQ-RPT-015), D-130…D-212 | T1 PASS (owner confirmed each file) |
 | 2026-09-19 | TASK-0041 | Capability catalog in every module requirement file | T2 PASS (records validator green; owner confirmed with each file) |
+| 2026-09-19 | TASK-0039 | Every functional-scope § citation remapped to REQ ids; section map; § rule in the validator | T2 PASS (validator green; negative test caught a bare §) |

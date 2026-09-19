@@ -2,7 +2,7 @@
 
 Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: IAM (Identity & Access)
 
-Kaynaklar: Özellik Yapısı §2; kararlar D-036, D-039, D-040, D-041, D-043, D-083, D-098, D-101, D-111…D-118. Açık soru: OQ-026 (parola politikası ve hesap kilidi eşikleri, Phase 03).
+Kaynaklar: REQ-AUD-006; kararlar D-036, D-039, D-040, D-041, D-043, D-083, D-098, D-101, D-111…D-118. Açık soru: OQ-026 (parola politikası ve hesap kilidi eşikleri, Phase 03).
 
 **Sınır.** Denetim kayıtlarının gösterimi REQ-AUD'dadır; IAM giriş ve yetki olaylarını üretir. İş akışının yetki kuralları REQ-WFL-019…022'dedir; burada yalnızca IAM'in onları mümkün kılan yapısı var. Personel kartı ve işten ayrılış süreci REQ-HR'dadır; IAM ayrılış tarihine tepki verir (REQ-IAM-007).
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-001 — E-posta ve parolayla giriş
 
-- Kaynak: D-036; §2.8
+- Kaynak: D-036; REQ-AUD-006
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Saha personeli ve taşeron ekip başları dahil herkes kendi hesabıyla, e-posta ve parolayla giriş yapar. Kendi kendine kayıt yoktur; hesapları yetkili kişi açar.
@@ -36,7 +36,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-003 — İki adımlı giriş
 
-- Kaynak: §2.8; D-043
+- Kaynak: REQ-AUD-006; D-043
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: iki adımlı girişin zorunlu olduğu roller
@@ -48,7 +48,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-004 — Parola değiştirme ve sıfırlama
 
-- Kaynak: §2.8
+- Kaynak: REQ-AUD-006
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Kullanıcı kendi parolasını değiştirir; yetkili yönetici bir kullanıcı için parola sıfırlama başlatır. Parola kuralları OQ-026 ile belirlenir.
@@ -59,7 +59,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-005 — Hatalı giriş denemelerinde geçici kilit
 
-- Kaynak: §2.8; OQ-026
+- Kaynak: REQ-AUD-006; OQ-026
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: deneme sayısı ve kilit süresi (OQ-026)
@@ -70,7 +70,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-006 — Pasife alınan hesabın erişimi anında kapanır
 
-- Kaynak: §2.8
+- Kaynak: REQ-AUD-006
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Bir hesap pasife alındığında erişim anında kapanır ve açık oturumlar sonlandırılır.
@@ -80,7 +80,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-007 — Ayrılış tarihinde erişim kendiliğinden kapanır
 
-- Kaynak: D-117; §45.4
+- Kaynak: D-117; REQ-WFL-029
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: İnsan Kaynakları bir personeli ayrılış tarihiyle "işten ayrıldı" olarak işaretlediğinde, o tarih geldiğinde hesap kendiliğinden pasife alınır, açık oturumlar kapanır, sahiplere ve kişinin yöneticisine bildirim gider. Bu davranış IAM'in kendisindedir, bir akışa bağlı değildir.
@@ -91,7 +91,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-008 — Giriş ve yetki olayları denetime yazılır
 
-- Kaynak: §2.8
+- Kaynak: REQ-AUD-006
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Başarılı ve başarısız girişler, çıkışlar, rol atamaları ve bitişleri, vekâletler, kişisel istisnalar ve hesap pasifleştirmeleri denetim kaydına yazılır. Gösterimi REQ-AUD'dadır.
@@ -103,7 +103,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-009 — Dinamik roller
 
-- Kaynak: §2.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: roller, seviyeleri ve üst-alt ilişkileri
@@ -115,7 +115,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-010 — Rol, yetkilerin bir araya gelmesidir
 
-- Kaynak: §2.1; sahip notu 2026-09-18 (D-098)
+- Kaynak: sahip notu 2026-09-18 (D-098)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: her rolün taşıdığı yetkiler
@@ -126,7 +126,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-011 — Ticari ve hassas veri görünürlüğü modül bazında
 
-- Kaynak: D-115; §2.5
+- Kaynak: D-115
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Veri dört sınıftadır: genel, iç, ticari, hassas kişisel. Ticari ve hassas kişisel veriyi görme izni modül modül ayrı verilir. Örneğin İSG sorumlusu kazadaki çalışanın adını görür, maaşını, SGK numarasını ve IBAN'ını görmez; saha mühendisi kendi şantiyesinin üretimini görür, kâr marjını ve teklif fiyatını görmez.
@@ -137,7 +137,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-012 — Rol ataması kapsam taşır
 
-- Kaynak: D-111; §2.5
+- Kaynak: D-111
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Bir rol kişiye verilirken geçerli olduğu kapsam seçilir: tüm şirket, belirli şantiyeler veya belirli projeler. Aynı rol farklı kişilere farklı kapsamla verilebilir.
@@ -148,7 +148,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-013 — Birden fazla rol; yetkiler birleşir, işlemde rol kaydedilir
 
-- Kaynak: D-113; §2.2
+- Kaynak: D-113
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Bir kişiye birden fazla rol verilebilir. Kişi bütün rollerinin yetkilerini aynı anda kullanır, rol değiştirmek zorunda kalmaz. Yaptığı her işlemin kaydına hangi rol kapsamında yapıldığı yazılır; iki rol de aynı işleme izin veriyorsa kişiye bir kez sorulur. Tek rolü olana rol seçimi gösterilmez.
@@ -159,7 +159,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-014 — Hiyerarşi: rol düzeyinde, kişi için elle değiştirilebilir
 
-- Kaynak: D-112; §2.1
+- Kaynak: D-112
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Rollerin üst-alt ilişkisi tanımlanır. Bir kişinin amiri, aynı kapsamda bir üst rolü taşıyan kişidir. Gerektiğinde bir kişi için amir elle değiştirilebilir; elle değiştirilen amir rol hiyerarşisinden önce gelir.
@@ -170,7 +170,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-015 — Kişisel istisnalar
 
-- Kaynak: §2.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Sahip, rolün varsayılan yetkilerine ek olarak belirli bir kişi için tek tek modül veya ekran erişimini açıp kapatabilir. Bu istisnalar kayıt altında tutulur ve toplu listelenir.
@@ -204,7 +204,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-018 — Süreli vekâlet
 
-- Kaynak: §2.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Bir kişiye başlangıç ve bitiş tarihiyle vekâleten rol verilir. Süre boyunca ilgili yetkileri kullanır; süre bitince vekâlet kendiliğinden sona erer.
@@ -250,7 +250,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-022 — Birden fazla sahip
 
-- Kaynak: D-114; §2.4
+- Kaynak: D-114; REQ-AUD-006
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Sahip katmanı birden fazla kişide olabilir (ortaklar). Sahipler birbirinden veri gizleyemez ve birbirlerinin işlemlerini denetleyebilir.
@@ -260,7 +260,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-023 — Sahibin görünürlüğü kısıtlanamaz
 
-- Kaynak: §2.4
+- Kaynak: REQ-AUD-006
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Genel müdür dahil hiçbir yönetici sahipten veri gizleyemez; sahibin görünürlüğünü azaltan hiçbir ayar yoktur.
@@ -270,7 +270,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-024 — Sahibin yetkileri
 
-- Kaynak: §2.4
+- Kaynak: REQ-AUD-006
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Sahip tüm şirket verisini ve tüm kritik uyarıları görür; genel müdür dahil herkesin işlem geçmişini denetler; görünürlükleri açıp kapatır; istisnai işlemlere izin verir; onay zincirlerini değiştirir; kimin hangi rol ve yetkiye sahip olduğunu yönetir.
@@ -292,7 +292,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-026 — Hazırlayan kendi işlemini onaylayamaz
 
-- Kaynak: §2.6
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: kuralın hangi onay adımlarında açık olduğu
@@ -305,7 +305,7 @@ Terimler (`docs/domain/GLOSSARY.md`): User, Role, Permission, Role Assignment, S
 
 ### REQ-IAM-027 — Yeni rol atanınca kullanıcı yönlendirilir
 
-- Kaynak: §2.7
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: yönlendirme içeriği (rol tanımının parçası)

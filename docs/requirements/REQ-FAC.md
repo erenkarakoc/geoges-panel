@@ -2,9 +2,9 @@
 
 Durum: CONFIRMED (sahip, 2026-09-18) · 2026-09-18 · Modül: FAC (Factory)
 
-Kaynaklar: Özellik Yapısı §17; kararlar D-145, D-146.
+Kaynaklar: kararlar D-145, D-146.
 
-**Sınır.** Fabrikadaki stok hareketleri ve fire REQ-INV'dedir; FAC onları günlük kayıtla üretir. Fabrika personelinin puantajı ve bordrosu REQ-HR'dadır. Makine bakımı ve arızası REQ-EQP'dedir. Dış işler ve yan gelirler (§20.2) REQ-FIN'dedir. Onay mekanizması REQ-WFL'dedir.
+**Sınır.** Fabrikadaki stok hareketleri ve fire REQ-INV'dedir; FAC onları günlük kayıtla üretir. Fabrika personelinin puantajı ve bordrosu REQ-HR'dadır. Makine bakımı ve arızası REQ-EQP'dedir. Dış işler ve yan gelirler (REQ-FIN-012) REQ-FIN'dedir. Onay mekanizması REQ-WFL'dedir.
 
 Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip Lug, Flat Bar, Galvanizer, Process Loss, Overhead Allocation, Technical Improvement Work.
 
@@ -14,7 +14,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 
 ### REQ-FAC-001 — Fabrika bir üretim ve maliyet merkezidir
 
-- Kaynak: §17
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Fabrika panel döküm yeri değildir; çelik şerit, lug, kalıp/ekipman işleri ve diğer metal imalatların üretim ve maliyet merkezidir.
@@ -24,7 +24,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 
 ### REQ-FAC-002 — Fabrika ana görünümü
 
-- Kaynak: §17.1
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Fabrika ekranında bugün işlenen/delinen çelik şerit, tip ve boy dağılımı, üretilen lug, fire oranı, birim işleme maliyeti, adam-gün veya saat verimi, hammadde, işlemde, galvanizde ve sevke hazır miktarlar, günlük/aylık fabrika gideri, makine durumları, bekleyen bakım, dış iş ve yan gelirler görünür. Maliyet ve gider ticari veridir.
@@ -36,7 +36,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 
 ### REQ-FAC-003 — Fabrika günlük kaydının içeriği
 
-- Kaynak: §17.2
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Fabrika sorumlusu günlük olarak şunları girer: hangi şerit tipinden kaç adet/metre işlendiği, başlangıç/bitiş saatleri, lug üretim miktarı, haddeci mal girişi, galvanize çıkış, galvaniz dönüşü, şantiyeye sevk, fire, fabrika personel puantajı, makine arızası/bakımı, fabrika harcaması, yapılan tamir/tadilat/kalıp işi. Her iş için harcanan işçilik saati girilir (REQ-FAC-009 bunu kullanır).
@@ -46,7 +46,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 
 ### REQ-FAC-004 — Fabrika kaydı onaya gider
 
-- Kaynak: §17.2; D-146; REQ-SIT-008, REQ-SIT-009, REQ-SIT-012
+- Kaynak: D-146; REQ-SIT-008, REQ-SIT-009, REQ-SIT-012
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Akış
 - Akışla ayarlanan: fabrika kaydının onaylayıcısı; onay adımının varlığı sabittir
@@ -69,7 +69,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 
 ### REQ-FAC-006 — Çelik şerit zinciri
 
-- Kaynak: §17.3
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Çelik şerit uçtan uca izlenir: haddeci teklifi/siparişi → fabrikaya giriş → delme/işleme → galvanize çıkış → galvaniz dönüşü → şantiyeye sevk → sahada kullanım.
@@ -79,7 +79,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 
 ### REQ-FAC-007 — Lug zinciri
 
-- Kaynak: §17.4
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Lug uçtan uca izlenir: düz lama siparişi → fabrikaya giriş → kesme → delme → bükme → galvanize çıkış → galvaniz dönüşü → fabrika/şantiye sevki → kullanım.
@@ -91,7 +91,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 
 ### REQ-FAC-008 — Fabrika giderleri
 
-- Kaynak: §17.5
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Fabrika maliyetinde işçilik, SGK, yemek, kira, elektrik, sarf malzeme, makine amortismanı, tamir/bakım ve nakliye dikkate alınır.
@@ -101,7 +101,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 
 ### REQ-FAC-009 — Birim maliyet: gider işçilik saatine göre dağıtılır
 
-- Kaynak: §17.5; D-145
+- Kaynak: D-145
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
 - Açıklama: Ayın fabrika gideri, şerit işlemeye, lug üretimine ve diğer işlere harcanan işçilik saati oranında dağıtılır; her işin payı o ayki üretim miktarına bölünerek birim maliyet (bir metre işlenmiş şerit, bir adet lug) bulunur. Ay kapanana kadar birim maliyet geçicidir ve "geçici" işaretlidir (REQ-INV-022).
@@ -114,7 +114,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Factory Daily Log, Steel Strip, Tie Strip 
 
 ### REQ-FAC-010 — Teknik iyileştirme işleri
 
-- Kaynak: §17.6
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Should · Kademe: T2
 - Katman: Sabit
 - Açıklama: Fabrikada yapılan kalıp tamiri/üretimi, makine-ekipman geliştirme, özel aparat imalatı, maliyet azaltıcı çözüm, yeni ürün/tasarım denemesi, kaynak/kesim/tadilat gibi işler kayıt altına alınır; harcanan saat ve malzeme bu işe yazılır.

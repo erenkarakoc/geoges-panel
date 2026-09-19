@@ -34,7 +34,7 @@ Panelde kapsamlı bir site içi arama bulunur ve arayüzü COSS `Command` bileş
 2. Projenin mevcut tasarım sistemi
 3. COSS UI
 4. Projede mevcut bileşenler
-5. **COSS Origin gelişmiş bileşen örnekleri (öncelikli ilham, D-042)** — bkz. §3.1
+5. **COSS Origin gelişmiş bileşen örnekleri (öncelikli ilham, D-042)** — bkz. DESIGN_SYSTEM_RULES §3.1
 6. devl.dev örüntüleri (ilham)
 7. Sahip onaylı özgün element
 
@@ -57,7 +57,7 @@ Kullanım alanları: uygulama kabuğu, dashboard, navigasyon, ayarlar, formlar, 
 
 | Alan | Referans | Not |
 |---|---|---|
-| Auth / onboarding | https://www.devl.dev/c/auth/onboarding | Her ekranda tek karar, adım göstergesi (Adım 01 / 3). Yeni rol yönlendirmesi (§2.7) bu düzeni kullanır. |
+| Auth / onboarding | https://www.devl.dev/c/auth/onboarding | Her ekranda tek karar, adım göstergesi (Adım 01 / 3). Yeni rol yönlendirmesi (REQ-IAM-027) bu düzeni kullanır. |
 | Giriş ekranı | https://www.devl.dev/c/auth/login | Tüm kimlik doğrulama ekranlarının tasarımı (D-046). |
 
 ### 3.2. Auth ekranları: tasarımın birebir alınması (D-046)
@@ -92,7 +92,7 @@ Sahip isteği (2026-09-16): COSS UI / Tailwind varsayılanlarının dışına ç
 
 | # | Yer | COSS varsayılanı | Projede | Neden | Dosya |
 |---|---|---|---|---|---|
-| 1 | Renk token'ları | `--primary`, `--sidebar-primary` nötr gri (açıkta koyu gri, koyuda beyaza yakın) | Her iki temada da marka mavisi `#0F4C81`, üzerinde beyaz yazı (sahip tercihi 2026-09-16; önceki hâli koyu modda açık maviydi). Yalnızca bu iki token değiştirilir: `--ring` (odak halkası), `--input`, `--border` ve `--background` COSS varsayılanında bırakılmıştır — sahip isteği 2026-09-16, marka rengi yalnızca birincil eylemlerde | Kurumsal kimlik (§40.5) | `src/platform/ui/theme/brand.css` |
+| 1 | Renk token'ları | `--primary`, `--sidebar-primary` nötr gri (açıkta koyu gri, koyuda beyaza yakın) | Her iki temada da marka mavisi `#0F4C81`, üzerinde beyaz yazı (sahip tercihi 2026-09-16; önceki hâli koyu modda açık maviydi). Yalnızca bu iki token değiştirilir: `--ring` (odak halkası), `--input`, `--border` ve `--background` COSS varsayılanında bırakılmıştır — sahip isteği 2026-09-16, marka rengi yalnızca birincil eylemlerde | Kurumsal kimlik (REQ-NFR-011) | `src/platform/ui/theme/brand.css` |
 | 2 | Logo rengi | — | `--brand-logo`: açıkta `#0F4C81`, koyuda `#EFEFEF` | Sahibin logo dosyaları | `brand.css`, `brand-logo.tsx` |
 | 3 | Uygulama kartı kenarlığı | `inset` kartında yalnızca gölge | Masaüstünde 1px kenarlık, her boyutta (2026-09-16: `2xl`'de kaldırılması denendi, sahip isteğiyle geri alındı — çerçeveyle iç içe iki kenarlık tercih edildi) | Sahip isteği: kenarlıklı kart | `app-shell.tsx` |
 | 4 | Dış yerleşim boşluğu (`--layout-gap`) | Kart `m-2`, sidebar `p-2` (0,5rem) | `md` ≥: 1,5rem, `xl` ≥: 2,5rem; kartın üst/sağ/alt kenarlarında ve sidebar'ın üst/alt kenarlarında. **Menünün iki yanı eşit 1rem'dir** (solunda çerçeveye, sağında karta) — sahip isteği 2026-09-17 | Sahip isteği: geniş dış kenar boşluğu, eşit menü oluğu | `app-shell.tsx`, `app-sidebar.tsx` |
@@ -109,7 +109,7 @@ Sahip isteği (2026-09-16): COSS UI / Tailwind varsayılanlarının dışına ç
 | 11 | 2FA karekodu | — | Supabase'in ürettiği SVG, `data:` URL'li `<img>` ile gösterilir (`next/image` değil) | Satır içi veri URL'sinde optimize edilecek bir şey yok | `two-factor-form.tsx` |
 | 12 | Uygulama kabuğu dış çerçevesi | Kabuk ekranı doldurur (`min-h-svh`) | `2xl` üstünde tüm kabuk ortalanmış 16:9 çerçeveye girer: `rounded-2xl`, kenarlık, gölge, `min(94vw, 92svh×16/9)` genişlik. Auth ekranlarıyla aynı çerçeve (D-046). Çerçevenin ekran kenarına uzaklığı `--frame-inset` token'ından gelir (1,5rem); içerideki oluk ise 4. maddedeki `--layout-gap`. İki dış boşluk da `app-shell.tsx` başında tanımlıdır | Sahip isteği 2026-09-16: auth yerleşimi uygulama genelinde de kullanılsın | `app-shell.tsx` |
 | 10a | Daraltılmış menüde grup başlığı | COSS başlığı `-mt-8 opacity-0` ile gizler: görünmez ama düzende kalır, tam kendi yüksekliği kadar yukarı kayıp grubun ilk öğesinin üstüne oturur ve tıklamasını yutar | `group-data-[collapsible=icon]:pointer-events-none` eklendi | COSS kusuru; daraltılmış menüde her grubun ilk öğesi tıklanamıyordu | `app-sidebar.tsx` |
-| 10b | Beyaz yüzeyler | Açık temada `--background`, `--card`, `--popover`, `--code` düz beyaz; koyu temada mürekkep `neutral-100` | Hepsi `--brand-light` (`#EFEFEF`). Açık tema kuralı `:root:not(.dark)` ile sınırlanır — `brand.css`, `globals.css`'ten sonra yüklendiği için düz `:root` COSS'un `.dark` bloğunu da ezerdi | Sahip kuralı: düz beyaz kullanılmaz (§4) | `brand.css` |
+| 10b | Beyaz yüzeyler | Açık temada `--background`, `--card`, `--popover`, `--code` düz beyaz; koyu temada mürekkep `neutral-100` | Hepsi `--brand-light` (`#EFEFEF`). Açık tema kuralı `:root:not(.dark)` ile sınırlanır — `brand.css`, `globals.css`'ten sonra yüklendiği için düz `:root` COSS'un `.dark` bloğunu da ezerdi | Sahip kuralı: düz beyaz kullanılmaz (DESIGN_SYSTEM_RULES §4) | `brand.css` |
 | 10c | Sidebar zemini (açık tema) | `--sidebar: neutral-50` (`#FAFAFA`), karttan (beyaz) 5 ton koyu | `#EAEAEA` (`--brand-light`'tan türetilir), karttan yine 5 ton koyu | 10b sonrası kart `#EFEFEF` olunca sidebar karttan açık kalıyor, katman sırası tersine dönüyordu. COSS'un `--sidebar-foreground` karışımı bu değere bağlı olduğu için kendini yeniden hesaplar | `brand.css` |
 | 11a | Tema değiştirici | — | Menü yerine tek tıkla açık/koyu geçişi; "Sistem" seçeneği arayüzden kaldırıldı (ilk ziyarette işletim sistemi tercihi yine geçerli, ilk manuel geçişten sonra seçim hatırlanır) | Sahip isteği 2026-09-16 | `theme-toggle.tsx` |
 | 12a | Sidebar konumlanması | COSS sidebar'ı ekrana sabitler (`fixed h-svh`) | `2xl`'de `absolute h-full`: menü, 12. maddedeki çerçevenin içinde kalır | `fixed` ekrana göre konumlanır ve çerçeveden taşardı; COSS dosyası değiştirilmeden proje katmanından geçildi | `app-sidebar.tsx` |
@@ -128,11 +128,11 @@ Sahip isteği (2026-09-16): COSS UI / Tailwind varsayılanlarının dışına ç
 | 16c | Sidebar etiketleri | COSS yalnız menü düğmesinin son `span`'ını kırpar; grup satırında son çocuk chevron olduğu için başlık sarmalanıyordu | Tüm menü etiketlerine `truncate` + rayla birlikte sönümlenen `opacity` | Sahip isteği 2026-09-17 (D-068): açılış sırasında alt satıra kayan başlıklar | `app-sidebar.tsx` Grup satırı iki durumda da **tek bir elemandır**: açıkken akordiyonu açar, daraltılmışken uçan menüyü açar. Önceden iki ayrı bileşen arasında yer değiştiriyordu, DOM elemanı değiştiği için grup başlıkları animasyon almıyordu (sahip 2026-09-17). |
 | 16d | Kabuk geçişi | COSS kartın kenar boşluğunu animasyonsuz değiştirir | Kart `transition-[margin] duration-200 ease-linear` ile menüyle aynı hızda kayar; logo ve kare logo çapraz sönümlenir, menü başlığı sabit yükseklikte | Sahip isteği 2026-09-17 (D-068): aç/kapa sırasındaki zıplama | `app-shell.tsx`, `app-sidebar.tsx` |
 | 16e | Sidebar başlığı | COSS `SidebarHeader` kendi 8px dolgusunu taşır | Dolgu kaldırıldı (`p-0`); logo bağlantısı üst çubukla aynı 56px'lik banda oturur, yatay boşluk bağlantının kendi `px-2`'sinden gelir | Sahip isteği 2026-09-17: logo içeriğin üstüyle hizalı olmalı; dolgu onu kartın üst kenarının 8px altına itiyordu. Kare logo 32px'ten 40px'e çıkarıldı (önce uzun logoyla aynı 48px denendi, sahip isteğiyle küçültüldü): daraltılmış menüde markanın üstünde 8px, açık menüde 4px boşluk kalır. Başlığın altına 12px eklendi (sahip isteği): modüller markadan uzaklaşır ve ilk menü satırı iki durumda da aynı yükseklikte başlar | `app-sidebar.tsx` |
-| 17a | Telefon gezinmesi | COSS'ta alt gezinme çubuğu yok; sidebar telefonda `Sheet` çekmecesi olur | `md` altında kabuk, içeriğin altında kendi alt çubuğunu basar (iş katmanı + ortada birincil eylem + Modüller); sidebar çekmecesi ve üstteki menü düğmesi bu genişlikte kalkar | D-069, §40.2: günlük kullanılan ekranlar tek dokunuşta olmalı. Birincil eylem telefonda yalnız `+` ikonuyla, 44px'lik yuvarlak düğme olarak durur (sahip 2026-09-17); eylemin adı erişilebilir ad olarak kalır | `mobile-bottom-bar.tsx`, `primary-action.tsx`, `app-header.tsx` |
-| 17b | Mobil modül listesi | — | "Modüller" COSS `Drawer` içinde grup başlıklı ikon ızgarası ve arama kutusu olarak açılır | D-069: parmakla büyük hedefler (§40.2); arama Türkçe harfe takılmaz | `mobile-bottom-bar.tsx` |
+| 17a | Telefon gezinmesi | COSS'ta alt gezinme çubuğu yok; sidebar telefonda `Sheet` çekmecesi olur | `md` altında kabuk, içeriğin altında kendi alt çubuğunu basar (iş katmanı + ortada birincil eylem + Modüller); sidebar çekmecesi ve üstteki menü düğmesi bu genişlikte kalkar | D-069, REQ-NFR-008: günlük kullanılan ekranlar tek dokunuşta olmalı. Birincil eylem telefonda yalnız `+` ikonuyla, 44px'lik yuvarlak düğme olarak durur (sahip 2026-09-17); eylemin adı erişilebilir ad olarak kalır | `mobile-bottom-bar.tsx`, `primary-action.tsx`, `app-header.tsx` |
+| 17b | Mobil modül listesi | — | "Modüller" COSS `Drawer` içinde grup başlıklı ikon ızgarası ve arama kutusu olarak açılır | D-069: parmakla büyük hedefler (REQ-NFR-008); arama Türkçe harfe takılmaz | `mobile-bottom-bar.tsx` |
 | 17c | Bağlam satırı (mobil) | — | Seçili bölüm, şerit kaydırılabilir olduğunda kendiliğinden görünür hale getirilir | Telefonda hangi bölümde olduğu ekrandan çıkıyordu | `context-bar.tsx` |
 | 18a | Logo geçişi (aç/kapa) | — | Uzun logo sola kayıp bulanıklaşarak çıkar, kare logo sağdan gelip netleşir: 12px kayma, 2px bulanıklık, 200ms, `ease-out`; `prefers-reduced-motion` açıkken geçiş yok. Kare logo, daralan başlığın ortasına değil **48px'lik sabit bir kutuya** hizalanır, yoksa menü kapanırken onunla birlikte sola sürükleniyordu. Bulanıklık `blur-*` yerine doğrudan `[filter:…]` ile verilir; varyant içindeki `blur-0`, düz `blur-[2px]`'i temizlemiyordu | Sahip isteği 2026-09-17 | `app-sidebar.tsx` |
-| 18b | Onay ekranı | — | Onay merkezi liste değil **kuyruk**: tek kayıt ekranı doldurur, karar verilince sıradaki gelir, kuyruk bitince "Bugün temiz" boş durumu | D-070, §4; sahip isteği 2026-09-17 | `modules/wfl/ui/approval-queue.tsx` |
+| 18b | Onay ekranı | — | Onay merkezi liste değil **kuyruk**: tek kayıt ekranı doldurur, karar verilince sıradaki gelir, kuyruk bitince "Bugün temiz" boş durumu | D-070, REQ-WFL-012…015; sahip isteği 2026-09-17 | `modules/wfl/ui/approval-queue.tsx` |
 
 Bilinen, henüz giderilmemiş fark: COSS sidebar'ın mobil başlığı ("Sidebar") ve kenar çubuğu ipucu ("Toggle Sidebar") İngilizce kalır; COSS dosyası değiştirilmeden düzeltilemez.
 
@@ -158,7 +158,7 @@ Her önemli ekran için masaüstü, tablet ve mobil davranışı ayrı düşün�
 
 ## 10. Standart ekran kalıpları
 
-Liste (başlık, Yeni, arama, hızlı filtre, özet, satır/kart görünümü, sıralama, sık/ferah yoğunluk, gelişmiş filtre, tercihlerin hatırlanması), detay (başlık, durum, eylemler, kilit rakamlar, aç/kapa bölümler) ve form kalıpları Özellik Yapısı §41–§44'e göre Phase 02'de COSS bileşen eşlemesiyle ayrıntılandırılır.
+Liste (başlık, Yeni, arama, hızlı filtre, özet, satır/kart görünümü, sıralama, sık/ferah yoğunluk, gelişmiş filtre, tercihlerin hatırlanması), detay (başlık, durum, eylemler, kilit rakamlar, aç/kapa bölümler) ve form kalıpları REQ-ADM-004, REQ-NFR-013…015, REQ-SIT-015, REQ-SIT-029, REQ-SIT-035'e göre Phase 02'de COSS bileşen eşlemesiyle ayrıntılandırılır.
 
 ## 11. UI tutarlılık incelemesi
 

@@ -1,20 +1,20 @@
 # İş Akışları
 
-Durum: Kabul edildi · Son güncelleme: 2026-09-18 (CHG-006)
+Durum: Kabul edildi · Son güncelleme: 2026-09-19 (CHG-006)
 
 Şirket süreçleri (onay zincirleri, eskalasyonlar, tetikleyiciler, bağımlılık kilitleri) koda gömülmez; iş akışı motorunda **sürümlü akış tanımları** olarak çalışır ve tam görünürlüklü yetkili kullanıcılar tarafından tasarımcıyla kurulur. Kurallar: ADR-006 (CHG-006 ekiyle), kararlar D-077…D-105.
 
 - Phase 01: her modül **yetenek kataloğunu** çıkarır — yayınladığı olaylar, sunduğu aksiyonlar, koşulların okuyabileceği tipli ve sınıflandırılmış alanlar (TASK-0041).
-- Phase 02: §45'in sekiz uçtan uca akışı **gerçek akış tanımı** olarak adım adım yazılır ve her adım palete karşı sınanır (D-089, TASK-0042).
+- Phase 02: sekiz uçtan uca akış (REQ-WFL-011, REQ-WFL-028) **gerçek akış tanımı** olarak adım adım yazılır ve her adım palete karşı sınanır (D-089, TASK-0042).
 - Phase 08: motor ve tasarımcı kurulur; varsayılan akışlar **şablon** olarak gelir, kullanılan akış onun kopyasıdır (D-086).
 
 Uçtan uca bir süreç tek uzun akış değildir; **birbirini tetikleyen kısa akışlardan** kurulur (D-104).
 
-İlk tanımlanacak varsayılan akışlar: günlük saha kaydı onayı · malzeme çıkış talebi · ödeme onayı · hakediş → fatura · personel çıkışı · revizyon talebi · stok sayımı onayı · satın alma talebi · teklif onayı · ve §45'in sekiz uçtan uca süreci.
+İlk tanımlanacak varsayılan akışlar: günlük saha kaydı onayı · malzeme çıkış talebi · ödeme onayı · hakediş → fatura · personel çıkışı · revizyon talebi · stok sayımı onayı · satın alma talebi · teklif onayı · ve sekiz uçtan uca süreç (REQ-WFL-011, REQ-WFL-028).
 
-## §45 palet sınaması (2026-09-17)
+## Uçtan uca akışların palet sınaması (REQ-WFL-011, REQ-WFL-028) (2026-09-17)
 
-Sınama 2026-09-17'de yapıldı. Yöntem: §45'teki her adım üç kutudan birine konuldu —
+Sınama 2026-09-17'de yapıldı. Yöntem: uçtan uca akışlardaki (REQ-WFL-011, REQ-WFL-028) her adım üç kutudan birine konuldu —
 **Ç** (çekirdek: veri girişi, defter, türetme — akış düğümü değil), **palet**
 (ADR-006'nın 12 düğümünden biri karşılıyor), **boşluk** (hiçbir düğüm karşılamıyor).
 
@@ -54,7 +54,7 @@ bu akış yazılamaz.
 45.3/10: "eksikse düzeltme ister; tam ise onaylar". Yani onayın **iki değil üç**
 sonucu var — onay, red, **düzeltmeye geri gönder** — ve üçüncüsü grafikte geriye
 giden bir kenar. ADR-006 onay düğümünü tanımlıyor ama çıkışlarını ve geri gönderme
-kenarını tanımlamıyor. §37.1'deki revizyon talebi mekanizmasıyla da bağlantılı.
+kenarını tanımlamıyor. REQ-AUD-007…010, REQ-SIT-033'deki revizyon talebi mekanizmasıyla da bağlantılı.
 
 **B-4 — Koşul yalnızca tek kaydı okuyor; toplu/tarihsel koşul yok.**
 45.5/6: "**tekrarlayan** gecikme şantiye tanı ekranında görünür". Bu "son 30 günde
@@ -91,7 +91,7 @@ ADR-006 yalnızca "başlangıç/olay" diyor. Bu belgenin §5'i beş tetikleyici 
 modül geçiyor; bunu tek bir yürüyen süreç olarak modellemek, aylarca açık kalan ve her
 sürüm değişiminde göç sorunu çıkaran bir örnek üretir. Doğrusu: **olaylarla zincirlenen
 birkaç kısa akış** (teklif akışı → sözleşme akışı → günlük onay akışı → hakediş akışı →
-fatura/tahsilat akışı). §45 bunları tek bir anlatı olarak yazıyor çünkü iş dilinde öyle
+fatura/tahsilat akışı). REQ-WFL-011, REQ-WFL-028 bunları tek bir anlatı olarak yazıyor çünkü iş dilinde öyle
 anlatılıyor; motor tarafında öyle kurulmamalı. Bu, ADR-006'ya yazılması gereken bir
 tasarım kuralı.
 

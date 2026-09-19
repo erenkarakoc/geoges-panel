@@ -338,6 +338,37 @@ for (const file of FILES.filter((name) => /^docs\/requirements\/REQ-[A-Z]{2,3}\.
   });
 }
 
+/**
+ * Records cite requirements, not sections of the functional scope (TASK-0039, D-075): the scope
+ * leaves the repository with TASK-0027. A `§` is still allowed when it names another document —
+ * PROJECT_RULES, DESIGN_SYSTEM_RULES, an ADR, GIT_WORKFLOW, the original protocol, or "bu belgenin".
+ * The section → requirement map in docs/requirements/README.md is the one place that keeps numbers.
+ */
+const SECTION_EXEMPT = new Set([
+  "ai/SESSION_JOURNAL.md",
+  "ai/PROJECT_RULES.md",
+  "docs/requirements/README.md",
+]);
+const SECTION_OWNER =
+  /(?:PROJECT_RULES(?:\.md)?`?|DESIGN_SYSTEM_RULES(?:\.md)?`?|ADR-\d{3}[\w-]*(?:\.md)?`?|GIT_WORKFLOW(?:\.md)?`?|Protocol|belgenin)\s*$/;
+const SECTION_CHAIN_TAIL = /(?:§\d+(?:\.\d+)*\s*(?:[–-]\s*§?\d+(?:\.\d+)*)?\s*(?:,|\/)\s*)+$/;
+for (const file of FILES) {
+  if (SECTION_EXEMPT.has(file) || file.startsWith("docs/sources/")) continue;
+  for (const { number, text } of lines(CONTENT.get(file) ?? "")) {
+    for (const match of text.matchAll(/§\d+(?:\.\d+)*/g)) {
+      const before = text.slice(0, match.index).replace(SECTION_CHAIN_TAIL, "");
+      if (!SECTION_OWNER.test(before)) {
+        fail(
+          file,
+          number,
+          `${match[0]} cites a section without naming its document`,
+          "cite the REQ ids (map: docs/requirements/README.md), or name the document the section belongs to",
+        );
+      }
+    }
+  }
+}
+
 for (const file of FILES) {
   const content = CONTENT.get(file) ?? "";
   // A file may describe ids it does not define (the ID standard's examples, the REQ template).

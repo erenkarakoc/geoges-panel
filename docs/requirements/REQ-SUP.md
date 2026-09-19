@@ -2,7 +2,7 @@
 
 Durum: CONFIRMED (sahip, 2026-09-19) · 2026-09-19 · Modül: SUP (Support)
 
-Kaynaklar: Özellik Yapısı §25.7.
+Kaynaklar:.
 
 **Sınır.** Eskalasyon mekanizması REQ-TSK-006'dadır. Malzeme ve ekipman ihtiyacı için satın alma talebi REQ-PUR'dadır; destek talebi o talebe dönüştürülebilir. Rol hiyerarşisi REQ-IAM-014'tedir.
 
@@ -12,7 +12,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Support Ticket, Role.
 
 ### REQ-SUP-001 — Destek talebi açılır
 
-- Kaynak: §25.7
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: kategoriler (başlangıç: donanım, panel hatası, malzeme/ekipman ihtiyacı, idari talep, diğer)
@@ -23,7 +23,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Support Ticket, Role.
 
 ### REQ-SUP-002 — Talebin altında mesajlaşma
 
-- Kaynak: §25.7
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit
 - Açıklama: Talep açan ve muhatap talebin altında mesajlaşır; ek ve fotoğraf eklenebilir.
@@ -33,7 +33,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Support Ticket, Role.
 
 ### REQ-SUP-003 — Çözme, gerekçeli ret ve üste sevk
 
-- Kaynak: §25.7
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: kimin kime talep açabileceği ve pozisyona göre sevk zinciri (ör. Formen → Koordinatör → Genel Müdür)
@@ -45,18 +45,18 @@ Terimler (`docs/domain/GLOSSARY.md`): Support Ticket, Role.
 
 ### REQ-SUP-004 — Durumlar
 
-- Kaynak: §25.7
+- Kaynak: Özellik Yapısı (eşleme: `docs/requirements/README.md`)
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: çözülen talebin kendiliğinden kapanma süresi
-- Açıklama: Talep şu durumlardan geçer: Açık → İşlemde → Beklemede → Çözüldü veya Reddedildi → Kapatıldı. Çözülen talebi açan kişi kapatır veya yeniden açar; belirli süre içinde işlem yapmazsa talep kendiliğinden kapanır (§25.7'den türetilen kural, sahip onayladı).
+- Açıklama: Talep şu durumlardan geçer: Açık → İşlemde → Beklemede → Çözüldü veya Reddedildi → Kapatıldı. Çözülen talebi açan kişi kapatır veya yeniden açar; belirli süre içinde işlem yapmazsa talep kendiliğinden kapanır ('den türetilen kural, sahip onayladı).
 - Kabul kriterleri:
   - [ ] Her durum geçişi kişi ve zamanla talebin geçmişinde görünür.
 - Durum: CONFIRMED
 
 ### REQ-SUP-005 — Cevapsız talep eskale olur
 
-- Kaynak: §25.7; REQ-TSK-006
+- Kaynak: REQ-TSK-006
 - Öncelik: Must · Kademe: T2
 - Katman: Akış
 - Akışla ayarlanan: cevapsız talebin bekleme süreleri ve eskalasyon zinciri (varsayılan akış: cevapsız destek talebi)

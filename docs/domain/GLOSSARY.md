@@ -15,7 +15,7 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Kapsam | Scope | Rol atamasının geçerli olduğu alan: tüm şirket, şantiyeler veya projeler | — | area, region | PROPOSED | D-111 |
 | Veri sınıfı | Data Class | Verinin gizlilik sınıfı: genel, iç, ticari, hassas kişisel | — | sensitivity_level | PROPOSED | Görme izni modül bazında (D-115) |
 | Tam görünürlük | Full Visibility | Tüm modüllerde tüm veri sınıflarını tüm kapsamlarda görebilmek | — | superuser, admin | PROPOSED | Akış tasarlama yetkisinin şartı (D-083) |
-| Görev ayrılığı | Separation of Duties | Hazırlayanın kendi işlemini onaylayamaması kuralı | — | four_eyes | PROPOSED | §2.6 |
+| Görev ayrılığı | Separation of Duties | Hazırlayanın kendi işlemini onaylayamaması kuralı | — | four_eyes | PROPOSED | REQ-IAM-026 |
 | İşlem yapılan rol | Acting Role | Çoklu rolü olan kullanıcının işlemi yaptığı rol | — | current_role | PROPOSED | |
 | Firma | Party | Şirketin iş yaptığı her firma/kurum için tek kayıt; rolleri olur (işveren, müşteri, tedarikçi…) | — | company, firm, organization | CONFIRMED | D-027; aynı firma için ikinci kart açılmaz |
 | İşveren | Client | Bizi uygulama işine alan firma/idare; Party rolü `client` | Employer (sözleşme metinlerinde) | company | CONFIRMED | D-027; FIDIC "Employer" kullanır |
@@ -24,18 +24,18 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Proje | Project | Sözleşmeli iş; 1..N şantiye | — | job | PROPOSED | |
 | Şantiye | Site | Projenin fiziksel uygulama yeri | — | construction_site, workplace | PROPOSED | Arayüzde modül ve menü adı "Şantiye" (D-026) |
 | Proje revizyonu | Project Revision | Onaylanınca geçerli olan, hedefleri taşıyan proje sürümü (ör. Rev.2) | — | version, drawing_rev | PROPOSED | D-136 |
-| Proje aşaması | Project Stage | Projenin yaşam döngüsündeki yeri | — | phase, status | PROPOSED | §7.2 |
-| Teknik ofis işi | Technical Office Item | Teknik ofisin proje altında izlenen işi | — | tech_task | PROPOSED | §7.4 |
-| Sözleşme süresi | Contract Duration | İşverene karşı resmî süre | — | deadline | PROPOSED | §8.1 |
-| Teorik süre | Theoretical Duration | Mevcut kaynaklarla beklenen süre | — | estimate | PROPOSED | §8.1 |
-| Yönetim hedef süresi | Management Target Duration | Yönetimin koyduğu iç hedef süre | — | goal | PROPOSED | §8.1 |
+| Proje aşaması | Project Stage | Projenin yaşam döngüsündeki yeri | — | phase, status | PROPOSED | REQ-PRJ-003 |
+| Teknik ofis işi | Technical Office Item | Teknik ofisin proje altında izlenen işi | — | tech_task | PROPOSED | REQ-PRJ-005, REQ-PRJ-009 |
+| Sözleşme süresi | Contract Duration | İşverene karşı resmî süre | — | deadline | PROPOSED | REQ-PRJ-010 |
+| Teorik süre | Theoretical Duration | Mevcut kaynaklarla beklenen süre | — | estimate | PROPOSED | REQ-PRJ-010 |
+| Yönetim hedef süresi | Management Target Duration | Yönetimin koyduğu iç hedef süre | — | goal | PROPOSED | REQ-PRJ-010 |
 | Günlük hedef | Daily Target | Şantiyenin bir günlük üretim hedefi | — | quota | PROPOSED | D-137 |
 | Duvar | Wall | Proje içindeki duvar birimi | — | structure | PROPOSED | |
 | Toprakarme | Reinforced Earth (MSE wall) | Çelik şerit donatılı zemin duvarı | mechanically stabilized earth | — | PROPOSED | Kodda `mse` kısaltması kullanılmaz |
 | Katalog kalemi | Catalog Item | Ortak listelerdeki tek bir tanım (gider kategorisi, malzeme…) | — | lookup, option | PROPOSED | D-139 |
-| Şerit tipi | Strip Type | Genişlik, kalınlık, delik sayısı ve standart boylarıyla tanımlı çelik şerit türü | — | strip_model | PROPOSED | §11.2 |
+| Şerit tipi | Strip Type | Genişlik, kalınlık, delik sayısı ve standart boylarıyla tanımlı çelik şerit türü | — | strip_model | PROPOSED | REQ-ADM-003, REQ-SIT-022 |
 | Özel alan | Custom Field | Belirlenmiş kayıt türlerine eklenen tipli alan | — | extra_field, meta | PROPOSED | ADR-005 |
-| Çalışma takvimi | Working Calendar | Çalışma saatleri, tatiller ve fazla mesai kuralları | — | schedule, shift_plan | PROPOSED | §23.9 |
+| Çalışma takvimi | Working Calendar | Çalışma saatleri, tatiller ve fazla mesai kuralları | — | schedule, shift_plan | PROPOSED | REQ-ADM-010…012 |
 | Panel tipi | Panel Type | C4, C5… gibi tanımlı panel ölçüsü | — | panel_model | PROPOSED | |
 | Kademe (panel sırası) | Panel Course | Panelin duvarda alttan üste yer aldığı sıra/yükseklik (1. kademe, 2. kademe…) | — | level, grade, rank | CONFIRMED | D-031 |
 | Panel dökümü | Panel Casting | Sahada panelin kalıpta dökülmesi | — | pouring, production | PROPOSED | |
@@ -48,8 +48,8 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Harpuşta | Coping | Duvar üst başlığı | — | cap | PROPOSED | |
 | Dolgu | Backfill | İşverenin serip sıkıştırdığı dolgu | — | fill_material | PROPOSED | |
 | Teslim-tesellüm | Handover | Alanın işverene/işverenden teslimi | — | delivery | PROPOSED | `handover_to_client`, `handover_from_client` |
-| İşveren bekleme süresi | Client Wait Time | Dolguya teslim ile geri alınma arasında işveren kaynaklı geçen süre | — | delay, idle_time | PROPOSED | §11.5 |
-| Saha harcaması | Site Expense | Şantiyede yapılan, belgeyle girilen harcama | — | cost, spending | PROPOSED | §9.4 |
+| İşveren bekleme süresi | Client Wait Time | Dolguya teslim ile geri alınma arasında işveren kaynaklı geçen süre | — | delay, idle_time | PROPOSED | REQ-SIT-025 |
+| Saha harcaması | Site Expense | Şantiyede yapılan, belgeyle girilen harcama | — | cost, spending | PROPOSED | REQ-FIN-015, REQ-SIT-003, REQ-SIT-030 |
 | Geç giriş | Late Entry | Giriş süresi geçtikten sonra girilen günlük kayıt | — | overdue_log | PROPOSED | D-122 |
 | Günlük saha kaydı | Daily Site Log | Şantiyenin günlük ana kaydı | — | daily_report (resmi rapor ayrıdır) | PROPOSED | |
 | Resmi günlük rapor | Official Daily Report | Onaylı kayıttan üretilen PDF rapor | — | — | PROPOSED | |
@@ -79,27 +79,27 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Yükümlülük | Obligation | Sözleşmeden doğan iş/tarih | — | duty, requirement | PROPOSED | |
 | Tedarik matrisi | Supply Responsibility Matrix | Kim neyi karşılıyor | — | — | PROPOSED | |
 | Tedarikçi | Supplier | Tedarikçi rolü taşıyan firma | — | vendor | PROPOSED | D-027 |
-| Satın alma siparişi | Purchase Order | Tedarikçiye verilen sipariş | — | po_order | PROPOSED | §18.3 |
-| Satın alma talebi | Purchase Request | Katalog içi veya dışı alım için iç talep | — | requisition | PROPOSED | §18.16 |
-| Tedarikçi teklifi | Supplier Quote | Bir tedarikçinin fiyat, termin ve koşul teklifi | — | offer | PROPOSED | §18.16 |
+| Satın alma siparişi | Purchase Order | Tedarikçiye verilen sipariş | — | po_order | PROPOSED | REQ-PUR-003…005 |
+| Satın alma talebi | Purchase Request | Katalog içi veya dışı alım için iç talep | — | requisition | PROPOSED | REQ-EQP-005, REQ-PUR-007…011 |
+| Tedarikçi teklifi | Supplier Quote | Bir tedarikçinin fiyat, termin ve koşul teklifi | — | offer | PROPOSED | REQ-EQP-005, REQ-PUR-007…011 |
 | Fazla teslim | Over-Delivery | Siparişten fazla gelen miktar | — | surplus | PROPOSED | D-144 |
-| Malzeme çıkış talebi | Material Issue Request | Şantiyenin malzeme sevki için açtığı talep | — | requisition | PROPOSED | §18.7 |
-| Tır | Truck Load | Tek bir tırla yapılan sevkiyat parçası | — | vehicle_trip | PROPOSED | §18.11 |
-| Şerit kombinasyonu | Strip Combination | Bir uzunluk ihtiyacını karşılayan stok boyları bileşimi | — | cut_plan | PROPOSED | §18.14 |
+| Malzeme çıkış talebi | Material Issue Request | Şantiyenin malzeme sevki için açtığı talep | — | requisition | PROPOSED | REQ-INV-005 |
+| Tır | Truck Load | Tek bir tırla yapılan sevkiyat parçası | — | vehicle_trip | PROPOSED | REQ-INV-009…013, REQ-PUR-004 |
+| Şerit kombinasyonu | Strip Combination | Bir uzunluk ihtiyacını karşılayan stok boyları bileşimi | — | cut_plan | PROPOSED | REQ-INV-016 |
 | Gelene kadarki maliyet | Landed Cost | Alış bedeli + galvaniz + stoğa gelene kadarki nakliye | — | total_cost | PROPOSED | D-142 |
 | Ağırlıklı ortalama maliyet | Weighted Average Cost | Lokasyon başına alışların ağırlıklı ortalaması | — | avg_price | PROPOSED | D-143 |
-| Düz lama | Flat Bar | Lug hammaddesi | — | plate | PROPOSED | §17.4 |
-| Fabrika günlük kaydı | Factory Daily Log | Fabrikanın günlük üretim ve hareket kaydı | — | factory_report | PROPOSED | §17.2 |
+| Düz lama | Flat Bar | Lug hammaddesi | — | plate | PROPOSED | REQ-FAC-007 |
+| Fabrika günlük kaydı | Factory Daily Log | Fabrikanın günlük üretim ve hareket kaydı | — | factory_report | PROPOSED | REQ-FAC-003…004 |
 | Gider dağıtımı | Overhead Allocation | Fabrika giderinin işlere işçilik saatiyle dağıtılması | — | cost_split | PROPOSED | D-145 |
-| Teknik iyileştirme işi | Technical Improvement Work | Fabrikadaki kalıp, aparat, geliştirme işleri | — | rnd_task | PROPOSED | §17.6 |
+| Teknik iyileştirme işi | Technical Improvement Work | Fabrikadaki kalıp, aparat, geliştirme işleri | — | rnd_task | PROPOSED | REQ-FAC-010 |
 | Devreden miktar | Carried-Over Quantity | İşverenin onaylamadığı, sonraki hakedişte yeniden önerilen miktar | — | backlog | PROPOSED | D-147 |
 | İşveren avansı | Client Advance | İşverenden iş başında alınan, hakedişlerden kesilerek kapanan avans | — | prepayment | PROPOSED | D-150 |
-| Gelir | Income | Bir maliyet merkezine yazılan her gelir kaydı | — | revenue_item | PROPOSED | §22.2 |
-| Gider | Expense | Bir maliyet merkezine yazılan her gider kaydı | — | cost, spending | PROPOSED | §22.3 |
+| Gelir | Income | Bir maliyet merkezine yazılan her gelir kaydı | — | revenue_item | PROPOSED | REQ-FIN-011 |
+| Gider | Expense | Bir maliyet merkezine yazılan her gider kaydı | — | cost, spending | PROPOSED | REQ-FIN-013…014, REQ-FIN-016 |
 | Genel gider | General Expense | Hiçbir projeye ait olmayan, projelere dağıtılmayan gider | — | overhead (fabrika gider dağıtımıyla karışır) | PROPOSED | D-149 |
-| Maliyet merkezi | Cost Center | Gelir ve giderin yazıldığı birim: proje, şantiye, fabrika, ekipman, genel | — | department | PROPOSED | §22.2 |
-| Nakit akışı projeksiyonu | Cash Flow Projection | Önümüzdeki haftaların beklenen giriş, çıkış ve kümülatif nakdi | — | forecast | PROPOSED | §22.7 |
-| Ödeme | Payment | Bir firmaya yapılan, onaylı ve dekontla kapanan ödeme | — | transfer | PROPOSED | §22.8 |
+| Maliyet merkezi | Cost Center | Gelir ve giderin yazıldığı birim: proje, şantiye, fabrika, ekipman, genel | — | department | PROPOSED | REQ-FIN-011 |
+| Nakit akışı projeksiyonu | Cash Flow Projection | Önümüzdeki haftaların beklenen giriş, çıkış ve kümülatif nakdi | — | forecast | PROPOSED | REQ-FIN-021, REQ-FIN-023 |
+| Ödeme | Payment | Bir firmaya yapılan, onaylı ve dekontla kapanan ödeme | — | transfer | PROPOSED | REQ-FIN-024…025 |
 | Muhasebe aktarımı | Accounting Export | Muhasebeci/YMM programına verilen aylık dosya | — | sync | PROPOSED | D-153 |
 | Kapanış birimi | Closing Unit | Dönemini kendi kapatan birim: her şantiye, fabrika, genel | — | branch | PROPOSED | D-154 |
 | Grup halinde izlenen eşya | Asset Group | Lokasyon başına adetle izlenen düşük değerli eşya (ör. el aletleri) | — | bulk_item | PROPOSED | D-158 |
@@ -108,74 +108,74 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Ekipman çalışma günü | Equipment Working Day | Ekipmanın bir şantiyede çalıştığı, amortismanın o şantiyeye yazıldığı gün | — | usage_day | PROPOSED | D-155, D-162 |
 | Atıl ekipman gideri | Idle Equipment Expense | Ekipmanın çalışmadığı günlerin amortisman payı; projelere yüklenmez | — | idle_cost | PROPOSED | D-156 |
 | Demirbaş zayii | Asset Write-Off | Kullanılamaz hale gelen varlığın kalan değerinin gidere yazılması | — | damaged_unit (panel zayiine ayrılmış) | PROPOSED | D-157 |
-| Periyodik kontrol | Periodic Inspection | Vinç fenni kontrolü, araç muayenesi, sigorta, bakım gibi zorunlu kontroller | — | check_up | PROPOSED | §21.5 |
-| Vinç günlük kaydı | Crane Daily Log | Vincin günlük çalışma saati, yakıt, arıza/bekleme ve iş kaydı | — | crane_report | PROPOSED | §21.7 |
-| Vinç operatörü | Crane Operator | Kendisine atanmış vinçlerin kaydını giren kişi | — | driver | PROPOSED | §21.7 |
+| Periyodik kontrol | Periodic Inspection | Vinç fenni kontrolü, araç muayenesi, sigorta, bakım gibi zorunlu kontroller | — | check_up | PROPOSED | REQ-EQP-015 |
+| Vinç günlük kaydı | Crane Daily Log | Vincin günlük çalışma saati, yakıt, arıza/bekleme ve iş kaydı | — | crane_report | PROPOSED | REQ-EQP-004, REQ-EQP-018…020 |
+| Vinç operatörü | Crane Operator | Kendisine atanmış vinçlerin kaydını giren kişi | — | driver | PROPOSED | REQ-EQP-004, REQ-EQP-018…020 |
 | Bordro parametresi | Payroll Parameter | Vergi dilimi, SGK oranı ve tavanı, asgari ücret gibi geçerlilik tarihli bordro tanımı | — | tax_setting | PROPOSED | D-163 |
 | Maaş avansı | Salary Advance | Personele verilen, sonraki bordrolardan kesilen avans | — | loan | PROPOSED | D-165 |
 | Banka toplu ödeme dosyası | Bank Payment File | Onaylı bordrodan bankaya yüklenmek üzere üretilen dosya | — | bank_export | PROPOSED | D-168 |
-| İzin bakiyesi | Leave Balance | Hak edilen ve kullanılan izin günlerinin farkı | — | vacation_days | PROPOSED | §23.5 |
-| İşe giriş kontrol listesi | Onboarding Checklist | İşe girişte tamamlanması gereken evrak ve işler | — | hire_list | PROPOSED | §23.6 |
-| İşten çıkış kontrol listesi | Offboarding Checklist | Ayrılışta evrak, zimmet ve avans tamamlanmadan kapanmayan liste | — | exit_list | PROPOSED | §23.6 |
-| Günlük faaliyet raporu | Daily Activity Report | Üretim kaydı olmayan rollerin günlük iş raporu | — | daily_log (günlük saha kaydıyla karışır) | PROPOSED | §23.8 |
-| İletişim kaydı | Contact Log | Bir firmayla yapılan görüşmenin tarih, kişi, konu ve sonuç kaydı | — | call_log | PROPOSED | §5.1 |
-| Talep kaynağı | Lead Source | Talebin geldiği kanal: e-posta, telefon, WhatsApp, kendi bulduğumuz iş… | — | channel | PROPOSED | §5.1 |
-| Kayıp nedeni | Loss Reason | Kaybedilen talebin katalogdan seçilen nedeni | — | lost_cause | PROPOSED | §5 |
+| İzin bakiyesi | Leave Balance | Hak edilen ve kullanılan izin günlerinin farkı | — | vacation_days | PROPOSED | REQ-HR-014 |
+| İşe giriş kontrol listesi | Onboarding Checklist | İşe girişte tamamlanması gereken evrak ve işler | — | hire_list | PROPOSED | REQ-HR-015 |
+| İşten çıkış kontrol listesi | Offboarding Checklist | Ayrılışta evrak, zimmet ve avans tamamlanmadan kapanmayan liste | — | exit_list | PROPOSED | REQ-HR-015 |
+| Günlük faaliyet raporu | Daily Activity Report | Üretim kaydı olmayan rollerin günlük iş raporu | — | daily_log (günlük saha kaydıyla karışır) | PROPOSED | REQ-HR-016 |
+| İletişim kaydı | Contact Log | Bir firmayla yapılan görüşmenin tarih, kişi, konu ve sonuç kaydı | — | call_log | PROPOSED | REQ-CRM-001…003, REQ-CRM-005 |
+| Talep kaynağı | Lead Source | Talebin geldiği kanal: e-posta, telefon, WhatsApp, kendi bulduğumuz iş… | — | channel | PROPOSED | REQ-CRM-001…003, REQ-CRM-005 |
+| Kayıp nedeni | Loss Reason | Kaybedilen talebin katalogdan seçilen nedeni | — | lost_cause | PROPOSED | REQ-CRM-001, REQ-CRM-006 |
 | İşveren karnesi | Client Scorecard | İşverenin kayıtlardan hesaplanan ödeme, gecikme ve kârlılık geçmişi | — | rating, score | PROPOSED | D-171 |
 | Karne notu | Scorecard Note | Karneye eklenen tarihli, gerekçeli, silinmeyen not | — | comment | PROPOSED | D-171 |
-| Teklif sürümü | Quote Version | Gönderilmiş teklifin değişmeyen sürümü (Rev.1, Rev.2…) | — | revision (proje revizyonuna ayrılmış) | PROPOSED | §6.8 |
-| Teklif şablonu | Quote Template | Teklif belgesinin sabit metinlerini taşıyan şablon | — | form | PROPOSED | §6.8 |
+| Teklif sürümü | Quote Version | Gönderilmiş teklifin değişmeyen sürümü (Rev.1, Rev.2…) | — | revision (proje revizyonuna ayrılmış) | PROPOSED | REQ-QTE-003, REQ-QTE-012…013 |
+| Teklif şablonu | Quote Template | Teklif belgesinin sabit metinlerini taşıyan şablon | — | form | PROPOSED | REQ-QTE-003, REQ-QTE-012…013 |
 | Tahmini maliyet | Estimated Cost | Teklif kaleminin geçmiş gerçek maliyetten önerilen veya elle girilen maliyeti | — | budget | PROPOSED | D-174 |
-| Hedef marj | Target Margin | Yetkilinin istediği en düşük kâr marjı | — | markup | PROPOSED | §6.4 |
-| Maliyet geri beslemesi | Cost Feedback | Tahmini ve gerçekleşen maliyetin karşılaştırılması | — | variance_report | PROPOSED | §6.7 |
-| Ders notu | Lesson Note | Tamamlanan işten sonraki tekliflere taşınan not | — | comment | PROPOSED | §6.7 |
+| Hedef marj | Target Margin | Yetkilinin istediği en düşük kâr marjı | — | markup | PROPOSED | REQ-QTE-007 |
+| Maliyet geri beslemesi | Cost Feedback | Tahmini ve gerçekleşen maliyetin karşılaştırılması | — | variance_report | PROPOSED | REQ-QTE-005, REQ-QTE-010…011 |
+| Ders notu | Lesson Note | Tamamlanan işten sonraki tekliflere taşınan not | — | comment | PROPOSED | REQ-QTE-005, REQ-QTE-010…011 |
 | Stok ayırma | Stock Reservation | Satış siparişi için stokta ayrılan, kullanılabilir sayılmayan miktar | — | hold, block | PROPOSED | D-175 |
 | Sözleşme değişikliği (zeyilname) | Contract Amendment | Geçerlilik tarihli yeni sözleşme sürümü; öncekiler silinmez | — | revision (proje revizyonuna ayrılmış) | PROPOSED | REQ-CMP-005 |
 | Çerçeve anlaşma | Framework Agreement | Tedarikçiyle süreli fiyat ve teslim şartı anlaşması | — | blanket_order | PROPOSED | D-177 |
-| Gecikme cezası | Delay Penalty | Sözleşme süresinin aşılmasında günlük cezai tutarla hesaplanan risk | — | fine | PROPOSED | §24.1 |
+| Gecikme cezası | Delay Penalty | Sözleşme süresinin aşılmasında günlük cezai tutarla hesaplanan risk | — | fine | PROPOSED | REQ-CMP-002, REQ-CMP-005, REQ-CMP-010 |
 | Süre uzatımı | Extension of Time | İşverenin sözleşme bitiş tarihini ileri alma kararı | EOT | delay_extension | PROPOSED | D-178 |
-| İşveren gecikme dosyası | Client Delay File | İşveren gecikmelerini kayıt ve belgeyle toplayan dosya | — | claim_report | PROPOSED | §24.6 |
+| İşveren gecikme dosyası | Client Delay File | İşveren gecikmelerini kayıt ve belgeyle toplayan dosya | — | claim_report | PROPOSED | REQ-CMP-012 |
 | Bildirim yazısı | Notice Letter | İşverene gönderilen resmi gecikme bildirimi | — | warning_letter | PROPOSED | D-179 |
 | Teminat mektubu komisyonu | Guarantee Commission | Teminat mektubu için bankaya ödenen, projeye yazılan komisyon | — | bank_fee | PROPOSED | D-180 |
-| Uyuşmazlık dosyası | Dispute File | Hak talebi veya uyuşmazlık kaydı ve belgeleri | — | case | PROPOSED | §24.7 |
-| Test sertifikası | Test Certificate | Bir partinin laboratuvar/kurum test sonucu ve belgesi | Sertifika (UI) | cert, report | PROPOSED | §29.1 |
-| Parti (malzeme) | Material Lot | Aynı üretim veya teslimden gelen, birlikte izlenen malzeme miktarı | Lot (UI) | batch (döküm seansına ayrılmış) | PROPOSED | §29.1 |
-| Kalite kontrolü | Quality Check | Sahada yapılan ölçüm veya uygunluk kontrolü kaydı | — | inspection (periyodik kontrole ayrılmış) | PROPOSED | §29.3 |
-| Kök neden | Root Cause | Uygunsuzluğun asıl sebebi | — | reason | PROPOSED | §29.4 |
-| İç denetim bulgusu | Internal Audit Finding | İç denetimde tespit edilen bulgu; uygunsuzluk kayıt türü | — | audit_log (denetim kaydına ayrılmış) | PROPOSED | §29.4 |
-| Müşteri şikâyeti | Customer Complaint | Müşteri veya işveren geri bildirimi; uygunsuzluk kayıt türü | — | ticket | PROPOSED | §29.4 |
-| İSG olayı | OHS Incident | Kaza veya ramak kala kaydı | — | accident (tür değeridir) | PROPOSED | §30.1 |
-| Eğitim kaydı | Training Record | Personelin aldığı eğitim, tarihi ve geçerliliği | — | course | PROPOSED | §30.2 |
-| Günlük İSG kontrol listesi | OHS Checklist | Şantiye/fabrikanın günlük İSG kontrol maddeleri | — | safety_form | PROPOSED | §30.3 |
-| Risk değerlendirmesi | Risk Assessment | Şantiye/fabrika İSG risk değerlendirme belgesi | — | risk (uygunsuzluk kayıt türüyle karışır) | PROPOSED | §30.3 |
+| Uyuşmazlık dosyası | Dispute File | Hak talebi veya uyuşmazlık kaydı ve belgeleri | — | case | PROPOSED | REQ-CMP-014, REQ-CMP-016…017 |
+| Test sertifikası | Test Certificate | Bir partinin laboratuvar/kurum test sonucu ve belgesi | Sertifika (UI) | cert, report | PROPOSED | REQ-QHS-001, REQ-QHS-003 |
+| Parti (malzeme) | Material Lot | Aynı üretim veya teslimden gelen, birlikte izlenen malzeme miktarı | Lot (UI) | batch (döküm seansına ayrılmış) | PROPOSED | REQ-QHS-001, REQ-QHS-003 |
+| Kalite kontrolü | Quality Check | Sahada yapılan ölçüm veya uygunluk kontrolü kaydı | — | inspection (periyodik kontrole ayrılmış) | PROPOSED | REQ-QHS-004 |
+| Kök neden | Root Cause | Uygunsuzluğun asıl sebebi | — | reason | PROPOSED | REQ-QHS-005…008 |
+| İç denetim bulgusu | Internal Audit Finding | İç denetimde tespit edilen bulgu; uygunsuzluk kayıt türü | — | audit_log (denetim kaydına ayrılmış) | PROPOSED | REQ-QHS-005…008 |
+| Müşteri şikâyeti | Customer Complaint | Müşteri veya işveren geri bildirimi; uygunsuzluk kayıt türü | — | ticket | PROPOSED | REQ-QHS-005…008 |
+| İSG olayı | OHS Incident | Kaza veya ramak kala kaydı | — | accident (tür değeridir) | PROPOSED | REQ-QHS-009…010 |
+| Eğitim kaydı | Training Record | Personelin aldığı eğitim, tarihi ve geçerliliği | — | course | PROPOSED | REQ-QHS-012 |
+| Günlük İSG kontrol listesi | OHS Checklist | Şantiye/fabrikanın günlük İSG kontrol maddeleri | — | safety_form | PROPOSED | REQ-QHS-013…015 |
+| Risk değerlendirmesi | Risk Assessment | Şantiye/fabrika İSG risk değerlendirme belgesi | — | risk (uygunsuzluk kayıt türüyle karışır) | PROPOSED | REQ-QHS-013…015 |
 | KKD teslimi | PPE Issue | KKD'nin kişiye adetle verilmesi ve kişinin onayı | — | ppe_assignment (demirbaş zimmetiyle karışır) | PROPOSED | D-184 |
-| KPI (performans göstergesi) | Key Performance Indicator (KPI) | Bir pozisyonun kodlu, ağırlıklı ve hedefli ölçütü (ör. SM-01) | KPI | metric (genel ölçü için) | PROPOSED | §28.11 |
+| KPI (performans göstergesi) | Key Performance Indicator (KPI) | Bir pozisyonun kodlu, ağırlıklı ve hedefli ölçütü (ör. SM-01) | KPI | metric (genel ölçü için) | PROPOSED | REQ-PRF-002, REQ-PRF-008…011, REQ-PRF-013 |
 | Performans puanı | Performance Score | Kişinin aylık 0–100 puanı | — | rating | PROPOSED | D-189 |
-| Puan bandı | Score Band | Puan aralığı ve karşılığı (Mükemmel, İyi, Geliştirilmeli, Kritik) | — | grade | PROPOSED | §28.11 |
-| Performans hedefi | Performance Target | Şirket, rol veya kişi düzeyindeki KPI hedefi | — | goal | PROPOSED | §28.10 |
-| Prim kuralı | Bonus Rule | Primi bir koşula ve tutara/orana bağlayan kural | — | incentive | PROPOSED | §28.10 |
+| Puan bandı | Score Band | Puan aralığı ve karşılığı (Mükemmel, İyi, Geliştirilmeli, Kritik) | — | grade | PROPOSED | REQ-PRF-002, REQ-PRF-008…011, REQ-PRF-013 |
+| Performans hedefi | Performance Target | Şirket, rol veya kişi düzeyindeki KPI hedefi | — | goal | PROPOSED | REQ-PRF-014…015, REQ-PRF-017 |
+| Prim kuralı | Bonus Rule | Primi bir koşula ve tutara/orana bağlayan kural | — | incentive | PROPOSED | REQ-PRF-014…015, REQ-PRF-017 |
 | Prim | Bonus | Performansa bağlı, bordro dışı ödenen ek ödeme | — | premium, incentive | PROPOSED | D-188 |
 | Gelişim planı | Development Plan | Kritik puandan sonra amirin kişiyle yazdığı plan | — | pip | PROPOSED | D-193 |
-| Performans sıralaması | Performance Ranking | Benzer roller arasında olumlu performansın gösterimi | — | leaderboard | PROPOSED | §28.9 |
+| Performans sıralaması | Performance Ranking | Benzer roller arasında olumlu performansın gösterimi | — | leaderboard | PROPOSED | REQ-PRF-019 |
 | Öneri | Recommendation | Tanımlı bir kuraldan üretilen, gerekçeli ve rakamlı tavsiye; karar vermez | — | suggestion (genel), advice | PROPOSED | D-195 |
-| Öneri türü | Recommendation Type | Bir öneriyi üreten kural ve hesabı | — | rule (iş akışı kuralıyla karışır) | PROPOSED | §26.2 |
-| Kaynak darboğazı | Resource Bottleneck | Bir şantiyede kaynak eksikliğinden yavaşlayan iş | — | shortage | PROPOSED | §27.1 |
-| Kaynak transfer önerisi | Resource Transfer Suggestion | Atıl kaynağın darboğaza aktarılması için maliyet-kazanç hesabıyla öneri | — | move_order | PROPOSED | §27.2 |
-| Hızlandırma senaryosu | Acceleration Scenario | Projeyi hızlandırma seçeneği ve süre-maliyet hesabı | — | what_if | PROPOSED | §8.3 |
+| Öneri türü | Recommendation Type | Bir öneriyi üreten kural ve hesabı | — | rule (iş akışı kuralıyla karışır) | PROPOSED | REQ-INT-003…004 |
+| Kaynak darboğazı | Resource Bottleneck | Bir şantiyede kaynak eksikliğinden yavaşlayan iş | — | shortage | PROPOSED | REQ-INT-007 |
+| Kaynak transfer önerisi | Resource Transfer Suggestion | Atıl kaynağın darboğaza aktarılması için maliyet-kazanç hesabıyla öneri | — | move_order | PROPOSED | REQ-INT-008 |
+| Hızlandırma senaryosu | Acceleration Scenario | Projeyi hızlandırma seçeneği ve süre-maliyet hesabı | — | what_if | PROPOSED | REQ-INT-011…012 |
 | Senaryo sınırı | Scenario Limit | Aşıldığında senaryoyu "önerilmez" yapan tanımlı sınır | — | cap | PROPOSED | D-196 |
-| Toplantı | Meeting | Tarih, katılımcı, gündem ve notlarıyla toplantı kaydı | — | session (döküm seansıyla karışır) | PROPOSED | §32.1 |
+| Toplantı | Meeting | Tarih, katılımcı, gündem ve notlarıyla toplantı kaydı | — | session (döküm seansıyla karışır) | PROPOSED | REQ-MTG-001 |
 | Toplantı tutanağı | Meeting Minutes | Toplantının kaydedilince kesinleşen notları | — | report | PROPOSED | D-200 |
-| Belge | Document | Bir kayda bağlı dosya | Evrak (UI) | file (genel dosya için), attachment | PROPOSED | §33 |
-| Belge sürümü | Document Version | Aynı belgenin yeni yüklemesi; öncekiler saklanır | — | revision (proje revizyonuna ayrılmış) | PROPOSED | §33.4 |
-| Arşiv | Archive | Tüm belgeleri yetkiye göre tek pencerede arayan ekran | — | drive, repository | PROPOSED | §33.2 |
-| Sınıflandırılmamış belge | Unclassified Document | Aktarımda kayda bağlanamayan, geçici alanda tutulan belge | — | orphan | PROPOSED | §33.4, DEF-001 |
+| Belge | Document | Bir kayda bağlı dosya | Evrak (UI) | file (genel dosya için), attachment | PROPOSED | REQ-DOC-001 |
+| Belge sürümü | Document Version | Aynı belgenin yeni yüklemesi; öncekiler saklanır | — | revision (proje revizyonuna ayrılmış) | PROPOSED | REQ-DOC-005…010 |
+| Arşiv | Archive | Tüm belgeleri yetkiye göre tek pencerede arayan ekran | — | drive, repository | PROPOSED | REQ-DOC-002, REQ-DOC-004 |
+| Sınıflandırılmamış belge | Unclassified Document | Aktarımda kayda bağlanamayan, geçici alanda tutulan belge | — | orphan | PROPOSED | REQ-DOC-005…010, DEF-001 |
 | Metin tanıma | Text Recognition | Taranmış belge ve fotoğraftaki yazının okunması | OCR | scan_text | PROPOSED | D-201 |
-| Yıllık hedef | Annual Target | Şirketin yıllık ciro, kâr, kapasite ve benzeri hedefi | — | goal | PROPOSED | §35.1 |
+| Yıllık hedef | Annual Target | Şirketin yıllık ciro, kâr, kapasite ve benzeri hedefi | — | goal | PROPOSED | REQ-STR-001 |
 | Bütçe | Budget | Ay, maliyet merkezi ve gider türü bazında planlanan gelir ve gider | — | plan (genel) | PROPOSED | D-202 |
-| Revize bütçe | Budget Revision | Onaylı bütçenin yıl içindeki yeni sürümü; ilk bütçe silinmez | — | revision (proje revizyonuna ayrılmış) | PROPOSED | §35.2 |
-| Bütçe sapması | Budget Variance | Bütçe ile gerçekleşen arasındaki fark | — | deviation | PROPOSED | §35.2 |
+| Revize bütçe | Budget Revision | Onaylı bütçenin yıl içindeki yeni sürümü; ilk bütçe silinmez | — | revision (proje revizyonuna ayrılmış) | PROPOSED | REQ-STR-002…003 |
+| Bütçe sapması | Budget Variance | Bütçe ile gerçekleşen arasındaki fark | — | deviation | PROPOSED | REQ-STR-002…003 |
 | Enflasyona göre düzeltilmiş görünüm | Inflation-Adjusted View | Rakamların TÜFE ile bugünün lirasına çevrilmiş gösterimi | — | real_value | PROPOSED | D-203 |
-| Yatırım analizi | Investment Analysis | Yeni ekipman alımının maliyet, kazanç ve geri dönüş hesabı | — | roi_report | PROPOSED | §35.3 |
+| Yatırım analizi | Investment Analysis | Yeni ekipman alımının maliyet, kazanç ve geri dönüş hesabı | — | roi_report | PROPOSED | REQ-STR-005 |
 | Geri dönüş süresi | Payback Period | Yatırımın kendini ödediği süre; basit ve indirgenmiş | — | roi | PROPOSED | D-204 |
 | Şirket sağlık karnesi | Company Health Scorecard | Şirketin başlık başına renkli genel durumu | — | score (işveren karnesiyle karışır) | PROPOSED | D-205 |
 | Malzeme | Material | — | item (katalog satırı) | product | PROPOSED | |
@@ -212,7 +212,7 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Telefon bildirimi | Push Notification | Tarayıcı üzerinden telefona anında giden bildirim | web push | sms | PROPOSED | D-132 |
 | Günlük özet | Daily Digest | Kişiye sabah giden tek özet ileti | — | report, summary_mail | PROPOSED | D-133 |
 | Denetim kaydı | Audit Log | Değiştirilemeyen işlem kaydı | — | history_table, log | PROPOSED | D-135 |
-| Kayıt geçmişi | Record History | Bir kaydın alan alan değişiklik geçmişi | — | changelog, versions | PROPOSED | §38 |
+| Kayıt geçmişi | Record History | Bir kaydın alan alan değişiklik geçmişi | — | changelog, versions | PROPOSED | REQ-AUD-001…002, REQ-AUD-004…005, REQ-WFL-016 |
 | Görev | Task | Sorumluya atanan iş | — | job, todo | PROPOSED | Geliştirme görevleri `TASK-NNNN` ID'si ile karışmaması için kodda `work_task` Phase 04'te değerlendirilir |
 | Eskalasyon | Escalation | — | — | — | PROPOSED | |
 | Demirbaş / Varlık | Asset | Envanter kalemi (makine, araç, laptop…) | — | fixture, inventory_item | PROPOSED | |
@@ -238,5 +238,5 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Bugün (giriş ekranı) | Today Screen | Her rolün girişte açılan, role göre kurulan ekranı | — | dashboard, home | PROPOSED | D-056. Kodda hâlâ `/dashboard` ve `dashboard-widget-registry` adları var — TASK-0043 |
 | Gösterge | Indicator | "Bugün"de ve raporlarda gösterilen tek sayı | — | widget (kavram adı olarak), metric | PROPOSED | Kodda şimdilik `widget` — TASK-0043 |
 | Dikkat öğesi | Attention Item | Gizlenemeyen, yalnızca sebebi çözülünce kapanan kritik uyarı | — | alert, alarm | PROPOSED | D-126 |
-| Zarar tanısı | Loss Diagnosis | Şantiye maliyetini etkenlerine ayıran kart | — | root_cause (uygunsuzluğun kök nedenine ayrılmış) | PROPOSED | §14.2, D-129 |
+| Zarar tanısı | Loss Diagnosis | Şantiye maliyetini etkenlerine ayıran kart | — | root_cause (uygunsuzluğun kök nedenine ayrılmış) | PROPOSED | REQ-RPT-013, D-129 |
 | Cockpit | Owner Cockpit | Sahip yönetim ekranı | — | dashboard (genel ekranlar için) | PROPOSED | |
