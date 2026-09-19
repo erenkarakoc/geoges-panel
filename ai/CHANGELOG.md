@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Ports, data access, search and live updates
+
+- `docs/architecture/PORTS_AND_SERVICES.md` names every outside dependency and puts it behind a port, so a provider can be swapped without touching a module. Data access becomes a direct PostgreSQL connection so a record and its event are written together, with row-level security kept per transaction (D-238, closing OQ-020). Search stays inside PostgreSQL with Turkish spelling tolerance and the same permission filtering (D-239). Live updates carry a signal, never data — the screen fetches with the viewer's own rights (D-240).
+
+
 ## 2026-09-20 — Configuration architecture
 
 - `docs/architecture/CONFIGURATION.md` fixes how the adjustable half of the panel behaves: a price or threshold changed in June never disturbs a March progress payment, because rules carry validity dates and approved records keep the version they used. Custom fields are allowed on reference records and refused on ledger records, so no free-text field can blur a cost or a payroll figure (D-237, TASK-0061).

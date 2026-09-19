@@ -53,7 +53,7 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 
 | ID | Question |
 |---|---|
-| OQ-020 | Data access approach: supabase-js/PostgREST vs direct Postgres client/ORM — decided in Phase 03 after spike. |
+| OQ-020 | **ANSWERED 2026-09-20 → D-238:** direct PostgreSQL connection with a typed query builder, RLS kept through per-transaction session identity; PostgREST not used for data access. Provisional until the Phase 06 spike confirms correctness and speed. |
 | OQ-021 | ANSWERED 2026-09-16 → D-048: first pilot runs on sample data; no pilot site or user group named yet. |
 | OQ-022 | ANSWERED 2026-09-16 → D-049: no target date; not schedule-driven. |
 | OQ-023 | ANSWERED 2026-09-15 → D-041: owner-designated delegate for an owner-defined period; all actions reported to the owner. |
