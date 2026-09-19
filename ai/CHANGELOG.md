@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-19 — MTG, DOC, SUP confirmed
+
+- The owner confirmed REQ-MTG, REQ-DOC and REQ-SUP with both derived rules: 23 more requirements CONFIRMED, 401 in all. Next: STR.
+- Commit `b750f52` carried only half of this (MTG and DOC marked, SUP and the records not): the confirmation script stopped on an unexpected suffix and the commit ran anyway. This entry completes it.
+
+
 ## 2026-09-19 — MTG, DOC and SUP requirements
 
 - Three decisions (D-199…D-201), all beyond the recommendation. Meetings are visible by role scope — a site meeting to everyone who sees the site; minutes are final as soon as they are saved, with no approval or objection window; and archive search reads document contents, including text recognition of scanned papers and photos. Whether recognition may send documents to an outside service is left as an owner question for Phase 03.

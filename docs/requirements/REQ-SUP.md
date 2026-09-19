@@ -1,6 +1,6 @@
 # REQ-SUP — İç Destek Talepleri
 
-Durum: DRAFT · 2026-09-19 · Modül: SUP (Support)
+Durum: CONFIRMED (sahip, 2026-09-19) · 2026-09-19 · Modül: SUP (Support)
 
 Kaynaklar: Özellik Yapısı §25.7.
 
@@ -19,7 +19,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Support Ticket, Role.
 - Açıklama: Her kullanıcı bir ihtiyaç veya sorun için talep açar: kategori, konu, açıklama, ek/fotoğraf, öncelik, ilgili şantiye veya birim ve muhatap kişi veya rol.
 - Kabul kriterleri:
   - [ ] Muhatap seçilmeden talep açılmaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-SUP-002 — Talebin altında mesajlaşma
 
@@ -29,7 +29,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Support Ticket, Role.
 - Açıklama: Talep açan ve muhatap talebin altında mesajlaşır; ek ve fotoğraf eklenebilir.
 - Kabul kriterleri:
   - [ ] Her yeni mesaj karşı tarafa bildirim olarak düşer.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-SUP-003 — Çözme, gerekçeli ret ve üste sevk
 
@@ -41,7 +41,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Support Ticket, Role.
 - Kabul kriterleri:
   - [ ] Ret gerekçesiz yapılamaz.
   - [ ] Sevk edilen talebin geçmişinde kimden kime ve ne zaman sevk edildiği görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-SUP-004 — Durumlar
 
@@ -49,10 +49,10 @@ Terimler (`docs/domain/GLOSSARY.md`): Support Ticket, Role.
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: çözülen talebin kendiliğinden kapanma süresi
-- Açıklama: Talep şu durumlardan geçer: Açık → İşlemde → Beklemede → Çözüldü veya Reddedildi → Kapatıldı. Çözülen talebi açan kişi kapatır veya yeniden açar; belirli süre içinde işlem yapmazsa talep kendiliğinden kapanır (§25.7'den türetilen kural, bu dosyanın onayıyla kesinleşir).
+- Açıklama: Talep şu durumlardan geçer: Açık → İşlemde → Beklemede → Çözüldü veya Reddedildi → Kapatıldı. Çözülen talebi açan kişi kapatır veya yeniden açar; belirli süre içinde işlem yapmazsa talep kendiliğinden kapanır (§25.7'den türetilen kural, sahip onayladı).
 - Kabul kriterleri:
   - [ ] Her durum geçişi kişi ve zamanla talebin geçmişinde görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-SUP-005 — Cevapsız talep eskale olur
 
@@ -63,7 +63,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Support Ticket, Role.
 - Açıklama: Cevapsız kalan talep görev motorunun eskalasyon kurallarıyla üst seviyeye çıkar.
 - Kabul kriterleri:
   - [ ] Eskale olan talep ilk muhatabın listesinden düşmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 
