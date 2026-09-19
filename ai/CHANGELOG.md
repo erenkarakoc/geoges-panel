@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Phase 04 opens with the database conventions
+
+- `docs/database/CONVENTIONS.md` settles the rules every table will follow: nothing is ever deleted, every table carries its scope column and a row-level-security policy, ledgers only ever gain rows, and history goes through one channel instead of each module inventing its own. The owner chose rounding at the line so screen, invoice and accountant agree, and foreign-currency amounts keep the rate and date that produced their lira value (D-243, D-244). Phase 04 work is filed as TASK-0065…TASK-0072.
+
+
 ## 2026-09-20 — Phase 03 DONE
 
 - The owner approved the Phase 03 exit. The panel now has an architecture: what a module owns and how two of them talk, how an event survives a crash, how a flow definition and a running instance stay apart, how permission is decided in three places, how a rule changed today leaves last March alone, where data comes from and how it is searched, and how a record type someone invents next year is stored without changing the schema. Sixteen spikes will test the risky half before anything is built on it. Phase 04 — database architecture — starts.
