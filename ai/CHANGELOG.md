@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Administration page confirmed
+
+- The owner confirmed the administration page and flow designer design. Next: WCAG 2.2 AA targets, then the custom-element list (which will carry the flow diagram canvas).
+
+
 ## 2026-09-19 — Administration page and flow designer
 
 - The "Yönetim" group leaves the menu rail: it becomes one page opened from the user menu, with its own left sub-menu for users and roles, master data, workflows, record types and the audit log. Revision requests move into Onaylar as a tab. The flow designer puts the diagram first with each step's questions in a side panel, and works fully on phones too. The run log stays inside the administration page; everyone else sees in plain words which flow and step gave them a task (D-223, `docs/ui-ux/ADMINISTRATION.md`). Awaiting owner review (TASK-0052).

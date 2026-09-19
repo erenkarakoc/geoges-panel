@@ -1,6 +1,6 @@
 # Yönetim Sayfası ve Akış Tasarımcısı
 
-Durum: TASLAK · Son güncelleme: 2026-09-19
+Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-19
 
 D-108'in ertelediği yerleşim turu. Akış tasarımcısı, şablonlar, yeni akışlar, çalışma günlüğü ve kayıt türü oluşturucunun menüdeki yeri ve nasıl çalıştığı burada yazılır. Kararlar: D-223. Gereksinimler: REQ-WFL-001…011, REQ-WFL-017…030, REQ-WFL-033…039.
 

@@ -51,3 +51,4 @@ Only items whose quality gate passed are listed here.
 | 2026-09-19 | TASK-0050 | Daily site log screen spec (SCR-021) | T2 PASS (owner confirmed) |
 | 2026-09-19 | TASK-0051 | Per-screen state matrix | T2 PASS (owner confirmed) |
 | 2026-09-19 | TASK-0042 | Eight end-to-end flows as flow definitions | T2 PASS (owner confirmed) |
+| 2026-09-19 | TASK-0052 | Administration page and flow designer UX | T2 PASS (owner confirmed) |
