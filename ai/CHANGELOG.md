@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Module boundaries
+
+- `docs/architecture/MODULE_BOUNDARIES.md` fixes what a module owns and how two modules may talk: queries and commands for what the user must see at once, events for everything else, and never another module's tables. Reporting, intelligence and strategy read a rebuildable read model fed by events instead of querying fifteen modules per screen (D-233). Capability declarations become contract tests that break CI when code and declaration drift (TASK-0057).
+
+
 ## 2026-09-20 — Phase 03 opens
 
 - Four owner decisions start the architecture: passwords stay at eight characters with a complexity rule (the owner chose this over the longer-but-simpler rule the AI recommended, objection recorded), sessions last 30 days and end after three days of inactivity (D-230, closing OQ-026); nothing is deleted by time (D-231); and only the approval counter, the bell and the approval queue update live, everything else on refresh (D-232). Phase 03 work is filed as TASK-0057…TASK-0064.

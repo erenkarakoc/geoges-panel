@@ -66,3 +66,4 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-19 21:26:48Z · 6c9e96a0 · Write · `docs/ui-ux/SPECIAL_SCREENS.md`
 - 2026-09-19 21:36:45Z · 6c9e96a0 · Write · `docs/ui-ux/SEARCH.md`
 - 2026-09-19 21:36:57Z · 6c9e96a0 · Edit · `docs/ui-ux/SEARCH.md`
+- 2026-09-19 23:35:11Z · 6c9e96a0 · Write · `docs/architecture/MODULE_BOUNDARIES.md`
