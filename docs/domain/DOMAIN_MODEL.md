@@ -1,6 +1,6 @@
 # Alan Modeli
 
-Durum: Parti 1–2 CONFIRMED (sahip, 2026-09-19); Parti 3 (EQP, HR, CRM, QTE, CMP, QHS) TASLAK · Son güncelleme: 2026-09-19
+Durum: Parti 1–3 CONFIRMED (sahip, 2026-09-19); Parti 4 (MTG, SUP, PRF, INT, STR) TASLAK · Son güncelleme: 2026-09-19
 
 Her modülün **ana kayıtları**, aralarındaki **ilişkiler** ve hiçbir koşulda bozulmaması gereken **değişmez kurallar** (invariant). Kayıt adları sözlüğün kod adlarıdır (`docs/domain/GLOSSARY.md`); her kural onu doğuran gereksinime bağlıdır. Olaylar, aksiyonlar ve koşul alanları her modülün `docs/requirements/REQ-<MODÜL>.md` dosyasındaki yetenek kataloğundadır; burada tekrarlanmaz. Tablolar, sütunlar ve satır görünürlüğü Phase 04'te bu modelden türetilir (TASK-0046).
 
@@ -358,3 +358,69 @@ Ortak kurallar (her modül için geçerli):
 - **QHS-K3** Ramak kala hiçbir performans veya prim hesabında olumsuz sayılmaz (REQ-QHS-011).
 - **QHS-K4** Ciddi kaza veya açık kritik İSG bulgusu olan dönemde şantiyenin hız ve prim hedefi başarılı sayılmaz (REQ-QHS-016).
 - **QHS-K5** "Kaldı" sonucu partiyi bloke etmez, ama kararı girilene kadar parti işaretli görünür (REQ-QHS-003).
+
+---
+
+## MTG — Toplantı ve karar
+
+**Ana kayıtlar:** `Meeting` (tarih, başlık, katılımcılar, gündem, isteğe bağlı proje veya şantiye) · `MeetingMinutes` (kaydedilince kesinleşen notlar) · `MeetingDecision` (karar, sorumlu, son tarih, durum).
+
+**İlişkiler:** `Meeting` 1—1 `MeetingMinutes`; `Meeting` 1—N `MeetingDecision` 1—1 `Task` (TSK); `Meeting` N—0..1 `Project` veya `Site`.
+
+**Değişmez kurallar**
+
+- **MTG-K1** Tutanak kaydedilince kilitlenir; değişiklik yalnız revizyon talebiyle olur (REQ-MTG-003).
+- **MTG-K2** Sorumlusu ve son tarihi olmayan karar kaydedilmez (REQ-MTG-004).
+- **MTG-K3** Karar ile bağlı görevinin durumu hiçbir zaman ayrışmaz (REQ-MTG-007).
+- **MTG-K4** Bir kapsama bağlı toplantıyı o kapsamı görebilen görür; bağlı olmayanı yalnız katılımcılar (REQ-MTG-002).
+
+## SUP — Destek talebi
+
+**Ana kayıtlar:** `SupportTicket` (kategori, konu, öncelik, muhatap, durum) · `SupportMessage` (talebin altındaki mesaj ve ekleri) · `TicketReferral` (üst pozisyona sevk).
+
+**İlişkiler:** `SupportTicket` 1—N `SupportMessage`, `TicketReferral`; `SupportTicket` 0—1 `PurchaseRequest` (PUR).
+
+**Değişmez kurallar**
+
+- **SUP-K1** Muhatap seçilmeden talep açılmaz; ret gerekçesiz yapılamaz (REQ-SUP-001, REQ-SUP-003).
+- **SUP-K2** Eskale olan talep ilk muhatabın listesinden düşmez (REQ-SUP-005).
+
+## PRF — Performans ve prim
+
+**Ana kayıtlar:** `KeyPerformanceIndicator` (kod, pozisyon, ağırlık, hedef, puanlama tipi, veri kaynağı) · `PerformanceTarget` (şirket, rol veya kişi düzeyi) · `KpiResult` (bir kişinin bir aydaki KPI değeri; hesaplanan veya amir puanı ve gerekçesi) · `PerformanceScore` (aylık 0–100 puan ve bant; kesinleşti mi) · `BonusRule` · `Bonus` (aylık prim; hesap dökümü, onay, ödeme) · `DevelopmentPlan`.
+
+**İlişkiler:** `KeyPerformanceIndicator` N—1 pozisyon (rol); `PerformanceScore` N—1 `Employee`, 1—N `KpiResult`; `Bonus` N—1 `PerformanceScore` ve N—1 `BonusRule`; `KpiResult` N—1 kaynak kayıtlar (günlük kayıt, uygunsuzluk, görev…).
+
+**Değişmez kurallar**
+
+- **PRF-K1** Hesaplanabilen KPI elle yazılamaz; kimse kendi KPI puanını giremez (REQ-PRF-002, REQ-PRF-003).
+- **PRF-K2** Bir pozisyonun KPI ağırlıkları toplamı %100'dür ve her skora en az bir kalite veya güvenlik boyutu girer (REQ-PRF-004, REQ-PRF-008).
+- **PRF-K3** Koordinatörün KPI'ları arasında kâr, marj veya maliyet tabanlı KPI yoktur (REQ-PRF-006).
+- **PRF-K4** Katalog değişikliği kapanmış ayların puanını ve primini değiştirmez (REQ-PRF-010).
+- **PRF-K5** Onaylanmamış prim ödenmez; ödenen her prim muhasebe aktarımına girer; prim tutarı hassas veridir (REQ-PRF-016, REQ-PRF-017, REQ-PRF-018).
+- **PRF-K6** Taşeron ekip başı için puan ve prim hesaplanmaz (REQ-PRF-020).
+
+## INT — Öneriler ve senaryolar
+
+**Ana kayıtlar:** `Recommendation` (tür, önem, gerekçe ve rakamlar, kaynak kayıtlar, durum, kapatma gerekçesi) · `RecommendationType` · `ResourceTransferSuggestion` · `AccelerationScenario` (girdiler, hesap dökümü, "önerilmez" nedeni, onay) · `ScenarioLimit`.
+
+**İlişkiler:** `Recommendation` N—1 `RecommendationType`, N—N kaynak kayıtlar; onaylanan `ResourceTransferSuggestion` 1—1 transfer kaydı (EQP veya INV); onaylanan `AccelerationScenario` 1—1 `Project` yönetim hedef süresi.
+
+**Değişmez kurallar**
+
+- **INT-K1** INT hiçbir stok, ekipman, personel, hedef veya para kaydını doğrudan değiştirmez; öneri üretimi dışarıya veri göndermez (REQ-INT-002, REQ-INT-004).
+- **INT-K2** Uygulanmayan öneri gerekçesiz kapatılamaz (REQ-INT-005).
+- **INT-K3** "Önerilmez" işaretli senaryo önerilen senaryo olamaz ve seçilemez (REQ-INT-012, REQ-INT-013).
+- **INT-K4** Onaylanmamış senaryo hiçbir hedefi değiştirmez (REQ-INT-014).
+
+## STR — Strateji ve bütçe
+
+**Ana kayıtlar:** `AnnualTarget` · `Budget` ve `BudgetRevision` (ay × maliyet merkezi × gider türü satırları) · `BudgetVariance` (hesaplanan görünüm) · `InvestmentAnalysis` · `CompanyHealthScorecard` (başlık başına renk ve nedenleri; hesaplanan görünüm).
+
+**İlişkiler:** `Budget` 1—N `BudgetRevision`; `AnnualTarget` 1—N `PerformanceTarget` (PRF, şirket düzeyi); `InvestmentAnalysis` N—N `Asset` (EQP) verisi.
+
+**Değişmez kurallar**
+
+- **STR-K1** Onaylanan bütçe kilitlidir; değişiklik yeni revizyondur ve ilk bütçe silinmez (REQ-STR-002).
+- **STR-K2** Enflasyona göre düzeltilmiş görünüm hiçbir kaydı değiştirmez; endeksi eksik ay sessizce hesaplanmaz (REQ-STR-004).
+- **STR-K3** Sağlık karnesinde tek toplam şirket puanı yoktur; her renk göstergelerine açılır (REQ-STR-008).

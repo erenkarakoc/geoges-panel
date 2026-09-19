@@ -201,12 +201,15 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Cari hareketi | Party Account Entry | Bir firmanın carisindeki tek hareket | — | ledger_line | CONFIRMED | REQ-FIN-019 |
 | Üretim satırı | Production Entry | Fabrika günlük kaydında iş türü başına miktar ve işçilik saati | — | output_row | CONFIRMED | REQ-FAC-003 |
 | Hakediş kalemi | Progress Payment Line | Hakedişte önerilen ve düzeltilen miktar, gerekçe, devreden miktar | — | invoice_line | CONFIRMED | REQ-FIN-002 |
-| Varlık lokasyon dönemi | Asset Location Period | Bir varlığın hangi tarihler arasında nerede olduğu | — | location_history | PROPOSED | REQ-EQP-006 |
-| Arıza | Breakdown | Varlığın arıza ve tamir kaydı | — | failure | PROPOSED | REQ-EQP-013 |
-| DÖF aksiyonu | Corrective Action | Uygunsuzluğun düzeltici veya önleyici tek aksiyonu; görev olarak düşer | — | fix | PROPOSED | REQ-QHS-006 |
-| Bordro satırı | Payroll Line | Bordroda bir kişinin brüt, SGK, vergi, kesinti ve net satırı | — | payslip (belgeyle karışır) | PROPOSED | REQ-HR-006 |
-| Teklif kalemi | Quote Line | Teklif sürümünde kalem, miktar, fiyat ve tahmini maliyet | — | offer_item | PROPOSED | REQ-QTE-001 |
-| Satış siparişi sevkiyatı | Sales Order Shipment | Satış siparişinin tek sevkiyatı; fatura görevi buna bağlıdır | — | delivery (teslim alımla karışır) | PROPOSED | REQ-QTE-017 |
+| Varlık lokasyon dönemi | Asset Location Period | Bir varlığın hangi tarihler arasında nerede olduğu | — | location_history | CONFIRMED | REQ-EQP-006 |
+| Arıza | Breakdown | Varlığın arıza ve tamir kaydı | — | failure | CONFIRMED | REQ-EQP-013 |
+| DÖF aksiyonu | Corrective Action | Uygunsuzluğun düzeltici veya önleyici tek aksiyonu; görev olarak düşer | — | fix | CONFIRMED | REQ-QHS-006 |
+| Bordro satırı | Payroll Line | Bordroda bir kişinin brüt, SGK, vergi, kesinti ve net satırı | — | payslip (belgeyle karışır) | CONFIRMED | REQ-HR-006 |
+| Teklif kalemi | Quote Line | Teklif sürümünde kalem, miktar, fiyat ve tahmini maliyet | — | offer_item | CONFIRMED | REQ-QTE-001 |
+| Satış siparişi sevkiyatı | Sales Order Shipment | Satış siparişinin tek sevkiyatı; fatura görevi buna bağlıdır | — | delivery (teslim alımla karışır) | CONFIRMED | REQ-QTE-017 |
+| KPI sonucu | KPI Result | Bir kişinin bir aydaki tek KPI değeri; hesaplanan veya amir puanı ve gerekçesi | — | kpi_value | PROPOSED | REQ-PRF-002 |
+| Destek mesajı | Support Message | Destek talebinin altındaki mesaj ve ekleri | — | comment | PROPOSED | REQ-SUP-002 |
+| Talep sevki | Ticket Referral | Destek talebinin üst pozisyona sevki | — | forward | PROPOSED | REQ-SUP-003 |
 | Malzeme | Material | — | item (katalog satırı) | product | CONFIRMED | |
 | Sarf malzeme | Consumable | — | — | supply | CONFIRMED | |
 | Sarf reçetesi | Consumption Recipe | İş birimi başına standart sarf | bill of materials | — | CONFIRMED | |

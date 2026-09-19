@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Domain model, batch 4
+
+- The owner confirmed batch 3 and its six record names. Batch 4 — meetings, support, performance, recommendations and strategy — completes `docs/domain/DOMAIN_MODEL.md`, with three new record names proposed in the glossary.
+
+
 ## 2026-09-19 — Domain model, batch 3
 
 - The owner confirmed batch 2 and its six record names. Batch 3 adds equipment, HR, CRM, quotes, contracts and quality/OHS to `docs/domain/DOMAIN_MODEL.md`, with six new record names proposed in the glossary.
