@@ -55,3 +55,4 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-19 12:26:12Z · 6c9e96a0 · Write · `docs/domain/PERMISSION_MATRIX.md`
 - 2026-09-19 14:05:54Z · 6c9e96a0 · Write · `docs/domain/DOMAIN_MODEL.md`
 - 2026-09-19 15:20:45Z · 6c9e96a0 · Write · `docs/ui-ux/SCREEN_INVENTORY.md`
+- 2026-09-19 15:50:36Z · 6c9e96a0 · Write · `docs/ui-ux/SCREEN_PATTERNS.md`

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Standard screen patterns
+
+- `docs/ui-ux/SCREEN_PATTERNS.md` defines the list, detail and form patterns every module uses, each mapped to COSS components already installed — no custom component was needed. The owner chose section tabs with collapsible parts for detail screens, pages on desktop and "Daha fazla göster" on phones, and short forms in a dialog with long ones as full pages under a fixed save bar (D-219).
+
+
 ## 2026-09-19 — Screen inventory confirmed
 
 - The owner confirmed the inventory and asked for a separate "Raporlar" entry instead of reports opening only from module screens; it sits in the work layer below "Görevler" (SCR-017, D-218). Next: the list, detail and form standards.
