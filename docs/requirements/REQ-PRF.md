@@ -17,7 +17,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Key Performance Indicator (KPI), Performan
 - Kaynak: §28, §28.1–§28.6
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
-- Tanımla ayarlanan: pozisyon başına KPI'lar, ağırlıkları ve hedefleri (REQ-PRF-009)
+- Tanımla ayarlanan: pozisyon başına KPI'lar, ağırlıkları ve hedefleri (REQ-PRF-008)
 - Açıklama: Yalnızca saha değil bütün organizasyon ölçülür; herkes kendi işinin objektif metrikleriyle değerlendirilir. Başlangıç metrikleri: saha mühendisi, formen ve ekip için doğrulanmış üretim m², panel/saat, zamanında veri girişi, kayıt eksiksizliği, zayi/fire oranı, onaya zamanında gönderme, kalite, İSG uyumu; koordinatör için sorumlu şantiyelerin operasyonel performansı, geciken onay sayısı, sorun çözme süresi, veri disiplini; fabrika için üretim miktarı, birim maliyet, fire, makine duruşu, veri kalitesi, zamanında sevkiyat; teknik ofis için çizim/revizyon teslim süresi, gecikme, hata/revizyon oranı, teklif/metraj hazırlama süresi; satış için teklif sayısı, yanıt süresi, kazanma oranı, kaçırılan fırsat/ihale, tekliflerin sonradan gerçek kârlılığı; muhasebe için hakediş/fatura/ödeme işlerinin zamanında yapılması, yükümlülüklerin kaçırılmaması, hata oranı; İK için bordro ve SGK süreçlerinin zamanında olması, eksik evrak, izin/zimmet/çıkış süreçlerinin doğru tamamlanması.
 - Kabul kriterleri:
   - [ ] Bir kişinin puanında yalnızca kendi pozisyonuna tanımlı KPI'lar yer alır.

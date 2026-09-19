@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-19 — INT requirements
+
+- Four decisions (D-195…D-198), all as recommended. Recommendations come from defined rules with their reasoning and figures always visible — no AI model, no data leaving the panel. An acceleration scenario that crosses a defined limit (legal overtime, casting per mold count, an open critical OHS finding) is marked "not recommended" and cannot be chosen; an approved scenario becomes the project's management target and flows into daily targets, tasks and a bonus rule; a recommendation not acted on is closed with a reason and returns only if things change markedly.
+- `REQ-INT.md` (14) is written, DRAFT, layer-tagged, with its catalog; six proposed glossary terms were added first. REQ-PRF-001 now points to the catalog requirement REQ-PRF-008 (it pointed to -009 by mistake).
+
+
 ## 2026-09-19 — PRF confirmed
 
 - The owner confirmed REQ-PRF with both derived rules (a mid-month position change blends the score by days; subcontractor crews are compared but get no score or bonus): 20 more requirements CONFIRMED, 364 in all. Next: INT.

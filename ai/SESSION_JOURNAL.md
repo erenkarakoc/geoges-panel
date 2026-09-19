@@ -43,3 +43,4 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-18 20:46:22Z · 6c9e96a0 · Edit · `scripts/check-records.mjs`
 - 2026-09-19 09:31:06Z · 6c9e96a0 · Write · `docs/requirements/REQ-QHS.md`
 - 2026-09-19 10:24:55Z · 6c9e96a0 · Write · `docs/requirements/REQ-PRF.md`
+- 2026-09-19 10:33:51Z · 6c9e96a0 · Write · `docs/requirements/REQ-INT.md`

@@ -157,6 +157,12 @@ Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** 
 | Prim | Bonus | Performansa bağlı, bordro dışı ödenen ek ödeme | — | premium, incentive | PROPOSED | D-188 |
 | Gelişim planı | Development Plan | Kritik puandan sonra amirin kişiyle yazdığı plan | — | pip | PROPOSED | D-193 |
 | Performans sıralaması | Performance Ranking | Benzer roller arasında olumlu performansın gösterimi | — | leaderboard | PROPOSED | §28.9 |
+| Öneri | Recommendation | Tanımlı bir kuraldan üretilen, gerekçeli ve rakamlı tavsiye; karar vermez | — | suggestion (genel), advice | PROPOSED | D-195 |
+| Öneri türü | Recommendation Type | Bir öneriyi üreten kural ve hesabı | — | rule (iş akışı kuralıyla karışır) | PROPOSED | §26.2 |
+| Kaynak darboğazı | Resource Bottleneck | Bir şantiyede kaynak eksikliğinden yavaşlayan iş | — | shortage | PROPOSED | §27.1 |
+| Kaynak transfer önerisi | Resource Transfer Suggestion | Atıl kaynağın darboğaza aktarılması için maliyet-kazanç hesabıyla öneri | — | move_order | PROPOSED | §27.2 |
+| Hızlandırma senaryosu | Acceleration Scenario | Projeyi hızlandırma seçeneği ve süre-maliyet hesabı | — | what_if | PROPOSED | §8.3 |
+| Senaryo sınırı | Scenario Limit | Aşıldığında senaryoyu "önerilmez" yapan tanımlı sınır | — | cap | PROPOSED | D-196 |
 | Malzeme | Material | — | item (katalog satırı) | product | PROPOSED | |
 | Sarf malzeme | Consumable | — | — | supply | PROPOSED | |
 | Sarf reçetesi | Consumption Recipe | İş birimi başına standart sarf | bill of materials | — | PROPOSED | |

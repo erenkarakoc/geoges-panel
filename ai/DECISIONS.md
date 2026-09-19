@@ -202,6 +202,15 @@ Decided by the owner in a four-round question session.
 - **Risks:** RISK-002 grows (D-079); RISK-005 unchanged (D-088); new **RISK-010**, the record-type builder (storage model, performance, reporting and migration of user-defined structures); D-083 must hold in code or D-082 becomes a data leak.
 - **Deferred:** DEF-006, e-mail triggers.
 
+## PHASE 01 — INT requirement round (2026-09-19)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-195 | **Recommendations come from defined rules and calculations only**; every recommendation shows its reasoning and figures, no data leaves the panel, and no AI model is used to produce them. A new recommendation type needs development | Owner 2026-09-19; §26 |
+| D-196 | **An acceleration scenario is "not recommended" when it crosses a defined limit** — legal overtime, daily working hours per person, daily casting per mold count, an open critical OHS finding and similar — and the crossed limit is named; limit values are catalog settings | Owner 2026-09-19; §8.4; D-185 |
+| D-197 | **An approved scenario flows into the targets**: it becomes the project's management target duration, daily targets are recalculated, extra crane or staff needs open as tasks and its bonus pool becomes a bonus rule; no resource moves by itself | Owner 2026-09-19; §8.4 |
+| D-198 | **A recommendation not acted on is closed with a reason** and kept; it comes back if the situation changes markedly; the same issue stays in "Dikkat" if it is there | Owner 2026-09-19; §26 |
+
 ## PHASE 01 — PRF requirement round (2026-09-19)
 
 | ID | Decision | Ref |
