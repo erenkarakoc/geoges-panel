@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Architecture principles have a permanent home
+
+- Before the source folder goes, its fifteen architecture principles were checked one by one against the records. Twelve are already carried by an ADR, a decision or requirements. Three were only implied — one master record per fact, people enter facts and the system computes results, reports read from summary views — so `docs/architecture/PRINCIPLES.md` now states all fifteen and the layer model, each with where it is decided, and binds the three open ones to the phase that must honour them (Phase 04 data model, Phase 02 forms, Phase 03 read models).
+
+
 ## 2026-09-19 — Glossary confirmed
 
 - The owner confirmed the 219 proposed glossary terms in four rounds of grouped questions (15 groups, shown by their Turkish name and meaning). A script checked that the terms shown were exactly the terms pending — none left out, none extra — before marking them. The glossary now holds 234 CONFIRMED terms and no PROPOSED or OPEN ones; OQ-007, TASK-0020 and TASK-0014 are closed. A new term still starts PROPOSED and is confirmed with the module that introduces it.
