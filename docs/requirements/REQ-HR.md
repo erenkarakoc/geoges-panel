@@ -6,7 +6,7 @@ Kaynaklar: Özellik Yapısı §23.1–§23.8; kararlar D-050, D-117, D-134, D-16
 
 **Sınır.** Çalışma takvimi, tatiller ve fazla mesai kuralları REQ-ADM-010…012'dedir (§23.9). Şantiye personelinin puantajı günlük saha kaydında girilir (REQ-SIT-026); HR onu okur. Ayrılış tarihinde erişimin kapanması REQ-IAM-007'dedir. Zimmet kaydı REQ-EQP-007'dedir. Maaş giderinin muhasebesi, ödeme ve muhasebe aktarımı REQ-FIN'dedir. Performans değerlendirmesi REQ-PRF'dedir. Onay mekanizması REQ-WFL'dedir.
 
-**KVKK.** Bu modül gerçek kişisel ve hassas veri tutar (maaş, SGK, IBAN, sağlık raporu). Gerçek İK verisi girilmeden önce RISK-001 ve D-134 (hiçbir verinin silinmemesi) sahibe yeniden sunulur (D-050, REQ-AUD-003).
+**KVKK.** Bu modül gerçek kişisel ve hassas veri tutar (maaş, SGK, IBAN). Sağlık belgesinin kendisi panelde saklanmaz; yalnızca varlığı ve tarihleri tutulur (D-186). Gerçek İK verisi girilmeden önce RISK-001 ve D-134 (hiçbir verinin silinmemesi) sahibe yeniden sunulur (D-050, REQ-AUD-003).
 
 Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Parameter, Salary Advance, Bank Payment File, Leave, Leave Balance, Onboarding Checklist, Offboarding Checklist, Daily Activity Report, Working Calendar.
 
@@ -30,7 +30,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Kaynak: §23.1; REQ-IAM-011
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit
-- Açıklama: Maaş, SGK bilgisi, IBAN, sağlık raporu ve özlük belgeleri hassas kişisel veridir; yalnızca bu veri sınıfını görme izni olan roller (varsayılan: yetkili İK ve sahip) görür.
+- Açıklama: Maaş, SGK bilgisi, IBAN, özlük belgeleri ve sağlık raporunun var olduğu bilgisiyle tarihleri hassas kişisel veridir; sağlık raporunun kendisi panelde saklanmaz, panel dışında tutulur (D-186); yalnızca bu veri sınıfını görme izni olan roller (varsayılan: yetkili İK ve sahip) görür.
 - Kabul kriterleri:
   - [ ] Hassas izni olmayan kullanıcı bu alanları listelerde, dışa aktarmalarda ve kayıt geçmişinde de görmez (REQ-AUD-004).
 - Durum: CONFIRMED
@@ -41,7 +41,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Akış
 - Akışla ayarlanan: uyarı ve yenileme görevinin ne kadar önce ve kime düşeceği
-- Açıklama: Eğitim sertifikası, sağlık raporu, operatör belgesi gibi süreli belgelerin bitiş tarihi yaklaşınca ve geçince uyarı üretilir.
+- Açıklama: Eğitim sertifikası, sağlık raporu, operatör belgesi gibi süreli belgelerin bitiş tarihi yaklaşınca ve geçince uyarı üretilir. Sağlık raporu için yalnızca var/yok ve geçerlilik tarihi tutulur; belgenin kendisi yüklenmez (D-186).
 - Kabul kriterleri:
   - [ ] Süresi geçen zorunlu belge, sebebi çözülene kadar "Dikkat" bölümünde kalır (REQ-RPT-008).
 - Durum: CONFIRMED
@@ -172,7 +172,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Employee, Timesheet, Payroll, Payroll Para
 - Açıklama: İzin türleri (yıllık, mazeret, rapor/hastalık, ücretsiz; liste tanımlardan genişletilebilir) ayrı izlenir. Personel talep eder, iş akışındaki onaydan geçer; kullanılan gün ve bakiye görünür. Yıllık izin hakkını İK her personel için elle girer.
 - Kabul kriterleri:
   - [ ] Bakiyeyi aşan yıllık izin talebi uyarıyla gösterilir.
-  - [ ] Rapor/hastalık izni belge olmadan onaylanmaz.
+  - [ ] Rapor/hastalık izni, raporun var olduğu ve kapsadığı tarihler girilmeden onaylanmaz; rapor belgesinin kendisi panele yüklenmez (D-186).
 - Durum: CONFIRMED
 
 ## E. Giriş ve çıkış

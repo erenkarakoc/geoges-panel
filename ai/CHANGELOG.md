@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-19 — QHS confirmed; medical reports leave the panel
+
+- The owner confirmed REQ-QHS with its derived PPE paper-record rule: 16 more requirements CONFIRMED, 344 in all.
+- D-183 kept health information out of accident records, which left REQ-HR relying on medical reports. The owner settled it (D-186): the panel keeps only that a report exists and its dates — for the personnel file, periodic health reports and sick leave alike — and never the document. REQ-HR-002, -003 and -014 were reworded to say so. Next: PRF.
+
+
 ## 2026-09-19 — QHS requirements
 
 - Four quality and safety decisions (D-182…D-185). A lot that fails a test stays usable and raises a decision task rather than a quarantine; no health information is kept for accidents — which leaves a question for REQ-HR, where medical reports still appear; PPE is handed out by count and confirmed by the person on the phone; and a serious accident or an open critical OHS finding voids a site's speed and bonus target for the period, while reporting a near miss never counts against anyone.

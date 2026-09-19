@@ -1,8 +1,8 @@
 # REQ-QHS — Kalite, Uygunsuzluk ve DÖF, İş Sağlığı ve Güvenliği
 
-Durum: DRAFT · 2026-09-19 · Modül: QHS (Quality, Health & Safety)
+Durum: CONFIRMED (sahip, 2026-09-19) · 2026-09-19 · Modül: QHS (Quality, Health & Safety)
 
-Kaynaklar: Özellik Yapısı §29, §30; kararlar D-050, D-134, D-182…D-185; RISK-001.
+Kaynaklar: Özellik Yapısı §29, §30; kararlar D-050, D-134, D-182…D-186; RISK-001.
 
 **Sınır.** Görev, eskalasyon ve bildirim mekanizması REQ-TSK'dadır; onay ve kilitler REQ-WFL'dedir. Personelin süreli belgeleri REQ-HR-003'te, tüm süreli belgelerin tek listesi REQ-CMP-016'dadır. KKD stoğu REQ-INV'de, periyodik kontrollü ekipman REQ-EQP'dedir. Performans ve prim hesabı REQ-PRF'dedir; QHS o hesaba hangi olayın nasıl gireceğini söyler. Hızlandırma senaryolarındaki kalite ve İSG sınırı (§8.4) REQ-INT'tedir.
 
@@ -21,7 +21,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Açıklama: Her sertifikada tür, parti/lot, ilgili malzeme veya üretim, test tarihi, sonuç/değer, geçti/kaldı, düzenleyen laboratuvar veya kurum, geçerlilik tarihi, belge ve ilgili proje, teklif veya sevkiyat tutulur.
 - Kabul kriterleri:
   - [ ] Bir partinin ekranında o partiye ait bütün sertifikalar görünür; sevkiyat ve proje ekranında da ilgili sertifikalar listelenir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QHS-002 — Sertifika durumu ve yenileme
 
@@ -32,7 +32,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Açıklama: Sertifika geçerlilik tarihine göre "geçerli", "süresi yaklaşıyor" veya "süresi doldu" olarak işaretlenir. Süreli sertifikalar REQ-CMP-016'daki tek listede de görünür.
 - Kabul kriterleri:
   - [ ] Durum geçerlilik tarihinden hesaplanır; elle değiştirilmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QHS-003 — "Kaldı" sonucu uyarı ve karar ister
 
@@ -44,7 +44,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Kabul kriterleri:
   - [ ] "Kaldı" sonucu olan ve kararı girilmemiş parti, stok, sevkiyat ve sarf ekranlarında işaretli görünür.
   - [ ] Karar, kim ve ne zaman bilgisiyle partinin geçmişinde kalır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## B. Saha kalite kontrolleri
 
@@ -57,7 +57,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Açıklama: Proje ihtiyacına göre kontrol kayıtları tutulur: kontrol türü, tarih, şantiye, duvar veya panel tipi, ölçülen değer, uygun/uygun değil, kontrol eden, fotoğraf ve belge.
 - Kabul kriterleri:
   - [ ] "Uygun değil" sonuçlu kontrolden tek adımda uygunsuzluk kaydı açılabilir (REQ-QHS-005).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## C. Uygunsuzluk ve DÖF
 
@@ -71,7 +71,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Kabul kriterleri:
   - [ ] Kök neden ve en az bir aksiyon girilmeden kayıt kapatılamaz.
   - [ ] Gerçek çözüm süresi açılış ve kapanış tarihinden hesaplanır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QHS-006 — Aksiyonlar görev olur, süreyi aşan eskale olur
 
@@ -82,7 +82,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Açıklama: Her düzeltici ve önleyici aksiyon sorumlusuna görev olarak düşer. Hedef çözüm süresini aşan açık kayıt eskale olur. Kaydın kapanması onayla olur.
 - Kabul kriterleri:
   - [ ] Açık aksiyonu olan kayıt kapatılamaz.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QHS-007 — Tekrar eden uygunsuzluk
 
@@ -92,7 +92,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Açıklama: Aynı birim veya süreçte aynı türde tekrar eden uygunsuzluk işaretlenir ve ayrıca raporlanır. Kayıt açılırken benzer geçmiş kayıtlar önerilir; kullanıcı tekrar olduğunu işaretlerse önceki kayda bağlanır.
 - Kabul kriterleri:
   - [ ] Tekrar eden kayıt, bağlandığı önceki kayıtlarla birlikte görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QHS-008 — Uygunsuzluk performansa yansır
 
@@ -102,7 +102,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Açıklama: Uygunsuzluk kayıtları, sayısı, etki seviyesi, tekrar ve çözüm süresiyle ilgili pozisyonun performans verisine geçer. Ağırlıklar REQ-PRF'dedir.
 - Kabul kriterleri:
   - [ ] Performansa geçen her kalem kaynağı olan uygunsuzluk kaydına bağlantı taşır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## D. İSG olayları
 
@@ -115,7 +115,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Kabul kriterleri:
   - [ ] Olay kaydında sağlık bilgisi için alan veya belge türü yoktur.
   - [ ] Olay kaydı yalnızca ilgili şantiyeyi veya fabrikayı görebilen kullanıcılara görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QHS-010 — Olay aksiyonları ve ciddi kaza
 
@@ -126,7 +126,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Açıklama: Olayın açık aksiyonları görev olarak düşer. Ciddi kaza yüksek öncelikle üst yönetime çıkar ve kapanana kadar "Dikkat" bölümünde kalır (REQ-RPT-008).
 - Kabul kriterleri:
   - [ ] Ciddi kaza bildirimi, günlük özeti beklemeden anında gider (REQ-TSK-012).
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QHS-011 — Ramak kala bildirimi hiçbir yerde cezalandırılmaz
 
@@ -136,7 +136,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Açıklama: Ramak kala bildirmek, bildirenin, şantiyenin veya ekibin hiçbir performans, sıralama veya prim hesabında olumsuz sayılmaz. Amaç ramak kalaların saklanmamasıdır.
 - Kabul kriterleri:
   - [ ] Performans ve prim hesaplarında ramak kala sayısı olumsuz yönde hiçbir formüle girmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## E. Eğitim
 
@@ -150,7 +150,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Açıklama: Personelin aldığı eğitimler tür, tarih, veren kurum, geçerlilik süresi ve belgeyle tutulur. Süresi yaklaşan eğitim yenileme görevi oluşturur; süreli belge olarak REQ-HR-003 ve REQ-CMP-016 listelerinde de görünür.
 - Kabul kriterleri:
   - [ ] Bir rol veya iş için zorunlu eğitimi eksik olan personel listelenebilir.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## F. Günlük kontrol, risk değerlendirmesi ve KKD
 
@@ -164,7 +164,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Açıklama: Şantiye veya fabrika ihtiyacına göre günlük İSG kontrol listesi doldurulur: her madde uygun / uygun değil / geçerli değil, açıklama ve fotoğraf.
 - Kabul kriterleri:
   - [ ] "Uygun değil" işaretlenen madde açıklama olmadan kaydedilmez.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QHS-014 — Risk değerlendirmesi
 
@@ -175,7 +175,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Açıklama: Şantiye ve fabrika için risk değerlendirmesi belgesiyle, hazırlayanı, tarihi ve gözden geçirme tarihiyle tutulur; yeni sürüm eskisini silmez.
 - Kabul kriterleri:
   - [ ] Geçerli risk değerlendirmesi olmayan aktif şantiye "Dikkat" bölümünde görünür.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ### REQ-QHS-015 — KKD kişiye adetle teslim edilir
 
@@ -183,11 +183,11 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Öncelik: Must · Kademe: T2
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: KKD türleri ve hangilerinin periyodik kontrol isteyen demirbaş olarak izlendiği
-- Açıklama: KKD stoktan sarf gibi çıkar (REQ-INV) ve kişinin kartına ne, kaç adet ve hangi tarihte verildiği yazılır. Kişi teslim aldığını kendi hesabından telefonda onaylar; panel hesabı olmayan kişi için imzalı teslim tutanağının fotoğrafı yüklenir (D-160 ile aynı yol; D-184'ten türetilen kural, bu dosyanın onayıyla kesinleşir). Emniyet kemeri gibi periyodik kontrol isteyen KKD tek tek demirbaş kartıyla izlenir (REQ-EQP-015).
+- Açıklama: KKD stoktan sarf gibi çıkar (REQ-INV) ve kişinin kartına ne, kaç adet ve hangi tarihte verildiği yazılır. Kişi teslim aldığını kendi hesabından telefonda onaylar; panel hesabı olmayan kişi için imzalı teslim tutanağının fotoğrafı yüklenir (D-160 ile aynı yol; D-184'ten türetilen kural, sahip onayladı). Emniyet kemeri gibi periyodik kontrol isteyen KKD tek tek demirbaş kartıyla izlenir (REQ-EQP-015).
 - Kabul kriterleri:
   - [ ] Kişinin kartında aldığı KKD'lerin geçmişi görünür.
   - [ ] Onayı veya tutanağı olmayan teslim "onay bekliyor" olarak işaretli kalır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ## G. Güvenlik hız ve primin üstündedir
 
@@ -200,7 +200,7 @@ Terimler (`docs/domain/GLOSSARY.md`): Test Certificate, Material Lot, Quality Ch
 - Kabul kriterleri:
   - [ ] Hedefi geçersiz kılan olay, performans ekranında gerekçe olarak bağlantısıyla görünür.
   - [ ] Kritik bulgu kapatıldığında, o dönemin değerlendirmesi dönem kapanmadıysa yeniden yapılır; kapandıysa geçersizlik kalır.
-- Durum: DRAFT
+- Durum: CONFIRMED
 
 ---
 
