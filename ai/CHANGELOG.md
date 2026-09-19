@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-19 — Per-screen states (draft)
+
+- `docs/ui-ux/SCREEN_STATES.md` writes down, for every screen, what it says when it is empty and what it offers to do, and the states only that screen has (a record already decided by someone else, a period that cannot close yet, a price still waiting for its exchange rate). Common rules cover loading, errors, missing permission and a lost connection once for all screens. Awaiting owner review (TASK-0051).
+
+
 ## 2026-09-19 — Daily site log screen confirmed
 
 - The owner confirmed SCR-021 with its four added details (a "no work in this section today" option, skipping the rest on a no-work day, showing who is editing a section, remembering the chosen view). Next: the per-screen state matrix.

@@ -43,4 +43,4 @@ Session date: 2026-09-17/18 · Model: Claude Opus 5 (Claude Code desktop) · Foc
 
 ## Next session
 
-1. Phase 01 is DONE (owner approved 2026-09-19). Phase 02 is current. Agreed order: (1) screen inventory — confirmed (TASK-0048, D-217, D-218); (3) list/detail/form standards — confirmed (TASK-0049, D-219); (4) daily site log UX — confirmed (TASK-0050, D-220; OQ-027 closed); (2) per-screen states; (5) eight end-to-end flows (TASK-0042) with (6) flow designer / record-type builder UX and placement (D-108 round); (7) WCAG targets; (8) custom-element list.
+1. Phase 01 is DONE (owner approved 2026-09-19). Phase 02 is current. Agreed order: (1) screen inventory — confirmed (TASK-0048, D-217, D-218); (3) list/detail/form standards — confirmed (TASK-0049, D-219); (4) daily site log UX — confirmed (TASK-0050, D-220; OQ-027 closed); (2) per-screen states — drafted, awaiting owner review (TASK-0051, `docs/ui-ux/SCREEN_STATES.md`); (5) eight end-to-end flows (TASK-0042) with (6) flow designer / record-type builder UX and placement (D-108 round); (7) WCAG targets; (8) custom-element list.
