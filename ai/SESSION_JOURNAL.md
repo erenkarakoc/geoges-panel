@@ -90,3 +90,5 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-20 00:07:02Z · 6c9e96a0 · Write · `docs/infrastructure/ENVIRONMENTS.md`
 - 2026-09-20 00:07:23Z · 6c9e96a0 · Write · `docs/infrastructure/LOCAL_SETUP.md`
 - 2026-09-20 00:07:43Z · 6c9e96a0 · Write · `docs/infrastructure/CI.md`
+- 2026-09-20 00:13:23Z · 6c9e96a0 · Write · `docs/infrastructure/BACKUP_AND_RECOVERY.md`
+- 2026-09-20 00:14:00Z · 6c9e96a0 · Write · `docs/infrastructure/RUNBOOKS.md`

@@ -19,7 +19,7 @@ Panelin nerede çalıştığı, verinin nerede durduğu ve canlıya geçerken ne
 
 1. **Kabul, sahibin kendi makinesinde yapılır.** Her dilim bitince sahip paneli kendi bilgisayarında açar ve gezer. Kurulum adımları `LOCAL_SETUP.md`'dedir ve her dilimde güncel tutulur.
 2. **Pilot, sunucu gelene kadar yapılamaz.** Saha mühendisi ve koordinatörle yapılacak pilot bir adres ister. Dilim 1 bittiğinde sunucu kararı yeniden gündeme gelir (Phase 09 çıkışı).
-3. **Test verisi sıfırlanabilir, yapılandırma korunur (D-246).** İki ayrı komut vardır (bölüm 4a). **Gerçek veri girdiği gün ikisi de kilitlenir** ve ikinci bir proje açılır (bölüm 5).
+3. **Test verisi sıfırlanabilir, yapılandırma korunur (D-246).** İki ayrı komut vardır (bölüm 4a). **Gerçek veri girdiği gün ikisi de kilitlenir** ve ikinci bir proje açılır (bölüm 6).
 
 ## 3. Sırlar ve erişim
 
@@ -50,7 +50,7 @@ Panelin nerede çalıştığı, verinin nerede durduğu ve canlıya geçerken ne
 ## 5. Göçler
 
 - Şema değişiklikleri sıralı göç dosyalarıdır; her göç Git'te durur ve tek yönde ilerler (`docs/database/CONVENTIONS.md` bölüm 11).
-- Göç çalıştırmadan önce veritabanının yedeği alınır (bölüm 6).
+- Göç çalıştırmadan önce veritabanının yedeği alınır (bölüm 7).
 - Başlangıç verisi (roller, yetki tipleri, kataloglar, akış şablonları) tekrar çalıştırılabilir dosyalardadır; örnek veri ayrı bir dosyadır ve canlıda hiç çalıştırılmaz.
 
 ## 6. Canlıya geçerken değişecekler (ertelenen kararlar)

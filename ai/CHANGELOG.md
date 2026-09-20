@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-20 — Backup plan and runbooks
+
+- `docs/infrastructure/BACKUP_AND_RECOVERY.md` states plainly what would be lost and how fast it comes back: a dump before every migration now, and five things that must exist before any real company data is entered — including a restore actually rehearsed and timed, because an untested backup is not a backup. When live, the date of the last backup and the last drill will be visible on the administration page.
+- `docs/infrastructure/RUNBOOKS.md` writes down what to do when something breaks: the queue stopped, a migration went wrong, a flow instance failed, the exchange rate did not arrive, a key leaked, or nobody can sign in as owner (TASK-0077, TASK-0078).
+
+
 ## 2026-09-20 — Resetting sample data no longer throws away your work
 
 - The owner asked whether the reset command would also wipe the workflows. It would have, which was wrong: a morning spent in the flow designer is not sample data. There are now two commands — one clears sample business records and keeps configuration, the other returns configuration itself to factory state and asks first. Configuration can also be exported and loaded into another environment, so the flows built locally move to the live project instead of being rebuilt by hand (D-246, TASK-0076).
