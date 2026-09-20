@@ -100,3 +100,4 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-20 11:08:46Z · 6c9e96a0 · Write · `docs/architecture/spikes/SPIKE-07-flow-canvas.md`
 - 2026-09-20 11:19:24Z · 6c9e96a0 · Write · `docs/architecture/spikes/SPIKE-10-pdf-quality.md`
 - 2026-09-20 11:27:01Z · 6c9e96a0 · Write · `docs/architecture/spikes/SPIKE-11-tcmb-exchange-rate.md`
+- 2026-09-20 11:43:58Z · 6c9e96a0 · Write · `docs/architecture/spikes/SPIKE-01-rls-correctness.md`

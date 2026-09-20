@@ -1,6 +1,6 @@
 # SPIKE-10 — Sunucuda üretilen PDF kalitesi
 
-Durum: GEÇTİ (iki koşulla) · Tarih: 2026-09-20 · İlgili: `DocumentRenderer` portu (`docs/architecture/PORTS_AND_SERVICES.md`), REQ-QTE, REQ-RPT
+Durum: İNCELEMEDE (görsel doğrulama eksik) · Tarih: 2026-09-20 · İlgili: `DocumentRenderer` portu (`docs/architecture/PORTS_AND_SERVICES.md`), REQ-QTE, REQ-RPT
 
 **Soru.** Teklif belgesi ve resmî günlük rapor, Türkçe karakterlerle ve tablo düzeni bozulmadan, A4'te basılabilir kalitede üretilebiliyor mu?
 
@@ -19,7 +19,7 @@ Durum: GEÇTİ (iki koşulla) · Tarih: 2026-09-20 · İlgili: `DocumentRenderer
 | Metin seçilebilir ve aranabilir | Evet | Evet |
 | Gömülü yazı tipi | 4 alt küme | 2 alt küme |
 
-Sayfa ölçüsü, kenar boşlukları, sağa hizalı para sütunları, binlik ayraçlı sayılar ve satır kırılmaları bozulmadı.
+2026-09-20 öz inceleme düzeltmesi: sayfa ölçüsü ve metin çıkarımı doğrulandı; sayfalar görüntüye dönüştürülüp incelenmedi. Kenar boşlukları, sütun hizası ve satır kırılmalarının görsel olarak bozulmadığı henüz kanıtlanmadı. Önceki GEÇTİ sonucu bu nedenle geri alındı; iki PDF bütün sayfalarıyla görsel olarak incelenmeden TASK-0080 kapanmaz.
 
 ## İki koşul
 

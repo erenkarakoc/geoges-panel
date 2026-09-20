@@ -189,6 +189,8 @@ Rules written only as prose depend on a model remembering them at the right mome
 
 A failure prints the file, the line and what to fix. Forward references — records citing files the roadmap has not produced yet, such as `docs/requirements/REQ-*.md` — are counted on one line rather than listed; `npm run records -- --verbose` lists them. A gate that prints forty lines on every commit stops being read. The validator is amended whenever a new class of contradiction is found; a contradiction found twice is a missing check.
 
+13. The roadmap overview has exactly one `IN_PROGRESS` phase; `ai/CURRENT_STATE.md` and `ai/SESSION_HANDOFF.md` each have exactly one `CURRENT PHASE: PHASE NN` line matching it (TASK-0085). Historical prose is not interpreted by this check. When the final phase finishes, this guard must be extended to represent project completion explicitly.
+
 ### 21.2 The session journal
 
 `ai/SESSION_JOURNAL.md` is append-only and written by a `PostToolUse` hook in `.claude/settings.json`, not by the model. Every file-modifying tool call appends one line: timestamp, session id, tool, path. The model never edits it; the file is committed with the work.

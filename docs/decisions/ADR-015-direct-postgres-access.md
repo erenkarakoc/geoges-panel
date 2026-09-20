@@ -30,10 +30,12 @@ Bağlantı havuzu ve oturum değişkeni yönetimi bizde kalır; PostgREST'in haz
 Oturum değişkeni yazılmadan açılan bir işlem yetkisiz veri görebilir. Önlem: bağlantı yalnız veri katmanında açılır ve sözleşme testi bunu denetler (`docs/architecture/MODULE_BOUNDARIES.md` bölüm 5). Doğrulama: SPIKE-01, SPIKE-02.
 
 ## Geçiş (Migration) Notları
-Karar Phase 06 denemesine kadar geçicidir (OQ-020). Deneme kalırsa seçenek 1'e dönülür ve outbox veritabanı tetikleyicisiyle yazılır.
+Phase 06'da SPIKE-01 ve SPIKE-02 ölçütleri 2026-09-20'de karşılandı: daraltılmış rol yetkileriyle 12 güvenlik kontrolü; 100 binin üzerinde kayıtta üç ağ turlu parametreli liste/detay işlemlerinde p95 239–240 ms. Raporlar: `docs/architecture/spikes/SPIKE-01-rls-correctness.md`, `docs/architecture/spikes/SPIKE-02-rls-performance.md`.
+
+Phase 07'ye zorunlu uygulama koşulları: uygulama rolü yetki tablolarını doğrudan değiştiremez; kimlik işlem yereldir ve doğrulanmış sunucu oturumundan gelir; sorgu girdileri parametrelidir; TLS sertifikası doğrulanır. Deneme yardımcısının geniş başlangıç yetkileri ve kapalı sertifika doğrulaması ürüne kopyalanmaz. Tam IAM, ayrı giriş rolü ve eşzamanlı yük testleri ürün kapısında ayrıca doğrulanır.
 
 ## Tarih
 2026-09-20
 
 ## Durum
-Kabul edildi (SPIKE-01 ve SPIKE-02 ile doğrulanacak)
+Kabul edildi (SPIKE-01 ve SPIKE-02'nin ölçülen kapsamı doğrulandı; Phase 07 uygulama koşulları yukarıda)

@@ -5,10 +5,10 @@ Last updated: 2026-09-20
 ```text
 PROJECT STATUS:      DESIGN
 CURRENT PHASE:       PHASE 06 — Validation Spikes (Phase 05 DONE 2026-09-20, owner approved)
-CURRENT SUBPHASE:    PLANNING
+CURRENT SUBPHASE:    TESTING
 CURRENT FEATURE:     —
-CURRENT TASK:        Phase 06 spikes — 16 throwaway experiments, starting with the ones that carry the architecture (SPIKE-01, 02, 03)
-STATUS:              DESIGNING
+CURRENT TASK:        SPIKE-01/02/03 verified; next SPIKE-04/05/06. SPIKE-10/11 reopened for missing acceptance evidence.
+STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
 CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 and CHG-006 are both folded. Normal ADR-007 rule applies — Phase 06 writes **throwaway spike code only** (never shipped); product code resumes in Phase 07 or via an approved change request.
@@ -18,6 +18,8 @@ CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 a
 ```
 
 ## LAST COMPLETED TASK
+2026-09-20: SPIKE-01/02/03 reports (TASK-0082…TASK-0084): restricted grants and 12 RLS assertions; parameterized list/detail/stock transactions at p95 239–240 ms; 10,000 ordered events with process-exit rollback and duplicate suppression. Resume pointers repaired and machine-checked (TASK-0085).
+
 Phase 05 DONE (2026-09-20, owner approved): local-first operation with no staging and hosting deferred (D-245), two reset commands and portable configuration (D-246), CI gate, owner setup guide, backup and recovery plan, eleven runbooks (TASK-0073…TASK-0078).
 
 Earlier: Phase 04 DONE (2026-09-20, owner approved): 211 tables in six schema documents plus conventions and the coverage check (TASK-0065…TASK-0072, D-243, D-244).
@@ -31,19 +33,19 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Phase 03: agree the work plan with the owner — module public APIs and boundary specs, event backbone (outbox, dispatch, idempotency, retries), workflow engine architecture (ADR-006 with CHG-006: triggers D-103, approval outcomes D-099, for-each D-096, record node D-095, windowed conditions D-100, traceability D-087, versioning and templates D-086, authority model D-082/D-083), rules and configuration model with effective dating, custom fields, search architecture (TASK-0029), the storage direction for user-defined record types, and the Phase 06 spike list.
-2. OQ-026 (password policy) is answered in Phase 03.
-3. TASK-0043: rename `dashboard`/`widget` in code to match the glossary (Phase 07).
-4. TASK-0018: re-check after 2026-10-15 that the worker keeps storing observations via the `CLAUDE_CODE_OAUTH_TOKEN` fallback.
+1. SPIKE-04/05/06: version-pinned workflow instances, dry-run equivalence, windowed condition limits.
+2. Remaining Phase 06 experiments follow the order in `docs/architecture/spikes/README.md`. SPIKE-10 needs rendered PDF inspection; SPIKE-11 needs missing-rate/recovery assertions. Neither is waived or complete.
+3. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076; no product code in Phase 06.
+4. TASK-0018: re-check memory-worker authentication after 2026-10-15; do not stop the worker or invoke cloud-sync.
 
 ## BLOCKED BY
 None.
 
 ## OPEN QUESTIONS
-See `ai/OPEN_QUESTIONS.md`. OQ-028 (workflow platform direction) **answered and folded 2026-09-18** → CHG-006, D-077…D-105. Also open: OQ-010…OQ-017, OQ-020, OQ-026 (later phases).
+See `ai/OPEN_QUESTIONS.md`. OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.
 
 ## RECENT DECISIONS
-- 2026-09-19: Phase 01 still open — all exit deliverables in — permission matrix (TASK-0045, D-215), domain model (TASK-0046), slice order and pilots (TASK-0047, D-216); awaiting owner approval of the exit; KVKK inventory deferred (D-214, DEF-007)
+- 2026-09-20: Phases 01–05 are owner-approved DONE; Phase 06 is current. Local-first operation D-245 and separate reset/configuration tools D-246 remain in force.
 - 2026-09-19: glossary confirmed by the owner — 234 terms CONFIRMED, OQ-007 closed
 - D-213 (2026-09-19, TASK-0039): every scope § citation replaced by REQ ids; section map in `docs/requirements/README.md`; scope at Git tag `scope-archive`; validator rejects an unnamed §
 - D-209…D-212 (2026-09-19, NFR round): RPO ≤ 1 h, RTO ≤ 4 h, Turkish-only interface, sizing for 50–150 users

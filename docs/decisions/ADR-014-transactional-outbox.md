@@ -38,3 +38,7 @@ Outbox satırları silinmez (D-231). Dış kuyruğa geçilecekse yalnız outbox 
 
 ## Durum
 Kabul edildi
+
+## Phase 06 doğrulaması (2026-09-20)
+
+SPIKE-03'te ilk seçim yalnız `SKIP LOCKED` kullandığı için kayıt sırasını korumadı. Düzeltilmiş denemede aynı kaydın önceki teslimi bitmeden sonraki olay seçilmiyor; teslim ve etki aynı işlemde yazılıyor. Kaynak/olay geri alma, işlem ortasında süreç kapanması, üç işleyiciyle 10.000 sıralı olay ve 500 tekrarda sıfır ek etki doğrulandı. Kararın teslim garantisi değişmedi. Ürün işleyicisi bu negatif testleri de taşımalı. Ayrıntı ve sınırlar: `docs/architecture/spikes/SPIKE-03-outbox-reliability.md` (TASK-0084).

@@ -1,6 +1,6 @@
 # SPIKE-11 — TCMB kuru
 
-Durum: GEÇTİ · Tarih: 2026-09-20 · İlgili: REQ-ADM-013, REQ-ADM-014, REQ-ADM-015, ADM-K4
+Durum: İNCELEMEDE (kesinti ve iyileşme testi eksik) · Tarih: 2026-09-20 · İlgili: REQ-ADM-013, REQ-ADM-014, REQ-ADM-015, ADM-K4
 
 **Soru.** TCMB döviz alış kuru her iş günü güvenilir alınıyor mu? Alınamadığında `exchange_rate.missing` çıkıp tutarlar "kur bekliyor" işaretleniyor ve ertesi gün kendiliğinden tamamlanıyor mu?
 
@@ -40,3 +40,5 @@ Gereksinimin istediği alan `ForexBuying`'dir (döviz alış, REQ-ADM-013).
 ## Ölçümün sınırları
 
 Bir günlük gözlem; TCMB'nin uzun süreli kesintisi denenmedi. Bu yüzden "gün sonunda hâlâ yoksa" kuralı tasarımın parçası olarak kaldı: panelin davranışı kesintiye değil, kurun yokluğuna bağlıdır.
+
+2026-09-20 öz inceleme düzeltmesi: sağlayıcı yanıtları ve XML gözlemleri, `exchange_rate.missing` olayı, bekleyen tutarlar ve sonraki gün kendiliğinden tamamlama zincirini sınamıyor. Önceki GEÇTİ sonucu geri alındı. TASK-0081 bu üç davranışın otomatik testleriyle tamamlanacak; kabul ölçütü daraltılmadı.

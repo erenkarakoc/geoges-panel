@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-20 — Revalidated database spikes and repaired resume records
+
+- TASK-0082…TASK-0084: corrected a self-grant weakness in the throwaway RLS fixture; 12 assertions now pass. Parameterized transactions meet the 300 ms target at p95 239–240 ms. The outbox selection initially violated record order; corrected selection passes atomic rollback, abrupt process exit, 10,000 ordered events and 500 duplicate deliveries. Reports preserve both failures and verification limits. No product code or product tables changed.
+- TASK-0085: replaced stale phase pointers and handoff, added deterministic roadmap/state/handoff comparison, and corrected the obsolete staging acceptance wording under D-245.
+- TASK-0080 and TASK-0081 reopened to REVIEW: prior PDF text extraction did not prove visual quality; TCMB response timing did not prove missing-rate/recovery behavior. Earlier changelog entries describe the conclusions at that time and are superseded by this audit.
+
+
 ## 2026-09-20 — SPIKE-11 passed: the exchange rate is reachable and fast
 
 - Fifteen requests to the central bank, fifteen answers, thirty milliseconds each. Weekends simply have no bulletin, which the panel must read as "no rate today" rather than as a failure. Three traps were found and written down: the "current" bulletin is not always yesterday's (it changes when the bank publishes in the afternoon, so the panel must ask for a specific date and check the date it gets back), the file carries the date twice in two different formats, and some currencies are quoted per hundred units (TASK-0081).

@@ -192,6 +192,39 @@ const PHASE_STATUSES = new Set([
 }
 
 // ---------------------------------------------------------------------------
+// 2b. Resume pointers must identify the roadmap's one active phase.
+// ---------------------------------------------------------------------------
+
+{
+  const roadmap = CONTENT.get("ai/MASTER_ROADMAP.md") ?? "";
+  const active = [
+    ...roadmap.matchAll(/^\|\s*(\d{2}[A-Z]?)\s*\|[^|]*\|[^|]*\|\s*IN_PROGRESS\s*\|/gm),
+  ].map((match) => match[1]);
+  if (active.length !== 1) {
+    fail(
+      "ai/MASTER_ROADMAP.md",
+      1,
+      "Expected exactly one IN_PROGRESS phase",
+      "mark the current phase in the overview table",
+    );
+  } else {
+    for (const file of ["ai/CURRENT_STATE.md", "ai/SESSION_HANDOFF.md"]) {
+      const pointers = [
+        ...(CONTENT.get(file) ?? "").matchAll(/^CURRENT PHASE:\s+PHASE (\d{2}[A-Z]?)\b/gm),
+      ];
+      if (pointers.length !== 1 || pointers[0][1] !== active[0]) {
+        fail(
+          file,
+          1,
+          `CURRENT PHASE must identify PHASE ${active[0]} exactly once`,
+          "synchronize the resume pointer with MASTER_ROADMAP",
+        );
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
 // 3. Every change request in DECISIONS.md is in the roadmap's change register
 // ---------------------------------------------------------------------------
 

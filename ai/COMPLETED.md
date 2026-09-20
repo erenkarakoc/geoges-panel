@@ -2,8 +2,14 @@
 
 Only items whose quality gate passed are listed here.
 
+2026-09-20: SPIKE-10 (TASK-0080) and SPIKE-11 (TASK-0081) are reopened to REVIEW; their earlier reports did not cover every acceptance criterion. See the spike index and CHANGELOG. They are not completed items.
+
 | Date | ID | Item | Gate |
 |---|---|---|---|
+| 2026-09-20 | TASK-0082 | RLS spike: least-privilege correction and 12 assertions | T1 spike PASS; self-review and limits in report |
+| 2026-09-20 | TASK-0083 | 100k-row RLS performance: parameterized transactions below 300 ms | T1 spike PASS; 20 samples per query, self-review in report |
+| 2026-09-20 | TASK-0084 | Ordered outbox: 10k events, atomic rollback, process exit and replay | T1 spike PASS; 10 assertions, self-review in report |
+| 2026-09-20 | TASK-0085 | Resume phase consistency guard and stale-record repair | T2 PASS; three negative probes and valid-state check |
 | 2026-09-15 | TASK-0001 | Local Git repository initialized (`main`), remote `origin` → `github.com/erenkarakoc/geoges-panel` | T3 PASS |
 | 2026-09-15 | TASK-0007 | Skill audit (sources, pinned commits, bundled executables, licenses) | T2 PASS |
 | 2026-09-15 | TASK-0008 | 8 skills vendored into `.claude/skills/` at pinned commits | T1 PASS (content verified: markdown only except Tailwind sync script, not executed) |
