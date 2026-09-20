@@ -401,6 +401,10 @@ Bu ayrım kök nedeni kanıtlamaz, yalnız arama yolu ile örnek düzeyindeki ma
 
 ### Veritabanında kalanlar
 
-Aday `spike.s12r_range_search(text)`, `spike.s12r_range_request(uuid,text)` ve `s12r_words_exact_cover` **kaldırılmadı**; kaldırma sahibin onayını bekliyor. Asıl `spike.s12r_bucket_search(text)` ve `spike.s12r_request_search(uuid,text)`, kaynak GiST ve birincil indeksler, RLS kuralları ve 500.411 sözcük satırı değişmedi. Bu oturumda ürün kodu yazılmadı, bölge taşınmadı, oturum sonlandırılmadı, reset yapılmadı ve hedef gevşetilmedi. TASK-0090/0091 REVIEW, OQ-029 açık.
+Sahibin "en uygun gördüğün şekilde" talimatıyla geri alma uygulandı. **`s12r_words_exact_cover` kaldırıldı.** Gerekçe: ürün tasarımında böyle bir indeks yoktur, dolayısıyla onu bırakmak sonraki soğuk ölçümü ürün temel çizgisi yerine reddedilmiş bir yapılandırmada yapmak olurdu. Dokuz kontrol geçti: indeks gitti, `s12r_words_pkey` ve `s12r_words_gist` yerinde, dört fonksiyon yerinde, 500.411 satır değişmedi (`search12r-candidate-rollback-*.json`).
+
+Aday aralık fonksiyonları `spike.s12r_range_search(text)` ve `spike.s12r_range_request(uuid,text)` **bilerek korundu.** İndeks kalkınca aralık yazımı bedelsiz ve ölçülebilir bir kazanca dönüşür — nadir terimde 0,905 ms ve 20 blok, asıl yolda 1,092 ms ve 79 blok; `uretim 499999` örneğinde 1,392 ms ve 143 blok, asıl yolda 2,213 ms ve 301 blok. Bu, ürün tasarımına taşınmayı hak eden tek öneridir ve henüz benimsenmemiştir; 300 ms ilk-istek sorununa etkisi yoktur.
+
+Asıl `spike.s12r_bucket_search(text)` ve `spike.s12r_request_search(uuid,text)`, kaynak GiST ve birincil indeksler, RLS kuralları ve 500.411 sözcük satırı değişmedi. Bu oturumda ürün kodu yazılmadı, bölge taşınmadı, oturum sonlandırılmadı, reset yapılmadı ve hedef gevşetilmedi. TASK-0090/0091 REVIEW, OQ-029 açık.
 
 Kanıt dosyaları dış scratchpad'de: `search12r-range-waits-1789943726422.json`, `search12r-warmup-arms-*.json`, `search12r-ab-warm-*.json`, `search12r-index-cost-*.json`, `search12r-fixture-restore-*.json`, `search12r-poststats-*.json`. Betikler aynı adları taşır. Hız kapısı `search12r-speed-gate.mjs` zaman damgalı soğuk kanıtları da okuyacak biçimde genişletildi ve FAIL veriyor.
