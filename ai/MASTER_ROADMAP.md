@@ -208,7 +208,7 @@ STATUS: DONE
 - **Candidate spikes:** Supabase Auth + RLS with multi-role, delegation and acting role; transactional outbox + job processing on the chosen stack; workflow engine definition model + versioned execution; visual flow editor feasibility with COSS/Base UI; R2 signed URLs + permission-checked downloads; Turkish-quality PDF generation (quote documents, daily report); CBRT exchange-rate fetch with fallback; architecture boundary enforcement tooling.
 - **Dependencies:** Phases 03–05 (all DONE).
 - **Status:** `IN_PROGRESS` — **current phase since 2026-09-20.** Spike list and pass criteria: `docs/architecture/spikes/README.md` (16 spikes).
-- **Validation finding (2026-09-20):** SPIKE-12 failed the 300 ms target for no-match searches under RLS. ADR-017 is under technical review; TASK-0091 retries the PostgreSQL/RLS design before SPIKE-14. Eight spikes have passed; search is not complete. No security or performance criterion was waived (OQ-029).
+- **Validation finding (2026-09-20):** SPIKE-12 initially failed no-match search. TASK-0091's three-helper-table prototype now passes 73 checks and 18 warm scenarios at p95 220–258 ms on 500k rows. First executions reached 461/371 ms; the model/word-matching proposal awaits owner approval (OQ-029). ADR-017 remains under review; eight spikes are complete, search is not. Resolve adoption and first-execution speed before SPIKE-14; no criterion is waived.
 - **Deliverables:** spike reports in `docs/architecture/spikes/`, ADR updates.
 - **Acceptance:** every candidate spike is PASS, FAIL (with ADR change) or explicitly waived by owner.
 - **CHG-006 spikes:** user-defined record types end to end (definition → storage → RLS → search → report); free-form windowed conditions under load.

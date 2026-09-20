@@ -47,7 +47,7 @@ Kurallar:
 - Belge içeriği arama satırına girmez; arşivin kendi içerik araması ayrıdır (D-227). Metni çıkarılmamış belge "okunuyor" olarak işaretlenir (REQ-DOC-004).
 - Hacim büyüdüğünde ayrı arama motoruna geçiş, bu tasarımı bozmadan bir adaptör değişimidir.
 
-**Doğrulama notu, 2026-09-20:** SPIKE-12, RLS altındaki boş sonuç sorgularında 300 ms hedefinden kaldı. ADR-017'nin teknik düzeni yeniden incelemede (TASK-0091, OQ-029); yalnız GIN + trigram kurmak yeterli kabul edilemez. PostgreSQL yönü ve yetki kuralları korunur; ürün araması çözüm tekrar sınanmadan uygulanmaz.
+**Doğrulama notu, 2026-09-20:** İlk SPIKE-12 düzeni boş sonuçlarda 300 ms hedefinden kaldı. TASK-0091'in üç yardımcı tablo kullanan prototipi 73 kontrolden ve 18 sıcak sorgu senaryosundan geçti (p95 220–258 ms). İlk çalıştırmalarda 461/371 ms görüldü. Yardımcı model ve sözcük davranışı önerisinin sahip onayı ile kalan hız doğrulaması açık (OQ-029); ADR-017 incelemede kalır. Bu not onaylı veri modelini genişletmez. Ayrıntı: `docs/architecture/spikes/SPIKE-12-search-retry.md`.
 
 ## 4. Canlı güncelleme (D-240, D-232)
 

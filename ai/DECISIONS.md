@@ -2,6 +2,18 @@
 
 Last updated: 2026-09-20
 
+## Proposed search-model amendment — owner approval pending (OQ-029, TASK-0091)
+
+This is an impact analysis under PROJECT_RULES §9, **not an approved decision**. No new D id or approved phase change is recorded. D-239's PostgreSQL direction, RLS and the 300 ms target stand.
+
+- **Change and reason:** add three scope-protected derived search structures (word/record postings, scoped vocabulary, sorted record-id buckets). The prototype passed 73 checks and 18 warm scenarios at p95 220–258 ms on 500k rows; simpler tested index shapes failed. First executions at 461/371 ms remain unresolved, so SPIKE-12 is not complete.
+- **Requirements/features/tasks:** preserve REQ-NFR-012, REQ-IAM-011 and D-227; affects global search, ADR-017 and TASK-0090/0091. Proposed semantics require every query word in the same record, regardless of order; spelling correction applies only when an exact word is absent from the authorized vocabulary. This is not silently adopted as a business rule.
+- **Database/dependencies:** retain the search row; propose the three projections plus pg_trgm/btree_gist/intarray. About 481 MiB extra including indexes in this fixture. RUM was rejected and removed. Product UUIDs need a capacity-checked search-id mapping rather than an int4 cast; scalar fixture scopes must become the approved generic scope model. The confirmed 211-table inventory is unchanged pending approval and design.
+- **Backend/APIs/UI/permissions:** keep the existing search port and grouped results, no new UI element or external service. Every helper must share scope RLS, source rows recheck permission, changes take effect next request. No privileged user-query path. Total counts/pagination must use identical filters separately.
+- **Tests/migration:** validate first execution, concurrency, real scope kinds, UUID mapping, normalization, changing records/permissions, more record types and ambiguous spelling candidates. Build projections deterministically from search rows and compare before switching reads. Search row and projection updates must be atomic and repeat-safe; SPIKE-14 must verify rebuild without business effects.
+- **Backward compatibility/rollback/risks:** business sources unchanged; retain a reversible read-path switch, but the old slow path cannot satisfy acceptance. Added storage/write/rebuild cost and unbounded candidate work remain risks. Warm timing is not an all-requests SLA or a waiver of cold latency.
+- **Recommendation:** approve this architecture direction and word semantics, then fold the precise schema/dependency plan and resolve first-execution performance before closing search and proceeding to SPIKE-14. Approval alone does not pass the outstanding tests. Report: `docs/architecture/spikes/SPIKE-12-search-retry.md`.
+
 ## PHASE DECISION SUMMARY — PHASE 00 (2026-09-15)
 
 Decided by the owner in a four-round question session.

@@ -88,7 +88,7 @@ Belgenin kapsamı ve veri sınıfı **bağlı kayıttan** türetilir; RLS politi
 | `core.outbox_delivery` | Abone × olay teslimi | `outbox_id`, `subscriber`, `status`, `attempts`, `last_error`, `processed_at` | Tekrarsızlık anahtarı `(outbox_id, subscriber)` |
 | `core.dead_letter` | Beş denemede teslim edilemeyen | `outbox_id`, `subscriber`, `error`, `payload` | Sahip katmanına kritik bildirim üretir |
 | `core.scheduled_job` | Zamanlanmış iş ve uyandırma | `job_type`, `run_at`, `idempotency_key`, `payload`, `status` | Akışın bekleme adımları burada (WORKFLOW_ENGINE bölüm 4) |
-| `core.search_row` | Arama satırı | `record_*`, `record_type`, `title`, `secondary`, `search_vector`, `scope_type`, `scope_ids[]` | GIN + trigram yönü ADR-017'de; RLS altında hız SPIKE-12'de başarısız, teknik indeks/sorgu düzeni TASK-0091 ile yeniden doğrulanacak. Ticari/hassas alan girmez |
+| `core.search_row` | Arama satırı | `record_*`, `record_type`, `title`, `secondary`, `search_vector`, `scope_type`, `scope_ids[]` | ADR-017 yeniden incelemede: TASK-0091 sıcak sorgularda geçti; ilk sorgu hızı ve üç yardımcı arama tablosu önerisinin onayı açık (OQ-029). Bu onaylı liste henüz genişletilmedi. Ticari/hassas alan girmez |
 
 `core` şeması modüllerin ortak altyapısıdır; iş verisi tutmaz ve yalnız platform kodu yazar.
 

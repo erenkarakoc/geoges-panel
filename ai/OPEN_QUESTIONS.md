@@ -8,7 +8,7 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 
 | ID | Category | Question | Proposed answer | Blocks |
 |---|---|---|---|---|
-| OQ-029 | Architecture validation | OPEN 2026-09-20: which PostgreSQL query/index design meets the 300 ms search target while preserving RLS? SPIKE-12 failed no-match queries; correctness controls passed. | TASK-0091 tests a revised design within D-239 first. The combined search-in-policy prototype did not solve both query modes. No new provider, weaker permission model or relaxed target has been approved. | Product search implementation and Phase 06 exit until a validated resolution |
+| OQ-029 | Architecture validation | OPEN 2026-09-20: adopt the scoped helper-index model and all-words matching proposal, then resolve first-execution latency? | TASK-0091: 73 checks passed, 18 warm scenarios p95 220–258 ms on 500k rows. Three derived tables add about 481 MiB; first executions reached 461/371 ms. Detailed proposal in DECISIONS and `docs/architecture/spikes/SPIKE-12-search-retry.md`. No owner approval or speed waiver recorded. | Product search implementation and Phase 06 exit until approval and remaining speed validation |
 
 ## Phase 00 — answered domain question
 

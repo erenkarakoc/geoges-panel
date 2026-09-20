@@ -21,23 +21,32 @@ Seçenek 2 (D-239). Ayrıntı: `docs/architecture/PORTS_AND_SERVICES.md` bölüm
 Yetki süzmesi RLS ile aynı yerde kalır; işletilecek tek sistem; şirket ölçeğinde yeterli.
 
 ## Avantajlar
-Tek veri kaynağı; tutarlı yetki; ek işletme maliyeti yok. Türkçe harf duyarsızlığı, sorgu ve indekslenen metne aynı açık normalleştirmeyi uygulayarak sağlanır; trigram ayrıca yazım yakınlığı içindir.
+Tek veri kaynağı; tutarlı yetki; ayrı arama hizmeti işletilmez. İndekslerin disk, yazma ve bakım maliyeti vardır. Türkçe harf duyarsızlığı, sorgu ve indekslenen metne aynı açık normalleştirmeyi uygulayarak sağlanır; trigram ayrıca yazım yakınlığı içindir.
 
 ## Dezavantajlar
 Eş anlam sözlüğü ve gelişmiş ağırlıklandırma sınırlı; çok büyük hacimde yavaşlar.
 
 ## Riskler
-Hacim büyürse arama yavaşlar. SPIKE-12'de RLS altındaki sorgular olumlu örneklerde hızlı olsa da boş sonuçlarda GIN indekslerini kullanmadı ve 300 ms hedefini aştı. Teknik düzen TASK-0091 ile yeniden doğrulanacak; çözüm doğrulanmadan arama ürün koduna taşınmaz. Başka motora geçiş kararı alınmadı.
+Hacim büyürse arama yavaşlar. İlk SPIKE-12 düzeni RLS altında boş sonuçlarda GIN indekslerini kullanmadı ve 300 ms hedefini aştı. TASK-0091'in yardımcı veri modeli sıcak sorgularda hedefi sağladı; ilk çalıştırma hızı ve ürün modeline alma onayı açık. Çözüm doğrulanmadan arama ürün koduna taşınmaz. Başka motora geçiş kararı alınmadı.
 
 ## SPIKE-12 bulgusu — 2026-09-20
 
 500.000 satırda 36 doğruluk/bütünlük kontrolü geçti; boş tam metin ve benzerlik aramalarında p95 398 ve 2.846 ms ölçüldü. Denenen birleşik alternatif sorunu çözmedi. RLS veya hedef süre değiştirilmedi. D-239'un PostgreSQL yönü korunuyor; bu ADR'nin mevcut sorgu/indeks varsayımı tekrar incelemede. Ayrıntı: `docs/architecture/spikes/SPIKE-12-turkish-search.md`; açık konu OQ-029.
 
 ## Geçiş (Migration) Notları
+
+### TASK-0091 önerisi — henüz onaylı karar değildir
+
+Üç kapsam korumalı yardımcı tablo, sözcük/kayıt eşlemelerini ve kayıt dizilerini tutar; intarray kesişimi çok sözcüklü sorguyu daraltır. 500.000 kayıtta 73 kontrol geçti; 18 sıcak senaryoda p95 220–258 ms. İlk çalıştırmalarda 461/371 ms görüldü. Ek tablo ve indeksler yaklaşık 481 MiB; btree_gist ve intarray ek bağımlılıkları önerilir. RUM denendi, elendi ve kaldırıldı.
+
+Önerilen davranışta bütün sorgu sözcükleri aynı kayıtta bulunur; yalnız yetkili sözlükte aynen bulunmayan sözcüklere yazım yakınlığı uygulanır. Ürün UUID/kapsam modeline uyarlama, atomik güncelleme, yeniden kurma, ilk sorgu ve eşzamanlılık doğrulaması tamamlanmadan ürün kabulü yapılamaz. Ayrıntılı etki analizi: `docs/architecture/spikes/SPIKE-12-search-retry.md`; sahip kararı OQ-029'da beklenir. Onaylı Phase 04 tablo listesi henüz değiştirilmedi.
+
+### Mevcut geçiş yönü
+
 Arama satırı modeli korunarak dış motora aktarılabilir; kaynak veri her zaman modüllerdedir.
 
 ## Tarih
 2026-09-20
 
 ## Durum
-YENİDEN İNCELEMEDE — SPIKE-12 hız ölçütünden kaldı; TASK-0091 doğrulaması bekleniyor. Önceki sahip onayı D-239 korunur, teknik yeterlilik henüz kanıtlanmadı.
+YENİDEN İNCELEMEDE — TASK-0091 sıcak sorgu ölçütünü sağladı; ilk çalıştırma hızı ve yardımcı model/sözcük davranışı onayı bekleniyor. D-239 korunur; SPIKE-12 tamamlandı sayılmaz.

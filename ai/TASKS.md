@@ -88,8 +88,8 @@ Last updated: 2026-09-20 · Format: `docs/standards/ID_STANDARDS.md`
 
 | TASK-0089 | SPIKE-08: custom record types end to end | T1 | DONE | TASK-0064 | Phase 06. 48 checks including two reproduced/fixed fixture flaws; 50,001 records, shared RLS, typed input, links, search/report, field retirement and definition history. List p95 240 ms, numeric filter p95 270 ms. Report: `docs/architecture/spikes/SPIKE-08-custom-record-types.md`. Data spike only, no UI/product code |
 
-| TASK-0090 | SPIKE-12: Turkish search, scoped results and 500k-row performance | T1 | REVIEW | TASK-0064 | FAIL on speed; 36 correctness/integrity checks passed. No-match full-text/fuzzy p95 398/2846 ms on 500k rows. ADR-017 under review; retry in TASK-0091. Report: `docs/architecture/spikes/SPIKE-12-turkish-search.md`. Not DONE, no product code |
-| TASK-0091 | Revise and revalidate RLS-preserving search queries and indexes | T1 | NOT_STARTED | TASK-0064 | Follow-up to TASK-0090 and OQ-029. First seek a PostgreSQL solution preserving RLS and the 300 ms target; test empty/rare/common/typo queries, broad/narrow scope, best five per group and consecutive requests. Do not waive criteria or change provider/security model without an explicit decision. Precedes SPIKE-14 |
+| TASK-0090 | SPIKE-12: Turkish search, scoped results and 500k-row performance | T1 | REVIEW | TASK-0064 | Original failure preserved in `docs/architecture/spikes/SPIKE-12-turkish-search.md`. TASK-0091 now has 73 passing checks and warm p95 220–258 ms; cold observations exceed 300 ms and the helper-index proposal needs owner approval. Not DONE; OQ-029 open |
+| TASK-0091 | Revise and revalidate RLS-preserving search queries and indexes | T1 | REVIEW | TASK-0064 | Report: `docs/architecture/spikes/SPIKE-12-search-retry.md`. 500k rows, 73 checks, 18 warm scenarios below 300 ms. Three helper projections add about 481 MiB; adoption and word-matching semantics proposed, not approved. First executions 461/371 ms remain unresolved. Precedes SPIKE-14; no product code |
 
 ## CHG-003 / CHG-004 — early UX and shell delivery
 

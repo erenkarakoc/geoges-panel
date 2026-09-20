@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Search retry passes warm measurements; adoption and cold latency remain open
+
+- TASK-0091 / SPIKE-12: 73 correctness/review checks passed on 500k synthetic rows. After removing rejected RUM/GiST alternatives, 18 scenarios with 20 timed samples each gave warm p95 220–258 ms, maximum 258 ms. First executions after cleanup reached 461/371 ms; neither task is DONE and no performance waiver is recorded.
+- Proposed three scoped helper projections and all-words matching with scoped spelling correction; about 481 MiB extra storage in this fixture. Recorded impact analysis and owner approval point in DECISIONS/OQ-029; confirmed Phase 04 tables and D-239 remain unchanged. Reports preserve failed variants, cold observations, UUID/scope adaptation needs and atomic update/rollback evidence. Updated all active search status pointers; eight spikes remain complete. No product source or UI changes.
+
 ## 2026-09-20 — Turkish search passed correctness but failed performance
 
 - TASK-0090 / SPIKE-12 remains REVIEW, not DONE: 36 correctness/integrity checks passed on 500,000 synthetic rows. Existing-match p95 was 219–225 ms, but no-match full-text/fuzzy p95 was 398/2846 ms. The query-plan comparison exposed unused GIN indexes under RLS; the combined alternative also failed and was reverted. The report preserves failed measurements and untested scope.
