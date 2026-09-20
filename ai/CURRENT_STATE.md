@@ -44,9 +44,10 @@ Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006,
 1. TASK-0091: after a long natural idle, run search12r-cold-triage.mjs before any other DB experiment. Its four probes separate connection wake-up, catalog reads, pure CPU, buffer scanning and the search path, so the remaining cold cost can be attributed outside or inside the query. Do not repeat warm tests and call it progress.
 2. TASK-0091 rollback DONE and deliberately partial: s12r_words_exact_cover dropped so the next cold run measures the product-equivalent baseline; the two range functions were kept because without that index the range rewrite is a free measurable win. Nine checks confirmed pkey, GiST, four functions and 500,411 rows survived.
 3. TASK-0091: the exact-match range rewrite is the only measured recommendation worth carrying into design — it reaches the existing primary key with no extra index. It is not adopted yet and does not address OQ-029. Baseline speed gate still fails including 571 and 554 ms; no target waiver or region change.
-4. Remaining Phase 06 experiments follow the order in `docs/architecture/spikes/README.md`. SPIKE-10 needs rendered PDF inspection; SPIKE-11 needs missing-rate/recovery assertions. Neither is waived or complete.
-5. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076; no product code in Phase 06.
-6. TASK-0018: re-check memory-worker authentication after 2026-10-15; do not stop the worker or invoke cloud-sync.
+4. SPIKE-10 (TASK-0080): rendered inspection is done and passed, but it exposed two new conditions — the measured documents used unshippable fonts (Windows Segoe UI/Arial and a proprietary Arial TTF, never the recommended OFL Geist), and the daily report's text layer shatters three headers so archive search would miss them. Re-render with a bundleable font and re-check extraction before closing.
+5. SPIKE-11 (TASK-0081) still needs missing-rate/recovery assertions. Neither spike is waived or complete.
+6. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076; no product code in Phase 06.
+7. TASK-0018: re-check memory-worker authentication after 2026-10-15; do not stop the worker or invoke cloud-sync.
 
 ## BLOCKED BY
 No owner input is currently needed; the owner left the rollback shape to judgement on 2026-09-21 and it is done. The search model and word semantics were adopted with the owner’s continuation (D-247). Product search and Phase 06 exit remain gated by first-request performance: 392, 529, 540, 554, 571 and 636 ms versus 300 ms (OQ-029). Further disposable diagnosis is authorized; no target waiver or product code.

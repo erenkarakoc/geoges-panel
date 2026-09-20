@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-21 — PDF pages actually inspected; two defects the earlier review missed
+
+- TASK-0080: rasterised all four pages of both test documents and inspected them. The visual gap is closed: A4 geometry, margins, column alignment, the repeated table header on page two, page numbering, page-break continuity (34 rows, nothing lost or duplicated at the break) and Turkish typography including m², °C and × all pass. The quote's line items, subtotal, 20% VAT and grand total are internally consistent.
+- Found that neither measured document used a font the product could ship. The quote embedded Windows Segoe UI and Arial with no @font-face at all; the daily report embedded `test-full.ttf`, whose name table identifies it as Arial Regular 7.06, © Monotype Corporation. The recommended OFL Geist was only ever tried as the `next/font` woff2 subset — precisely the case that failed. The production configuration, a bundleable font with no system fallback, remains untested, and no full font file exists in the project.
+- Found that the daily report's text layer is not as searchable as claimed: extraction yields `Panel t i p i`, `B i t i ş` and `Ek i p`, so an archive search for `tipi`, `Bitiş` or `Ekip` would miss the document. This contradicts the report's REQ-DOC-004 claim. The pages render correctly; only the text layer is affected, and the cause was not isolated.
+- TASK-0080 therefore stays REVIEW with three named exit conditions. The DocumentRenderer direction is unchanged; no requirement was relaxed and no product code was written.
+
 ## 2026-09-21 — Candidate fails cold acceptance; new-backend explanation ruled out
 
 - TASK-0091: the first database action was the prepared candidate wait sampler. After roughly six hours of natural idle the range candidate's first call took 554 ms total / 469 ms server, against the original's 571/487 ms. The candidate does not reduce the cold cost and fails its acceptance criterion. Zero physical reads, 89 of 300 samples `active` with no wait event, 211 ClientRead; the query stayed continuously active for 460 ms.

@@ -1,6 +1,6 @@
 # SPIKE-10 — Sunucuda üretilen PDF kalitesi
 
-Durum: İNCELEMEDE (görsel doğrulama eksik) · Tarih: 2026-09-20 · İlgili: `DocumentRenderer` portu (`docs/architecture/PORTS_AND_SERVICES.md`), REQ-QTE, REQ-RPT
+Durum: İNCELEMEDE (görsel doğrulama yapıldı; yazı tipi kökeni ve metin katmanı açık) · Tarih: 2026-09-21 · İlgili: `DocumentRenderer` portu (`docs/architecture/PORTS_AND_SERVICES.md`), REQ-QTE, REQ-RPT
 
 **Soru.** Teklif belgesi ve resmî günlük rapor, Türkçe karakterlerle ve tablo düzeni bozulmadan, A4'te basılabilir kalitede üretilebiliyor mu?
 
@@ -37,3 +37,64 @@ Durum: İNCELEMEDE (görsel doğrulama eksik) · Tarih: 2026-09-20 · İlgili: `
 2. PDF üretimi iş kuyruğunda çalışır, istek yolunda değil (`PORTS_AND_SERVICES.md` bölüm 6); tarayıcı örneği yeniden kullanılır, belge başına yeniden başlatılmaz.
 3. Üretilen belge arşive kaydın altına yazılır ve sürümlenir (DOC-K4); metin katmanı aranabilir olduğu için arşiv içerik aramasına da girer (REQ-DOC-004).
 4. Sunucu kararı alınırken Chromium bağımlılığı ve bellek ihtiyacı hesaba katılır (DEF-008).
+
+## Görsel doğrulama yapıldı — iki yeni kusur bulundu · 2026-09-21
+
+Eksik olan adım tamamlandı: her iki PDF'in **bütün sayfaları** `pdfjs-dist` ve `@napi-rs/canvas` ile 2× ölçekte görüntüye çevrilip incelendi (`pdf-render.mjs`, çıktılar `render/` altında). Bu, PDF'in kendi sayfa içeriğini inceler; HTML'i yeniden ekrana basmaz.
+
+### Görsel inceleme sonucu: geçti
+
+| Kontrol | Fiyat teklifi (1 sayfa) | Günlük rapor (2 sayfa) |
+|---|---|---|
+| Sayfa ölçüsü | 596×842 pt, dikey A4 | 842×596 pt, yatay A4, iki sayfa da |
+| Üstbilgi | "GEOGES Panel · TKF-2026-0147" | "GEOGES Panel · Günlük saha raporu · Şereflikoçhisar", iki sayfada da |
+| Altbilgi / sayfa no | "Sayfa 1 / 1" | "Sayfa 1/2" ve "Sayfa 2/2" |
+| Tablo başlığının tekrarı | — | **Var**, sayfa 2'de eksiksiz 13 sütun |
+| Sütun hizası | sayısal sütunlar sağa, metin sola | iki sayfada da birebir aynı sütun genişlikleri |
+| Kenar boşlukları | dengeli, taşma yok | dengeli, taşma yok |
+| Metin kırpılması / üst üste binme | yok | yok |
+| Türkçe tipografi | Şereflikoçhisar, İnşaat, Söğütözü, Çığır Yapı A.Ş., ÇĞİÖŞÜ çğıöşü doğru | Şereflikoçhisar, İlerleme, Başlangıç, Kalıp yağı sapması, döküm doğru |
+| Özel işaretler | × ve — doğru | m², °C, × doğru |
+
+Sayfa kırılmasında satır kaybı veya tekrarı yok: sayfa 1 D-4 / %39,0 / toplam adet 252 ile biter, sayfa 2 D-5 / %40,0 / 255 ile başlar ve üçer artış düzeni korunur. 25 + 9 = 34 satır, beklenen satır sayısıyla aynıdır.
+
+Teklifin aritmetiği de denetlendi: altı kalemin miktar × birim fiyat çarpımlarının hepsi doğru, toplamları 12.045.354,00 ara toplamı veriyor, %20 KDV 2.409.070,80 ve genel toplam 14.454.424,80 tutarlı. Bu bir iş kuralı doğrulaması değil, şablonun sayıları bozmadığının kontrolüdür.
+
+### Kusur 1 — ölçülen belgeler paketlenemeyecek yazı tipleri kullanıyor
+
+Görsel inceleme sırasında belgelerin hangi yazı tipiyle üretildiği denetlendi ve **raporun kendi koşuluna aykırı** olduğu görüldü:
+
+| Belge | HTML'deki tanım | PDF'e gömülen |
+|---|---|---|
+| Fiyat teklifi | `font-family: "Segoe UI", Arial, sans-serif`, `@font-face` yok | SegoeUI, SegoeUI-Bold, SegoeUI-Semibold, ArialMT — dördü de Windows sistem yazı tipi |
+| Günlük rapor | `@font-face` ile `test-full.ttf` gömülü | ArialMT, iki alt küme |
+
+`test-full.ttf` dosyasının name tablosu okundu: **Arial Regular, Version 7.06, © Monotype Corporation**. Yani "tam yazı tipi dosyası gömüldü" bulgusunun dayandığı dosya, Windows'tan kopyalanmış tescilli Arial'dır ve ürünle birlikte dağıtılamaz.
+
+Raporun önerdiği OFL lisanslı Geist ise yalnız `next/font` alt kümesi (`geist.woff2`, 29 KB) olarak denendi — yani tam olarak **başarısız olan** durum. Projede paketlenebilir tam bir yazı tipi dosyası bulunmuyor; `next/font` yalnız woff2 alt kümeleri üretiyor.
+
+**Sonuç:** "alt küme yetmez, tam dosya çalışır" tanısı geçerlidir, ama üretimde kullanılacak yapılandırma — sistem yazı tipi olmadan, paketlenebilir OFL bir yazı tipiyle, tam belgede — **hiç sınanmadı.** Linux sunucuda Segoe UI ve Arial bulunmayacağı için ölçülen iki belge üretim koşullarını temsil etmiyor.
+
+### Kusur 2 — metin katmanı iddia edilen kadar aranabilir değil
+
+Günlük raporun metin çıkarımında üç başlık hücresi harflerine ayrılıyor:
+
+- `Panel tipi` → `Panel t i p i`
+- `Bitiş` → `B i t i ş`
+- `Ekip` → `Ek i p`
+
+Sayfa görüntüsünde bu başlıklar doğru görünüyor; kusur yalnız metin katmanındadır. Sonucu şudur: arşivde **`tipi`, `Bitiş` veya `Ekip` aranırsa bu belge bulunmaz.** Bu, raporun "metin katmanı aranabilir olduğu için arşiv içerik aramasına da girer (REQ-DOC-004)" ifadesiyle çelişir.
+
+Fiyat teklifinde aynı kusur görülmedi. Neden yalıtılmadı; büyük olasılıkla 8,5 punto gövde ölçüsünde tarayıcının alt piksel yerleştirmesi, çıkarıcının harf araları eşiğini aşıyor. Kesin neden ve çözüm, üretimde kullanılacak yazı tipiyle ve gerçek arşiv arama uygulamasıyla birlikte doğrulanmalıdır; ölçüm aracı olarak burada pdf.js kullanıldı, başka bir çıkarıcı farklı davranabilir.
+
+### Durum
+
+Görsel doğrulama eksiği kapandı. Buna karşılık iki yeni koşul açıldığı için **TASK-0080 REVIEW olarak kalır**; kapanması için gerekenler:
+
+1. Paketlenebilir OFL bir yazı tipinin tam dosyasıyla, sistem yazı tipine hiç başvurmadan iki belgenin yeniden üretilmesi ve yeniden görsel olarak incelenmesi.
+2. Aynı üretimde metin çıkarımının parçalanmadığının, özellikle dar başlık hücrelerinde, gösterilmesi.
+3. Linux'ta Chromium kurulum boyutunun doğrulanması — bu DEF-008 kapsamında kalır.
+
+`DocumentRenderer` portunun başsız tarayıcı yönü değişmedi; bulunan iki kusur yön değil uygulama koşullarıdır. Hiçbir gereksinim gevşetilmedi, ürün kodu yazılmadı.
+
+Kanıt ve betikler dış scratchpad'de: `pdf-render.mjs` ve `render/*.png` (dört sayfa görüntüsü), `pdf-render-report.json`, `pdf-textdefect.mjs`, `font-identify.mjs`, mevcut `pdf-check.mjs`.
