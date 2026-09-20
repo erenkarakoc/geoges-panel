@@ -1,6 +1,6 @@
 # Veritabanı Sözleşmeleri
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Phase 04'ün ortak kuralları: adlandırma, anahtarlar, tipler, para ve miktar duyarlığı, zaman, durum, geçmiş, silme, dizin ve göç düzeni. Her modül şeması bu kurallara uyar. Görev: TASK-0065. Kararlar: D-243, D-244. Mimari: `docs/architecture/PORTS_AND_SERVICES.md` (ADR-015), `docs/architecture/PERMISSIONS.md`.
 

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Phase 04 DONE
+
+- The owner approved the Phase 04 exit. The panel now has a database design: 211 tables, ledgers that only gain rows, closed periods that refuse new ones, sensitive personnel data sitting apart from the everyday personnel list, and three things every table must prove before its migration is accepted. Phase 05 — infrastructure, environments and operations — starts, and it needs the owner's answers on the server, backups and e-mail (OQ-010…OQ-016).
+
+
 ## 2026-09-20 — Data coverage check
 
 - `docs/database/COVERAGE.md` counts what Phase 04 produced — 211 tables — and names the requirements that correctly have no table of their own, so a gap can be told apart from a principle. Every table must prove three things before a migration is accepted: it has a scope column, a security policy and a history channel (TASK-0072).

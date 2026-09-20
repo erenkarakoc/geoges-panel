@@ -1,6 +1,6 @@
 # Şema — Platform (IAM, AUD, DOC, WFL, TSK, ADM)
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Platform modüllerinin tabloları. Ortak kurallar `docs/database/CONVENTIONS.md`'dedir ve burada tekrar edilmez: her tabloda `id`, oluşturma/güncelleme izleri, kapsam sütunu, RLS politikası ve geçmiş kanalı vardır. Alan modeli: `docs/domain/DOMAIN_MODEL.md`. Görev: TASK-0066.
 

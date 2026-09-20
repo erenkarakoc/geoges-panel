@@ -63,3 +63,11 @@ Only items whose quality gate passed are listed here.
 | 2026-09-20 | TASK-0062 | Ports, data access, search and live updates | T2 PASS (owner confirmed) |
 | 2026-09-20 | TASK-0063 | Storage direction for user-defined record types | T1 PASS (owner confirmed) |
 | 2026-09-20 | TASK-0064 | Phase 06 spike list | T2 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0065 | Database conventions and migration strategy | T2 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0066 | Platform schema | T1 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0067 | Operations schema | T1 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0068 | Commercial and finance schema | T1 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0069 | Corporate schema | T1 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0070 | Analytics schema | T2 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0071 | User-defined record type schema | T1 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0072 | Phase 04 data coverage check | T2 PASS (owner confirmed) |

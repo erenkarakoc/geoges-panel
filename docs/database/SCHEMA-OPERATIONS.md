@@ -1,6 +1,6 @@
 # Şema — Operasyon (PRJ, SIT, INV, PUR, FAC, EQP)
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Ortak kurallar `docs/database/CONVENTIONS.md`'dedir; her tabloda `id`, izler, kapsam sütunu, RLS ve geçmiş kanalı vardır ve tekrar yazılmaz. Alan modeli ve değişmezler: `docs/domain/DOMAIN_MODEL.md`. Görev: TASK-0067.
 

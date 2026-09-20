@@ -1,6 +1,6 @@
 # Şema — Kurumsal (HR, CMP, QHS, MTG, SUP)
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Ortak kurallar `docs/database/CONVENTIONS.md`'dedir. Bu şemalarda hassas kişisel veri yoğundur; her hassas sütun `data_class = sensitive` işaretlidir ve izni olmayanın sorgusundan çıkarılır (`docs/architecture/PERMISSIONS.md` bölüm 3). Görev: TASK-0069.
 

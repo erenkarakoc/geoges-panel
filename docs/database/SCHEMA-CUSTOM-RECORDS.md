@@ -1,6 +1,6 @@
 # Şema — Kullanıcı Tanımlı Kayıt Türleri
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 ADR-016 ve D-241'in tablo karşılığı. Kullanıcının tanımladığı her tür aynı tabloları kullanır; yeni tür göç gerektirmez. Ortak kurallar `docs/database/CONVENTIONS.md`'dedir. Görev: TASK-0071. Ekranlar ve oluşturucu Phase 09R'dedir (D-105).
 

@@ -1,6 +1,6 @@
 # Şema — Ticari ve Finans (CRM, QTE, FIN)
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Ortak kurallar `docs/database/CONVENTIONS.md`'dedir. Para sütunları D-243'e uyar: `amount` + `currency` + `amount_try` + `exchange_rate` + `exchange_rate_date`; satır bazında kuruşa yuvarlama. Görev: TASK-0068.
 

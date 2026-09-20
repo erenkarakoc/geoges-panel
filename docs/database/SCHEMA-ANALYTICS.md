@@ -1,6 +1,6 @@
 # Şema — Analiz ve Yönetim (RPT, PRF, INT, STR)
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Bu dört modül kendi iş verisini üretmez; başkasının verisinden türetir (D-233). Tabloları iki gruptur: **okuma modelleri** (olaylarla beslenir, yeniden kurulabilir) ve **kendi kayıtları** (kullanıcının girdiği veya onayladığı şeyler: KPI kataloğu, prim, öneri kararı, bütçe). Ortak kurallar `docs/database/CONVENTIONS.md`'dedir. Görev: TASK-0070.
 

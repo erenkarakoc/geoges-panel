@@ -21,8 +21,8 @@ Module codes: see `docs/architecture/MODULE_MAP.md`.
 | 01 | Requirements & Domain Analysis | Design | DONE |
 | 02 | UX, Information Architecture & User Flows | Design | DONE |
 | 03 | System Architecture | Design | DONE |
-| 04 | Database Architecture | Design | IN_PROGRESS |
-| 05 | Infrastructure, Environments & Operations Design | Design | NOT_STARTED |
+| 04 | Database Architecture | Design | DONE |
+| 05 | Infrastructure, Environments & Operations Design | Design | IN_PROGRESS |
 | 06 | Validation Spikes | Validate | NOT_STARTED |
 | 07 | Foundation Build | Build | PARTIALLY_DONE |
 | 08 | Workflow Engine & Visual Designer | Build | NOT_STARTED |
@@ -188,7 +188,7 @@ STATUS: DONE
 - **Purpose:** design the full domain schema before implementation.
 - **Scope:** entities for all modules (purpose, ownership, relationships, constraints, indexes, permissions, RLS, audit, history, soft delete, retention); ledgers; effective-dated configuration tables; outbox; audit tables; RLS policy model; migration strategy (expand/contract, additive-first); seed/reference data; sensitive data columns.
 - **Dependencies:** Phase 03 (DONE).
-- **Status:** `IN_PROGRESS` — **current phase since 2026-09-20.**
+- **Status:** `DONE` — owner approved the exit 2026-09-20. **Delivered:** conventions and migration strategy (`docs/database/CONVENTIONS.md`, TASK-0065, D-243, D-244); platform, operations, commercial-finance, corporate, analytics and user-defined record schemas — 211 tables (TASK-0066…TASK-0071); data coverage check (`COVERAGE.md`, TASK-0072). Ledgers are append-only, closed periods refuse rows, sensitive personnel columns are isolated, and every table must carry a scope column, an RLS policy and a history channel.
 - **Deliverables:** `docs/database/*` (ERD per module, table specs, RLS matrix, migration conventions).
 - **Acceptance:** every REQ with data maps to tables; RLS defined for every table; naming review passed.
 - **CHG-006 scope:** versioned flow definitions, running instances and their trace; capability registry; the **storage model for user-defined record types** with RLS (D-092) and non-destructive history (D-094) — the hardest data question of CHG-006 (RISK-010).
@@ -197,7 +197,8 @@ STATUS: DONE
 
 - **Purpose:** design how the system runs, deploys, is observed and recovered.
 - **Scope:** Supabase projects per environment; R2 buckets and access; VPS layout (Docker, reverse proxy, SSL); domains (`geogespanel.com` noindex); CI/CD pipeline (lint → type-check → unit → integration → build → security checks → deploy → health check → rollback); secrets management; logging, error tracking, monitoring; backup & disaster recovery (DB, files, offsite); email sending; web push; cost estimate.
-- **Dependencies:** Phase 03; OQ-010…OQ-016.
+- **Dependencies:** Phase 03 (DONE), Phase 04 (DONE); OQ-010…OQ-016.
+- **Status:** `IN_PROGRESS` — **current phase since 2026-09-20.**
 - **Deliverables:** `docs/infrastructure/*`, runbooks drafts, ADRs.
 - **Acceptance:** RPO/RTO defined; restore procedure designed; environment matrix complete.
 
