@@ -4,7 +4,7 @@ Durum: REVIEW — D-247 model onaylı; yeni bağlantı ilk istek hızı açık �
 
 ## Güncel sonuç — D-247 sonrası
 
-Model ve sözcük davranışı onaylandı; CHG-007 ile tasarım kayıtlarına katlandı. Tek çağrılı düzenin 18 senaryosunda, ön ısınma olmadan 20’şer ölçümün en yavaşı 190 ms. Önceki 73 kontrole ek 14 istek ve 5 güvenlik kontrolü geçti. Ancak 12 yeni bağlantının ilk isteklerinden biri 392 ms sürdü; hız kapısı FAIL ve SPIKE-12 REVIEW kalır. Son bölüm güncel kanıttır; aşağıdaki üç turlu ölçümler tarihsel karşılaştırmadır.
+Model ve sözcük davranışı onaylandı; CHG-007 ile tasarım kayıtlarına katlandı. Tek çağrılı düzenin 18 senaryosunda, ön ısınma olmadan 20’şer ölçümün en yavaşı 190 ms. Önceki 73 kontrole ek 14 istek ve 5 güvenlik kontrolü geçti. Ancak 12 yeni bağlantının ilk isteklerinden biri 392 ms sürdü; sonraki aynı-istek tanısında 529 ms toplamın 445 ms’si sunucuda ölçüldü. Hız kapısı her iki başarısızlığı korur; SPIKE-12 REVIEW kalır. Son bölüm güncel kanıttır; aşağıdaki üç turlu ölçümler tarihsel karşılaştırmadır.
 
 ## Önceki sonuç
 
@@ -174,3 +174,52 @@ Kanıtlar: search12r-cold-evidence.json, search12r-fresh-evidence.json, search12
 Son veritabanında önceki yardımcıların yanında s12r_request_search de kalır. Kaynak veri değiştirilmedi; s12r_bucket_search tanımı tanı sırasında aynı içerikle yeniden oluşturuldu, algoritma değişmedi. Başlangıçtaki SQL tanımı dış scratchpad'de search12r-current-function.sql olarak saklandı. Sonraki iş, kimlik/rol sözleşmesi korunarak ilk çağrının sunucu ve bağlantı giderlerini eşzamanlı kaydetmek, aşımı kontrollü biçimde yeniden üretmek ve gidermektir. Hedefi yükseltmek veya aykırı örneği silmek çözüm değildir.
 
 Teknik dayanak: [PostgreSQL işlem sınırları](https://www.postgresql.org/docs/17/tutorial-transactions.html), [DISCARD PLANS](https://www.postgresql.org/docs/17/sql-discard.html), [Supabase gözlemlenebilirlik](https://supabase.com/docs/guides/observability). Belgelerin tanımladığı davranış ile bu deneyin ölçümleri ayrı değerlendirilir.
+
+## Aynı istekte sunucu/istemci ayrımı — devam planı
+
+2026-09-20: TASK-0091 kapsamında 24 yeni istemci bağlantısının ilk arama çağrısı EXPLAIN ANALYZE ile ölçülecek. Her gözlemde bağlantı kurulumu, toplam sorgu süresi, PostgreSQL planlama/çalışma süresi ve blok okumaları aynı isteğe ait olacak. Sonuç adedi ve sınırlı rol doğrulanacak; başlangıç ve kapanışta rol/zaman aşımı açıkça temizlenecek. Kanıt her örnekte diske yazılacak. Yalnız sentetik arama okunacak; ürün veya deney algoritması değiştirilmeyecek. Bu tanı başarısız örnekleri silmez, önceki hız kapısını kendiliğinden kapatmaz.
+
+### Daraltma planı
+
+Adım profili, birlikte bulunmayan sözcüklerde sürenin çoğunun kapsam/tür kümelerini tek tek işleyen döngüde geçtiğini gösterdi (yaklaşık 39–73 ms sıcak sunucu süresi). Aynı intarray kesişimini tek özyinelemeli SQL sorgusunda yapmak sınanacak: bütün sözcükler ve kapsam filtresi korunacak, tür başına beş seçimi kaynak RLS'inden sonra yapılacak. Önce yeni deney fonksiyonu kurulacak; mevcut yordam değiştirilmeyecek. Bağımsız sonuç/sıralama referansı geçmeden yeni yol kabul edilmeyecek; başarısız olursa yardımcı kaldırılacak.
+
+## Aynı isteğin süre ayrımı — sonuç
+
+24 yeni istemci bağlantısında ilk arama çağrısı ölçüldü. İlk zor arama **529 ms** sürdü: PostgreSQL çalışma süresi **444,701 ms**, dış planlama 0,059 ms, kalan yaklaşık 84 ms. Bu örnekte baskın gecikme sunucudadır; yalnız ağ gecikmesi açıklaması reddedilir. Sonraki aynı tür sorgular yaklaşık 118–152 ms, diğer sorgular 77–239 ms oldu. İlk dört sorgunun sunucu süreleri sırasıyla 444,701 / 159,776 / 69,025 / 47,829 ms; sonraki örnekler belirgin biçimde azaldı. Bu gözlem bir başlangıç maliyetini gösterir, nedenini tek başına kanıtlamaz.
+
+| Örnek | Tür | Toplam ms | Sunucu ms | Dış plan ms | Kalan ms | Paylaşımlı blok okuma |
+|---|---|---:|---:|---:|---:|---:|
+| 0 | absent | 529 | 444.701 | 0.059 | 84 | 0 |
+| 1 | number | 239 | 159.776 | 0.028 | 79 | 0 |
+| 2 | common | 143 | 69.025 | 0.029 | 74 | 0 |
+| 3 | typo | 128 | 47.829 | 0.029 | 80 | 0 |
+| 4 | absent | 152 | 72.736 | 0.035 | 79 | 0 |
+| 5 | number | 83 | 3.776 | 0.029 | 79 | 0 |
+| 6 | common | 84 | 4.571 | 0.03 | 79 | 0 |
+| 7 | typo | 84 | 4.47 | 0.029 | 79 | 0 |
+| 8 | absent | 119 | 39.553 | 0.028 | 79 | 0 |
+| 9 | number | 77 | 3.808 | 0.028 | 73 | 0 |
+| 10 | common | 78 | 4.665 | 0.029 | 73 | 0 |
+| 11 | typo | 83 | 4.425 | 0.029 | 78 | 0 |
+| 12 | absent | 119 | 39.493 | 0.027 | 79 | 0 |
+| 13 | number | 83 | 3.809 | 0.032 | 79 | 0 |
+| 14 | common | 79 | 4.715 | 0.029 | 74 | 0 |
+| 15 | typo | 78 | 4.294 | 0.03 | 73 | 0 |
+| 16 | absent | 118 | 44.835 | 0.028 | 73 | 0 |
+| 17 | number | 84 | 3.79 | 0.029 | 80 | 0 |
+| 18 | common | 78 | 4.593 | 0.028 | 73 | 0 |
+| 19 | typo | 84 | 4.279 | 0.029 | 79 | 0 |
+| 20 | absent | 125 | 44.413 | 0.027 | 80 | 0 |
+| 21 | number | 78 | 3.864 | 0.029 | 74 | 0 |
+| 22 | common | 84 | 4.684 | 0.028 | 79 | 0 |
+| 23 | typo | 84 | 4.394 | 0.028 | 79 | 0 |
+
+Bütün örneklerde sonuç adedi, sınırlı rol ve işlem sonrası boş kimlik kontrol edildi. Bağlantı kurma/rol hazırlama 508–625 ms ve yukarıdaki çağrı sürelerine dahil değildir. Shared Read Blocks=0, bu sorguda raporlanan paylaşımlı bloklarda fiziksel okuma olmadığını gösterir; sistem katalogları, işletim sistemi veya backend ilk yükleme maliyetinin bütünüyle elendiğini göstermez. Yeni istemci bağlantısı havuzun yeni PostgreSQL backend'i verdiği anlamına gelmez.
+
+Ayrı tanı kopyası arama adımlarına süre ölçümü koydu. Sıcak durumda setup yaklaşık 0,6–2,2 ms, sözcük bakışları yaklaşık 0,6–1 ms, küme döngüsü yaklaşık 39–73 ms oldu. 445 ms'lik başlangıç aşımı bu kopyada yeniden oluşmadı; onu döngünün tek başına açıkladığı ileri sürülemez. JIT açık/kapalı tanısı çözüm göstermedi. Sunucunun mevcut JIT ayarı off; pg_stat_statements içinde arama çağrılarıyla eşleşen 408 çağrı için jit_functions ve derleme süreleri sıfır. Mevcut aşımın JIT kaynaklı olduğu desteklenmiyor.
+
+Özyinelemeli toplu kesişim alternatifi ayrı s12r_set_search yordamında denendi: birlikte bulunmayan sözcükler yaklaşık 81 ms sunucu süresi, yaygın iki sözcük **7555 ms**. Eşit puan sıralaması kaldırılınca yaygın iki sözcük yaklaşık 139 ms'ye indi ama mevcut yordamın sıcak 4–5 ms davranışından hâlâ kötüydü. Alternatif kabul edilmedi; bağımsız tam sonuç testi yapılmış sayılmaz. s12r_set_search ve süre ölçüm kopyası s12r_profile_search kaldırıldı. Asıl s12r_bucket_search/s12r_request_search değişmedi; asıl yolun bir sonuçlu sorgusu ve işlem sonrası kimlik temizliği tekrar geçti. Veri ve ürün kodu değişmedi.
+
+Kanıt: search12r-attribution.mjs/json (her örnekte yazıldı), search12r-stage.mjs ve search12r-stage-evidence.json; elenen düzenler search12r-set.mjs/search12r-set2.mjs, salt okunur JIT incelemesi search12r-jitstats.mjs; temizlik search12r-attribution-cleanup.mjs. Eski betikler körlemesine çalıştırılmaz. Hız kapısı mevcut ve yeni ilk-istek kanıtlarını birlikte değerlendirir; 392 ve 529 ms için başarısız kalır.
+
+**Sonraki tanı:** istemci bağlantısı ile gerçek PostgreSQL backend başlangıcını ayırmak için backend kimliği/başlangıç zamanı aynı ölçümle kaydedilecek. Havuzun aynı backend'i yeniden kullanması ile gerçekten yeni backend'in ilk yürütmesi karşılaştırılmalı; gerekirse aynı test projesinin doğrudan bağlantı yolu erişilebilirliği incelenmeli. Sunucu/başka kullanıcı oturumları sonlandırılmayacak, soğuk örnekler ölçümden çıkarılmayacak. Kök neden ve düzeltme henüz tamamlanmadı; TASK-0091 REVIEW, OQ-029 açık.

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — First-request latency attributed to server work in a reproduced failure
+
+- TASK-0091: 24 first-call observations with server/client times from the same request. One 529 ms call spent 444.701 ms executing on the server, disproving a purely network explanation. All sample result counts, restricted role and identity cleanup checks passed. Root cause remains open; no fix or PASS claimed.
+- Stage profiling did not reproduce the cold peak; JIT is off with zero measured compilation. A separate recursive set-query variant regressed common search to 7555 ms (139 ms after removing unnecessary tie sorting); rejected and removed along with its profiling copy. Original functions/data unchanged; cleanup control passed. Replay gate includes the new failure. Next: actual backend startup versus client/pool reuse.
+
 ## 2026-09-20 — Schema count drift found and guarded
 
 - TASK-0092: the original schema definitions contained 212 tables, while COVERAGE said 211; the platform task claimed 34 while defining 45. With three new search helpers the correct totals are 215 and 48. Corrected current records and added an automatic definition-to-inventory check, including duplicate/missing schema and total checks. The real stale total was rejected before correction. Historical changelog entries remain historical.

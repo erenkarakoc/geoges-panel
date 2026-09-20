@@ -22,11 +22,13 @@ CURRENT PHASE: PHASE 06 — Validation Spikes
 
 ## Next work
 
-1. TASK-0091: isolate and resolve the remaining first-request overhead; no owner approval is pending. Capture server and per-request overhead together on the one-call path and retain failures. D-247 / CHG-007 is folded. A 392 ms first request still fails 300 ms, so do not close SPIKE-12 or move to SPIKE-14 yet. Product Phase 07 still requires actual restricted login, verified TLS, generic scopes and full IAM.
+1. TASK-0091: capture actual backend identity/start alongside the next first request; distinguish fresh client connections from a fresh PostgreSQL backend. Latest 24 observations include 529 ms total / 445 ms server execution with zero reported shared reads; this disproves an exclusively network explanation, not every possible I/O cost. Inspect same-project direct-connection availability if needed; never terminate other sessions or restart the service. No approval pending; do not close SPIKE-12 or move to SPIKE-14 yet.
 2. Finish the other experiments, including the reopened PDF/TCMB acceptance checks. Do not call Phase 06 complete until every exit criterion is met or explicitly waived by the owner.
 3. Phase 07 adapter tests must preserve the restricted DB role, parameter binding, transaction-local identity, identity cleanup on failure, verified TLS, ordered event selection, atomic effect/delivery and duplicate suppression.
 
 ## Local experiment evidence
+
+Latest attribution: search12r-attribution.mjs/json has 24 complete first-request observations, result-count/restricted-role/identity cleanup assertions per sample. First absent query 529 ms, server 444.701 ms, residual 84 ms. Startup preparation excluded (508–625 ms). Stage instrumentation failed to reproduce that cold peak; warm bucket loop 39–73 ms. JIT setting off, 408 tracked calls with zero JIT work. Set-based alternatives regressed common queries to 7555 ms / 139 ms and were rejected; s12r_set_search and s12r_profile_search were removed. Original request/bucket functions and data are unchanged; cleanup verified one-result query and empty identity. search12r-attribution-cleanup.mjs cleans role and timeout. Speed replay now also reads attribution and must fail for 392/529 ms. Do not reinterpret the warm stage profile as proof of the first-call root cause.
 
 Latest: search12r-onecall.mjs/evidence.json retains the 18 x 20 timing sets and 14 request checks. s12r_request_search(uuid,text) is the new private SECURITY INVOKER wrapper; it rejects any current role other than spike_app. Implicit transactions clean identity after success/error/cancellation. The existing s12r_bucket_search algorithm is unchanged; its identical definition was reinstalled during plan tests and saved as search12r-current-function.sql. Original/new syntax helpers are disposable only.
 

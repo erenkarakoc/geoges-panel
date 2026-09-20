@@ -47,7 +47,7 @@ Kurallar:
 - Belge içeriği arama satırına girmez; arşivin kendi içerik araması ayrıdır (D-227). Metni çıkarılmamış belge "okunuyor" olarak işaretlenir (REQ-DOC-004).
 - Hacim büyüdüğünde ayrı arama motoruna geçiş, bu tasarımı bozmadan bir adaptör değişimidir.
 
-**Doğrulama notu, 2026-09-20:** Üç kapsam korumalı yardımcı arama tablosu ve bütün sözcüklerle eşleşme D-247 / CHG-007 ile onaylandı. Şema SCHEMA-PLATFORM belgesine katlandı; önceki 73 kontrol ile ek 19 istek/güvenlik kontrolü geçti. Tek çağrılı düzende 360 ölçüm en çok 190 ms; yeni bağlantıda 392 ms ilk istek kaldı. İlk istek gecikmesi OQ-029 kapsamında ölçülüyor; ürün uygulaması ve SPIKE-12 kapanışı için kalan hız doğrulaması gerekli. Ayrıntı: `docs/architecture/spikes/SPIKE-12-search-retry.md`.
+**Doğrulama notu, 2026-09-20:** Üç kapsam korumalı yardımcı arama tablosu ve bütün sözcüklerle eşleşme D-247 / CHG-007 ile onaylandı. Şema SCHEMA-PLATFORM belgesine katlandı; önceki 73 kontrol ile ek 19 istek/güvenlik kontrolü geçti. Tek çağrılı düzende 360 ölçüm en çok 190 ms; ilk isteklerde 392/529 ms kaldı; 529 ms’nin 445 ms’si sunucuda ölçüldü. İlk istek gecikmesi OQ-029 kapsamında ölçülüyor; ürün uygulaması ve SPIKE-12 kapanışı için kalan hız doğrulaması gerekli. Ayrıntı: `docs/architecture/spikes/SPIKE-12-search-retry.md`.
 
 ## 4. Canlı güncelleme (D-240, D-232)
 
