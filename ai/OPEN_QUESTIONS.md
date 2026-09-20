@@ -4,7 +4,13 @@ Last updated: 2026-09-20 · Format: `OQ-NNN` · Blocking = blocks the stated pha
 
 IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no missing records).
 
-## Phase 00 — open
+## Phase 06 — search validation
+
+| ID | Category | Question | Proposed answer | Blocks |
+|---|---|---|---|---|
+| OQ-029 | Architecture validation | OPEN 2026-09-20: which PostgreSQL query/index design meets the 300 ms search target while preserving RLS? SPIKE-12 failed no-match queries; correctness controls passed. | TASK-0091 tests a revised design within D-239 first. The combined search-in-policy prototype did not solve both query modes. No new provider, weaker permission model or relaxed target has been approved. | Product search implementation and Phase 06 exit until a validated resolution |
+
+## Phase 00 — answered domain question
 
 | ID | Category | Question | Proposed answer | Blocks |
 |---|---|---|---|---|

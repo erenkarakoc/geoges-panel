@@ -41,11 +41,13 @@ Kurallar:
 **Karar: ilk sürümde ayrı bir arama motoru kurulmaz; arama PostgreSQL'in kendi tam metin araması ve benzerlik eklentisiyle yapılır.**
 
 - Her aranabilir kayıt türü için bir **arama satırı** tutulur: kayıt kimliği, tür, başlık, ikincil bilgi, arama vektörü, kapsam sütunları. Satır, kaydın olaylarıyla güncellenir.
-- Türkçe harf duyarsızlığı ve yazım yakınlığı için benzerlik eklentisi (`pg_trgm`) kullanılır; "sogut" → "Söğüt" bu yüzden çalışır.
+- Türkçe harf duyarsızlığı için sorgu ve indekslenecek metin aynı Unicode/Türkçe harf normalleştirmesinden geçer; "sogut" → "Söğüt" eşleşmesi buradan gelir. `pg_trgm` ayrıca yazım yakınlığı sağlar; harf dönüşümünün yerine geçmez.
 - **Yetki süzmesi arama satırında da RLS ile** yapılır; yetkisiz kayıt sonuç sayısına bile girmez (REQ-NFR-012).
 - Ticari ve hassas alanlar arama vektörüne **hiç konmaz**; o veriyle arama yapılamaz (REQ-IAM-011).
 - Belge içeriği arama satırına girmez; arşivin kendi içerik araması ayrıdır (D-227). Metni çıkarılmamış belge "okunuyor" olarak işaretlenir (REQ-DOC-004).
 - Hacim büyüdüğünde ayrı arama motoruna geçiş, bu tasarımı bozmadan bir adaptör değişimidir.
+
+**Doğrulama notu, 2026-09-20:** SPIKE-12, RLS altındaki boş sonuç sorgularında 300 ms hedefinden kaldı. ADR-017'nin teknik düzeni yeniden incelemede (TASK-0091, OQ-029); yalnız GIN + trigram kurmak yeterli kabul edilemez. PostgreSQL yönü ve yetki kuralları korunur; ürün araması çözüm tekrar sınanmadan uygulanmaz.
 
 ## 4. Canlı güncelleme (D-240, D-232)
 

@@ -7,7 +7,7 @@ PROJECT STATUS:      DESIGN
 CURRENT PHASE:       PHASE 06 — Validation Spikes (Phase 05 DONE 2026-09-20, owner approved)
 CURRENT SUBPHASE:    TESTING
 CURRENT FEATURE:     —
-CURRENT TASK:        SPIKE-01…08 verified in their documented scope; next SPIKE-12, then SPIKE-14. SPIKE-10/11 remain REVIEW.
+CURRENT TASK:        SPIKE-12 failed speed (TASK-0090 REVIEW); next TASK-0091 fixes/retests the query/index design before SPIKE-14. SPIKE-01…08 passed; SPIKE-10/11 remain REVIEW.
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -37,16 +37,16 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. SPIKE-12 (Turkish search), then SPIKE-14 (read-model rebuild), following the Phase 06 index.
+1. TASK-0091: resolve the SPIKE-12 speed failure with RLS preserved, then SPIKE-14 (read-model rebuild). TASK-0090 remains REVIEW; ADR-017 is under technical review (OQ-029). Thirty-six correctness/integrity checks passed, but no-match full-text/fuzzy p95 was 398/2846 ms on 500k rows. Eight of sixteen spikes have passed.
 2. Remaining Phase 06 experiments follow the order in `docs/architecture/spikes/README.md`. SPIKE-10 needs rendered PDF inspection; SPIKE-11 needs missing-rate/recovery assertions. Neither is waived or complete.
 3. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076; no product code in Phase 06.
 4. TASK-0018: re-check memory-worker authentication after 2026-10-15; do not stop the worker or invoke cloud-sync.
 
 ## BLOCKED BY
-None.
+No external input is required to investigate TASK-0091. Product search implementation and Phase 06 exit are blocked by the unresolved SPIKE-12 failure (OQ-029); the 300 ms target and RLS requirement remain unchanged.
 
 ## OPEN QUESTIONS
-See `ai/OPEN_QUESTIONS.md`. OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.
+See `ai/OPEN_QUESTIONS.md`. OQ-029 tracks the search feasibility failure. OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.
 
 ## RECENT DECISIONS
 - 2026-09-20: Phases 01–05 are owner-approved DONE; Phase 06 is current. Local-first operation D-245 and separate reset/configuration tools D-246 remain in force.

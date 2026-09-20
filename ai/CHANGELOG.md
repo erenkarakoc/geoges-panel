@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Turkish search passed correctness but failed performance
+
+- TASK-0090 / SPIKE-12 remains REVIEW, not DONE: 36 correctness/integrity checks passed on 500,000 synthetic rows. Existing-match p95 was 219–225 ms, but no-match full-text/fuzzy p95 was 398/2846 ms. The query-plan comparison exposed unused GIN indexes under RLS; the combined alternative also failed and was reverted. The report preserves failed measurements and untested scope.
+- Corrected the claim that pg_trgm itself folds Turkish letters. ADR-017 is under technical review; ports/schema notes, the spike index and roadmap record the failed assumption. TASK-0091 and OQ-029 carry the RLS-preserving retry before SPIKE-14. No business requirement, provider choice or performance target changed. No product code written; pg_trgm and isolated synthetic fixtures were the only retained database additions.
+
 ## 2026-09-20 — Custom record data spike passed after two fixture repairs
 
 - TASK-0089: SPIKE-08 completed its definition/input/RLS/search/report/retirement chain with 48 checks and 50,001 synthetic records. List and numeric filtering p95 were 240 and 270 ms. The report distinguishes data feasibility from the future builder UI, full IAM and workflow integration.
@@ -870,4 +875,3 @@
 - Skill audit performed; 8 skills vendored at pinned commits into `.claude/skills/` (supabase, supabase-postgres-best-practices, coss, coss-particles, react-best-practices, composition-patterns, cloudflare, tailwind-4-docs).
 - `.claude/settings.json`: `ui-ux-pro-max` disabled, `claude-mem` enabled for this project.
 - CHG-001 proposed (early preview of auth screens and app shell).
-
