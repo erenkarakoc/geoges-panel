@@ -22,11 +22,13 @@ CURRENT PHASE: PHASE 06 — Validation Spikes
 
 ## Next work
 
-1. TASK-0091: next diagnostic must use an explicit transaction with SET LOCAL role/timeout/identity and capture backend startup under the owner before switching role in that same transaction. Current endpoint is Ireland eu-west-1 port 6543 transaction pooling, so session SET ROLE across calls is not a reliable setup. Keep this diagnostic separate from one-call timing. Do not close SPIKE-12 or move to SPIKE-14; no approval pending.
+1. TASK-0091: next compare original and instrumented request wrappers under equivalent initial conditions, including catalog/planning/IO cost. Backend startup was captured successfully; do not repeat warm profiling and call it a root cause. Keep explicit transaction + SET LOCAL role/timeout setup; do not rely on session state in the transaction pooler. Ireland stays at owner request; region move postponed (DEF-009). Do not close SPIKE-12 or move to SPIKE-14 yet.
 2. Finish the other experiments, including the reopened PDF/TCMB acceptance checks. Do not call Phase 06 complete until every exit criterion is met or explicitly waived by the owner.
 3. Phase 07 adapter tests must preserve the restricted DB role, parameter binding, transaction-local identity, identity cleanup on failure, verified TLS, ordered event selection, atomic effect/delivery and duplicate suppression.
 
 ## Local experiment evidence
+
+Latest pinned test: search12r-pinned.mjs/evidence.json, six clients / 12 calls, all counts/role/PID/savepoint identity cleanup passed. Backend 489491 age 0.157 s at setup: first 540/464.720 ms total/server, second 112/38.945. Remaining calls 76–206 ms. Subsequent DISCARD PLANS did not recreate the peak. Separate search12r-cold-stage.mjs/evidence.json pinned one holder and one genuinely new backend 489510 age 0.083 s: first direct profile 125/48.324 ms, second 114/39.604. Profile did not use request wrapper and ran after the prior test; not an equivalent cold control. No root cause proven. Temporary s12r_cold_profile was dropped; original functions/data untouched. No fixture reset, connection edits or region changes. Replay includes pinned 540 ms and stays FAIL.
 
 Latest backend evidence: search12r-backend.mjs/evidence.json contains 32 calls over 16 clients, all PID 488000. First total 636 ms / server clock 533.213 ms, next 119 / 38.564 ms. Counts/role/identity cleanup passed throughout. Restricted backend_start was null but Number(null) printed zero; corrected ages to null with provenance and fixed script. Later owner lookup returned no row for that PID; age is unavailable, not zero. search12r-backend-review.mjs records this. No sessions terminated. Replay gate includes 636 ms and remains FAIL. Clock timing includes result collection but excludes outer planning; not identical to EXPLAIN.
 

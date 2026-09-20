@@ -43,7 +43,7 @@ Onaylanan davranışta bütün sorgu sözcükleri aynı kayıtta bulunur; yalnı
 
 ### İstek yürütme doğrulaması
 
-Kimliği kurup aramayı tek parametreli çağrıda çalıştıran SECURITY INVOKER deney sarmalayıcısı, örtük PostgreSQL işlemiyle üç ağ turunu bire indirdi. 360 ölçümün en yavaşı 190 ms; yeni bağlantılarda 392 ms ve sonraki tanıda 529 ms ilk istek görüldü (ikincisinde 445 ms sunucu çalışması). Bu nedenle teknik kapanış halen açık. Ek 19 istek/güvenlik kontrolü, başarı/hata/iptal sonrası kimlik temizliğini doğruladı; yanlış başlangıç rolü varsayan test düzeltildi. Üründe gerçek sınırlı giriş rolü zorunludur; havuzda SET ROLE durumunun bağlantılar arasında kendiliğinden sıfırlandığı varsayılmaz.
+Kimliği kurup aramayı tek parametreli çağrıda çalıştıran SECURITY INVOKER deney sarmalayıcısı, örtük PostgreSQL işlemiyle üç ağ turunu bire indirdi. 360 ölçümün en yavaşı 190 ms; yeni bağlantılarda 392 ms ve sonraki tanıda 529 ms ilk istek görüldü (ikincisinde 445 ms sunucu çalışması). Daha sonra 636 ms ve başlangıcı doğrulanmış yeni backend üzerinde 540 ms (465 ms sunucu) görüldü. Ayrı yeni backend profili hızlıydı; başlangıç tek başına kanıtlanmış kök neden değildir. Bu nedenle teknik kapanış halen açık. Ek 19 istek/güvenlik kontrolü, başarı/hata/iptal sonrası kimlik temizliğini doğruladı; yanlış başlangıç rolü varsayan test düzeltildi. Üründe gerçek sınırlı giriş rolü zorunludur; havuzda SET ROLE durumunun bağlantılar arasında kendiliğinden sıfırlandığı varsayılmaz.
 
 ### Mevcut geçiş yönü
 

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Pinned-backend diagnosis and region postponement
+
+- TASK-0091: transaction-local role/timeout setup captured the actual backend start. A 0.157-second-old backend took 540 ms (465 ms inside server), then 112 ms. All 12 count/role/PID/savepoint-cleanup checks passed. Replay preserves the new failure.
+- A separate direct profile on another new backend took 125/48 ms. It was not an equivalent wrapper/cold-cache comparison; no root cause or fix claimed. Private diagnostic copy removed, original functions/data unchanged. Updated active status pointers and recorded owner-postponed region migration as DEF-009.
+
 ## 2026-09-20 — Ireland endpoint and backend reuse measured
 
 - TASK-0091: 32 requests across 16 clients reused one backend through the Ireland transaction pooler. First 636 ms request spent 533 ms inside the server; region distance alone does not explain it. No region move or session termination. Corrected PROJECT_CONTEXT to separate actual test endpoint from original Frankfurt direction.
