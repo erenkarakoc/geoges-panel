@@ -52,8 +52,9 @@ Tarayıcıda `http://localhost:3000` adresini açın. Kapatmak için komut istem
 
 Panel örnek veriyle gelir: örnek şantiye, örnek proje, örnek kullanıcılar. Ekranlarda "örnek veri" işareti görürsünüz.
 
-- Veriyi başlangıç hâline döndürmek için: `npm run db:reset`
-- Bu komut **bütün örnek veriyi siler ve yeniden kurar**. Gerçek veri girildiği gün komut kilitlenecek (`ENVIRONMENTS.md` bölüm 2).
+- Örnek iş verisini temizlemek için: `npm run db:reset:data` — kurduğunuz akışlar, kataloglar ve eşikler **durur**, yalnız örnek şantiye, günlük kayıt, stok ve görevler silinir.
+- Yapılandırmayı da fabrika ayarına döndürmek için: `npm run db:reset:config` — onay sorar.
+- Gerçek veri girildiği gün iki komut da kilitlenecek (`ENVIRONMENTS.md` bölüm 4a).
 
 ## 8. Giriş
 

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Resetting sample data no longer throws away your work
+
+- The owner asked whether the reset command would also wipe the workflows. It would have, which was wrong: a morning spent in the flow designer is not sample data. There are now two commands — one clears sample business records and keeps configuration, the other returns configuration itself to factory state and asks first. Configuration can also be exported and loaded into another environment, so the flows built locally move to the live project instead of being rebuilt by hand (D-246, TASK-0076).
+
+
 ## 2026-09-20 — Phase 05: local-first, hosting deferred
 
 - The owner chose to run without a staging environment, on a single Supabase project, with the server decision left for later (D-245). Three consequences are now written down rather than discovered later: acceptance happens on the owner's own machine, with a Turkish setup guide; the pilot with real field users waits until there is an address, which the Phase 09 exit now asks for; and the sample-data reset command is locked the day real data arrives, when a second Supabase project is opened. Milestone M1 becomes the local acceptance milestone instead of the staging gate (TASK-0073…TASK-0075).
