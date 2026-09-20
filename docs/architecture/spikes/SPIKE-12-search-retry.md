@@ -1,10 +1,10 @@
 # SPIKE-12 — Arama hızının yeniden sınanması
 
-Durum: REVIEW — D-247 model onaylı; yeni bağlantı ilk istek hızı açık · Tarih: 2026-09-20 · Görev: TASK-0091 · Bağlı: TASK-0090, OQ-029, ADR-017, D-239, REQ-NFR-012
+Durum: REVIEW — D-247 model onaylı; soğuk ilk istek hızı açık · Tarih: 2026-09-21 · Görev: TASK-0091 · Bağlı: TASK-0090, OQ-029, ADR-017, D-239, REQ-NFR-012
 
 ## Güncel sonuç — D-247 sonrası
 
-Model ve sözcük davranışı onaylandı; CHG-007 ile tasarım kayıtlarına katlandı. Tek çağrılı düzenin 18 senaryosunda, ön ısınma olmadan 20’şer ölçümün en yavaşı 190 ms. Önceki 73 kontrole ek 14 istek ve 5 güvenlik kontrolü geçti. Ancak 12 yeni bağlantının ilk isteklerinden biri 392 ms sürdü; sonraki aynı-istek tanısında 529 ms toplamın 445 ms’si sunucuda ölçüldü. Son backend tanısında 636 ms toplam / 533 ms sunucu içi süre görüldü. Hız kapısı bütün başarısızlıkları korur; SPIKE-12 REVIEW kalır. Son bölüm güncel kanıttır; aşağıdaki üç turlu ölçümler tarihsel karşılaştırmadır.
+Model ve sözcük davranışı onaylandı; CHG-007 ile tasarım kayıtlarına katlandı. Tek çağrılı düzenin 18 senaryosunda, ön ısınma olmadan 20’şer ölçümün en yavaşı 190 ms. Önceki 73 kontrole ek 14 istek ve 5 güvenlik kontrolü geçti. Ancak 12 yeni bağlantının ilk isteklerinden biri 392 ms sürdü; sonraki aynı-istek tanısında 529 ms toplamın 445 ms’si sunucuda ölçüldü. Son backend tanısında 636 ms toplam / 533 ms sunucu içi süre görüldü. Hız kapısı bütün başarısızlıkları korur; SPIKE-12 REVIEW kalır. **Güncel kanıt belgenin son bölümündedir (2026-09-21);** aradaki bütün bölümler tarihsel sırayla korunur ve üç turlu ölçümler tarihsel karşılaştırmadır. 2026-09-21'de aday soğuk ölçümde geçmedi, "yeni backend" açıklaması çürütüldü ve kalan maliyeti ayırmak için soğuk ayrıştırma probu hazırlandı.
 
 ## Önceki sonuç
 
@@ -311,3 +311,96 @@ Aynı alt/üst sözcük sınırıyla kesin eşleşme, nadir 499996 örneğinde B
 Kanıt: search12r-waits-cold-evidence.json; search12r-planning-capability.json; search12r-nested-plans-1789921376747.json; search12r-word-plan-evidence.json; search12r-cover-evidence.json; search12r-exact-range-evidence.json; search12r-range-candidate-evidence.json. Eski bekleme betiği sabit dosya adını kullandığı için önceki 126 ms'nin ham dosyası üzerine yazıldı; tarihsel özet raporda korunur, ham iz korunmuş gibi gösterilmez. Yeni bekleme/iç planlama kanıtları zaman damgalı dosyalara yazılır; soğuk 571 ms ayrıca sabit arşiv kopyasındadır.
 
 **Devam:** ilk veritabanı eylemi search12r-range-waits.mjs olmalı; adayın doğal boşta kalma sonrası ilk çağrısını örnekler. Bu betik hiçbir kurulum/ısınma araması yapmaz. Aday tanım ve yeni indeks deney veritabanında kalır; eski kurulum betikleri tekrar çalıştırılmaz. Soğuk aday geçerse bağımsız kaynak referansı, yeni ölçüm serisi ve indeks yazma/bakım maliyeti doğrulanır; geçmezse aday düzeltilir veya iki fonksiyon ve yalnız yeni indeks kaldırılır. Eski başarısız ölçümler silinmez; baseline hız kapısı 571 ms'yi de içerip FAIL kalır. Ürün tasarımına kabul edilmiş bir indeks değişikliği, ürün kodu veya bölge taşıması yok; TASK-0091 REVIEW ve OQ-029 açık.
+
+## Adayın soğuk ilk çağrısı ve nedenin daraltılması — 2026-09-21
+
+### Aday soğuk ölçümde geçmedi
+
+Oturumun ilk veritabanı eylemi hazırlanan bekleme örnekleyicisiydi; kurulum veya ısınma araması yapmaz. Yaklaşık altı saatlik doğal boşta kalmanın ardından aday aralık fonksiyonunun ilk çağrısı **554 ms toplam / 468,950 ms sunucu** sürdü. Backend 519335, yaşı bir saniyenin altında. Paylaşımlı blok isabeti 6079, **fiziksel okuma sıfır**. 300 örnekten 89'u `active` ve bekleme olayı boş, 211'i bitmiş sorgunun ClientRead beklemesi; örneklerin zaman damgaları sorgunun 460 ms boyunca kesintisiz `active` kaldığını gösteriyor.
+
+Asıl sürümün soğuk ölçümü 571 / 486,752 ms idi. Aday 554 / 468,950 ms. Fark ölçüm gürültüsü sınırındadır; **aday ilk çağrı hedefini karşılamadı ve soğuk maliyeti azaltmadı.** Bu ölçüm hız tekrar kapısına eklendi; kapı altı korunan başarısızlıkla FAIL vermeye devam ediyor (571, 554, 540, 636, 529, 392 ms).
+
+### "Yeni backend" açıklaması çürütüldü
+
+Daha önce yeni backend'in ilk yürütmesi olası neden sayılıyordu. Bunu sınamak için aynı anda açık işlemle tutulan **altı ayrı backend** (PID 519369–519376, yaşları 0,084–0,165 saniye) üzerinde üç kol karşılaştırıldı: A hiç ısınma yok, B yalnız ilişki/katalog dokunuşu, C ucuz bir arama çağrısı. Kolların sırası [B, A, C, C, A, B] olarak dağıtıldı.
+
+| Kol | Isınma | Ölçülen ilk hedef arama (sunucu ms) | Blok isabeti |
+|---|---|---:|---:|
+| A (kontrol) | yok | 46,789 · 47,094 | 6025 |
+| B (ilişki dokunuşu) | 5 sınırlı SELECT | 48,069 · 44,336 | 5664 |
+| C (ucuz çağrı) | tek sözcük araması | 40,153 · 40,502 | 5067 |
+
+Ölçüm başına sonuç adedi, sınırlı rol ve savepoint sonrası boş kimlik doğrulandı; toplam 24 işaretli kontrol geçti. **Hiç ısınmayan, bir saniyeden genç altı backend'in ilk araması 40–48 ms sunucu süresi verdi** — kırk dakika önce aynı yaştaki bir backend'in ölçtüğü 469 ms'nin onda biri. Backend'in yeniliği ne gerekli ne yeterli koşuldur; ayrıca ısınma kollarının kazancı ihmal edilebilir düzeydedir. Ayırt edici etken backend değil, **örnek genelindeki uzun boşta kalmadır.** Bu bir eleme sonucudur; nedeni kanıtlamaz.
+
+### Adayın sıcak ortamdaki kontrollü farkı
+
+İki backend üzerinde, sıra yanlılığını iptal etmek için dönüşümlü (backend 0 asıl-önce, backend 1 aday-önce), terim başına on ikişer örnekle karşılaştırıldı:
+
+| Senaryo | Asıl medyan sunucu ms | Aday medyan sunucu ms | Asıl blok | Aday blok |
+|---|---:|---:|---:|---:|
+| sogut uretim (birlikte yok) | 38,453 | 38,359 | 5230 | 5040 |
+| uretim (yaygın) | 2,311 | 2,478 | 290 | 198 |
+| 499997 (nadir) | 1,688 | 1,174 | 79 | 20 |
+| 499996 (nadir) | 1,197 | 0,915 | 100 | 20 |
+| sogut (tek kesin) | 2,288 | 2,383 | 279 | 181 |
+| uretim 499999 | 2,305 | 1,354 | 316 | 45 |
+
+Aday blok isabetlerini gerçekten düşürüyor, fakat kazanç **yarım ile bir milisaniye** aralığındadır ve ağır senaryoda hiç yoktur. Tek çağrılık toplam süre 77–117 ms bandında kalıyor; bu bandı ağ turu belirliyor. Aday, 300 ms ilk-istek sorununa dokunmuyor.
+
+### İki kaldıraç aynı planlayıcı hatasını çözüyor
+
+`spike.s12r_words` üzerinde zaten **`s12r_words_pkey` UNIQUE B-tree (word, scope_id)** vardı, boyutu 15.777.792 bayt. Aday indeks `s12r_words_exact_cover` aynı anahtarı kullanıp yalnız `INCLUDE (record_count)` ekliyor ve 15.785.984 bayt tutuyor; yani mevcut birincil anahtarın neredeyse birebir kopyasıdır.
+
+İndeks, aynı işlem içinde düşürülüp sonda `ROLLBACK` ile geri getirilerek (PostgreSQL'de `DROP INDEX` işlemseldir) kalıcı değişiklik yapılmadan ölçüldü. Kimlik işlem yerel kurularak sınırlı rolde alınan plan kanıtı:
+
+| Durum | `word = term` planı | `word >= term AND word <= term` planı |
+|---|---|---|
+| Kapsayan indeks var | Index Only Scan `s12r_words_exact_cover` | Index Only Scan `s12r_words_exact_cover` |
+| Kapsayan indeks yok | Index Scan `s12r_words_gist` (65–109 blok) | Index Scan `s12r_words_pkey` (3–105 blok) |
+
+Buradan çıkan sonuç: kesin eşleşmede trigram GiST seçilmesi tek bir planlayıcı tercihidir ve **iki ayrı yoldan** düzeltilebilir — ya kapsayan indeks eklenerek ya da yalnız aralık koşulu yazılarak. İkincisi **mevcut birincil anahtarı kullanır, yeni indeks gerektirmez.**
+
+İndeks varken ve istatistikler tazeyken asıl fonksiyon adaydan biraz daha hızlıdır (0,669 / 2,172 / 37,827 ms; aday 0,903 / 2,405 / 38,142 ms) ve blok isabetleri eşittir. İndeks yokken aday üstündür (nadir terimde 0,905 ms ve 20 blok, asıl 1,092 ms ve 79 blok). Yani ikisi birlikte kullanılırsa aday hiçbir şey kazandırmaz.
+
+### Kapsayan indeksin yazma maliyeti
+
+Yazmalar açık işlem ve savepoint ile geri alındı, veri değişmedi. 20.000 satırlık işlemlerin medyan sunucu süreleri:
+
+| İşlem | İndeks varken | İndeks yokken | Fark |
+|---|---:|---:|---:|
+| INSERT 20.000 satır | 1011,316 ms | 937,910 ms | +73,4 ms (~%8) |
+| UPDATE 20.000 `record_count` | 1376,084 ms | 952,260 ms | +423,8 ms (~%45) |
+
+Güncelleme farkı büyüktür, çünkü `record_count` indeksin `INCLUDE` sütunudur ve değişmesi HOT güncellemeyi engeller. Ölçüm sırası rastgeleleştirilmedi (önce indeksli kol çalıştı), bu yüzden mutlak değerler değil yön ve büyüklük mertebesi kullanılmalıdır.
+
+**Değerlendirme:** kapsayan indeks 15,05 MiB yer ve güncellemelerde yaklaşık %45 ek maliyet karşılığında sıcak aramada yarım milisaniye kazandırıyor; aynı planlayıcı düzeltmesi bedelsiz aralık koşuluyla da elde edilebiliyor. Ürün tasarımına önerilmez. Kalıcı olarak alınması önerilen tek şey, kesin eşleşmenin sıralama aralığı olarak yazılmasıdır. Bu bir ürün kararı değil, ölçülmüş bir öneridir.
+
+### Fikstüre verilen zarar ve onarımı
+
+Yazma maliyeti ölçümü, geri alınmış olmasına rağmen fiziksel ölü satır bıraktı: `s12r_words` indeksleri GiST 37.289.984 → 57.188.352, pkey 15.777.792 → 17.801.216, aday 15.785.984 → 20.930.560 bayta çıktı. Bu bu oturumun yan etkisidir ve sonraki soğuk ölçümü bozacaktı. `VACUUM (ANALYZE)` ve `REINDEX TABLE spike.s12r_words` ile onarıldı: ölü satır sıfır, satır sayısı 500.411 değişmedi, aday ve pkey **bayt bayt eski boyutlarına** döndü, GiST 37.437.440 bayt olarak yeniden kuruldu (%0,4 fark).
+
+Onarımın ölçülebilir bir yan etkisi vardır ve saklanmaz: `ANALYZE` öncesinde asıl fonksiyon nadir terimde 79 blok (GiST) kullanıyordu, sonrasında 20 blok (kapsayan indeksle index-only). Yani **bu oturumdan önceki bütün ölçümler bayat istatistiklerle alınmıştır.** Tazelenmiş istatistik soğuk 469 ms sorununu değiştirmez: soğuk ölçüm zaten `VACUUM`'dan önce alınmıştı ve sıcak ölçümler her iki durumda da 38 ms bandındadır.
+
+### Sıradaki tanı — soğuk ayrıştırma
+
+Soğuk maliyetin bilinen özellikleri artık şunlardır: sunucu içinde, `active` durumda, görünür bekleme olayı yok, fiziksel okuma yok, bütün aşamalara yayılmış, yeni backend'e bağlı değil, plan veya indeks seçimine bağlı değil, DISCARD PLANS ile yeniden üretilemiyor. Geriye kalan aday açıklamalar örnek düzeyindedir ve arama sorgusuna özgü değildir.
+
+`search12r-cold-triage.mjs` hazırlandı ve **sonraki oturumun ilk veritabanı eylemi** olmalıdır; uzun bir doğal boşta kalma gerektirir. Tek işlemde, artan maliyetli dört probu sırayla ölçer:
+
+| Prob | İçerik | Yavaşsa işaret ettiği |
+|---|---|---|
+| P0 | `select 1` | bağlantı/backend uyanma maliyeti, sorgu işi yok |
+| P1 | `pg_stat_activity` sayımı | sistem kataloğu okuma maliyeti |
+| P2 | `generate_series(1..1.000.000)` sayımı | saf CPU; hiç paylaşımlı tampon kullanmaz |
+| P3 | `s12r_words` üzerinde seq scan | çok blok, az CPU; host tarafında sayfa hatalanması |
+| P4 | asıl `s12r_request_search` | maliyet arama yoluna özgü |
+
+Her prob üç kez çalışır, ilk ve sonraki çalıştırmaların farkı kaydedilir. P4 sonuç adedi, sınırlı rol ve savepoint sonrası kimlik temizliği kontrolleriyle korunur; işlem `ROLLBACK` ile kapanır. Betik kurulum, ısınma, DDL veya reset yapmaz. Hız kapısı bu betiğin P4 sonuçlarını da okuyacak biçimde genişletildi.
+
+Bu ayrım kök nedeni kanıtlamaz, yalnız arama yolu ile örnek düzeyindeki maliyeti birbirinden ayırır. P2 soğukken de yavaşsa sorun sorgu mühendisliğiyle çözülemez ve barındırma/örnek kararına taşınır.
+
+### Veritabanında kalanlar
+
+Aday `spike.s12r_range_search(text)`, `spike.s12r_range_request(uuid,text)` ve `s12r_words_exact_cover` **kaldırılmadı**; kaldırma sahibin onayını bekliyor. Asıl `spike.s12r_bucket_search(text)` ve `spike.s12r_request_search(uuid,text)`, kaynak GiST ve birincil indeksler, RLS kuralları ve 500.411 sözcük satırı değişmedi. Bu oturumda ürün kodu yazılmadı, bölge taşınmadı, oturum sonlandırılmadı, reset yapılmadı ve hedef gevşetilmedi. TASK-0090/0091 REVIEW, OQ-029 açık.
+
+Kanıt dosyaları dış scratchpad'de: `search12r-range-waits-1789943726422.json`, `search12r-warmup-arms-*.json`, `search12r-ab-warm-*.json`, `search12r-index-cost-*.json`, `search12r-fixture-restore-*.json`, `search12r-poststats-*.json`. Betikler aynı adları taşır. Hız kapısı `search12r-speed-gate.mjs` zaman damgalı soğuk kanıtları da okuyacak biçimde genişletildi ve FAIL veriyor.

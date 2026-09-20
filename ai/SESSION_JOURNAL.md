@@ -101,3 +101,8 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-20 11:19:24Z · 6c9e96a0 · Write · `docs/architecture/spikes/SPIKE-10-pdf-quality.md`
 - 2026-09-20 11:27:01Z · 6c9e96a0 · Write · `docs/architecture/spikes/SPIKE-11-tcmb-exchange-rate.md`
 - 2026-09-20 11:43:58Z · 6c9e96a0 · Write · `docs/architecture/spikes/SPIKE-01-rls-correctness.md`
+- 2026-09-20 22:54:39Z · bf800d5c · Edit · `docs/architecture/spikes/SPIKE-12-search-retry.md`
+- 2026-09-20 22:54:49Z · bf800d5c · Edit · `docs/architecture/spikes/SPIKE-12-search-retry.md`
+- 2026-09-20 22:55:00Z · bf800d5c · Edit · `ai/CURRENT_STATE.md`
+- 2026-09-20 22:55:09Z · bf800d5c · Edit · `ai/CURRENT_STATE.md`
+- 2026-09-20 22:55:18Z · bf800d5c · Edit · `ai/CURRENT_STATE.md`

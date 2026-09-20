@@ -1,6 +1,6 @@
 # OPEN QUESTIONS
 
-Last updated: 2026-09-20 · Format: `OQ-NNN` · Blocking = blocks the stated phase
+Last updated: 2026-09-21 · Format: `OQ-NNN` · Blocking = blocks the stated phase
 
 IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no missing records).
 
@@ -8,7 +8,7 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 
 | ID | Category | Question | Proposed answer | Blocks |
 |---|---|---|---|---|
-| OQ-029 | Architecture validation | OPEN: which first-execution cost causes the remaining 300 ms failure? D-247 model and semantics remain adopted. | Verified new backend: first 540 ms total / 465 ms server, second 112/39 ms. Separate new-backend direct profile was fast; startup alone is not a proven cause. Equivalent profile reproduced 432/354 ms across several stages; plan modes gave no accepted fix. Cold original 571/487 ms had no sampled PG wait. Exact lookup GiST choice isolated; covering B-tree/range candidate passed 24 parity/security checks. Next cold candidate sampler, then independent source validation; no accepted fix yet. Earlier 392/529/636 ms retained; replay FAIL. Region move postponed (DEF-009). See `docs/architecture/spikes/SPIKE-12-search-retry.md`. No waiver. | Product search implementation and Phase 06 exit until validated resolution |
+| OQ-029 | Architecture validation | OPEN: which first-execution cost causes the remaining 300 ms failure? D-247 model and semantics remain adopted. | 2026-09-21: the candidate failed its cold first call (554 ms total / 469 ms server after ~6 h idle), matching the original's 571/487 ms, so index and plan changes do not address it. New-backend startup is ruled out: six concurrently held backends aged 0.084–0.165 s answered the same search in 40–48 ms, with warm-up arms adding nothing. The cold cost is inside the server, `active`, with no sampled wait, no physical read, spread across all stages, and is not reproducible while the instance is warm — it tracks instance-level idleness. Plan probes showed the covering index and the range rewrite fix the same planner choice; the rewrite uses the existing primary key with no extra index, while the index costs 15.05 MiB and ~45% more on `record_count` updates, so the index is not recommended. Next: `search12r-cold-triage.mjs` after a long natural idle, separating connection wake-up, catalog reads, pure CPU, buffer scanning and the search path. Earlier 392/529/540/636 ms and the new 554 ms are retained; replay FAIL. Region move postponed (DEF-009). See `docs/architecture/spikes/SPIKE-12-search-retry.md`. No waiver. | Product search implementation and Phase 06 exit until validated resolution |
 
 ## Phase 00 — answered domain question
 
