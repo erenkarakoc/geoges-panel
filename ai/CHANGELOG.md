@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Data coverage check
+
+- `docs/database/COVERAGE.md` counts what Phase 04 produced — 211 tables — and names the requirements that correctly have no table of their own, so a gap can be told apart from a principle. Every table must prove three things before a migration is accepted: it has a scope column, a security policy and a history channel (TASK-0072).
+
+
 ## 2026-09-20 — Analytics and user-defined record schemas
 
 - `docs/database/SCHEMA-ANALYTICS.md` separates what reporting derives from what it owns: indicator and summary tables carry a rebuild marker and can be thrown away, while KPI definitions, bonuses, recommendations and budgets are real records. A month that cannot be calculated says so instead of showing zero.
