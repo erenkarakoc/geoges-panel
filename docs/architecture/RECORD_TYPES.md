@@ -62,3 +62,9 @@ Sınırlar mühendislik ayarıdır; aşılmak istenirse o ihtiyaç muhtemelen ge
 - **Phase 04:** `custom_record`, tanım, bağ ve dizin tablolarının şeması; JSONB alanlarının doğrulanması; ortak RLS politikası.
 - **Phase 06 denemesi (RISK-010):** bir türün uçtan uca sınanması — tanım, veri girişi, RLS, arama, rapor, alan emekliye ayırma — ve on binlerce kayıtta sorgu süresi.
 - **Phase 09R:** ekranlar ve oluşturucu deneyimi, pilot sonrası gerçek kullanımla.
+
+## 9. Phase 06 doğrulaması (2026-09-20)
+
+SPIKE-08 veri zinciri ölçütlerini geçti (TASK-0089); rapor: `docs/architecture/spikes/SPIKE-08-custom-record-types.md`. İki tür aynı politika kümesini kullandı; 50.001 kayıtta liste/sayısal süzme p95 240/270 ms ölçüldü. Ürün ekranları ve tam IAM henüz uygulanmadı.
+
+Denemeden ürün kabul testlerine taşınacaklar: geçmiş ve arama gibi yardımcı tablolara yazma, yalnız okuma izniyle açılamaz; emekli alanın arama metni de temizlenir; eski tanım sürümleri denetim kanalında korunur; sayısal süzme indeksi sayısal sorgu ifadesiyle aynı tipte kurulur. Deneyde alan emekliliği ve arama yenilemesi aynı işlemde sınandı. D-241 değişmedi; sonuçlar bu kuralların gerekliliğini somutlaştırır.

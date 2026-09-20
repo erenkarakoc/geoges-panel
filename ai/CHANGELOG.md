@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-20 — Custom record data spike passed after two fixture repairs
+
+- TASK-0089: SPIKE-08 completed its definition/input/RLS/search/report/retirement chain with 48 checks and 50,001 synthetic records. List and numeric filtering p95 were 240 and 270 ms. The report distinguishes data feasibility from the future builder UI, full IAM and workflow integration.
+- Negative review found read-only-user writes to helper tables and stale search vectors after field retirement. Both were reproduced, repaired in the throwaway schema and verified; source values and old definition snapshots remained intact. Product records/source were unchanged. Next: SPIKE-12, then SPIKE-14.
+
+
 ## 2026-09-20 — Workflow execution spikes passed in their measured scope
 
 - TASK-0086…TASK-0088: completed SPIKE-04/05/06 with 26 assertions plus 13 independent reference checks. Existing instances keep their version across publication and process restart. Dry runs preserve state and match real paths/owners for four scenarios. Indexed historical count/sum queries over 500k rows stay below two seconds, and genuine PostgreSQL timeout stops the instance with a recorded reason and notification intent.

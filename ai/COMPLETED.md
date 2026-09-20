@@ -6,6 +6,7 @@ Only items whose quality gate passed are listed here.
 
 | Date | ID | Item | Gate |
 |---|---|---|---|
+| 2026-09-20 | TASK-0089 | Custom record data pipeline, shared RLS, history and 50k-row speed | T1 spike PASS; 48 controls, documented repairs and limits |
 | 2026-09-20 | TASK-0086 | Workflow version pinning and persistent trace | T1 spike PASS; seven assertions and independent trace review |
 | 2026-09-20 | TASK-0087 | Dry/real parity without persistent dry-run effects | T1 spike PASS; ten assertions and independent reference review |
 | 2026-09-20 | TASK-0088 | Historical query speed, freshness and real timeout | T1 spike PASS; nine assertions and documented limits |

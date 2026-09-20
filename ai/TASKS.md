@@ -86,6 +86,8 @@ Last updated: 2026-09-20 · Format: `docs/standards/ID_STANDARDS.md`
 | TASK-0087 | SPIKE-05: shared dry-run execution without effects | T1 | DONE | TASK-0064 | Phase 06. Ten checks pass across approve/reject/return/false-condition paths; read-only write rejection and no persistent changes. Thirteen independent path/owner assertions shared with SPIKE-04. Report: `docs/architecture/spikes/SPIKE-05-dry-run-parity.md`. No product code |
 | TASK-0088 | SPIKE-06: bounded historical conditions | T1 | DONE | TASK-0064 | Phase 06. Nine checks pass: 500k history, fresh count/sum, p95 238–241 ms, genuine 2-second statement timeout, failed-instance trace and notification intent without business effects. Report: `docs/architecture/spikes/SPIKE-06-windowed-conditions.md`. No product code |
 
+| TASK-0089 | SPIKE-08: custom record types end to end | T1 | DONE | TASK-0064 | Phase 06. 48 checks including two reproduced/fixed fixture flaws; 50,001 records, shared RLS, typed input, links, search/report, field retirement and definition history. List p95 240 ms, numeric filter p95 270 ms. Report: `docs/architecture/spikes/SPIKE-08-custom-record-types.md`. Data spike only, no UI/product code |
+
 ## CHG-003 / CHG-004 — early UX and shell delivery
 
 These deliver **Phase 02** (navigation, IA, role entry screen, top bar, mobile) and **Phase 07** (app shell) scope ahead of their phases, under approved change requests. Both phases are `PARTIALLY_DONE` in the roadmap.

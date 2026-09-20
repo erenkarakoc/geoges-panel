@@ -36,4 +36,8 @@ Bir tür modül olacak kadar büyürse verisi JSONB'den tipli tabloya taşınır
 2026-09-20
 
 ## Durum
-Kabul edildi (SPIKE-08 ile doğrulanacak)
+Kabul edildi (SPIKE-08 veri zinciri ve 50 bin kayıt ölçütleri 2026-09-20 doğrulandı; ekranlar/tam IAM Phase 09R)
+
+## Doğrulama notu
+
+TASK-0089 kapsamında 48 kontrol geçti; ilk deneyde bulunan yardımcı tablo yetkisi ve emekli alanın eski arama metni kusurları giderildi. Ölçüm, kapsam ve ürün sınırlamaları: `docs/architecture/spikes/SPIKE-08-custom-record-types.md`. Eski alan tanımını yeniden kurmak için sürümün alan bilgileri denetim kanalında tutulmalıdır; kayıt üzerindeki sürüm numarası tek başına yeterli değildir.

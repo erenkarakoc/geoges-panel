@@ -19,14 +19,14 @@ ADR-016 ve D-241'in tablo karşılığı. Kullanıcının tanımladığı her t�
 
 ## Yetki
 
-- `cst.record` üzerinde **tek** RLS politikası vardır: kullanıcının etkin kapsamı ile satırın `scope_type`/`scope_ids[]` karşılaştırılır, ardından `cst.permission_rule` okunur.
+- `cst.record` üzerinde **türlerden bağımsız ortak RLS politikaları** vardır: okuma, ekleme ve güncelleme kendi işlem iznini denetler. Kullanıcının etkin kapsamı satırın `scope_type`/`scope_ids[]` alanlarıyla karşılaştırılır, ardından `cst.permission_rule` okunur. D-241'deki tek politika yaklaşımı, her yeni türe ayrı politika üretmemek anlamındadır; yazma kontrolü okuma kontrolüyle karıştırılmaz (SPIKE-08).
 - Alan düzeyi veri sınıfı süzmesi sunucu katmanındadır: hassas veya ticari işaretli alan, izni olmayanın sorgusundan çıkarılır (JSONB'den okunmadan).
 - Yeni tür eklemek yeni politika **gerektirmez**; ADR-016'nın en önemli kazancı budur.
 
 ## Dizinler
 
 - `cst.record (record_type_id, status)` ve `(record_type_id, scope_type)` temel dizinlerdir.
-- `is_searchable` veya `is_filterable` işaretli her alan için ifade dizini kurulur: `((fields ->> 'alan_kodu'))`. Dizinler tür tanımından üretilir; elle yazılmaz.
+- `is_searchable` veya `is_filterable` işaretli her alan için ifade dizini kurulur: `((fields ->> 'alan_kodu'))`. Dizinler tür tanımından üretilir; elle yazılmaz. Yukarıdaki ifade metin alanı örneğidir; sayısal alanın indeksi sayısal dönüşümle sorgunun kullandığı ifadeyi eşlemelidir (SPIKE-08).
 - Aranabilir alanlar ayrıca `core.search_row`'a yazılır (ADR-017); tür adı arama sonuçlarında grup olur.
 
 ## Doğrulama
@@ -39,7 +39,8 @@ ADR-016 ve D-241'in tablo karşılığı. Kullanıcının tanımladığı her t�
 - Alan silinmez: `retired_at` yazılır, JSONB'deki değerler yerinde kalır, ekranlarda görünmez, geçmişte görünür (D-094).
 - Alan tipi değiştirilemez; yeni alan açılır, eskisi emekliye ayrılır.
 - Her kayıt, yazıldığı tür sürümünü (`type_version_no`) taşır; böylece eski kayıt hangi tanıma göre girildiği bilinerek okunur.
-- Değişiklikler `aud.record_history` kanalına yazılır; kullanıcı tanımlı kayıtlar için de "kim neyi değiştirdi" tutulur.
+- Değişiklikler `aud.record_history` kanalına yazılır; kullanıcı tanımlı kayıtlar için de "kim neyi değiştirdi" tutulur. Alan tanımının önceki sürümleri de yeniden kurulabilmelidir; yalnız kayıt üzerindeki sürüm numarası yeterli değildir.
+- Alan emekliye ayrılınca arama satırlarındaki eski alan metni de temizlenir. Kaynak JSONB değeri ve geçmiş silinmez. Yardımcı geçmiş/arama satırlarına yazma, türün yazma yetkisini gerektirir; okuma yetkisi yeterli değildir (SPIKE-08).
 
 ## Sınırlar (D-241)
 
