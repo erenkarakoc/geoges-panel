@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — SPIKE-07 passed: the flow canvas holds up
+
+- A throwaway 40-step flow was built and measured. It paints in about a quarter of a second, stays at roughly 80 frames a second while being zoomed and dragged, fits a phone screen without sideways scrolling, and every step can be reached from the keyboard. The diagram library already in the project (MIT, ~88 KB compressed) does the heavy lifting; the boxes, panels and buttons around it are COSS. Three things were noted for Phase 08: the canvas should be one tab stop with arrow-key movement instead of forty, the mini-map should be off on phones, and the library should load only when the designer is opened (TASK-0079).
+
+
 ## 2026-09-20 — Phase 05 DONE, Phase 06 starts
 
 - The owner approved the Phase 05 exit. How the panel runs, how it is checked before every commit, how the owner installs it themselves, what happens when something breaks and what must exist before real data are all written down. Phase 06 begins: sixteen throwaway experiments against the riskiest decisions, starting with the three that hold the architecture up — row-level security on a direct connection, its speed, and the outbox under load. The owner chose to run them against the existing Supabase project.

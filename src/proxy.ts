@@ -19,6 +19,11 @@ const publicRoutes = [
 ];
 
 function isPublicRoute(pathname: string): boolean {
+  // Phase 06 spike route, development only; removed with the spike (SPIKE-07).
+  if (process.env.NODE_ENV !== "production" && pathname.startsWith("/spike-flow")) {
+    return true;
+  }
+
   return publicRoutes.some((route) => pathname === route || pathname.startsWith(`${route}/`));
 }
 
