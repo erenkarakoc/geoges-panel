@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-20 — Cold wait captured; exact-word index candidate prepared
+
+- TASK-0091: original cold request 571/487 ms, no PG wait sampled while active. Transaction-local nested stats showed exact-word execution cost rather than plan cost in a subsequent rare-number case. Exact equality sometimes uses trigram GiST. No definitive CPU/IO root cause claimed.
+- Added a disposable 15.05 MiB covering B-tree and private same-bound range lookup copies; originals/RLS unchanged. Index-only path demonstrated; 54 covering-index candidate timings and 24 range-candidate parity/security checks passed. Cold candidate and independent source reference still pending; no product adoption. Next first DB action is the prepared candidate wait sampler.
+- Fixed evidence overwriting by timestamping future wait outputs. Old warm raw trace was overwritten, explicitly acknowledged; cold 571 ms preserved separately and added to failing baseline replay. All diagnostic settings remained transaction-local, statistics not reset.
+
 ## 2026-09-20 — Equivalent search profiling reproduces distributed first-call delay
 
 - TASK-0091: eight equivalent-wrapper observations; first profile 432 ms total / 354 ms server, with setup, exact-word lookup and bucket work all slower. Other new backends were fast. Private profile copies removed; result/role/savepoint identity checks passed. No root cause or fix claimed.

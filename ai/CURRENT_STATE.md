@@ -7,7 +7,7 @@ PROJECT STATUS:      DESIGN
 CURRENT PHASE:       PHASE 06 — Validation Spikes (Phase 05 DONE 2026-09-20, owner approved)
 CURRENT SUBPHASE:    TESTING
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0090/0091 REVIEW: equivalent wrapper profile reproduced 432/354 ms across several stages; forced plan modes offered no accepted fix. Warm wait sampling is inconclusive. Next first database action: wait-sampled original search after natural idle (OQ-029). Ireland stays (DEF-009).
+CURRENT TASK:        TASK-0090/0091 REVIEW: cold original 571/487 ms with no sampled PG wait; nested stats locate execution cost in exact-word lookup. B-tree/range candidate passed 24 parity/security checks but awaits cold validation. FIRST next DB action: search12r-range-waits.mjs. Ireland stays (DEF-009).
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -39,13 +39,13 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. TASK-0091: run search12r-waits.mjs before any other database experiment on resume, to pair any natural-idle first-call failure with wait events. Equivalent profiling reproduced 432/354 ms across setup, word lookup and buckets; plan-cache modes did not establish a fix. Last wait sample was warm and inconclusive. Do not repeat warm timings as root-cause evidence. Keep role/timeout transaction-local; OQ-029 stays open before SPIKE-14.
+1. TASK-0091: run search12r-range-waits.mjs before any other DB experiment. Private range candidate plus 15.05 MiB covering index are retained only in spike schema; original functions unchanged. Then independently validate source results and candidate cold/warm series before adoption. Baseline speed gate still fails including 571 ms; no target waiver or region change.
 2. Remaining Phase 06 experiments follow the order in `docs/architecture/spikes/README.md`. SPIKE-10 needs rendered PDF inspection; SPIKE-11 needs missing-rate/recovery assertions. Neither is waived or complete.
 3. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076; no product code in Phase 06.
 4. TASK-0018: re-check memory-worker authentication after 2026-10-15; do not stop the worker or invoke cloud-sync.
 
 ## BLOCKED BY
-No owner input is currently needed. The search model and word semantics were adopted with the owner’s continuation (D-247). Product search and Phase 06 exit remain gated by first-request performance: 392, 529, 636 and 540 ms versus 300 ms (OQ-029). Further disposable diagnosis is authorized; no target waiver or product code.
+No owner input is currently needed. The search model and word semantics were adopted with the owner’s continuation (D-247). Product search and Phase 06 exit remain gated by first-request performance: 392, 529, 636, 540 and 571 ms versus 300 ms (OQ-029). Further disposable diagnosis is authorized; no target waiver or product code.
 
 ## OPEN QUESTIONS
 See `ai/OPEN_QUESTIONS.md`. OQ-029 tracks remaining first-request validation after D-247 adoption. OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.
