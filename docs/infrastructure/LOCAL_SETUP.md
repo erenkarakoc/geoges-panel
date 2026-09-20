@@ -1,6 +1,6 @@
 # Paneli Kendi Bilgisayarınızda Çalıştırma
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Her dilim bitiminde paneli kendi bilgisayarınızda açıp gezmeniz için (D-245). Windows içindir. İlk kurulum bir kez yapılır, sonraki dilimlerde yalnız 5. ve 6. adımlar tekrarlanır.
 

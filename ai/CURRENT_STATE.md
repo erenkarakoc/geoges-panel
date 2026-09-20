@@ -4,21 +4,23 @@ Last updated: 2026-09-20
 
 ```text
 PROJECT STATUS:      DESIGN
-CURRENT PHASE:       PHASE 05 — Infrastructure, Environments & Operations (Phase 04 DONE 2026-09-20, owner approved)
+CURRENT PHASE:       PHASE 06 — Validation Spikes (Phase 05 DONE 2026-09-20, owner approved)
 CURRENT SUBPHASE:    PLANNING
 CURRENT FEATURE:     —
-CURRENT TASK:        Phase 05 work plan (environments, CI/CD, secrets, backup and restore, monitoring, e-mail and domains) — needs owner answers on OQ-010…OQ-016
+CURRENT TASK:        Phase 06 spikes — 16 throwaway experiments, starting with the ones that carry the architecture (SPIKE-01, 02, 03)
 STATUS:              DESIGNING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
-CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 and CHG-006 are both folded. Normal ADR-007 rule applies — Phase 05 is a design phase; product code resumes in Phase 07 or via an approved change request.
+CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 and CHG-006 are both folded. Normal ADR-007 rule applies — Phase 06 writes **throwaway spike code only** (never shipped); product code resumes in Phase 07 or via an approved change request.
                      Tooling code that enforces the records (scripts/, .githooks/) is always allowed.
                      Already-shipped exceptions that remain valid: development-only sandboxes (D-052) and the CHG-004 shell transfer (TASK-0032…TASK-0037, owner approved).
                      Note: TASK-0034 and TASK-0037 also shipped module-namespaced sample screens (modules/sit/ui, modules/wfl/ui, modules/tsk/ui). They are sample data behind the shell, approved as part of CHG-004, and are re-wired when SIT and the workflow engine exist.
 ```
 
 ## LAST COMPLETED TASK
-Phase 04 DONE (2026-09-20, owner approved): 211 tables in six schema documents plus conventions and the coverage check (TASK-0065…TASK-0072, D-243, D-244).
+Phase 05 DONE (2026-09-20, owner approved): local-first operation with no staging and hosting deferred (D-245), two reset commands and portable configuration (D-246), CI gate, owner setup guide, backup and recovery plan, eleven runbooks (TASK-0073…TASK-0078).
+
+Earlier: Phase 04 DONE (2026-09-20, owner approved): 211 tables in six schema documents plus conventions and the coverage check (TASK-0065…TASK-0072, D-243, D-244).
 
 Earlier: Phase 03 DONE (2026-09-20, owner approved): module boundaries and contracts, event backbone, workflow engine architecture, permission architecture, configuration and custom fields, ports and data access, storage direction for user-defined record types, and the 16 Phase 06 spikes (TASK-0057…TASK-0064, D-230…D-242, ADR-014…018; OQ-020 and OQ-026 closed).
 

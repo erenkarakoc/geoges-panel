@@ -1,6 +1,6 @@
 # İşletim El Kitapçıkları
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Bir şey ters gittiğinde ne yapılacağı. Her kitapçık: belirti → ilk kontrol → düzeltme → sonrası. Yerel dönem için yazıldı; sunucu kurulunca dağıtım ve izleme adımları eklenecek (DEF-008). Görev: TASK-0078.
 

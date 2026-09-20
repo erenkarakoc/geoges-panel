@@ -1,6 +1,6 @@
 # Sürekli Entegrasyon ve Kalite Kapısı
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Her commit'te ve her push'ta neyin otomatik denetlendiği. Yerel kapı bugün çalışıyor; GitHub tarafı Phase 07'de kurulur. Görev: TASK-0074. İlgili: `docs/standards/QUALITY_GATES.md`, ADR-008.
 

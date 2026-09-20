@@ -22,8 +22,8 @@ Module codes: see `docs/architecture/MODULE_MAP.md`.
 | 02 | UX, Information Architecture & User Flows | Design | DONE |
 | 03 | System Architecture | Design | DONE |
 | 04 | Database Architecture | Design | DONE |
-| 05 | Infrastructure, Environments & Operations Design | Design | IN_PROGRESS |
-| 06 | Validation Spikes | Validate | NOT_STARTED |
+| 05 | Infrastructure, Environments & Operations Design | Design | DONE |
+| 06 | Validation Spikes | Validate | IN_PROGRESS |
 | 07 | Foundation Build | Build | PARTIALLY_DONE |
 | 08 | Workflow Engine & Visual Designer | Build | NOT_STARTED |
 | 09 | Slice 1 — Projects, Sites, Daily Log, Approvals, Cockpit | Build + Pilot | NOT_STARTED |
@@ -198,7 +198,7 @@ STATUS: DONE
 - **Purpose:** design how the system runs, deploys, is observed and recovered.
 - **Scope:** Supabase projects per environment; R2 buckets and access; VPS layout (Docker, reverse proxy, SSL); domains (`geogespanel.com` noindex); CI/CD pipeline (lint → type-check → unit → integration → build → security checks → deploy → health check → rollback); secrets management; logging, error tracking, monitoring; backup & disaster recovery (DB, files, offsite); email sending; web push; cost estimate.
 - **Dependencies:** Phase 03 (DONE), Phase 04 (DONE); OQ-010…OQ-016 — answered or deferred 2026-09-20 (D-245, DEF-008).
-- **Status:** `IN_PROGRESS` — **current phase since 2026-09-20.**
+- **Status:** `DONE` — owner approved the exit 2026-09-20. **Delivered:** local-first environment model with three data layers and two reset commands (`ENVIRONMENTS.md`, TASK-0073, D-245, D-246); CI and quality gate (`CI.md`, TASK-0074); the owner's own setup guide (`LOCAL_SETUP.md`, TASK-0075); backup and disaster recovery with RPO/RTO targets and the five prerequisites before real data (`BACKUP_AND_RECOVERY.md`, TASK-0077); eleven runbooks (`RUNBOOKS.md`, TASK-0078). Hosting, staging, deployment, monitoring and off-site backup deferred as DEF-008, tied to the Phase 09 exit.
 - **Deliverables:** `docs/infrastructure/*`, runbooks drafts, ADRs.
 - **Acceptance:** RPO/RTO defined; restore procedure designed; environment matrix complete.
 
@@ -206,7 +206,8 @@ STATUS: DONE
 
 - **Purpose:** prove risky assumptions before committing to them. Spike code is thrown away.
 - **Candidate spikes:** Supabase Auth + RLS with multi-role, delegation and acting role; transactional outbox + job processing on the chosen stack; workflow engine definition model + versioned execution; visual flow editor feasibility with COSS/Base UI; R2 signed URLs + permission-checked downloads; Turkish-quality PDF generation (quote documents, daily report); CBRT exchange-rate fetch with fallback; architecture boundary enforcement tooling.
-- **Dependencies:** Phases 03–05 drafts.
+- **Dependencies:** Phases 03–05 (all DONE).
+- **Status:** `IN_PROGRESS` — **current phase since 2026-09-20.** Spike list and pass criteria: `docs/architecture/spikes/README.md` (16 spikes).
 - **Deliverables:** spike reports in `docs/architecture/spikes/`, ADR updates.
 - **Acceptance:** every candidate spike is PASS, FAIL (with ADR change) or explicitly waived by owner.
 - **CHG-006 spikes:** user-defined record types end to end (definition → storage → RLS → search → report); free-form windowed conditions under load.

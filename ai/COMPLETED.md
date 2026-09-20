@@ -71,3 +71,8 @@ Only items whose quality gate passed are listed here.
 | 2026-09-20 | TASK-0070 | Analytics schema | T2 PASS (owner confirmed) |
 | 2026-09-20 | TASK-0071 | User-defined record type schema | T1 PASS (owner confirmed) |
 | 2026-09-20 | TASK-0072 | Phase 04 data coverage check | T2 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0073 | Environment and operations model | T2 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0074 | CI and quality gate | T2 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0075 | Owner's local setup guide | T3 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0077 | Backup and disaster recovery plan | T1 PASS (owner confirmed) |
+| 2026-09-20 | TASK-0078 | Operational runbooks | T2 PASS (owner confirmed) |

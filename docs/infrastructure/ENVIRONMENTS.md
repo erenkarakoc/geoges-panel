@@ -1,6 +1,6 @@
 # Ortamlar ve İşletim Modeli
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Panelin nerede çalıştığı, verinin nerede durduğu ve canlıya geçerken nelerin değişeceği. Görev: TASK-0073. Kararlar: D-245. Gereksinimler: REQ-NFR-017…020.
 

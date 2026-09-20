@@ -1,6 +1,6 @@
 # Yedekleme ve Felaket Kurtarma
 
-Durum: TASLAK · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 
 Veri kaybına ve uzun kesintiye karşı plan. Hedefler gereksinimden gelir: **en çok 1 saatlik veri kaybı (RPO ≤ 1 saat)** ve **en çok 4 saatlik kesinti (RTO ≤ 4 saat)** (REQ-NFR-018, REQ-NFR-019). Görev: TASK-0077. İlgili: `docs/infrastructure/ENVIRONMENTS.md`, D-231 (hiçbir kayıt zamanla silinmez).
 

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Phase 05 DONE, Phase 06 starts
+
+- The owner approved the Phase 05 exit. How the panel runs, how it is checked before every commit, how the owner installs it themselves, what happens when something breaks and what must exist before real data are all written down. Phase 06 begins: sixteen throwaway experiments against the riskiest decisions, starting with the three that hold the architecture up — row-level security on a direct connection, its speed, and the outbox under load. The owner chose to run them against the existing Supabase project.
+
+
 ## 2026-09-20 — Backup plan and runbooks
 
 - `docs/infrastructure/BACKUP_AND_RECOVERY.md` states plainly what would be lost and how fast it comes back: a dump before every migration now, and five things that must exist before any real company data is entered — including a restore actually rehearsed and timed, because an untested backup is not a backup. When live, the date of the last backup and the last drill will be visible on the administration page.
