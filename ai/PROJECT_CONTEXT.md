@@ -45,7 +45,7 @@ Owner (full visibility, cannot be restricted by anyone), general manager, coordi
 |---|---|
 | App | Next.js (current: 16.x) + TypeScript, React 19 |
 | UI | COSS UI (Base UI) + Tailwind CSS v4 |
-| Database/Auth | Supabase Cloud, EU (Frankfurt) region; portable toward self-hosted Supabase |
+| Database/Auth | Supabase Cloud, EU; original direction Frankfurt, current test endpoint Ireland (eu-west-1, verified 2026-09-20); confirm deployment region before rollout; portable toward self-hosted Supabase |
 | Files | Cloudflare R2 behind a storage port |
 | Hosting | Own VPS (Docker, reverse proxy); Google Cloud Run only for heavy workloads if needed |
 | Source control | GitHub `erenkarakoc/geoges-panel` (private) |

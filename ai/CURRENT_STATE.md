@@ -7,7 +7,7 @@ PROJECT STATUS:      DESIGN
 CURRENT PHASE:       PHASE 06 — Validation Spikes (Phase 05 DONE 2026-09-20, owner approved)
 CURRENT SUBPHASE:    TESTING
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0090/0091 REVIEW: latest first request 529 ms includes 445 ms server work. JIT and set-query alternative ruled out; original one-call path retained. Next distinguish actual backend startup from pool reuse (OQ-029); eight spikes complete.
+CURRENT TASK:        TASK-0090/0091 REVIEW: latest 636 ms request includes 533 ms server work; 32 calls reused one backend through the Ireland transaction pooler. Backend age unavailable. Next use transaction-local diagnostic setup (OQ-029); eight spikes complete.
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -39,13 +39,13 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. TASK-0091: distinguish real PostgreSQL backend startup from fresh-client/pool reuse. Latest 24 first-call observations include 529 ms total / 445 ms server work; a first-execution cause is not yet proven. JIT statistics show zero compilation, and a slower set-based alternative was removed. Original one-call path and D-247 design remain; eight spikes complete, OQ-029 open before SPIKE-14.
+1. TASK-0091: capture backend startup and first execution within transaction-local diagnostic setup. Ireland transaction pooler confirmed; 32 calls reused one PID, but age was unavailable. Latest 636 ms total / 533 ms server work cannot be explained by geographic network latency alone. Preserve all failed samples; OQ-029 remains open before SPIKE-14.
 2. Remaining Phase 06 experiments follow the order in `docs/architecture/spikes/README.md`. SPIKE-10 needs rendered PDF inspection; SPIKE-11 needs missing-rate/recovery assertions. Neither is waived or complete.
 3. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076; no product code in Phase 06.
 4. TASK-0018: re-check memory-worker authentication after 2026-10-15; do not stop the worker or invoke cloud-sync.
 
 ## BLOCKED BY
-No owner input is currently needed. The search model and word semantics were adopted with the owner’s continuation (D-247). Product search and Phase 06 exit remain gated by first-request performance: 392 and 529 ms versus 300 ms (OQ-029). Further disposable diagnosis is authorized; no target waiver or product code.
+No owner input is currently needed. The search model and word semantics were adopted with the owner’s continuation (D-247). Product search and Phase 06 exit remain gated by first-request performance: 392, 529 and 636 ms versus 300 ms (OQ-029). Further disposable diagnosis is authorized; no target waiver or product code.
 
 ## OPEN QUESTIONS
 See `ai/OPEN_QUESTIONS.md`. OQ-029 tracks remaining first-request validation after D-247 adoption. OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.

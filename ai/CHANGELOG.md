@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Ireland endpoint and backend reuse measured
+
+- TASK-0091: 32 requests across 16 clients reused one backend through the Ireland transaction pooler. First 636 ms request spent 533 ms inside the server; region distance alone does not explain it. No region move or session termination. Corrected PROJECT_CONTEXT to separate actual test endpoint from original Frankfurt direction.
+- Corrected unavailable backend age mistakenly rendered as zero by Number(null); later owner lookup could not recover the departed PID. Preserved evidence provenance, extended failing speed replay, and required transaction-local setup for the next diagnostic. No root cause, performance PASS or product implementation claimed.
+
 ## 2026-09-20 — First-request latency attributed to server work in a reproduced failure
 
 - TASK-0091: 24 first-call observations with server/client times from the same request. One 529 ms call spent 444.701 ms executing on the server, disproving a purely network explanation. All sample result counts, restricted role and identity cleanup checks passed. Root cause remains open; no fix or PASS claimed.

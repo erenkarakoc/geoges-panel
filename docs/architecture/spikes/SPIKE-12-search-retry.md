@@ -4,7 +4,7 @@ Durum: REVIEW — D-247 model onaylı; yeni bağlantı ilk istek hızı açık �
 
 ## Güncel sonuç — D-247 sonrası
 
-Model ve sözcük davranışı onaylandı; CHG-007 ile tasarım kayıtlarına katlandı. Tek çağrılı düzenin 18 senaryosunda, ön ısınma olmadan 20’şer ölçümün en yavaşı 190 ms. Önceki 73 kontrole ek 14 istek ve 5 güvenlik kontrolü geçti. Ancak 12 yeni bağlantının ilk isteklerinden biri 392 ms sürdü; sonraki aynı-istek tanısında 529 ms toplamın 445 ms’si sunucuda ölçüldü. Hız kapısı her iki başarısızlığı korur; SPIKE-12 REVIEW kalır. Son bölüm güncel kanıttır; aşağıdaki üç turlu ölçümler tarihsel karşılaştırmadır.
+Model ve sözcük davranışı onaylandı; CHG-007 ile tasarım kayıtlarına katlandı. Tek çağrılı düzenin 18 senaryosunda, ön ısınma olmadan 20’şer ölçümün en yavaşı 190 ms. Önceki 73 kontrole ek 14 istek ve 5 güvenlik kontrolü geçti. Ancak 12 yeni bağlantının ilk isteklerinden biri 392 ms sürdü; sonraki aynı-istek tanısında 529 ms toplamın 445 ms’si sunucuda ölçüldü. Son backend tanısında 636 ms toplam / 533 ms sunucu içi süre görüldü. Hız kapısı bütün başarısızlıkları korur; SPIKE-12 REVIEW kalır. Son bölüm güncel kanıttır; aşağıdaki üç turlu ölçümler tarihsel karşılaştırmadır.
 
 ## Önceki sonuç
 
@@ -223,3 +223,21 @@ Ayrı tanı kopyası arama adımlarına süre ölçümü koydu. Sıcak durumda s
 Kanıt: search12r-attribution.mjs/json (her örnekte yazıldı), search12r-stage.mjs ve search12r-stage-evidence.json; elenen düzenler search12r-set.mjs/search12r-set2.mjs, salt okunur JIT incelemesi search12r-jitstats.mjs; temizlik search12r-attribution-cleanup.mjs. Eski betikler körlemesine çalıştırılmaz. Hız kapısı mevcut ve yeni ilk-istek kanıtlarını birlikte değerlendirir; 392 ve 529 ms için başarısız kalır.
 
 **Sonraki tanı:** istemci bağlantısı ile gerçek PostgreSQL backend başlangıcını ayırmak için backend kimliği/başlangıç zamanı aynı ölçümle kaydedilecek. Havuzun aynı backend'i yeniden kullanması ile gerçekten yeni backend'in ilk yürütmesi karşılaştırılmalı; gerekirse aynı test projesinin doğrudan bağlantı yolu erişilebilirliği incelenmeli. Sunucu/başka kullanıcı oturumları sonlandırılmayacak, soğuk örnekler ölçümden çıkarılmayacak. Kök neden ve düzeltme henüz tamamlanmadı; TASK-0091 REVIEW, OQ-029 açık.
+
+## Bölge ve gerçek backend ayrımı — plan
+
+2026-09-20: Sahip İrlanda konumunun etkisini sordu. Mevcut bağlantının yalnız bölge kodu/parola içermeyen bağlantı modu okunacak. Arama isteğiyle aynı SQL komutunda backend kimliği, backend yaşı ve arama çalışma süresi kaydedilecek. Her yeni istemci bağlantısında iki ardışık çağrı karşılaştırılacak; sonuç/yetki/kimlik temizliği kontrol edilecek. Hiçbir bölge değişimi, proje taşıma veya servis yeniden başlatma yapılmayacak. Konumun ağ gecikmesine etkisi ile sunucu içindeki maliyet ayrı yorumlanacak.
+
+## Bölge ve gerçek backend ayrımı — sonuç
+
+Mevcut test bağlantısının bölge kodu eu-west-1 (İrlanda), portu 6543: paylaşımlı **işlem havuzu**. Önceki Frankfurt ifadesi hedef yönelimdi; test projesinin gerçek konumu olarak kullanılmamalı. [Supabase bölgeleri](https://supabase.com/docs/guides/platform/regions) yakınlığın gecikmeye etkisini, [bağlantı belgesi](https://supabase.com/docs/guides/database/connecting-to-postgres) işlem havuzunun bağlantı davranışını açıklar. Bölge/proje değiştirilmedi.
+
+16 yeni istemci bağlantısında ikişer arama, toplam 32 gözlem yapıldı; tamamı aynı backend kimliğini (488000) verdi. İlk birlikte bulunmayan sözcük araması 636 ms toplam, 533,213 ms sunucu içi süre; hemen sonraki aynı sorgu 119 / 38,564 ms. İlk numara araması 183 / 109,076 ms, sonraki 77 / 2,834 ms. Sonuç adedi, sınırlı rol ve işlem sonrası kimlik temizliği bütün örneklerde geçti. Backend kimliğinin aynı olması yeniden kullanımı gösterir; ilk örnekten önce ne zaman başladığını göstermez.
+
+Ölçüm, bağımlı MATERIALIZED CTE içinde clock_timestamp ile arama ve sonuç toplama süresini ölçer; dış SQL planlaması bu süreye dahil değildir. Önceki EXPLAIN ölçümüyle birebir aynı araç değildir. Toplamdan kalan süre yalnız ağ değildir; havuz, dış planlama ve istemci giderlerini de içerir. Dolayısıyla 533 ms sunucu içi maliyeti yalnız coğrafi ağ uzaklığı açıklamaz. Frankfurt karşılaştırması yapılmadı; taşınmanın sağlayacağı kazanç bilinmiyor.
+
+Ölçüm betiğinde görünmeyen backend_start değerinin Number(null) ile sıfır yazılması incelemede bulundu. Kanıt yaş alanları null olarak düzeltildi ve düzeltmenin kökeni kaydedildi; backend'in sıfır yaşında olduğu iddia edilmez. Sonraki yönetici okumasında ölçülen PID artık görünmedi, bu nedenle başlangıç zamanı doğrulanamadı. Hiçbir oturum sonlandırılmadı.
+
+İşlem havuzunda oturum düzeyinde SET ROLE/timeout ayarlarına güvenilemez. Bu seride rol her sorguda doğrulandı ve sarmalayıcı yanlış rolü reddeder; yine de sonraki deney başlangıç/son ayarlarını aynı açık işlemde SET LOCAL ile kurmalı. Bu çok turlu tanının süresi tek çağrılı ürün hedefiyle karıştırılmamalı. Üründe gerçek sınırlı giriş rolü şartı değişmez.
+
+Kanıt: search12r-backend.mjs, search12r-backend-evidence.json ve search12r-backend-review.mjs. Hız tekrar kapısına bu seri de eklendi: 392/529/636 ms örnekleri korunur, sonuç FAIL. Sonraki adım aynı işlemde rol/kimlik ve backend başlangıcını birlikte yakalayıp ilk-yürütme maliyetini sınamak; tekrarlanan sıcak ölçümler çözüm sayılmaz. TASK-0091 REVIEW ve OQ-029 açık; ürün kodu yazılmadı.

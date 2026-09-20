@@ -22,11 +22,13 @@ CURRENT PHASE: PHASE 06 — Validation Spikes
 
 ## Next work
 
-1. TASK-0091: capture actual backend identity/start alongside the next first request; distinguish fresh client connections from a fresh PostgreSQL backend. Latest 24 observations include 529 ms total / 445 ms server execution with zero reported shared reads; this disproves an exclusively network explanation, not every possible I/O cost. Inspect same-project direct-connection availability if needed; never terminate other sessions or restart the service. No approval pending; do not close SPIKE-12 or move to SPIKE-14 yet.
+1. TASK-0091: next diagnostic must use an explicit transaction with SET LOCAL role/timeout/identity and capture backend startup under the owner before switching role in that same transaction. Current endpoint is Ireland eu-west-1 port 6543 transaction pooling, so session SET ROLE across calls is not a reliable setup. Keep this diagnostic separate from one-call timing. Do not close SPIKE-12 or move to SPIKE-14; no approval pending.
 2. Finish the other experiments, including the reopened PDF/TCMB acceptance checks. Do not call Phase 06 complete until every exit criterion is met or explicitly waived by the owner.
 3. Phase 07 adapter tests must preserve the restricted DB role, parameter binding, transaction-local identity, identity cleanup on failure, verified TLS, ordered event selection, atomic effect/delivery and duplicate suppression.
 
 ## Local experiment evidence
+
+Latest backend evidence: search12r-backend.mjs/evidence.json contains 32 calls over 16 clients, all PID 488000. First total 636 ms / server clock 533.213 ms, next 119 / 38.564 ms. Counts/role/identity cleanup passed throughout. Restricted backend_start was null but Number(null) printed zero; corrected ages to null with provenance and fixed script. Later owner lookup returned no row for that PID; age is unavailable, not zero. search12r-backend-review.mjs records this. No sessions terminated. Replay gate includes 636 ms and remains FAIL. Clock timing includes result collection but excludes outer planning; not identical to EXPLAIN.
 
 Latest attribution: search12r-attribution.mjs/json has 24 complete first-request observations, result-count/restricted-role/identity cleanup assertions per sample. First absent query 529 ms, server 444.701 ms, residual 84 ms. Startup preparation excluded (508–625 ms). Stage instrumentation failed to reproduce that cold peak; warm bucket loop 39–73 ms. JIT setting off, 408 tracked calls with zero JIT work. Set-based alternatives regressed common queries to 7555 ms / 139 ms and were rejected; s12r_set_search and s12r_profile_search were removed. Original request/bucket functions and data are unchanged; cleanup verified one-result query and empty identity. search12r-attribution-cleanup.mjs cleans role and timeout. Speed replay now also reads attribution and must fail for 392/529 ms. Do not reinterpret the warm stage profile as proof of the first-call root cause.
 
@@ -46,7 +48,7 @@ The same scratchpad now contains workflow456.mjs and workflow456-review.mjs. The
 
 Scripts remain outside the repository in the previous Claude session scratchpad, session id 6c9e96a0-f93a-4199-9423-9c176e20ea35, under scratchpad/spikes: resume-verify.mjs and resume-outbox.mjs. They are disposable and must never become product code. Re-running resume-outbox.mjs refuses existing review tables; inspect before reusing. The spike schema still contains synthetic data and review_* test tables. No production table was touched. Test users/assignments and the two order-counterexample events were cleaned up; no schema reset was performed.
 
-The helper reads .env.local without printing it. Its TLS certificate verification is disabled and must not be copied into product code. Use bounded statements and sanitized error codes. Never print a URL, password or full connection exception. The current pooler host indicates eu-west-1, while PROJECT_CONTEXT describes Frankfurt; verify the actual project region before rollout instead of assuming those are identical.
+The helper reads .env.local without printing it. Its TLS certificate verification is disabled and must not be copied into product code. Use bounded statements and sanitized error codes. Never print a URL, password or full connection exception. Current test endpoint is Ireland eu-west-1 transaction pooler (6543); PROJECT_CONTEXT now distinguishes that from the original Frankfurt direction. Deployment region remains to be confirmed before rollout.
 
 ## Standing rules
 

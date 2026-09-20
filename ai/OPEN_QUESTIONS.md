@@ -8,7 +8,7 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 
 | ID | Category | Question | Proposed answer | Blocks |
 |---|---|---|---|---|
-| OQ-029 | Architecture validation | OPEN: which first-execution cost causes the remaining 300 ms failure? D-247 model and semantics remain adopted. | Latest same-request measurement: 529 ms total / 445 ms server work; no JIT contribution. Set-based alternative slower and removed. Next capture actual backend startup versus pool reuse. Earlier 392 ms retained; replay FAIL. See `docs/architecture/spikes/SPIKE-12-search-retry.md`. No waiver. | Product search implementation and Phase 06 exit until validated resolution |
+| OQ-029 | Architecture validation | OPEN: which first-execution cost causes the remaining 300 ms failure? D-247 model and semantics remain adopted. | Latest measurement: 636 ms total / 533 ms server work. Ireland transaction pooler confirmed; 32 calls reused one backend, age unavailable. Next capture startup with transaction-local role setup. Earlier 392/529 ms retained; replay FAIL. See `docs/architecture/spikes/SPIKE-12-search-retry.md`. No waiver. | Product search implementation and Phase 06 exit until validated resolution |
 
 ## Phase 00 — answered domain question
 
