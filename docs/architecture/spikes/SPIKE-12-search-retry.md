@@ -259,3 +259,27 @@ Ayrı private SECURITY INVOKER profil kopyası için yalnız iki deney bağlant�
 İnceleme: görünmeyen yaş artık assert ile reddediliyor; rol/zaman aşımı SET LOCAL, bütün asıl tanı işlemleri ROLLBACK ile kapanıyor. İstekler arasındaki kimlik temizliği aynı backend üzerinde savepoint geri alımıyla denetlendi; bu yeni bir COMMIT/iptal testi değildir (önceki güvenlik kanıtları ayrı kalır). Profil kopyası kaldırıldı; asıl fonksiyonlar, veriler, bağlantı dosyası ve bölge değiştirilmedi. Bölge taşıması sahibin isteğiyle sonraya bırakıldı (DEF-009).
 
 Kanıt: search12r-pinned.mjs/evidence.json ve search12r-cold-stage.mjs/evidence.json. Hız tekrar kapısı yeni 540 ms örneğini de içerir ve FAIL kalır. Sonraki tanı asıl sarmalayıcıyla eşdeğer profili aynı koşullarda karşılaştırmalı ve ilk aşımın katalog/planlama/IO maliyetini kaydetmeli; sıcak profil tek başına ilk yürütmenin açıklaması değildir. TASK-0091 REVIEW, OQ-029 açık; sekiz deneme tamamlanmış durumda.
+
+## Eşdeğer sarmalayıcı profili — plan
+
+TASK-0091: Asıl yordam ve istek sarmalayıcısından ayrı private/invoker kopyalar üretilecek; arama adımlarına yalnız süre bildirimi eklenecek. Dört bağlantı açık işlemle ayrı backend tutacak; ikisinde profil, ikisinde asıl çağrı çalışacak, her birinde iki tekrar yapılacak. Backend başlangıcı, EXPLAIN planlama/çalışma ve blok sayaçları kaydedilecek. Profil ilk çalıştırılacak; ortak veritabanı/işletim sistemi önbelleği eşit soğuk varsayılmayacak. Girdiler parametreli, rol ve zaman aşımı işlem yerel, sonuç/kimlik kontrolleri zorunlu. Deney sonunda kopyalar kaldırılacak; asıl fonksiyonlar/veriler aynı kalacak. Yeni ürün kodu veya bölge taşıması yok.
+
+### Plan seçimi karşılaştırması
+
+Aynı arama tanımıyla auto, force_generic_plan ve force_custom_plan işlem yerel karşılaştırılacak. Boş çok sözcük, yaygın çok sözcük, nadir numara ve belirsiz yazım örnekleri ikişer kez; 5 saniye gerçek statement_timeout; sonuç adetleri, rol ve kimlik temizliği kontrol edilecek. Plan atımı veri/OS önbelleğini boşaltmaz. Ayar sunucuda veya fonksiyonda kalıcı değiştirilmeyecek. Hızlanan tek örnek bütün arama davranışı için kabul sayılmayacak.
+
+### İlk arama sırasında bekleme örnekleme
+
+Plan seçimi tek başına çözüm göstermedi. Sonraki salt okunur tanıda hedef arama ve ayrı gözlem bağlantısı aynı anda çalışacak. Gözlemci yalnız hedef deney PID'sinin state/wait_event alanlarını 5 ms aralık hedefiyle 1,5 saniye örnekleyecek; sorgu metni veya diğer kullanıcılar okunmayacak. Gerçek örnekleme aralığı zaman damgalarıyla saklanacak. CPU çalışması ile kayıtlı IO/kilit beklemelerini ayırmaya yardımcı olur; örnekleme hiçbir beklemenin kaçmadığını kanıtlamaz. İki bağlantı işlem yerel timeout/rol ile kapanacak; kalıcı nesne değişmeyecek.
+
+## Eşdeğer profil, plan seçimi ve bekleme örnekleri — sonuç
+
+Dört ayrı backend üzerinde sekiz çağrının sonuç adedi, sınırlı rol ve savepoint sonrası boş kimlik kontrolleri geçti. Asıl fonksiyonlardan türetilen profil ve sarmalayıcı kopyaları aynı rol/girdi/arama yapısını korudu. İlk profil çağrısı **432 ms toplam / 353,717 ms sunucu**: hazırlık 41,154 ms; kesin sözcük bakışları 91,509 ve 52,077 ms; eşleme 2,654 ms; küme döngüsü 165,201 ms. Aynı çağrının tekrarı 113 / 39,416 ms. Diğer üç backend'in ilk çağrıları 121–128 / 47–49 ms. Dış planlama yaklaşık 0,03 ms ve raporlanan paylaşımlı blok okuma sıfır. Yavaşlık artık profil içinde de yakalandı ve birden çok aşamaya dağılmış durumda; dış EXPLAIN planlama süresi, iç PL/pgSQL sorgularının planlama maliyetini ayrı ölçmez. Bütün sistem/katalog/OS IO'sunun sıfır olduğu sonucu çıkarılamaz. Kopyalar sonunda kaldırıldı.
+
+Üç işlem yerel plan modu, dört senaryo ve ikişer tekrar ile 24 sorguda sonuç/rol doğrulandı. Genel plan modunda boş çok sözcük sorgusu sunucuda 39–41 ms; auto 39–40 ms; her defasında özel plan zorlanınca 84 ms. Diğer senaryolarda genel planın ilk çalıştırmaları 77–116 ms sunucu süresi, tekrarları 4–7 ms idi. Bütün bu çağrılar toplamda 77–189 ms arasında kaldı, zaman aşımı olmadı. Seri genel planla başladığı için önbellek/sıra etkisi vardır; eşit soğuk koşullar sağlandığı iddia edilmez. Genel plan başlangıç maliyetinin tamamını ortadan kaldırmadı, auto'ya karşı kabul edilecek bir kazanç göstermedi. Hiçbir kalıcı plan ayarı değiştirilmedi. Bu seride yalnız sonuç/rol kontrolü ve son ROLLBACK yapıldı; ayrıca kimlik temizliği assert'i eklenmiş sayılmaz.
+
+Bekleme örneklemesi asıl aramaya eşzamanlı ayrı bağlantıdan 300 örnek aldı. Arama bu kez 126 ms toplam / 41,902 ms sunucu sürdü: yedi örnek active ve wait_event boş, kalan 293 örnek işlem içinde istemciden sonraki komutu bekliyor (ClientRead). Bu **sıcak** çalışmada görünür IO/kilit beklemesi yakalanmadı; yavaş ilk çağrının CPU kaynaklı olduğunu kanıtlamaz. Yalnız hedef deney PID'si okundu; asıl veri/fonksiyonlar, bölge ve bağlantı dosyası değişmedi.
+
+Kanıt: search12r-wrapper-profile.mjs/evidence.json, search12r-plan-mode.mjs/evidence.json ve search12r-waits.mjs/evidence.json. Profilin 432 ms'si tanı ölçümüdür, ürün hızıyla doğrudan eşdeğer kabul edilmez; eski asıl istek aşımları ayrıca korunur. İnceleme sonunda geçici kopyalar kaldırıldı, bütün işlemler geri alındı ve kalıcı ayar değişmedi.
+
+Sonraki başlangıçta **başka bir veritabanı deneyi öncesinde** search12r-waits.mjs çalıştırılmalı; böylece doğal boşta kalma sonrasındaki olası yavaş ilk çağrı bekleme kaydıyla eşleşebilir. Yavaşlık oluşmazsa aynı sıcak testi tekrarlamak kök neden ilerlemesi sayılmaz. Kontrollü ilk-çağrı/altyapı ölçümü halen gerekir; 300 ms hedefi, TASK-0091 REVIEW ve OQ-029 açık durumu değişmedi.

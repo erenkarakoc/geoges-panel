@@ -7,7 +7,7 @@ PROJECT STATUS:      DESIGN
 CURRENT PHASE:       PHASE 06 — Validation Spikes (Phase 05 DONE 2026-09-20, owner approved)
 CURRENT SUBPHASE:    TESTING
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0090/0091 REVIEW: verified new backend first search 540 ms / 465 ms server; a separate new-backend profile was fast. Root cause open; next equivalent-wrapper initial-execution profiling (OQ-029). Ireland remains; region move postponed (DEF-009).
+CURRENT TASK:        TASK-0090/0091 REVIEW: equivalent wrapper profile reproduced 432/354 ms across several stages; forced plan modes offered no accepted fix. Warm wait sampling is inconclusive. Next first database action: wait-sampled original search after natural idle (OQ-029). Ireland stays (DEF-009).
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -39,7 +39,7 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. TASK-0091: compare original and instrumented request wrappers under equivalent initial conditions and capture planning/catalog/IO work. Pinned transaction now proves a new-backend failure (540/465 ms); a direct profile on another new backend was fast, so backend startup alone is not the root cause. Preserve all evidence; keep transaction-local role/timeout setup. No region move (DEF-009); OQ-029 stays open before SPIKE-14.
+1. TASK-0091: run search12r-waits.mjs before any other database experiment on resume, to pair any natural-idle first-call failure with wait events. Equivalent profiling reproduced 432/354 ms across setup, word lookup and buckets; plan-cache modes did not establish a fix. Last wait sample was warm and inconclusive. Do not repeat warm timings as root-cause evidence. Keep role/timeout transaction-local; OQ-029 stays open before SPIKE-14.
 2. Remaining Phase 06 experiments follow the order in `docs/architecture/spikes/README.md`. SPIKE-10 needs rendered PDF inspection; SPIKE-11 needs missing-rate/recovery assertions. Neither is waived or complete.
 3. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076; no product code in Phase 06.
 4. TASK-0018: re-check memory-worker authentication after 2026-10-15; do not stop the worker or invoke cloud-sync.

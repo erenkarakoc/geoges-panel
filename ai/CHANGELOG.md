@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Equivalent search profiling reproduces distributed first-call delay
+
+- TASK-0091: eight equivalent-wrapper observations; first profile 432 ms total / 354 ms server, with setup, exact-word lookup and bucket work all slower. Other new backends were fast. Private profile copies removed; result/role/savepoint identity checks passed. No root cause or fix claimed.
+- Twenty-four plan-mode count/role checks found no accepted fix; force-custom worsened warm no-match work. Separate 300-sample wait trace caught only a warm 126 ms call and cannot explain cold latency. All settings remained transaction-local, original functions/data unchanged. Next first DB action on resume is the prepared wait sampler, to avoid warming before observation.
+
 ## 2026-09-20 — Pinned-backend diagnosis and region postponement
 
 - TASK-0091: transaction-local role/timeout setup captured the actual backend start. A 0.157-second-old backend took 540 ms (465 ms inside server), then 112 ms. All 12 count/role/PID/savepoint-cleanup checks passed. Replay preserves the new failure.

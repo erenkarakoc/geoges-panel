@@ -27,7 +27,7 @@ Phase 03'te alınan mimari kararların riskli olanları, yapıma başlamadan ön
 
 Önce mimarinin taşıyıcıları: SPIKE-01, 02, 03. Sonra motor: 04, 05, 06. Sonra veri ve arayüz riskleri: 08, 07, 12, 14. Kalanlar bağımsızdır ve paralel yürüyebilir.
 
-2026-09-20: D-247 ile model onaylandı; TASK-0091 tek çağrılı aramada ilerledi ama ilk istek aşımları nedeniyle açık. Backend başlangıcı doğrulandı (540/465 ms toplam/sunucu); ayrı yeni backend profili hızlıydı, kök neden henüz kanıtlanmadı. Sonraki iş aynı sarmalayıcıyla eşdeğer başlangıç koşullarında profil, sonra SPIKE-14. Sekiz deneme tamamlandı; hedef gevşetilmedi (OQ-029).
+2026-09-20: D-247 ile model onaylandı; TASK-0091 tek çağrılı aramada ilerledi ama ilk istek aşımları nedeniyle açık. Backend başlangıcı doğrulandı (540/465 ms toplam/sunucu); ayrı yeni backend profili hızlıydı, kök neden henüz kanıtlanmadı. Eşdeğer profil 432/354 ms gecikmeyi birden çok adımda yakaladı; plan modu çözüm olmadı. Sonraki iş doğal ilk yavaş çağrıda bekleme örnekleme, sonra SPIKE-14. Sekiz deneme tamamlandı; hedef gevşetilmedi (OQ-029).
 
 ## Kural
 
