@@ -98,3 +98,4 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-20 11:05:12Z · 6c9e96a0 · Write · `src/app/(sandbox)/spike-flow/page.tsx`
 - 2026-09-20 11:05:41Z · 6c9e96a0 · Edit · `src/proxy.ts`
 - 2026-09-20 11:08:46Z · 6c9e96a0 · Write · `docs/architecture/spikes/SPIKE-07-flow-canvas.md`
+- 2026-09-20 11:19:24Z · 6c9e96a0 · Write · `docs/architecture/spikes/SPIKE-10-pdf-quality.md`

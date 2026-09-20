@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — SPIKE-10 passed: the documents print correctly
+
+- A price quote and an official daily site report were generated as real PDFs. Both came out at exact A4, with Turkish characters intact everywhere, right-aligned money columns, repeating table headers across pages, page numbers, and text that can still be selected and searched — in about half a second each. Two conditions came out of it: the document font must be shipped with the application (the runtime font subsets silently fell back to Times New Roman and broke text extraction), and the server will need a headless browser, which now belongs to the hosting decision. The SPIKE-07 canvas code was deleted as planned; it stays in git history (TASK-0080).
+
+
 ## 2026-09-20 — SPIKE-07 passed: the flow canvas holds up
 
 - A throwaway 40-step flow was built and measured. It paints in about a quarter of a second, stays at roughly 80 frames a second while being zoomed and dragged, fits a phone screen without sideways scrolling, and every step can be reached from the keyboard. The diagram library already in the project (MIT, ~88 KB compressed) does the heavy lifting; the boxes, panels and buttons around it are COSS. Three things were noted for Phase 08: the canvas should be one tab stop with arrow-key movement instead of forty, the mini-map should be off on phones, and the library should load only when the designer is opened (TASK-0079).
