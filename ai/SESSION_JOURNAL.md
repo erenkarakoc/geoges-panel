@@ -87,3 +87,6 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-19 23:59:34Z · 6c9e96a0 · Write · `docs/database/SCHEMA-ANALYTICS.md`
 - 2026-09-19 23:59:59Z · 6c9e96a0 · Write · `docs/database/SCHEMA-CUSTOM-RECORDS.md`
 - 2026-09-20 00:01:03Z · 6c9e96a0 · Write · `docs/database/COVERAGE.md`
+- 2026-09-20 00:07:02Z · 6c9e96a0 · Write · `docs/infrastructure/ENVIRONMENTS.md`
+- 2026-09-20 00:07:23Z · 6c9e96a0 · Write · `docs/infrastructure/LOCAL_SETUP.md`
+- 2026-09-20 00:07:43Z · 6c9e96a0 · Write · `docs/infrastructure/CI.md`

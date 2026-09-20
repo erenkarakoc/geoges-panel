@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — Phase 05: local-first, hosting deferred
+
+- The owner chose to run without a staging environment, on a single Supabase project, with the server decision left for later (D-245). Three consequences are now written down rather than discovered later: acceptance happens on the owner's own machine, with a Turkish setup guide; the pilot with real field users waits until there is an address, which the Phase 09 exit now asks for; and the sample-data reset command is locked the day real data arrives, when a second Supabase project is opened. Milestone M1 becomes the local acceptance milestone instead of the staging gate (TASK-0073…TASK-0075).
+
+
 ## 2026-09-20 — Phase 04 DONE
 
 - The owner approved the Phase 04 exit. The panel now has a database design: 211 tables, ledgers that only gain rows, closed periods that refuse new ones, sensitive personnel data sitting apart from the everyday personnel list, and three things every table must prove before its migration is accepted. Phase 05 — infrastructure, environments and operations — starts, and it needs the owner's answers on the server, backups and e-mail (OQ-010…OQ-016).

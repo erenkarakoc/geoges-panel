@@ -197,7 +197,7 @@ STATUS: DONE
 
 - **Purpose:** design how the system runs, deploys, is observed and recovered.
 - **Scope:** Supabase projects per environment; R2 buckets and access; VPS layout (Docker, reverse proxy, SSL); domains (`geogespanel.com` noindex); CI/CD pipeline (lint → type-check → unit → integration → build → security checks → deploy → health check → rollback); secrets management; logging, error tracking, monitoring; backup & disaster recovery (DB, files, offsite); email sending; web push; cost estimate.
-- **Dependencies:** Phase 03 (DONE), Phase 04 (DONE); OQ-010…OQ-016.
+- **Dependencies:** Phase 03 (DONE), Phase 04 (DONE); OQ-010…OQ-016 — answered or deferred 2026-09-20 (D-245, DEF-008).
 - **Status:** `IN_PROGRESS` — **current phase since 2026-09-20.**
 - **Deliverables:** `docs/infrastructure/*`, runbooks drafts, ADRs.
 - **Acceptance:** RPO/RTO defined; restore procedure designed; environment matrix complete.
@@ -216,7 +216,7 @@ STATUS: DONE
 - **Scope:** repository scaffold (Next.js, TypeScript, COSS, Tailwind, lint/format/boundary rules, test setup), CI pipeline, environments, design tokens and app shell, IAM (auth, 2FA, roles, delegation, visibility), audit & history, revision request mechanism core, documents/storage, outbox & jobs, notifications & tasks core, catalogs & custom fields, currency & calendar, deployment to staging.
 - **Dependencies:** Phase 06.
 - **Status:** `PARTIALLY_DONE`. Delivered ahead of the phase by M0 and CHG-004: scaffold, lint/boundary rules and test setup (TASK-0023), real Supabase authentication with TOTP 2FA and session guard (TASK-0024, TASK-0025), app shell with navigation registry, theme and brand tokens, role onboarding (TASK-0026, TASK-0032…TASK-0036). **Still owed:** CI pipeline, environments and staging deploy, dynamic roles / delegation / acting role / visibility, audit & history, revision-request core, documents & storage, outbox & jobs, notifications & tasks core, catalogs & custom fields, currency & calendar.
-- **Milestone M1 — first review on a real environment (CHG-001, redefined by CHG-005 2026-09-17):** the original M1 ("owner sees the authentication pages and the shell for the first time") was consumed by M0 and CHG-004, which the owner reviewed locally. M1 is now the **staging** milestone: the same screens plus the foundation services running on the deployed environment, with a proven deploy and rollback. What M1 still proves that local review did not: real environment configuration, secrets handling, session behaviour behind the reverse proxy, backup/restore path and rollback.
+- **Milestone M1 — first review on the owner's own machine (CHG-001, redefined by CHG-005 2026-09-17, redefined again by D-245 2026-09-20):** the original M1 ("owner sees the authentication pages and the shell for the first time") was consumed by M0 and CHG-004. The staging definition (D-074) fell away when the owner chose to run local-first with no staging environment. M1 is now the **local acceptance** milestone: the owner installs and runs the panel themselves following `docs/infrastructure/LOCAL_SETUP.md`, signs in with 2FA and walks a complete flow. The deployed-environment milestone returns as part of the Phase 09 exit, with the hosting decision (DEF-008).
 - **Acceptance:** foundation features pass T1 gates; staging deploy with rollback proven; M1 review done on staging with owner feedback recorded.
 - **CHG-006:** dynamic IAM must support permission types and roles defined, and assigned, from the flow designer (D-098, D-101), and must refuse the flow-design permission to any role without full visibility (D-083).
 
@@ -233,10 +233,10 @@ Each slice follows the same pattern:
 1. Feature decision summary per feature (question round if gaps remain from Phase 01–04).
 2. Implementation plans for T1/T2 tasks.
 3. Build → test → self-review → documentation.
-4. Staging acceptance by owner.
-5. Pilot with real users on sample data (D-216); feedback recorded as change requests. Real company data enters only at the Phase 19 rollout, after the KVKK check (D-214, DEF-007).
+4. Owner acceptance — the owner runs the slice on their own machine (D-245, `docs/infrastructure/LOCAL_SETUP.md`); on a deployed environment once hosting exists.
+5. Pilot with real users on sample data (D-216), **once there is an address to reach** — the hosting decision is taken at the Phase 09 exit (D-245, DEF-008); feedback recorded as change requests. Real company data enters only at the Phase 19 rollout, after the KVKK check (D-214, DEF-007).
 
-Phase 09 exit adds one condition (D-216): the pilot site and pilot users (roles and people) are named by the owner before slice 1's build ends.
+Phase 09 exit adds two conditions: the pilot site and pilot users (roles and people) are named by the owner before slice 1's build ends (D-216); and the hosting decision (server, environments, deployment) is taken, because the pilot needs a reachable address (D-245, DEF-008).
 
 | Phase | Slice | Main modules | Depends on |
 |---|---|---|---|

@@ -40,9 +40,9 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 
 | ID | Question |
 |---|---|
-| OQ-010 | VPS: provider, location (Türkiye/EU), CPU/RAM/disk; already purchased? |
-| OQ-011 | Staging: same VPS (separate containers) or separate server? |
-| OQ-012 | Supabase plan per environment; separate Supabase projects for dev/staging/prod? |
+| OQ-010 | **DEFERRED 2026-09-20 → D-245:** no server for now; provider and location are decided before the Slice 1 pilot. |
+| OQ-011 | **ANSWERED 2026-09-20 → D-245:** no staging environment; acceptance runs on the owner's own machine. Live and staging are separated when hosting is decided. |
+| OQ-012 | **ANSWERED 2026-09-20 → D-245:** one Supabase project for now, sample data resettable; a second project is opened when real data arrives. |
 | OQ-013 | Offsite backup target for database and R2 files. |
 | OQ-014 | Error tracking & monitoring tool. |
 | OQ-015 | Email: provider of `info@` mailbox and transactional sender; which domain (`geoges.com` vs `geogespanel.com`)? |
