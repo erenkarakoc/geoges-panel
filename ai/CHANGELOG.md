@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-20 — Analytics and user-defined record schemas
+
+- `docs/database/SCHEMA-ANALYTICS.md` separates what reporting derives from what it owns: indicator and summary tables carry a rebuild marker and can be thrown away, while KPI definitions, bonuses, recommendations and budgets are real records. A month that cannot be calculated says so instead of showing zero.
+- `docs/database/SCHEMA-CUSTOM-RECORDS.md` turns ADR-016 into six tables. Every type a user invents shares one security policy and needs no migration; fields retire instead of vanishing, and each record remembers which version of the definition it was written under (TASK-0070, TASK-0071).
+
+
 ## 2026-09-20 — Corporate schema
 
 - `docs/database/SCHEMA-CORPORATE.md` covers people, contracts, quality and safety, meetings and support. Sensitive personnel columns — identity number, IBAN, salary — live in a separate table, so the ordinary personnel list never touches them. A medical report keeps only its existence and dates, never a diagnosis. A nonconformity cannot close without a root cause and an action, and a safety check cannot record "not compliant" without saying why (TASK-0069).
