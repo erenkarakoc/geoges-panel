@@ -92,10 +92,11 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-20 00:07:43Z · 6c9e96a0 · Write · `docs/infrastructure/CI.md`
 - 2026-09-20 00:13:23Z · 6c9e96a0 · Write · `docs/infrastructure/BACKUP_AND_RECOVERY.md`
 - 2026-09-20 00:14:00Z · 6c9e96a0 · Write · `docs/infrastructure/RUNBOOKS.md`
-- 2026-09-20 11:04:23Z · 6c9e96a0 · Write · `src/sandbox/spike-flow/flow-data.ts`
-- 2026-09-20 11:04:32Z · 6c9e96a0 · Write · `src/sandbox/spike-flow/step-node.tsx`
-- 2026-09-20 11:05:04Z · 6c9e96a0 · Write · `src/sandbox/spike-flow/spike-flow-page.tsx`
-- 2026-09-20 11:05:12Z · 6c9e96a0 · Write · `src/app/(sandbox)/spike-flow/page.tsx`
+- 2026-09-20 11:04:23Z · 6c9e96a0 · Write · `src/sandbox/spike-flow/flow-data.ts` (SPIKE-07 deneme kodu; rapor yazılınca silindi)
+- 2026-09-20 11:04:32Z · 6c9e96a0 · Write · `src/sandbox/spike-flow/step-node.tsx` (SPIKE-07 deneme kodu; rapor yazılınca silindi)
+- 2026-09-20 11:05:04Z · 6c9e96a0 · Write · `src/sandbox/spike-flow/spike-flow-page.tsx` (SPIKE-07 deneme kodu; rapor yazılınca silindi)
+- 2026-09-20 11:05:12Z · 6c9e96a0 · Write · `src/app/(sandbox)/spike-flow/page.tsx` (SPIKE-07 deneme kodu; rapor yazılınca silindi)
 - 2026-09-20 11:05:41Z · 6c9e96a0 · Edit · `src/proxy.ts`
 - 2026-09-20 11:08:46Z · 6c9e96a0 · Write · `docs/architecture/spikes/SPIKE-07-flow-canvas.md`
 - 2026-09-20 11:19:24Z · 6c9e96a0 · Write · `docs/architecture/spikes/SPIKE-10-pdf-quality.md`
+- 2026-09-20 11:27:01Z · 6c9e96a0 · Write · `docs/architecture/spikes/SPIKE-11-tcmb-exchange-rate.md`

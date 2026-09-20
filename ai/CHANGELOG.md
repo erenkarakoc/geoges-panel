@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-20 — SPIKE-11 passed: the exchange rate is reachable and fast
+
+- Fifteen requests to the central bank, fifteen answers, thirty milliseconds each. Weekends simply have no bulletin, which the panel must read as "no rate today" rather than as a failure. Three traps were found and written down: the "current" bulletin is not always yesterday's (it changes when the bank publishes in the afternoon, so the panel must ask for a specific date and check the date it gets back), the file carries the date twice in two different formats, and some currencies are quoted per hundred units (TASK-0081).
+
+
 ## 2026-09-20 — SPIKE-10 passed: the documents print correctly
 
 - A price quote and an official daily site report were generated as real PDFs. Both came out at exact A4, with Turkish characters intact everywhere, right-aligned money columns, repeating table headers across pages, page numbers, and text that can still be selected and searched — in about half a second each. Two conditions came out of it: the document font must be shipped with the application (the runtime font subsets silently fell back to Times New Roman and broke text extraction), and the server will need a headless browser, which now belongs to the hosting decision. The SPIKE-07 canvas code was deleted as planned; it stays in git history (TASK-0080).

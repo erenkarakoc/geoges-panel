@@ -4,7 +4,7 @@ Durum: GEÇTİ · Tarih: 2026-09-20 · İlgili karar: D-224, ADR-009, D-235
 
 **Soru.** Kutu-ok şeması COSS/Base UI ile kurulabiliyor mu, kütüphane gerekiyor mu? 40 adımlı bir akış masaüstünde ve telefonda akıcı mı, klavyeyle kullanılabiliyor mu, kütüphane gerekiyorsa lisansı ve boyutu kabul edilebilir mi?
 
-**Yöntem.** `src/sandbox/spike-flow/` altında atılacak bir prototip: gerçek şablonların şeklinde 40 adım (başlangıç, koşul, onay, görev, kayıt oluştur, bildirim, bekleme, paralel dal, her biri için, birleşme, eskalasyon, alt akış, kilit, bitiş), 40 bağlantı, üç çıkışlı bir onay kutusu, geriye giden "düzeltmeye gönder" kenarı ve eksik bırakılmış bir adım. Adım kutusu tamamen tema token'larıyla; adım soruları COSS `Sheet` panelinde. Ölçümler geliştirme derlemesinde (üretim derlemesi daha hızlıdır).
+**Yöntem.** `src/sandbox/spike-flow/` altında atılacak bir prototip (rapordan sonra silindi; Git geçmişinde `faec278`): gerçek şablonların şeklinde 40 adım (başlangıç, koşul, onay, görev, kayıt oluştur, bildirim, bekleme, paralel dal, her biri için, birleşme, eskalasyon, alt akış, kilit, bitiş), 40 bağlantı, üç çıkışlı bir onay kutusu, geriye giden "düzeltmeye gönder" kenarı ve eksik bırakılmış bir adım. Adım kutusu tamamen tema token'larıyla; adım soruları COSS `Sheet` panelinde. Ölçümler geliştirme derlemesinde (üretim derlemesi daha hızlıdır).
 
 ## Sonuçlar
 
