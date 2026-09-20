@@ -2,7 +2,7 @@
 
 Durum: KALDI — hız ölçütü sağlanmadı · Tarih: 2026-09-20 · Görev: TASK-0090 · İlgili: ADR-017, D-239, REQ-NFR-012
 
-Bu rapor ilk denemenin tarihsel başarısızlık kanıtıdır. Sonraki TASK-0091 sonucu `docs/architecture/spikes/SPIKE-12-search-retry.md` içindedir: sıcak sorgular geçti; ilk çalıştırma hızı ve mimari onay halen açıktır. Aşağıdaki ölçümler son prototipe ait değildir.
+Bu rapor ilk denemenin tarihsel başarısızlık kanıtıdır. Sonraki TASK-0091 sonucu `docs/architecture/spikes/SPIKE-12-search-retry.md` içindedir: D-247 model onaylıdır; tek çağrılı arama iyileşti ancak yeni bağlantı ilk istek hızı halen açıktır. Aşağıdaki ölçümler son prototipe ait değildir.
 
 ## Deneme planı
 

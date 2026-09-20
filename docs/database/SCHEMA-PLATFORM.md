@@ -88,7 +88,22 @@ Belgenin kapsamı ve veri sınıfı **bağlı kayıttan** türetilir; RLS politi
 | `core.outbox_delivery` | Abone × olay teslimi | `outbox_id`, `subscriber`, `status`, `attempts`, `last_error`, `processed_at` | Tekrarsızlık anahtarı `(outbox_id, subscriber)` |
 | `core.dead_letter` | Beş denemede teslim edilemeyen | `outbox_id`, `subscriber`, `error`, `payload` | Sahip katmanına kritik bildirim üretir |
 | `core.scheduled_job` | Zamanlanmış iş ve uyandırma | `job_type`, `run_at`, `idempotency_key`, `payload`, `status` | Akışın bekleme adımları burada (WORKFLOW_ENGINE bölüm 4) |
-| `core.search_row` | Arama satırı | `record_*`, `record_type`, `title`, `secondary`, `search_vector`, `scope_type`, `scope_ids[]` | ADR-017 yeniden incelemede: TASK-0091 sıcak sorgularda geçti; ilk sorgu hızı ve üç yardımcı arama tablosu önerisinin onayı açık (OQ-029). Bu onaylı liste henüz genişletilmedi. Ticari/hassas alan girmez |
+| `core.search_row` | Arama satırı | `record_*`, `record_type`, `title`, `secondary`, `search_vector`, `scope_type`, `scope_ids[]`, `search_document_id`, `normalization_version`, `projection_version`, `source_event_id` | UUID kimlik korunur; benzersiz iç arama numarası ve üç yardımcı veri kümesi D-247 / ADR-017 ile eklenir. Ticari/hassas alan girmez |
+
+| `core.search_posting` | Sözcük → arama kaydı | `search_row_id`, `word`, `scope_type`, `scope_ids[]`, `projection_version` | Kaynak arama satırına FK; aynı sürümde kayıt/sözcük tekil; kaynak görünürlüğüyle RLS |
+| `core.search_word` | Kapsam/tür bazında sözcük adedi | `word`, `record_type`, `scope_type`, `scope_ids[]`, `record_count`, `projection_version` | Türetilmiş sözlük; yetkisiz varlık veya adet açığa çıkmaz |
+| `core.search_word_bucket` | Sözcüğün sıralı arama numaraları | `word`, `record_type`, `scope_type`, `scope_ids[]`, `search_document_ids integer[]`, `projection_version` | Kapsam/tür/sözcük/sürüm tekil; sıralı, tekrarsız, NULL içermeyen dizi |
+
+### Arama yardımcıları sözleşmesi (D-247, CHG-007)
+
+- Ortak `id uuid` anahtarları korunur. `search_row.search_document_id` pozitif, UNIQUE int4 iç numaradır; UUID dökümü değildir, iş kaydının anahtarı veya dış API kimliği olmaz. Kaynak satıra kalıcı ve tekil eşlenir; yeniden kurmada keyfi yeniden atanmaz. 2.147.483.647 sınırına varmadan kapasite kontrolü ve uyarı gerekir; taşma/sarma veya başka kayda numara yeniden kullanma yoktur. Kapasite artışı yeni göç ve doğrulama gerektirir.
+- Kapsam kümesi sıralı, tekrarsız UUID dizisiyle normalleştirilir; `scope_type` aynı IAM anlamını taşır. Sırf ortak bir şantiyesi var diye farklı görünürlük kümeleri birleştirilmez. Çok kapsamlı kayıt bir sonuç olarak döner; deneydeki tek skaler kapsam ürün yetkilerinin yerine geçmez.
+- Her yardımcıda RLS vardır. Eşlemeler kaynak satırın güncel görünürlüğüne bağlıdır. Sözcük ve adet yalnız görünür eşlemelerden türetilir. Bir kümedeki tüm kayıtların görünürlüğü kanıtlanamıyorsa kümenin ham kimlik dizisi/adedi kullanıcıya verilmez; yetkili eşlemelerden hesaplanan yol kullanılır. Bu kısmi yetki yolunun performansı ürün IAM testinde ayrıca doğrulanır; hız için yetki gevşetilmez.
+- Kaynak olayının sürümü kontrol edilir; arama satırı ile üç yardımcının değişimi tek işlemde tamamlanır. Eski/tekrar teslim edilmiş olay daha yeni indeksi ezmez. Başlık, kapsam, veri sınıfı, alan emekliliği ve aranabilirlik değişimleri eski sözcükleri de günceller. İş kayıtları ve AUD geçmişi korunur; yeniden kurulabilen yardımcıların yenilenmesi tarihçe silme değildir. Kullanıcı rolüne yazma/silme verilmez.
+- pg_trgm, btree_gist ve intarray gereklidir; göç öncesi sürüm/şema/izin kontrolü yapılır. RUM bağımlılığı yoktur. FK ve sözcük/kapsam/tür indeksleri gerçek sorgularla doğrulanır; intarray yalnız NULL içermeyen dizilerde kullanılır.
+- Yeniden kurma, kaynak arama satırlarından sürümlü bir gölge veri kümesi üretir; sayım, RLS ve sonuç karşılaştırması sonrası okuma sürümü atomik değiştirilir. Hata halinde önceki sürüm okunur. Eski yavaş yolun varlığı performans kabulü değildir. Güncel kaynakla tutarlılık için olay yüksek su işareti ve değişimlerin tamamlanması SPIKE-14 ile doğrulanır.
+- Kaynak, yardımcı ve eşleme uyuşmazlığında eksik veriyi başarılı sonuç diye sunmak yerine kontrollü hata üretilir. Yeniden kurma kaynak olay/görev/bildirim doğurmaz. Genel iş tablosu AUD zorunluluğundan `core.*` muafiyeti geçerlidir; kurulum/yeniden kurma işletim günlüğüne yazılır.
+- Bu belge tasarım ekidir; ürün göçü veya kodu teslim edilmedi. İlk istek, eşzamanlılık, UUID eşlemesi, tüm kapsam türleri, kısmi yetki ve olayla güncelleme kabul testleri açıkça korunur.
 
 `core` şeması modüllerin ortak altyapısıdır; iş verisi tutmaz ve yalnız platform kodu yazar.
 

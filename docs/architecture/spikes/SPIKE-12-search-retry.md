@@ -1,8 +1,12 @@
 # SPIKE-12 — Arama hızının yeniden sınanması
 
-Durum: REVIEW — mimari öneri ve ilk çalıştırma hızı açık · Tarih: 2026-09-20 · Görev: TASK-0091 · Bağlı: TASK-0090, OQ-029, ADR-017, D-239, REQ-NFR-012
+Durum: REVIEW — D-247 model onaylı; yeni bağlantı ilk istek hızı açık · Tarih: 2026-09-20 · Görev: TASK-0091 · Bağlı: TASK-0090, OQ-029, ADR-017, D-239, REQ-NFR-012
 
-## Sonuç
+## Güncel sonuç — D-247 sonrası
+
+Model ve sözcük davranışı onaylandı; CHG-007 ile tasarım kayıtlarına katlandı. Tek çağrılı düzenin 18 senaryosunda, ön ısınma olmadan 20’şer ölçümün en yavaşı 190 ms. Önceki 73 kontrole ek 14 istek ve 5 güvenlik kontrolü geçti. Ancak 12 yeni bağlantının ilk isteklerinden biri 392 ms sürdü; hız kapısı FAIL ve SPIKE-12 REVIEW kalır. Son bölüm güncel kanıttır; aşağıdaki üç turlu ölçümler tarihsel karşılaştırmadır.
+
+## Önceki sonuç
 
 500.000 sentetik kayıtta **73 doğruluk ve inceleme kontrolü geçti**. Son temizlenmiş düzende, tür başına en iyi beş sonucu getiren 18 senaryonun iki ısınma sonrası 20'şer ölçümünde p95 **220–258 ms**, en yavaş örnek **258 ms** oldu.
 
@@ -92,7 +96,9 @@ Tüm değerler ms; her satır iki ısınma sonrası 20 örnek. Sonuç adedi her 
 
 Temizlikten sonraki ön ısınmasız tekil gözlemler: birlikte bulunmayan sözcükler **461 ms**, yaygın iki sözcük 249 ms, sözcük + sayı **371 ms**, belirsiz sayı 274 ms. Tekrarlı soğuk başlangıç testi değildir; ilk çalıştırma hedefinin sağlandığı söylenemez. Sonraki doğrulama bu aşımı yeniden üretip çözmeli; yalnız ısınmayı zorunlu sayarak hedef geçmiş kabul edilemez.
 
-## Ürün mimarisine öneri — onay bekliyor
+## Önceden sunulan ürün mimarisi önerisi — D-247 ile onaylandı
+
+Aşağıdaki etki analizi onay öncesinde yazıldı; bekleyen onay ve 211 tablo ifadeleri o tarihe aittir. D-247 ile yön onaylandı, ürün tasarımı SCHEMA-PLATFORM belgesinde 215 tabloya katlandı. İlk istek hızına istisna verilmedi.
 
 PostgreSQL yönü ve arama satırı korunarak üç türetilmiş veri kümesi eklenebilir. Ölçülen başarı karşılığında ek disk, yazma, bakım ve yeniden kurma maliyeti vardır.
 
@@ -118,3 +124,53 @@ Veritabanında s12_search/s12_access/s12_fold, üç s12r_ tablo ve s12r_bucket_s
 Tam IAM, bütün kapsam türleri, gerçek modül/tür kataloğu, ürün olay tüketicisi, HTTP/tarayıcı, ilk bağlantı, tekrar üretilebilir soğuk plan ve eşzamanlı yük teslim edilmedi. Sahip onayı bunların test edilmiş olduğu anlamına gelmez.
 
 Kaynaklar: [PostgreSQL pg_trgm](https://www.postgresql.org/docs/17/pgtrgm.html), [PostgreSQL intarray](https://www.postgresql.org/docs/17/intarray.html), [Supabase RUM](https://supabase.com/docs/guides/database/extensions/rum). Bu rapor belgelerin yanında yalnız belirtilen deneyin sonuçlarını kaydeder.
+## Bu oturumun devam planı — 2026-09-20
+
+Sahibin iki öneriden sonra verdiği "devam" talimatıyla önerilen yön ve sözcük davranışı benimsenir; karar D-247, değişiklik CHG-007 olarak katlanır. Bu onay hız istisnası değildir. Önce ADR, veri sözleşmesi ve yol haritası güncellenir. Ardından yalnız geçici deneyde, her sorgudan önce işlem içi DISCARD PLANS ile yeniden planlama, sorgu/işlem sürelerinin ayrılması ve sınırlı rol altında EXPLAIN ölçümü yapılır. Kaynak veriye veya ürün tablolarına yazılmaz. Gerekirse yalnız deney fonksiyonu düzenlenir; eski tanımı dış scratchpad'e kaydedilir ve geri dönüş mümkün tutulur. Başarı için ilk plan ve sıcak sorgular aynı sonuçları üretmeli, RLS korunmalı ve 300 ms sınırı aşılmamalıdır. Sunucu yeniden başlatma veya işletim sistemi önbelleğini temizleme yapılmaz; soğuk veri önbelleği bu yöntemle kanıtlanmış sayılmaz.
+
+### Tek gidiş-dönüşlü okuma denemesi
+
+Üç gidiş-dönüşün toplamı bazı örneklerde sorgu çalışmasından çok daha uzundur. Aynı arama yordamını, kimliği işlem başında kuran SECURITY INVOKER bir deney sarmalayıcısıyla tek parametreli SQL çağrısında sınayacağız. PostgreSQL'in örtük işlemi çağrı sonunda yerel kimliği temizlemeli; bu başarıda ve hatada ayrı doğrulanacak. Rol işlemden önce sabit sınırlı roldür; sarmalayıcı yanlış rolde çalışmayı reddeder. Bu, yetki veya 300 ms şartını değiştirmez; ölçüm biçiminin üç ağ turundan bire indiği açıkça raporlanır. İlk bağlantı/rol kurma maliyeti ayrıca belirtilir. Ürün bağlantısında gerçek sınırlı giriş rolü gerekir; deneyin yönetici bağlantısı ürüne taşınmaz.
+
+## Son tanı ve tek çağrılı ölçümler — 2026-09-20
+
+İlk planı yeniden üretmek için DISCARD PLANS, ayrıca 12 yeni bağlantı ve dönüşümlü SELECT 1 kontrolü kullanıldı. DISCARD PLANS veri/işletim sistemi önbelleğini temizlemez; soğuk disk veya sunucu yeniden başlatma sınanmadı. İlk üç turlu yeniden denemede 828/348 ms görüldü. Yeni bağlantı EXPLAIN örneklerinde sorgu çalışması yaklaşık 4–40 ms iken bazı toplamlar 331–462 ms idi. Bu örneklerde önemli gecikme sorgu çalışmasının dışındadır; ağ/havuz/istemci payları ayrı ayrı kanıtlanmadı.
+
+Dönüşümlü 20 kontrol ve 20 aramada SELECT 1 p95 238, en yavaş 243 ms; arama p95 279, en yavaş 631 ms oldu. Bu kez ilk aramanın sunucu çalışması 384 ms olduğundan bütün gecikmeyi ağa bağlamak da yanlıştır. JIT açık/kapalı karşılaştırması tek başına çözüm göstermedi: 744/919/856 ms işlemlerde sunucu yaklaşık 39–42 ms, BEGIN/COMMIT ağ turları 228–324 ms idi. Kalıcı JIT ayarı değiştirilmedi.
+
+spike.s12r_request_search(actor uuid, q text) yalnız spike_app rolüyle, SECURITY INVOKER olarak kimliği işlem yerel kurup mevcut s12r_bucket_search yordamını çağırır. Tek SQL komutu PostgreSQL'in örtük işlemiyle tamamlanır; ek BEGIN ve COMMIT ağ turları yoktur. Kullanıcı ve sorgu bağlı parametredir. Üründe actor yalnız doğrulanmış sunucu oturumundan gelir; tarayıcının serbest kimlik seçmesine izin verilmez. Bu bir iş kuralı değişikliği değil ADR-015 içindeki okuma çağrısı denemesidir.
+
+Aşağıdaki süreler **bir ağ gidiş-dönüşüdür**; önceki üç turlu ölçümlerle yöntem farkı açık tutulur. Ön ısınma yok; her örnek öncesi planlar atıldı (tanı komutunun süresi ölçüme dahil değil, üründe çalıştırılmaz). Bağlantı ve sınırlı rol kurulumu ölçümden önce tamamlandı. 20 örneğin tümünde sonuç sayısı kontrol edildi.
+
+| Senaryo kodu | İlk | p50 | p95 | En yavaş (ms) |
+|---|---:|---:|---:|---:|
+| one-exact | 99 | 76 | 76 | 99 |
+| all-exact | 77 | 77 | 77 | 79 |
+| all-common | 76 | 77 | 79 | 80 |
+| one-common | 76 | 80 | 91 | 91 |
+| all-typo | 169 | 91 | 100 | 169 |
+| one-absent | 75 | 79 | 85 | 88 |
+| all-absent | 80 | 81 | 88 | 88 |
+| multi-absent | 122 | 140 | 158 | 160 |
+| multi-common | 175 | 88 | 99 | 175 |
+| number | 190 | 84 | 90 | 190 |
+| ambiguous | 145 | 89 | 123 | 145 |
+| reversed | 123 | 112 | 123 | 124 |
+| late | 115 | 88 | 98 | 115 |
+| holes | 91 | 87 | 105 | 109 |
+| sparse | 123 | 114 | 123 | 125 |
+| 50-ranges | 105 | 90 | 105 | 108 |
+| 9-ranges | 85 | 84 | 88 | 89 |
+| 8-ranges | 86 | 85 | 98 | 101 |
+
+Ayrı 12 yeni bağlantıdaki ilk istekler sırasıyla 123, **392**, 133, 84, 263, 78, 115, 76, 119, 83, 137, 84 ms. Bağlantı/rol kurma ayrıca 524–3560 ms sürdü ve hedef sorgu süresine katılmadı. Yeni istemci bağlantısı, havuzun yeni PostgreSQL backend'i verdiğini kanıtlamaz. 392 ms örneği çıkarılmadı; tüm ilk istekler hedefi karşılıyor iddiası yoktur.
+
+14 ek istek kontrolü geçti: aynı bağlantıda farklı kullanıcılar, izinsiz kullanıcı, başarı ve geçersiz girdi sonrasında temiz kimlik/arama bağlamı, kimliksiz arama ve doğrudan kaynak okumanın boş dönmesi. Ayrı beş güvenlik kontrolü: private/invoker özellikler, yanlış rolün 42501 ile reddi, gerçek 1 ms iptalinin 57014 vermesi, iptal sonrası kimlik temizliği ve sonraki izinsiz kullanıcının boş sonucu.
+
+İlk ayrı inceleme yanlış rol kontrolünde durdu: test, yeni bağlantıda yönetici rolüne kendiliğinden dönüldüğünü varsaymıştı. Havuzdaki önceki SET ROLE durumu nedeniyle sınırlı rol hâlâ etkindi. Test başlangıcında açık RESET ROLE, sonunda RESET ROLE/RESET statement_timeout eklenince beş kontrol geçti. Güvenlik sınırı gevşetilmedi. Ürün bağlantısı gerçek sınırlı giriş rolü kullanmalı; yöneticiyle bağlanıp SET ROLE durumuna güvenen deney kopyalanmamalı. Deney sarmalayıcısı yanlış rolde çalışmayı zaten reddeder; geçici betikler başlangıç/son durumunu açık kurmalıdır.
+
+Kanıtlar: search12r-cold-evidence.json, search12r-fresh-evidence.json, search12r-control-evidence.json, search12r-jit-evidence.json ve search12r-onecall-evidence.json. Yeni bağlantı incelemesi JSON yazmadan negatif testte durdu; 12 basılmış gözlem eksiksiz search12r-first-observations.json dosyasına, konsol aktarımı olduğu belirtilerek kaydedildi. Düzeltilmiş güvenlik betiği search12r-onecall-security.mjs beş kontrolü geçti. search12r-speed-gate.mjs iki son hız kanıtını okuyup 392 ms için **FAIL / çıkış kodu 1** verir. Bu, ürün test kapısının bozulduğu anlamına gelmez: doğrulama denemesinin başarısız kabul ölçütü kayda geçirilmiştir.
+
+Son veritabanında önceki yardımcıların yanında s12r_request_search de kalır. Kaynak veri değiştirilmedi; s12r_bucket_search tanımı tanı sırasında aynı içerikle yeniden oluşturuldu, algoritma değişmedi. Başlangıçtaki SQL tanımı dış scratchpad'de search12r-current-function.sql olarak saklandı. Sonraki iş, kimlik/rol sözleşmesi korunarak ilk çağrının sunucu ve bağlantı giderlerini eşzamanlı kaydetmek, aşımı kontrollü biçimde yeniden üretmek ve gidermektir. Hedefi yükseltmek veya aykırı örneği silmek çözüm değildir.
+
+Teknik dayanak: [PostgreSQL işlem sınırları](https://www.postgresql.org/docs/17/tutorial-transactions.html), [DISCARD PLANS](https://www.postgresql.org/docs/17/sql-discard.html), [Supabase gözlemlenebilirlik](https://supabase.com/docs/guides/observability). Belgelerin tanımladığı davranış ile bu deneyin ölçümleri ayrı değerlendirilir.

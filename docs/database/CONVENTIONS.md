@@ -68,7 +68,7 @@ m² gibi türetilen ölçüler **saklanır ve hesaplandığı kural sürümüyle
 
 - Her yabancı anahtar dizinlidir.
 - Liste ekranlarının varsayılan sıralaması ve süzgeçleri (durum + tarih + kapsam) birleşik dizin alır.
-- Arama satırı tablosu GIN dizinlidir (`ADR-017`).
+- Arama satırı ve üç yardımcı veri kümesinin sorgu/indeks düzeni ADR-017 ve D-247 ile tanımlıdır; yalnız GIN eklemek RLS altında hız garantisi değildir. İç arama numarası istisnası UUID birincil anahtarı değiştirmez (`SCHEMA-PLATFORM.md`).
 - Dizin, ekranın gerçek sorgusundan türetilir; "olur da lazım olur" dizini eklenmez.
 
 ## 10. Satır düzeyi güvenlik

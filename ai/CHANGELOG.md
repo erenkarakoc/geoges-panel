@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2026-09-20 — Schema count drift found and guarded
+
+- TASK-0092: the original schema definitions contained 212 tables, while COVERAGE said 211; the platform task claimed 34 while defining 45. With three new search helpers the correct totals are 215 and 48. Corrected current records and added an automatic definition-to-inventory check, including duplicate/missing schema and total checks. The real stale total was rejected before correction. Historical changelog entries remain historical.
+- Self-review: definition rows are counted once, duplicate declarations fail, coverage cannot hide a schema move behind an unchanged total. Six regression cases and full quality gate passed (69 tests); no product code changed.
+
+## 2026-09-20 — Search model adopted; request overhead reduced, first-request gate still fails
+
+- D-247 / CHG-007: proceeded with the recommended model and word semantics after the owner’s continuation. Folded ADR, UX, three schema helpers (215 planned tables), glossary, scope/UUID/rebuild rules and operations inventory. No product source or migration.
+- TASK-0091: diagnosed both server startup and outside-query overhead; a single-call invoker wrapper reduced 18 x 20 no-warmup samples to max 190 ms. Added 14 request checks and five security checks, including real cancellation/identity cleanup. Fixed a negative test that assumed pooled role state reset automatically; restricted runtime login remains mandatory.
+- Twelve new-connection first requests still include 392 ms. Preserved all observations, including the aborted review’s console output, and added a replay speed gate that exits nonzero for that failure. TASK-0090/0091 remain REVIEW, OQ-029 open; eight spikes complete. Next: isolate remaining startup/transport overhead before SPIKE-14.
+
 ## 2026-09-20 — Search retry passes warm measurements; adoption and cold latency remain open
 
 - TASK-0091 / SPIKE-12: 73 correctness/review checks passed on 500k synthetic rows. After removing rejected RUM/GiST alternatives, 18 scenarios with 20 timed samples each gave warm p95 220–258 ms, maximum 258 ms. First executions after cleanup reached 461/371 ms; neither task is DONE and no performance waiver is recorded.

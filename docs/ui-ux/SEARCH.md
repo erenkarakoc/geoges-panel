@@ -21,6 +21,10 @@ Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
 - Kullanıcı tanımlı kayıt türleri (pilot sonrası), tanımında "aramaya girsin" seçildiyse ayrı bir grup olur (REQ-WFL-037).
 - Türkçe harf farkına takılmaz ("sogut" → "Söğüt"); bu kabukta var (`search-text.ts`).
 
+### Sözcüklerin eşleşmesi (D-247)
+
+Kayıt aramasında yazılan bütün sözcükler aynı kayıtta bulunur; sıraları önemli değildir. Bir sözcük kişinin erişebildiği arama sözlüğünde aynen varsa o kullanılır; yoksa benzer yazılışları denenir. Yalnız bir bölümünü içeren kayıtlarla boşluk doldurulmaz. Normalleştirme ve eşik sözleşmesi ADR-017'dedir. Ekran/işlem adlarının mevcut eş anlamlıları korunur; ürün kabuğu bu tasarım kararıyla değiştirilmiş sayılmaz.
+
 ## 2. Yetki (T1)
 
 - Sonuç, kişinin görmeye yetkili olduğu kayıtlardan üretilir. Yetkisiz kayıt ne sonuç, ne sayı, ne "eşleşme var ama göremezsiniz" olarak görünür (REQ-NFR-012, REQ-DOC-003).

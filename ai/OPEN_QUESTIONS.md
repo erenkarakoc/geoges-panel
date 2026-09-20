@@ -8,7 +8,7 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 
 | ID | Category | Question | Proposed answer | Blocks |
 |---|---|---|---|---|
-| OQ-029 | Architecture validation | OPEN 2026-09-20: adopt the scoped helper-index model and all-words matching proposal, then resolve first-execution latency? | TASK-0091: 73 checks passed, 18 warm scenarios p95 220–258 ms on 500k rows. Three derived tables add about 481 MiB; first executions reached 461/371 ms. Detailed proposal in DECISIONS and `docs/architecture/spikes/SPIKE-12-search-retry.md`. No owner approval or speed waiver recorded. | Product search implementation and Phase 06 exit until approval and remaining speed validation |
+| OQ-029 | Architecture validation | OPEN: can remaining first-request latency meet 300 ms without weakening RLS? Model and word semantics adopted by D-247 on 2026-09-20. | One-call request removes two round trips: 18 x 20 samples max 190 ms, but a fresh-connection first request reached 392 ms. Both server startup and outside-query overhead appeared in diagnostics; no single root cause proven. Replay gate FAIL; report in `docs/architecture/spikes/SPIKE-12-search-retry.md`. No speed waiver. | Product search implementation and Phase 06 exit until validated speed resolution |
 
 ## Phase 00 — answered domain question
 

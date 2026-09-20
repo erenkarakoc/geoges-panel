@@ -14,7 +14,7 @@ Phase 04 çıkış denetimi: verisi olan her gereksinimin bir tablosu var mı, h
 | `wfl` | 8 | REQ-WFL (39) |
 | `tsk` | 5 | REQ-TSK (13) |
 | `adm` | 9 | REQ-ADM (15) |
-| `core` | 5 | Altyapı (ADR-014, ADR-017) |
+| `core` | 8 | Altyapı (ADR-014, ADR-017, D-247) |
 | `prj` | 7 | REQ-PRJ (11) |
 | `sit` | 17 | REQ-SIT (35) |
 | `inv` | 11 | REQ-INV (27) |
@@ -34,7 +34,9 @@ Phase 04 çıkış denetimi: verisi olan her gereksinimin bir tablosu var mı, h
 | `int` | 5 | REQ-INT (14) |
 | `str` | 7 | REQ-STR (8) |
 | `cst` | 6 | REQ-WFL-035…039 |
-| **Toplam** | **211** | 438 gereksinim |
+| **Toplam** | **215** | 438 gereksinim |
+
+İlk Phase 04 belgeleri 212 tablo içeriyordu; önceki toplamın 211 yazılması sayım hatasıydı (TASK-0092). CHG-007 / D-247 üç türetilmiş arama tablosu ekledi. REQ-NFR-012 artık bu yardımcılarla birlikte core.search_row üzerinden açıkça izlenir. Tasarım sayısıdır; göç uygulanmış tablo sayısı değildir.
 
 MIG (veri aktarımı) ertelendiği için tablosu yoktur (DEF-001).
 
@@ -47,7 +49,7 @@ Bunlar davranış, hedef veya işletim kuralıdır; tablo beklemezler. Doğrulam
 | REQ-NFR-001, REQ-NFR-002 | Sistem ilkesi (kaydı olmayan iş tamamlanmış sayılmaz; tek resmî kayıt) |
 | REQ-NFR-003 | Dış kaynaktan gelen verinin işaretlenmesi — ilgili tabloların `source_*` sütunlarıyla karşılanır |
 | REQ-NFR-006…011, REQ-NFR-016 | Arayüz, dil, marka, erişilebilirlik hedefleri |
-| REQ-NFR-012…015 | Ekran kalıpları; verisi ilgili modüldedir |
+| REQ-NFR-013…015 | Ekran kalıpları; verisi ilgili modüldedir |
 | REQ-NFR-017…020 | Performans, yedek, günlükleme, felaket kurtarma — Phase 05 |
 | REQ-SIT-032 | Onaylı verinin dağılması; olay altyapısıyla karşılanır (ADR-014) |
 | REQ-WFL-006, REQ-WFL-020 | Motorun yapamayacakları ve sistem yetkisi — kısıt ve kod kuralı |

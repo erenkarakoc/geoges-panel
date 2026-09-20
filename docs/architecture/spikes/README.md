@@ -17,7 +17,7 @@ Phase 03'te alınan mimari kararların riskli olanları, yapıma başlamadan ön
 | SPIKE-09 | R2 imzalı bağlantılar yetki denetimiyle birlikte çalışıyor mu? | Yetkisiz kullanıcı bağlantı üretemiyor; üretilmiş bağlantı süresi dolunca çalışmıyor; 50 MB dosya sahadaki bağlantıda inebiliyor | ADR-003 |
 | SPIKE-10 | Sunucuda üretilen PDF basılabilir kalitede mi? | Teklif belgesi ve resmî günlük rapor Türkçe karakterlerle, tablo düzeni bozulmadan, A4'te doğru çıkıyor | **İNCELEMEDE: görsel doğrulama eksik, 2026-09-20** → `SPIKE-10-pdf-quality.md` |
 | SPIKE-11 | TCMB kuru her iş günü güvenilir alınıyor mu? | Kur alınamadığında `exchange_rate.missing` çıkıyor, tutarlar "kur bekliyor" işaretleniyor, ertesi gün kendiliğinden tamamlanıyor | **İNCELEMEDE: kesinti/iyileşme testi eksik, 2026-09-20** → `SPIKE-11-tcmb-exchange-rate.md` |
-| SPIKE-12 | PostgreSQL araması Türkçe için yeterli mi? | "sogut" → "Söğüt", "hakedis" → "hakediş" buluyor; yetkisiz kayıt sonuca hiç girmiyor; 500 bin arama satırında 300 ms altında | **İNCELEMEDE 2026-09-20:** ilk başarısızlık `SPIKE-12-turkish-search.md`; tekrar denemesinde 73 kontrol ve 18 sıcak senaryo geçti, ilk sorgu hızı ve mimari onay açık → `SPIKE-12-search-retry.md` · TASK-0091, ADR-017, D-239, REQ-NFR-012 |
+| SPIKE-12 | PostgreSQL araması Türkçe için yeterli mi? | "sogut" → "Söğüt", "hakedis" → "hakediş" buluyor; yetkisiz kayıt sonuca hiç girmiyor; 500 bin arama satırında 300 ms altında | **İNCELEMEDE 2026-09-20:** D-247 model onaylı; tek çağrıda 360 ölçüm en çok 190 ms, yeni bağlantıda bir ilk istek 392 ms → `SPIKE-12-search-retry.md`. İlk başarısızlık: `SPIKE-12-turkish-search.md` · TASK-0091, OQ-029, ADR-017, REQ-NFR-012 |
 | SPIKE-13 | Canlı sinyal kanalı sahada dayanıyor mu? | Zayıf bağlantıda kanal koptuğunda ekran sessizce yeniden bağlanıyor; sinyal kaybolduğunda sayfa yenilemesi doğru sayıyı getiriyor; kanal veri taşımıyor | D-240 |
 | SPIKE-14 | Okuma modeli sıfırdan yeniden kurulabiliyor mu? | Bir yıllık olaydan rapor modelleri yeniden kuruluyor, sonuç kaynak kayıtlarla birebir; süre kabul edilebilir; yeniden kurma bildirim ve görev üretmiyor | D-233, D-234 |
 | SPIKE-15 | Sahadan fotoğraf yükleme zayıf bağlantıda çalışıyor mu? | Telefondan çekilen fotoğraf küçültülüp yükleniyor; bağlantı kesilip döndüğünde yükleme kaldığı yerden tamamlanıyor; günlük kayıt bu sırada kaybolmuyor | REQ-SIT-020, REQ-NFR-015 |
@@ -27,7 +27,7 @@ Phase 03'te alınan mimari kararların riskli olanları, yapıma başlamadan ön
 
 Önce mimarinin taşıyıcıları: SPIKE-01, 02, 03. Sonra motor: 04, 05, 06. Sonra veri ve arayüz riskleri: 08, 07, 12, 14. Kalanlar bağımsızdır ve paralel yürüyebilir.
 
-2026-09-20: TASK-0091 sıcak aramalarda hedefi sağladı; üç yardımcı tablo önerisinin onayı ve ilk çalıştırma hızının doğrulanması sırada, ardından SPIKE-14. Sekiz deneme tamamlandı; SPIKE-12 tamamlandı sayılmaz. Hedef gevşetilmedi (OQ-029).
+2026-09-20: D-247 ile model onaylandı; TASK-0091 tek çağrılı aramada ilerledi ama 392 ms ilk istek nedeniyle açık. Sonraki iş kalan gecikmeyi ayırmak, sonra SPIKE-14. Sekiz deneme tamamlandı; hedef gevşetilmedi (OQ-029).
 
 ## Kural
 

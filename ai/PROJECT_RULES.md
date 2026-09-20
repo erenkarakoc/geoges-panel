@@ -191,6 +191,8 @@ A failure prints the file, the line and what to fix. Forward references — reco
 
 13. The roadmap overview has exactly one `IN_PROGRESS` phase; `ai/CURRENT_STATE.md` and `ai/SESSION_HANDOFF.md` each have exactly one `CURRENT PHASE: PHASE NN` line matching it (TASK-0085). Historical prose is not interpreted by this check. When the final phase finishes, this guard must be extended to represent project completion explicitly.
 
+14. The table rows in `docs/database/SCHEMA-*.md` must agree with every per-schema count and the total in `docs/database/COVERAGE.md`; duplicate definitions, duplicate coverage rows and missing schemas/totals are rejected (TASK-0092). Historical narrative counts are not parsed.
+
 ### 21.2 The session journal
 
 `ai/SESSION_JOURNAL.md` is append-only and written by a `PostToolUse` hook in `.claude/settings.json`, not by the model. Every file-modifying tool call appends one line: timestamp, session id, tool, path. The model never edits it; the file is committed with the work.

@@ -71,6 +71,8 @@ Every approved change request must appear here, with the phase it changed. Analy
 | CHG-005 | Record consistency and deterministic guards | Rewrote the stale parts of this file, refiled `ai/TASKS.md`, redefined Milestone M1, blocked TASK-0027 behind TASK-0039, added `npm run records`, the pre-commit gate and the hook-written session journal | DONE 2026-09-18 |
 | CHG-006 | Composition-first workflow platform | **Approved and folded 2026-09-18 (D-077…D-105).** Phase order unchanged (engine + designer stay in Phase 08, before the slices — D-088). Adds a per-module capability catalog to Phase 01, contract tests to Phase 03, a free record-type builder (D-079), built after the Slice 1 pilot (D-105), new spikes to Phase 06. Analysis in `ai/DECISIONS.md` | DONE 2026-09-18 |
 
+| CHG-007 | Scoped derived search indexes and word matching | Approved 2026-09-20 (D-247). Folds the Phase 02 search behavior, Phase 03 ADR-017 and Phase 04 three-table extension (215 planned tables); Phase 05 extension/rebuild inventory and Phase 07 adapter obligations updated. Phase order unchanged. Phase 06 latency validation remains open; no product code or target waiver | DESIGN FOLDED; VALIDATION OPEN |
+
 ## Work delivered ahead of its phase
 
 Recorded so that no phase is entered believing its scope is untouched.
@@ -188,7 +190,7 @@ STATUS: DONE
 - **Purpose:** design the full domain schema before implementation.
 - **Scope:** entities for all modules (purpose, ownership, relationships, constraints, indexes, permissions, RLS, audit, history, soft delete, retention); ledgers; effective-dated configuration tables; outbox; audit tables; RLS policy model; migration strategy (expand/contract, additive-first); seed/reference data; sensitive data columns.
 - **Dependencies:** Phase 03 (DONE).
-- **Status:** `DONE` — owner approved the exit 2026-09-20. **Delivered:** conventions and migration strategy (`docs/database/CONVENTIONS.md`, TASK-0065, D-243, D-244); platform, operations, commercial-finance, corporate, analytics and user-defined record schemas — 211 tables (TASK-0066…TASK-0071); data coverage check (`COVERAGE.md`, TASK-0072). Ledgers are append-only, closed periods refuse rows, sensitive personnel columns are isolated, and every table must carry a scope column, an RLS policy and a history channel.
+- **Status:** `DONE` — owner approved the exit 2026-09-20. **Delivered:** conventions and migration strategy (`docs/database/CONVENTIONS.md`, TASK-0065, D-243, D-244); platform, operations, commercial-finance, corporate, analytics and user-defined record schemas — 212 defined tables at original exit (previous total 211 was a counting error, TASK-0092), extended to 215 by CHG-007 / D-247 (TASK-0066…TASK-0071); data coverage check (`COVERAGE.md`, TASK-0072). Ledgers are append-only, closed periods refuse rows, sensitive personnel columns are isolated, and every table must carry a scope column, an RLS policy and a history channel.
 - **Deliverables:** `docs/database/*` (ERD per module, table specs, RLS matrix, migration conventions).
 - **Acceptance:** every REQ with data maps to tables; RLS defined for every table; naming review passed.
 - **CHG-006 scope:** versioned flow definitions, running instances and their trace; capability registry; the **storage model for user-defined record types** with RLS (D-092) and non-destructive history (D-094) — the hardest data question of CHG-006 (RISK-010).
@@ -208,7 +210,7 @@ STATUS: DONE
 - **Candidate spikes:** Supabase Auth + RLS with multi-role, delegation and acting role; transactional outbox + job processing on the chosen stack; workflow engine definition model + versioned execution; visual flow editor feasibility with COSS/Base UI; R2 signed URLs + permission-checked downloads; Turkish-quality PDF generation (quote documents, daily report); CBRT exchange-rate fetch with fallback; architecture boundary enforcement tooling.
 - **Dependencies:** Phases 03–05 (all DONE).
 - **Status:** `IN_PROGRESS` — **current phase since 2026-09-20.** Spike list and pass criteria: `docs/architecture/spikes/README.md` (16 spikes).
-- **Validation finding (2026-09-20):** SPIKE-12 initially failed no-match search. TASK-0091's three-helper-table prototype now passes 73 checks and 18 warm scenarios at p95 220–258 ms on 500k rows. First executions reached 461/371 ms; the model/word-matching proposal awaits owner approval (OQ-029). ADR-017 remains under review; eight spikes are complete, search is not. Resolve adoption and first-execution speed before SPIKE-14; no criterion is waived.
+- **Validation finding (2026-09-20):** D-247 / CHG-007 adopted and folded. TASK-0091 one-call search: 18 x 20 samples max 190 ms; 19 additional request/security checks passed. A new-connection first request reached 392 ms; replay gate FAIL (OQ-029). Eight spikes complete; search remains REVIEW before SPIKE-14. No criterion waived.
 - **Deliverables:** spike reports in `docs/architecture/spikes/`, ADR updates.
 - **Acceptance:** every candidate spike is PASS, FAIL (with ADR change) or explicitly waived by owner.
 - **CHG-006 spikes:** user-defined record types end to end (definition → storage → RLS → search → report); free-form windowed conditions under load.

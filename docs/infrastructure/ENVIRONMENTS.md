@@ -78,3 +78,11 @@ Bu tablo `ai/DEFERRED.md`'deki DEF-008 ile eşleşir; unutulmaması için Phase 
 ## 8. Ölçek
 
 İki yıl içinde 50–150 kullanıcı hedefi (REQ-NFR-020) tek sunucu ve tek veritabanıyla karşılanır. Yük artarsa önce outbox işleyicisi ayrı sürece alınır, sonra okuma modelleri için okuma kopyası eklenir; uygulama kodu değişmez (ADR-015, ADR-014).
+
+## Arama indeksi işletimi (D-247, CHG-007)
+
+pg_trgm, btree_gist ve intarray eklentileri göç öncesi kontrol edilir; RUM kullanılmaz. Üç türetilmiş arama tablosu iş kaydının kaynağı değildir. Birlikte güncellenir, aynı normalleştirme sürümüyle yeniden kurulur ve geçişte kaynak/yardımcı sonuçları karşılaştırılır. Yeni indeks doğrulanmadan okuma sürümü değiştirilmez; önceki sürüm geri dönüş için korunur.
+
+500 bin sentetik kayıtta yardımcı tablo ve indeksler yaklaşık 481 MiB ek alan kullandı; kapasite planında asıl veri, indeksler ve geçici yeniden kurma alanı ayrı hesaplanır. Göç yedeği ve geri dönüş kuralları aynen geçerlidir. db:reset:data sonrasında yardımcılar kalan aranabilir kaynaklardan yeniden üretilir; akış tanımları bu yüzden sıfırlanmaz. Yardımcı arama verisi config:export'a girmez.
+
+Bağlantı havuzu sıcak/ilk istek, bağlantı açılışı ve gerçek HTTP süresi ayrı izlenir; uygulama yalnız sınanmış süreyi karşılıyor diye bütün uçtan uca yol hızlı kabul edilmez. İşlem yerel kimliğinin başarıda, hatada ve havuzdaki sonraki kullanıcıya geçişte temizliği Phase 07 sözleşme testidir.

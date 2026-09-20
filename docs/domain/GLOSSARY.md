@@ -1,11 +1,14 @@
 # Terim Sözlüğü (Glossary)
 
-Durum: KESİNLEŞTİ — bütün terimler sahip tarafından onaylandı (OQ-007, 2026-09-19); yeni terim eklenirken PROPOSED başlar ve modülün onayıyla kesinleşir · Son güncelleme: 2026-09-19
+Durum: KESİNLEŞTİ — temel sözlük OQ-007 ile onaylandı; arama altyapısı terimleri D-247 yönünün teknik adlandırmasıdır · Son güncelleme: 2026-09-20
 
 Kod, veritabanı, API ve event isimlerinde yalnızca **Canonical English Term** kullanılır. Durum sütunu: `PROPOSED` (önerildi), `CONFIRMED` (kesinleşti), `OPEN` (tartışmalı).
 
 | Türkçe terim | Canonical English Term | Tanım | İzinli alternatif | Yasak alternatif | Durum | Not |
 |---|---|---|---|---|---|---|
+| Arama sözcük eşlemesi | Search Posting | Sözcüğün arama kaydıyla kapsam korumalı eşlemesi | — | — | CONFIRMED | D-247 teknik adlandırması |
+| Arama sözcüğü | Search Word | Yetki kapsamındaki türetilmiş sözcük ve adedi | — | — | CONFIRMED | D-247 teknik adlandırması |
+| Arama sözcük kümesi | Search Word Bucket | Aynı sözcük, tür ve kapsam için sıralı arama kimlikleri | — | — | CONFIRMED | D-247 teknik adlandırması |
 | Sahip | Owner | Şirket sahibi; hiçbir rol tarafından kısıtlanamayan en üst görünürlük | — | admin, boss | CONFIRMED | Sistem yöneticisi rolünden ayrıdır |
 | Rol | Role | Yetki ve sorumluluk seti | — | position (farklı kavram) | CONFIRMED | |
 | Vekâlet | Role Delegation | Belirli süreli rol ataması | — | proxy, deputy | CONFIRMED | |

@@ -7,7 +7,7 @@ PROJECT STATUS:      DESIGN
 CURRENT PHASE:       PHASE 06 — Validation Spikes (Phase 05 DONE 2026-09-20, owner approved)
 CURRENT SUBPHASE:    TESTING
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0090/0091 REVIEW: search retry passes 73 checks and warm speed; helper-model/word-semantics approval and first-execution speed remain open (OQ-029), before SPIKE-14. SPIKE-01…08 passed; SPIKE-10/11 remain REVIEW.
+CURRENT TASK:        TASK-0090/0091 REVIEW: D-247 / CHG-007 adopted and folded. One-call search max 190 ms in 360 samples; new-connection first request 392 ms remains open (OQ-029). Next isolate remaining latency before SPIKE-14; eight spikes complete.
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -18,6 +18,8 @@ CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 a
 ```
 
 ## LAST COMPLETED TASK
+2026-09-20: TASK-0092: corrected schema inventory totals (212 original definitions, now 215 after D-247; platform 48). Added deterministic per-schema/total and duplicate/missing-row checks to the records gate. Six regression cases and full check with 69 tests passed. Search validation TASK-0091 remains REVIEW.
+
 2026-09-20: SPIKE-08 (TASK-0089): custom record data pipeline, 48 checks, 50,001 records; list/filter p95 240/270 ms. Fixed read-only-user writes to helper tables and stale search content after field retirement in the throwaway setup. No product UI or source changes.
 
 2026-09-20: SPIKE-04/05/06 (TASK-0086…TASK-0088): database-backed version pinning with fresh-process resume; dry/real parity and read-only protection; 500k-row conditions with real timeout recovery. 26 primary assertions plus 13 independent path/owner assertions passed; no product code.
@@ -26,7 +28,7 @@ CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 a
 
 Phase 05 DONE (2026-09-20, owner approved): local-first operation with no staging and hosting deferred (D-245), two reset commands and portable configuration (D-246), CI gate, owner setup guide, backup and recovery plan, eleven runbooks (TASK-0073…TASK-0078).
 
-Earlier: Phase 04 DONE (2026-09-20, owner approved): 211 tables in six schema documents plus conventions and the coverage check (TASK-0065…TASK-0072, D-243, D-244).
+Earlier: Phase 04 DONE (2026-09-20, owner approved): 212 original table definitions (previous total 211 corrected by TASK-0092), now 215 after D-247, in six schema documents plus conventions and the coverage check (TASK-0065…TASK-0072, D-243, D-244).
 
 Earlier: Phase 03 DONE (2026-09-20, owner approved): module boundaries and contracts, event backbone, workflow engine architecture, permission architecture, configuration and custom fields, ports and data access, storage direction for user-defined record types, and the 16 Phase 06 spikes (TASK-0057…TASK-0064, D-230…D-242, ADR-014…018; OQ-020 and OQ-026 closed).
 
@@ -37,18 +39,19 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. TASK-0091: obtain the owner's answer on the concrete helper-model and word-matching proposal (OQ-029), fold an approved amendment, then resolve first-execution latency before SPIKE-14 (read-model rebuild). Retry: 73 checks passed, 18 warm scenarios p95 220–258 ms on 500k rows; first executions 461/371 ms. TASK-0090/0091 and ADR-017 remain REVIEW. Eight of sixteen spikes are complete; no speed waiver.
+1. TASK-0091: isolate the remaining first-request latency before SPIKE-14. D-247 / CHG-007 is folded into architecture, schema, UX and operations (215 planned tables); no approval pending. One-call search: 18 x 20 no-warmup samples max 190 ms, plus 19 request/security checks. Twelve new-connection first requests include 392 ms, so the replay gate fails and TASK-0090/0091 remain REVIEW. Eight spikes complete.
 2. Remaining Phase 06 experiments follow the order in `docs/architecture/spikes/README.md`. SPIKE-10 needs rendered PDF inspection; SPIKE-11 needs missing-rate/recovery assertions. Neither is waived or complete.
 3. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076; no product code in Phase 06.
 4. TASK-0018: re-check memory-worker authentication after 2026-10-15; do not stop the worker or invoke cloud-sync.
 
 ## BLOCKED BY
-Product adoption of the three-helper-table search model and word semantics requires the owner's answer to the recorded proposal (PROJECT_RULES §9, OQ-029). The 300 ms target also remains unproven on first execution. Approval alone cannot close SPIKE-12 or permit product code in Phase 06; further disposable performance investigation is authorized.
+No owner input is currently needed. The search model and word semantics were adopted with the owner’s continuation (D-247). Product search and Phase 06 exit remain gated by first-request performance: 392 ms versus 300 ms (OQ-029). Further disposable diagnosis is authorized; no target waiver or product code.
 
 ## OPEN QUESTIONS
-See `ai/OPEN_QUESTIONS.md`. OQ-029 tracks search-model adoption and remaining first-execution validation. OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.
+See `ai/OPEN_QUESTIONS.md`. OQ-029 tracks remaining first-request validation after D-247 adoption. OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.
 
 ## RECENT DECISIONS
+- D-247 / CHG-007 (2026-09-20): scoped search helpers and all-words matching adopted; three tables added to the design, 215 total. No speed waiver.
 - 2026-09-20: Phases 01–05 are owner-approved DONE; Phase 06 is current. Local-first operation D-245 and separate reset/configuration tools D-246 remain in force.
 - 2026-09-19: glossary confirmed by the owner — 234 terms CONFIRMED, OQ-007 closed
 - D-213 (2026-09-19, TASK-0039): every scope § citation replaced by REQ ids; section map in `docs/requirements/README.md`; scope at Git tag `scope-archive`; validator rejects an unnamed §

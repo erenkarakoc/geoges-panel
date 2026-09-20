@@ -19,6 +19,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { checkSchemaCounts } from "./check-schema-counts.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const STRICT = process.argv.includes("--strict");
@@ -70,6 +71,21 @@ function recordFiles() {
 
 const FILES = recordFiles();
 const CONTENT = new Map(FILES.map((file) => [file, read(file) ?? ""]));
+
+// Count actual schema rows, not remembered phase-exit totals (TASK-0092).
+if (CONTENT.has("docs/database/COVERAGE.md")) {
+  const schemas = new Map(
+    [...CONTENT].filter(([file]) => /^docs\/database\/SCHEMA-[^/]+\.md$/.test(file)),
+  );
+  for (const message of checkSchemaCounts(schemas, CONTENT.get("docs/database/COVERAGE.md"))) {
+    fail(
+      "docs/database/COVERAGE.md",
+      1,
+      message,
+      "reconcile the inventory with the SCHEMA table definitions",
+    );
+  }
+}
 
 // ---------------------------------------------------------------------------
 // 1. Tasks: unique ids, recognised heading, known status

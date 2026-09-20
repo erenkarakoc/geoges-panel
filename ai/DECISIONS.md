@@ -2,9 +2,13 @@
 
 Last updated: 2026-09-20
 
-## Proposed search-model amendment — owner approval pending (OQ-029, TASK-0091)
+## CHG-007 — Search helper model (D-247, OQ-029, TASK-0091)
 
-This is an impact analysis under PROJECT_RULES §9, **not an approved decision**. No new D id or approved phase change is recorded. D-239's PostgreSQL direction, RLS and the 300 ms target stand.
+The owner instructed "devam" after the two concrete recommended choices on 2026-09-20; proceed with the recommended helper model and word semantics. This approval does not waive latency validation. The analysis below was recorded before approval (commit 70d63e1); its proposed/pending wording is historical. D-239, RLS and 300 ms stand.
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-247 | Adopt three scoped derived search structures in PostgreSQL: word/record postings, vocabulary and record-id buckets. All query words must match the same record, order-independent; spelling correction applies only to words absent from the authorized vocabulary. Accept the measured extra storage/write/rebuild cost; use a bounded internal search identifier while keeping UUID business identities. No latency waiver and no product implementation in Phase 06. | Owner continuation 2026-09-20 after the recommended choices; CHG-007, ADR-017, TASK-0091 |
 
 - **Change and reason:** add three scope-protected derived search structures (word/record postings, scoped vocabulary, sorted record-id buckets). The prototype passed 73 checks and 18 warm scenarios at p95 220–258 ms on 500k rows; simpler tested index shapes failed. First executions at 461/371 ms remain unresolved, so SPIKE-12 is not complete.
 - **Requirements/features/tasks:** preserve REQ-NFR-012, REQ-IAM-011 and D-227; affects global search, ADR-017 and TASK-0090/0091. Proposed semantics require every query word in the same record, regardless of order; spelling correction applies only when an exact word is absent from the authorized vocabulary. This is not silently adopted as a business rule.
