@@ -6,6 +6,9 @@ Only items whose quality gate passed are listed here.
 
 | Date | ID | Item | Gate |
 |---|---|---|---|
+| 2026-09-20 | TASK-0086 | Workflow version pinning and persistent trace | T1 spike PASS; seven assertions and independent trace review |
+| 2026-09-20 | TASK-0087 | Dry/real parity without persistent dry-run effects | T1 spike PASS; ten assertions and independent reference review |
+| 2026-09-20 | TASK-0088 | Historical query speed, freshness and real timeout | T1 spike PASS; nine assertions and documented limits |
 | 2026-09-20 | TASK-0082 | RLS spike: least-privilege correction and 12 assertions | T1 spike PASS; self-review and limits in report |
 | 2026-09-20 | TASK-0083 | 100k-row RLS performance: parameterized transactions below 300 ms | T1 spike PASS; 20 samples per query, self-review in report |
 | 2026-09-20 | TASK-0084 | Ordered outbox: 10k events, atomic rollback, process exit and replay | T1 spike PASS; 10 assertions, self-review in report |

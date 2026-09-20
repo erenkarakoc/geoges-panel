@@ -6,6 +6,8 @@ CURRENT PHASE: PHASE 06 — Validation Spikes
 
 ## Verified state
 
+- SPIKE-04/05/06 are complete in the stated spike scope (TASK-0086…TASK-0088). Seven versioning checks, ten dry-run checks, nine historical-condition checks, plus thirteen independent trace/owner checks passed. Report details and limitations are in the spike index. Twenty samples per historical query gave p95 238–241 ms on 500,006 synthetic rows. Real PostgreSQL cancellation produced a failed instance, an error trace and a queued notification intent; total failure handling was 2,796 ms including network and writes.
+
 - Phases 00–05 are DONE. Phase 06 is active; product code resumes in Phase 07. The roadmap is authoritative.
 - SPIKE-01/02/03: TASK-0082…TASK-0084, reports in the spike index. The first RLS fixture allowed self-grant through broad table privileges; demonstrated and repaired only in the throwaway schema. Twelve assertions pass on the optimized policies. Twenty timed samples per query give p95 239–240 ms for parameterized list/detail/stock transactions including three network round trips.
 - Outbox: the old SKIP LOCKED selection permitted a later event from a locked record. Corrected head-per-record selection verified with 100 records × 100 events, three workers, process exit before commit, pause/resume and 500 duplicates. All ten checks pass. ADR-014 is unchanged; these are implementation constraints needed to satisfy it.
@@ -14,11 +16,13 @@ CURRENT PHASE: PHASE 06 — Validation Spikes
 
 ## Next work
 
-1. Read the Phase 06 index, workflow architecture and relevant requirements; perform SPIKE-04/05/06 as throwaway experiments.
+1. Continue with SPIKE-08 (custom record types end to end), then SPIKE-12 and SPIKE-14. Read each architecture/requirement before writing a disposable experiment.
 2. Finish the other experiments, including the reopened PDF/TCMB acceptance checks. Do not call Phase 06 complete until every exit criterion is met or explicitly waived by the owner.
 3. Phase 07 adapter tests must preserve the restricted DB role, parameter binding, transaction-local identity, identity cleanup on failure, verified TLS, ordered event selection, atomic effect/delivery and duplicate suppression.
 
 ## Local experiment evidence
+
+The same scratchpad now contains workflow456.mjs and workflow456-review.mjs. The first refuses existing wf_ tables and must not be blindly rerun. The second only reads completed experiment instances and compares them with independently specified paths/owners. The spike schema retains wf_ workflow/version/instance/effect/history fixture tables; these are sample data, not product schemas. Main execution uses one transition evaluator for real and dry modes. Dry mode uses READ ONLY; real mode records synthetic effects. Full IAM, all 14 node types, external sending, schema migrations and concurrent publication were not implemented.
 
 Scripts remain outside the repository in the previous Claude session scratchpad, session id 6c9e96a0-f93a-4199-9423-9c176e20ea35, under scratchpad/spikes: resume-verify.mjs and resume-outbox.mjs. They are disposable and must never become product code. Re-running resume-outbox.mjs refuses existing review tables; inspect before reusing. The spike schema still contains synthetic data and review_* test tables. No production table was touched. Test users/assignments and the two order-counterexample events were cleaned up; no schema reset was performed.
 

@@ -82,6 +82,10 @@ Last updated: 2026-09-20 · Format: `docs/standards/ID_STANDARDS.md`
 | TASK-0084 | SPIKE-03: atomic ordered outbox | T1 | DONE | TASK-0064 | Phase 06. Ten checks pass: atomic source/event rollback, process exit before commit, 10,000 events in record order, pause/restart, duplicate suppression. Report: `docs/architecture/spikes/SPIKE-03-outbox-reliability.md` |
 | TASK-0085 | Repair stale resume records and enforce phase pointers | T2 | DONE | TASK-0064 | Phase 06. CURRENT_STATE and SESSION_HANDOFF must each identify the single IN_PROGRESS roadmap phase; negative tests cover stale and absent pointers and ambiguous active phases. No product code |
 
+| TASK-0086 | SPIKE-04: pinned workflow version and persistent trace | T1 | DONE | TASK-0064 | Phase 06. Seven checks pass: fresh-process resume on v1 after v2 publication, separate version traces, published-edit and stale-trial rejection. Report: `docs/architecture/spikes/SPIKE-04-workflow-versioning.md`. No product code |
+| TASK-0087 | SPIKE-05: shared dry-run execution without effects | T1 | DONE | TASK-0064 | Phase 06. Ten checks pass across approve/reject/return/false-condition paths; read-only write rejection and no persistent changes. Thirteen independent path/owner assertions shared with SPIKE-04. Report: `docs/architecture/spikes/SPIKE-05-dry-run-parity.md`. No product code |
+| TASK-0088 | SPIKE-06: bounded historical conditions | T1 | DONE | TASK-0064 | Phase 06. Nine checks pass: 500k history, fresh count/sum, p95 238–241 ms, genuine 2-second statement timeout, failed-instance trace and notification intent without business effects. Report: `docs/architecture/spikes/SPIKE-06-windowed-conditions.md`. No product code |
+
 ## CHG-003 / CHG-004 — early UX and shell delivery
 
 These deliver **Phase 02** (navigation, IA, role entry screen, top bar, mobile) and **Phase 07** (app shell) scope ahead of their phases, under approved change requests. Both phases are `PARTIALLY_DONE` in the roadmap.

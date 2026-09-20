@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-20 — Workflow execution spikes passed in their measured scope
+
+- TASK-0086…TASK-0088: completed SPIKE-04/05/06 with 26 assertions plus 13 independent reference checks. Existing instances keep their version across publication and process restart. Dry runs preserve state and match real paths/owners for four scenarios. Indexed historical count/sum queries over 500k rows stay below two seconds, and genuine PostgreSQL timeout stops the instance with a recorded reason and notification intent.
+- Reports distinguish the disposable model from the future product engine: synthetic owners/effects, selected node types, no full IAM or concurrent-publication guarantee. No product source or production schema changed. Next: SPIKE-08, SPIKE-12 and SPIKE-14; PDF and TCMB checks remain REVIEW.
+
+
 ## 2026-09-20 — Revalidated database spikes and repaired resume records
 
 - TASK-0082…TASK-0084: corrected a self-grant weakness in the throwaway RLS fixture; 12 assertions now pass. Parameterized transactions meet the 300 ms target at p95 239–240 ms. The outbox selection initially violated record order; corrected selection passes atomic rollback, abrupt process exit, 10,000 ordered events and 500 duplicate deliveries. Reports preserve both failures and verification limits. No product code or product tables changed.

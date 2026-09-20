@@ -119,3 +119,9 @@ Serbest kod, doğrudan veritabanı erişimi, defter kesinleştirme, çalışırk
 - Sürümlü tanım + yürüyen örnek modeli, sürüm göçü olmadan çalışıyor mu?
 - Geçmişe bakan koşullar gerçek veri hacminde süre sınırının altında kalıyor mu?
 - Kuru mod (deneme), gerçek yürütmeyle aynı yolu izliyor mu — yoksa iki ayrı davranış mı doğuyor?
+
+## 12. Phase 06 doğrulaması (2026-09-20)
+
+SPIKE-04/05/06, TASK-0086…TASK-0088 kapsamında deneme ölçütlerini geçti. Sürüm bağı ve kalıcı günlük ayrı süreçte yeniden açılarak; kuru mod aynı değerlendirici ve salt okunur işlemle; geçmiş koşulları 500 bin örnek satır ve gerçek PostgreSQL zaman aşımıyla sınandı. Raporlar `docs/architecture/spikes/README.md` üzerinden erişilebilir.
+
+Phase 08 uygulamasında korunacak kontroller: tanım değişince deneme kanıtının geçersizleşmesi; eski örneğin sürümünü sabit tutma; kuru modda iş etkisi adaptörüne erişmeme ve veritabanı yazmasını ayrıca engelleme; süre aşımından sonra rollback ve ayrı işlemde hata/bildirim kaydı. Tam palet, IAM, eşzamanlı yayın ve varsayımsal kayıt çıktısına bağlı koşullar ürünün kabul testleridir; bu denemeler bunların tamamlandığı anlamına gelmez. İş kuralları ve kabul ölçütleri değiştirilmedi.

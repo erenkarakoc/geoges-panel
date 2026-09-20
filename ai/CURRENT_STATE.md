@@ -7,7 +7,7 @@ PROJECT STATUS:      DESIGN
 CURRENT PHASE:       PHASE 06 — Validation Spikes (Phase 05 DONE 2026-09-20, owner approved)
 CURRENT SUBPHASE:    TESTING
 CURRENT FEATURE:     —
-CURRENT TASK:        SPIKE-01/02/03 verified; next SPIKE-04/05/06. SPIKE-10/11 reopened for missing acceptance evidence.
+CURRENT TASK:        SPIKE-01…07 verified in their documented scope; next SPIKE-08, then SPIKE-12/14. SPIKE-10/11 remain REVIEW.
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -18,6 +18,8 @@ CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 a
 ```
 
 ## LAST COMPLETED TASK
+2026-09-20: SPIKE-04/05/06 (TASK-0086…TASK-0088): database-backed version pinning with fresh-process resume; dry/real parity and read-only protection; 500k-row conditions with real timeout recovery. 26 primary assertions plus 13 independent path/owner assertions passed; no product code.
+
 2026-09-20: SPIKE-01/02/03 reports (TASK-0082…TASK-0084): restricted grants and 12 RLS assertions; parameterized list/detail/stock transactions at p95 239–240 ms; 10,000 ordered events with process-exit rollback and duplicate suppression. Resume pointers repaired and machine-checked (TASK-0085).
 
 Phase 05 DONE (2026-09-20, owner approved): local-first operation with no staging and hosting deferred (D-245), two reset commands and portable configuration (D-246), CI gate, owner setup guide, backup and recovery plan, eleven runbooks (TASK-0073…TASK-0078).
@@ -33,7 +35,7 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. SPIKE-04/05/06: version-pinned workflow instances, dry-run equivalence, windowed condition limits.
+1. SPIKE-08: user-defined record types end to end. Then SPIKE-12 (Turkish search) and SPIKE-14 (read-model rebuild), following the Phase 06 index.
 2. Remaining Phase 06 experiments follow the order in `docs/architecture/spikes/README.md`. SPIKE-10 needs rendered PDF inspection; SPIKE-11 needs missing-rate/recovery assertions. Neither is waived or complete.
 3. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076; no product code in Phase 06.
 4. TASK-0018: re-check memory-worker authentication after 2026-10-15; do not stop the worker or invoke cloud-sync.
