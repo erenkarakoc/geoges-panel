@@ -18,6 +18,10 @@ CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 a
 ```
 
 ## LAST COMPLETED TASK
+2026-09-21: TASK-0081 DONE (SPIKE-11): the missing-rate event, "kur bekliyor" amounts and next-day completion are covered by 30 automated checks; trap 1 was caught live when `today.xml` served Friday's bulletin on Monday morning. Two corrections recorded: the test's own UTC date bug and the retry-interval reading. State machine is in memory; persistence stays with Phase 07.
+
+2026-09-21: TASK-0080 (SPIKE-10) rendered inspection passed on every layout claim but opened two new conditions — unshippable fonts in both measured documents and a shattered text layer that would defeat archive search — so it stays REVIEW.
+
 2026-09-21: TASK-0091 diagnosis round (task still REVIEW): the candidate's first call after ~6 h idle took 554/469 ms, matching the original's 571/487 ms, so the candidate does not fix the cold path. Six concurrently held backends aged 0.084–0.165 s answered the same search in 40–48 ms with and without warm-up, ruling out new-backend startup. Plan probes showed the covering index and the range rewrite fix the same planner choice; the rewrite reaches the existing primary key with no new index, while the index costs 15.05 MiB and ~45% more on record_count updates. Fixture bloat caused by the write-cost test was repaired (VACUUM ANALYZE + REINDEX, sizes restored, 500,411 rows intact); the resulting fresh statistics are recorded as a baseline change. Speed replay still FAILs with six preserved observations.
 
 2026-09-20: TASK-0092: corrected schema inventory totals (212 original definitions, now 215 after D-247; platform 48). Added deterministic per-schema/total and duplicate/missing-row checks to the records gate. Six regression cases and full check with 69 tests passed. Search validation TASK-0091 remains REVIEW.
@@ -45,7 +49,7 @@ Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006,
 2. TASK-0091 rollback DONE and deliberately partial: s12r_words_exact_cover dropped so the next cold run measures the product-equivalent baseline; the two range functions were kept because without that index the range rewrite is a free measurable win. Nine checks confirmed pkey, GiST, four functions and 500,411 rows survived.
 3. TASK-0091: the exact-match range rewrite is the only measured recommendation worth carrying into design — it reaches the existing primary key with no extra index. It is not adopted yet and does not address OQ-029. Baseline speed gate still fails including 571 and 554 ms; no target waiver or region change.
 4. SPIKE-10 (TASK-0080): rendered inspection is done and passed, but it exposed two new conditions — the measured documents used unshippable fonts (Windows Segoe UI/Arial and a proprietary Arial TTF, never the recommended OFL Geist), and the daily report's text layer shatters three headers so archive search would miss them. Re-render with a bundleable font and re-check extraction before closing.
-5. SPIKE-11 (TASK-0081) still needs missing-rate/recovery assertions. Neither spike is waived or complete.
+5. SPIKE-11 (TASK-0081) is DONE: 30 checks cover the live traps and the missing/pending/recovery chain. Real persistence, queue and event bus stay with Phase 07 adapter tests.
 6. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076; no product code in Phase 06.
 7. TASK-0018: re-check memory-worker authentication after 2026-10-15; do not stop the worker or invoke cloud-sync.
 

@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-21 — TCMB missing-rate chain tested; SPIKE-11 closed
+
+- TASK-0081 DONE. The three reopened behaviours — the `exchange_rate.missing` event, "kur bekliyor" amounts and next-day automatic completion — are now covered by 30 automated checks, all passing.
+- Live against the real service: the dated file's `Tarih` matches the requested business day, `Tarih` (dd.mm.yyyy) and `Date` (mm/dd/yyyy) coexist, JPY is published with `Unit=100`, and a weekend dated file returns 404. Trap 1 was caught live rather than argued: at 02:30 on Monday 21.09 `today.xml` served the 18.09 bulletin while the 21.09 dated file returned 404, so trusting the current-bulletin file would have labelled Friday's rate as Monday's.
+- Simulated with an injected provider, calendar and clock: four attempts at 10/30/60-minute intervals, exactly one missing event per day and none on retry, pending amounts marked and approved records left with their own rates (REQ-ADM-015), automatic completion with correct USD conversion and Unit-divided JPY, and no double conversion on a second run.
+- Two corrections recorded rather than quietly fixed. The test's first version computed dates with `toISOString()`, so at 02:30 local it evaluated the previous day and a green check was verifying the wrong date; business-day maths must never use UTC, which applies to the product adapter too. The documented retry wording is ambiguous between attempts at 0/10/30/60 and intervals of 10/30/60 minutes; the interval reading was implemented and left as an operations parameter, since both satisfy the requirement and finish long before end of day.
+- LIMIT: the state machine runs in memory. Real persistence, the job queue, the event bus and concurrency are Phase 07 adapter work, and a prolonged TCMB outage was still not exercised.
+
 ## 2026-09-21 — PDF pages actually inspected; two defects the earlier review missed
 
 - TASK-0080: rasterised all four pages of both test documents and inspected them. The visual gap is closed: A4 geometry, margins, column alignment, the repeated table header on page two, page numbering, page-break continuity (34 rows, nothing lost or duplicated at the break) and Turkish typography including m², °C and × all pass. The quote's line items, subtotal, 20% VAT and grand total are internally consistent.
