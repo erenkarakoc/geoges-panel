@@ -408,3 +408,42 @@ Aday aralık fonksiyonları `spike.s12r_range_search(text)` ve `spike.s12r_range
 Asıl `spike.s12r_bucket_search(text)` ve `spike.s12r_request_search(uuid,text)`, kaynak GiST ve birincil indeksler, RLS kuralları ve 500.411 sözcük satırı değişmedi. Bu oturumda ürün kodu yazılmadı, bölge taşınmadı, oturum sonlandırılmadı, reset yapılmadı ve hedef gevşetilmedi. TASK-0090/0091 REVIEW, OQ-029 açık.
 
 Kanıt dosyaları dış scratchpad'de: `search12r-range-waits-1789943726422.json`, `search12r-warmup-arms-*.json`, `search12r-ab-warm-*.json`, `search12r-index-cost-*.json`, `search12r-fixture-restore-*.json`, `search12r-poststats-*.json`. Betikler aynı adları taşır. Hız kapısı `search12r-speed-gate.mjs` zaman damgalı soğuk kanıtları da okuyacak biçimde genişletildi ve FAIL veriyor.
+
+## Soğuk ayrıştırma sonucu — maliyet sorguda değil, veri sayfalarının ilk dokunuşunda · 2026-09-21
+
+`search12r-cold-triage.mjs`, veritabanına son dokunuştan (02:22) yaklaşık **on saat** sonra, 12:47'de, başka hiçbir sorgudan önce çalıştı. Backend 566139, yaşı 2,4 saniye. On kontrolün tamamı geçti (sonuç adedi, sınırlı rol, savepoint sonrası boş kimlik). Kanıt: `search12r-cold-triage-1789984049320.json`.
+
+| Prob | İçerik | İlk (sunucu ms) | Tekrarlar | Blok isabeti / okuma | Soğuk cezası |
+|---|---|---:|---:|---|---|
+| P0 | `select 1` | 0,079 | 0,028 · 0,018 | — | yok |
+| P1 | `pg_stat_activity` sayımı | 4,441 | 0,108 · 0,095 | — | ihmal edilebilir |
+| P2 | `generate_series(1..1.000.000)` | **219,209** | **216,361 · 219,239** | 0 / 0 | **yok** |
+| P3 | `s12r_words` seq scan | **517,260** | **58,150 · 58,027** | 2705 / 0, her üç çalıştırmada aynı | **~9 kat** |
+| P4 | asıl `s12r_request_search` | 383,094 (462 toplam) | 40,359 · 40,011 | 6166 → 5228 / 0 | ~9 kat |
+
+Bağlantı kurma 527 ms, BEGIN 76 ms sürdü; bunlar sorgu sürelerine dahil değildir.
+
+### Ne gösteriyor
+
+1. **Bağlantı veya backend uyanma maliyeti yok.** `select 1` ilk çağrıda 0,079 ms.
+2. **CPU soğukken yavaş değil.** Hiç paylaşımlı tampon kullanmayan saf CPU probu ilk ve sonraki çalıştırmalarda aynı sürede (216–219 ms) bitti. Örneğin işlemcisinin boşta kalma sonrasında kısılması açıklaması çürütüldü.
+3. **Ceza, veri sayfalarının ilk dokunuşunda.** Aynı 2705 blok, üç çalıştırmada da PostgreSQL açısından **paylaşımlı tampon isabeti ve sıfır okuma** olarak sayıldı; ama ilk tarama 517 ms, sonrakiler 58 ms sürdü. Ek maliyet 459 ms / 2705 blok ≈ **170 µs/blok**.
+4. **Arama, dokunduğu her yeni ilişki için aynı cezayı ödüyor.** P3 `s12r_words`'ü ısıttığı halde P4 ilk çağrıda 383 ms sürdü, çünkü arama başka ilişkilere (eşlemeler, sözcük kümeleri, kaynak tablo, GiST indeksi) de dokunur.
+
+Bu tablo, önceki bütün gözlemlerle tutarlıdır: sorgunun `active` kalıp hiçbir bekleme olayı göstermemesi, fiziksel okumanın sıfır olması, maliyetin bütün aşamalara yayılması, yeni backend'e bağlı olmaması, DISCARD PLANS ile üretilememesi ve örnek sıcakken hiç görülmemesi.
+
+### En olası açıklama — kanıtlanmış değil
+
+PostgreSQL'in kendi paylaşımlı belleğinde olduğunu sandığı sayfaların altındaki bellek, uzun boşta kalmada işletim sistemi veya sanallaştırma katmanı tarafından geri alınıyor (takas alanına yazma veya bellek geri kazanımı). İlk dokunuşta sayfa çekirdek düzeyinde geri getiriliyor; PostgreSQL bunu bir okuma olarak görmez, isabet sayar ve süreç bekleme olayı olmadan `active` görünür. Sayfa başına ~170 µs, bellekteki basit bir sayfa hatasından çok, arkasında depolama olan bir geri getirme maliyetine uyar.
+
+Bu açıklama PostgreSQL içinden **doğrudan gözlenemez**; sunucunun işletim sistemi sayaçlarına erişimimiz yok. Doğrulama yolu: Supabase panelindeki veritabanı bellek ve takas (swap) grafiğinde, boşta kalma sonrasında takas kullanımının yükselip yükselmediğine bakmak.
+
+### OQ-029 için sonucu
+
+Kalan ilk-istek aşımı **sorgu tasarımıyla çözülebilecek bir sorun değildir.** İndeks, plan modu, aralık yazımı veya tek çağrı düzeni bu cezayı değiştirmez; ölçümler bunu defalarca gösterdi. Karşılanması şu seçeneklerden birine bağlıdır ve bu bir **sahip kararıdır**:
+
+- **Sıcak tutma:** arama ilişkilerini belirli aralıklarla hafifçe okuyan bir iş (ör. `pg_prewarm` veya sınırlı tarama). Sayfaların geri alınmasını önleyip önlemediği saatler süren ayrı bir deneyle ölçülmelidir.
+- **Örnek boyutu:** daha çok belleği olan bir hesaplama katmanı bellek baskısını ve geri alımı azaltabilir; maliyeti vardır ve barındırma kararına (DEF-008) bağlıdır.
+- **Gerçek kullanım örüntüsü:** gün içinde sürekli kullanımda boşta kalma kısa olur; ceza büyük olasılıkla sabahın ilk kullanıcısına düşer. Bu bir gözlem değil, varsayımdır ve hedefi kendiliğinden karşılamaz.
+
+Hedef gevşetilmedi. Hız kapısı bu ölçümü de okur ve yedi korunan başarısızlıkla FAIL verir (392, 529, 540, 554, 571, 636 ve 462 ms). TASK-0090/0091 REVIEW, OQ-029 açık; artık bir teknik tanı değil, bir karar sorusudur.

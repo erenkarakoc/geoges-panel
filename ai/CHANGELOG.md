@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-21 — Cold triage puts first-request cost outside the query
+
+- TASK-0091: ran the prepared triage as the first database action after about ten hours of idle. Connection wake-up (`select 1`, 0.08 ms) and pure CPU (219 ms first, 216–219 after) showed no cold penalty. A scan of 2705 blocks, counted as shared-buffer hits with zero reads on every run, took 517 ms first against 58 ms after, about 170 µs per block; the search then took 383 ms first against 40 ms. Ten result/role/identity checks passed.
+- The cost attaches to the first touch of data pages PostgreSQL believes are cached, consistent with every earlier observation. The most likely mechanism is host memory reclaim during idle; it cannot be observed from inside PostgreSQL and is not claimed as proven. Suggested owner check: the Supabase memory/swap graph.
+- Query engineering is exhausted, so OQ-029 is now an owner decision between a keep-warm job (to be validated by a multi-hour experiment), a larger compute tier under the hosting decision, or an explicit recorded exception. The speed replay gate reads the triage and fails with seven preserved observations. No target waiver, no product code, no region change.
+
 ## 2026-09-21 — SPIKE-10 passes with the production font; two findings retracted
 
 - TASK-0080 DONE. The old fallback to Times New Roman was not "subsets don't work". next/font emits one woff2 per subset with a unicode-range, the app already requests `latin` + `latin-ext`, and the spike had embedded only the preloaded `latin` file. Predicted and confirmed 6/6: c-cedilla, o-umlaut and u-umlaut render from that file, while g-breve, s-cedilla and dotted capital I fall back. With both files and their ranges, full Turkish text embeds no fallback at all.

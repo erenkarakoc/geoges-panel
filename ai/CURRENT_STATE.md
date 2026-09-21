@@ -7,7 +7,7 @@ PROJECT STATUS:      DESIGN
 CURRENT PHASE:       PHASE 06 — Validation Spikes (Phase 05 DONE 2026-09-20, owner approved)
 CURRENT SUBPHASE:    TESTING
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0090/0091 REVIEW: the range candidate FAILED its cold first call (554/469 ms) and new-backend startup is ruled out — six under-one-second backends first-searched in 40–48 ms. Cost is instance-level idleness, not plan, index or backend age. FIRST next DB action after a long natural idle: search12r-cold-triage.mjs. Rejected covering index dropped; range functions kept as the one free recommendation. Ireland stays (DEF-009).
+CURRENT TASK:        TASK-0090/0091 REVIEW: cold triage (2026-09-21, ~10 h idle) put the first-request cost outside the query — no penalty on connection or pure CPU, ~9x on the first touch of data pages PostgreSQL counts as cached (517 vs 58 ms scan, 383 vs 40 ms search). OQ-029 is now an OWNER DECISION: keep-warm job, larger compute, or explicit exception. Ireland stays (DEF-009).
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -18,6 +18,8 @@ CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 a
 ```
 
 ## LAST COMPLETED TASK
+2026-09-21: TASK-0091 cold triage: after ~10 h idle, `select 1` and pure CPU showed no cold penalty, while the first scan of 2705 blocks counted as shared-buffer hits took 517 ms against 58 ms after and the search 383 against 40 ms. Cost attaches to first touch of cached-looking pages; most likely host memory reclaim, not proven. OQ-029 became an owner decision.
+
 2026-09-21: TASK-0081 DONE (SPIKE-11): the missing-rate event, "kur bekliyor" amounts and next-day completion are covered by 30 automated checks; trap 1 was caught live when `today.xml` served Friday's bulletin on Monday morning. Two corrections recorded: the test's own UTC date bug and the retry-interval reading. State machine is in memory; persistence stays with Phase 07.
 
 2026-09-21: TASK-0080 DONE (SPIKE-10): passed with the project's own Geist `latin` + `latin-ext` files and no system font. The old Times fallback came from embedding only the `latin` subset; the "shattered text layer" was my space-joining extractor, retracted — positional joining finds every word. Rule carried: the archive indexer joins text by position.
@@ -45,7 +47,7 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. TASK-0091: after a long natural idle, run search12r-cold-triage.mjs before any other DB experiment. Its four probes separate connection wake-up, catalog reads, pure CPU, buffer scanning and the search path, so the remaining cold cost can be attributed outside or inside the query. Do not repeat warm tests and call it progress.
+1. OQ-029 owner decision: keep-warm job (validate with a multi-hour experiment), larger compute tier (DEF-008), or an explicit cold-start exception. Query engineering is exhausted; warm tests are not progress. The owner can check the Supabase memory/swap graph to confirm reclaim.
 2. TASK-0091 rollback DONE and deliberately partial: s12r_words_exact_cover dropped so the next cold run measures the product-equivalent baseline; the two range functions were kept because without that index the range rewrite is a free measurable win. Nine checks confirmed pkey, GiST, four functions and 500,411 rows survived.
 3. TASK-0091: the exact-match range rewrite is the only measured recommendation worth carrying into design — it reaches the existing primary key with no extra index. It is not adopted yet and does not address OQ-029. Baseline speed gate still fails including 571 and 554 ms; no target waiver or region change.
 4. SPIKE-10 (TASK-0080) is DONE with the production font; the two same-day "defects" were a wrong subset file and my own extraction method, both retracted.
@@ -54,7 +56,7 @@ Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006,
 7. TASK-0018: re-check memory-worker authentication after 2026-10-15; do not stop the worker or invoke cloud-sync.
 
 ## BLOCKED BY
-No owner input is currently needed; the owner left the rollback shape to judgement on 2026-09-21 and it is done. The search model and word semantics were adopted with the owner’s continuation (D-247). Product search and Phase 06 exit remain gated by first-request performance: 392, 529, 540, 554, 571 and 636 ms versus 300 ms (OQ-029). Further disposable diagnosis is authorized; no target waiver or product code.
+OQ-029 needs an owner decision (see NEXT TASK 1). Product search and Phase 06 exit stay gated by first-request performance: 392, 462, 529, 540, 554, 571 and 636 ms versus 300 ms. The D-247 model is adopted; no target waiver, no product code.
 
 ## OPEN QUESTIONS
 See `ai/OPEN_QUESTIONS.md`. OQ-029 tracks remaining first-request validation after D-247 adoption. OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.
