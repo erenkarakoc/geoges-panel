@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-21 — SPIKE-14 passes; spike schema removed from the Free Plan project
+
+- TASK-0093 DONE (SPIKE-14). One year of 500,000 events rebuilt the site summary and stock balance read models from scratch in 19.3 s with 0 differences against the source records, 0.15% of the 4 h RTO that bounds a post-recovery rebuild. The non-replayable notification subscriber was never called and 30,952 notifications stayed unchanged; a negative control showed the probe would have caught a call. Drift in the live model was detected and audited; the shadow rebuild kept readers on the old complete version until an atomic switch; re-delivering 100,000 events and an older approval changed nothing; 325 later events caught up in 588 ms; scope RLS and write/execute denials held. 21/21 checks.
+- Honest limits: yearly volume is an assumption (none is recorded). A first 1.5M-event attempt filled the test disk and rolled back cleanly; flat 50k-event chunk times support linear estimates of ~58 s for 1.5M and ~4.8 min for five years, which are estimates. Fixture tables were unlogged, measured read-model tables were not. A task-producing subscriber was not modelled separately.
+- The Supabase test project turned out to be on the Free Plan (500 MB database, 500 MB shared RAM, no backups) and was already over the limit before this session. With the owner's approval the whole `spike` schema was dropped: 1,042 → 12 MB, 50 tables and 14 functions, auth and every other schema unchanged, inventory saved first. Recorded hosting-decision inputs: Pro daily backups do not meet D-209's one-hour RPO without PITR or self-hosted WAL archiving, and the small shared memory is the likely source of the D-248 cold-start penalty.
+
 ## 2026-09-21 — Search validation closed under an owner cold-start exception
 
 - D-248 / CHG-008: presented four options after the cold triage; the owner chose a cold-start exception. The first search after the database instance has been idle is exempt from the 300 ms SPIKE-12 target; warm searches stay bound by it, and any warm search above 300 ms is a failure. The cold first request is re-measured on the chosen compute at the hosting decision. REQ-NFR-012's text is unchanged; the figure lives in the SPIKE-12 criterion and ADR-017, both amended and registered in the roadmap.
