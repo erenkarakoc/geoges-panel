@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-21 — SPIKE-13 finds and fixes a stale-counter defect
+
+- TASK-0095 DONE. A local SSE server and real headless Chrome with two differently scoped users. The first run failed: during a 10 s offline window the still-open stream delivered three signals, but every follow-up count request failed, and without a reconnect the counter stayed wrong for about 18 s. Fixed by retrying failed count requests with backoff and refreshing on the browser `online` event; the failing evidence is kept.
+- After the fix, 12/12: the counter follows signals, no signal crosses scopes, and the screen recovers silently from a server drop (0.8 s), an offline window (62 ms after coming back), a network-error outage (2.8 s) and a slow 400 ms link. A 503 closes the native EventSource for good, so a backoff wrapper is required (4.3 s). Reload always shows the source count and every frame carries only the signal type.
+- Limits recorded for Phase 07 and the hosting decision: proxy/CDN buffering and idle timeouts, the HTTP/1.1 six-connection cap across tabs (HTTP/2 or one shared stream), wiring signals to the outbox worker, and real mobile networks. Fourteen spikes are complete.
+
 ## 2026-09-21 — R2 public URL flagged against ADR-003; bucket jurisdiction kept for now
 
 - D-249: the owner kept the non-EU R2 bucket for synthetic data; EU jurisdiction is decided before real personnel files, since jurisdiction is fixed at bucket creation.
