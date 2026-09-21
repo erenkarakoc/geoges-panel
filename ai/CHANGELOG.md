@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-21 — Search validation closed under an owner cold-start exception
+
+- D-248 / CHG-008: presented four options after the cold triage; the owner chose a cold-start exception. The first search after the database instance has been idle is exempt from the 300 ms SPIKE-12 target; warm searches stay bound by it, and any warm search above 300 ms is a failure. The cold first request is re-measured on the chosen compute at the hosting decision. REQ-NFR-012's text is unchanged; the figure lives in the SPIKE-12 criterion and ADR-017, both amended and registered in the roadmap.
+- TASK-0090 and TASK-0091 DONE. Self-review: a read-only post-maintenance check passed 19/19 (500,000 source rows, 500,411 vocabulary rows, equal projection totals, only the GiST and primary key indexes left, scope isolation in three profiles, invoker/private functions, identity cleanup). The speed gate was reclassified rather than rewritten: the 18 warm series pass with a 190 ms maximum and all seven cold observations stay listed as excepted; the earlier gate version is kept.
+- Honest scope note: six of the seven cold observations were first requests after idle; the 392 ms case was a second request, plausibly the first touch of relations the first did not use. Eleven spikes are complete and SPIKE-14 is unblocked.
+
 ## 2026-09-21 — Cold triage puts first-request cost outside the query
 
 - TASK-0091: ran the prepared triage as the first database action after about ten hours of idle. Connection wake-up (`select 1`, 0.08 ms) and pure CPU (219 ms first, 216–219 after) showed no cold penalty. A scan of 2705 blocks, counted as shared-buffer hits with zero reads on every run, took 517 ms first against 58 ms after, about 170 µs per block; the search then took 383 ms first against 40 ms. Ten result/role/identity checks passed.

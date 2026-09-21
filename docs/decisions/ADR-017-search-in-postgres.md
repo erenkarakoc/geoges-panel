@@ -27,7 +27,7 @@ Tek veri kaynağı; tutarlı yetki; ayrı arama hizmeti işletilmez. İndeksleri
 Eş anlam sözlüğü ve gelişmiş ağırlıklandırma sınırlı; çok büyük hacimde yavaşlar.
 
 ## Riskler
-Hacim büyürse arama yavaşlar. İlk SPIKE-12 düzeni RLS altında boş sonuçlarda GIN indekslerini kullanmadı ve 300 ms hedefini aştı. TASK-0091'in yardımcı veri modeli sıcak sorgularda hedefi sağladı; model D-247 ile onaylandı, ilk çalıştırma hızı açık. Çözüm doğrulanmadan arama ürün koduna taşınmaz. Başka motora geçiş kararı alınmadı.
+Hacim büyürse arama yavaşlar. İlk SPIKE-12 düzeni RLS altında boş sonuçlarda GIN indekslerini kullanmadı ve 300 ms hedefini aştı. TASK-0091'in yardımcı veri modeli sıcak sorgularda hedefi sağladı (18 senaryoda en yavaş 190 ms); model D-247 ile onaylandı. İlk çalıştırma aşımının sorgunun dışında, uzun boşta kalma sonrası veri sayfalarının ilk dokunuşunda oluştuğu gösterildi (2026-09-21). Sahip bu soğuk ilk istekleri D-248 ile 300 ms hedefinden istisna tuttu; sıcak istekler 300 ms sınırına bağlıdır ve barındırma kararında (DEF-008) soğuk ilk istek yeniden ölçülür. Başka motora geçiş kararı alınmadı.
 
 ## SPIKE-12 bulgusu — 2026-09-20
 

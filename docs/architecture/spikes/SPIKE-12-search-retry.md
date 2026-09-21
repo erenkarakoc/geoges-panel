@@ -1,6 +1,6 @@
 # SPIKE-12 — Arama hızının yeniden sınanması
 
-Durum: REVIEW — D-247 model onaylı; soğuk ilk istek hızı açık · Tarih: 2026-09-21 · Görev: TASK-0091 · Bağlı: TASK-0090, OQ-029, ADR-017, D-239, REQ-NFR-012
+Durum: GEÇTİ (D-248 soğuk başlangıç istisnasıyla, 2026-09-21) · Tarih: 2026-09-21 · Görev: TASK-0091 · Bağlı: TASK-0090, OQ-029, ADR-017, D-239, D-248, REQ-NFR-012
 
 ## Güncel sonuç — D-247 sonrası
 
@@ -447,3 +447,26 @@ Kalan ilk-istek aşımı **sorgu tasarımıyla çözülebilecek bir sorun değil
 - **Gerçek kullanım örüntüsü:** gün içinde sürekli kullanımda boşta kalma kısa olur; ceza büyük olasılıkla sabahın ilk kullanıcısına düşer. Bu bir gözlem değil, varsayımdır ve hedefi kendiliğinden karşılamaz.
 
 Hedef gevşetilmedi. Hız kapısı bu ölçümü de okur ve yedi korunan başarısızlıkla FAIL verir (392, 529, 540, 554, 571, 636 ve 462 ms). TASK-0090/0091 REVIEW, OQ-029 açık; artık bir teknik tanı değil, bir karar sorusudur.
+
+## Kapanış — sahip kararıyla soğuk başlangıç istisnası · 2026-09-21
+
+Soğuk ayrıştırma sonucunda sahibe dört seçenek sunuldu: sıcak tutma deneyi, daha büyük sunucu, soğuk başlangıç istisnası veya önce Supabase bellek grafiğine bakmak. **Sahip soğuk başlangıç istisnasını seçti (D-248 / CHG-008).**
+
+İstisnanın kapsamı dardır:
+
+- **Kapsanan:** veritabanı örneği boşta kaldıktan sonra veri sayfalarına ilk kez dokunulduğu için 300 ms'yi aşan arama istekleri.
+- **Kapsanmayan:** sıcak istekler. Bunlar 300 ms sınırına bağlı kalır; sıcak bir isteğin aşması başarısızlıktır. Ölçülen sıcak seride 18 senaryonun en yavaşı 190 ms.
+- **Kanıt:** yedi soğuk gözlem (392, 462, 529, 540, 554, 571, 636 ms) silinmedi; istisna altında ayrıca listelenir. Altısı bir çalıştırmanın boşta kalma sonrası ilk isteğiydi. 392 ms, yeni bağlantı serisinin ikinci isteğiydi ve büyük olasılıkla birinci isteğin dokunmadığı ilişkilere ilk dokunuştu; ayrıştırma her yeni ilişkinin cezayı ayrı ödediğini gösterdi. Tutarlıdır, tek tek kanıtlanmamıştır.
+- **Yeniden değerlendirme:** barındırma ve hesaplama katmanı seçildiğinde (DEF-008) soğuk ilk istek o sunucuda yeniden ölçülür.
+
+### Öz inceleme (T1)
+
+Bugünkü bakım (VACUUM/ANALYZE, REINDEX, aday indeksin kaldırılması) sonrasında, yalnız okuyan bir bütünlük kontrolü **19/19** geçti (`search12r-post-maintenance-*.json`): kaynak 500.000 satır; sözcük tablosu 500.411 satır; eşleme, sözcük adetleri ve dizi elemanı toplamları eşit (1.994.801); `s12r_words` üzerinde yalnız GiST ve birincil anahtar; ölü satır yok; üç profilde üç yardımcı tablo da kapsam dışı satır göstermiyor; iki fonksiyon invoker, private ve yalnız `spike_app` tarafından çalıştırılabilir; kapsamsız kullanıcıya sonuç yok, yetkili kullanıcıya var; işlem sonrası kimlik temiz.
+
+İndeks ve istatistik değişiklikleri sorgu sonucunu değiştirmez; bugünkü bütün A/B serilerinde aslı ve aday yol her terimde aynı sonuç sayısını verdi. Kaynak vektörlerden kurulan bağımsız referansla yapılan tam satır karşılaştırması önceki turda (57 + 16 kontrol) geçmişti ve veri değişmediği için tekrar edilmedi.
+
+Hız kapısı yeniden yazılmadı, yeniden sınıflandırıldı: sıcak seri 300 ms'yi aşarsa hâlâ KALIR; soğuk gözlemler istisna altında listelenir. Önceki sürüm `search12r-speed-gate-pre-d248.mjs` olarak korunur. Şu anki sonuç: **PASS**, sıcak en yavaş 190 ms, yedi soğuk gözlem istisnada.
+
+### Sonuç: GEÇTİ (D-248 istisnasıyla)
+
+Doğruluk, yetki ve sıcak hız ölçütleri karşılandı; boşta kalma sonrası ilk istek sahip kararıyla istisnadır. TASK-0090 ve TASK-0091 kapanır; SPIKE-14'ün önündeki engel kalkar. Phase 07 arama adaptörüne taşınanlar: tam eşleşmenin aralık olarak yazılması (bedelsiz, ölçülmüş) ve barındırma kararında soğuk ilk isteğin yeniden ölçülmesi.

@@ -7,7 +7,7 @@ PROJECT STATUS:      DESIGN
 CURRENT PHASE:       PHASE 06 — Validation Spikes (Phase 05 DONE 2026-09-20, owner approved)
 CURRENT SUBPHASE:    TESTING
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0090/0091 REVIEW: cold triage (2026-09-21, ~10 h idle) put the first-request cost outside the query — no penalty on connection or pure CPU, ~9x on the first touch of data pages PostgreSQL counts as cached (517 vs 58 ms scan, 383 vs 40 ms search). OQ-029 is now an OWNER DECISION: keep-warm job, larger compute, or explicit exception. Ireland stays (DEF-009).
+CURRENT TASK:        Search validation CLOSED 2026-09-21 under D-248 (owner cold-start exception; warm searches under 300 ms, max 190 ms). SPIKE-10/11/12 done; eleven spikes complete. Next: remaining spikes 09, 13, 14, 15, 16 — SPIKE-14 now unblocked.
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -18,6 +18,8 @@ CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 a
 ```
 
 ## LAST COMPLETED TASK
+2026-09-21: TASK-0090/0091 DONE under D-248 (owner cold-start exception). Read-only post-maintenance check 19/19; speed gate reclassified and PASS on the warm series (max 190 ms) with seven cold observations kept as excepted.
+
 2026-09-21: TASK-0091 cold triage: after ~10 h idle, `select 1` and pure CPU showed no cold penalty, while the first scan of 2705 blocks counted as shared-buffer hits took 517 ms against 58 ms after and the search 383 against 40 ms. Cost attaches to first touch of cached-looking pages; most likely host memory reclaim, not proven. OQ-029 became an owner decision.
 
 2026-09-21: TASK-0081 DONE (SPIKE-11): the missing-rate event, "kur bekliyor" amounts and next-day completion are covered by 30 automated checks; trap 1 was caught live when `today.xml` served Friday's bulletin on Monday morning. Two corrections recorded: the test's own UTC date bug and the retry-interval reading. State machine is in memory; persistence stays with Phase 07.
@@ -47,21 +49,22 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. OQ-029 owner decision: keep-warm job (validate with a multi-hour experiment), larger compute tier (DEF-008), or an explicit cold-start exception. Query engineering is exhausted; warm tests are not progress. The owner can check the Supabase memory/swap graph to confirm reclaim.
+1. Remaining Phase 06 spikes: SPIKE-14 (read-model rebuild, now unblocked), SPIKE-13 (realtime signal), SPIKE-15 (photo upload), SPIKE-16 (OCR), SPIKE-09 (R2 signed links — needs R2 credentials). Phase 06 does not close until each passes or the owner waives it.
 2. TASK-0091 rollback DONE and deliberately partial: s12r_words_exact_cover dropped so the next cold run measures the product-equivalent baseline; the two range functions were kept because without that index the range rewrite is a free measurable win. Nine checks confirmed pkey, GiST, four functions and 500,411 rows survived.
-3. TASK-0091: the exact-match range rewrite is the only measured recommendation worth carrying into design — it reaches the existing primary key with no extra index. It is not adopted yet and does not address OQ-029. Baseline speed gate still fails including 571 and 554 ms; no target waiver or region change.
+3. Carry to the Phase 07 search adapter: the exact-match range rewrite (free, measured) and a re-measurement of the cold first request on the chosen compute at the hosting decision (D-248, DEF-008).
 4. SPIKE-10 (TASK-0080) is DONE with the production font; the two same-day "defects" were a wrong subset file and my own extraction method, both retracted.
 5. SPIKE-11 (TASK-0081) is DONE: 30 checks cover the live traps and the missing/pending/recovery chain. Real persistence, queue and event bus stay with Phase 07 adapter tests.
 6. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076; no product code in Phase 06.
 7. TASK-0018: re-check memory-worker authentication after 2026-10-15; do not stop the worker or invoke cloud-sync.
 
 ## BLOCKED BY
-OQ-029 needs an owner decision (see NEXT TASK 1). Product search and Phase 06 exit stay gated by first-request performance: 392, 462, 529, 540, 554, 571 and 636 ms versus 300 ms. The D-247 model is adopted; no target waiver, no product code.
+Nothing blocks the remaining spikes on owner input except SPIKE-09, which needs R2 credentials. Search is closed under D-248; no product code in Phase 06.
 
 ## OPEN QUESTIONS
-See `ai/OPEN_QUESTIONS.md`. OQ-029 tracks remaining first-request validation after D-247 adoption. OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.
+See `ai/OPEN_QUESTIONS.md`. OQ-029 was answered 2026-09-21 by D-248 (cold-start exception). OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.
 
 ## RECENT DECISIONS
+- D-248 / CHG-008 (2026-09-21): cold-start exception for search latency — the first search after instance idle is exempt from 300 ms; warm searches stay bound; cold observations kept; re-measure at the hosting decision.
 - D-247 / CHG-007 (2026-09-20): scoped search helpers and all-words matching adopted; three tables added to the design, 215 total. No speed waiver.
 - 2026-09-20: Phases 01–05 are owner-approved DONE; Phase 06 is current. Local-first operation D-245 and separate reset/configuration tools D-246 remain in force.
 - 2026-09-19: glossary confirmed by the owner — 234 terms CONFIRMED, OQ-007 closed

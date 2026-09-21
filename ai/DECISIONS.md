@@ -1,6 +1,22 @@
 # DECISIONS
 
-Last updated: 2026-09-20
+Last updated: 2026-09-21
+
+## CHG-008 — Cold-start exception for search latency (D-248, OQ-029, TASK-0091)
+
+Owner decision on 2026-09-21, chosen from four presented options: a keep-warm experiment, a larger compute tier, a cold-start exception, or checking the Supabase memory graph first. The owner chose the exception.
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-248 | **Cold-start exception to the 300 ms search target.** A search request that exceeds 300 ms because data pages are being touched for the first time after the database instance has been idle is exempt from the SPIKE-12 latency criterion. Warm requests stay bound by 300 ms, and any warm request above it is a failure. Cold observations are kept and reported separately, never deleted. The cold first request is re-measured on the chosen compute when hosting is decided (DEF-008). D-239, RLS and every correctness criterion are unchanged. | Owner 2026-09-21; CHG-008, OQ-029, ADR-017, TASK-0091 |
+
+- **Change and reason:** the 2026-09-21 cold triage, after about ten hours of idle, found no penalty on connection wake-up or pure CPU but a ~9x penalty on the first touch of data pages PostgreSQL counts as shared-buffer hits with zero reads (scan 517 vs 58 ms, search 383 vs 40 ms). Index, plan mode, range rewrite and the one-call wrapper were all measured and none changes it, so query engineering cannot meet the target for the first request after idle.
+- **Requirements/features/tasks:** REQ-NFR-012's text is unchanged; its acceptance criteria carry no latency figure. The 300 ms figure lives in the owner-confirmed SPIKE-12 pass criterion and in ADR-017, both amended by this exception. TASK-0090 and TASK-0091 close, SPIKE-14 is unblocked, TASK-0029 is unaffected.
+- **Scope of the evidence:** six of the seven cold observations (529, 540, 554, 571, 636 and 462 ms) were the first request of a run after idle. The 392 ms case was the second request of a fresh-connection series and plausibly the first touch of relations the first request did not use, which the triage showed each pay the penalty; consistent, not individually proven.
+- **Database/backend/APIs/UI/permissions:** none. No schema change and no product code. The exact-match range rewrite stays a measured recommendation for the Phase 07 search adapter and is not adopted here.
+- **Tests:** the speed replay gate is reclassified: the 18 warm series must stay under 300 ms (current maximum 190 ms) and the seven cold observations are listed as excepted. A read-only post-maintenance check passed 19/19 (data totals, index state, scope isolation in three profiles, function privileges, identity cleanup).
+- **Risks:** the first user after a quiet period, typically at the start of the day, may wait roughly 0.4–0.6 s for the first search. The mechanism (host memory reclaim during idle) is the most likely explanation but is not proven, and a smaller production instance could make it worse. The keep-warm and compute options remain available later without changing this decision's scope.
+- **Rollback:** withdraw the exception and reopen OQ-029; all evidence and the previous gate version (`search12r-speed-gate-pre-d248.mjs`) are preserved.
 
 ## CHG-007 — Search helper model (D-247, OQ-029, TASK-0091)
 
