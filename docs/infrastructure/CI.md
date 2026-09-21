@@ -19,7 +19,9 @@ Başarısızsa commit olmaz. Commit sonrası kanca `origin/main`'e push eder.
 
 ## 2. GitHub tarafı (Phase 07)
 
-Push ve pull request'te aynı adımlar sunucuda tekrar koşar, üstüne:
+**Kuruldu (TASK-0100, 2026-09-21):** `.github/workflows/ci.yml`, `main`'e her push'ta ve her pull request'te yerel kapının aynısını (`npm ci`, ardından `npm run check:commit`) Node 24 ile koşar. Tam git geçmişiyle çalışır, çünkü kayıt denetimi tarih damgalarını son commit tarihiyle karşılaştırır. Eylemler commit özetiyle sabitlenmiştir (RISK-004).
+
+Aşağıdaki ek adımlar, sınadıkları şey (tablolar, yetenek kataloğu, ekranlar) ilgili görevle geldiğinde eklenir:
 
 | Adım | Ne yapar | Kırılırsa |
 |---|---|---|

@@ -79,3 +79,14 @@ Temel özellikler T1 kapısından geçer; M1 yerel kabulü sahibin geri bildirim
 - **Testler:** grafik okuyucu (gerçek MODULE_MAP: kenar sayısı, kesikli okların dışarıda kalması, platform grubunun tanınması, döngü yok; yapay döngünün yakalanması); gerçek ESLint yapılandırmasıyla sonda testleri (izinli ok + `index.ts` geçer; iç klasöre erişim, göreli yol, `import type`, dinamik içe aktarım, yeniden dışa aktarma, grafiğe aykırı yön ve platformdan iş modülüne erişim engellenir; rota `ui/` ve `index.ts` kullanabilir, iç klasöre giremez); şema taraması (başka modül şeması yakalanır, SQL olmayan dizge ve yorum sayılmaz); bütün repo temiz.
 - **Göç:** yok. **Geri dönüş:** tek commit geri alınır.
 - **Kabul:** `npm run check` bütün yeni denetimlerle geçer; sonda testleri kuralın gerçekten engellediğini gösterir; MODULE_MAP biçimi bozulursa kural sessizce gevşemek yerine hata verir.
+
+### TASK-0100 — GitHub CI (T2)
+
+- **Amaç:** yerel pre-commit kapısının aynısını her push ve pull request'te GitHub'da koşmak; kanca atlanarak yapılmış bir commit de `main`'de yeşil kalamaz (D-110, `docs/infrastructure/CI.md` bölüm 2).
+- **Bağımlılık:** TASK-0099 (sınır denetimleri kapının parçası).
+- **Etkilenen dosyalar:** yeni `.github/workflows/ci.yml`; `docs/infrastructure/CI.md`.
+- **Kararlar:** Node 24 ve `npm ci` (D-253); kapı `npm run check:commit`; eylemler değişebilen etiketle değil commit özetiyle sabitlenir (RISK-004); iş yalnız okuma yetkisiyle çalışır; **tam git geçmişi** alınır, çünkü kayıt denetimi "Last updated" damgasını dosyanın son commit tarihiyle karşılaştırır ve silinmiş yolları arar; sığ klonda her dosya bugün değişmiş görünürdü.
+- **Bu görevde olmayanlar:** CI.md bölüm 2'deki şema, sözleşme, erişilebilirlik, klavye ve kontrast testleri; bunların sınadığı şeyler (tablolar, yetenek kataloğu, ekranlar) ilgili görevlerle geldikçe eklenir.
+- **Veritabanı / arayüz / güvenlik:** değişiklik yok; gizli anahtar kullanılmaz.
+- **Test:** ilk push'ta iş yeşil biter (`gh run`); kapının GitHub'da gerçekten koştuğu ve tam geçmişle çalıştığı çıktıdan doğrulanır.
+- **Geri dönüş:** iş dosyası silinir. **Kabul:** `main`'e her push'ta CI koşar ve geçer.
