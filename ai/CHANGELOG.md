@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-21 — SPIKE-09 passes against the R2 bucket
+
+- TASK-0094 DONE. The owner created the `geoges-panel` R2 bucket with a key limited to object read/write on it; the variables use the `R2_` prefix from the naming convention and are now listed in `.env.example`. 17/17 checks: links are issued only for documents the caller can see under their own RLS scope; unsigned object and list requests, a signed link with a changed key or a stretched expiry, and an expired link are all refused; a 50 MB file downloads intact with its Turkish filename.
+- Design finding: R2 checks expiry at the start of a request, so a slow download outlived its 20 s link and completed, while resuming a cut download needed a fresh, re-authorised link plus a Range request. Links can stay short-lived; the exact lifetime remains a product setting.
+- Limits recorded: the field network was simulated by client throttling; public r2.dev access must be confirmed off in the dashboard; the bucket is not EU-jurisdiction, which needs an owner decision under RISK-001 before real personnel files. Metadata lived in a never-committed transaction and the test objects were deleted, so nothing remains in R2 or the database. Thirteen spikes are complete.
+
 ## 2026-09-21 — SPIKE-14 passes; spike schema removed from the Free Plan project
 
 - TASK-0093 DONE (SPIKE-14). One year of 500,000 events rebuilt the site summary and stock balance read models from scratch in 19.3 s with 0 differences against the source records, 0.15% of the 4 h RTO that bounds a post-recovery rebuild. The non-replayable notification subscriber was never called and 30,952 notifications stayed unchanged; a negative control showed the probe would have caught a call. Drift in the live model was detected and audited; the shadow rebuild kept readers on the old complete version until an atomic switch; re-delivering 100,000 events and an older approval changed nothing; 325 later events caught up in 588 ms; scope RLS and write/execute denials held. 21/21 checks.

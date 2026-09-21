@@ -7,7 +7,7 @@ PROJECT STATUS:      DESIGN
 CURRENT PHASE:       PHASE 06 — Validation Spikes (Phase 05 DONE 2026-09-20, owner approved)
 CURRENT SUBPHASE:    TESTING
 CURRENT FEATURE:     —
-CURRENT TASK:        Phase 06: twelve spikes complete (01–08, 10, 11, 12, 14). SPIKE-14 passed 21/21 on 2026-09-21. Test project is Supabase FREE PLAN (500 MB DB); the owner approved dropping the whole `spike` schema (1,042 → 12 MB). Next: SPIKE-13, 15, 16; SPIKE-09 needs R2 credentials.
+CURRENT TASK:        Phase 06: thirteen spikes complete (01–12, 14). SPIKE-09 passed 17/17 on 2026-09-21 against the owner's R2 bucket. Remaining: SPIKE-13 (realtime signal), SPIKE-15 (photo upload on weak connection), SPIKE-16 (OCR). Test project is on the Supabase Free Plan.
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -18,6 +18,8 @@ CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 a
 ```
 
 ## LAST COMPLETED TASK
+2026-09-21: TASK-0094 DONE (SPIKE-09): 17/17 against R2. Links are issued only for documents visible under the caller's RLS scope; unsigned, tampered and expired links are refused; 50 MB downloads intact with a Turkish filename; a slow download outlives its link, and resuming a cut download needs a fresh re-authorised link with Range. Nothing left in R2 or the database.
+
 2026-09-21: TASK-0093 DONE (SPIKE-14): 21/21 checks, one year of 500,000 events rebuilt in 19.3 s with 0 differences against the sources, no notification produced, shadow version with atomic switch, duplicates and catch-up verified. The first 1.5M-event attempt filled the Free Plan disk and rolled back. The owner then approved dropping the whole `spike` schema (1,042 → 12 MB; auth and other schemas unchanged).
 
 2026-09-21: TASK-0090/0091 DONE under D-248 (owner cold-start exception). Read-only post-maintenance check 19/19; speed gate reclassified and PASS on the warm series (max 190 ms) with seven cold observations kept as excepted.
@@ -51,7 +53,7 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Remaining Phase 06 spikes: SPIKE-13 (realtime signal), SPIKE-15 (photo upload), SPIKE-16 (OCR), SPIKE-09 (R2 signed links — needs R2 credentials). Each builds a small fixture (well under 300 MB) and removes it when done; the test project is on the Free Plan. Phase 06 does not close until each passes or the owner waives it.
+1. Remaining Phase 06 spikes: SPIKE-13 (realtime signal), SPIKE-15 (photo upload on a weak connection, uses the R2 bucket), SPIKE-16 (OCR). Each builds a small fixture and removes it when done. Owner decision to raise before real personnel files: the R2 bucket is not EU-jurisdiction (RISK-001); jurisdiction is fixed at bucket creation.
 2. TASK-0091 rollback DONE and deliberately partial: s12r_words_exact_cover dropped so the next cold run measures the product-equivalent baseline; the two range functions were kept because without that index the range rewrite is a free measurable win. Nine checks confirmed pkey, GiST, four functions and 500,411 rows survived.
 3. Carry to the Phase 07 search adapter: the exact-match range rewrite (free, measured) and a re-measurement of the cold first request on the chosen compute at the hosting decision (D-248, DEF-008).
 4. SPIKE-10 (TASK-0080) is DONE with the production font; the two same-day "defects" were a wrong subset file and my own extraction method, both retracted.
