@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-21 — Light-theme focus indicators reach 6.8:1; the sidebar speaks Turkish
+
+- TASK-0054 DONE without editing any COSS file. The light theme's focus colour is neutral-600 (D-225). Measuring on the dev server showed that COSS draws the outline of elements without their own focus style, such as plain links, at half strength, which stayed at 2.27:1 even with the darker colour; the light theme's base outline now uses the full colour. Input borders, button rings and link outlines all measure 6.8:1, and the dark theme is unchanged.
+- The sidebar rail is now announced and tooltipped as "Menüyü aç veya kapat". COSS's own mobile sheet, whose title is fixed in English and which duplicated the phone navigation, can no longer be opened with Ctrl/Cmd+B at phone widths. Both deviations are logged in DESIGN_SYSTEM_RULES section 4.1.
+
 ## 2026-09-21 — The entry screen is `/today` in code, as in the glossary
 
 - TASK-0043 DONE. The glossary calls the entry screen "Bugün" (Today Screen) and each figure an Indicator, and forbids `dashboard` and `widget`; the code now agrees. The route moved from `/dashboard` to `/today` with a permanent redirect so old links keep working, the route constant became `todayRoute`, and the figure registry became `platform/today/indicator-registry.ts`. Files moved with their history; behaviour is unchanged. On the dev server `/dashboard` answers 308 to `/today`, which sends a signed-out visitor to sign-in as before.

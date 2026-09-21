@@ -3,7 +3,7 @@
 import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
@@ -86,6 +86,23 @@ export function AppSidebar({
   const closeMobileDrawer = () => setOpenMobile(false);
   // The drawer is always full width, so only the desktop rail can be in its icon state.
   const isRail = state === "collapsed" && !isMobile;
+
+  // At phone widths COSS opens its own sheet on Ctrl/Cmd+B. Phones navigate with the bottom bar
+  // and the "Modüller" drawer (D-069), and that sheet's title is fixed in English inside the COSS
+  // file, so the shortcut is stopped here before COSS's window listener sees it.
+  // Deviation from COSS defaults — see docs/ui-ux/DESIGN_SYSTEM_RULES.md §4.1 row 19d (TASK-0054).
+  useEffect(() => {
+    if (!isMobile) {
+      return;
+    }
+    const stopSheetShortcut = (event: KeyboardEvent) => {
+      if (event.key === "b" && (event.metaKey || event.ctrlKey)) {
+        event.stopPropagation();
+      }
+    };
+    window.addEventListener("keydown", stopSheetShortcut, { capture: true });
+    return () => window.removeEventListener("keydown", stopSheetShortcut, { capture: true });
+  }, [isMobile]);
 
   const toggleGroup = (groupId: string, open: boolean) => {
     const next = open ? [...openGroupIds, groupId] : openGroupIds.filter((id) => id !== groupId);

@@ -50,7 +50,11 @@ export function SidebarDragRail() {
 
   return (
     <SidebarRail
+      // COSS names the rail "Toggle Sidebar"; its props come last, so the Turkish name wins
+      // without touching the COSS file (ADR-011, TASK-0054). Same wording as the header button.
+      aria-label="Menüyü aç veya kapat"
       className="touch-none"
+      title="Menüyü aç veya kapat"
       onClick={() => {
         // A drag ends with a click event; only a real click toggles.
         if (!didDrag.current) {

@@ -8,9 +8,9 @@ Hedef **WCAG 2.2 AA**'dır (REQ-NFR-016, `docs/ui-ux/DESIGN_SYSTEM_RULES.md` §8
 
 | Konu | WCAG | Kural |
 |---|---|---|
-| Dil | 3.1.1 | Sayfa dili `tr`. Türkçe arayüzde İngilizce kalan erişilebilir ad hatadır. Bilinen tek fark: COSS sidebar'ın "Sidebar" ve "Toggle Sidebar" metinleri (`docs/ui-ux/DESIGN_SYSTEM_RULES.md` §4.1 sonu). Phase 07'de proje katmanında Türkçeleştirilir. |
+| Dil | 3.1.1 | Sayfa dili `tr`. Türkçe arayüzde İngilizce kalan erişilebilir ad hatadır. COSS sidebar'ın "Toggle Sidebar" ve "Sidebar" metinleri 2026-09-21'de proje katmanında giderildi (TASK-0054, `docs/ui-ux/DESIGN_SYSTEM_RULES.md` §4.1 satır 19d). |
 | Metin kontrastı | 1.4.3 | Normal metin en az 4,5:1, büyük metin en az 3:1; açık ve koyu temanın ikisinde de. Marka mavisi `#0F4C81` beyaz üzerinde 8,86:1, `#EFEFEF` üzerinde 7,7:1. |
-| Arayüz ve odak kontrastı | 1.4.11 | Girdi kenarı, seçili durum ve odak halkası komşu renge karşı en az 3:1. **Bulgu:** açık temada COSS'un odak rengi (`--ring`, neutral-400) zemine karşı 2,25:1'dir. Açık temada `--ring` neutral-600 olur (6,8:1). Koyu tema (3,89:1) değişmez (D-225). |
+| Arayüz ve odak kontrastı | 1.4.11 | Girdi kenarı, seçili durum ve odak halkası komşu renge karşı en az 3:1. **Bulgu:** açık temada COSS'un odak rengi (`--ring`, neutral-400) zemine karşı 2,25:1'dir. Açık temada `--ring` neutral-600'e çekildi (6,8:1; uygulandı 2026-09-21, TASK-0054). Düz bağlantılar COSS'un %50 saydam temel çizgisini kullandığı için o çizgi de açık temada tam renge çekildi; ölçüm: alan kenarı, düğme halkası ve bağlantı çizgisi 6,8:1. Koyu tema (3,89:1) değişmez (D-225). |
 | Renk tek başına anlam taşımaz | 1.4.1 | Her durum rengi yanında metin veya simge vardır: durum rozetleri metinlidir, gün şeridinde renk ve simge birliktedir (SCR-021). |
 | Klavye | 2.1.1, 2.4.3 | Her ekran klavyeyle baştan sona kullanılır. Odak sırası görsel sırayla aynıdır. Esc açılan paneli kapatır ve odak, paneli açan öğeye döner (COSS / Base UI davranışı). |
 | Görünür odak, örtülmeyen odak | 2.4.7, 2.4.11 | Odaklanan öğe her zaman görünür. Sabit bantlar (üst bar, kaydet çubuğu, telefondaki alt çubuk) odaklanan öğenin üstünü örtmez; odaklanan öğe kaydırılıp görünür alana getirilir. |
