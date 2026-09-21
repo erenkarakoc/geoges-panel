@@ -7,7 +7,7 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { dashboardRoute } from "@/modules/iam/application/auth-routing";
+import { todayRoute } from "@/modules/iam/application/auth-routing";
 import { AuthFormHeader } from "@/modules/iam/ui/auth-form-header";
 
 type OnboardingStep = {
@@ -97,7 +97,7 @@ export function RoleOnboarding() {
           Geri
         </Button>
         {isLast ? (
-          <Button render={<Link href={dashboardRoute} />} size="lg">
+          <Button render={<Link href={todayRoute} />} size="lg">
             Panele git
             <ArrowRightIcon aria-hidden="true" />
           </Button>

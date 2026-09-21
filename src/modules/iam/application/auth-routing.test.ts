@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  dashboardRoute,
+  todayRoute,
   resolvePostSignInRoute,
   resolveProtectedPageRedirect,
   signInRoute,
@@ -16,16 +16,16 @@ const twoFactorPending: AuthSession = { user, currentLevel: "aal1", nextLevel: "
 const twoFactorCleared: AuthSession = { user, currentLevel: "aal2", nextLevel: "aal2" };
 
 describe("resolvePostSignInRoute", () => {
-  it("sends a user without a second factor to the dashboard", () => {
-    expect(resolvePostSignInRoute(withoutTwoFactor)).toBe(dashboardRoute);
+  it("sends a user without a second factor to the Today screen", () => {
+    expect(resolvePostSignInRoute(withoutTwoFactor)).toBe(todayRoute);
   });
 
   it("stops at the two-factor step while the session is still aal1", () => {
     expect(resolvePostSignInRoute(twoFactorPending)).toBe(twoFactorRoute);
   });
 
-  it("sends a fully verified session to the dashboard", () => {
-    expect(resolvePostSignInRoute(twoFactorCleared)).toBe(dashboardRoute);
+  it("sends a fully verified session to the Today screen", () => {
+    expect(resolvePostSignInRoute(twoFactorCleared)).toBe(todayRoute);
   });
 
   it("falls back to sign-in when there is no session", () => {

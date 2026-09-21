@@ -47,7 +47,7 @@ export function PresentationPage() {
         </div>
         <div className={styles.headerActions}>
           <Badge variant="warning">Yalnız geliştirme · canlıda yok</Badge>
-          <Button render={<Link href="/dashboard" />} size="sm" variant="outline">
+          <Button render={<Link href="/today" />} size="sm" variant="outline">
             <ArrowLeftIcon aria-hidden="true" />
             Panele dön
           </Button>

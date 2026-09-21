@@ -125,7 +125,7 @@ export function AppSidebar({
         <Link
           aria-label="GEOGES Panel ana sayfa"
           className="flex h-14 items-center gap-2 rounded-lg ps-1 pe-2"
-          href="/dashboard"
+          href="/today"
           onClick={closeMobileDrawer}
         >
           <BrandTile className="size-10" variant="theme" />

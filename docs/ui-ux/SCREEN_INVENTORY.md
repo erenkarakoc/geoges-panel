@@ -22,8 +22,8 @@ Panelin bütün ekranları, her birinin karşıladığı gereksinimler ve varsay
 
 | ID | Ekran | Tür | Adres | Gereksinimler | Roller |
 |---|---|---|---|---|---|
-| SCR-010 | Bugün | P | `/dashboard` | REQ-RPT-001…005, REQ-RPT-007…009, REQ-CRM-008, REQ-PRJ-011 | Herkes (role göre kurulur) |
-| SCR-011 | Sistem gözü (Bugün içinde ikinci sekme) | S | `/dashboard` | REQ-RPT-010, REQ-RPT-011 | SAH, GM |
+| SCR-010 | Bugün | P | `/today` (eski `/dashboard` kalıcı yönlendirilir) | REQ-RPT-001…005, REQ-RPT-007…009, REQ-CRM-008, REQ-PRJ-011 | Herkes (role göre kurulur) |
+| SCR-011 | Sistem gözü (Bugün içinde ikinci sekme) | S | `/today` | REQ-RPT-010, REQ-RPT-011 | SAH, GM |
 | SCR-012 | Onaylar (kuyruk) | Ö | `/approvals` | REQ-WFL-012…016, REQ-WFL-031, REQ-SIT-031, REQ-IAM-020, REQ-IAM-025, REQ-IAM-026 | Önüne onay düşen herkes |
 | SCR-192 | Revizyon talepleri (Onaylar'da sekme, D-223) | S | `/approvals/revision-requests` | REQ-AUD-007…010 | Onaylayıcılar; talep eden kendi talebi |
 | SCR-013 | Görevler | L | `/tasks` | REQ-TSK-001…008 | Herkes |

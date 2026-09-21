@@ -4,7 +4,7 @@ export const signInRoute = "/sign-in";
 export const twoFactorRoute = "/two-factor";
 export const updatePasswordRoute = "/update-password";
 export const onboardingRoute = "/onboarding";
-export const dashboardRoute = "/dashboard";
+export const todayRoute = "/today";
 
 /** The user has a second factor but the session has not cleared it yet. */
 export function requiresTwoFactorStep(session: AuthSession): boolean {
@@ -17,7 +17,7 @@ export function resolvePostSignInRoute(session: AuthSession | null): string {
     return signInRoute;
   }
 
-  return requiresTwoFactorStep(session) ? twoFactorRoute : dashboardRoute;
+  return requiresTwoFactorStep(session) ? twoFactorRoute : todayRoute;
 }
 
 /** Route a protected page must send the visitor to, or `null` when they may stay. */

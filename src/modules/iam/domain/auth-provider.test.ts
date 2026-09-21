@@ -73,12 +73,12 @@ describe("AuthProvider contract", () => {
     expect(await auth.getSession()).toBeNull();
   });
 
-  it("signs in without a second factor and goes straight to the dashboard", async () => {
+  it("signs in without a second factor and goes straight to the Today screen", async () => {
     const auth = createFakeAuthProvider({ password: "dogruparola" });
 
     await auth.signInWithPassword({ email: "a@b.com", password: "dogruparola" });
 
-    expect(resolvePostSignInRoute(await auth.getSession())).toBe("/dashboard");
+    expect(resolvePostSignInRoute(await auth.getSession())).toBe("/today");
   });
 
   it("keeps a two-factor account at aal1 until the right code is entered", async () => {
@@ -95,7 +95,7 @@ describe("AuthProvider contract", () => {
     await auth.verifyTwoFactorCode({ code: "123456" });
 
     expect((await auth.getSession())?.currentLevel).toBe("aal2");
-    expect(resolvePostSignInRoute(await auth.getSession())).toBe("/dashboard");
+    expect(resolvePostSignInRoute(await auth.getSession())).toBe("/today");
   });
 
   it("refuses to remove the second factor before it has been cleared", async () => {
@@ -114,7 +114,7 @@ describe("AuthProvider contract", () => {
     await auth.verifyTwoFactorCode({ code: "123456" });
     await auth.disableTwoFactor();
 
-    expect(resolvePostSignInRoute(await auth.getSession())).toBe("/dashboard");
+    expect(resolvePostSignInRoute(await auth.getSession())).toBe("/today");
     expect((await auth.getSession())?.nextLevel).toBe("aal1");
   });
 

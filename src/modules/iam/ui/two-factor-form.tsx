@@ -27,7 +27,7 @@ import {
   initialTwoFactorEnrollmentState,
   initialTwoFactorRemovalState,
 } from "@/modules/iam/application/auth-form-state";
-import { dashboardRoute } from "@/modules/iam/application/auth-routing";
+import { todayRoute } from "@/modules/iam/application/auth-routing";
 import { AuthFormHeader } from "@/modules/iam/ui/auth-form-header";
 import { useAuthFormImpulse } from "@/modules/iam/ui/use-auth-form-impulse";
 import { useActionToast } from "@/platform/ui/feedback/use-action-toast";
@@ -147,7 +147,7 @@ function TwoFactorRemoval() {
         </AlertDialog>
       </div>
 
-      <Button className="mt-6" render={<Link href={dashboardRoute} />} variant="ghost">
+      <Button className="mt-6" render={<Link href={todayRoute} />} variant="ghost">
         Panele dön
       </Button>
     </>

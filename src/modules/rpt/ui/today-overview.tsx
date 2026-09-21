@@ -15,10 +15,7 @@ import {
 import { type TodayWork, type TodayWorkTone, todayWorkBySeat } from "@/modules/rpt/ui/today-work";
 import { type AccessPolicy, filterByPermission } from "@/platform/access/access-policy";
 import type { PreviewRole } from "@/platform/access/preview-roles";
-import {
-  type DashboardWidget,
-  dashboardWidgetRegistry,
-} from "@/platform/dashboard/dashboard-widget-registry";
+import { type Indicator, indicatorRegistry } from "@/platform/today/indicator-registry";
 import { formatDayLong, todayIn } from "@/platform/date/day";
 import { Figure } from "@/platform/ui/format/figure";
 
@@ -86,22 +83,22 @@ function WorkBlock({ work }: { work: TodayWork }) {
   );
 }
 
-function IndicatorGrid({ widgets }: { widgets: readonly DashboardWidget[] }) {
+function IndicatorGrid({ indicators }: { indicators: readonly Indicator[] }) {
   return (
     // Two columns, because this grid lives in half the screen next to the work block; a third
     // column only fits once the window is very wide.
     <ul className="grid gap-3 sm:grid-cols-2 2xl:grid-cols-3">
-      {widgets.map((widget) => (
-        <li key={widget.id}>
+      {indicators.map((indicator) => (
+        <li key={indicator.id}>
           <Frame className="h-full">
             {/* The card stretches to the tallest in its row; the panel has to follow, or a
                 short figure leaves a gap under its own surface. */}
             <FramePanel className="flex flex-1 flex-col gap-1 p-4">
-              <span className="text-xs text-muted-foreground">{widget.title}</span>
+              <span className="text-xs text-muted-foreground">{indicator.title}</span>
               <Figure
                 className="text-lg"
-                unit={widget.sampleUnit}
-                value={widget.sampleValue ?? "—"}
+                unit={indicator.sampleUnit}
+                value={indicator.sampleValue ?? "—"}
               />
             </FramePanel>
           </Frame>
@@ -119,9 +116,9 @@ function IndicatorGrid({ widgets }: { widgets: readonly DashboardWidget[] }) {
  */
 export function TodayOverview({ access, seat }: { access: AccessPolicy; seat: PreviewRole }) {
   const work = todayWorkBySeat[seat.id];
-  const indicators = filterByPermission(dashboardWidgetRegistry, access);
-  const criticalIndicators = indicators.filter((widget) => widget.critical);
-  const otherIndicators = indicators.filter((widget) => !widget.critical);
+  const indicators = filterByPermission(indicatorRegistry, access);
+  const criticalIndicators = indicators.filter((indicator) => indicator.critical);
+  const otherIndicators = indicators.filter((indicator) => !indicator.critical);
   const today = todayIn();
 
   return (
@@ -136,7 +133,7 @@ export function TodayOverview({ access, seat }: { access: AccessPolicy; seat: Pr
 
         {criticalIndicators.length > 0 ? (
           <section aria-label="Kilit göstergeler" className="flex min-w-0 flex-col gap-3">
-            <IndicatorGrid widgets={criticalIndicators} />
+            <IndicatorGrid indicators={criticalIndicators} />
             {otherIndicators.length > 0 ? (
               <Collapsible>
                 <CollapsibleTrigger
@@ -151,7 +148,7 @@ export function TodayOverview({ access, seat }: { access: AccessPolicy; seat: Pr
                   }
                 />
                 <CollapsiblePanel className="pt-3">
-                  <IndicatorGrid widgets={otherIndicators} />
+                  <IndicatorGrid indicators={otherIndicators} />
                 </CollapsiblePanel>
               </Collapsible>
             ) : null}

@@ -1,7 +1,7 @@
 import type { PermissionGuarded } from "@/platform/access/access-policy";
 import type { ModuleCode } from "@/platform/navigation/navigation-registry";
 
-export type DashboardWidget = PermissionGuarded & {
+export type Indicator = PermissionGuarded & {
   id: string;
   title: string;
   description: string;
@@ -27,7 +27,7 @@ export type DashboardWidget = PermissionGuarded & {
  * (D-065), and the site summary was taken off this screen by the owner on 2026-09-17 — it
  * belongs with the SIT screens when they exist.
  */
-export const dashboardWidgetRegistry: readonly DashboardWidget[] = [
+export const indicatorRegistry: readonly Indicator[] = [
   {
     id: "active-sites",
     sampleValue: "4",

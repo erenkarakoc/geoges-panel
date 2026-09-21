@@ -103,7 +103,7 @@ export const workNavigation: readonly NavigationItem[] = [
   {
     id: "today",
     label: "Bugün",
-    href: "/dashboard",
+    href: "/today",
     icon: CalendarCheckIcon,
     moduleCode: "RPT",
     requiredPermission: "rpt.cockpit.view",

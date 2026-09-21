@@ -30,7 +30,7 @@ export function ModulePlaceholder({ item }: { item: NavigationItem }) {
         </Badge>
       </EmptyHeader>
       <EmptyContent>
-        <Button render={<Link href="/dashboard" />} variant="outline">
+        <Button render={<Link href="/today" />} variant="outline">
           <ArrowLeftIcon aria-hidden="true" />
           Cockpit&apos;e dön
         </Button>

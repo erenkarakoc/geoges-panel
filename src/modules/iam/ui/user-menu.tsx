@@ -29,7 +29,11 @@ import {
   MenuTrigger,
 } from "@/components/ui/menu";
 import { signOutAction } from "@/modules/iam/application/auth-actions";
-import { onboardingRoute, twoFactorRoute } from "@/modules/iam/application/auth-routing";
+import {
+  onboardingRoute,
+  todayRoute,
+  twoFactorRoute,
+} from "@/modules/iam/application/auth-routing";
 import { type PreviewRoleId, rememberPreviewRole } from "@/platform/access/preview-roles";
 
 type RoleSwitcher = {
@@ -54,7 +58,7 @@ export function UserMenu({
   const switchRole = (roleId: PreviewRoleId) => {
     rememberPreviewRole(roleId);
     // Every seat starts on "Bugün" (D-056); the refresh re-renders the shell for the new seat.
-    router.push("/dashboard");
+    router.push(todayRoute);
     router.refresh();
   };
 

@@ -12,7 +12,7 @@ import type {
 } from "@/modules/iam/application/auth-form-state";
 import { authFailureMessage } from "@/modules/iam/application/auth-messages";
 import {
-  dashboardRoute,
+  todayRoute,
   resolvePostSignInRoute,
   signInRoute,
   updatePasswordRoute,
@@ -134,7 +134,7 @@ export async function updatePasswordAction(
     return { error: authFailureMessage(result.code) };
   }
 
-  redirect(dashboardRoute);
+  redirect(todayRoute);
 }
 
 export async function startTwoFactorEnrollmentAction(
@@ -175,5 +175,5 @@ export async function verifyTwoFactorAction(
     return { error: authFailureMessage(result.code) };
   }
 
-  redirect(dashboardRoute);
+  redirect(todayRoute);
 }

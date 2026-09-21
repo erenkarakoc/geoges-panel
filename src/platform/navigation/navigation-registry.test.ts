@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { type AccessPolicy, previewAccessPolicy } from "@/platform/access/access-policy";
-import { dashboardWidgetRegistry } from "@/platform/dashboard/dashboard-widget-registry";
+import { indicatorRegistry } from "@/platform/today/indicator-registry";
 import {
   allNavigationItems,
   findNavigationItemByHref,
@@ -91,22 +91,22 @@ describe("findNavigationItemByHref", () => {
   });
 
   it("finds work-layer screens too, now that they left the group list", () => {
-    expect(findNavigationItemByHref(navigationRegistry, "/dashboard")?.id).toBe("today");
+    expect(findNavigationItemByHref(navigationRegistry, "/today")?.id).toBe("today");
     expect(findNavigationItemByHref(navigationRegistry, "/approvals")?.id).toBe("approvals");
   });
 });
 
-describe("dashboardWidgetRegistry", () => {
-  it("has unique widget ids", () => {
-    const ids = dashboardWidgetRegistry.map((widget) => widget.id);
+describe("indicatorRegistry", () => {
+  it("has unique indicator ids", () => {
+    const ids = indicatorRegistry.map((indicator) => indicator.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
 
   it('marks six figures as critical, the ones "Bugün" shows unfolded', () => {
-    expect(dashboardWidgetRegistry.filter((widget) => widget.critical)).toHaveLength(6);
+    expect(indicatorRegistry.filter((indicator) => indicator.critical)).toHaveLength(6);
   });
 
   it("gives every figure a sample value, so no card renders an empty number", () => {
-    expect(dashboardWidgetRegistry.every((widget) => Boolean(widget.sampleValue))).toBe(true);
+    expect(indicatorRegistry.every((indicator) => Boolean(indicator.sampleValue))).toBe(true);
   });
 });

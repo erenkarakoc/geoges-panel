@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2026-09-21 — The entry screen is `/today` in code, as in the glossary
+
+- TASK-0043 DONE. The glossary calls the entry screen "Bugün" (Today Screen) and each figure an Indicator, and forbids `dashboard` and `widget`; the code now agrees. The route moved from `/dashboard` to `/today` with a permanent redirect so old links keep working, the route constant became `todayRoute`, and the figure registry became `platform/today/indicator-registry.ts`. Files moved with their history; behaviour is unchanged. On the dev server `/dashboard` answers 308 to `/today`, which sends a signed-out visitor to sign-in as before.
+
 ## 2026-09-21 — GitHub CI is live
 
 - TASK-0100 DONE. Every push to `main` and every pull request now runs the same gate as the local hook on GitHub (`npm ci`, then `npm run check:commit`, Node 24), so a commit made with the hook bypassed cannot stay green. The job checks out the full history, because the records gate compares stamps with commit dates and looks up deleted paths; actions are pinned to commit SHAs and the token is read-only. The first run passed and its log confirms the records, schema-access, lint, test and formatting steps ran on the server. The remaining CI.md steps arrive with the tables, catalogs and screens they test.

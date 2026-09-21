@@ -7,7 +7,7 @@ PROJECT STATUS:              IMPLEMENTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
 CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        Phase 07 implementing. TASK-0099 and TASK-0100 DONE (boundary rule from MODULE_MAP; GitHub CI green on every push). Next: TASK-0043 and TASK-0054 (small alignments), then TASK-0101 data access foundation.
+CURRENT TASK:        Phase 07 implementing. TASK-0099, TASK-0100, TASK-0043 DONE. Next: TASK-0054 (light-theme focus ring and Turkish sidebar accessible names), then TASK-0101 data access foundation.
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -18,6 +18,8 @@ CODE ALLOWED:        Phase 07 permits product code (ADR-007), but only after the
 ```
 
 ## LAST COMPLETED TASK
+2026-09-21: TASK-0043 DONE: the entry screen route is `/today` and its figures are `Indicator`s, matching the glossary; `/dashboard` redirects permanently.
+
 2026-09-21: TASK-0100 DONE: GitHub CI runs `npm ci` and `npm run check:commit` on Node 24 for every push and pull request, with full git history and SHA-pinned actions; first run green.
 
 2026-09-21: TASK-0099 DONE: the ADR-001 boundary rule is generated from MODULE_MAP; modules reach each other only along an arrow and through `index.ts`, routes through `index.ts` and `ui/`; module SQL may not name another module's schema. 15 real-config probe tests, graph and schema tests, production build passes.
@@ -67,7 +69,7 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Phase 07 plan approved (2026-09-21); TASK-0099 and TASK-0100 DONE. Continue in order: TASK-0043, TASK-0054 → TASK-0101 (data access) → TASK-0076 → TASK-0102 (IAM) → TASK-0103, TASK-0104 → TASK-0105, TASK-0106 → TASK-0107…TASK-0110 → TASK-0028 → TASK-0111 (M1). Each T1/T2 task writes its implementation plan in `docs/features/phase-07-foundation-plan.md` section 7 before code.
+1. Phase 07 plan approved (2026-09-21); TASK-0099 and TASK-0100 DONE. Continue in order: TASK-0054 → TASK-0101 (data access) → TASK-0076 → TASK-0102 (IAM) → TASK-0103, TASK-0104 → TASK-0105, TASK-0106 → TASK-0107…TASK-0110 → TASK-0028 → TASK-0111 (M1). Each T1/T2 task writes its implementation plan in `docs/features/phase-07-foundation-plan.md` section 7 before code.
 2. Owner action pending: disable the R2 bucket's public r2.dev URL (ADR-003) before any real file.
 3. Carry into Phase 07 design: cold first request re-measure at hosting (D-248, DEF-008); EU bucket jurisdiction before real personnel files (D-249); QTE→PRJ sync-versus-event inconsistency (MODULE_BOUNDARIES section 3 vs MODULE_MAP); exact-match range rewrite for the search adapter.
 4. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076.

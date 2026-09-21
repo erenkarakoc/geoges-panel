@@ -4,7 +4,7 @@
  * enforces it. Server-only: the session helpers use the server Supabase client.
  */
 export {
-  dashboardRoute,
+  todayRoute,
   resolvePostSignInRoute,
   resolveProtectedPageRedirect,
   signInRoute,

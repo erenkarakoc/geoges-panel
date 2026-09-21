@@ -1,10 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { dashboardRoute, verifyRecoveryToken } from "@/modules/iam";
+import { todayRoute, verifyRecoveryToken } from "@/modules/iam";
 
 /** Only in-app paths may be used as a redirect target, so the link cannot bounce elsewhere. */
 function safeNextPath(value: string | null): string {
-  return value?.startsWith("/") && !value.startsWith("//") ? value : dashboardRoute;
+  return value?.startsWith("/") && !value.startsWith("//") ? value : todayRoute;
 }
 
 /**

@@ -1,7 +1,7 @@
 /**
  * Answers whether the current user may use a permission-guarded feature.
  *
- * Navigation, dashboard widgets and pages depend only on this interface.
+ * Navigation, Today indicators and pages depend only on this interface.
  * The real implementation (dynamic roles, delegation, acting role) is provided by
  * the IAM module once roles are designed (Phase 01/03/04); UI code does not change.
  */
