@@ -53,7 +53,7 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Remaining Phase 06 spikes: SPIKE-13 (realtime signal), SPIKE-15 (photo upload on a weak connection, uses the R2 bucket), SPIKE-16 (OCR). Each builds a small fixture and removes it when done. Owner decision to raise before real personnel files: the R2 bucket is not EU-jurisdiction (RISK-001); jurisdiction is fixed at bucket creation.
+1. Remaining Phase 06 spikes: SPIKE-13 (realtime signal), SPIKE-15 (photo upload on a weak connection, uses the R2 bucket), SPIKE-16 (OCR). Each builds a small fixture and removes it when done. OPEN ADR-003 item: the owner enabled the bucket's public r2.dev URL (every object readable unsigned) — recommended disabling; no real file while it is on. The non-EU bucket stays for now (D-249), revisited before real personnel files.
 2. TASK-0091 rollback DONE and deliberately partial: s12r_words_exact_cover dropped so the next cold run measures the product-equivalent baseline; the two range functions were kept because without that index the range rewrite is a free measurable win. Nine checks confirmed pkey, GiST, four functions and 500,411 rows survived.
 3. Carry to the Phase 07 search adapter: the exact-match range rewrite (free, measured) and a re-measurement of the cold first request on the chosen compute at the hosting decision (D-248, DEF-008).
 4. SPIKE-10 (TASK-0080) is DONE with the production font; the two same-day "defects" were a wrong subset file and my own extraction method, both retracted.
@@ -68,6 +68,7 @@ Nothing blocks the remaining spikes on owner input except SPIKE-09, which needs 
 See `ai/OPEN_QUESTIONS.md`. OQ-029 was answered 2026-09-21 by D-248 (cold-start exception). OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.
 
 ## RECENT DECISIONS
+- D-249 (2026-09-21): the non-EU R2 bucket stays for synthetic data; EU jurisdiction is decided before real personnel files.
 - D-248 / CHG-008 (2026-09-21): cold-start exception for search latency — the first search after instance idle is exempt from 300 ms; warm searches stay bound; cold observations kept; re-measure at the hosting decision.
 - D-247 / CHG-007 (2026-09-20): scoped search helpers and all-words matching adopted; three tables added to the design, 215 total. No speed waiver.
 - 2026-09-20: Phases 01–05 are owner-approved DONE; Phase 06 is current. Local-first operation D-245 and separate reset/configuration tools D-246 remain in force.

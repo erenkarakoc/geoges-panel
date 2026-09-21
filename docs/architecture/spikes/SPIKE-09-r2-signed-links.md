@@ -47,9 +47,9 @@ Sonucu şudur: bağlantı ömrü kısa tutulabilir (dakikalar mertebesinde), yav
 
 1. Saha bağlantısı istemci tarafında kısılarak taklit edildi; gerçek mobil ağ, gecikme ve paket kaybı sınanmadı.
 2. Tam indirme sahibin bağlantısında ölçüldü (~330 Mbit/sn); saha hızını temsil etmez.
-3. Kovanın `r2.dev` herkese açık adresi ve özel alan adı S3 API'siyle sınanamaz. Kova ayarlarında "Public access"ın kapalı olduğu panelden doğrulanmalıdır.
+3. Kovanın `r2.dev` herkese açık adresi S3 API'siyle sınanamaz. **2026-09-21 güncellemesi:** sahip bu adresi açtı. Cloudflare'in belgelediği davranışa göre bu durumda kovadaki her nesne imzasız okunabilir; bu, yetki denetimli imzalı bağlantı katmanını tamamen atlatır ve ADR-003'e aykırıdır. Bu makineden `r2.dev` alan adına TLS bağlantısı 26 ms içinde sıfırlandı (ağ tarafında engelleniyor gibi görünüyor), bu yüzden ifşa burada gösterilemedi; deneme nesnesi silindi, kova boş. Adres kapatılmadan gerçek dosya yüklenmez. Ayrıca `r2.dev`'in bu ağda erişilemez olması, sahadaki kullanıcılar için de güvenilmez olduğunu gösterir; doğru yol imzalı bağlantıdır.
 4. Tarayıcıdan doğrudan yükleme (CORS, çok parçalı yükleme) bu deneyin kapsamında değil; SPIKE-15'e aittir.
-5. **KVKK notu:** kova AB yargı bölgesinde oluşturulmamış (uç nokta adresinde `.eu.` yok). Deney sentetik veriyle yapıldı. Gerçek personel belgeleri ve bordrolar yüklenmeden önce AB yargı bölgeli bir kova kullanılıp kullanılmayacağı, RISK-001 kapsamında karar verilmesi gereken bir konudur. Yargı bölgesi kova oluşturulurken seçilir, sonradan değiştirilemez.
+5. **KVKK notu:** kova AB yargı bölgesinde oluşturulmamış (uç nokta adresinde `.eu.` yok). Deney sentetik veriyle yapıldı. Sahip şimdilik bu kovanın kalmasına karar verdi (D-249); gerçek personel belgeleri ve bordrolar yüklenmeden önce AB yargı bölgesi RISK-001 kapsamında yeniden değerlendirilir. Yargı bölgesi kova oluşturulurken seçilir, sonradan değiştirilemez.
 
 ## Phase 07'ye taşınanlar
 

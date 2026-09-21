@@ -2,6 +2,14 @@
 
 Last updated: 2026-09-21
 
+## Storage decisions after SPIKE-09 (2026-09-21)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-249 | **The current R2 bucket stays outside the EU jurisdiction for now.** It holds only synthetic spike data. Whether real personnel files (payroll, medical-report dates, identity documents) require an EU-jurisdiction bucket is decided before any real personnel file is uploaded; jurisdiction is fixed when a bucket is created, so a change then means a new bucket and a copy. | Owner 2026-09-21 ("kalsın"); RISK-001, ADR-003, TASK-0094 |
+
+**Open ADR-003 compliance item (not a decision):** on 2026-09-21 the owner enabled the bucket's public r2.dev development URL, after being asked to confirm it was disabled. Cloudflare documents that this makes every object in the bucket readable without a signature, which bypasses the permission-checked signed links ADR-003 requires. From this machine the r2.dev host resets TLS within 26 ms (it appears blocked on this network), so exposure could not be demonstrated here; the probe object was deleted and the bucket is empty. Recommendation given: disable it (R2 → bucket → Settings → Public Development URL). No real file may be uploaded while it is enabled.
+
 ## CHG-008 — Cold-start exception for search latency (D-248, OQ-029, TASK-0091)
 
 Owner decision on 2026-09-21, chosen from four presented options: a keep-warm experiment, a larger compute tier, a cold-start exception, or checking the Supabase memory graph first. The owner chose the exception.

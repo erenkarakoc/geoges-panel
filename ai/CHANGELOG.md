@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-21 — R2 public URL flagged against ADR-003; bucket jurisdiction kept for now
+
+- D-249: the owner kept the non-EU R2 bucket for synthetic data; EU jurisdiction is decided before real personnel files, since jurisdiction is fixed at bucket creation.
+- The owner enabled the bucket's public r2.dev URL after being asked to confirm it was off. Recorded as an open ADR-003 compliance item with a recommendation to disable it: Cloudflare documents that it makes every object readable without a signature. A probe could not demonstrate it from this machine because the r2.dev host resets TLS within 26 ms here; the probe object was deleted and the bucket is empty. No real file may be uploaded while it is enabled.
+
 ## 2026-09-21 — SPIKE-09 passes against the R2 bucket
 
 - TASK-0094 DONE. The owner created the `geoges-panel` R2 bucket with a key limited to object read/write on it; the variables use the `R2_` prefix from the naming convention and are now listed in `.env.example`. 17/17 checks: links are issued only for documents the caller can see under their own RLS scope; unsigned object and list requests, a signed link with a changed key or a stretched expiry, and an expired link are all refused; a 50 MB file downloads intact with its Turkish filename.
