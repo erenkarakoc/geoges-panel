@@ -93,6 +93,41 @@ const eslintConfig = defineConfig([
     },
   },
   {
+    // Database access (TASK-0101, ADR-015, PORTS_AND_SERVICES section 2): only a module's data
+    // layer reaches the database, through `@/platform/db`'s runAsUser. The driver and the query
+    // builder stay behind it, so routes, screens and application code cannot open a query.
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["src/platform/db/**", "src/modules/*/data/**"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [{ name: "pg", message: "Only src/platform/db uses the driver (ADR-015)." }],
+          patterns: [
+            {
+              group: ["kysely", "kysely/*", "@/platform/db", "@/platform/db/*"],
+              message:
+                "Database access belongs in src/modules/<code>/data/ (PORTS_AND_SERVICES section 2).",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/modules/*/data/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            { name: "pg", message: "Use runAsUser from @/platform/db; the pool is not shared." },
+          ],
+        },
+      ],
+    },
+  },
+  {
     // Vendored COSS sidebar skeleton uses Math.random for a decorative width.
     // Kept unmodified so COSS updates can be pulled without merge conflicts.
     files: ["src/components/ui/sidebar.tsx"],

@@ -32,3 +32,67 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check:commit
+
+  # Migrations against an empty database (CI.md section 4, TASK-0101): apply every migration,
+  # run the database tests, roll every migration back, apply them again and test again. The
+  # server is a throw-away PostgreSQL 17 with a certificate from a CA made for this run, so the
+  # tools keep verifying TLS exactly as they do against Supabase. `anon`, `authenticated` and
+  # `auth.users` stand in for the Supabase objects the tests check the runtime role against.
+  database:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DATABASE_URL: postgresql://postgres:ci-only@localhost:5432/postgres
+      DATABASE_CA_CERT_PATH: ci-certs/ca.crt
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Certificates for this run
+        run: |
+          mkdir ci-certs && cd ci-certs
+          openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj "/CN=ci-root" \
+            -keyout ca.key -out ca.crt
+          openssl req -newkey rsa:2048 -nodes -subj "/CN=localhost" \
+            -keyout server.key -out server.csr
+          printf "subjectAltName=DNS:localhost,IP:127.0.0.1\n" > san.ext
+          openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -days 1 \
+            -extfile san.ext -out server.crt
+          sudo chown 999:999 server.key server.crt && sudo chmod 600 server.key
+      - name: PostgreSQL 17 with TLS
+        run: |
+          docker run -d --name pg -p 5432:5432 -e POSTGRES_PASSWORD=ci-only \
+            -v "$PWD/ci-certs:/certs:ro" \
+            postgres@sha256:f3bd19c606e442c3d7bdfa8002e03fe260a1023351e0ea4598032022b68dd6e3 \
+            -c ssl=on -c ssl_cert_file=/certs/server.crt -c ssl_key_file=/certs/server.key
+          for i in $(seq 60); do
+            docker exec pg pg_isready -h 127.0.0.1 -U postgres && break
+            sleep 1
+          done
+          docker exec pg psql -v ON_ERROR_STOP=1 -U postgres -c "
+            create role anon nologin;
+            create role authenticated nologin;
+            create schema auth;
+            create table auth.users (id uuid primary key);
+            revoke all on schema auth from public;"
+      - name: Apply, then apply again (nothing left to do)
+        run: |
+          npm run db:migrate
+          npm run db:migrate | tee second-run.log
+          grep -q "database is up to date" second-run.log
+      - run: npm run db:app-role
+      - run: npm run test:db
+      - name: Roll every migration back
+        run: |
+          while node scripts/db-migrate.mjs --status | grep -q "^applied"; do
+            npm run db:migrate -- --rollback-last
+          done
+          test "$(docker exec pg psql -tA -U postgres -c "select count(*) from pg_roles where rolname = 'geoges_app'")" = 0
+      - name: Apply again after the rollback and test again
+        run: |
+          npm run db:migrate
+          npm run db:app-role
+          npm run test:db

@@ -126,3 +126,49 @@ describe("ADR-001 module boundary rule (generated from MODULE_MAP)", () => {
     expect(await verdict(filePath, code)).toBe(expected);
   });
 });
+
+// Database access stays in module data layers (TASK-0101): a separate ESLint rule.
+async function importVerdict(filePath, code) {
+  const [result] = await eslint.lintText(code, { filePath: resolve(ROOT, filePath) });
+  expect(result.messages.filter((m) => m.fatal)).toEqual([]);
+  return result.messages.some((m) => m.ruleId === "no-restricted-imports") ? "block" : "allow";
+}
+
+const dbCases = [
+  [
+    "a module data layer uses runAsUser",
+    "src/modules/sit/data/probe.ts",
+    "import { runAsUser } from '@/platform/db';\nimport { sql } from 'kysely';\nexport const p = [runAsUser, sql];\n",
+    "allow",
+  ],
+  [
+    "a module data layer opens its own driver connection",
+    "src/modules/sit/data/probe.ts",
+    "import pg from 'pg';\nexport const p = pg;\n",
+    "block",
+  ],
+  [
+    "a route calls the database directly",
+    "src/app/(app)/probe/page.tsx",
+    "import { runAsUser } from '@/platform/db';\nexport const p = runAsUser;\n",
+    "block",
+  ],
+  [
+    "application code builds a query",
+    "src/modules/sit/application/probe.ts",
+    "import { sql } from 'kysely';\nexport const p = sql;\n",
+    "block",
+  ],
+  [
+    "a screen imports the driver",
+    "src/modules/sit/ui/probe.tsx",
+    "import { Pool } from 'pg';\nexport const p = Pool;\n",
+    "block",
+  ],
+];
+
+describe("database access only from module data layers (TASK-0101)", () => {
+  it.each(dbCases)("%s", { timeout: 60_000 }, async (_name, filePath, code, expected) => {
+    expect(await importVerdict(filePath, code)).toBe(expected);
+  });
+});

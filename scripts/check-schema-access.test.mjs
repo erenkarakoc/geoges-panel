@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { findSchemaViolations } from "./check-schema-access.mjs";
+import { findMisplacedSql, findSchemaViolations } from "./check-schema-access.mjs";
 
 const SCHEMAS = ["sit", "fin", "doc", "core"];
 let root;
@@ -78,5 +78,37 @@ describe("table ownership check (TASK-0099)", () => {
 
   it("finds nothing in the real repository", () => {
     expect(findSchemaViolations()).toEqual([]);
+  });
+});
+
+describe("raw SQL stays in the data layer (TASK-0101)", () => {
+  it("finds a SQL statement in a route or a module's application folder", () => {
+    const found = findMisplacedSql(
+      project({
+        "src/app/(app)/x/page.tsx": "export const q = `select id from sit.site where id = $1`;\n",
+        "src/modules/sit/application/a.ts": "export const q = 'update sit.site set name = $1';\n",
+        "src/modules/sit/data/ok.ts": "export const q = 'select * from sit.site';\n",
+        "src/platform/db/ok.ts": "export const q = 'select set_config($1, $2, true) from x.y';\n",
+      }),
+    );
+    expect(found.map((f) => f.file).sort()).toEqual([
+      "src/app/(app)/x/page.tsx",
+      "src/modules/sit/application/a.ts",
+    ]);
+  });
+
+  it("does not mistake ordinary Turkish or English text for SQL", () => {
+    expect(
+      findMisplacedSql(
+        project({
+          "src/modules/sit/ui/t.tsx":
+            "export const a = 'Listeden bir şantiye seçin';\nexport const b = 'Select a site from the list';\nexport const c = 'update available';\n",
+        }),
+      ),
+    ).toEqual([]);
+  });
+
+  it("finds nothing in the real repository", () => {
+    expect(findMisplacedSql()).toEqual([]);
   });
 });

@@ -17,6 +17,9 @@ coverage/
 supabase/.temp/
 supabase/.branches/
 
+# pre-migration database dumps (npm run db:backup); never commit
+backups/
+
 # logs
 *.log
 npm-debug.log*

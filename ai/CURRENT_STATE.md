@@ -1,13 +1,13 @@
 # CURRENT STATE
 
-Last updated: 2026-09-21
+Last updated: 2026-09-22
 
 ```text
 PROJECT STATUS:              IMPLEMENTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
 CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        Phase 07 implementing. TASK-0099, TASK-0100, TASK-0043, TASK-0054 DONE. Next: TASK-0101 data access foundation (T1) — write its implementation plan first.
+CURRENT TASK:        TASK-0101 data access foundation (T1) TESTING: built, 0001 applied to the test project, local gate and 18 real-database tests green; waiting for the first GitHub run of the new CI `database` job. Next: TASK-0076.
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -18,6 +18,8 @@ CODE ALLOWED:        Phase 07 permits product code (ADR-007), but only after the
 ```
 
 ## LAST COMPLETED TASK
+2026-09-22: TASK-0101 built (TESTING until the CI `database` job's first green run): `pg` + Kysely (D-254), SQL migrations with down files and a checksum ledger, restricted login role `geoges_app`, TLS verified against the pinned Supabase root, `runAsUser` with transaction-local identity. Migration 0001 is applied to the Supabase test project and the runtime password is in `.env.local` (`DATABASE_APP_URL`, never printed).
+
 2026-09-21: TASK-0054 DONE: light-theme focus indicators measure 6.8:1 on inputs, buttons and links (COSS's 50% base outline corrected in the light theme); the sidebar rail is named in Turkish; COSS's English-titled mobile sheet cannot open at phone widths.
 
 2026-09-21: TASK-0043 DONE: the entry screen route is `/today` and its figures are `Indicator`s, matching the glossary; `/dashboard` redirects permanently.

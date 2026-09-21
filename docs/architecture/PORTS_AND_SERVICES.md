@@ -1,6 +1,6 @@
 # Portlar, Veri Erişimi ve Ortak Servisler
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-22
 
 Panelin dış dünyaya ve veritabanına nasıl bağlandığı. Taşınabilirlik kuralı ADR-002 ve ADR-003'ten gelir: iş mantığı standart PostgreSQL ve uygulama katmanında yaşar, sağlayıcıya özgü her şey bir portun arkasındadır. Görev: TASK-0062. Kararlar: D-238, D-239, D-240.
 
@@ -35,6 +35,8 @@ Kurallar:
 - Kullanıcı isteğinden gelen her sorgu, kullanıcının kimliğiyle açılmış işlemde çalışır.
 - Ham SQL yalnız veri katmanında (`modules/<kod>/data/`) bulunur; modül dışında SQL yazılmaz.
 - Phase 06 denemesi bunu doğrular: çok rollü ve kapsamlı kullanıcıda RLS doğru ve yeterince hızlı mı (TASK-0064).
+
+**Uygulama (TASK-0101, 2026-09-22, D-254):** sürücü `pg`, tipli sorgu kurucu Kysely. Tek giriş kapısı `src/platform/db` içindeki `runAsUser`'dır: işlemi açar, kullanıcı kimliğini ve etkin rolü işlem yerel ayar olarak parametreyle yazar, işi aynı bağlantıda çalıştırır; hata olursa geri alır, geri alma da başarısızsa bağlantıyı havuza döndürmeden yok eder. Havuz ve ham istemci dışa verilmez. `pg`, `kysely` ve `@/platform/db` yalnız `modules/<kod>/data/` içinden içe aktarılabilir (ESLint); SQL cümlesi olan dizge de yalnız orada durabilir (`npm run boundaries`). RLS politikaları kimliği `core.current_user_id()` ve `core.current_role_id()` ile okur; kimlik yoksa hiçbir satır görünmez.
 
 ## 3. Arama (D-239)
 

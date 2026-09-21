@@ -1,6 +1,6 @@
 # Modül Sınırları ve Sözleşmeler
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-21
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-22
 
 Modüler monolitte (ADR-001) bir modülün nerede bittiğini, dışarıya neyi açtığını ve başka modülle nasıl konuştuğunu belirler. Modül listesi ve bağımlılık grafiği: `docs/architecture/MODULE_MAP.md`. Yetenek katalogları (olay, aksiyon, koşul alanı) her modülün `docs/requirements/REQ-<KOD>.md` dosyasının sonundadır; tek kaynak orasıdır (D-078). Görev: TASK-0057. Kararlar: D-233.
 
@@ -57,6 +57,7 @@ RPT, INT ve STR kendi verisini üretmez; başka modüllerin verisini okur. Bu ü
 - CI'da bir test, ilan ile kodu karşılaştırır: olayın alanları, aksiyonun girdisi ve gerektirdiği yetki, koşul alanının tipi ve veri sınıfı. Ayrışma varsa CI kırılır.
 - İkinci test, akış motorunun bilmediği bir aksiyonu veya koşul alanını kullanan akış tanımını reddeder.
 - Üçüncü test, bir modülün başka bir modülün tablosuna eriştiğini yakalar (veri katmanı erişimi modül adıyla etiketlenir).
+- Kimliksiz sorgu yolu yoktur (ADR-015, TASK-0101): veritabanına tek giriş `runAsUser`'dır ve kimliği işlemin ilk ifadesinde yazar; sürücü ve sorgu kurucu yalnız veri katmanından içe aktarılabilir. Birim testleri ifade sırasını, gerçek veritabanı testleri kimliğin sonraki işleme sızmadığını sınar.
 
 ## 6. Modül sınır özeti
 

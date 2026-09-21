@@ -1,6 +1,6 @@
 # Sürekli Entegrasyon ve Kalite Kapısı
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-21
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-22
 
 Her commit'te ve her push'ta neyin otomatik denetlendiği. Yerel kapı bugün çalışıyor; GitHub tarafı Phase 07'de kurulur. Görev: TASK-0074. İlgili: `docs/standards/QUALITY_GATES.md`, ADR-008.
 
@@ -9,13 +9,15 @@ Her commit'te ve her push'ta neyin otomatik denetlendiği. Yerel kapı bugün ç
 `npm run check:commit` her commit'ten önce koşar (pre-commit kancası):
 
 1. `records` — kayıt tutarlılığı (görevler, kararlar, atıflar, tarih damgaları)
-2. `boundaries` — hiçbir modül başka modülün şemasına SQL ile erişmiyor (TASK-0099)
+2. `boundaries` — hiçbir modül başka modülün şemasına SQL ile erişmiyor (TASK-0099); SQL cümleleri yalnız veri katmanında (TASK-0101)
 3. `typecheck` — TypeScript
-4. `lint` — ESLint + modül sınırları; izinli bağımlılıklar MODULE_MAP'ten üretilir, grafikte döngü varsa durur (ADR-001, TASK-0099)
+4. `lint` — ESLint + modül sınırları; izinli bağımlılıklar MODULE_MAP'ten üretilir, grafikte döngü varsa durur (ADR-001, TASK-0099); `pg`, `kysely` ve `@/platform/db` yalnız modül veri katmanından (TASK-0101)
 5. `test` — birim testleri; sınır kuralının gerçek yapılandırmayla sonda testleri dahil
 6. `format:check` — Prettier
 
 Başarısızsa commit olmaz. Commit sonrası kanca `origin/main`'e push eder.
+
+Gerçek veritabanı testleri (`npm run test:db`) `.env.local` ister; yerelde elle çalıştırılır, CI'da ise aşağıdaki geçici veritabanına karşı koşar.
 
 ## 2. GitHub tarafı (Phase 07)
 
@@ -50,7 +52,7 @@ Her T1 işinde "bu nasıl yanlış gidebilir" listesi test olarak yazılır (`do
 
 ## 4. Göç ve veri
 
-- Göç dosyası içeren bir değişiklik, CI'da boş bir veritabanına uygulanıp geri alınarak sınanır.
+- Göç dosyası içeren bir değişiklik, CI'da boş bir veritabanına uygulanıp geri alınarak sınanır. **Kuruldu (TASK-0101, 2026-09-22):** `database` işi, bu çalıştırma için üretilmiş sertifikayla TLS açık geçici bir PostgreSQL 17 başlatır; bütün göçleri uygular, ikinci çalıştırmanın hiçbir şey yapmadığını doğrular, veritabanı testlerini koşar, göçleri tek tek geri alır, yeniden uygular ve testleri tekrarlar. Supabase'e özgü `anon`, `authenticated` rolleri ve `auth.users` tablosu için yer tutucular kurulur.
 - Başlangıç verisi her CI çalışmasında yeniden kurulur; örnek veri yalnız yerelde.
 - Gerçek veri hiçbir zaman CI'ya girmez.
 

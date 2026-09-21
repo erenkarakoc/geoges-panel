@@ -1,6 +1,12 @@
 # DECISIONS
 
-Last updated: 2026-09-21
+Last updated: 2026-09-22
+
+## Data access foundation (TASK-0101, 2026-09-21)
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-254 | **Data access tooling: the `pg` driver with the Kysely typed query builder; plain SQL migrations applied by a small in-repo runner; the provider's root certificate pinned in the repository.** Kysely stays close to SQL, needs no code generation and has no schema language of its own, so migrations, RLS policies and grants stay plain SQL (CONVENTIONS sections 10–11); Drizzle was the alternative and would bring its own schema language and migration kit while policies would still be hand-written. The runner records each file's SHA-256 in `core.schema_migration` and stops when an applied file changes. Supabase signs its server certificates with its own root (Supabase Root 2021 CA), which the system store cannot verify (measured), so `db/certs/supabase-root-2021-ca.crt` is pinned and every connection verifies against it, with no unverified fallback; `DATABASE_CA_CERT_PATH` swaps it at the self-host move (D-250). The application connects only as the restricted login role `geoges_app` (`DATABASE_APP_URL`), whose password is generated locally and stored only as a SCRAM verifier on the server; the admin connection is used by migrations, dumps and the role command only. A technical decision inside D-238 / ADR-015, recorded, not asked. | AI technical decision 2026-09-21; ADR-015, D-238, TASK-0101 |
 
 ## CHG-009 — Phase 07 scheduling: search foundation, self-host timing, iPhone push (D-250…D-253)
 

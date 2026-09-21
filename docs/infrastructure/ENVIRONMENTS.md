@@ -1,6 +1,6 @@
 # Ortamlar ve İşletim Modeli
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-22
 
 Panelin nerede çalıştığı, verinin nerede durduğu ve canlıya geçerken nelerin değişeceği. Görev: TASK-0073. Kararlar: D-245. Gereksinimler: REQ-NFR-017…020.
 
@@ -52,6 +52,8 @@ Panelin nerede çalıştığı, verinin nerede durduğu ve canlıya geçerken ne
 - Şema değişiklikleri sıralı göç dosyalarıdır; her göç Git'te durur ve tek yönde ilerler (`docs/database/CONVENTIONS.md` bölüm 11).
 - Göç çalıştırmadan önce veritabanının yedeği alınır (bölüm 7).
 - Başlangıç verisi (roller, yetki tipleri, kataloglar, akış şablonları) tekrar çalıştırılabilir dosyalardadır; örnek veri ayrı bir dosyadır ve canlıda hiç çalıştırılmaz.
+
+**Kuruldu (TASK-0101, 2026-09-22):** göçler `db/migrations/` altında düz SQL dosyalarıdır; her birinin yanında geri alma dosyası (`.down.sql`) durur ya da neden olmadığı dosyada yazılıdır. Komutlar: `npm run db:migrate` (bekleyenleri uygular), `-- --status` (yalnız listeler), `-- --rollback-last` (son göçü geri alır); `npm run db:backup` göç öncesi dökümü alır ve ilk göçten sonra döküm olmadan göç çalışmaz. Uygulama veritabanına yalnız kısıtlı `geoges_app` rolüyle ve doğrulanmış TLS ile bağlanır (`DATABASE_APP_URL`); parolasını `npm run db:app-role` üretir. Döküm için bu makinede PostgreSQL 17 komut satırı araçları gerekir (bugün kurulu değil).
 
 ## 6. Canlıya geçerken değişecekler (ertelenen kararlar)
 

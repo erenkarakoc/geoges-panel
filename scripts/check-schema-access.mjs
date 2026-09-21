@@ -12,6 +12,10 @@
  * It sees literal strings only: table names assembled at runtime escape it, so Phase 07 also
  * gives each module's data layer a database role limited to its own schema.
  *
+ * A second check keeps raw SQL in the data layer (PORTS_AND_SERVICES section 2, TASK-0101):
+ * a string that reads as a whole SQL statement may appear only under `src/modules/<code>/data/`
+ * and `src/platform/db/`. Which files may import `pg` and `kysely` is an ESLint rule.
+ *
  *   node scripts/check-schema-access.mjs      exits 1 on a violation
  */
 import { readFileSync, readdirSync, statSync } from "node:fs";
@@ -86,7 +90,42 @@ export function findSchemaViolations(root = ROOT, schemas = schemaNames()) {
   return violations;
 }
 
+// Every product table lives in a module schema, so a real statement names `schema.table`; that
+// keeps sentences such as "Select a site from the list" out.
+const TABLE = String.raw`"?[a-z_]\w*"?\."?[a-z_]\w*`;
+const SQL_STATEMENT = new RegExp(
+  String.raw`^\s*(select\s[\s\S]*?\sfrom\s+${TABLE}|insert\s+into\s+${TABLE}|update\s+${TABLE}\s+set\s|delete\s+from\s+${TABLE}|with\s+\w+\s+as\s*\(|(create|alter|drop)\s+(table|schema|policy|function|role|index)\s)`,
+  "i",
+);
+const SQL_HOMES = [/^src\/modules\/[^/]+\/data\//, /^src\/platform\/db\//];
+
+/** Files outside the data layer holding a string that reads as a whole SQL statement. */
+export function findMisplacedSql(root = ROOT) {
+  const found = [];
+  const walk = (dir) => {
+    for (const name of readdirSync(dir)) {
+      const path = join(dir, name);
+      if (statSync(path).isDirectory()) walk(path);
+      else if (/\.(ts|tsx)$/.test(name) && !/\.(test|dbtest)\.tsx?$/.test(name)) scan(path);
+    }
+  };
+  const scan = (file) => {
+    const rel = relative(root, file).split(sep).join("/");
+    if (SQL_HOMES.some((home) => home.test(rel))) return;
+    const statement = literals(readFileSync(file, "utf8"), file).find((t) => SQL_STATEMENT.test(t));
+    if (statement) found.push({ file: rel, statement: statement.trim().slice(0, 60) });
+  };
+  walk(join(root, "src"));
+  return found;
+}
+
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
+  const misplaced = findMisplacedSql();
+  for (const m of misplaced) {
+    console.error(
+      `${m.file}\n  raw SQL outside the data layer: "${m.statement}"\n  fix: move it to src/modules/<code>/data/ (PORTS_AND_SERVICES section 2)`,
+    );
+  }
   const violations = findSchemaViolations();
   for (const v of violations) {
     console.error(
@@ -98,5 +137,10 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
       ? `schema access: ${violations.length} violation(s)`
       : "schema access OK — no module touches another module's schema",
   );
-  process.exitCode = violations.length ? 1 : 0;
+  console.log(
+    misplaced.length
+      ? `sql location: ${misplaced.length} violation(s)`
+      : "sql location OK — raw SQL only in data layers",
+  );
+  process.exitCode = violations.length || misplaced.length ? 1 : 0;
 }

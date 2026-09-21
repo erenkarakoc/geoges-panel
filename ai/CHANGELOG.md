@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-22 — The panel has its own database door
+
+- TASK-0101 built (T1, in testing until the new CI job's first green run). The application now reaches the database only as a restricted login role that cannot bypass row level security, create roles or delete rows, and only over TLS verified against Supabase's own root certificate, which the operating system does not trust by default (measured). Every request runs in one transaction that first writes the signed-in user as transaction-local settings; after commit or rollback nothing is left on the pooled connection, and a connection whose rollback fails is destroyed rather than reused. Driver, query builder and database door can only be imported from a module's data layer, and SQL statements may only live there.
+- Schema changes are plain SQL migrations with a down file each and a checksum ledger; the first one is applied to the test project. A dump is required before every later migration. A new CI job applies all migrations to an empty PostgreSQL 17, tests, rolls them back, applies them again and tests again (CI.md section 4).
+- Tooling decision D-254: `pg` with Kysely, an in-repo migration runner, the pinned root certificate.
+
 ## 2026-09-21 — Light-theme focus indicators reach 6.8:1; the sidebar speaks Turkish
 
 - TASK-0054 DONE without editing any COSS file. The light theme's focus colour is neutral-600 (D-225). Measuring on the dev server showed that COSS draws the outline of elements without their own focus style, such as plain links, at half strength, which stayed at 2.27:1 even with the darker colour; the light theme's base outline now uses the full colour. Input borders, button rings and link outlines all measure 6.8:1, and the dark theme is unchanged.
