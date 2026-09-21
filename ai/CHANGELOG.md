@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-21 — SPIKE-17 closes the last roadmap candidate; Phase 06 ready for exit
+
+- TASK-0098 DONE. The roadmap listed "architecture boundary enforcement tooling" as a Phase 06 candidate, but it had never become a spike and had no waiver; the owner chose to test it. Using the repo's own ESLint 9 and the already installed eslint-plugin-boundaries 7.2.0 on a throwaway fixture, 14/14: 34 module edges were generated from MODULE_MAP, the graph is acyclic, another module is reachable only through its `index.ts` along a graph edge, and deep, relative, type-only, dynamic-import and re-export bypasses plus against-graph dependencies are all blocked, failing CI. A static SQL scan caught a module reading another module's schema without false alarms, and the real repo is clean under today's rule.
+- Found a record inconsistency: MODULE_BOUNDARIES section 3 says QTE calls PRJ's `createDraftProject` synchronously, while MODULE_MAP draws that edge dashed as an event; to settle when QTE is designed. The SQL scan sees only literal strings, so per-module database grants are recommended as the stronger complement.
+- Seventeen spikes are complete and every roadmap candidate is covered. Phase 06 now waits for the owner's exit decision.
+
 ## 2026-09-21 — SPIKE-16 passes; all sixteen listed spikes complete, one candidate unaccounted for
 
 - TASK-0097 DONE. Local Tesseract (downloaded with the owner's permission) read synthetic scans without any document leaving the machine. Measured as searchability with the search normalisation: on a realistic scan the dispatch note matched all 10 search terms and the weighing slip all 9, with Turkish diacritics exact and the net weight extractable, at about one second per page. A poor, faded 100 dpi scan lost some terms (6/10, 8/9), which becomes a low-confidence flag and rescan prompt rather than a reason to send documents out.

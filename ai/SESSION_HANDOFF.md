@@ -6,6 +6,7 @@ CURRENT PHASE: PHASE 06 — Validation Spikes
 
 ## Verified state
 
+- 2026-09-21: SPIKE-17 (TASK-0098) passed 14/14 — the ADR-001 boundary rule can be generated from MODULE_MAP and enforced in CI with the already-installed eslint-plugin-boundaries 7.2.0 (its `entry-point` rule is deprecated; use `dependencies` with `fileInternalPath`).
 - 2026-09-21: SPIKE-16 (TASK-0097) passed 4/4 with local Tesseract; typical scans fully searchable, poor scans partially, handled as a quality flag. All sixteen listed spikes are complete.
 - 2026-09-21: SPIKE-15 (TASK-0096) passed 11/11 — browser-side resize (5.86 MB → 238 KB), offset-checked chunked upload through the app server to R2, resume from the server-reported offset with 0 bytes resent after an offline window, draft autosave retry and restore on reload. Chrome transparently retried the server-side dropped request, so that scenario did not exercise our resume logic.
 - 2026-09-21: SPIKE-13 (TASK-0095) passed 12/12 after a fix. Its first run found a real defect — a signal can arrive while the follow-up count request fails, leaving the counter stale until the next reconnect — fixed with request retry and an `online` refresh. Native EventSource closes permanently on HTTP 503, so the client needs its own backoff wrapper. Both evidence files are kept.
@@ -34,7 +35,7 @@ CURRENT PHASE: PHASE 06 — Validation Spikes
 
 ## Next work
 
-1. All sixteen listed spikes are complete. Open before the Phase 06 exit: the roadmap candidate "architecture boundary enforcement tooling" (ADR-001, PROJECT_RULES §8) was never turned into a spike and has no waiver; the owner must choose to run it or waive it. Then the owner approves the exit. Scratchpad also holds tesseract.js 7.0.0 and its language data (owner-approved download).
+1. Phase 06 is ready for the owner's exit decision: seventeen spikes complete, every roadmap candidate covered (SPIKE-17 boundary enforcement added and passed). After approval, Phase 07 becomes the single IN_PROGRESS phase in the roadmap and both pointer files (records gate check 13). Carry: public r2.dev URL (ADR-003), QTE→PRJ edge inconsistency, D-248 re-measure at hosting, D-249 EU bucket decision.
 2. TASK-0091 rollback is DONE and deliberately partial. s12r_words_exact_cover was dropped on 2026-09-21 so the next cold measurement runs on the product-equivalent baseline; nine checks confirmed pkey, GiST, all four functions and 500,411 rows survived. The two range functions were KEPT on purpose: without the covering index the range rewrite is a free, measurable win (rare term 0.905 ms / 20 blocks versus 1.092 ms / 79 blocks) and is the one recommendation worth carrying into design. It is not adopted and does not address OQ-029. Never drop the original GiST or primary key indexes.
 3. Remaining experiments not blocked by search: SPIKE-09 (R2 signed links, needs R2 credentials), 13 (realtime signal, may touch the database — run only after the cold triage), 15 (photo upload), 16 (OCR). SPIKE-14 waits for search validation. Do not call Phase 06 complete until every exit criterion is met or explicitly waived by the owner.
 4. Phase 07 adapter tests must preserve the restricted DB role, parameter binding, transaction-local identity, identity cleanup on failure, verified TLS, ordered event selection, atomic effect/delivery and duplicate suppression.

@@ -7,7 +7,7 @@ PROJECT STATUS:      DESIGN
 CURRENT PHASE:       PHASE 06 — Validation Spikes (Phase 05 DONE 2026-09-20, owner approved)
 CURRENT SUBPHASE:    TESTING
 CURRENT FEATURE:     —
-CURRENT TASK:        Phase 06: all sixteen listed spikes complete (SPIKE-16 passed 2026-09-21). Before the exit review: the roadmap's candidate "architecture boundary enforcement tooling" is not among the sixteen and has no waiver — owner to decide (run it or waive). Phase exit needs owner approval. Open ADR-003 item: public r2.dev URL enabled.
+CURRENT TASK:        Phase 06: seventeen spikes complete (01–17) and every roadmap candidate is covered (SPIKE-17 added for boundary enforcement, 14/14). Ready for the owner's Phase 06 exit decision. Open, not blocking the exit: public r2.dev URL (ADR-003), QTE→PRJ edge inconsistency, D-248 re-measure at hosting.
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -18,6 +18,8 @@ CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 a
 ```
 
 ## LAST COMPLETED TASK
+2026-09-21: TASK-0098 DONE (SPIKE-17): boundary enforcement with the repo's own ESLint and eslint-plugin-boundaries, 14/14 — edges generated from MODULE_MAP, acyclic graph, index.ts-only access, all common bypasses blocked, schema-access scan working, real repo clean.
+
 2026-09-21: TASK-0097 DONE (SPIKE-16): local Tesseract reads a typical scanned dispatch note (10/10 search terms) and weighing slip (9/9) with Turkish diacritics intact; no document leaves the machine; poor scans become a quality flag. Harness corrections recorded with raw results.
 
 2026-09-21: TASK-0096 DONE (SPIKE-15): photo resized in the browser 24.6x, uploaded in offset-checked chunks through the app to R2 over a simulated weak link; after an offline window it resumed from the server-reported offset with 0 bytes resent; the draft autosave retried and a reload restored everything. Offline entry stays deferred (DEF-002).
@@ -59,7 +61,7 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Phase 06 exit: owner decides on the missing candidate spike (architecture boundary enforcement tooling, ADR-001) — run it or waive it explicitly — and then approves the exit. Carry-forward lists live in each spike report.
+1. Phase 06 exit: owner approval. All candidates PASS; carry-forward lists live in each spike report. Open items to carry: public r2.dev URL (ADR-003), QTE→PRJ sync-vs-event inconsistency (MODULE_BOUNDARIES section 3 vs MODULE_MAP), cold first request re-measure at hosting (D-248), EU bucket jurisdiction before real personnel files (D-249).
 2. TASK-0091 rollback DONE and deliberately partial: s12r_words_exact_cover dropped so the next cold run measures the product-equivalent baseline; the two range functions were kept because without that index the range rewrite is a free measurable win. Nine checks confirmed pkey, GiST, four functions and 500,411 rows survived.
 3. Carry to the Phase 07 search adapter: the exact-match range rewrite (free, measured) and a re-measurement of the cold first request on the chosen compute at the hosting decision (D-248, DEF-008).
 4. SPIKE-10 (TASK-0080) is DONE with the production font; the two same-day "defects" were a wrong subset file and my own extraction method, both retracted.
