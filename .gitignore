@@ -19,6 +19,8 @@ supabase/.branches/
 
 # pre-migration database dumps (npm run db:backup); never commit
 backups/
+# configuration exports (npm run config:export); may hold the owner's configuration
+exports/
 
 # logs
 *.log

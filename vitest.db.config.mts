@@ -12,7 +12,7 @@ export default defineConfig({
     },
   },
   test: {
-    include: ["src/**/*.dbtest.ts"],
+    include: ["src/**/*.dbtest.ts", "scripts/**/*.dbtest.mjs"],
     environment: "node",
     setupFiles: ["./scripts/stubs/load-env-local.mjs"],
     testTimeout: 60_000,

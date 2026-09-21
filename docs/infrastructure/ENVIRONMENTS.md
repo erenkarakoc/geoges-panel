@@ -40,10 +40,12 @@ Panelin nerede çalıştığı, verinin nerede durduğu ve canlıya geçerken ne
 - `db:reset:config` — nadiren: yapılandırmayı da fabrika ayarına döndürür. Onay sorar.
 - Akış **örnekleri** iş verisidir ve iki komutta da silinir; akış **tanımları** yapılandırmadır.
 
+**Kuruldu (TASK-0076, 2026-09-22):** komutlar tablo adı ezberlemez; her tablo katmanını `core.table_layer`'a kendi göçünde kaydeder ve kayıtsız tablo içeren göç geçemez (`docs/database/CONVENTIONS.md` bölüm 11). `db:reset:config` önce yapılandırmayı `exports/` altına dışa aktarır, sonra `SIFIRLA` onayı ister (betikte `--onay=SIFIRLA`). Örnek veri `npm run db:sample` ile `db/samples/`'tan yüklenir. `npm run db:mark-real-data` ortamı gerçek veri ortamı olarak işaretler (`KILITLE` onayıyla, geri alınmaz); o andan sonra iki sıfırlama ve örnek veri yükleme reddedilir.
+
 ## 4b. Yapılandırmanın taşınması (D-246)
 
 - `config:export` yapılandırmayı tek bir dosyaya çıkarır: akış tanımları ve sürümleri, kataloglar, tarihli kurallar, özel alan tanımları, roller ve yetki tipleri, kayıt türü tanımları.
-- `config:import` bunu başka bir ortama yükler; çakışan anahtarlar raporlanır, sessizce üzerine yazılmaz.
+- `config:import` bunu başka bir ortama yükler; çakışan anahtarlar raporlanır, sessizce üzerine yazılmaz. Tek bir çakışma bile varsa hiçbir satır yazılmaz; `-- --dry-run` yalnız raporlar. Hedefin son göçü dosyadakiyle aynı olmalıdır.
 - Canlıya geçerken ikinci Supabase projesi bu dosyayla kurulur; yerelde kurduğunuz akışlar elle tekrarlanmaz.
 - İş verisi bu dosyaya **girmez**; yalnız yapılandırma taşınır.
 

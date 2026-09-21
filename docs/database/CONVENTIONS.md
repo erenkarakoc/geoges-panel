@@ -1,6 +1,6 @@
 # Veritabanı Sözleşmeleri
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-22
 
 Phase 04'ün ortak kuralları: adlandırma, anahtarlar, tipler, para ve miktar duyarlığı, zaman, durum, geçmiş, silme, dizin ve göç düzeni. Her modül şeması bu kurallara uyar. Görev: TASK-0065. Kararlar: D-243, D-244. Mimari: `docs/architecture/PORTS_AND_SERVICES.md` (ADR-015), `docs/architecture/PERMISSIONS.md`.
 
@@ -82,7 +82,9 @@ m² gibi türetilen ölçüler **saklanır ve hesaplandığı kural sürümüyle
 - Göçler ileri yönlüdür ve **önce ekle, sonra kaldır** kuralına uyar: yeni sütun eklenir, kod iki biçimi de okur, veri taşınır, eski sütun sonra kaldırılır.
 - Her göç geri alınabilir olmalıdır; geri alınamayan adım (veri silen) ayrı göç olur ve gözden geçirilir.
 - Üretimde tabloyu kilitleyen işlemler (büyük `ALTER`) ayrı bakım penceresinde çalışır; Phase 05 bunu işletim tarafında tanımlar.
-- Başlangıç verisi (roller, yetki tipleri, varsayılan kataloglar, akış şablonları) ayrı ve tekrar çalıştırılabilir dosyalardadır.
+- Başlangıç verisi (roller, yetki tipleri, varsayılan kataloglar, akış şablonları) ayrı ve tekrar çalıştırılabilir dosyalardadır (`db/seeds/`); satırları sabit kimliklidir, çünkü başka ortama taşınan yapılandırma onlara kimlikle başvurur.
+- Her göçün yanında geri alma dosyası (`NNNN_ad.down.sql`) durur ya da göç `-- irreversible: <neden>` satırıyla nedenini söyler; göç aracı ikisi de yoksa çalışmaz. Uygulanmış göç dosyası hiç değiştirilmez, yorumu bile; düzeltme yeni göçtür (TASK-0101).
+- **Her tablo katmanını kaydeder (D-246, TASK-0076):** tabloyu oluşturan göç `core.table_layer`'a `seed`, `config`, `business` veya `system` satırını da yazar. Yabancı anahtar yönü: `seed` → `seed`; `config` → `seed`, `config`; `system` → `system`; `business` → hepsi. `seed` ve `config` tablolarının birincil anahtarı vardır. Göç aracı bu kurallara aykırı göçü geri alır; geri alma dosyası tablonun kaydını da siler.
 
 ## 12. Sınama
 

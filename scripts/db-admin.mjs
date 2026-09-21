@@ -16,6 +16,28 @@ export const ENV_PATH = resolve(ROOT, ".env.local");
 export const DEFAULT_CA_PATH = resolve(ROOT, "db/certs/supabase-root-2021-ca.crt");
 export const APP_ROLE = "geoges_app";
 
+/** Schemas owned by the provider or the database itself; everything else is ours. */
+const PROVIDER_SCHEMAS = new Set([
+  "auth",
+  "extensions",
+  "graphql",
+  "graphql_public",
+  "information_schema",
+  "net",
+  "pgbouncer",
+  "pgsodium",
+  "pgsodium_masks",
+  "realtime",
+  "storage",
+  "supabase_functions",
+  "supabase_migrations",
+  "vault",
+]);
+
+export function applicationSchemas(names) {
+  return names.filter((n) => !n.startsWith("pg_") && !PROVIDER_SCHEMAS.has(n)).sort();
+}
+
 /** Parses a dotenv file: `KEY=value`, optional surrounding quotes, `#` comment lines. */
 export function parseEnv(text) {
   const env = {};
@@ -91,4 +113,22 @@ export function safeError(error) {
   return serverError && !/password|postgres(ql)?:\/\//i.test(error.message)
     ? `${code}: ${error.message}`
     : code;
+}
+
+/**
+ * Asks the person at the keyboard to type `word` (D-246: the configuration reset asks first).
+ * A script passes `--onay=<word>` instead. Without a keyboard and without the flag, the answer
+ * is no.
+ */
+export async function confirmed(word, argv = process.argv, input = process.stdin) {
+  const flag = argv.find((a) => a.startsWith("--onay="));
+  if (flag) return flag.slice("--onay=".length) === word;
+  if (!input.isTTY) return false;
+  const { createInterface } = await import("node:readline/promises");
+  const rl = createInterface({ input, output: process.stdout });
+  try {
+    return (await rl.question(`Onaylamak için ${word} yazın: `)).trim() === word;
+  } finally {
+    rl.close();
+  }
 }

@@ -153,3 +153,12 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-21 21:03:35Z · bf800d5c · Write · `scripts/db-migrate.mjs`
 - 2026-09-21 21:04:16Z · bf800d5c · Edit · `scripts/db-tools.test.mjs`
 - 2026-09-21 21:04:44Z · bf800d5c · Edit · `scripts/db-migrate.mjs`
+- 2026-09-21 21:21:02Z · bf800d5c · Write · `scripts/db-layers.mjs`
+- 2026-09-21 21:22:04Z · bf800d5c · Write · `scripts/config-transfer.mjs`
+- 2026-09-21 21:22:16Z · bf800d5c · Write · `scripts/db-reset.mjs`
+- 2026-09-21 21:22:21Z · bf800d5c · Write · `scripts/db-sample.mjs`
+- 2026-09-21 21:22:25Z · bf800d5c · Write · `scripts/db-mark-real-data.mjs`
+- 2026-09-21 21:23:02Z · bf800d5c · Write · `scripts/db-layers.test.mjs`
+- 2026-09-21 21:23:45Z · bf800d5c · Write · `scripts/db-layers.dbtest.mjs`
+- 2026-09-21 21:23:59Z · bf800d5c · Edit · `scripts/config-transfer.mjs`
+- 2026-09-21 21:24:01Z · bf800d5c · Edit · `scripts/config-transfer.mjs`

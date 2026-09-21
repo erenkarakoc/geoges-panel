@@ -15,30 +15,17 @@ import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
-import { DEFAULT_CA_PATH, adminConfig, connectAdmin, readEnvFile, safeError } from "./db-admin.mjs";
+import {
+  DEFAULT_CA_PATH,
+  adminConfig,
+  applicationSchemas,
+  connectAdmin,
+  readEnvFile,
+  safeError,
+} from "./db-admin.mjs";
 import { BACKUPS_DIR } from "./db-migrate.mjs";
 
-/** Schemas owned by the provider or the database itself; everything else is ours. */
-const PROVIDER_SCHEMAS = new Set([
-  "auth",
-  "extensions",
-  "graphql",
-  "graphql_public",
-  "information_schema",
-  "net",
-  "pgbouncer",
-  "pgsodium",
-  "pgsodium_masks",
-  "realtime",
-  "storage",
-  "supabase_functions",
-  "supabase_migrations",
-  "vault",
-]);
-
-export function applicationSchemas(names) {
-  return names.filter((n) => !n.startsWith("pg_") && !PROVIDER_SCHEMAS.has(n)).sort();
-}
+export { applicationSchemas };
 
 export function dumpFileName(now = new Date()) {
   return `${now.toISOString().replace(/[:.]/g, "-")}.dump`;

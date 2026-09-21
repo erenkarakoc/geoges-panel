@@ -1,6 +1,6 @@
 # Paneli Kendi Bilgisayarınızda Çalıştırma
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-22
 
 Her dilim bitiminde paneli kendi bilgisayarınızda açıp gezmeniz için (D-245). Windows içindir. İlk kurulum bir kez yapılır, sonraki dilimlerde yalnız 5. ve 6. adımlar tekrarlanır.
 
@@ -53,7 +53,8 @@ Tarayıcıda `http://localhost:3000` adresini açın. Kapatmak için komut istem
 Panel örnek veriyle gelir: örnek şantiye, örnek proje, örnek kullanıcılar. Ekranlarda "örnek veri" işareti görürsünüz.
 
 - Örnek iş verisini temizlemek için: `npm run db:reset:data` — kurduğunuz akışlar, kataloglar ve eşikler **durur**, yalnız örnek şantiye, günlük kayıt, stok ve görevler silinir.
-- Yapılandırmayı da fabrika ayarına döndürmek için: `npm run db:reset:config` — onay sorar.
+- Yapılandırmayı da fabrika ayarına döndürmek için: `npm run db:reset:config` — önce yapılandırmanızın bir kopyasını `exports/` klasörüne alır, sonra onay için `SIFIRLA` yazmanızı ister.
+- Örnek veriyi yeniden yüklemek için: `npm run db:sample`.
 - Gerçek veri girildiği gün iki komut da kilitlenecek (`ENVIRONMENTS.md` bölüm 4a).
 
 ## 8. Giriş

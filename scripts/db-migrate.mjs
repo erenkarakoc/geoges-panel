@@ -26,6 +26,7 @@ import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { ROOT, adminConfig, connectAdmin, readEnvFile, safeError } from "./db-admin.mjs";
+import { SEEDS_DIR, checkLayers, hasLayerRegister, runSqlFolder } from "./db-layers.mjs";
 
 export const MIGRATIONS_DIR = resolve(ROOT, "db/migrations");
 export const BACKUPS_DIR = resolve(ROOT, "backups");
@@ -128,6 +129,9 @@ export function backupProblem({
   return null;
 }
 
+/** Our own errors keep their text; driver errors go through safeError. */
+const describe = (error) => (error.code ? safeError(error) : error.message);
+
 /** Runs `sql` and the ledger change in one transaction under the migration lock. */
 async function inLockedTransaction(client, work) {
   await client.query("begin");
@@ -151,6 +155,7 @@ async function applyPending(client, pending) {
         ]);
         if (again.rowCount) return "skip";
         await client.query(file.sql);
+        if (await hasLayerRegister(client)) await checkLayers(client);
         await client.query("insert into core.schema_migration (name, checksum) values ($1, $2)", [
           file.name,
           file.checksum,
@@ -163,8 +168,21 @@ async function applyPending(client, pending) {
           : `done     ${file.name}`,
       );
     } catch (error) {
-      throw new Error(`${file.name} failed and was rolled back: ${safeError(error)}`);
+      throw new Error(`${file.name} failed and was rolled back: ${describe(error)}`);
     }
+  }
+}
+
+/** Factory data files (db/seeds) are re-runnable and follow every migrate run (TASK-0076). */
+async function applySeeds(client) {
+  await client.query("begin");
+  try {
+    const names = await runSqlFolder(client, SEEDS_DIR);
+    await client.query("commit");
+    if (names.length) console.log(`seeded   ${names.join(", ")}`);
+  } catch (error) {
+    await client.query("rollback").catch(() => {});
+    throw new Error(`seed data failed and was rolled back: ${describe(error)}`);
   }
 }
 
@@ -176,11 +194,12 @@ async function rollbackLast(client, files, applied) {
   try {
     await inLockedTransaction(client, async () => {
       await client.query(file.down);
+      if (await hasLayerRegister(client)) await checkLayers(client);
       await client.query("delete from core.schema_migration where name = $1", [file.name]);
     });
     console.log(`reverted ${file.name}`);
   } catch (error) {
-    throw new Error(`${file.name} down failed and was rolled back: ${safeError(error)}`);
+    throw new Error(`${file.name} down failed and was rolled back: ${describe(error)}`);
   }
 }
 
@@ -203,7 +222,10 @@ async function run({ statusOnly, rollback }) {
       return;
     }
     const work = rollback ? 1 : pending.length;
-    if (work === 0) return console.log("database is up to date");
+    if (work === 0) {
+      console.log("database is up to date");
+      return await applySeeds(client);
+    }
     const problem = backupProblem({
       appliedCount: applied.length,
       pendingCount: work,
@@ -212,7 +234,10 @@ async function run({ statusOnly, rollback }) {
     });
     if (problem) throw new Error(problem);
     if (rollback) await rollbackLast(client, files, applied);
-    else await applyPending(client, pending);
+    else {
+      await applyPending(client, pending);
+      await applySeeds(client);
+    }
   } finally {
     await client.end();
   }
