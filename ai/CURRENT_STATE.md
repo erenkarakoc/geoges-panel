@@ -7,7 +7,7 @@ PROJECT STATUS:              IMPLEMENTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
 CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0102 DONE. Next: TASK-0112 account security tables (T1) — recovery codes, sign-in lockout, session inactivity; plan first.
+CURRENT TASK:        TASK-0102 DONE. Next: TASK-0103 audit log and record history (T1), plan first. TASK-0112 follows TASK-0103/0105/0108 (D-257).
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
