@@ -6,6 +6,7 @@ CURRENT PHASE: PHASE 07 — Foundation Build
 
 ## Verified state
 
+- 2026-09-21: TASK-0099 DONE. The boundary rule is generated from MODULE_MAP (`scripts/module-graph.mjs`); platform-to-platform dependencies need an arrow in the map first. `npm run boundaries` is now part of `check` and `check:commit`.
 - 2026-09-21: the owner approved the Phase 06 exit. Phase 06 is DONE (seventeen spikes, every roadmap candidate covered, no ADR changed) and Phase 07 is the single IN_PROGRESS phase.
 - 2026-09-21: SPIKE-17 (TASK-0098) passed 14/14 — the ADR-001 boundary rule can be generated from MODULE_MAP and enforced in CI with the already-installed eslint-plugin-boundaries 7.2.0 (its `entry-point` rule is deprecated; use `dependencies` with `fileInternalPath`).
 - 2026-09-21: SPIKE-16 (TASK-0097) passed 4/4 with local Tesseract; typical scans fully searchable, poor scans partially, handled as a quality flag. All sixteen listed spikes are complete.
@@ -36,7 +37,7 @@ CURRENT PHASE: PHASE 07 — Foundation Build
 
 ## Next work
 
-1. Phase 07 plan is written and awaits owner approval (`docs/features/phase-07-foundation-plan.md`). Question round done (CHG-009, D-250…D-253). After approval start TASK-0099 by writing its implementation plan (PROJECT_RULES §10) — no code before that. Carry: public r2.dev URL (owner action, ADR-003), D-248 re-measure at hosting, D-249 EU bucket decision, QTE→PRJ edge inconsistency.
+1. Phase 07 plan approved 2026-09-21; TASK-0099 DONE. Next TASK-0100 (GitHub CI, see `docs/infrastructure/CI.md` section 2), writing its implementation plan first in the plan document section 7. Note for the owner: MODULE_MAP's header still says "Taslak (Phase 03'te kesinleşir)" although Phase 03 is DONE, and the lint rule now reads that file. Carry: public r2.dev URL (owner action, ADR-003), D-248 re-measure at hosting, D-249 EU bucket decision, QTE→PRJ edge inconsistency (MODULE_MAP's event table also treats quote.won as an event).
 2. TASK-0091 rollback is DONE and deliberately partial. s12r_words_exact_cover was dropped on 2026-09-21 so the next cold measurement runs on the product-equivalent baseline; nine checks confirmed pkey, GiST, all four functions and 500,411 rows survived. The two range functions were KEPT on purpose: without the covering index the range rewrite is a free, measurable win (rare term 0.905 ms / 20 blocks versus 1.092 ms / 79 blocks) and is the one recommendation worth carrying into design. It is not adopted and does not address OQ-029. Never drop the original GiST or primary key indexes.
 3. Remaining experiments not blocked by search: SPIKE-09 (R2 signed links, needs R2 credentials), 13 (realtime signal, may touch the database — run only after the cold triage), 15 (photo upload), 16 (OCR). SPIKE-14 waits for search validation. Do not call Phase 06 complete until every exit criterion is met or explicitly waived by the owner.
 4. Phase 07 adapter tests must preserve the restricted DB role, parameter binding, transaction-local identity, identity cleanup on failure, verified TLS, ordered event selection, atomic effect/delivery and duplicate suppression.

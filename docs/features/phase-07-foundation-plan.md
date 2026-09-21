@@ -1,6 +1,6 @@
 # Phase 07 — Temel Yapım Planı
 
-Durum: ONAY BEKLİYOR (sahip) · Tarih: 2026-09-21 · Faz: Phase 07 · Bağlı: `ai/MASTER_ROADMAP.md`, CHG-009, D-250…D-253
+Durum: ONAYLANDI (sahip, 2026-09-21) · Tarih: 2026-09-21 · Faz: Phase 07 · Bağlı: `ai/MASTER_ROADMAP.md`, CHG-009, D-250…D-253
 
 Bu belge Phase 07'nin keşif ve planlama adımıdır (PROJECT_RULES §2, §3, §10). Hâlâ borçlu olunan temel kalemleri, her birinin tasarım kaynağını, doğrulama denemelerinden taşınan kuralları, yapım sırasını ve açılan görevleri listeler. Her T1/T2 görev, kod yazılmadan önce kendi uygulama planını (PROJECT_RULES §10) ayrıca yazar.
 
@@ -64,3 +64,18 @@ Sıra bağımlılıktan gelir; her adım bir öncekinin üstüne kurulur.
 ## 6. Kabul
 
 Temel özellikler T1 kapısından geçer; M1 yerel kabulü sahibin geri bildirimiyle kaydedilir (D-245); barındırılan dağıtım ve geri dönüş Phase 09 pilotundan önce doğrulanır (DEF-008). Arama temelinin eklenmesiyle Phase 07 tahmini 8–11 iş gününden yaklaşık 10–13 iş gününe çıkar.
+
+## 7. Görev uygulama planları
+
+### TASK-0099 — Sınır kuralının MODULE_MAP'ten üretilmesi (T2)
+
+- **Amaç:** bugünkü "modüller arası içe aktarım tamamen yasak" kuralını, MODULE_BOUNDARIES bölüm 2'nin öngördüğü biçime getirmek: bir modül başka modülü yalnız grafikte izinli bir okla ve yalnız `index.ts` üzerinden kullanır. İzinli oklar elle yazılmaz, `docs/architecture/MODULE_MAP.md`'den üretilir; grafik döngüsüzlüğü ve modüllerin başka modül şemasına SQL ile erişmemesi `npm run check` içinde denetlenir (SPIKE-17).
+- **Bağımlılık:** yok.
+- **Kural anlamı (MODULE_MAP'ten):** düz oklar doğrudan bağımlılıktır, geçişli değildir; kesikli oklar olaydır, kod bağımlılığı sayılmaz. Her iş modülü altı platform modülünü (IAM, AUD, DOC, WFL, TSK, ADM) kullanabilir. Platform modülleri iş modüllerine bağımlı olamaz.
+- **Uygulama katmanı (`src/app`):** rotalar bileşimin köküdür. MODULE_BOUNDARIES kuralı modüller arasını bağlar; rotalar bir modülün `index.ts`'ini ve `ui/` ekranlarını kullanabilir, `application/`, `domain/`, `infrastructure/` gibi iç klasörlerine giremez.
+- **Etkilenen dosyalar:** `eslint.config.mjs`; yeni `scripts/module-graph.mjs` (grafik okuma, döngü denetimi, politika üretimi) ve testi; yeni `scripts/check-schema-access.mjs` ve testi; kuralın gerçek yapılandırmayla sınandığı `scripts/boundaries.test.mjs`; `package.json` (`check` ve `check:commit`); yeni `src/modules/iam/index.ts`; IAM'in iç yollarını kullanan rotalar `@/modules/iam` üzerinden geçer.
+- **Veritabanı / arayüz:** değişiklik yok. Davranış değişikliği yok; yalnız içe aktarım yolları.
+- **Güvenlik:** veri sahipliği kuralını (MODULE_BOUNDARIES bölüm 1) makineyle korur.
+- **Testler:** grafik okuyucu (gerçek MODULE_MAP: kenar sayısı, kesikli okların dışarıda kalması, platform grubunun tanınması, döngü yok; yapay döngünün yakalanması); gerçek ESLint yapılandırmasıyla sonda testleri (izinli ok + `index.ts` geçer; iç klasöre erişim, göreli yol, `import type`, dinamik içe aktarım, yeniden dışa aktarma, grafiğe aykırı yön ve platformdan iş modülüne erişim engellenir; rota `ui/` ve `index.ts` kullanabilir, iç klasöre giremez); şema taraması (başka modül şeması yakalanır, SQL olmayan dizge ve yorum sayılmaz); bütün repo temiz.
+- **Göç:** yok. **Geri dönüş:** tek commit geri alınır.
+- **Kabul:** `npm run check` bütün yeni denetimlerle geçer; sonda testleri kuralın gerçekten engellediğini gösterir; MODULE_MAP biçimi bozulursa kural sessizce gevşemek yerine hata verir.

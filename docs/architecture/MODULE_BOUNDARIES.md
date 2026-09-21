@@ -1,6 +1,6 @@
 # Modül Sınırları ve Sözleşmeler
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-21
 
 Modüler monolitte (ADR-001) bir modülün nerede bittiğini, dışarıya neyi açtığını ve başka modülle nasıl konuştuğunu belirler. Modül listesi ve bağımlılık grafiği: `docs/architecture/MODULE_MAP.md`. Yetenek katalogları (olay, aksiyon, koşul alanı) her modülün `docs/requirements/REQ-<KOD>.md` dosyasının sonundadır; tek kaynak orasıdır (D-078). Görev: TASK-0057. Kararlar: D-233.
 
@@ -25,7 +25,9 @@ src/modules/<kod>/
 ```
 
 - Başka bir modül yalnız `@/modules/<kod>` kökünden içe aktarır; alt klasörlere erişemez.
-- Bugün lint kuralı modüller arası içe aktarmayı tamamen yasaklıyor (`eslint.config.mjs`). Phase 07'de "yalnız `index.ts`" biçimine gevşetilir; bu, TASK-0057'den doğan bir uygulama işidir.
+- **Kural makineyle uygulanır (TASK-0099, 2026-09-21).** `eslint.config.mjs` izinli bağımlılıkları elle yazmaz; `scripts/module-graph.mjs` onları `docs/architecture/MODULE_MAP.md`'den üretir. Bir modül başka modülü yalnız grafikte düz bir okla ve yalnız `index.ts` üzerinden kullanabilir; kesikli oklar olaydır, kod bağımlılığı sayılmaz. Her iş modülü altı platform modülünü kullanabilir; platform modülleri iş modüllerine bağımlı olamaz. Platform modülleri arasında henüz ok çizilmediği için böyle bir bağımlılık önce haritaya ok olarak eklenir. Grafikte döngü olursa lint çalışmaz. Yeni bir bağımlılığın yolu her zaman haritaya yeni bir ok eklemektir.
+- Rotalar (`src/app`) bileşimin köküdür: bir modülün `index.ts`'ini ve `ui/` ekranlarını kullanabilir, iç klasörlerine (`application/`, `domain/`, `infrastructure/`) giremez.
+- Kural, gerçek yapılandırmayla sonda testleriyle sınanır (`scripts/boundaries.test.mjs`): iç klasöre erişim, göreli yol, `import type`, dinamik içe aktarım, yeniden dışa aktarma ve grafiğe aykırı yön engellenir. Modüllerin başka modül şemasına SQL ile erişmesi `npm run boundaries` ile ayrıca denetlenir (bölüm 1 kural 1).
 - Platform modülleri (IAM, AUD, DOC, WFL, TSK, ADM) `src/platform/` ve `src/modules/` arasında bölünmüştür; Phase 07'de hepsi aynı düzene taşınır.
 
 ## 3. İletişim biçimleri

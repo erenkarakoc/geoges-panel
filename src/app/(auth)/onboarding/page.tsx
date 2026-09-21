@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { resolveProtectedPageRedirect } from "@/modules/iam/application/auth-routing";
-import { readAuthSession } from "@/modules/iam/application/auth-session";
+import { readAuthSession, resolveProtectedPageRedirect } from "@/modules/iam";
 import { RoleOnboarding } from "@/modules/iam/ui/role-onboarding";
 
 export const metadata: Metadata = { title: "Yeni rolünüz" };

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-21 — Phase 07 starts: the module boundary rule now comes from MODULE_MAP
+
+- The owner approved the Phase 07 plan. TASK-0099 DONE: ESLint no longer carries a hand-written boundary rule; `scripts/module-graph.mjs` reads MODULE_MAP and generates it. A module may use another only along a solid arrow and only through its `index.ts`; dashed arrows are events; every business module may use the six platform modules; platform modules never depend on business modules, and dependencies among platform modules need an arrow in the map first. A cycle or an unreadable map stops the lint instead of loosening it.
+- Routes may use a module's `index.ts` and `ui/` screens but not its internal folders. IAM gained an `index.ts`, the routes use it, and the password-reset confirmation route no longer reaches IAM's infrastructure; behaviour is unchanged and the production build passes.
+- `npm run boundaries` (in both check gates) finds module SQL naming another module's schema, scanning only SQL-looking strings so file names are not mistaken for schemas. Fifteen probe tests lint real snippets through the actual configuration, proving the rule blocks deep, relative, type-only, dynamic and re-export bypasses and against-graph dependencies while allowing the legitimate paths.
+
 ## 2026-09-21 — Phase 07 discovery: plan, three owner answers, thirteen tasks
 
 - Every still-owed foundation item already had a design from Phases 03–05; the plan in `docs/features/phase-07-foundation-plan.md` links each one to its sources, the spike carry-forwards and a task, in dependency order.

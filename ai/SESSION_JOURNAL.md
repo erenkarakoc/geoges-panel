@@ -113,3 +113,16 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-21 11:39:32Z · bf800d5c · Write · `docs/architecture/spikes/SPIKE-16-ocr-in-house.md`
 - 2026-09-21 12:22:08Z · bf800d5c · Write · `docs/architecture/spikes/SPIKE-17-boundary-enforcement.md`
 - 2026-09-21 13:54:15Z · bf800d5c · Write · `docs/features/phase-07-foundation-plan.md`
+- 2026-09-21 15:54:45Z · bf800d5c · Write · `scripts/module-graph.mjs`
+- 2026-09-21 15:55:10Z · bf800d5c · Edit · `eslint.config.mjs`
+- 2026-09-21 15:55:13Z · bf800d5c · Edit · `eslint.config.mjs`
+- 2026-09-21 15:55:15Z · bf800d5c · Edit · `eslint.config.mjs`
+- 2026-09-21 15:55:48Z · bf800d5c · Edit · `src/modules/iam/application/auth-session.ts`
+- 2026-09-21 15:55:50Z · bf800d5c · Write · `src/modules/iam/index.ts`
+- 2026-09-21 15:56:14Z · bf800d5c · Edit · `src/app/auth/confirm/route.ts`
+- 2026-09-21 15:56:16Z · bf800d5c · Edit · `src/app/auth/confirm/route.ts`
+- 2026-09-21 15:57:51Z · bf800d5c · Write · `scripts/boundaries.test.mjs`
+- 2026-09-21 15:58:29Z · bf800d5c · Edit · `scripts/boundaries.test.mjs`
+- 2026-09-21 15:58:36Z · bf800d5c · Write · `scripts/module-graph.test.mjs`
+- 2026-09-21 15:58:55Z · bf800d5c · Write · `scripts/check-schema-access.mjs`
+- 2026-09-21 15:59:02Z · bf800d5c · Write · `scripts/check-schema-access.test.mjs`

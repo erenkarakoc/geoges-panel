@@ -1,8 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { dashboardRoute } from "@/modules/iam/application/auth-routing";
-import { createSupabaseAuthProvider } from "@/modules/iam/infrastructure/supabase/supabase-auth-provider";
-import { createSupabaseServerClient } from "@/platform/supabase/server-client";
+import { dashboardRoute, verifyRecoveryToken } from "@/modules/iam";
 
 /** Only in-app paths may be used as a redirect target, so the link cannot bounce elsewhere. */
 function safeNextPath(value: string | null): string {
@@ -17,13 +15,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const { searchParams, origin } = request.nextUrl;
   const tokenHash = searchParams.get("token_hash");
 
-  if (tokenHash) {
-    const auth = createSupabaseAuthProvider(await createSupabaseServerClient());
-    const result = await auth.verifyRecoveryToken({ tokenHash });
-
-    if (result.ok) {
-      return NextResponse.redirect(new URL(safeNextPath(searchParams.get("next")), origin));
-    }
+  if (tokenHash && (await verifyRecoveryToken(tokenHash))) {
+    return NextResponse.redirect(new URL(safeNextPath(searchParams.get("next")), origin));
   }
 
   return NextResponse.redirect(new URL("/reset-password?expired=1", origin));

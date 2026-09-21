@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { signInRoute } from "@/modules/iam/application/auth-routing";
-import { readAuthSession } from "@/modules/iam/application/auth-session";
+import { readAuthSession, signInRoute } from "@/modules/iam";
 import { TwoFactorForm } from "@/modules/iam/ui/two-factor-form";
 
 export const metadata: Metadata = { title: "İki adımlı doğrulama" };

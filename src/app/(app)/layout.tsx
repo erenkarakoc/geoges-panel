@@ -1,8 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { resolveProtectedPageRedirect } from "@/modules/iam/application/auth-routing";
-import { readAuthSession } from "@/modules/iam/application/auth-session";
+import { readAuthSession, resolveProtectedPageRedirect } from "@/modules/iam";
 import { UserMenu } from "@/modules/iam/ui/user-menu";
 import {
   createPreviewRolePolicy,

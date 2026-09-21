@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
-import { resolveProtectedPageRedirect } from "@/modules/iam/application/auth-routing";
-import { readAuthSession } from "@/modules/iam/application/auth-session";
+import { readAuthSession, resolveProtectedPageRedirect } from "@/modules/iam";
 import { PresentationPage } from "@/sandbox/presentation/presentation-page";
 
 export const metadata: Metadata = { title: "Yapı sunumu" };

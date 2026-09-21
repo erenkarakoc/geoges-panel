@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { resolvePostSignInRoute } from "@/modules/iam/application/auth-routing";
-import { readAuthSession } from "@/modules/iam/application/auth-session";
+import { readAuthSession, resolvePostSignInRoute } from "@/modules/iam";
 import { SignInForm } from "@/modules/iam/ui/sign-in-form";
 
 export const metadata: Metadata = { title: "Giriş" };

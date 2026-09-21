@@ -3,11 +3,11 @@
 Last updated: 2026-09-21
 
 ```text
-PROJECT STATUS:              DESIGNING
+PROJECT STATUS:              IMPLEMENTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
-CURRENT SUBPHASE:    PLAN
+CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        Phase 07 plan written (`docs/features/phase-07-foundation-plan.md`), awaiting owner approval. Question round done: D-250 self-host at Phase 19, D-251 search in the foundation, D-252 iPhone push condition accepted, D-253 npm + Node 24. Thirteen tasks opened (TASK-0099…TASK-0111); first is TASK-0099.
+CURRENT TASK:        Phase 07 plan approved 2026-09-21. TASK-0099 DONE (boundary rule generated from MODULE_MAP, index.ts-only access, schema-access check). Next: TASK-0100 GitHub CI, then TASK-0043 and TASK-0054, then TASK-0101.
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -18,6 +18,8 @@ CODE ALLOWED:        Phase 07 permits product code (ADR-007), but only after the
 ```
 
 ## LAST COMPLETED TASK
+2026-09-21: TASK-0099 DONE: the ADR-001 boundary rule is generated from MODULE_MAP; modules reach each other only along an arrow and through `index.ts`, routes through `index.ts` and `ui/`; module SQL may not name another module's schema. 15 real-config probe tests, graph and schema tests, production build passes.
+
 Phase 06 DONE (2026-09-21, owner approved): seventeen spikes, every roadmap candidate covered; SPIKE-12 under the D-248 cold-start exception; no ADR changed. Carry-forward lists live in each spike report.
 
 2026-09-21: TASK-0098 DONE (SPIKE-17): boundary enforcement with the repo's own ESLint and eslint-plugin-boundaries, 14/14 — edges generated from MODULE_MAP, acyclic graph, index.ts-only access, all common bypasses blocked, schema-access scan working, real repo clean.
@@ -63,7 +65,7 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Owner approves the Phase 07 plan; then start TASK-0099 with its implementation plan (PROJECT_RULES §10). Order: foundation (0099, 0100, 0043, 0054) → data access (0101, 0076) → IAM (0102) → audit and outbox (0103, 0104) → configuration (0105, 0106) → services (0107–0110) → shell (0028) → M1 (0111).
+1. Phase 07 plan approved (2026-09-21). Continue in order: TASK-0100 (GitHub CI) → TASK-0043, TASK-0054 → TASK-0101 (data access) → TASK-0076 → TASK-0102 (IAM) → TASK-0103, TASK-0104 → TASK-0105, TASK-0106 → TASK-0107…TASK-0110 → TASK-0028 → TASK-0111 (M1). Each T1/T2 task writes its implementation plan in `docs/features/phase-07-foundation-plan.md` section 7 before code.
 2. Owner action pending: disable the R2 bucket's public r2.dev URL (ADR-003) before any real file.
 3. Carry into Phase 07 design: cold first request re-measure at hosting (D-248, DEF-008); EU bucket jurisdiction before real personnel files (D-249); QTE→PRJ sync-versus-event inconsistency (MODULE_BOUNDARIES section 3 vs MODULE_MAP); exact-match range rewrite for the search adapter.
 4. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076.

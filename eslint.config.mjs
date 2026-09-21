@@ -3,8 +3,13 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import boundaries from "eslint-plugin-boundaries";
 
-// Architecture boundaries (ADR-001): modules may not reach into other modules.
-// Cross-module collaboration will go through public module APIs or events (Phase 03).
+import { loadModuleGraph } from "./scripts/module-graph.mjs";
+
+// Architecture boundaries (ADR-001, MODULE_BOUNDARIES section 2, TASK-0099): a module may use
+// another module only along an arrow of docs/architecture/MODULE_MAP.md and only through its
+// `index.ts`. The allowed arrows are generated from the map, never written here by hand, and
+// loading fails on a dependency cycle (validated by SPIKE-17).
+const { policies: modulePolicies } = loadModuleGraph();
 const boundaryElements = [
   { type: "app", pattern: "src/app" },
   { type: "module", pattern: "src/modules/*", capture: ["moduleName"] },
@@ -41,13 +46,14 @@ const eslintConfig = defineConfig([
             "{{from.element.types}} is not allowed to depend on {{to.element.types}} (ADR-001 module boundaries)",
           policies: [
             {
+              // Routes are the composition root: they may use a module's public `index.ts` and its
+              // `ui/` screens, but not its internal folders (application, domain, infrastructure).
               from: { element: { type: "app" } },
               allow: {
-                to: {
-                  element: {
-                    types: { anyOf: ["app", "module", "platform", "sandbox", ...cossLayers] },
-                  },
-                },
+                to: [
+                  { element: { types: { anyOf: ["app", "platform", "sandbox", ...cossLayers] } } },
+                  { element: { type: "module", fileInternalPath: ["index.ts", "ui/**"] } },
+                ],
               },
             },
             {
@@ -70,18 +76,9 @@ const eslintConfig = defineConfig([
             },
             {
               from: { element: { type: "module" } },
-              allow: {
-                to: [
-                  {
-                    element: {
-                      type: "module",
-                      captured: { moduleName: "{{from.element.captured.moduleName}}" },
-                    },
-                  },
-                  { element: { types: { anyOf: ["platform", ...cossLayers] } } },
-                ],
-              },
+              allow: { to: { element: { types: { anyOf: ["platform", ...cossLayers] } } } },
             },
+            ...modulePolicies,
             {
               from: { element: { type: "platform" } },
               allow: { to: { element: { types: { anyOf: ["platform", ...cossLayers] } } } },

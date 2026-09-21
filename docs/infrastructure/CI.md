@@ -1,6 +1,6 @@
 # Sürekli Entegrasyon ve Kalite Kapısı
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-21
 
 Her commit'te ve her push'ta neyin otomatik denetlendiği. Yerel kapı bugün çalışıyor; GitHub tarafı Phase 07'de kurulur. Görev: TASK-0074. İlgili: `docs/standards/QUALITY_GATES.md`, ADR-008.
 
@@ -9,10 +9,11 @@ Her commit'te ve her push'ta neyin otomatik denetlendiği. Yerel kapı bugün ç
 `npm run check:commit` her commit'ten önce koşar (pre-commit kancası):
 
 1. `records` — kayıt tutarlılığı (görevler, kararlar, atıflar, tarih damgaları)
-2. `typecheck` — TypeScript
-3. `lint` — ESLint + modül sınırları (ADR-001)
-4. `test` — birim testleri
-5. `format:check` — Prettier
+2. `boundaries` — hiçbir modül başka modülün şemasına SQL ile erişmiyor (TASK-0099)
+3. `typecheck` — TypeScript
+4. `lint` — ESLint + modül sınırları; izinli bağımlılıklar MODULE_MAP'ten üretilir, grafikte döngü varsa durur (ADR-001, TASK-0099)
+5. `test` — birim testleri; sınır kuralının gerçek yapılandırmayla sonda testleri dahil
+6. `format:check` — Prettier
 
 Başarısızsa commit olmaz. Commit sonrası kanca `origin/main`'e push eder.
 

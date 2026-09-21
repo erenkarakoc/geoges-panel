@@ -10,11 +10,12 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "records": "node scripts/check-records.mjs",
+    "boundaries": "node scripts/check-schema-access.mjs",
     "test:watch": "vitest",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run records && npm run typecheck && npm run lint && npm run test && npm run format:check",
-    "check:commit": "node scripts/check-records.mjs --strict && npm run typecheck && npm run lint && npm run test && npm run format:check"
+    "check": "npm run records && npm run boundaries && npm run typecheck && npm run lint && npm run test && npm run format:check",
+    "check:commit": "node scripts/check-records.mjs --strict && npm run boundaries && npm run typecheck && npm run lint && npm run test && npm run format:check"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",
