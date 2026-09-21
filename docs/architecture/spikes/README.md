@@ -1,6 +1,6 @@
 # Doğrulama Denemeleri (Phase 06)
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-21
+Durum: DONE (sahip faz çıkışını 2026-09-21'de onayladı) · Son güncelleme: 2026-09-21
 
 Phase 03'te alınan mimari kararların riskli olanları, yapıma başlamadan önce küçük denemelerle sınanır. **Deneme kodu atılır**; ürüne girmez. Her deneme bir soruya "geçti", "kaldı (ve hangi kararı değiştiriyor)" ya da "sahip açıkça vazgeçti" cevabı verir. Rapor: `docs/architecture/spikes/SPIKE-<NN>-<ad>.md`. Görev: TASK-0064.
 

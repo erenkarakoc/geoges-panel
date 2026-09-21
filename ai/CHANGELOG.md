@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-21 — Phase 06 closed with owner approval; Phase 07 begins
+
+- The owner approved the Phase 06 exit. Seventeen spikes are complete and every roadmap candidate is covered: SPIKE-01–11 and 13–17 passed, SPIKE-12 passed under the cold-start exception (D-248). No architecture decision had to change; each report lists what it hands to Phase 07.
+- Phase 07 (Foundation Build) is now the single IN_PROGRESS phase. It starts with discovery: the still-owed foundation items, the mandatory question round and the phase decision summary come before any product code, as the project rules require.
+- Carried open: the public r2.dev URL (owner action, ADR-003), the cold first request re-measure at hosting (D-248), the EU bucket jurisdiction before real personnel files (D-249) and the QTE-to-PRJ sync-versus-event inconsistency.
+
 ## 2026-09-21 — SPIKE-17 closes the last roadmap candidate; Phase 06 ready for exit
 
 - TASK-0098 DONE. The roadmap listed "architecture boundary enforcement tooling" as a Phase 06 candidate, but it had never become a spike and had no waiver; the owner chose to test it. Using the repo's own ESLint 9 and the already installed eslint-plugin-boundaries 7.2.0 on a throwaway fixture, 14/14: 34 module edges were generated from MODULE_MAP, the graph is acyclic, another module is reachable only through its `index.ts` along a graph edge, and deep, relative, type-only, dynamic-import and re-export bypasses plus against-graph dependencies are all blocked, failing CI. A static SQL scan caught a module reading another module's schema without false alarms, and the real repo is clean under today's rule.

@@ -3,21 +3,23 @@
 Last updated: 2026-09-21
 
 ```text
-PROJECT STATUS:      DESIGN
-CURRENT PHASE:       PHASE 06 — Validation Spikes (Phase 05 DONE 2026-09-20, owner approved)
-CURRENT SUBPHASE:    TESTING
+PROJECT STATUS:              DISCOVERY
+CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
+CURRENT SUBPHASE:    DISCOVER
 CURRENT FEATURE:     —
-CURRENT TASK:        Phase 06: seventeen spikes complete (01–17) and every roadmap candidate is covered (SPIKE-17 added for boundary enforcement, 14/14). Ready for the owner's Phase 06 exit decision. Open, not blocking the exit: public r2.dev URL (ADR-003), QTE→PRJ edge inconsistency, D-248 re-measure at hosting.
+CURRENT TASK:        Phase 07 kickoff: list the still-owed foundation items from the roadmap, run the mandatory question round grouped by category (PROJECT_RULES §3), write the PHASE DECISION SUMMARY, then open tasks with implementation plans (PROJECT_RULES §10). No Phase 07 task is open yet.
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
-CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 and CHG-006 are both folded. Normal ADR-007 rule applies — Phase 06 writes **throwaway spike code only** (never shipped); product code resumes in Phase 07 or via an approved change request.
+CODE ALLOWED:        Phase 07 permits product code (ADR-007), but only after the question round and a written implementation plan for each T1/T2 task (PROJECT_RULES §3, §10). Spike code is never merged; the scratchpad scripts stay outside the repository.
                      Tooling code that enforces the records (scripts/, .githooks/) is always allowed.
                      Already-shipped exceptions that remain valid: development-only sandboxes (D-052) and the CHG-004 shell transfer (TASK-0032…TASK-0037, owner approved).
                      Note: TASK-0034 and TASK-0037 also shipped module-namespaced sample screens (modules/sit/ui, modules/wfl/ui, modules/tsk/ui). They are sample data behind the shell, approved as part of CHG-004, and are re-wired when SIT and the workflow engine exist.
 ```
 
 ## LAST COMPLETED TASK
+Phase 06 DONE (2026-09-21, owner approved): seventeen spikes, every roadmap candidate covered; SPIKE-12 under the D-248 cold-start exception; no ADR changed. Carry-forward lists live in each spike report.
+
 2026-09-21: TASK-0098 DONE (SPIKE-17): boundary enforcement with the repo's own ESLint and eslint-plugin-boundaries, 14/14 — edges generated from MODULE_MAP, acyclic graph, index.ts-only access, all common bypasses blocked, schema-access scan working, real repo clean.
 
 2026-09-21: TASK-0097 DONE (SPIKE-16): local Tesseract reads a typical scanned dispatch note (10/10 search terms) and weighing slip (9/9) with Turkish diacritics intact; no document leaves the machine; poor scans become a quality flag. Harness corrections recorded with raw results.
@@ -61,21 +63,20 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Phase 06 exit: owner approval. All candidates PASS; carry-forward lists live in each spike report. Open items to carry: public r2.dev URL (ADR-003), QTE→PRJ sync-vs-event inconsistency (MODULE_BOUNDARIES section 3 vs MODULE_MAP), cold first request re-measure at hosting (D-248), EU bucket jurisdiction before real personnel files (D-249).
-2. TASK-0091 rollback DONE and deliberately partial: s12r_words_exact_cover dropped so the next cold run measures the product-equivalent baseline; the two range functions were kept because without that index the range rewrite is a free measurable win. Nine checks confirmed pkey, GiST, four functions and 500,411 rows survived.
-3. Carry to the Phase 07 search adapter: the exact-match range rewrite (free, measured) and a re-measurement of the cold first request on the chosen compute at the hosting decision (D-248, DEF-008).
-4. SPIKE-10 (TASK-0080) is DONE with the production font; the two same-day "defects" were a wrong subset file and my own extraction method, both retracted.
-5. SPIKE-11 (TASK-0081) is DONE: 30 checks cover the live traps and the missing/pending/recovery chain. Real persistence, queue and event bus stay with Phase 07 adapter tests.
-6. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076; no product code in Phase 06.
-7. TASK-0018: re-check memory-worker authentication after 2026-10-15; do not stop the worker or invoke cloud-sync.
+1. Phase 07 discovery: list the still-owed foundation items (roadmap Phase 07 section), then the question round grouped by category and the PHASE DECISION SUMMARY. Each spike report's "Phase 07'ye taşınanlar" list is an input.
+2. Owner action pending: disable the R2 bucket's public r2.dev URL (ADR-003) before any real file.
+3. Carry into Phase 07 design: cold first request re-measure at hosting (D-248, DEF-008); EU bucket jurisdiction before real personnel files (D-249); QTE→PRJ sync-versus-event inconsistency (MODULE_BOUNDARIES section 3 vs MODULE_MAP); exact-match range rewrite for the search adapter.
+4. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076.
+5. TASK-0018: re-check memory-worker authentication after 2026-10-15; do not stop the worker or invoke cloud-sync.
 
 ## BLOCKED BY
-Nothing blocks the remaining spikes on owner input except SPIKE-09, which needs R2 credentials. Search is closed under D-248; no product code in Phase 06.
+Nothing blocks the Phase 07 discovery. The question round will need owner answers. One owner action is open: disabling the public r2.dev URL (ADR-003).
 
 ## OPEN QUESTIONS
 See `ai/OPEN_QUESTIONS.md`. OQ-029 was answered 2026-09-21 by D-248 (cold-start exception). OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.
 
 ## RECENT DECISIONS
+- 2026-09-21: Phase 06 exit approved by the owner; Phase 07 is current.
 - D-249 (2026-09-21): the non-EU R2 bucket stays for synthetic data; EU jurisdiction is decided before real personnel files.
 - D-248 / CHG-008 (2026-09-21): cold-start exception for search latency — the first search after instance idle is exempt from 300 ms; warm searches stay bound; cold observations kept; re-measure at the hosting decision.
 - D-247 / CHG-007 (2026-09-20): scoped search helpers and all-words matching adopted; three tables added to the design, 215 total. No speed waiver.
