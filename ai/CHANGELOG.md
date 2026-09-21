@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-21 — SPIKE-10 passes with the production font; two findings retracted
+
+- TASK-0080 DONE. The old fallback to Times New Roman was not "subsets don't work". next/font emits one woff2 per subset with a unicode-range, the app already requests `latin` + `latin-ext`, and the spike had embedded only the preloaded `latin` file. Predicted and confirmed 6/6: c-cedilla, o-umlaut and u-umlaut render from that file, while g-breve, s-cedilla and dotted capital I fall back. With both files and their ranges, full Turkish text embeds no fallback at all.
+- Regenerated the quote and the daily report with the project's own Geist and no system or proprietary font, headers and footers included (Chrome's header/footer templates do not inherit page fonts and need their own @font-face). All four pages inspected. Geist moves the daily report's page break from 25 to 23 rows; continuity and the repeated header hold.
+- RETRACTED the earlier same-day claim that the text layer shatters and defeats archive search. Joining extracted runs by position finds every probe word in all four PDFs; my extractor, which joined runs with spaces, was the defect. The real rule is that the archive indexer must join by position, which matters more with Geist because g-breve, s-cedilla and dotted I come from a separate subset and form separate runs.
+- Also retracted the original report's "a full TTF must be embedded" condition; no full file or proprietary Arial is needed. Carried notes: Geist embeds as Type3 because it is a variable font, so test a static instance if an archival format is ever required; Linux Chromium size stays a hosting input under DEF-008. Ten spikes are now complete.
+
 ## 2026-09-21 — TCMB missing-rate chain tested; SPIKE-11 closed
 
 - TASK-0081 DONE. The three reopened behaviours — the `exchange_rate.missing` event, "kur bekliyor" amounts and next-day automatic completion — are now covered by 30 automated checks, all passing.

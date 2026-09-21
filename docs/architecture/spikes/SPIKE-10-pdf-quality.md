@@ -1,6 +1,6 @@
 # SPIKE-10 — Sunucuda üretilen PDF kalitesi
 
-Durum: İNCELEMEDE (görsel doğrulama yapıldı; yazı tipi kökeni ve metin katmanı açık) · Tarih: 2026-09-21 · İlgili: `DocumentRenderer` portu (`docs/architecture/PORTS_AND_SERVICES.md`), REQ-QTE, REQ-RPT
+Durum: GEÇTİ (üretim yazı tipi Geist ile, 2026-09-21; güncel sonuç belgenin son bölümündedir — önceki "tam dosya gerekir" koşulu ve "Kusur 2" orada düzeltilmiştir) · Tarih: 2026-09-21 · İlgili: `DocumentRenderer` portu (`docs/architecture/PORTS_AND_SERVICES.md`), REQ-QTE, REQ-RPT
 
 **Soru.** Teklif belgesi ve resmî günlük rapor, Türkçe karakterlerle ve tablo düzeni bozulmadan, A4'te basılabilir kalitede üretilebiliyor mu?
 
@@ -98,3 +98,88 @@ Görsel doğrulama eksiği kapandı. Buna karşılık iki yeni koşul açıldı�
 `DocumentRenderer` portunun başsız tarayıcı yönü değişmedi; bulunan iki kusur yön değil uygulama koşullarıdır. Hiçbir gereksinim gevşetilmedi, ürün kodu yazılmadı.
 
 Kanıt ve betikler dış scratchpad'de: `pdf-render.mjs` ve `render/*.png` (dört sayfa görüntüsü), `pdf-render-report.json`, `pdf-textdefect.mjs`, `font-identify.mjs`, mevcut `pdf-check.mjs`.
+
+## Kök neden bulundu, üretim yazı tipiyle geçti · 2026-09-21 (ikinci tur)
+
+Bu bölüm yukarıdaki iki bölümün sonuçlarını **düzeltir**. Hem ilk rapordaki "tam yazı tipi dosyası gömülmeli" koşulu hem de aynı gün yazılan "Kusur 2" yanlış bir nedene dayanıyordu. İkisi de silinmedi; tarihsel kayıt olarak yukarıda durur ve bu bölümle geçersiz sayılır.
+
+### Yazı tipi: sorun alt küme değil, eksik alt kümeydi
+
+İlk rapor, `next/font` alt kümesinin "sessizce Times New Roman'a düştüğünü" gözleyip **tam dosya gerektiği** sonucuna varmıştı. Gözlem doğru, çıkarım yanlıştı.
+
+`next/font`, Geist için alt küme başına ayrı bir woff2 üretir ve her birine `unicode-range` verir. Uygulamanın kendi ayarı zaten doğrudur: `src/app/layout.tsx` içinde `subsets: ["latin", "latin-ext"]`. Üretilen CSS okunduğunda:
+
+| Dosya | Alt küme | Kapsadığı Türkçe harfler |
+|---|---|---|
+| `caa3a2e1…` (29.288 bayt, önceden yüklenen) | `latin` | ç ö ü Ç Ö Ü ve **ı** (U+0131) |
+| `7178b3e5…` | `latin-ext` | **ğ ş İ Ğ Ş** (U+011E–U+015F) |
+
+Deneydeki `geist.woff2` birinci dosyanın birebir kopyasıdır (aynı boyut). Deney yalnız onu, `unicode-range` olmadan gömmüştü; tarayıcı ikinci dosyanın varlığından habersiz olduğu için ğ/ş/İ'yi yedek yazı tipine düşürdü.
+
+Bu, keskin bir tahminle sınandı ve **tahmin birebir tuttu** (`pdf-font-coverage.mjs`, 6/6):
+
+| Metin | Sonuç |
+|---|---|
+| Yalnız ASCII | yedek yok — alt küme çalışıyor |
+| `ç ö ü Ç Ö Ü` (U+00xx) | yedek yok |
+| `ğ ı ş Ğ İ Ş` | Times New Roman'a düştü |
+| Tam Arial TTF ile Türkçe | yalnız Arial |
+
+Ardından `next/font`'un kurallarını birebir taklit eden bir deneyle çözüm doğrulandı (`pdf-geist-full.mjs`, 3/3): `ı` tek başına `latin` dosyasında bulundu; yalnız `latin` ile tam Türkçe metin Times'a düştü (hata yeniden üretildi); **`latin` + `latin-ext` birlikte, kendi `unicode-range`'leriyle, tam Türkçe metni hiçbir yedek yazı tipi olmadan** çıkardı.
+
+### İki belge üretim yazı tipiyle yeniden üretildi
+
+Teklif ve günlük rapor, sistem yazı tipi ve tescilli Arial tamamen çıkarılarak, projenin kendi Geist dosyalarıyla yeniden üretildi (`pdf-html-geist.mjs`, `pdf-daily-geist.mjs`). Sonuç:
+
+| Kontrol | Teklif | Günlük rapor |
+|---|---|---|
+| Üretim süresi | 525 ms | 487 ms |
+| Dosya boyutu | 135 KB | 240 KB |
+| Gömülen sistem yazı tipi | **yok** | **yok** |
+| Üstbilgi / altbilgi yazı tipi | Geist | Geist, "Şereflikoçhisar" dahil |
+| Sayfa ölçüsü | 596×842 pt | 842×596 pt, iki sayfa |
+| Tekrar eden tablo başlığı | — | var |
+| Sayfa kırılması sürekliliği | — | sayfa 1 D-2 / %37,0 / 246 ile biter, sayfa 2 D-3 / %38,0 / 249 ile başlar; 23 + 11 = 34 satır |
+
+Dört sayfa da görüntüye çevrilip incelendi; taşma, kırpılma veya farklı yazı tipinden gelen glif yok. Geist, Arial'dan biraz daha geniş olduğu için sayfa 1'e 25 yerine **23 satır** sığdı ve teklifin giriş paragrafı farklı yerden kırıldı. Bu bir kusur değil; tam tersine düzenin neden **üretim yazı tipiyle** doğrulanması gerektiğinin somut kanıtıdır. Sistem yazı tipiyle yapılan önceki ölçümler bu yüzden temsil edici değildi.
+
+### Metin katmanı: kusur benim çıkarma yöntemimdeydi
+
+Aynı gün yazılan "Kusur 2", günlük raporun metin katmanının `Panel t i p i`, `B i t i ş`, `Ek i p` biçiminde parçalandığını ve arşiv aramasının bunları bulamayacağını söylüyordu. **Bu bulgu yanlıştı ve geri alınır.**
+
+Çıkarılan metin parçalarını arada boşlukla birleştiriyordum. Gerçek bir dizinleyici ise parçaları konuma göre birleştirir: aynı satırda ve aralarında görünür boşluk yoksa bitiştirir. İki yöntem dört PDF üzerinde karşılaştırıldı (`pdf-textlayer.mjs`):
+
+| Belge | Boşlukla birleştirme | Konuma göre birleştirme |
+|---|---|---|
+| Teklif, Segoe UI | 9/9 | 9/9 |
+| Teklif, Geist | 3/9 | **9/9** |
+| Günlük rapor, Arial | 7/10 | **10/10** |
+| Günlük rapor, Geist | 5/10 | **10/10** |
+
+Konuma göre birleştirmede **her sözcük her belgede bulunuyor.** PDF'teki karakterler doğru (ş gerçekten U+015F) ve doğru yerde; bölünme yalnız çıkarma sırasında oluşuyordu. Geist'te bölünme daha sık görülür, çünkü ğ/ş/İ ayrı `latin-ext` dosyasından çizildiği için PDF'te ayrı bir metin koşusu olur (`Biti` + `ş`, `İ` + `lerleme`).
+
+Geriye kalan gerçek gereksinim bir kusur değil, bir tasarım kuralıdır: **arşiv dizinleyicisi PDF metnini konuma göre birleştirmelidir.** Üretim yazı tipiyle bu kural zorunludur; aksi halde ğ, ş veya İ içeren her sözcük aramada kaybolur.
+
+### Bir incelik: Type3
+
+Chrome, Geist'i **Type3** yazı tipi olarak gömüyor (FontFile akışı yok). Geist değişken bir yazı tipi olduğundan tarayıcının PDF motoru onu sabit TrueType olarak gömemiyor. Type3 glifleri vektördür; 2× görüntülerde keskin çıktı ve metin çıkarımı doğru çalıştı. Ancak bazı arşiv biçimi doğrulayıcıları ve eski yazıcılar Type3'e daha kötü davranabilir. Belgelerin ileride PDF/A gibi bir arşiv biçiminde saklanması gerekirse, Geist'in sabit (değişken olmayan) bir örneğiyle ayrıca sınanmalıdır. Bu bir geçme koşulu değil, taşınan bir nottur.
+
+### Sonuç: GEÇTİ
+
+Soru — teklif belgesi ve resmî günlük rapor Türkçe karakterlerle, tablo düzeni bozulmadan, A4'te doğru çıkıyor mu — **üretimde kullanılacak yazı tipiyle** evet olarak cevaplandı. TASK-0080 kapanır.
+
+Aynı gün yazılan "üç çıkış koşulu" şöyle sonuçlandı:
+
+1. Paketlenebilir OFL yazı tipiyle yeniden üretim → **yapıldı ve geçti**; tam TTF veya tescilli Arial gerekmiyor.
+2. Metin çıkarımının parçalanmadığının gösterilmesi → **kusur olmadığı gösterildi**; kural konuma göre birleştirmedir.
+3. Linux'ta Chromium kurulum boyutu → spike'ın geçme ölçütü değil, barındırma kararının girdisidir. Barındırma D-245 ile ertelendiği için DEF-008 altında kalır; burada doğrulanamaz.
+
+### Phase 07/08'e taşınan notlar (yukarıdaki listeye ek)
+
+5. PDF şablonları, uygulamanın kullandığı aynı Geist `latin` + `latin-ext` dosyalarını, `next/font`'un ürettiği `unicode-range` kurallarıyla yükler. Tek bir alt küme dosyası seçmek Türkçe harfleri bozar.
+6. Chrome'un üstbilgi/altbilgi şablonları sayfanın `@font-face` kurallarını miras almaz. Şablonlara aynı yüzler ayrıca verilmelidir; verilmezse "Şereflikoçhisar" gibi başlıklar sistem yazı tipine düşer.
+7. Arşiv içerik araması (REQ-DOC-004) PDF metnini konuma göre birleştirir; parçaları boşlukla birleştiren bir dizinleyici Türkçe sözcükleri kaybeder. Bu, dizinleyicinin otomatik testiyle korunmalıdır.
+8. Sayfa düzeni ve kırılmaları üretim yazı tipiyle doğrulanır; başka yazı tipiyle alınan ölçüm geçerli sayılmaz.
+9. Geist Type3 olarak gömülür; arşiv biçimi gerekirse sabit bir örnekle ayrıca sınanır.
+
+Kanıt ve betikler dış scratchpad'de: `pdf-font-coverage.mjs`, `pdf-geist-full.mjs`, `geist-faces.mjs`, `pdf-html-geist.mjs`, `pdf-daily-geist.mjs`, `pdf-textlayer.mjs`, `pdf-textprobe.mjs`, `nextfont/` (projenin ürettiği woff2 dosyalarının kopyası), `render/*geist*.png` ve zaman damgalı JSON kanıtları.
