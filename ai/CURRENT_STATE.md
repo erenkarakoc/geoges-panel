@@ -7,7 +7,7 @@ PROJECT STATUS:      DESIGN
 CURRENT PHASE:       PHASE 06 — Validation Spikes (Phase 05 DONE 2026-09-20, owner approved)
 CURRENT SUBPHASE:    TESTING
 CURRENT FEATURE:     —
-CURRENT TASK:        Phase 06: fourteen spikes complete (01–14). SPIKE-13 passed 12/12 on 2026-09-21 after fixing a stale-counter defect its first run exposed. Remaining: SPIKE-15 (photo upload on a weak connection), SPIKE-16 (OCR). Open ADR-003 item: public r2.dev URL enabled by the owner.
+CURRENT TASK:        Phase 06: fifteen spikes complete (01–15). SPIKE-15 passed 11/11 on 2026-09-21. Remaining: SPIKE-16 (OCR on the panel's own infrastructure) — needs owner permission to download an OCR engine and Turkish model. Open ADR-003 item: public r2.dev URL enabled.
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -18,6 +18,8 @@ CODE ALLOWED:        The owner's freeze (2026-09-17) ENDED 2026-09-18: CHG-005 a
 ```
 
 ## LAST COMPLETED TASK
+2026-09-21: TASK-0096 DONE (SPIKE-15): photo resized in the browser 24.6x, uploaded in offset-checked chunks through the app to R2 over a simulated weak link; after an offline window it resumed from the server-reported offset with 0 bytes resent; the draft autosave retried and a reload restored everything. Offline entry stays deferred (DEF-002).
+
 2026-09-21: TASK-0095 DONE (SPIKE-13): SSE signal channel in real headless Chrome. First run failed: a signal arrived while the count request failed offline, leaving the counter stale ~18 s; fixed with count-request retry and `online` refresh, then 12/12. A 503 permanently closes the native EventSource, so a backoff wrapper is required; frames carry only the signal type.
 
 2026-09-21: TASK-0094 DONE (SPIKE-09): 17/17 against R2. Links are issued only for documents visible under the caller's RLS scope; unsigned, tampered and expired links are refused; 50 MB downloads intact with a Turkish filename; a slow download outlives its link, and resuming a cut download needs a fresh re-authorised link with Range. Nothing left in R2 or the database.
@@ -55,7 +57,7 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Remaining Phase 06 spikes: SPIKE-15 (photo upload on a weak connection, uses the R2 bucket), SPIKE-16 (OCR). Each builds a small fixture and removes it when done. OPEN ADR-003 item: the owner enabled the bucket's public r2.dev URL (every object readable unsigned) — recommended disabling; no real file while it is on. The non-EU bucket stays for now (D-249), revisited before real personnel files.
+1. Remaining Phase 06 spike: SPIKE-16 (OCR on own infrastructure), pending owner permission for the OCR engine and Turkish model download. Then Phase 06 exit review. Each builds a small fixture and removes it when done. OPEN ADR-003 item: the owner enabled the bucket's public r2.dev URL (every object readable unsigned) — recommended disabling; no real file while it is on. The non-EU bucket stays for now (D-249), revisited before real personnel files.
 2. TASK-0091 rollback DONE and deliberately partial: s12r_words_exact_cover dropped so the next cold run measures the product-equivalent baseline; the two range functions were kept because without that index the range rewrite is a free measurable win. Nine checks confirmed pkey, GiST, four functions and 500,411 rows survived.
 3. Carry to the Phase 07 search adapter: the exact-match range rewrite (free, measured) and a re-measurement of the cold first request on the chosen compute at the hosting decision (D-248, DEF-008).
 4. SPIKE-10 (TASK-0080) is DONE with the production font; the two same-day "defects" were a wrong subset file and my own extraction method, both retracted.

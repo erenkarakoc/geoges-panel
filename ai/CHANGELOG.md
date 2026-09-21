@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-21 — SPIKE-15 passes: resumable photo upload and a draft that survives the drop
+
+- TASK-0096 DONE. Online-only frame (DEF-002). A synthetic 4032x3024 phone photo was resized in the browser to 1600x1200 (5.86 MB to 238 KB) and uploaded in 64 KB offset-checked chunks through the app server to R2 over a simulated 256 kbit/s link, with an 8 s offline window while the user changed the form. 11/11: the upload resumed from the server-reported offset with no byte resent, the stored object matched the resized photo byte for byte, the draft autosave retried and kept the offline change, and a reload restored the form and the attached photo.
+- From the log: the chunk in flight at the cut had actually reached the server, which is why the resume offset must be asked of the server; the deliberate server-side drop was absorbed by Chrome's own retry of a reused connection, so it did not test our logic; and the `online` event should cut the retry backoff short, since the upload waited 7.5 s after reconnecting.
+- Limits: closing the tab while offline loses unsaved input and a pending photo, which is the deferred offline-entry boundary; EXIF, HEIC and a real camera were not tested. Fifteen spikes are complete; SPIKE-16 remains.
+
 ## 2026-09-21 — SPIKE-13 finds and fixes a stale-counter defect
 
 - TASK-0095 DONE. A local SSE server and real headless Chrome with two differently scoped users. The first run failed: during a 10 s offline window the still-open stream delivered three signals, but every follow-up count request failed, and without a reconnect the counter stayed wrong for about 18 s. Fixed by retrying failed count requests with backoff and refreshing on the browser `online` event; the failing evidence is kept.
