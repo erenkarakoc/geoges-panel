@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-21 — SPIKE-16 passes; all sixteen listed spikes complete, one candidate unaccounted for
+
+- TASK-0097 DONE. Local Tesseract (downloaded with the owner's permission) read synthetic scans without any document leaving the machine. Measured as searchability with the search normalisation: on a realistic scan the dispatch note matched all 10 search terms and the weighing slip all 9, with Turkish diacritics exact and the net weight extractable, at about one second per page. A poor, faded 100 dpi scan lost some terms (6/10, 8/9), which becomes a low-confidence flag and rescan prompt rather than a reason to send documents out.
+- The harness changed three times after failures were seen, each applied uniformly with raw results kept: a dark default page background that hid all text, a second sparse-text pass because bordered table rows were skipped, and a spacing cleanup between digits and punctuation. Real anonymised scans must confirm it in Phase 07.
+- All sixteen listed spikes are complete. Before the Phase 06 exit, one gap was found: the roadmap's candidate "architecture boundary enforcement tooling" was never turned into a spike and has no waiver; it has been put to the owner.
+
 ## 2026-09-21 — SPIKE-15 passes: resumable photo upload and a draft that survives the drop
 
 - TASK-0096 DONE. Online-only frame (DEF-002). A synthetic 4032x3024 phone photo was resized in the browser to 1600x1200 (5.86 MB to 238 KB) and uploaded in 64 KB offset-checked chunks through the app server to R2 over a simulated 256 kbit/s link, with an 8 s offline window while the user changed the form. 11/11: the upload resumed from the server-reported offset with no byte resent, the stored object matched the resized photo byte for byte, the draft autosave retried and kept the offline change, and a reload restored the form and the attached photo.
