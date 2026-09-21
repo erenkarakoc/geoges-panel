@@ -68,7 +68,7 @@ export function findSchemaViolations(root = ROOT, schemas = schemaNames()) {
     for (const name of readdirSync(dir)) {
       const path = join(dir, name);
       if (statSync(path).isDirectory()) walk(path);
-      else if (/\.(ts|tsx)$/.test(name) && !/\.test\.tsx?$/.test(name)) scan(path);
+      else if (/\.(ts|tsx)$/.test(name) && !/\.(test|dbtest)\.tsx?$/.test(name)) scan(path);
     }
   };
   const scan = (file) => {

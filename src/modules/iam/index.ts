@@ -11,3 +11,28 @@ export {
 } from "./application/auth-routing";
 export { readAuthSession, verifyRecoveryToken } from "./application/auth-session";
 export type { AuthSession } from "./domain/auth-provider";
+
+// Permission service (TASK-0102, PERMISSIONS.md). Module data layers write their RLS policies with
+// the `iam.*` database functions; server code asks these.
+export {
+  AccessDeniedError,
+  actingIdentity,
+  approvalOwner,
+  assertCan,
+  chooseActingRole,
+  managerOf,
+  readEffectivePermissions,
+  signInIdentity,
+} from "./application/access";
+export {
+  COMPANY,
+  can,
+  canSee,
+  iamRuleMessage,
+  scopeOf,
+  visibleColumns,
+  type ActingRole,
+  type DataClass,
+  type PermissionSnapshot,
+  type ScopeItem,
+} from "./domain/permissions";

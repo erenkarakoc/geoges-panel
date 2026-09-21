@@ -56,10 +56,11 @@ Panel örnek veriyle gelir: örnek şantiye, örnek proje, örnek kullanıcılar
 - Yapılandırmayı da fabrika ayarına döndürmek için: `npm run db:reset:config` — önce yapılandırmanızın bir kopyasını `exports/` klasörüne alır, sonra onay için `SIFIRLA` yazmanızı ister.
 - Örnek veriyi yeniden yüklemek için: `npm run db:sample`.
 - Gerçek veri girildiği gün iki komut da kilitlenecek (`ENVIRONMENTS.md` bölüm 4a).
+- Örnek kişiler sıfırlamayla silinir; sizin hesabınız ve gerçek hesaplar hiçbir sıfırlamada silinmez. Yapılandırmayı sıfırladığınızda sahip rolünüz başlangıç verisiyle kendiliğinden geri gelir (D-256).
 
 ## 8. Giriş
 
-Kurulumla birlikte size bir sahip hesabı ve parolası iletilir. İlk girişte iki adımlı doğrulamayı telefonunuzdaki doğrulama uygulamasıyla kurarsınız (Google Authenticator, Microsoft Authenticator veya benzeri). Kurtarma kodlarınızı bir yere kaydedin (D-236).
+Kurulumla birlikte size bir sahip hesabı ve parolası iletilir. Hesap Supabase'de açıldıktan sonra panele sahip olarak bağlanır: `npm run iam:bootstrap-owner -- <e-posta>` (TASK-0102). İlk girişte iki adımlı doğrulamayı telefonunuzdaki doğrulama uygulamasıyla kurarsınız (Google Authenticator, Microsoft Authenticator veya benzeri). Kurtarma kodlarınızı bir yere kaydedin (D-236).
 
 ## 9. Bir sorun çıkarsa
 

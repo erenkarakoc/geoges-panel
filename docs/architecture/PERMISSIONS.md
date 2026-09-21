@@ -1,6 +1,6 @@
 # Kimlik, Yetki ve Görünürlük Mimarisi
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-22
 
 REQ-IAM'in ve yetki matrisinin (`docs/domain/PERMISSION_MATRIX.md`) mimarisi: kim kimdir, bir işlemin yapılıp yapılamayacağına nerede karar verilir, veri nasıl süzülür. Görev: TASK-0060. Kararlar: D-230, D-236.
 
@@ -74,3 +74,10 @@ Giriş ve çıkışlar, başarısız denemeler, rol atamaları ve bitişleri, ve
 
 - Phase 04: her tablonun kapsam sütunu ve RLS politikası; veri sınıfı sütun düzeyinde nasıl işaretlenir; yetki anlık görüntüsünün veritabanında nasıl temsil edildiği.
 - Phase 06 denemesi: çok rollü + vekâletli + kapsamlı bir kullanıcı için RLS'in doğru ve yeterince hızlı çalıştığı; yetki değişiminin açık oturumlara ne kadar sürede yansıdığı.
+
+## 9. Kurulum (TASK-0102, D-256)
+
+- Etkin yetki veritabanında hesaplanır: `iam.my_grants()` izin + rol + kapsam kümesini, `iam.my_data_classes()` modül ve kapsam bazında veri sınıfı izinlerini verir. Sunucu bunları istek başına bir kez okur (`modules/iam`: `readEffectivePermissions`, `assertCan`, `visibleColumns`); önbellek istek bitince ölür, böylece bölüm 2'deki "anında geçersizleşme" bir sonraki istekte gerçekleşir.
+- RLS politikaları aynı işlevlerle yazılır (`docs/database/CONVENTIONS.md` bölüm 10); sunucu ile veritabanı aynı tablolardan okur.
+- Bölüm 2–5'teki kurallar ya testle ya veritabanı kısıtıyla karşılanır: sahip katmanı hiçbir yoldan daraltılamaz; akış tasarlama yetkisi tam görünürlüklü olmayan role bağlanamaz; vekâlet yalnız verenin taşıdığı rol ve kapsam için verilir ve bitişte kendiliğinden düşer.
+- Ekranlar (Kullanıcılar & Roller, rol seçimi sorusu) ve kabuğun gerçek yetkiye bağlanması kendi dilimlerinde gelir; bölüm 6'nın kurtarma kodu, geçici kilit ve hareketsizlik kuralları TASK-0112'dedir.

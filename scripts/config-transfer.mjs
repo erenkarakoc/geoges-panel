@@ -2,11 +2,12 @@
 /**
  * Configuration export and import (TASK-0076, D-246, ENVIRONMENTS section 4b).
  *
- * Export writes every `config` table's rows to one JSON file together with the database's last
+ * Export writes every portable `config` table's rows to one JSON file together with the database's last
  * applied migration. Import loads such a file into another environment on the same migration:
  * a row missing in the target is added, an identical row is skipped, and a row that differs is
  * a conflict. One conflict writes nothing; every conflict is reported by table and key. Business
- * data and search helpers never enter the file.
+ * data, search helpers and configuration that names people (role assignments, personal
+ * exceptions, manual managers; D-256) never enter the file.
  *
  *   npm run config:export [-- <file>]           default exports/config-<time>.json
  *   npm run config:import -- <file> [--dry-run]
@@ -124,10 +125,14 @@ async function advanceSequences(client, name, columns) {
   }
 }
 
-/** The export object; `schemas` limits it to some schemas (tests). */
+/**
+ * The export object; `schemas` limits it to some schemas (tests).
+ * @param {import("pg").Client} client
+ * @param {{ schemas?: string[] | null, now?: Date }} [options]
+ */
 export async function exportConfig(client, { schemas = null, now = new Date() } = {}) {
   const tables = {};
-  for (const name of await tablesInLayers(client, ["config"], schemas)) {
+  for (const name of await tablesInLayers(client, ["config"], schemas, { portableOnly: true })) {
     tables[name] = await readRows(client, name, await tableShape(client, name));
   }
   return {
@@ -152,10 +157,12 @@ export async function importConfig(client, data, { dryRun = false, schemas = nul
       throw new Error(
         `hedef veritabanı ${head} göçünde, dosya ${data.migration_head} göçünden; önce göçleri eşitleyin`,
       );
-    const configTables = new Set(await tablesInLayers(client, ["config"], schemas));
+    const configTables = new Set(
+      await tablesInLayers(client, ["config"], schemas, { portableOnly: true }),
+    );
     const unknown = Object.keys(data.tables).filter((t) => !configTables.has(t));
     if (unknown.length)
-      throw new Error(`hedefte yapılandırma tablosu olmayanlar: ${unknown.join(", ")}`);
+      throw new Error(`hedefte taşınabilir yapılandırma tablosu olmayanlar: ${unknown.join(", ")}`);
 
     const { references } = await readLayerState(client);
     const order = dependencyOrder(Object.keys(data.tables), references);

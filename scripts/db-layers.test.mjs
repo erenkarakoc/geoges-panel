@@ -50,6 +50,39 @@ describe("table layer rules (TASK-0076)", () => {
     expect(layerProblems(s)).toEqual([`x.a (${a}) must not reference x.b (${b})`]);
   });
 
+  it.each([
+    ["config", "system"],
+    ["seed", "system"],
+  ])("lets %s data point at %s data (people's accounts are never emptied, D-256)", (a, b) => {
+    const s = state({ "x.a": a, "x.b": b }, [{ from: "x.a", to: "x.b" }]);
+    expect(layerProblems(s)).toEqual([]);
+  });
+
+  it("keeps portable configuration from pointing at people or non-portable rows (D-256)", () => {
+    const s = state(
+      {
+        "iam.role": "config",
+        "iam.role_permission": "config",
+        "iam.role_assignment": "config",
+        "iam.user": "system",
+        "adm.catalog": "seed",
+      },
+      [
+        { from: "iam.role_permission", to: "iam.role" },
+        { from: "iam.role", to: "adm.catalog" },
+        { from: "iam.role_assignment", to: "iam.role" },
+        { from: "iam.role_assignment", to: "iam.user" },
+        { from: "iam.role", to: "iam.user" },
+        { from: "iam.role_permission", to: "iam.role_assignment" },
+      ],
+    );
+    s.portable = new Set(["iam.role", "iam.role_permission"]);
+    expect(layerProblems(s)).toEqual([
+      "iam.role (portable config) must not reference iam.user (system, not portable)",
+      "iam.role_permission (portable config) must not reference iam.role_assignment (config, not portable)",
+    ]);
+  });
+
   it("requires a primary key on configuration and factory tables", () => {
     const s = state({ "wfl.flow": "config", "sit.log": "business" }, [], ["wfl.flow", "sit.log"]);
     expect(layerProblems(s)).toEqual(["wfl.flow is config data and needs a primary key"]);

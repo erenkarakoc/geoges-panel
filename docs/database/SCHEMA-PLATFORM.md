@@ -1,6 +1,6 @@
 # Şema — Platform (IAM, AUD, DOC, WFL, TSK, ADM)
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-22
 
 Platform modüllerinin tabloları. Ortak kurallar `docs/database/CONVENTIONS.md`'dedir ve burada tekrar edilmez: her tabloda `id`, oluşturma/güncelleme izleri, kapsam sütunu, RLS politikası ve geçmiş kanalı vardır. Alan modeli: `docs/domain/DOMAIN_MODEL.md`. Görev: TASK-0066.
 
@@ -10,19 +10,22 @@ Sütun listeleri **ayırt edici** olanları verir; ortak sütunlar yazılmaz.
 
 | Tablo | Ne tutar | Ayırt edici sütunlar | Notlar |
 |---|---|---|---|
-| `iam.user` | Panele giren kişi | `email`, `status` (active/disabled), `auth_provider_id`, `employee_id` (HR, nullable), `must_setup_2fa` | Kendi kendine kayıt yok. `auth_provider_id` Supabase Auth kimliği (ADR-002) |
-| `iam.role` | Dinamik rol | `code`, `name`, `level`, `parent_role_id`, `is_owner_layer`, `has_full_visibility` | `has_full_visibility` sütunu D-083'ün dayanağı: akış tasarlama yetkisi yalnız burada `true` olan role verilebilir (kısıt) |
-| `iam.permission` | Yetki tipi | `code`, `module`, `name`, `created_from` (admin/designer) | Akış tasarımcısından gelen de aynı tabloya yazılır (REQ-IAM-016) |
-| `iam.role_permission` | Rol × yetki | `role_id`, `permission_id` | |
+| `iam.user` | Panele giren kişi | `email`, `display_name`, `status` (active/disabled), `auth_provider_id`, `employee_id` (HR, nullable), `must_setup_2fa`, `left_on`, `is_bootstrap_owner`, `is_sample` | Kendi kendine kayıt yok. `id` Supabase Auth kullanıcı kimliğidir, `auth_provider_id` ayrıca tutulur (ADR-002, D-256). `system` katmanı: hiçbir sıfırlama gerçek hesabı silmez; `is_sample` örnek kişiyi, `is_bootstrap_owner` fabrika ayarından sonra sahip rolünü geri alacak kişiyi işaretler. Ayrılış tarihinden itibaren hiçbir yetki taşımaz (REQ-IAM-007) |
+| `iam.role` | Dinamik rol | `code`, `name`, `description`, `level`, `parent_role_id`, `is_owner_layer`, `has_full_visibility`, `is_active` | `has_full_visibility` sütunu D-083'ün dayanağı: akış tasarlama yetkisi yalnız burada `true` olan role verilebilir (kısıt). Tam görünürlük bütün `view` yetkilerini ve veri sınıflarını şirket genelinde verir; sahip katmanı her zaman tam görünürlüktedir. Fabrika şablonları: `db/seeds/0001_iam_role_templates.sql` |
+| `iam.permission` | Yetki tipi | `code` (`modül.nesne.eylem`), `module`, `name`, `created_from` (seed/admin/designer), `is_active` | Akış tasarımcısından gelen de aynı tabloya yazılır (REQ-IAM-016). Fabrika yetkileri matrisin modül düzeyindeki karşılığıdır: `.manage` (Y), `.view` (G), `.own` (K) |
+| `iam.role_permission` | Rol × yetki | `role_id`, `permission_id`, `revoked_at` | Silinmez; geri alma `revoked_at` ile. Sahip katmanının tuttuğu geri alınamaz (REQ-IAM-024) |
 | `iam.role_data_class` | Rolün modül bazında veri sınıfı izni | `role_id`, `module`, `can_see_commercial`, `can_see_sensitive` | `PERMISSION_MATRIX.md`'nin t/h işaretlerinin karşılığı |
-| `iam.role_assignment` | Kişiye rol | `user_id`, `role_id`, `scope_type` (company/site/project), `scope_ids[]`, `starts_on`, `ends_on`, `is_delegation`, `delegated_by_user_id`, `reason` | Vekâlet ayrı tablo değil, süreli atamadır (REQ-IAM-018) |
-| `iam.user_exception` | Kişisel istisna | `user_id`, `module_or_screen`, `effect` (grant/deny), `reason` | Yalnız sahip yazar (REQ-IAM-015) |
-| `iam.user_manager` | Elle amir ataması | `user_id`, `manager_user_id`, `scope_type`, `scope_ids[]` | Yoksa amir rol hiyerarşisinden gelir (REQ-IAM-014) |
+| `iam.role_assignment` | Kişiye rol | `user_id`, `role_id`, `scope_type` (company/site/project), `scope_ids[]`, `starts_on`, `ends_on`, `is_delegation`, `delegated_by_user_id`, `reason` | Vekâlet ayrı tablo değil, süreli atamadır (REQ-IAM-018); yalnız verenin bütün kapsam ve sürede taşıdığı rol devredilir (REQ-IAM-019). Bitirme `ends_on` ile |
+| `iam.user_exception` | Kişisel istisna | `user_id`, `target` (yetki kodu veya modül kodu), `effect` (grant/deny), `scope_type`, `scope_ids[]`, `reason`, `revoked_at` | Yalnız sahip yazar (REQ-IAM-015). Modül açma `view` yetkilerini açar, modül kapatma hepsini kapatır; kapatma şirket genelidir. Sahip katmanına kapatma yazılamaz |
+| `iam.user_manager` | Elle amir ataması | `user_id`, `manager_user_id`, `scope_type`, `scope_ids[]`, `revoked_at` | Yoksa amir rol hiyerarşisinden gelir (REQ-IAM-014) |
+| `iam.user_action_role_choice` | Hatırlanan rol seçimi | `user_id`, `permission_code`, `role_id` | İki rolü aynı işleme izin veren kişiye bir kez sorulur (REQ-IAM-013) |
 | `iam.recovery_code` | 2FA kurtarma kodu | `user_id`, `code_hash`, `used_at` | Kod yalnız üretim anında gösterilir (D-236) |
 | `iam.login_attempt` | Giriş denemesi | `email`, `succeeded`, `ip`, `user_agent`, `locked_until` | Geçici kilidin dayanağı (REQ-IAM-005) |
 | `iam.session` | Açık oturum | `user_id`, `last_seen_at`, `expires_at`, `device_label` | 30 gün / 3 gün hareketsizlik (D-230); pasifleşen kullanıcının satırları silinmez, `revoked_at` yazılır |
 
 **Kısıtlar.** Akış tasarlama yetkisi, `has_full_visibility = false` olan bir role bağlanamaz (`ck`/tetikleyici). Sahip katmanındaki rolün veri sınıfı izinleri kapatılamaz (IAM-K1). Aynı kullanıcı-rol-kapsam için çakışan tarih aralığı olamaz.
+
+**Kuruldu (TASK-0102, 0003 göçü, D-256).** Yukarıdaki kısıtlara ek olarak: sahip katmanı hiçbir yoldan daraltılamaz (rol, atama, yetki, veri sınıfı, istisna, hesap pasifleştirme); tam görünürlüklü rol yalnız tüm şirket kapsamıyla atanır; rol hiyerarşisinde döngü olamaz. Kayıt, yetki, atama ve istisna tabloları taşınabilirliğe göre ayrılır: rol, yetki tipi, rol-yetki ve rol-veri sınıfı `config:export` ile taşınır; kişi adı taşıyan atama, istisna, elle amir ve rol seçimi taşınmaz. Etkin yetki `iam.my_grants()` ve `iam.my_data_classes()` ile hesaplanır; modül politikaları `iam.has_company_scope`, `iam.scope_ids`, `iam.can_see` ve `iam.acting_role_valid` ile yazılır (`CONVENTIONS.md` bölüm 10). `iam.recovery_code`, `iam.login_attempt` ve `iam.session` TASK-0112'de kurulur.
 
 ## aud — Geçmiş, denetim, revizyon
 

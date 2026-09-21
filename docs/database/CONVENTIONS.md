@@ -74,7 +74,7 @@ m² gibi türetilen ölçüler **saklanır ve hesaplandığı kural sürümüyle
 ## 10. Satır düzeyi güvenlik
 
 - **Her tabloda RLS açıktır.** Politikasız tablo yoktur; yeni tablo eklerken politika aynı göçte yazılır.
-- Politika kapsam sütunlarını ve kullanıcının etkin yetkisini okur (`PERMISSIONS.md` bölüm 2).
+- Politika kapsam sütunlarını ve kullanıcının etkin yetkisini okur (`PERMISSIONS.md` bölüm 2). Etkin yetki `iam.*` işlevleriyle okunur (TASK-0102); kalıp: `(select iam.has_company_scope('sit.module.view')) or site_id = any ((select iam.scope_ids('sit.module.view', 'site'))::uuid[])`. Alt sorgu biçimi işlevin sorgu başına bir kez çalışmasını sağlar. Yazma politikaları `iam.acting_role_valid()` ile kişinin taşımadığı bir rolün kaydedilmesini de reddeder.
 - RLS'i atlayan servis bağlantısı yalnız göçler ve outbox işleyicisi içindir (ADR-015).
 
 ## 11. Göç düzeni
@@ -84,7 +84,7 @@ m² gibi türetilen ölçüler **saklanır ve hesaplandığı kural sürümüyle
 - Üretimde tabloyu kilitleyen işlemler (büyük `ALTER`) ayrı bakım penceresinde çalışır; Phase 05 bunu işletim tarafında tanımlar.
 - Başlangıç verisi (roller, yetki tipleri, varsayılan kataloglar, akış şablonları) ayrı ve tekrar çalıştırılabilir dosyalardadır (`db/seeds/`); satırları sabit kimliklidir, çünkü başka ortama taşınan yapılandırma onlara kimlikle başvurur.
 - Her göçün yanında geri alma dosyası (`NNNN_ad.down.sql`) durur ya da göç `-- irreversible: <neden>` satırıyla nedenini söyler; göç aracı ikisi de yoksa çalışmaz. Uygulanmış göç dosyası hiç değiştirilmez, yorumu bile; düzeltme yeni göçtür (TASK-0101).
-- **Her tablo katmanını kaydeder (D-246, TASK-0076):** tabloyu oluşturan göç `core.table_layer`'a `seed`, `config`, `business` veya `system` satırını da yazar. Yabancı anahtar yönü: `seed` → `seed`; `config` → `seed`, `config`; `system` → `system`; `business` → hepsi. `seed` ve `config` tablolarının birincil anahtarı vardır. Göç aracı bu kurallara aykırı göçü geri alır; geri alma dosyası tablonun kaydını da siler.
+- **Her tablo katmanını kaydeder (D-246, TASK-0076):** tabloyu oluşturan göç `core.table_layer`'a `seed`, `config`, `business` veya `system` satırını da yazar. Yabancı anahtar yönü: `seed` → `seed`, `system`; `config` → `seed`, `config`, `system`; `system` → `system`; `business` → hepsi (hesaplar `system`'dedir ve hiçbir sıfırlamada silinmez, D-256). Yapılandırma varsayılan olarak başka ortama **taşınabilir** değildir; taşınacak tablo kaydına `portable = true` yazar. Taşınabilir tablo kişilere (`system`) ya da taşınamayan satırlara başvuramaz; bu yüzden iz sütunları (`created_by_user_id`, `updated_by_user_id`, `created_in_role_id`) yapılandırma tablolarında yabancı anahtar değildir. `system` tablosunda örnek satır `is_sample` sütunuyla işaretlenir; iki sıfırlama bu satırları ve onlara başvuranları siler. `seed` ve `config` tablolarının birincil anahtarı vardır. Göç aracı bu kurallara aykırı göçü geri alır; geri alma dosyası tablonun kaydını da siler.
 
 ## 12. Sınama
 

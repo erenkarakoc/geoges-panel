@@ -47,7 +47,7 @@ Panelin nerede çalıştığı, verinin nerede durduğu ve canlıya geçerken ne
 - `config:export` yapılandırmayı tek bir dosyaya çıkarır: akış tanımları ve sürümleri, kataloglar, tarihli kurallar, özel alan tanımları, roller ve yetki tipleri, kayıt türü tanımları.
 - `config:import` bunu başka bir ortama yükler; çakışan anahtarlar raporlanır, sessizce üzerine yazılmaz. Tek bir çakışma bile varsa hiçbir satır yazılmaz; `-- --dry-run` yalnız raporlar. Hedefin son göçü dosyadakiyle aynı olmalıdır.
 - Canlıya geçerken ikinci Supabase projesi bu dosyayla kurulur; yerelde kurduğunuz akışlar elle tekrarlanmaz.
-- İş verisi bu dosyaya **girmez**; yalnız yapılandırma taşınır.
+- İş verisi bu dosyaya **girmez**; yalnız yapılandırma taşınır. Kişi adı taşıyan yapılandırma da girmez (rol atamaları, kişisel istisnalar, elle amirler; D-256): kişilerin kimliği her ortamda farklıdır, atamalar hedef ortamda yeniden yapılır. Roller, yetki tipleri ve rollerin tuttukları taşınır.
 
 ## 5. Göçler
 

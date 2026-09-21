@@ -116,6 +116,8 @@ const eslintConfig = defineConfig([
   },
   {
     files: ["src/modules/*/data/**/*.{ts,tsx}"],
+    // Real-database tests open their own pool as the runtime role (TASK-0101 pattern).
+    ignores: ["src/**/*.dbtest.ts"],
     rules: {
       "no-restricted-imports": [
         "error",

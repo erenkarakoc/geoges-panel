@@ -56,9 +56,9 @@ beforeAll(async () => {
       flow_id uuid references ${P}.flow,
       name text not null
     );
-    insert into core.table_layer (schema_name, table_name, layer) values
-      ('${P}', 'catalog', 'seed'), ('${P}', 'flow', 'config'),
-      ('${P}', 'rule', 'config'), ('${P}', 'site', 'business');
+    insert into core.table_layer (schema_name, table_name, layer, portable) values
+      ('${P}', 'catalog', 'seed', false), ('${P}', 'flow', 'config', true),
+      ('${P}', 'rule', 'config', true), ('${P}', 'site', 'business', false);
   `);
 });
 

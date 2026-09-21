@@ -6,6 +6,9 @@
  * table names. The migration runner calls `checkLayers` after each migration: an unregistered
  * table, a foreign key pointing the wrong way between layers, or a transferable table without a
  * primary key rolls the migration back.
+ *
+ * Configuration is portable (moved by config:export/import) unless its register row says
+ * otherwise; rows that name people are not, because people's ids differ per environment (D-256).
  */
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
@@ -19,17 +22,18 @@ export const SAMPLES_DIR = resolve(ROOT, "db/samples");
 /**
  * Which layers a table of each layer may reference. Business data may point anywhere; nothing
  * may point at business data except business data, so emptying it never breaks configuration
- * and exported configuration never depends on a business record.
+ * and exported configuration never depends on a business record. Seed and configuration may
+ * point at system tables (people's accounts), which no command ever empties (D-256).
  */
 const MAY_REFERENCE = {
-  seed: ["seed"],
-  config: ["seed", "config"],
+  seed: ["seed", "system"],
+  config: ["seed", "config", "system"],
   system: ["system"],
   business: LAYERS,
 };
 
 /** Rule violations, as readable lines; empty when the database follows the layer rules. */
-export function layerProblems({ tables, registered, references, primaryKeys }) {
+export function layerProblems({ tables, registered, references, primaryKeys, portable = null }) {
   const problems = [];
   const actual = new Set(tables);
   for (const table of tables) {
@@ -46,6 +50,9 @@ export function layerProblems({ tables, registered, references, primaryKeys }) {
     const b = registered.get(to);
     if (a && b && !MAY_REFERENCE[a].includes(b))
       problems.push(`${from} (${a}) must not reference ${to} (${b})`);
+    // Portable configuration travels alone: it cannot point at people or non-portable rows.
+    else if (portable && a === "config" && portable.has(from) && b !== "seed" && !portable.has(to))
+      problems.push(`${from} (portable config) must not reference ${to} (${b}, not portable)`);
   }
   return problems;
 }
@@ -90,8 +97,14 @@ export async function readLayerState(client) {
       where c.relkind in ('r', 'p') and not c.relispartition and n.nspname = any($1)`,
     [schemas],
   );
+  const { rows: portableColumn } = await client.query(
+    `select 1 from information_schema.columns
+      where table_schema = 'core' and table_name = 'table_layer' and column_name = 'portable'`,
+  );
   const registered = await client.query(
-    "select schema_name || '.' || table_name as name, layer from core.table_layer",
+    `select schema_name || '.' || table_name as name, layer,
+            ${portableColumn.length ? "portable" : "false"} as portable
+       from core.table_layer`,
   );
   const references = await client.query(
     `select fn.nspname || '.' || fc.relname as "from", tn.nspname || '.' || tc.relname as "to"
@@ -111,6 +124,7 @@ export async function readLayerState(client) {
   return {
     tables: tables.rows.map((r) => r.name).sort(),
     registered: new Map(registered.rows.map((r) => [r.name, r.layer])),
+    portable: new Set(registered.rows.filter((r) => r.portable).map((r) => r.name)),
     references: references.rows,
     primaryKeys: new Set(keys.rows.map((r) => r.name)),
   };
@@ -121,11 +135,20 @@ export async function checkLayers(client) {
   if (problems.length) throw new Error(`table layer rules broken:\n  ${problems.join("\n  ")}`);
 }
 
-/** Registered tables of the given layers, optionally limited to some schemas (tests). */
-export async function tablesInLayers(client, layers, schemas = null) {
+/**
+ * Registered tables of the given layers, optionally limited to some schemas (tests) or to
+ * portable configuration (config:export/import).
+ */
+export async function tablesInLayers(
+  client,
+  layers,
+  schemas = null,
+  { portableOnly = false } = {},
+) {
   const { rows } = await client.query(
     `select schema_name, table_name from core.table_layer
       where layer = any($1) and ($2::text[] is null or schema_name = any($2))
+        ${portableOnly ? "and portable" : ""}
       order by schema_name, table_name`,
     [layers, schemas],
   );
@@ -148,7 +171,12 @@ export async function assertNoRealData(client) {
     );
 }
 
-/** Empties every table of the given layers in one statement. Returns the emptied tables. */
+/**
+ * Empties every table of the given layers in one statement. Returns the emptied tables.
+ * @param {import("pg").Client} client
+ * @param {string[]} layers
+ * @param {string[] | null} [schemas]
+ */
 export async function emptyLayers(client, layers, schemas = null) {
   const tables = await tablesInLayers(client, layers, schemas);
   if (tables.length)
@@ -156,6 +184,53 @@ export async function emptyLayers(client, layers, schemas = null) {
       `truncate table ${tables.map((t) => quoteTable(client, t)).join(", ")} restart identity`,
     );
   return tables;
+}
+
+/**
+ * Removes sample rows kept in `system` tables (D-256): sample people live in `iam.user`, which no
+ * reset empties, flagged `is_sample`. Every row pointing at them through a foreign key goes first
+ * (their role assignments, managers, exceptions), then the sample rows themselves. Works from the
+ * catalog, like every other reset step. Returns the tables touched and the rows removed.
+ * @param {import("pg").Client} client
+ * @param {string[] | null} [schemas]
+ */
+export async function removeSampleRows(client, schemas = null) {
+  const { rows: flagged } = await client.query(
+    `select l.schema_name || '.' || l.table_name as name
+       from core.table_layer l
+       join information_schema.columns c
+         on c.table_schema = l.schema_name and c.table_name = l.table_name
+        and c.column_name = 'is_sample' and c.data_type = 'boolean'
+      where l.layer = 'system' and ($1::text[] is null or l.schema_name = any($1))
+      order by 1`,
+    [schemas],
+  );
+  let removed = 0;
+  for (const { name } of flagged) {
+    const target = quoteTable(client, name);
+    const { rows: refs } = await client.query(
+      `select fn.nspname || '.' || fc.relname as "from", fa.attname as col, ta.attname as key
+         from pg_constraint k
+         join pg_class fc on fc.oid = k.conrelid join pg_namespace fn on fn.oid = fc.relnamespace
+         join pg_attribute fa on fa.attrelid = k.conrelid and fa.attnum = k.conkey[1]
+         join pg_attribute ta on ta.attrelid = k.confrelid and ta.attnum = k.confkey[1]
+        where k.contype = 'f' and k.confrelid = $1::regclass and cardinality(k.conkey) = 1
+          and k.conrelid <> k.confrelid
+        order by 1, 2`,
+      [target],
+    );
+    for (const ref of refs) {
+      const { rowCount } = await client.query(
+        `delete from ${quoteTable(client, ref.from)}
+          where ${client.escapeIdentifier(ref.col)} in
+                (select ${client.escapeIdentifier(ref.key)} from ${target} where is_sample)`,
+      );
+      removed += rowCount;
+    }
+    const { rowCount } = await client.query(`delete from ${target} where is_sample`);
+    removed += rowCount;
+  }
+  return { tables: flagged.map((f) => f.name), removed };
 }
 
 /** `NNNN_name.sql` files of a folder in name order; a missing folder has none. */

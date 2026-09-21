@@ -1,6 +1,6 @@
 # Veri Kapsama Denetimi
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-22
 
 Phase 04 çıkış denetimi: verisi olan her gereksinimin bir tablosu var mı, her tablonun kapsam sütunu, RLS politikası ve geçmiş kanalı var mı, adlandırma standartlara uyuyor mu. Görev: TASK-0072. Kabul ölçütü `ai/MASTER_ROADMAP.md` Phase 04'tedir.
 
@@ -8,7 +8,7 @@ Phase 04 çıkış denetimi: verisi olan her gereksinimin bir tablosu var mı, h
 
 | Şema | Tablo | Gereksinim dosyası |
 |---|---|---|
-| `iam` | 11 | REQ-IAM (27) |
+| `iam` | 12 | REQ-IAM (27) |
 | `aud` | 4 | REQ-AUD (10) |
 | `doc` | 3 | REQ-DOC (10) |
 | `wfl` | 8 | REQ-WFL (39) |
@@ -34,9 +34,9 @@ Phase 04 çıkış denetimi: verisi olan her gereksinimin bir tablosu var mı, h
 | `int` | 5 | REQ-INT (14) |
 | `str` | 7 | REQ-STR (8) |
 | `cst` | 6 | REQ-WFL-035…039 |
-| **Toplam** | **215** | 438 gereksinim |
+| **Toplam** | **216** | 438 gereksinim |
 
-İlk Phase 04 belgeleri 212 tablo içeriyordu; önceki toplamın 211 yazılması sayım hatasıydı (TASK-0092). CHG-007 / D-247 üç türetilmiş arama tablosu ekledi. REQ-NFR-012 artık bu yardımcılarla birlikte core.search_row üzerinden açıkça izlenir. Tasarım sayısıdır; göç uygulanmış tablo sayısı değildir.
+İlk Phase 04 belgeleri 212 tablo içeriyordu; önceki toplamın 211 yazılması sayım hatasıydı (TASK-0092). CHG-007 / D-247 üç türetilmiş arama tablosu ekledi. REQ-NFR-012 artık bu yardımcılarla birlikte core.search_row üzerinden açıkça izlenir. TASK-0102, işlemde hangi rolün seçildiğini hatırlayan `iam.user_action_role_choice` tablosunu ekledi (REQ-IAM-013, D-256). Tasarım sayısıdır; göç uygulanmış tablo sayısı değildir.
 
 MIG (veri aktarımı) ertelendiği için tablosu yoktur (DEF-001).
 

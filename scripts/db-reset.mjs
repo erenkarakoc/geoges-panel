@@ -6,13 +6,20 @@
  *   npm run db:reset:config   exports the configuration to a file first, then returns
  *                             configuration and factory data to factory state; asks first
  *
- * Both run in one transaction, rebuild factory data (db/seeds) afterwards, and refuse once the
- * environment is marked as holding real data.
+ * Both run in one transaction, remove sample people (flagged rows in `system` tables, D-256),
+ * rebuild factory data (db/seeds) afterwards, and refuse once the environment is marked as
+ * holding real data. Real accounts are never removed.
  */
 import { pathToFileURL } from "node:url";
 
 import { confirmed, connectAdmin, safeError } from "./db-admin.mjs";
-import { SEEDS_DIR, assertNoRealData, emptyLayers, runSqlFolder } from "./db-layers.mjs";
+import {
+  SEEDS_DIR,
+  assertNoRealData,
+  emptyLayers,
+  removeSampleRows,
+  runSqlFolder,
+} from "./db-layers.mjs";
 import { writeExport } from "./config-transfer.mjs";
 
 export const RESET_LAYERS = {
@@ -28,9 +35,10 @@ export async function reset(client, mode, { schemas = null, seedsDir = SEEDS_DIR
   try {
     await assertNoRealData(client);
     const emptied = await emptyLayers(client, layers, schemas);
+    const samples = await removeSampleRows(client, schemas);
     const seeded = await runSqlFolder(client, seedsDir);
     await client.query("commit");
-    return { emptied, seeded };
+    return { emptied, samples, seeded };
   } catch (error) {
     await client.query("rollback").catch(() => {});
     throw error;
@@ -50,8 +58,10 @@ async function run(mode) {
       const out = await writeExport(client);
       console.log(`yedek dışa aktarım: ${out.path} (${out.tables} tablo, ${out.rows} satır)`);
     }
-    const { emptied, seeded } = await reset(client, mode);
-    console.log(`boşaltılan tablo: ${emptied.length}; başlangıç verisi dosyası: ${seeded.length}`);
+    const { emptied, samples, seeded } = await reset(client, mode);
+    console.log(
+      `boşaltılan tablo: ${emptied.length}; silinen örnek kişi satırı: ${samples.removed}; başlangıç verisi dosyası: ${seeded.length}`,
+    );
     console.log(mode === "data" ? "örnek iş verisi temizlendi" : "yapılandırma fabrika ayarında");
   } finally {
     await client.end();
