@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-21 — Phase 07 discovery: plan, three owner answers, thirteen tasks
+
+- Every still-owed foundation item already had a design from Phases 03–05; the plan in `docs/features/phase-07-foundation-plan.md` links each one to its sources, the spike carry-forwards and a task, in dependency order.
+- Discovery found two scheduling gaps and one piece of news for an owner decision. CHG-009: the owner decided the self-hosted Supabase move at the very end, in Phase 19 before real data (D-250); put the confirmed site-wide search into the Phase 07 foundation, which no build phase held (D-251); and accepted that iPhone push needs the panel on the Home Screen (D-252). npm 11 and Node 24 became final as a technical default (D-253, closes OQ-017). Phase 07's stale "deployment to staging" wording was corrected, and its estimate rises to about 10–13 working days.
+- Opened TASK-0099…TASK-0111 under a new Phase 07 heading. No code yet: each T1/T2 task writes its implementation plan first, and the plan awaits the owner's approval.
+
 ## 2026-09-21 — Phase 06 closed with owner approval; Phase 07 begins
 
 - The owner approved the Phase 06 exit. Seventeen spikes are complete and every roadmap candidate is covered: SPIKE-01–11 and 13–17 passed, SPIKE-12 passed under the cold-start exception (D-248). No architecture decision had to change; each report lists what it hands to Phase 07.

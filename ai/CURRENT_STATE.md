@@ -3,11 +3,11 @@
 Last updated: 2026-09-21
 
 ```text
-PROJECT STATUS:              DISCOVERY
+PROJECT STATUS:              DESIGNING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
-CURRENT SUBPHASE:    DISCOVER
+CURRENT SUBPHASE:    PLAN
 CURRENT FEATURE:     —
-CURRENT TASK:        Phase 07 kickoff: list the still-owed foundation items from the roadmap, run the mandatory question round grouped by category (PROJECT_RULES §3), write the PHASE DECISION SUMMARY, then open tasks with implementation plans (PROJECT_RULES §10). No Phase 07 task is open yet.
+CURRENT TASK:        Phase 07 plan written (`docs/features/phase-07-foundation-plan.md`), awaiting owner approval. Question round done: D-250 self-host at Phase 19, D-251 search in the foundation, D-252 iPhone push condition accepted, D-253 npm + Node 24. Thirteen tasks opened (TASK-0099…TASK-0111); first is TASK-0099.
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -63,7 +63,7 @@ Earlier: Phase 01 DONE (2026-09-19, owner approved): 438 CONFIRMED requirements 
 Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006, 0012, 0013; stale records corrected (ADR-013 status, AI_SKILLS claude-mem/Next.js notes, GIT_WORKFLOW Phase 00 direct-to-`main` exception, OQ-018/019 numbering note). Completion report in `ai/MASTER_ROADMAP.md`.
 
 ## NEXT TASK
-1. Phase 07 discovery: list the still-owed foundation items (roadmap Phase 07 section), then the question round grouped by category and the PHASE DECISION SUMMARY. Each spike report's "Phase 07'ye taşınanlar" list is an input.
+1. Owner approves the Phase 07 plan; then start TASK-0099 with its implementation plan (PROJECT_RULES §10). Order: foundation (0099, 0100, 0043, 0054) → data access (0101, 0076) → IAM (0102) → audit and outbox (0103, 0104) → configuration (0105, 0106) → services (0107–0110) → shell (0028) → M1 (0111).
 2. Owner action pending: disable the R2 bucket's public r2.dev URL (ADR-003) before any real file.
 3. Carry into Phase 07 design: cold first request re-measure at hosting (D-248, DEF-008); EU bucket jurisdiction before real personnel files (D-249); QTE→PRJ sync-versus-event inconsistency (MODULE_BOUNDARIES section 3 vs MODULE_MAP); exact-match range rewrite for the search adapter.
 4. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076.
@@ -76,6 +76,7 @@ Nothing blocks the Phase 07 discovery. The question round will need owner answer
 See `ai/OPEN_QUESTIONS.md`. OQ-029 was answered 2026-09-21 by D-248 (cold-start exception). OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.
 
 ## RECENT DECISIONS
+- CHG-009 / D-250…D-253 (2026-09-21): self-host move decided in Phase 19 before real data; site-wide search built in the Phase 07 foundation; iPhone Home Screen condition for push accepted; npm 11 + Node 24 final.
 - 2026-09-21: Phase 06 exit approved by the owner; Phase 07 is current.
 - D-249 (2026-09-21): the non-EU R2 bucket stays for synthetic data; EU jurisdiction is decided before real personnel files.
 - D-248 / CHG-008 (2026-09-21): cold-start exception for search latency — the first search after instance idle is exempt from 300 ms; warm searches stay bound; cold observations kept; re-measure at the hosting decision.

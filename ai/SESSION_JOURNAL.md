@@ -112,3 +112,4 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-21 11:30:44Z · bf800d5c · Write · `docs/architecture/spikes/SPIKE-15-field-photo-upload.md`
 - 2026-09-21 11:39:32Z · bf800d5c · Write · `docs/architecture/spikes/SPIKE-16-ocr-in-house.md`
 - 2026-09-21 12:22:08Z · bf800d5c · Write · `docs/architecture/spikes/SPIKE-17-boundary-enforcement.md`
+- 2026-09-21 13:54:15Z · bf800d5c · Write · `docs/features/phase-07-foundation-plan.md`

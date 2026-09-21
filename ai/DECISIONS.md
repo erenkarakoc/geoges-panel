@@ -2,6 +2,21 @@
 
 Last updated: 2026-09-21
 
+## CHG-009 — Phase 07 scheduling: search foundation, self-host timing, iPhone push (D-250…D-253)
+
+Phase 07 discovery (2026-09-21) found two scheduling gaps and one piece of new information affecting an owner decision; the owner answered all three on 2026-09-21. Plan: `docs/features/phase-07-foundation-plan.md`.
+
+| ID | Decision | Ref |
+|---|---|---|
+| D-250 | **The move to self-hosted Supabase is decided at the very end: in Phase 19, before any real data is entered.** The Slice 1 pilot runs on whatever hosting is chosen at the Phase 09 exit (DEF-008); because real use only starts in Phase 19 (D-216), the move still happens with sample data only. The self-hosted backup design (WAL archiving for the one-hour RPO, D-209) belongs to the same step. | Owner 2026-09-21 ("en sonda"); DEF-004, ADR-002 |
+| D-251 | **Site-wide search is built in the Phase 07 foundation**: the search port, the search row and its three derived helpers (D-247), event-driven update and rebuild, and the command palette shell. Each slice only registers its own record types. This schedules a confirmed requirement that no build phase held; it does not change scope. | Owner 2026-09-21; REQ-NFR-012, ADR-017, TASK-0029, TASK-0110 |
+| D-252 | **Instant phone notifications on iPhone require adding the panel to the Home Screen (iOS 16.4+), and this is accepted.** The user guide and the first sign-in show an "add to Home Screen" step; without it, notifications still appear in the panel. Android has no such condition. | Owner 2026-09-21; D-132, TASK-0108 |
+| D-253 | **Package manager and runtime: npm 11 and Node 24 LTS**, exact-pinned versions and a committed lockfile (closes OQ-017). A technical default already in use since M0; recorded, not asked. | AI technical decision 2026-09-21; OQ-017 |
+
+- **Change and reason:** Phase 07's scope did not include the confirmed site-wide search, although every slice must feed the search row; DEF-004 had no decision point despite the owner's stated intention to self-host; and D-132's browser push has an iPhone condition the owner had not been told. The Phase 07 scope text still said "deployment to staging", which D-245 had removed; corrected in the same change.
+- **Affected:** roadmap Phase 07 scope and estimate (about 8–11 to 10–13 working days), Phase 19 scope (self-host step), DEF-004 revisit point, TASK-0029 build moved into TASK-0110, TASK-0108 scope. No requirement, database design or permission rule changes.
+- **Risks and rollback:** search in the foundation lengthens Phase 07 but shortens Slice 1; reversible by moving TASK-0110 to Phase 09. Self-hosting last means the pilot runs on managed hosting; moving before real data keeps the migration cheap.
+
 ## Storage decisions after SPIKE-09 (2026-09-21)
 
 | ID | Decision | Ref |

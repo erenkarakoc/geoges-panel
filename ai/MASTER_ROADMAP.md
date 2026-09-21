@@ -48,7 +48,7 @@ Measured so far (2026-09-15…20, six days, 135 commits): Phase 00 half a day; P
 | 04 Database architecture | 2–3 |
 | 05 Infrastructure & operations | 1–2 |
 | 06 Validation spikes | 1–2 |
-| 07 Foundation build (remainder) | 8–11 |
+| 07 Foundation build (remainder, incl. search foundation, D-251) | 10–13 |
 | 08 Workflow engine & designer | 6–9 |
 | 09 Slice 1 | 7–10 |
 | 09R Record-type builder | 5–7 |
@@ -73,6 +73,7 @@ Every approved change request must appear here, with the phase it changed. Analy
 
 | CHG-007 | Scoped derived search indexes and word matching | Approved 2026-09-20 (D-247). Folds the Phase 02 search behavior, Phase 03 ADR-017 and Phase 04 three-table extension (215 planned tables); Phase 05 extension/rebuild inventory and Phase 07 adapter obligations updated. Phase order unchanged. Phase 06 latency validation closed 2026-09-21 under CHG-008 | DONE 2026-09-21 |
 | CHG-008 | Cold-start exception for search latency | Approved 2026-09-21 (D-248). Amends the SPIKE-12 pass criterion and ADR-017: warm searches stay under 300 ms, the first search after instance idle is exempt; cold observations are kept. Closes TASK-0090/0091 and unblocks SPIKE-14. No phase moved, no product code | DONE 2026-09-21 |
+| CHG-009 | Phase 07 scheduling: search foundation, self-host timing, iPhone push | Approved 2026-09-21 (D-250…D-253). Adds the site-wide search foundation to **Phase 07** (estimate ~10–13 days); adds the self-hosted Supabase move to **Phase 19**, before real data; corrects Phase 07's stale "deployment to staging" (D-245). No requirement or data model change | DONE 2026-09-21 |
 
 ## Work delivered ahead of its phase
 
@@ -218,7 +219,7 @@ STATUS: DONE
 
 ## PHASE 07 — Foundation Build
 
-- **Scope:** repository scaffold (Next.js, TypeScript, COSS, Tailwind, lint/format/boundary rules, test setup), CI pipeline, environments, design tokens and app shell, IAM (auth, 2FA, roles, delegation, visibility), audit & history, revision request mechanism core, documents/storage, outbox & jobs, notifications & tasks core, catalogs & custom fields, currency & calendar, deployment to staging.
+- **Scope:** repository scaffold (Next.js, TypeScript, COSS, Tailwind, lint/format/boundary rules, test setup), CI pipeline, environments, design tokens and app shell, IAM (auth, 2FA, roles, delegation, visibility), audit & history, revision request mechanism core, documents/storage, outbox & jobs, notifications & tasks core, catalogs & custom fields, currency & calendar, site-wide search foundation (D-251). No staging: local-first (D-245); hosted deployment returns at the Phase 09 exit (DEF-008). Plan: `docs/features/phase-07-foundation-plan.md`.
 - **Dependencies:** Phase 06.
 - **Status:** `IN_PROGRESS` — **current phase since 2026-09-21** (Phase 06 exit approved). First step: the mandatory question round and implementation plans before any Phase 07 code (PROJECT_RULES §3, §10). Earlier partial delivery, kept as the record of what is owed:  Delivered ahead of the phase by M0 and CHG-004: scaffold, lint/boundary rules and test setup (TASK-0023), real Supabase authentication with TOTP 2FA and session guard (TASK-0024, TASK-0025), app shell with navigation registry, theme and brand tokens, role onboarding (TASK-0026, TASK-0032…TASK-0036). **Still owed:** CI pipeline, environments and staging deploy, dynamic roles / delegation / acting role / visibility, audit & history, revision-request core, documents & storage, outbox & jobs, notifications & tasks core, catalogs & custom fields, currency & calendar.
 - **Milestone M1 — first review on the owner's own machine (CHG-001, redefined by CHG-005 2026-09-17, redefined again by D-245 2026-09-20):** the original M1 ("owner sees the authentication pages and the shell for the first time") was consumed by M0 and CHG-004. The staging definition (D-074) fell away when the owner chose to run local-first with no staging environment. M1 is now the **local acceptance** milestone: the owner installs and runs the panel themselves following `docs/infrastructure/LOCAL_SETUP.md`, signs in with 2FA and walks a complete flow. The deployed-environment milestone returns as part of the Phase 09 exit, with the hosting decision (DEF-008).
@@ -266,5 +267,5 @@ Ten slices were merged into seven on 2026-09-20 at the owner's request (D-229): 
 
 ## PHASE 19 — Production Readiness & Company-wide Rollout
 
-- **Scope:** security review of the whole system, performance & load review, backup restore drill, runbooks, user training material, rollout plan, go-live checklist, hypercare.
+- **Scope:** move to self-hosted Supabase before any real data, with WAL archiving for the one-hour RPO (D-250, D-209); security review of the whole system, performance & load review, backup restore drill, runbooks, user training material, rollout plan, go-live checklist, hypercare.
 - **Acceptance:** all slices DONE; restore drill passed; owner sign-off.
