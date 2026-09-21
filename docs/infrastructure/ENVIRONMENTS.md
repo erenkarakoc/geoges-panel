@@ -52,10 +52,10 @@ Panelin nerede çalıştığı, verinin nerede durduğu ve canlıya geçerken ne
 ## 5. Göçler
 
 - Şema değişiklikleri sıralı göç dosyalarıdır; her göç Git'te durur ve tek yönde ilerler (`docs/database/CONVENTIONS.md` bölüm 11).
-- Göç çalıştırmadan önce veritabanının yedeği alınır (bölüm 7).
+- Gerçek veri girildikten sonra göç çalıştırmadan önce veritabanının yedeği alınır (bölüm 7, D-255).
 - Başlangıç verisi (roller, yetki tipleri, kataloglar, akış şablonları) tekrar çalıştırılabilir dosyalardadır; örnek veri ayrı bir dosyadır ve canlıda hiç çalıştırılmaz.
 
-**Kuruldu (TASK-0101, 2026-09-22):** göçler `db/migrations/` altında düz SQL dosyalarıdır; her birinin yanında geri alma dosyası (`.down.sql`) durur ya da neden olmadığı dosyada yazılıdır. Komutlar: `npm run db:migrate` (bekleyenleri uygular), `-- --status` (yalnız listeler), `-- --rollback-last` (son göçü geri alır); `npm run db:backup` göç öncesi dökümü alır ve ilk göçten sonra döküm olmadan göç çalışmaz. Uygulama veritabanına yalnız kısıtlı `geoges_app` rolüyle ve doğrulanmış TLS ile bağlanır (`DATABASE_APP_URL`); parolasını `npm run db:app-role` üretir. Döküm için bu makinede PostgreSQL 17 komut satırı araçları gerekir (bugün kurulu değil).
+**Kuruldu (TASK-0101, 2026-09-22):** göçler `db/migrations/` altında düz SQL dosyalarıdır; her birinin yanında geri alma dosyası (`.down.sql`) durur ya da neden olmadığı dosyada yazılıdır. Komutlar: `npm run db:migrate` (bekleyenleri uygular), `-- --status` (yalnız listeler), `-- --rollback-last` (son göçü geri alır); `npm run db:backup` döküm alır; ortam gerçek veri ortamı olarak işaretlendikten sonra (`npm run db:mark-real-data`) son bir saatte alınmış döküm olmadan göç çalışmaz, test döneminde döküm gerekmez (D-255). Uygulama veritabanına yalnız kısıtlı `geoges_app` rolüyle ve doğrulanmış TLS ile bağlanır (`DATABASE_APP_URL`); parolasını `npm run db:app-role` üretir. Döküm için PostgreSQL 17 komut satırı araçları gerekir; bu makinede bugün kurulu değil, gerçek veriden önce kurulur.
 
 ## 6. Canlıya geçerken değişecekler (ertelenen kararlar)
 
@@ -74,7 +74,7 @@ Bu tablo `ai/DEFERRED.md`'deki DEF-008 ile eşleşir; unutulmaması için Phase 
 
 ## 7. Yedek ve geri dönüş (bugünkü hâli)
 
-- **Veritabanı:** Supabase'in günlük otomatik yedeği. Ayrıca her göçten önce ve haftada bir elle tam döküm alınır; döküm geliştirme makinesinde ve bir harici diskte saklanır.
+- **Veritabanı:** test döneminde veri örnek veridir ve elle döküm zorunlu değildir (D-255, sahip 2026-09-22); kayıp olursa göçler ve başlangıç verisi yeniden kurulur. Test projesi Supabase Free Plan'dadır ve otomatik yedeği yoktur. Gerçek veri işaretinden sonra her göçten önce ve haftada bir elle tam döküm alınır; döküm geliştirme makinesinde ve bir harici diskte saklanır.
 - **Dosyalar:** R2 kovasının sürümleme özelliği açıktır; silme geri alınabilir.
 - **Geri dönüş denemesi:** gerçek veri girmeden önce en az bir kez tam geri dönüş denenir ve süresi yazılır (REQ-NFR-019, REQ-DOC yedek maddesi). Bu, canlıya geçiş kapısının şartıdır.
 - RPO ≤ 1 saat ve RTO ≤ 4 saat hedefleri (REQ-NFR-018, REQ-NFR-019) **canlı ortam için** geçerlidir; yerel dönemde ölçülmez, ama tasarım bunları karşılayacak şekilde kurulur.

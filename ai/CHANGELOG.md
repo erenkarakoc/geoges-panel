@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-22 — Two resets, a lock and portable configuration
+
+- TASK-0076 DONE (D-246). `npm run db:reset:data` clears sample business data and keeps your flows and definitions; `npm run db:reset:config` first saves your configuration to a file, asks you to type SIFIRLA, then returns everything to factory state. `npm run config:export` / `config:import` carry configuration to another environment; if even one row differs, nothing is written and the differences are listed. Once the environment is marked as holding real data, both resets are locked.
+- The commands never keep a list of tables: every table states its layer when it is created, and a migration that forgets to is rolled back.
+- Owner decision D-255: while we are testing, migrations no longer need a backup first; the requirement returns automatically once real data is marked.
+
 ## 2026-09-22 — The panel has its own database door
 
 - TASK-0101 DONE (T1; CI run 35655520185 green). The application now reaches the database only as a restricted login role that cannot bypass row level security, create roles or delete rows, and only over TLS verified against Supabase's own root certificate, which the operating system does not trust by default (measured). Every request runs in one transaction that first writes the signed-in user as transaction-local settings; after commit or rollback nothing is left on the pooled connection, and a connection whose rollback fails is destroyed rather than reused. Driver, query builder and database door can only be imported from a module's data layer, and SQL statements may only live there.

@@ -12,7 +12,6 @@ import {
   BACKUP_MAX_AGE_MS,
   backupProblem,
   checksum,
-  isThrowAwayDatabase,
   latestBackupTime,
   planMigrations,
   readMigrations,
@@ -64,15 +63,6 @@ describe("migration runner (TASK-0101)", () => {
     expect(readMigrations().length).toBeGreaterThan(0);
   });
 
-  it("skips the dump only for CI's throw-away database on this machine", () => {
-    expect(isThrowAwayDatabase({ CI: "true" }, "localhost")).toBe(true);
-    expect(isThrowAwayDatabase({ CI: "true" }, "aws-0-eu-west-1.pooler.supabase.com")).toBe(false);
-    expect(isThrowAwayDatabase({}, "localhost")).toBe(false);
-    expect(
-      backupProblem({ appliedCount: 1, pendingCount: 1, backupTime: null, throwAway: true }),
-    ).toBeNull();
-  });
-
   it("rejects badly named files and duplicate numbers", () => {
     expect(() => readMigrations(folder({ "1_a.sql": "-- irreversible: x" }))).toThrow(
       /0001_short_name/,
@@ -115,26 +105,26 @@ describe("migration runner (TASK-0101)", () => {
   });
 });
 
-describe("pre-migration dump rule (TASK-0101)", () => {
+describe("pre-migration dump rule (TASK-0101, D-255)", () => {
   const now = Date.parse("2026-09-21T12:00:00Z");
 
-  it("needs no dump before the very first migration", () => {
-    expect(backupProblem({ appliedCount: 0, pendingCount: 1, backupTime: null, now })).toBeNull();
+  it("needs no dump while the environment holds only test data", () => {
+    expect(backupProblem({ realData: false, pendingCount: 1, backupTime: null, now })).toBeNull();
   });
 
-  it("needs a dump once anything has been applied", () => {
-    expect(backupProblem({ appliedCount: 1, pendingCount: 1, backupTime: null, now })).toMatch(
+  it("needs a dump once the environment holds real data", () => {
+    expect(backupProblem({ realData: true, pendingCount: 1, backupTime: null, now })).toMatch(
       /no dump found/,
     );
   });
 
   it("refuses a dump older than an hour and accepts a fresh one", () => {
     const old = now - BACKUP_MAX_AGE_MS - 1;
-    expect(backupProblem({ appliedCount: 1, pendingCount: 1, backupTime: old, now })).toMatch(
+    expect(backupProblem({ realData: true, pendingCount: 1, backupTime: old, now })).toMatch(
       /older than an hour/,
     );
     expect(
-      backupProblem({ appliedCount: 1, pendingCount: 1, backupTime: now - 60_000, now }),
+      backupProblem({ realData: true, pendingCount: 1, backupTime: now - 60_000, now }),
     ).toBeNull();
   });
 

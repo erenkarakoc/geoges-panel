@@ -1,6 +1,6 @@
 # Yedekleme ve Felaket Kurtarma
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-22
 
 Veri kaybına ve uzun kesintiye karşı plan. Hedefler gereksinimden gelir: **en çok 1 saatlik veri kaybı (RPO ≤ 1 saat)** ve **en çok 4 saatlik kesinti (RTO ≤ 4 saat)** (REQ-NFR-018, REQ-NFR-019). Görev: TASK-0077. İlgili: `docs/infrastructure/ENVIRONMENTS.md`, D-231 (hiçbir kayıt zamanla silinmez).
 
@@ -21,11 +21,11 @@ Kod ve göçler zaten iki yerde (yerel + GitHub). Asıl risk veritabanı ve dosy
 | Ne | Sıklık | Nerede durur | Saklama |
 |---|---|---|---|
 | Supabase otomatik yedeği | Günlük | Supabase | Planın verdiği süre |
-| Elle tam döküm (`pg_dump`) | Haftada bir **ve her göçten önce** | Geliştirme makinesi + harici disk | Son 8 döküm |
+| Elle tam döküm (`pg_dump`) | Gerçek veri işaretinden sonra haftada bir **ve her göçten önce**; test döneminde isteğe bağlı (D-255) | Geliştirme makinesi + harici disk | Son 8 döküm |
 | Yapılandırma dışa aktarımı | Her önemli akış değişikliğinden sonra | Git'e bağlı olmayan bir klasör | Son 5 sürüm |
 | R2 sürümleme | Sürekli | R2 | Silinen dosya 30 gün geri alınabilir |
 
-Bu dönemde veri örnek veridir; kayıp tahammül edilebilir. Yine de göç öncesi döküm zorunludur: hatalı bir göç, üzerinde çalıştığınız yapılandırmayı bozabilir.
+Bu dönemde veri örnek veridir; kayıp tahammül edilebilir. Sahip 2026-09-22'de test döneminde göç öncesi dökümü kaldırdı (D-255): hatalı bir göçte göçler ve başlangıç verisi yeniden kurulur, emek verilen yapılandırma `config:export` dosyasıyla korunur. Ortam `npm run db:mark-real-data` ile gerçek veri ortamı olarak işaretlendiği an göç aracı döküm olmadan çalışmayı yeniden reddeder.
 
 ## 3. Gerçek veriden önce zorunlu olanlar
 

@@ -7,9 +7,9 @@
  * an applied file that later changes, disappears or is joined by an older-numbered file stops
  * the run, because the database would no longer match the repository. A transaction-level
  * advisory lock keeps two runs from applying the same file (a session lock is not safe on the
- * transaction pooler). A dump younger than an hour is required before any migration once one
- * has been applied (BACKUP_AND_RECOVERY section 2); before the first there is nothing to keep,
- * and CI's throw-away database on localhost needs none.
+ * transaction pooler). Once the environment is marked as holding real data, a dump younger than
+ * an hour is required before any migration or rollback (D-255, BACKUP_AND_RECOVERY section 2);
+ * before that, everything in it is test data and no dump is required.
  *
  * Every migration is reversible (CONVENTIONS section 11): it comes with `NNNN_name.down.sql`,
  * or says why not in a `-- irreversible:` line, in which case the way back is the dump. CI
@@ -25,7 +25,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
-import { ROOT, adminConfig, connectAdmin, readEnvFile, safeError } from "./db-admin.mjs";
+import { ROOT, connectAdmin, readEnvFile, safeError } from "./db-admin.mjs";
 import { SEEDS_DIR, checkLayers, hasLayerRegister, runSqlFolder } from "./db-layers.mjs";
 
 export const MIGRATIONS_DIR = resolve(ROOT, "db/migrations");
@@ -109,20 +109,12 @@ export function latestBackupTime(dir = BACKUPS_DIR) {
   return times.length ? Math.max(...times) : null;
 }
 
-/** CI's database: created empty for the run on the same machine and thrown away after it. */
-export function isThrowAwayDatabase(env, host) {
-  return env.CI === "true" && ["localhost", "127.0.0.1", "::1"].includes(host);
-}
-
-/** Null when the run may go ahead, otherwise the reason it may not. */
-export function backupProblem({
-  appliedCount,
-  pendingCount,
-  backupTime,
-  throwAway = false,
-  now = Date.now(),
-}) {
-  if (pendingCount === 0 || appliedCount === 0 || throwAway) return null;
+/**
+ * Null when the run may go ahead, otherwise the reason it may not. A dump is required only once
+ * the environment holds real data (D-255): before that everything in it is test data.
+ */
+export function backupProblem({ realData, pendingCount, backupTime, now = Date.now() }) {
+  if (pendingCount === 0 || !realData) return null;
   if (backupTime === null) return "no dump found in backups/; run `npm run db:backup` first";
   if (now - backupTime > BACKUP_MAX_AGE_MS)
     return "the newest dump is older than an hour; run `npm run db:backup` first";
@@ -203,10 +195,19 @@ async function rollbackLast(client, files, applied) {
   }
 }
 
+/** True once db:mark-real-data has marked the environment (TASK-0076). */
+async function holdsRealData(client) {
+  const { rows } = await client.query("select to_regclass('core.environment') as t");
+  if (!rows[0].t) return false;
+  const flag = await client.query(
+    "select real_data_started_at is not null as real from core.environment",
+  );
+  return flag.rows[0]?.real === true;
+}
+
 async function run({ statusOnly, rollback }) {
   const files = readMigrations();
   const env = readEnvFile();
-  const throwAway = isThrowAwayDatabase(env, adminConfig(env).host);
   const client = await connectAdmin(env);
   try {
     if (!statusOnly) await client.query(LEDGER_SQL);
@@ -227,10 +228,9 @@ async function run({ statusOnly, rollback }) {
       return await applySeeds(client);
     }
     const problem = backupProblem({
-      appliedCount: applied.length,
+      realData: await holdsRealData(client),
       pendingCount: work,
       backupTime: latestBackupTime(),
-      throwAway,
     });
     if (problem) throw new Error(problem);
     if (rollback) await rollbackLast(client, files, applied);
