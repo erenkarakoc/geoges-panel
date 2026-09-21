@@ -24,12 +24,20 @@ import {
   twoFactorCodeSchema,
   updatePasswordSchema,
 } from "@/modules/iam/application/auth-schemas";
-import type { AuthProvider } from "@/modules/iam/domain/auth-provider";
+import { noteSession } from "@/modules/iam/application/access";
+import type { AuthProvider, AuthSession } from "@/modules/iam/domain/auth-provider";
 import { createSupabaseAuthProvider } from "@/modules/iam/infrastructure/supabase/supabase-auth-provider";
 import { createSupabaseServerClient } from "@/platform/supabase/server-client";
 
 async function authProvider(): Promise<AuthProvider> {
   return createSupabaseAuthProvider(await createSupabaseServerClient());
+}
+
+/** A sign-in is complete once no second step is pending; only then is it recorded. */
+async function noteCompleteSignIn(session: AuthSession | null): Promise<void> {
+  if (session && session.currentLevel === session.nextLevel) {
+    await noteSession(session.user.id, "signed_in");
+  }
 }
 
 export async function signInAction(
@@ -50,11 +58,17 @@ export async function signInAction(
     return { error: authFailureMessage(result.code), email };
   }
 
-  redirect(resolvePostSignInRoute(await auth.getSession()));
+  const session = await auth.getSession();
+  await noteCompleteSignIn(session);
+  redirect(resolvePostSignInRoute(session));
 }
 
 export async function signOutAction(): Promise<void> {
   const auth = await authProvider();
+  const session = await auth.getSession();
+  if (session) {
+    await noteSession(session.user.id, "signed_out");
+  }
   await auth.signOut();
 
   redirect(signInRoute);
@@ -175,5 +189,6 @@ export async function verifyTwoFactorAction(
     return { error: authFailureMessage(result.code) };
   }
 
+  await noteCompleteSignIn(await auth.getSession());
   redirect(todayRoute);
 }

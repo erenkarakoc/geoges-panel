@@ -8,7 +8,9 @@ import {
   readApprovalFacts,
   readManagers,
   readOwnerUsers,
+  readPeople,
   readRememberedRole,
+  recordSession,
   rememberRole,
   type DbIdentity,
   type PanelAccount,
@@ -98,6 +100,20 @@ async function currentIdentity(): Promise<DbIdentity> {
   const signedIn = await signInIdentity();
   if (!signedIn) throw new AccessDeniedError("iam.session");
   return signedIn.identity;
+}
+
+/** People for pickers and filters, as far as the signed-in person may see them. */
+export async function listPeople() {
+  return readPeople(await currentIdentity());
+}
+
+/**
+ * Records a sign-in or sign-out in the audit log (REQ-IAM-008). `userId` comes from a session the
+ * Auth server has just verified; a person without a panel account leaves no event.
+ */
+export async function noteSession(userId: string, kind: "signed_in" | "signed_out") {
+  const identity: DbIdentity = { userId, actingRoleId: null };
+  if (await findAccount(identity)) await recordSession(identity, kind);
 }
 
 /** A person's manager in one place: manual manager first, then the role hierarchy. */

@@ -57,6 +57,7 @@ m² gibi türetilen ölçüler **saklanır ve hesaplandığı kural sürümüyle
 - Her iş tablosunun alan bazlı değişiklik geçmişi AUD'ye yazılır: kayıt, alan, eski değer, yeni değer, kim, ne zaman, neden (REQ-AUD-001…004). Yazma, veri katmanındaki tek bir kanaldan geçer; modüller kendi geçmiş tablosunu kurmaz.
 - İzni olmayan kullanıcı, hassas alanın geçmişinde yalnız "değişti" görür (REQ-AUD-004).
 - Denetim ve geçmiş satırları silinmez ve güncellenmez (D-231).
+- **Kuruldu (TASK-0103, D-258):** tek kanal `aud.capture_history()` tetikleyicisidir. Tabloyu oluşturan göç, tablonun katman kaydına geçmiş türünü yazar (`history`: `tracked` / `append_only` / `none`) ve `tracked` tabloya `record_history` adlı tetikleyiciyi bağlar; göç aracı tetikleyicisiz `tracked` tabloyu, `id uuid` sütunu olmayanı ve koruyucusuz `append_only` tabloyu geri alır. Ticari ve hassas sütunlar aynı göçte `core.column_data_class`'a yazılır; kaydı olmayan sütun `internal`'dır. Değişikliğin nedeni işlem içinde `setChangeReason` ile verilir. Geçmiş `aud.history_of()` ile okunur; uygulama rolü geçmiş ve denetim tablolarına doğrudan erişemez. Sıfırlamalar yalnız sildikleri örnek verinin geçmişini siler; denetim kaydı hiçbir sıfırlamada silinmez.
 
 ## 8. Defter tabloları
 

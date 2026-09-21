@@ -14,6 +14,7 @@ import { createRunAsUser, type ClientPool } from "./run-as-user";
  */
 export type { DbIdentity } from "./db-identity";
 export type { Kysely as DbTransaction } from "kysely";
+export { setChangeReason } from "./change-reason";
 
 const globalForDb = globalThis as unknown as { geogesDbPool?: Pool };
 

@@ -17,7 +17,13 @@ import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { ROOT, connectAdmin, safeError } from "./db-admin.mjs";
-import { dependencyOrder, quoteTable, readLayerState, tablesInLayers } from "./db-layers.mjs";
+import {
+  dependencyOrder,
+  quoteTable,
+  readLayerState,
+  recordToolEvent,
+  tablesInLayers,
+} from "./db-layers.mjs";
 
 export const FORMAT = "geoges-config";
 export const FORMAT_VERSION = 1;
@@ -196,6 +202,11 @@ export async function importConfig(client, data, { dryRun = false, schemas = nul
         );
         await advanceSequences(client, name, cols);
       }
+      await recordToolEvent(client, "configuration.imported", {
+        migration_head: data.migration_head,
+        exported_at: data.exported_at,
+        rows_added: plans.reduce((n, p) => n + p.rows.length, 0),
+      });
     }
     await client.query(dryRun ? "rollback" : "commit");
     return report;
@@ -214,6 +225,11 @@ export async function writeExport(client, path = defaultExportPath()) {
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, `${JSON.stringify(data, null, 2)}\n`);
   const rows = Object.values(data.tables).reduce((n, t) => n + t.length, 0);
+  await recordToolEvent(client, "configuration.exported", {
+    migration_head: data.migration_head,
+    tables: Object.keys(data.tables).length,
+    rows,
+  });
   return { path, tables: Object.keys(data.tables).length, rows };
 }
 

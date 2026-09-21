@@ -6,7 +6,8 @@
  *   npm run db:reset:config   exports the configuration to a file first, then returns
  *                             configuration and factory data to factory state; asks first
  *
- * Both run in one transaction, remove sample people (flagged rows in `system` tables, D-256),
+ * Both run in one transaction, remove sample people (flagged rows in `system` tables, D-256)
+ * and the field history of everything removed (D-258), record the reset in the audit log,
  * rebuild factory data (db/seeds) afterwards, and refuse once the environment is marked as
  * holding real data. Real accounts are never removed.
  */
@@ -17,6 +18,8 @@ import {
   SEEDS_DIR,
   assertNoRealData,
   emptyLayers,
+  purgeHistory,
+  recordToolEvent,
   removeSampleRows,
   runSqlFolder,
 } from "./db-layers.mjs";
@@ -36,9 +39,16 @@ export async function reset(client, mode, { schemas = null, seedsDir = SEEDS_DIR
     await assertNoRealData(client);
     const emptied = await emptyLayers(client, layers, schemas);
     const samples = await removeSampleRows(client, schemas);
+    const historyRemoved = await purgeHistory(client, emptied);
     const seeded = await runSqlFolder(client, seedsDir);
+    // The audit log keeps every reset (D-258); it is never emptied itself.
+    await recordToolEvent(client, `environment.reset_${mode}`, {
+      emptied_tables: emptied.length,
+      sample_rows_removed: samples.removed,
+      history_rows_removed: historyRemoved,
+    });
     await client.query("commit");
-    return { emptied, samples, seeded };
+    return { emptied, samples, historyRemoved, seeded };
   } catch (error) {
     await client.query("rollback").catch(() => {});
     throw error;

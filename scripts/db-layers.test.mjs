@@ -83,6 +83,25 @@ describe("table layer rules (TASK-0076)", () => {
     ]);
   });
 
+  it("requires the history trigger and a uuid id on tracked tables (D-258)", () => {
+    const s = state({ "sit.log": "business", "aud.audit_log": "system", "sit.site": "business" });
+    s.history = Object.assign(
+      new Map([
+        ["sit.log", "tracked"],
+        ["sit.site", "tracked"],
+        ["aud.audit_log", "append_only"],
+      ]),
+      {
+        triggers: new Map([["sit.site", new Set(["record_history"])]]),
+        uuidIds: new Set(["sit.site", "sit.log"]),
+      },
+    );
+    expect(layerProblems(s)).toEqual([
+      "sit.log is tracked but has no record_history trigger",
+      "aud.audit_log is append-only but has no append_only_guard trigger",
+    ]);
+  });
+
   it("requires a primary key on configuration and factory tables", () => {
     const s = state({ "wfl.flow": "config", "sit.log": "business" }, [], ["wfl.flow", "sit.log"]);
     expect(layerProblems(s)).toEqual(["wfl.flow is config data and needs a primary key"]);

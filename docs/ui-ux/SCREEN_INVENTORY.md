@@ -1,6 +1,6 @@
 # Ekran Envanteri
 
-Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-19
+Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-22
 
 Panelin bütün ekranları, her birinin karşıladığı gereksinimler ve varsayılan olarak kimin gördüğü. Menü yapısı CHG-004'te kuruldu (D-054…D-070) ve burada değişmez; iki ekranın yeri ve ayrı "Raporlar" girişi 2026-09-19'da belirlendi (D-217, D-218). Roller `docs/domain/PERMISSION_MATRIX.md` kısaltmalarıyla yazılır; "Herkes" rolün kapsamı kadar demektir. Her ekranın durum matrisi (yükleniyor, boş, hata, yetki yok…) ve COSS bileşenleri bu envanterin sonraki adımında eklenir.
 
@@ -150,7 +150,7 @@ Menü şeridinde grup değildir: kullanıcı menüsündeki "Yönetim" girişiyle
 |---|---|---|---|---|---|
 | SCR-190 | Tanımlar (panel ve şerit tipleri, reçeteler, kataloglar, özel alanlar, takvim, kur, bordro parametreleri, KPI kataloğu, teklif şablonları, kontrol listeleri, eşikler ve kurallar) | Ö | `/admin/master-data` | REQ-ADM-001…015, REQ-HR-007, REQ-PRF-008…010, REQ-PRF-014, REQ-QTE-013, REQ-WFL-031 (istisna yetkisini açıp kapatma), REQ-WFL-032, REQ-NFR-005 | SAH, GM; TO, MUH, IK kendi katalogları |
 | SCR-191 | Kullanıcılar & Roller | Ö | `/admin/users-roles` | REQ-IAM-002, REQ-IAM-006…017, REQ-IAM-020…024 | SAH; GM ve IK görür |
-| SCR-193 | Denetim kayıtları | L | `/admin/audit-log` | REQ-AUD-005, REQ-AUD-006, REQ-IAM-008 | SAH |
+| SCR-193 | Denetim kayıtları | L | `/audit-log` | REQ-AUD-005, REQ-AUD-006, REQ-IAM-008 | SAH |
 | SCR-195 | İş akışları: Akışlar, Şablonlar, Yeni akışlar | L | `/admin/workflows` | REQ-WFL-018, REQ-WFL-023, REQ-WFL-027, REQ-WFL-028 | Akış tasarlama yetkisi olanlar |
 | SCR-196 | Akış tasarımcısı, deneme çalıştırması, yayın | Ö | `/admin/workflows/[id]` | REQ-WFL-001…011, REQ-WFL-017, REQ-WFL-019…026, REQ-WFL-029, REQ-WFL-030 | Akış tasarlama yetkisi olanlar |
 | SCR-197 | Çalışma günlüğü | L | `/admin/workflows/runs` | REQ-WFL-033, REQ-WFL-034 | Akış tasarlama yetkisi olanlar |

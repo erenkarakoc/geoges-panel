@@ -1,6 +1,6 @@
 # Yönetim Sayfası ve Akış Tasarımcısı
 
-Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-19
+Durum: CONFIRMED (sahip, 2026-09-19) · Son güncelleme: 2026-09-22
 
 D-108'in ertelediği yerleşim turu. Akış tasarımcısı, şablonlar, yeni akışlar, çalışma günlüğü ve kayıt türü oluşturucunun menüdeki yeri ve nasıl çalıştığı burada yazılır. Kararlar: D-223. Gereksinimler: REQ-WFL-001…011, REQ-WFL-017…030, REQ-WFL-033…039.
 
@@ -17,7 +17,7 @@ D-108'in ertelediği yerleşim turu. Akış tasarımcısı, şablonlar, yeni ak�
 | İş akışları | Akışlar · Şablonlar · Yeni akışlar | SCR-195 | `/admin/workflows` |
 | | Çalışma günlüğü | SCR-197 | `/admin/workflows/runs` |
 | Kayıt türleri | Kayıt türü oluşturucu (pilot sonrası, D-105; o zamana kadar görünmez) | SCR-198 | `/admin/record-types` |
-| Kayıtlar | Denetim kayıtları | SCR-193 | `/admin/audit-log` |
+| Kayıtlar | Denetim kayıtları | SCR-193 | `/audit-log` |
 
 Akış tasarımcısı (SCR-196) bir akış açılınca tam sayfa açılır: `/admin/workflows/[id]`. Veri aktarımı (SCR-194) ertelenmiştir; açıldığında bu sayfaya girer.
 

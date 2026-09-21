@@ -1,0 +1,154 @@
+import { z } from "zod";
+
+/**
+ * The audit log's vocabulary and filters (SCR-193, REQ-AUD-006, TASK-0103). Event codes are
+ * written by the database (migration 0004) and the admin tools; the screen shows their Turkish
+ * names. An unknown code is shown as it is rather than hidden.
+ */
+
+export const AUDIT_EVENT_LABELS: Readonly<Record<string, string>> = {
+  "user.signed_in": "Giriş yaptı",
+  "user.signed_out": "Çıkış yaptı",
+  "user.created": "Hesap açıldı",
+  "user.deactivated": "Hesap pasife alındı",
+  "user.reactivated": "Hesap yeniden açıldı",
+  "user.leaving_date_set": "Ayrılış tarihi girildi",
+  "role_assignment.created": "Rol atandı",
+  "role_assignment.ended": "Rol ataması bitirildi",
+  "role_assignment.changed": "Rol ataması değişti",
+  "role_delegation.started": "Vekâlet verildi",
+  "role_delegation.changed": "Vekâlet süresi değişti",
+  "role_permission.granted": "Role yetki verildi",
+  "role_permission.revoked": "Rolden yetki alındı",
+  "user_exception.created": "Kişisel istisna tanımlandı",
+  "user_exception.revoked": "Kişisel istisna kaldırıldı",
+  "user_manager.assigned": "Elle amir atandı",
+  "user_manager.revoked": "Elle amir kaldırıldı",
+  "environment.reset_data": "Örnek iş verisi sıfırlandı",
+  "environment.reset_config": "Yapılandırma fabrika ayarına döndü",
+  "configuration.exported": "Yapılandırma dışa aktarıldı",
+  "configuration.imported": "Yapılandırma içe aktarıldı",
+};
+
+/** Event groups offered by the "işlem türü" filter; the value is an event code prefix. */
+export const AUDIT_EVENT_GROUPS = [
+  { value: "user.", label: "Giriş ve hesaplar" },
+  { value: "role_assignment.", label: "Rol atamaları" },
+  { value: "role_delegation.", label: "Vekâletler" },
+  { value: "role_permission.", label: "Rol yetkileri" },
+  { value: "user_exception.", label: "Kişisel istisnalar" },
+  { value: "user_manager.", label: "Elle amir atamaları" },
+  { value: "environment.", label: "Sıfırlamalar" },
+  { value: "configuration.", label: "Yapılandırma aktarımı" },
+] as const;
+
+/** Record types offered by the "kayıt türü" filter (`schema.table`). */
+export const AUDIT_TARGET_TABLES = [
+  { value: "iam.user", label: "Kullanıcı" },
+  { value: "iam.role_assignment", label: "Rol ataması" },
+  { value: "iam.role_permission", label: "Rol yetkisi" },
+  { value: "iam.user_exception", label: "Kişisel istisna" },
+  { value: "iam.user_manager", label: "Elle amir" },
+] as const;
+
+export const AUDIT_PAGE_SIZE = 50;
+
+export function auditEventLabel(code: string): string {
+  return AUDIT_EVENT_LABELS[code] ?? code;
+}
+
+export function auditTargetLabel(schema: string | null, table: string | null): string | null {
+  if (!schema || !table) return null;
+  const key = `${schema}.${table}`;
+  return AUDIT_TARGET_TABLES.find((t) => t.value === key)?.label ?? key;
+}
+
+const DAY = /^\d{4}-\d{2}-\d{2}$/;
+const groupValues = AUDIT_EVENT_GROUPS.map((g) => g.value) as [string, ...string[]];
+const tableValues = AUDIT_TARGET_TABLES.map((t) => t.value) as [string, ...string[]];
+
+const optional = <T extends z.ZodType>(schema: T) =>
+  z.preprocess((v) => (v === "" || v === undefined ? undefined : v), schema.optional());
+
+const filterSchema = z.object({
+  kisi: optional(z.uuid()),
+  islem: optional(z.enum(groupValues)),
+  kayit: optional(z.enum(tableValues)),
+  baslangic: optional(z.string().regex(DAY)),
+  bitis: optional(z.string().regex(DAY)),
+  sayfa: optional(z.coerce.number().int().min(1).max(100_000)),
+});
+
+export type AuditLogFilters = {
+  actorId: string | null;
+  eventPrefix: string | null;
+  targetTable: string | null;
+  /** Calendar days in Europe/Istanbul, inclusive. */
+  fromDay: string | null;
+  toDay: string | null;
+  page: number;
+};
+
+/**
+ * Reads the filters from the query string (Turkish parameter names, as in the address bar). An
+ * invalid value is dropped, not an error: a hand-edited link still opens the list.
+ */
+export function parseAuditLogFilters(
+  params: Record<string, string | string[] | undefined>,
+): AuditLogFilters {
+  const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
+  const read = <K extends keyof typeof filterSchema.shape>(key: K) => {
+    const parsed = filterSchema.shape[key].safeParse(first(params[key]));
+    return parsed.success ? parsed.data : undefined;
+  };
+  return {
+    actorId: (read("kisi") as string | undefined) ?? null,
+    eventPrefix: (read("islem") as string | undefined) ?? null,
+    targetTable: (read("kayit") as string | undefined) ?? null,
+    fromDay: (read("baslangic") as string | undefined) ?? null,
+    toDay: (read("bitis") as string | undefined) ?? null,
+    page: (read("sayfa") as number | undefined) ?? 1,
+  };
+}
+
+/**
+ * The time range as instants. Turkey keeps UTC+3 all year (no daylight saving since 2016), so a
+ * calendar day starts at 00:00+03:00; the end day is inclusive.
+ */
+export function auditLogRange(filters: AuditLogFilters): { from: Date | null; to: Date | null } {
+  const from = filters.fromDay ? new Date(`${filters.fromDay}T00:00:00+03:00`) : null;
+  const to = filters.toDay
+    ? new Date(new Date(`${filters.toDay}T00:00:00+03:00`).getTime() + 86_400_000)
+    : null;
+  return { from, to };
+}
+
+/** Query string for a filter state; empty values and the first page are left out. */
+export function auditLogQuery(filters: AuditLogFilters, page = filters.page): string {
+  const q = new URLSearchParams();
+  if (filters.actorId) q.set("kisi", filters.actorId);
+  if (filters.eventPrefix) q.set("islem", filters.eventPrefix);
+  if (filters.targetTable) q.set("kayit", filters.targetTable);
+  if (filters.fromDay) q.set("baslangic", filters.fromDay);
+  if (filters.toDay) q.set("bitis", filters.toDay);
+  if (page > 1) q.set("sayfa", String(page));
+  const text = q.toString();
+  return text ? `?${text}` : "";
+}
+
+/** Page numbers to show around the current page, with `null` for a gap. */
+export function pageWindow(current: number, last: number): (number | null)[] {
+  if (last <= 7) return Array.from({ length: last }, (_, i) => i + 1);
+  const pages = new Set(
+    [1, last, current - 1, current, current + 1].filter((p) => p >= 1 && p <= last),
+  );
+  const sorted = [...pages].sort((a, b) => a - b);
+  const out: (number | null)[] = [];
+  let previous = 0;
+  for (const p of sorted) {
+    if (previous && p - previous > 1) out.push(null);
+    out.push(p);
+    previous = p;
+  }
+  return out;
+}

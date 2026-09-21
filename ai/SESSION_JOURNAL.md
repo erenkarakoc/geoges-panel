@@ -180,3 +180,10 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-21 22:37:48Z · b13a9554 · Edit · `db/migrations/0003_iam.sql`
 - 2026-09-21 22:37:49Z · b13a9554 · Edit · `db/migrations/0003_iam.sql`
 - 2026-09-21 22:37:57Z · b13a9554 · Edit · `scripts/db-layers.mjs`
+- 2026-09-21 23:12:20Z · b13a9554 · Write · `db/migrations/0004_audit.sql`
+- 2026-09-21 23:13:36Z · b13a9554 · Edit · `scripts/config-transfer.mjs`
+- 2026-09-21 23:16:28Z · b13a9554 · Write · `src/modules/aud/domain/audit-log.ts`
+- 2026-09-21 23:16:33Z · b13a9554 · Edit · `src/modules/aud/domain/audit-log.ts`
+- 2026-09-21 23:16:44Z · b13a9554 · Write · `src/modules/aud/data/aud-store.ts`
+- 2026-09-21 23:17:29Z · b13a9554 · Write · `src/modules/aud/ui/audit-log-list.tsx`
+- 2026-09-21 23:19:29Z · b13a9554 · Write · `src/modules/aud/data/aud.dbtest.ts`

@@ -341,7 +341,8 @@ describe("personal exceptions (REQ-IAM-015)", () => {
 describe("hierarchy (REQ-IAM-014)", () => {
   const managersOf = (userId: string, site: string) =>
     as<{ id: string }>(KO_A, `select iam.manager_of('${userId}', 'site', '${site}') as id`).then(
-      (r) => r.map((x) => x.id),
+      // The environment's real owner is an owner too; the test looks only at its own people.
+      (r) => r.map((x) => x.id).filter((x) => PEOPLE.includes(x)),
     );
 
   it("finds the parent role holder in the same site", async () => {

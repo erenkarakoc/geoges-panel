@@ -42,13 +42,14 @@ Mimari: modüler monolit (ADR-001). Bir modül başka modülün tablosuna doğru
 
 ## Bağımlılık grafiği
 
-Oklar "şuna bağımlıdır / şunu okur" anlamındadır. Tüm iş modülleri platform modüllerine (IAM, AUD, DOC, WFL, TSK, ADM) bağımlıdır; grafik okunabilirlik için bunu tek kutuda gösterir.
+Oklar "şuna bağımlıdır / şunu okur" anlamındadır. Platform modülleri arasındaki ok da açıkça yazılır: denetim ekranı ve geçmiş servisi yetkiyi IAM'e sorar (`AUD --> IAM`); IAM kendi olaylarını denetime veritabanı işlevleriyle yazar ve AUD'yi kodda çağırmaz, böylece döngü olmaz (TASK-0103, D-258). Tüm iş modülleri platform modüllerine (IAM, AUD, DOC, WFL, TSK, ADM) bağımlıdır; grafik okunabilirlik için bunu tek kutuda gösterir.
 
 ```mermaid
 flowchart TB
   subgraph PLATFORM[Platform]
     IAM --- AUD --- DOC --- WFL --- TSK --- ADM
   end
+  AUD --> IAM
 
   PRJ --> PLATFORM
   SIT --> PRJ

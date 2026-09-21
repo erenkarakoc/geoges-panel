@@ -7,7 +7,7 @@ PROJECT STATUS:              IMPLEMENTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
 CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0102 DONE. Next: TASK-0103 audit log and record history (T1), plan first. TASK-0112 follows TASK-0103/0105/0108 (D-257).
+CURRENT TASK:        TASK-0103 audit log and record history (T1) built and TESTING — waiting for CI and for the owner to sign in so SCR-193 can be checked in the browser. Next: TASK-0104. TASK-0112 follows TASK-0103/0105/0108 (D-257).
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -18,6 +18,8 @@ CODE ALLOWED:        Phase 07 permits product code (ADR-007), but only after the
 ```
 
 ## LAST COMPLETED TASK
+2026-09-22: TASK-0103 built (TESTING): migration 0004 (record history by one trigger, append-only audit log, history kind and column data classes in the register, IAM events, owner-only audit permission), `modules/aud` with SCR-193 at `/audit-log`, sign-in/sign-out events, reset and transfer events; D-258. Local: check (187 unit tests), build, `npm run test:db` 62/62.
+
 2026-09-22: TASK-0102 DONE (CI run 35664127779 green, database job 52/52 twice around a full rollback): migration 0003 `iam` schema with RLS and guards, PERMISSION_MATRIX role templates as seed data, `iam:bootstrap-owner`, the permission service in `modules/iam`; D-256. 0003 applied to the test project; local `npm run check`, build and `npm run test:db` 52/52 pass. TASK-0112 opened for recovery codes, sign-in lockout and session inactivity (Phase 07 IAM scope not in TASK-0025).
 
 2026-09-22: TASK-0076 DONE: every table registers its layer and the migration runner enforces it; `db:reset:data`, `db:reset:config` (exports first, asks), `db:sample`, `db:mark-real-data`, `config:export` / `config:import` (any conflict writes nothing). Migration 0002 applied to the test project. Owner decision D-255: no pre-migration dump until the environment is marked as holding real data.

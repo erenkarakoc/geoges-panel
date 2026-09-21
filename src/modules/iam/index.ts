@@ -20,7 +20,9 @@ export {
   approvalOwner,
   assertCan,
   chooseActingRole,
+  listPeople,
   managerOf,
+  noteSession,
   readEffectivePermissions,
   signInIdentity,
 } from "./application/access";

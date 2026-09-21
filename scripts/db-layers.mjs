@@ -32,9 +32,30 @@ const MAY_REFERENCE = {
   business: LAYERS,
 };
 
-/** Rule violations, as readable lines; empty when the database follows the layer rules. */
-export function layerProblems({ tables, registered, references, primaryKeys, portable = null }) {
+/**
+ * Rule violations, as readable lines; empty when the database follows the layer rules. A table
+ * registered as `tracked` must carry the history trigger and a uuid `id` (D-258); an
+ * `append_only` one its guard trigger.
+ */
+export function layerProblems({
+  tables,
+  registered,
+  references,
+  primaryKeys,
+  portable = null,
+  history = null,
+}) {
   const problems = [];
+  for (const [table, kind] of history ?? []) {
+    if (!registered.has(table) || !tables.includes(table)) continue;
+    const t = history.triggers.get(table) ?? new Set();
+    if (kind === "tracked" && !t.has("record_history"))
+      problems.push(`${table} is tracked but has no record_history trigger`);
+    if (kind === "tracked" && !history.uuidIds.has(table))
+      problems.push(`${table} is tracked but has no uuid id column`);
+    if (kind === "append_only" && !t.has("append_only_guard"))
+      problems.push(`${table} is append-only but has no append_only_guard trigger`);
+  }
   const actual = new Set(tables);
   for (const table of tables) {
     const layer = registered.get(table);
@@ -97,14 +118,28 @@ export async function readLayerState(client) {
       where c.relkind in ('r', 'p') and not c.relispartition and n.nspname = any($1)`,
     [schemas],
   );
-  const { rows: portableColumn } = await client.query(
-    `select 1 from information_schema.columns
-      where table_schema = 'core' and table_name = 'table_layer' and column_name = 'portable'`,
+  const { rows: registerColumns } = await client.query(
+    `select column_name from information_schema.columns
+      where table_schema = 'core' and table_name = 'table_layer'`,
   );
+  const has = (c) => registerColumns.some((r) => r.column_name === c);
   const registered = await client.query(
     `select schema_name || '.' || table_name as name, layer,
-            ${portableColumn.length ? "portable" : "false"} as portable
+            ${has("portable") ? "portable" : "false"} as portable,
+            ${has("history") ? "history" : "'none'"} as history
        from core.table_layer`,
+  );
+  const triggers = await client.query(
+    `select n.nspname || '.' || c.relname as name, t.tgname
+       from pg_trigger t join pg_class c on c.oid = t.tgrelid
+       join pg_namespace n on n.oid = c.relnamespace
+      where not t.tgisinternal and n.nspname = any($1)`,
+    [schemas],
+  );
+  const uuidIds = await client.query(
+    `select table_schema || '.' || table_name as name from information_schema.columns
+      where column_name = 'id' and data_type = 'uuid' and table_schema = any($1)`,
+    [schemas],
   );
   const references = await client.query(
     `select fn.nspname || '.' || fc.relname as "from", tn.nspname || '.' || tc.relname as "to"
@@ -125,6 +160,16 @@ export async function readLayerState(client) {
     tables: tables.rows.map((r) => r.name).sort(),
     registered: new Map(registered.rows.map((r) => [r.name, r.layer])),
     portable: new Set(registered.rows.filter((r) => r.portable).map((r) => r.name)),
+    history: Object.assign(
+      new Map(registered.rows.filter((r) => r.history !== "none").map((r) => [r.name, r.history])),
+      {
+        triggers: triggers.rows.reduce(
+          (m, r) => m.set(r.name, (m.get(r.name) ?? new Set()).add(r.tgname)),
+          new Map(),
+        ),
+        uuidIds: new Set(uuidIds.rows.map((r) => r.name)),
+      },
+    ),
     references: references.rows,
     primaryKeys: new Set(keys.rows.map((r) => r.name)),
   };
@@ -220,17 +265,68 @@ export async function removeSampleRows(client, schemas = null) {
       [target],
     );
     for (const ref of refs) {
-      const { rowCount } = await client.query(
-        `delete from ${quoteTable(client, ref.from)}
+      const { rows } = await client.query(
+        `delete from ${quoteTable(client, ref.from)} as doomed
           where ${client.escapeIdentifier(ref.col)} in
-                (select ${client.escapeIdentifier(ref.key)} from ${target} where is_sample)`,
+                (select ${client.escapeIdentifier(ref.key)} from ${target} where is_sample)
+         returning to_jsonb(doomed) ->> 'id' as id`,
       );
-      removed += rowCount;
+      removed += rows.length;
+      await purgeRowHistory(client, ref.from, rows.map((r) => r.id).filter(Boolean));
     }
-    const { rowCount } = await client.query(`delete from ${target} where is_sample`);
-    removed += rowCount;
+    const { rows } = await client.query(
+      `delete from ${target} as doomed where is_sample returning to_jsonb(doomed) ->> 'id' as id`,
+    );
+    removed += rows.length;
+    await purgeRowHistory(client, name, rows.map((r) => r.id).filter(Boolean));
   }
   return { tables: flagged.map((f) => f.name), removed };
+}
+
+async function hasFunction(client, signature) {
+  const { rows } = await client.query("select to_regprocedure($1) as f", [signature]);
+  return rows[0].f !== null;
+}
+
+/** History of rows removed one by one (sample people); a no-op before migration 0004. */
+async function purgeRowHistory(client, table, ids) {
+  if (
+    !ids.length ||
+    !(await hasFunction(client, "aud.purge_record_history_for_reset(text,uuid[])"))
+  )
+    return 0;
+  const { rows } = await client.query(
+    "select aud.purge_record_history_for_reset($1, $2::uuid[]) as n",
+    [table, ids],
+  );
+  return Number(rows[0].n);
+}
+
+/**
+ * Removes the field history of tables a reset has emptied (D-258); a no-op before migration 0004.
+ * @param {import("pg").Client} client
+ * @param {string[]} tables
+ */
+export async function purgeHistory(client, tables) {
+  if (!tables.length || !(await hasFunction(client, "aud.purge_history_for_reset(text[])")))
+    return 0;
+  const { rows } = await client.query("select aud.purge_history_for_reset($1) as n", [tables]);
+  return Number(rows[0].n);
+}
+
+/**
+ * Writes an audit event for a command run over the admin connection (resets, configuration
+ * transfer); a no-op before migration 0004. The actor is the database user, kept in the payload.
+ * @param {import("pg").Client} client
+ * @param {string} type
+ * @param {object} [payload]
+ */
+export async function recordToolEvent(client, type, payload = {}) {
+  if (!(await hasFunction(client, "aud.record_event(text,text,text,uuid,jsonb)"))) return;
+  await client.query(
+    "select aud.record_event($1, null, null, null, jsonb_build_object('tool_user', current_user) || $2::jsonb)",
+    [type, JSON.stringify(payload)],
+  );
 }
 
 /** `NNNN_name.sql` files of a folder in name order; a missing folder has none. */

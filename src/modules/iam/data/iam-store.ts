@@ -153,6 +153,26 @@ export function readApprovalFacts(identity: DbIdentity, approverId: string, item
   });
 }
 
+/** Writes a sign-in or sign-out event for the transaction's person (REQ-IAM-008). */
+export function recordSession(identity: DbIdentity, kind: "signed_in" | "signed_out") {
+  return runAsUser(identity, async (db: Tx) => {
+    await sql`select iam.note_session(${kind})`.execute(db);
+  });
+}
+
+/** People the signed-in person may see (own row, or everyone with `iam.module.view`), by name. */
+export function readPeople(identity: DbIdentity) {
+  return runAsUser(identity, async (db: Tx) => {
+    const { rows } = await sql<{ id: string; display_name: string; status: string }>`
+      select id, display_name, status from iam.user order by display_name, id`.execute(db);
+    return rows.map((r) => ({
+      id: r.id,
+      displayName: r.display_name,
+      active: r.status === "active",
+    }));
+  });
+}
+
 /** Everyone in the owner layer; an owner approval is done by any of them (REQ-IAM-025). */
 export function readOwnerUsers(identity: DbIdentity) {
   return runAsUser(identity, async (db: Tx) =>
