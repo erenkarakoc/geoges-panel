@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2026-09-21 — GitHub CI is live
+
+- TASK-0100 DONE. Every push to `main` and every pull request now runs the same gate as the local hook on GitHub (`npm ci`, then `npm run check:commit`, Node 24), so a commit made with the hook bypassed cannot stay green. The job checks out the full history, because the records gate compares stamps with commit dates and looks up deleted paths; actions are pinned to commit SHAs and the token is read-only. The first run passed and its log confirms the records, schema-access, lint, test and formatting steps ran on the server. The remaining CI.md steps arrive with the tables, catalogs and screens they test.
+
 ## 2026-09-21 — Phase 07 starts: the module boundary rule now comes from MODULE_MAP
 
 - The owner approved the Phase 07 plan. TASK-0099 DONE: ESLint no longer carries a hand-written boundary rule; `scripts/module-graph.mjs` reads MODULE_MAP and generates it. A module may use another only along a solid arrow and only through its `index.ts`; dashed arrows are events; every business module may use the six platform modules; platform modules never depend on business modules, and dependencies among platform modules need an arrow in the map first. A cycle or an unreadable map stops the lint instead of loosening it.
