@@ -27,7 +27,7 @@ Panelin bütün ekranları, her birinin karşıladığı gereksinimler ve varsay
 | SCR-012 | Onaylar (kuyruk) | Ö | `/approvals` | REQ-WFL-012…016, REQ-WFL-031, REQ-SIT-031, REQ-IAM-020, REQ-IAM-025, REQ-IAM-026 | Önüne onay düşen herkes |
 | SCR-192 | Revizyon talepleri (Onaylar'da sekme, D-223) | S | `/approvals/revision-requests` | REQ-AUD-007…010 | Onaylayıcılar; talep eden kendi talebi |
 | SCR-013 | Görevler | L | `/tasks` | REQ-TSK-001…008 | Herkes |
-| SCR-014 | Görev ver | F | `/tasks/new` | REQ-TSK-003, REQ-TSK-004 | Herkes (kapsamı kadar) |
+| SCR-014 | Görev ver | Ç | `/tasks/new` (panel içinden masaüstünde Dialog, telefonda Drawer; adres doğrudan açılırsa sayfa) | REQ-TSK-003, REQ-TSK-004 | Herkes (kapsamı kadar) |
 | SCR-015 | Bildirim çekmecesi | Ç | üst bar | REQ-TSK-009…012, REQ-NFR-009 | Herkes |
 | SCR-016 | Arama ve komut paleti | Ç | üst bar, kısayol | REQ-NFR-012 | Herkes |
 | SCR-017 | Raporlar (çalışma katmanında, Görevler'in altında) | L | `/reports` | REQ-RPT-015…019, REQ-RPT-023 | Herkes yetkisi olan raporları görür; hiç raporu yoksa öğe görünmez |

@@ -16,7 +16,7 @@ import { AppShell } from "@/platform/ui/app-shell/app-shell";
 // permissions come from IAM (Phase 04).
 const roleSwitchingAllowed = process.env.NODE_ENV === "development";
 
-export default async function AppLayout({ children, context }: LayoutProps<"/">) {
+export default async function AppLayout({ children, context, modal }: LayoutProps<"/">) {
   const session = await readAuthSession();
   const redirectTo = resolveProtectedPageRedirect(session);
 
@@ -53,6 +53,7 @@ export default async function AppLayout({ children, context }: LayoutProps<"/">)
       }}
     >
       {children}
+      {modal}
     </AppShell>
   );
 }

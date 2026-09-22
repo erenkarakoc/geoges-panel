@@ -276,3 +276,5 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-22 15:52:51Z · 5c627231 · Write · `src/modules/tsk/domain/tasks.test.ts`
 - 2026-09-22 15:54:36Z · 5c627231 · Write · `src/modules/tsk/data/tsk.dbtest.ts`
 - 2026-09-22 15:56:43Z · 5c627231 · Edit · `scripts/boundaries.test.mjs`
+- 2026-09-22 16:47:16Z · 5c627231 · Write · `src/modules/tsk/ui/assign-task-form.tsx`
+- 2026-09-22 16:47:42Z · 5c627231 · Write · `src/app/(app)/@modal/(.)tasks/new/page.tsx`

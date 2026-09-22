@@ -20,7 +20,10 @@ function failure(error: unknown): string {
   throw error;
 }
 
-/** SCR-014 "Görev ver": gives the task and opens it. */
+/**
+ * SCR-014 "Görev ver": gives the task. From the full page it opens the new task; from the
+ * dialog (`stay`) it reports success so the dialog closes over the page the person was on.
+ */
 export async function assignTaskAction(
   _previous: TaskFormState,
   formData: FormData,
@@ -39,6 +42,7 @@ export async function assignTaskAction(
     return { error: failure(error), done: null };
   }
   revalidatePath("/tasks");
+  if (formData.get("stay") === "1") return { error: null, done: "Görev verildi.", taskId };
   redirect(`/tasks/${taskId}`);
 }
 
