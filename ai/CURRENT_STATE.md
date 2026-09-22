@@ -7,8 +7,8 @@ PROJECT STATUS:              IMPLEMENTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
 CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0107 documents and storage (T1), all four steps built (D-262); waiting for its CI run. Next: TASK-0108 notifications and tasks. TASK-0112 follows TASK-0103/0105/0108 (D-257).
-STATUS:              TESTING
+CURRENT TASK:        TASK-0107 documents and storage (T1), DONE (D-262, CI run 35723626554 green). Next: TASK-0108 notifications and tasks. TASK-0112 follows TASK-0103/0105/0108 (D-257).
+STATUS:              IMPLEMENTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
 CODE ALLOWED:        Phase 07 permits product code (ADR-007), but only after the question round and a written implementation plan for each T1/T2 task (PROJECT_RULES §3, §10). Spike code is never merged; the scratchpad scripts stay outside the repository.
