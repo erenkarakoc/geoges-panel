@@ -8,7 +8,8 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "GEOGES Panel",
-    short_name: "GEOGES",
+    // What a phone writes under the icon on its Home Screen (owner 2026-09-23).
+    short_name: "Geoges Panel",
     description: "GEOGES şirket yönetim paneli",
     lang: "tr",
     dir: "ltr",

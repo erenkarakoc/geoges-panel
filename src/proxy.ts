@@ -11,6 +11,11 @@ import { readSupabaseConfig } from "@/platform/supabase/supabase-config";
  */
 
 const publicRoutes = [
+  // A phone reads these before anybody is signed in (the app manifest, its icons and the
+  // service worker that shows notifications); they hold nothing private.
+  "/manifest.webmanifest",
+  "/sw.js",
+  "/assets",
   "/sign-in",
   "/two-factor",
   "/reset-password",

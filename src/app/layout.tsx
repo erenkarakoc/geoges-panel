@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
   // On the Home Screen the panel opens as an app, with its own name under the icon (D-252).
-  appleWebApp: { capable: true, title: "GEOGES", statusBarStyle: "black-translucent" },
+  appleWebApp: { capable: true, title: "Geoges Panel", statusBarStyle: "black-translucent" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

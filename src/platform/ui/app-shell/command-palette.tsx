@@ -81,33 +81,24 @@ export function CommandPalette({
 
   return (
     <CommandDialog onOpenChange={setOpen} open={open}>
-      {/* Wide in the middle of the header (owner decision); an icon on phones. */}
+      {/* Wide in the middle of the header, and the same box on a phone (owner 2026-09-23): same
+          height as on desktop, only the keyboard shortcut steps aside since a phone has no
+          Ctrl+K. The tap target still reaches 44 px through COSS's coarse-pointer overlay. */}
       <CommandDialogTrigger
         render={
           <Button
-            className="hidden w-full max-w-md justify-start text-muted-foreground sm:flex"
+            className="w-full max-w-md min-w-0 justify-start text-muted-foreground"
             variant="outline"
           />
         }
       >
         <SearchIcon aria-hidden="true" />
-        Ara veya git…
-        <KbdGroup className="ms-auto">
+        {/* Truncates instead of spilling out of a narrow header. */}
+        <span className="min-w-0 truncate">Ara veya git…</span>
+        <KbdGroup className="ms-auto hidden md:flex">
           <Kbd>{modifierLabel}</Kbd>
           <Kbd>K</Kbd>
         </KbdGroup>
-      </CommandDialogTrigger>
-      <CommandDialogTrigger
-        render={
-          <Button
-            aria-label="Ara"
-            className="size-11 sm:hidden md:size-9"
-            size="icon"
-            variant="ghost"
-          />
-        }
-      >
-        <SearchIcon aria-hidden="true" />
       </CommandDialogTrigger>
       <CommandDialogPopup>
         {/* COSS's example leaves filtering to Base UI; ours also ignores Turkish letters. */}
@@ -140,7 +131,8 @@ export function CommandPalette({
               )}
             </CommandList>
           </CommandPanel>
-          <CommandFooter>
+          {/* Keyboard hints belong to a keyboard: a phone never sees them (owner 2026-09-23). */}
+          <CommandFooter className="hidden md:flex">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <KbdGroup>

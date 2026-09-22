@@ -7,6 +7,7 @@ import { useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Drawer,
   DrawerHeader,
@@ -111,7 +112,9 @@ export function MobileBottomBar({
        * carries it on a phone (owner 2026-09-17); the label stays as the accessible name.
        */}
       <PrimaryActionButton
-        className="mx-2 size-16 shrink-0 rounded-full [&_svg]:size-7"
+        // `sm:size-16` on purpose: the button's own size variant carries `sm:size-9`, which
+        // would shrink it on a wide phone (640-768 px), where this bar is still the navigation.
+        className="mx-2 size-16 shrink-0 rounded-full sm:size-16 [&_svg]:size-7"
         label={primaryAction}
         labelClassName="hidden"
         size="icon-lg"
@@ -149,14 +152,16 @@ export function MobileBottomBar({
                   <ul className="grid grid-cols-3 gap-2">
                     {group.items.map((item) => (
                       <li key={item.id}>
-                        <Link
-                          className="flex min-h-22 flex-col items-center justify-center gap-1.5 rounded-lg border p-2 text-center text-xs transition-colors hover:bg-accent/50"
-                          href={item.href}
-                          onClick={closeDrawer}
+                        {/* A COSS Card, so each module reads as its own raised tile; `bg-muted`
+                            keeps it a shade apart from the drawer's own surface (owner
+                            2026-09-23). */}
+                        <Card
+                          className="min-h-22 items-center justify-center gap-1.5 rounded-lg bg-muted p-2 text-center text-xs transition-colors hover:bg-accent/50"
+                          render={<Link href={item.href} onClick={closeDrawer} />}
                         >
                           <item.icon aria-hidden="true" className="size-5" />
                           <span className="line-clamp-2">{item.label}</span>
-                        </Link>
+                        </Card>
                       </li>
                     ))}
                   </ul>
