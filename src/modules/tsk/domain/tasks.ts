@@ -217,6 +217,9 @@ export type DigestCounts = {
 /** Default sending time of the morning summary; the dated rule `tsk.digest-time` overrides it. */
 export const DEFAULT_DIGEST_TIME = "07:30";
 
+/** Waiting time of each escalation step until the flow sets it (`tsk.escalation-wait-hours`). */
+export const DEFAULT_ESCALATION_WAIT_HOURS = 24;
+
 const count = (value: number | undefined) => value ?? 0;
 
 /**

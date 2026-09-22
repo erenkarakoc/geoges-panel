@@ -1,8 +1,9 @@
 import { sql } from "kysely";
 
-import { readRule } from "@/modules/adm";
+import { readRule, ruleNumber } from "@/modules/adm";
 import {
   DEFAULT_DIGEST_TIME,
+  DEFAULT_ESCALATION_WAIT_HOURS,
   digestText,
   notificationText,
   type DigestCounts,
@@ -131,4 +132,140 @@ export async function sendDailyDigests(db: SystemDb, mail: MailSender, now: Date
     sent += 1;
   }
   return sent;
+}
+
+/**
+ * Late tasks and the default escalation chain (REQ-TSK-006). Every quarter of an hour: a task
+ * whose due date has passed tells its assignee once, and one whose waiting time has passed again
+ * climbs a step. The waiting time is the dated rule `tsk.escalation-wait-hours`; in Phase 08 the
+ * escalation flow takes both the chain and the time over.
+ */
+export function overdueAndEscalation(clock: () => Date = () => new Date()): JobDefinition {
+  return {
+    type: "tsk.overdue-and-escalation",
+    recurrence: { everyMinutes: 15 },
+    async run(db) {
+      await handleLateTasks(db, clock());
+    },
+  };
+}
+
+export async function handleLateTasks(db: SystemDb, now: Date) {
+  const rule = await readRule(db, "tsk.escalation-wait-hours", istanbulDay(now));
+  const waitHours = ruleNumber(rule) ?? DEFAULT_ESCALATION_WAIT_HOURS;
+  const { rows } = await sql<{ task_id: string; action: string }>`
+    select task_id, action from tsk.tasks_needing_attention(${waitHours}, 100)`.execute(db);
+  let told = 0;
+  let escalated = 0;
+  for (const row of rows) {
+    if (row.action === "overdue") {
+      const { rows: marked } = await sql<{ done: boolean }>`
+        select tsk.mark_overdue(${row.task_id}::uuid) as done`.execute(db);
+      if (marked[0].done) told += 1;
+    } else {
+      const { rows: moved } = await sql<{ target: string | null }>`
+        select tsk.escalate_task(${row.task_id}::uuid) as target`.execute(db);
+      if (moved[0].target) escalated += 1;
+    }
+  }
+  return { told, escalated };
+}
+
+/**
+ * The queue's own troubles (EVENT_BACKBONE section 4): a dead letter nobody has retried, or
+ * deliveries running more than a quarter of an hour late, open one critical system-problem task
+ * for the owner layer, which closes itself when the cause goes away (REQ-TSK-005).
+ */
+export function systemWatch(): JobDefinition {
+  return {
+    type: "tsk.system-watch",
+    recurrence: { everyMinutes: 5 },
+    async run(db) {
+      await watchSystemHealth(db);
+    },
+  };
+}
+
+export const DELAY_ALARM_SECONDS = 15 * 60;
+
+export async function watchSystemHealth(db: SystemDb) {
+  const { rows } = await sql<{ dead_letters: number; behind_seconds: number }>`
+    select dead_letters, behind_seconds from tsk.system_health()`.execute(db);
+  const health = rows[0];
+  await problem(db, {
+    key: "system.dead_letter",
+    open: health.dead_letters > 0,
+    eventCode: "system.dead_letter",
+    title: `İşlenemeyen ${health.dead_letters} olay var (ölü mektup)`,
+    permission: null,
+  });
+  await problem(db, {
+    key: "system.delivery_delay",
+    open: health.behind_seconds > DELAY_ALARM_SECONDS,
+    eventCode: "system.delivery_delay",
+    title: `Olay kuyruğu ${Math.round(health.behind_seconds / 60)} dakika geride`,
+    permission: null,
+  });
+  return health;
+}
+
+/** Opens or closes one system-problem task and tells the people who can act on it. */
+async function problem(
+  db: SystemDb,
+  input: {
+    key: string;
+    open: boolean;
+    eventCode: string;
+    title: string;
+    /** Who should hear about it; the owner layer when null. */
+    permission: string | null;
+    linkPath?: string;
+  },
+) {
+  if (!input.open) {
+    await sql`select tsk.resolve_problem(${input.key})`.execute(db);
+    return null;
+  }
+  const { rows: people } = await sql<{ id: string }>`
+    select id from ${
+      input.permission
+        ? sql`tsk.people_with_permission(${input.permission})`
+        : sql`tsk.owner_people()`
+    } as people(id)`.execute(db);
+  if (!people.length) return null;
+  const { rows: opened } = await sql<{ id: string }>`
+    select tsk.open_problem_task(${input.key}, ${input.eventCode}, ${input.title},
+                                 ${people[0].id}::uuid, 'critical', null,
+                                 ${input.linkPath ?? null}) as id`.execute(db);
+  for (const person of people) {
+    await sql`
+      select tsk.notify(${person.id}::uuid, 'system.problem', ${input.title},
+                        ${input.linkPath ?? "/tasks"}, ${`problem:${input.key}`},
+                        ${opened[0].id}::uuid, p_is_critical => true)`.execute(db);
+  }
+  return opened[0].id;
+}
+
+/**
+ * A missing exchange rate is a problem for the people who may enter one by hand (REQ-ADM-013):
+ * they get a critical notification and one task, which closes when the bulletin arrives. In
+ * Phase 08 the default flow takes this over.
+ */
+export function exchangeRateAlarm(): EventSubscriber {
+  return {
+    name: "tsk.exchange-rate-alarm",
+    events: ["exchange_rate.missing", "exchange_rate.received"],
+    replayable: false,
+    async handle(db, event) {
+      const day = String(event.payload.bulletin_on ?? "").slice(0, 10);
+      if (!day) return;
+      await problem(db, {
+        key: `exchange_rate.missing:${day}`,
+        open: event.code === "exchange_rate.missing",
+        eventCode: event.code,
+        title: `${day} günü için TCMB kuru alınamadı; kuru elle girin`,
+        permission: "adm.module.manage",
+      });
+    },
+  };
 }

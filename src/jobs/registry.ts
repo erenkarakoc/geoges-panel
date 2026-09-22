@@ -1,7 +1,14 @@
 import { admJobs } from "@/modules/adm";
 import { docJobs } from "@/modules/doc";
 import { iamJobs } from "@/modules/iam";
-import { dailyDigest, liveSignals, phonePush } from "@/modules/tsk";
+import {
+  dailyDigest,
+  exchangeRateAlarm,
+  liveSignals,
+  overdueAndEscalation,
+  phonePush,
+  systemWatch,
+} from "@/modules/tsk";
 import type { JobRegistry } from "@/platform/jobs/types";
 import { sendSignal } from "@/platform/signals/hub";
 import { processMailSender } from "@/platform/mail/mail";
@@ -17,7 +24,19 @@ const doc = docJobs(processStorage, createTesseractReader());
  * may, through each module's `index.ts` only.
  */
 export const jobRegistry: JobRegistry = {
-  subscribers: [...doc.subscribers, liveSignals(sendSignal), phonePush(processPushSender)],
-  jobs: [...iamJobs, ...admJobs, ...doc.jobs, dailyDigest(processMailSender)],
+  subscribers: [
+    ...doc.subscribers,
+    liveSignals(sendSignal),
+    phonePush(processPushSender),
+    exchangeRateAlarm(),
+  ],
+  jobs: [
+    ...iamJobs,
+    ...admJobs,
+    ...doc.jobs,
+    dailyDigest(processMailSender),
+    overdueAndEscalation(),
+    systemWatch(),
+  ],
   readModels: [],
 };

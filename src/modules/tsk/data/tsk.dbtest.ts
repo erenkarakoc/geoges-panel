@@ -29,7 +29,14 @@ import {
   readTasks,
   reopenTask,
 } from "./tsk-store";
-import { liveSignals, phonePush, sendDailyDigests } from "./tsk-jobs";
+import {
+  exchangeRateAlarm,
+  handleLateTasks,
+  liveSignals,
+  phonePush,
+  sendDailyDigests,
+  watchSystemHealth,
+} from "./tsk-jobs";
 import {
   expirePushSubscription,
   readPushSubscriptionState,
@@ -72,7 +79,7 @@ async function worker<T>(work: (client: pg.PoolClient) => Promise<T>): Promise<T
 async function cleanUp() {
   const { rows: tasks } = await admin.query(
     `select id from tsk.task where assignee_user_id = any($1) or given_by_user_id = any($1)
-        or problem_key like 't0108:%'`,
+        or problem_key like 't0108:%' or problem_key like 'exchange_rate.missing:2030-%'`,
     [PEOPLE],
   );
   const taskIds = tasks.map((r) => r.id as string);
@@ -615,5 +622,113 @@ describe("the daily digest (REQ-TSK-013, D-133)", () => {
     const again = fakeMail();
     expect(await worker((c) => sendDailyDigests(kyselyOn(c), again.sender, morning(day)))).toBe(0);
     expect(again.sent).toEqual([]);
+  });
+});
+
+describe("late tasks and escalation (REQ-TSK-006)", () => {
+  const yesterday = () => new Date(Date.now() - 36 * 60 * 60 * 1000);
+
+  it("tells the assignee once, then climbs the chain without dropping the first person", async () => {
+    const taskId = await insertManualTask(as(GIVER_A), {
+      title: "Geciken görev",
+      description: null,
+      assigneeId: PEER_A,
+      priority: "normal",
+      dueAt: yesterday(),
+      needsApproval: false,
+    });
+
+    const first = await worker((c) => handleLateTasks(kyselyOn(c), new Date()));
+    expect(first.told).toBeGreaterThanOrEqual(1);
+    const overdue = (await readNotifications(as(PEER_A))).filter((n) => n.type === "task.overdue");
+    expect(overdue).toHaveLength(1);
+
+    // Running again the same minute changes nothing: the waiting time has not passed.
+    expect(await worker((c) => handleLateTasks(kyselyOn(c), new Date()))).toEqual({
+      told: 0,
+      escalated: 0,
+    });
+
+    // Once it has, the task goes to PEER_A's active delegate first (REQ-TSK-006).
+    await admin.query(
+      `update tsk.notification set created_at = now() - interval '48 hours'
+        where task_id = $1 and type = 'task.overdue'`,
+      [taskId],
+    );
+    const climbed = await worker((c) => handleLateTasks(kyselyOn(c), new Date()));
+    expect(climbed.escalated).toBe(1);
+    const { rows: steps } = await admin.query(
+      "select to_user_id, level from tsk.escalation where task_id = $1 order by level",
+      [taskId],
+    );
+    expect(steps).toEqual([{ to_user_id: DELEGATE, level: 1 }]);
+    // Both the first assignee and the escalation target see it.
+    expect(await readTask(as(PEER_A), taskId)).not.toBeNull();
+    expect(await readTask(as(DELEGATE), taskId)).not.toBeNull();
+    const told = (await readNotifications(as(DELEGATE))).filter((n) => n.type === "task.escalated");
+    expect(told.length).toBeGreaterThanOrEqual(1);
+
+    // The next step goes further up and never back to somebody who already has it.
+    await admin.query(
+      "update tsk.escalation set escalated_at = now() - interval '48 hours' where task_id = $1",
+      [taskId],
+    );
+    await worker((c) => handleLateTasks(kyselyOn(c), new Date()));
+    const { rows: after } = await admin.query(
+      "select to_user_id from tsk.escalation where task_id = $1 order by level",
+      [taskId],
+    );
+    expect(after.map((r) => r.to_user_id)).not.toContain(PEER_A);
+    expect(new Set(after.map((r) => r.to_user_id)).size).toBe(after.length);
+  });
+});
+
+describe("system problems (REQ-TSK-005, EVENT_BACKBONE)", () => {
+  const problemTask = async (key: string) =>
+    (
+      await admin.query(
+        "select id, title, status, priority from tsk.task where problem_key = $1 order by created_at desc limit 1",
+        [key],
+      )
+    ).rows[0];
+
+  it("opens one task while the queue is unhappy and closes it when it recovers", async () => {
+    const health = await worker((c) => watchSystemHealth(kyselyOn(c)));
+    expect(health.dead_letters).toBe(0);
+    expect(await problemTask("system.dead_letter")).toBeUndefined();
+  });
+
+  it("asks the people who may enter a rate by hand, once, and closes when the rate arrives", async () => {
+    const day = "2030-06-17";
+    const key = `exchange_rate.missing:${day}`;
+    const alarm = exchangeRateAlarm();
+    const event = (code: string) =>
+      ({ code, payload: { bulletin_on: day } }) as unknown as DeliveredEvent;
+    await worker((c) =>
+      alarm.handle(kyselyOn(c), event("exchange_rate.missing"), {
+        readModelVersion: async () => 1,
+      }),
+    );
+    const opened = await problemTask(key);
+    expect(opened).toMatchObject({ status: "open", priority: "critical" });
+    expect(opened.title).toContain(day);
+
+    // The same alarm again does not open a second task (REQ-TSK-005).
+    await worker((c) =>
+      alarm.handle(kyselyOn(c), event("exchange_rate.missing"), {
+        readModelVersion: async () => 1,
+      }),
+    );
+    const { rows: tasks } = await admin.query("select id from tsk.task where problem_key = $1", [
+      key,
+    ]);
+    expect(tasks).toHaveLength(1);
+
+    await worker((c) =>
+      alarm.handle(kyselyOn(c), event("exchange_rate.received"), {
+        readModelVersion: async () => 1,
+      }),
+    );
+    expect(await problemTask(key)).toMatchObject({ status: "closed" });
   });
 });

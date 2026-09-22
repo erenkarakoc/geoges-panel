@@ -306,3 +306,5 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-22 18:24:18Z · b13a9554 · Write · `db/migrations/0014_daily_digest.down.sql`
 - 2026-09-22 18:24:51Z · b13a9554 · Write · `src/platform/mail/mail.ts`
 - 2026-09-22 18:25:58Z · b13a9554 · Write · `db/seeds/0006_tsk_rules.sql`
+- 2026-09-22 18:32:06Z · b13a9554 · Write · `db/migrations/0015_overdue_and_system_problems.sql`
+- 2026-09-22 18:32:09Z · b13a9554 · Write · `db/migrations/0015_overdue_and_system_problems.down.sql`

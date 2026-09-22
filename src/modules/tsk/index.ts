@@ -36,4 +36,12 @@ export {
 } from "./domain/tasks";
 
 // Background work, collected by src/jobs/registry.ts (live signals).
-export { dailyDigest, liveSignals, phonePush, type SignalSender } from "./data/tsk-jobs";
+export {
+  dailyDigest,
+  exchangeRateAlarm,
+  liveSignals,
+  overdueAndEscalation,
+  phonePush,
+  systemWatch,
+  type SignalSender,
+} from "./data/tsk-jobs";
