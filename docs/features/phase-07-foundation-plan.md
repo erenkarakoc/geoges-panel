@@ -59,7 +59,7 @@ Sıra bağımlılıktan gelir; her adım bir öncekinin üstüne kurulur.
 - Sunucu, dağıtım hattı, izleme ve uzak yedek; e-posta sağlayıcısı ve alan adı: DEF-008 → Phase 09 çıkışı. Phase 07'de e-posta kanalı yerel bir test posta kutusuna karşı kurulur.
 - Self-host Supabase'e geçiş: D-250 → Phase 19, gerçek veriden önce.
 - Çevrimdışı giriş: DEF-002 → ilk pilot geri bildiriminden sonra.
-- Açık kalan uyum maddesi: R2 kovasının herkese açık `r2.dev` adresi gerçek dosyadan önce kapatılmalıdır (ADR-003); AB yargı bölgeli kova kararı gerçek personel dosyalarından önce verilir (D-249).
+- Uyum maddesi: R2 kovasının herkese açık `r2.dev` adresi 2026-09-22'de sahip tarafından kapatıldı (ADR-003); AB yargı bölgeli kova kararı gerçek personel dosyalarından önce verilir (D-249).
 
 ## 6. Kabul
 

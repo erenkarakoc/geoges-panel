@@ -90,13 +90,13 @@ Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006,
 
 ## NEXT TASK
 1. Phase 07 plan approved (2026-09-21); TASK-0099 and TASK-0100 DONE. Continue in order: TASK-0101 (data access) → TASK-0076 → TASK-0102 (IAM) → TASK-0103, TASK-0104 → TASK-0105, TASK-0106 → TASK-0107…TASK-0110 → TASK-0028 → TASK-0111 (M1). Each T1/T2 task writes its implementation plan in `docs/features/phase-07-foundation-plan.md` section 7 before code.
-2. Owner action pending: disable the R2 bucket's public r2.dev URL (ADR-003) before any real file.
+2. Done 2026-09-22: the owner disabled the R2 bucket's public r2.dev URL (ADR-003) and confirmed the 2026 holiday dates in seed 0004. Real personnel files still wait for the D-249 jurisdiction decision.
 3. Carry into Phase 07 design: cold first request re-measure at hosting (D-248, DEF-008); EU bucket jurisdiction before real personnel files (D-249); QTE→PRJ sync-versus-event inconsistency (MODULE_BOUNDARIES section 3 vs MODULE_MAP); exact-match range rewrite for the search adapter.
 4. Phase 07 carries TASK-0043, TASK-0054, TASK-0028 and TASK-0076.
 5. TASK-0018: re-check memory-worker authentication after 2026-10-15; do not stop the worker or invoke cloud-sync.
 
 ## BLOCKED BY
-Nothing blocks the Phase 07 discovery. The question round will need owner answers. One owner action is open: disabling the public r2.dev URL (ADR-003).
+Nothing blocks the Phase 07 discovery. The question round will need owner answers. No owner action is open for storage; real personnel files wait for D-249.
 
 ## OPEN QUESTIONS
 See `ai/OPEN_QUESTIONS.md`. OQ-029 was answered 2026-09-21 by D-248 (cold-start exception). OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.
