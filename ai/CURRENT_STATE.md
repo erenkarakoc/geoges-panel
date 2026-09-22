@@ -1,13 +1,13 @@
 # CURRENT STATE
 
-Last updated: 2026-09-22
+Last updated: 2026-09-23
 
 ```text
 PROJECT STATUS:              TESTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
 CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0108 notifications and tasks (T2) DONE 2026-09-22 (D-263, CI run 35769543866 green; five steps, migrations 0011-0015). Next: TASK-0109 revision requests, then TASK-0110 search, TASK-0028, TASK-0112 and TASK-0111 (M1).
+CURRENT TASK:        TASK-0108 notifications and tasks (T2) DONE 2026-09-22 (D-263, CI run 35769543866 green; five steps, migrations 0011-0015). Now: TASK-0109 revision requests (T1), DESIGNING - plan written 2026-09-23 (D-265, proposed), waiting for the owner's approval before coding; then TASK-0110 search, TASK-0028, TASK-0112 and TASK-0111 (M1). TASK-0113 (panel on the Home Screen, bigger phone targets) built and shipped 2026-09-23 (D-264).
 STATUS:              IMPLEMENTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)

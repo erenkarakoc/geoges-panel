@@ -317,3 +317,27 @@ Temel özellikler T1 kapısından geçer; M1 yerel kabulü sahibin geri bildirim
 - **Güvenlik:** kişi yalnız kendi satırını okur ve yazar (RLS + tanımlayıcı işlev); cihaz kimliği tutulmaz.
 - **Testler:** birim — pencere ve şeridin hangi durumda görüneceği; gerçek veritabanı — durumun kişiye özel olması ve notun tekrarının zarar vermemesi. Tarayıcı — telefon genişliğinde şerit ve pencere.
 - **Kabul:** `npm run check` ve derleme geçer; telefonda şerit görünür, iPhone penceresi iki adımı gösterir; Android tek tuş kurulumu HTTPS adres kurulduğunda (DEF-008) doğrulanır.
+
+### TASK-0109 — Revizyon talebi çekirdeği: kilitli kayıt, talep, onay, düzeltme hareketi (T1)
+
+- **Amaç:** REQ-AUD-007…010'un çekirdeği: onaylı kaydın kilitlenmesi, "hangi alan neden neye değişecek" talebi, talebin yetkiliye görev ve bildirim olarak düşmesi, eski-yeni yan yana onay ekranı, gerekçesiz reddin engellenmesi, onaylanınca değişikliğin kaydın sahibi modülce uygulanması ve farkın ayrı hareket olarak revizyona bağlanması (AUD-K3).
+- **Bağımlılık:** TASK-0103 (geçmiş ve denetim kaydı), TASK-0108 (görev ve bildirim). İkisi de DONE.
+- **Yapım adımları (her biri kendi testleriyle commit edilir):**
+  1. Göç 0018: `aud.revisable_record` (kayıt türü kütüğü), `aud.revision_request`, `aud.revision_effect`; talep açma/onay/ret işlevleri, koruyucular ve olaylar.
+  2. Servis ve modül yüzeyi: `requestRevision`, `decideRevision`, `listPendingRevisions`; kaydın sahibi modülün "uygulayıcı"sını birleştirme kökünde (`src/records`) kaydetmesi.
+  3. Ekranlar: SCR-192 "Revizyon talepleri" (Onaylar'ın sekmesi) — liste, eski-yeni yan yana onay, gerekçeli ret; kayıt ekranlarının kullanacağı "Revizyon talep et" girişi.
+  4. Görev ve bildirim bağlantısı: talep açılınca onaylayıcıya görev + bildirim, karar çıkınca talep edene bildirim.
+- **Kapsam dışı (kaydediliyor, düşürülmüyor):** talebin onaylayıcısının, kademe sayısının ve bildirimlerinin akışla ayarlanması Faz 08'dedir (REQ-AUD-007/008 "Akışla ayarlanan"); bu görev motor gelene kadar geçerli varsayılanı kurar. Hangi kayıt türünün hangi durumda kilitleneceği ve düzeltme hareketlerinin içeriği (stok, maliyet, hakediş, performans) her kaydın sahibi modülün kendi diliminde gelir; bu görev kütüğü, sözleşmeyi ve ilk uygulayıcı örneğini kurar. Dönem kapanışı kontrol listesi REQ-FIN-027…030 ile Faz 11'dedir.
+- **Kararlar (D-265, öneri):**
+  - **Kilit kimin işi:** kaydın sahibi modül kendi tablosunu kilitler (kendi koruyucusu), merkezde yalnız kütük durur: `aud.revisable_record` kayıt türünü, adını, varsayılan onaylayıcısını ve hangi alanların revizyona açık olduğunu tutar. AUD başka modülün tablosuna hiçbir zaman yazmaz (ADR-001).
+  - **Talep:** talep eden, kütükte açık olan alanlardan birini seçer; talep `{alan, eski değer, yeni değer}` listesi, gerekçe ve kaydın kapsamı ile açılır. Eski değer talep anında yazılır ve onay anında yeniden karşılaştırılır; kayıt bu arada değiştiyse talep "bayat" sayılır ve yeniden açılması istenir.
+  - **Kim onaylar (varsayılan, Faz 08'e kadar):** kaydın kapsamında talep edenin amiri (`iam.manager_of`), yoksa sahip katmanı; talep eden kendi talebini onaylayamaz. Kütükte kayıt türü başına farklı bir varsayılan yazılabilir.
+  - **Karar:** onaylayan eski ve yeni değeri yan yana görür; ret gerekçesiz yapılamaz (AUD-K4). Karar denetim kaydına ve kaydın geçmişine yazılır.
+  - **Uygulama:** onaylanan talep `revision_request.approved` olayını yayımlar ve kaydın sahibi modülün birleştirme kökünde kaydettiği uygulayıcıyı çağırır (DOC'un kayıt çözücüsüyle aynı kalıp, D-262). Uygulayıcısı olmayan kayıt türü için talep açılamaz — sessizce geçilmez.
+  - **Düzeltme hareketi:** modül farkı ayrı hareket olarak yazar ve `aud.revision_effect` ile talebe bağlar; önceki değerler silinmez (AUD-K3, REQ-AUD-009).
+  - **Görünürlük:** talebi talep eden, onaylayıcılar ve sahip katmanı görür; içerik kaydın veri sınıfına göre süzülür (AUD-K2).
+- **Etkilenen dosyalar:** yeni `db/migrations/0018_revision_requests.sql` + `.down.sql`, `src/modules/aud/data/revision-store.ts`, `src/modules/aud/application/revisions.ts`, `src/modules/aud/ui/revision-*.tsx`, `src/app/(app)/approvals/revision-requests/page.tsx`, `src/app/api/revisions/**`; değişen `src/records` (uygulayıcı kütüğü), `src/modules/aud/index.ts`, `src/jobs/registry.ts`.
+- **Güvenlik:** her okuma ve yazma kişinin kendi kimliğiyle; onay yetkisi veritabanında da denetlenir; gerekçe zorunluluğu koruyucuda; talep içeriğinde hassas alan varsa sınıfına göre süzülür.
+- **Testler:** birim — değişiklik listesinin kurulması, gerekçesiz reddin reddi, bayat talebin yakalanması. Gerçek veritabanı — kilitli kaydın doğrudan değiştirilememesi, yalnız yetkilinin karar verebilmesi, onayın uygulayıcıyı çağırması ve düzeltme hareketinin talebe bağlanması, talebin yalnız ilgililere görünmesi, iki kez onaylamanın zarar vermemesi. Tarayıcı — SCR-192 listesi ve eski-yeni onay ekranı.
+- **Göç:** 0018 test projesine uygulanır. **Geri dönüş:** `0018_revision_requests.down.sql` üç tabloyu ve işlevlerini kaldırır.
+- **Kabul:** yukarıdaki testler geçer; `npm run check` ve derleme geçer; deneme kayıt türüyle uçtan uca bir talep açılır, onaylanır, değişiklik uygulanır ve düzeltme hareketi talebe bağlı görünür.
