@@ -4,6 +4,7 @@ import {
   backoffDelay,
   connectSignals,
   createRefresher,
+  shareAcrossTabs,
   type EventSourceLike,
   type Timers,
 } from "./client";
@@ -124,6 +125,52 @@ describe("stream wrapper (SPIKE-13 carry-forward 1)", () => {
     source.emit("error");
     expect(clock.pending).toHaveLength(0);
     expect(backoffDelay(99)).toBe(8_000);
+  });
+});
+
+describe("one stream per browser (SPIKE-13 limit 2)", () => {
+  it("a tab that stopped before the lock arrived gives it back without connecting", async () => {
+    let grant: (() => Promise<void>) | null = null;
+    let released = false;
+    const g = globalThis as unknown as { navigator?: unknown; BroadcastChannel?: unknown };
+    const saved = { navigator: g.navigator, channel: g.BroadcastChannel };
+    Object.defineProperty(globalThis, "navigator", {
+      configurable: true,
+      value: {
+        locks: {
+          request: (_n: string, _o: unknown, cb: () => Promise<void> | void) =>
+            new Promise<void>((resolve) => {
+              grant = async () => {
+                await cb();
+                released = true;
+                resolve();
+              };
+            }),
+        },
+      },
+    });
+    g.BroadcastChannel = class {
+      onmessage: unknown = null;
+      postMessage() {}
+      close() {}
+    };
+    try {
+      let connects = 0;
+      const tab = shareAcrossTabs("t", { onOpen() {}, onSignal() {} }, () => {
+        connects += 1;
+        return { close() {} };
+      });
+      tab.close(); // React unmounts before the lock is granted
+      await grant!();
+      expect(connects).toBe(0);
+      expect(released).toBe(true);
+    } finally {
+      Object.defineProperty(globalThis, "navigator", {
+        configurable: true,
+        value: saved.navigator,
+      });
+      g.BroadcastChannel = saved.channel;
+    }
   });
 });
 

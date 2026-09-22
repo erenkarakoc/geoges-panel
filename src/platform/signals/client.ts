@@ -112,6 +112,8 @@ export function shareAcrossTabs(
 
   locks
     .request(name, { signal: abort.signal }, () => {
+      // Granted after this tab stopped listening: give the lock back at once.
+      if (abort.signal.aborted) return;
       connection = connect({
         onOpen() {
           handlers.onOpen();

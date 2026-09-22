@@ -2,7 +2,7 @@
 
 import { BellIcon, BellOffIcon, TriangleAlertIcon } from "lucide-react";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -72,19 +72,23 @@ export function NotificationBell() {
   const [summary, setSummary] = useState<Summary | null>(null);
   const [filter, setFilter] = useState<NotificationFilter>("all");
 
-  const refresher = useMemo(() => createRefresher(loadSummary, setSummary), []);
+  // One refresher per mount: a stopped one never applies data again (React may mount twice).
+  const refresher = useRef<ReturnType<typeof createRefresher<Summary>> | null>(null);
   useEffect(() => {
-    refresher.refresh();
-    return () => refresher.stop();
-  }, [refresher]);
-  useSignal("notifications", () => refresher.refresh());
+    const current = createRefresher(loadSummary, setSummary);
+    refresher.current = current;
+    current.refresh();
+    return () => current.stop();
+  }, []);
+  const reload = useCallback(() => refresher.current?.refresh(), []);
+  useSignal("notifications", reload);
 
   const openItem = useCallback(
     (item: NotificationItem) => {
       setOpen(false);
-      if (!item.isRead) void markRead({ ids: [item.id] }).then(() => refresher.refresh());
+      if (!item.isRead) void markRead({ ids: [item.id] }).then(reload);
     },
-    [refresher],
+    [reload],
   );
 
   const unread = summary?.unread ?? 0;
@@ -126,7 +130,7 @@ export function NotificationBell() {
         </Select>
         {unread > 0 ? (
           <Button
-            onClick={() => void markRead({ all: true }).then(() => refresher.refresh())}
+            onClick={() => void markRead({ all: true }).then(reload)}
             size="sm"
             variant="ghost"
           >
