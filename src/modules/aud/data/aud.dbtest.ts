@@ -312,6 +312,17 @@ describe("audit log (REQ-AUD-005, REQ-AUD-006, REQ-IAM-008)", () => {
     expect(Number(rows[0].total)).toBeGreaterThanOrEqual(rows.length);
   });
 
+  it("names the person an assignment event is about", async () => {
+    const rows = await as<{ target_name: string | null }>(
+      OWNER,
+      `select target_name from aud.audit_log_page(p_event_prefix => 'role_assignment.',
+                                                   p_limit => 200)
+        where payload ->> 'user_id' = '${VIEWER_A}'`,
+    );
+    expect(rows.length).toBeGreaterThan(0);
+    expect(new Set(rows.map((r) => r.target_name))).toEqual(new Set(["Deneme 2"]));
+  });
+
   it("refuses the audit permission to any role outside the owner layer and to exceptions", async () => {
     const toRole = admin.query(
       `insert into iam.role_permission (role_id, permission_id)

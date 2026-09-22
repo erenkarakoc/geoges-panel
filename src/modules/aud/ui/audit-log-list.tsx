@@ -44,6 +44,7 @@ import type { AuditLogPage } from "@/modules/aud/application/audit";
 import {
   AUDIT_EVENT_GROUPS,
   AUDIT_TARGET_TABLES,
+  auditActorLabel,
   auditEventLabel,
   auditLogQuery,
   auditTargetLabel,
@@ -193,7 +194,7 @@ export function AuditLogList({
                     <TableHead>Zaman</TableHead>
                     <TableHead>Kişi</TableHead>
                     <TableHead>İşlem</TableHead>
-                    <TableHead>Kayıt türü</TableHead>
+                    <TableHead>Kayıt</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -203,14 +204,17 @@ export function AuditLogList({
                         {timeFormat.format(e.occurredAt)}
                       </TableCell>
                       <TableCell>
-                        {e.actorName ?? "Sistem"}
+                        {auditActorLabel(e.actorUserId, e.actorName)}
                         {e.actorRoleName && (
                           <span className="text-muted-foreground"> · {e.actorRoleName}</span>
                         )}
                       </TableCell>
                       <TableCell>{auditEventLabel(e.eventType)}</TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {auditTargetLabel(e.targetSchema, e.targetTable) ?? "—"}
+                      <TableCell>
+                        <span className="text-muted-foreground">
+                          {auditTargetLabel(e.targetSchema, e.targetTable) ?? "—"}
+                        </span>
+                        {e.targetName && <span> · {e.targetName}</span>}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -220,9 +224,13 @@ export function AuditLogList({
             <ul className="divide-y sm:hidden">
               {data.entries.map((e) => (
                 <li className="flex flex-col gap-0.5 px-4 py-3" key={e.id}>
-                  <span className="text-sm font-medium">{auditEventLabel(e.eventType)}</span>
+                  <span className="text-sm font-medium">
+                    {auditEventLabel(e.eventType)}
+                    {e.targetName && ` · ${e.targetName}`}
+                  </span>
                   <span className="text-xs text-muted-foreground">
-                    {e.actorName ?? "Sistem"} · {timeFormat.format(e.occurredAt)}
+                    {auditActorLabel(e.actorUserId, e.actorName)} ·{" "}
+                    {timeFormat.format(e.occurredAt)}
                   </span>
                 </li>
               ))}

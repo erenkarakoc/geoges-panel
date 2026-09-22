@@ -57,6 +57,15 @@ export function auditEventLabel(code: string): string {
   return AUDIT_EVENT_LABELS[code] ?? code;
 }
 
+/**
+ * Who did it: the account's name; "Sistem" for the admin tools (no account); "Kaldırılmış hesap"
+ * for a sample or test account that a reset has since removed (real accounts are never removed).
+ */
+export function auditActorLabel(actorUserId: string | null, actorName: string | null): string {
+  if (actorName) return actorName;
+  return actorUserId ? "Kaldırılmış hesap" : "Sistem";
+}
+
 export function auditTargetLabel(schema: string | null, table: string | null): string | null {
   if (!schema || !table) return null;
   const key = `${schema}.${table}`;

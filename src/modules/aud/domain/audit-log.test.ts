@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  auditActorLabel,
   auditEventLabel,
   auditLogQuery,
   auditLogRange,
@@ -73,6 +74,9 @@ describe("audit log labels and pages", () => {
     expect(auditEventLabel("sit.unknown")).toBe("sit.unknown");
     expect(auditTargetLabel("iam", "user")).toBe("Kullanıcı");
     expect(auditTargetLabel(null, null)).toBeNull();
+    expect(auditActorLabel("x", "geoges-admin")).toBe("geoges-admin");
+    expect(auditActorLabel("x", null)).toBe("Kaldırılmış hesap");
+    expect(auditActorLabel(null, null)).toBe("Sistem");
   });
 
   it("shows every page when there are few, and a window with gaps otherwise", () => {

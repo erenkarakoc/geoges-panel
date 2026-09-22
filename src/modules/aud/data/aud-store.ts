@@ -21,6 +21,8 @@ export type AuditLogEntry = {
   targetSchema: string | null;
   targetTable: string | null;
   targetId: string | null;
+  /** The account the event is about, when it is about one. */
+  targetName: string | null;
   payload: Record<string, unknown>;
   occurredAt: Date;
 };
@@ -47,12 +49,13 @@ export function readAuditLogPage(identity: DbIdentity, q: AuditLogQuery) {
       target_schema: string | null;
       target_table: string | null;
       target_id: string | null;
+      target_name: string | null;
       payload: Record<string, unknown>;
       occurred_at: Date;
       total: string;
     }>`
       select id, event_type, actor_user_id, actor_name, actor_role_name, target_schema,
-             target_table, target_id, payload, occurred_at, total
+             target_table, target_id, target_name, payload, occurred_at, total
         from aud.audit_log_page(${q.actorId}::uuid, ${q.eventPrefix}, ${q.targetTable},
                                 ${q.from}::timestamptz, ${q.to}::timestamptz, ${q.offset},
                                 ${q.limit})`.execute(db);
@@ -67,6 +70,7 @@ export function readAuditLogPage(identity: DbIdentity, q: AuditLogQuery) {
         targetSchema: r.target_schema,
         targetTable: r.target_table,
         targetId: r.target_id,
+        targetName: r.target_name,
         payload: r.payload,
         occurredAt: new Date(r.occurred_at),
       })),
