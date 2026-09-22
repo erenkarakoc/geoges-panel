@@ -40,7 +40,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       className={cn(
-        "h-full antialiased",
+        // `overscroll-none`: the page itself never rubber-bands, so the header and the phone's
+        // bottom bar stay put even on a screen with nothing to scroll (owner 2026-09-23).
+        "h-full overscroll-none antialiased",
         geist.variable,
         geistHeading.variable,
         geistMono.variable,
@@ -48,7 +50,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="tr"
       suppressHydrationWarning
     >
-      <body className="relative flex min-h-full flex-col font-sans">
+      <body className="relative flex min-h-full flex-col overscroll-none font-sans">
         {/* Development only: a phone on the local network has no console we can open. */}
         {process.env.NODE_ENV === "production" ? null : <BrowserReport />}
         <ThemeProvider>

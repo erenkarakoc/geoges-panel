@@ -138,7 +138,8 @@ export async function AppShell({
             />
             {contextBar}
             {/* Page-specific functional footer is planned for Phase 02 (TASK-0028). */}
-            <ScrollArea className="min-h-0 flex-1">
+            {/* The page's own area scrolls; scrolling never chains out to the shell. */}
+            <ScrollArea className="min-h-0 flex-1" overscrollContain>
               <div className="flex flex-col gap-6 p-4 md:p-6">{children}</div>
             </ScrollArea>
             {/* Phones navigate from here; on desktop the rail does the same job (D-069). */}
