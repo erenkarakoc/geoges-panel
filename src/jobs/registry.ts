@@ -14,8 +14,10 @@ import type { JobRegistry } from "@/platform/jobs/types";
 import { sendSignal } from "@/platform/signals/hub";
 import { processMailSender } from "@/platform/mail/mail";
 import { processPushSender } from "@/platform/push/push";
+import { searchIndexer } from "@/platform/search/indexer";
 import { processStorage } from "@/platform/storage";
 import { createTesseractReader } from "@/platform/text-recognition/text-reader";
+import { searchIndex } from "@/records";
 
 const doc = docJobs(processStorage, createTesseractReader());
 
@@ -31,6 +33,7 @@ export const jobRegistry: JobRegistry = {
     phonePush(processPushSender),
     exchangeRateAlarm(),
     revisionAlerts(),
+    ...(searchIndex.length > 0 ? [searchIndexer(searchIndex)] : []),
   ],
   jobs: [
     ...iamJobs,

@@ -3,6 +3,7 @@ import "server-only";
 import { createRevisionService, type RevisionAppliers } from "@/modules/aud";
 import { createDocumentService, type RecordResolvers } from "@/modules/doc";
 import { signInIdentity } from "@/modules/iam";
+import type { SearchRegistration } from "@/platform/search/indexer";
 import { processStorage } from "@/platform/storage";
 
 /**
@@ -45,3 +46,12 @@ export function revisions() {
   });
   return revisionService;
 }
+
+/**
+ * Records that can be found by searching (TASK-0110, D-266). The module owning a record says
+ * which of its events change it and how it looks in a result: title, second line, where it
+ * opens, its scope and its data class, and the words worth searching — never a commercial or
+ * sensitive field. A record type with no registration is simply not searched. None exist before
+ * the first slice (Phase 09).
+ */
+export const searchIndex: readonly SearchRegistration[] = [];

@@ -332,3 +332,13 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-22 22:57:28Z · b13a9554 · Write · `src/app/(app)/approvals/revision-requests/page.tsx`
 - 2026-09-22 23:11:04Z · b13a9554 · Write · `db/migrations/0019_revision_events_carry_the_requester.sql`
 - 2026-09-22 23:11:07Z · b13a9554 · Write · `db/migrations/0019_revision_events_carry_the_requester.down.sql`
+- 2026-09-22 23:44:06Z · b13a9554 · Write · `db/migrations/0020_search.sql`
+- 2026-09-22 23:44:10Z · b13a9554 · Write · `db/migrations/0020_search.down.sql`
+- 2026-09-22 23:44:55Z · b13a9554 · Write · `src/platform/search/search.ts`
+- 2026-09-22 23:45:05Z · b13a9554 · Write · `src/platform/search/search.test.ts`
+- 2026-09-22 23:45:30Z · b13a9554 · Write · `src/platform/db/search-store.ts`
+- 2026-09-22 23:46:04Z · b13a9554 · Write · `src/platform/search/indexer.ts`
+- 2026-09-22 23:46:12Z · b13a9554 · Write · `src/app/api/search/route.ts`
+- 2026-09-22 23:47:56Z · b13a9554 · Write · `src/platform/search/service.ts`
+- 2026-09-22 23:47:59Z · b13a9554 · Write · `src/app/api/search/route.ts`
+- 2026-09-22 23:49:00Z · b13a9554 · Write · `src/platform/search/search.dbtest.ts`

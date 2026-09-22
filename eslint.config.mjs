@@ -107,10 +107,13 @@ const eslintConfig = defineConfig([
             },
             {
               // The composition roots may use platform and each module's public `index.ts` only.
+              // The jobs registry also reads the record registries, where the modules say what
+              // the worker indexes and applies (TASK-0110).
               from: { element: { types: { anyOf: ["jobs", "records"] } } },
               allow: {
                 to: [
                   { element: { type: "platform" } },
+                  { element: { type: "records" } },
                   { element: { type: "module", fileInternalPath: ["index.ts"] } },
                 ],
               },
@@ -134,8 +137,15 @@ const eslintConfig = defineConfig([
     // layer reaches the database, through `@/platform/db`'s runAsUser. The driver and the query
     // builder stay behind it, so routes, screens and application code cannot open a query.
     files: ["src/**/*.{ts,tsx}"],
-    // The outbox worker (platform/jobs) drives transactions on its own pool (TASK-0104).
-    ignores: ["src/platform/db/**", "src/modules/*/data/**", "src/platform/jobs/**"],
+    // The outbox worker (platform/jobs) drives transactions on its own pool (TASK-0104), and
+    // the search index (platform/search) is its own data layer: its tables live in `core`, which
+    // no module may name (TASK-0110, D-266).
+    ignores: [
+      "src/platform/db/**",
+      "src/modules/*/data/**",
+      "src/platform/jobs/**",
+      "src/platform/search/**",
+    ],
     rules: {
       "no-restricted-imports": [
         "error",
