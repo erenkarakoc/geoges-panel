@@ -10,9 +10,12 @@ export {
   getTask,
   getTaskWithHistory,
   listTasks,
+  forgetPushBrowser,
   markRead,
   markTaskDone,
   notificationSummary,
+  pushSettings,
+  rememberPushBrowser,
   reopen,
   TaskError,
   type NotificationItem,
@@ -33,4 +36,4 @@ export {
 } from "./domain/tasks";
 
 // Background work, collected by src/jobs/registry.ts (live signals).
-export { liveSignals, type SignalSender } from "./data/tsk-jobs";
+export { liveSignals, phonePush, type SignalSender } from "./data/tsk-jobs";

@@ -14,6 +14,7 @@ import { connectAdmin } from "../../../../scripts/db-admin.mjs";
 import { readDatabaseConfig } from "@/platform/db/database-config";
 import { kyselyOn } from "@/platform/db/run-as-user";
 import type { DeliveredEvent } from "@/platform/jobs/types";
+import type { PushMessage, PushResult, PushSender, PushTarget } from "@/platform/push/push";
 
 import {
   approveTask,
@@ -28,7 +29,12 @@ import {
   readTasks,
   reopenTask,
 } from "./tsk-store";
-import { liveSignals } from "./tsk-jobs";
+import { liveSignals, phonePush } from "./tsk-jobs";
+import {
+  expirePushSubscription,
+  readPushSubscriptionState,
+  savePushSubscription,
+} from "./tsk-push-store";
 
 const id = (n: number) => `0192f0c1-0108-7000-8000-${String(n).padStart(12, "0")}`;
 const GIVER_A = id(1);
@@ -71,6 +77,7 @@ async function cleanUp() {
   );
   const taskIds = tasks.map((r) => r.id as string);
   await admin.query("delete from tsk.notification where user_id = any($1)", [PEOPLE]);
+  await admin.query("delete from tsk.push_subscription where user_id = any($1)", [PEOPLE]);
   await admin.query(
     `delete from core.outbox_delivery where outbox_id in
        (select id from core.outbox where event_code like 'notification.%'
@@ -432,5 +439,96 @@ describe("live signals (ADR-018, D-240)", () => {
     expect(new Set(sent.slice(2))).toEqual(
       new Set([`${PEER_A}:tasks`, `${GIVER_A}:tasks`, `${DELEGATE}:tasks`]),
     );
+  });
+});
+
+describe("phone notifications (REQ-TSK-010, D-132)", () => {
+  const address = (n: number) => ({
+    endpoint: `https://push.example.test/t0108/${n}`,
+    p256dh: "deneme-p256dh",
+    auth: "deneme-auth",
+  });
+
+  /** A push service that answers as told and remembers what it was asked to send. */
+  function fakeService(answers: Record<string, PushResult>) {
+    const sent: { endpoint: string; message: PushMessage }[] = [];
+    const sender: PushSender = {
+      publicKey: () => "deneme-anahtar",
+      async send(target: PushTarget, message: PushMessage) {
+        sent.push({ endpoint: target.endpoint, message });
+        return answers[target.endpoint] ?? "sent";
+      },
+    };
+    return { sender, sent };
+  }
+
+  const statusOf = async (endpoint: string) =>
+    (await admin.query("select status from tsk.push_subscription where endpoint = $1", [endpoint]))
+      .rows[0]?.status;
+
+  it("keeps a browser per person and lets that person switch it off", async () => {
+    await savePushSubscription(as(PEER_A), { ...address(1), userAgent: "Deneme tarayıcı" });
+    expect(await readPushSubscriptionState(as(PEER_A), address(1).endpoint)).toBe(true);
+    // Somebody else's browser is not theirs to see or to switch off.
+    expect(await readPushSubscriptionState(as(OTHER_B), address(1).endpoint)).toBe(false);
+    expect(await expirePushSubscription(as(OTHER_B), address(1).endpoint)).toBe(false);
+    expect(await expirePushSubscription(as(PEER_A), address(1).endpoint)).toBe(true);
+    expect(await statusOf(address(1).endpoint)).toBe("expired");
+    // Allowing it again revives the same row.
+    await savePushSubscription(as(PEER_A), address(1));
+    expect(await statusOf(address(1).endpoint)).toBe("active");
+  });
+
+  it("sends the panel's words to every live browser and retires the gone ones", async () => {
+    await savePushSubscription(as(PEER_A), address(2));
+    const since = (await admin.query("select clock_timestamp() as t")).rows[0].t;
+    await give(GIVER_A, PEER_A, false, "Telefon bildirimi");
+    const { rows } = await admin.query(
+      `select payload from core.outbox
+        where event_code = 'notification.created' and occurred_at >= $1
+          and payload ->> 'user_id' = $2`,
+      [since, PEER_A],
+    );
+    expect(rows).toHaveLength(1);
+
+    const service = fakeService({ [address(2).endpoint]: "gone" });
+    await worker((client) =>
+      phonePush(service.sender).handle(
+        kyselyOn(client),
+        { code: "notification.created", payload: rows[0].payload } as unknown as DeliveredEvent,
+        { readModelVersion: async () => 1 },
+      ),
+    );
+    expect(service.sent.map((s) => [s.endpoint, s.message.title, s.message.body])).toEqual([
+      [address(1).endpoint, "Size yeni görev verildi", "Telefon bildirimi"],
+      [address(2).endpoint, "Size yeni görev verildi", "Telefon bildirimi"],
+    ]);
+    expect(await statusOf(address(1).endpoint)).toBe("active");
+    expect(await statusOf(address(2).endpoint)).toBe("expired");
+  });
+
+  it("sends nothing for a notification that asks for the panel only", async () => {
+    const since = (await admin.query("select clock_timestamp() as t")).rows[0].t;
+    await worker((c) =>
+      c.query(
+        `select tsk.notify($1, 'task.completed', 'Yalnız panel', '/tasks', 't0108:panel-only-' ||
+                            extract(epoch from clock_timestamp())::bigint)`,
+        [PEER_A],
+      ),
+    );
+    const { rows } = await admin.query(
+      `select payload from core.outbox where event_code = 'notification.created'
+          and occurred_at >= $1 and payload ->> 'user_id' = $2`,
+      [since, PEER_A],
+    );
+    const service = fakeService({});
+    await worker((client) =>
+      phonePush(service.sender).handle(
+        kyselyOn(client),
+        { code: "notification.created", payload: rows[0].payload } as unknown as DeliveredEvent,
+        { readModelVersion: async () => 1 },
+      ),
+    );
+    expect(service.sent).toEqual([]);
   });
 });

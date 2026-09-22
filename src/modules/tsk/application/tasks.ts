@@ -16,12 +16,18 @@ import {
   type TaskView,
 } from "@/modules/tsk/data/tsk-store";
 import {
+  expirePushSubscription,
+  readPushSubscriptionState,
+  savePushSubscription,
+} from "@/modules/tsk/data/tsk-push-store";
+import {
   assignTaskSchema,
   dueAtFromDay,
   notificationText,
   sortTasks,
   TASK_RULE_MESSAGES,
 } from "@/modules/tsk/domain/tasks";
+import { processPushSender } from "@/platform/push/push";
 
 /**
  * The task service (TASK-0108, REQ-TSK-001…008). Everyone signed in may give tasks within their
@@ -155,4 +161,31 @@ export async function notificationSummary(): Promise<{
 /** Marks the given notifications read, or all of them when `ids` is null. */
 export async function markRead(ids: readonly string[] | null): Promise<number> {
   return markNotificationsRead(await identity(), ids);
+}
+
+// ---------------------------------------------------------------------------------------------
+// Phone notifications (REQ-TSK-010, D-132, D-252)
+// ---------------------------------------------------------------------------------------------
+
+/** What the browser needs to switch phone notifications on, and whether it already is. */
+export async function pushSettings(endpoint: string | null) {
+  const key = processPushSender.publicKey();
+  if (!key) return { publicKey: null, enabled: false };
+  const on = endpoint ? await readPushSubscriptionState(await identity(), endpoint) : false;
+  return { publicKey: key, enabled: on };
+}
+
+/** Remembers the browser the person just allowed (REQ-TSK-010). */
+export async function rememberPushBrowser(subscription: {
+  endpoint: string;
+  p256dh: string;
+  auth: string;
+  userAgent?: string | null;
+}) {
+  return savePushSubscription(await identity(), subscription);
+}
+
+/** Switches this browser off again; the row is kept as "expired". */
+export async function forgetPushBrowser(endpoint: string) {
+  return expirePushSubscription(await identity(), endpoint);
 }

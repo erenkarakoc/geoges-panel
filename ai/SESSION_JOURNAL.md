@@ -294,3 +294,11 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-22 17:57:23Z · b13a9554 · Edit · `src/modules/tsk/ui/notification-bell.tsx`
 - 2026-09-22 17:57:26Z · b13a9554 · Edit · `src/modules/tsk/ui/notification-bell.tsx`
 - 2026-09-22 17:57:29Z · b13a9554 · Edit · `src/modules/tsk/ui/notification-bell.tsx`
+- 2026-09-22 17:59:44Z · b13a9554 · Write · `db/migrations/0013_push_subscriptions.sql`
+- 2026-09-22 17:59:46Z · b13a9554 · Write · `db/migrations/0013_push_subscriptions.down.sql`
+- 2026-09-22 18:00:08Z · b13a9554 · Write · `src/platform/push/push.ts`
+- 2026-09-22 18:00:35Z · b13a9554 · Write · `src/modules/tsk/data/tsk-push-store.ts`
+- 2026-09-22 18:01:27Z · b13a9554 · Write · `public/sw.js`
+- 2026-09-22 18:01:35Z · b13a9554 · Write · `src/app/api/push/route.ts`
+- 2026-09-22 18:02:29Z · b13a9554 · Write · `src/modules/tsk/ui/push-toggle.tsx`
+- 2026-09-22 18:02:34Z · b13a9554 · Write · `src/app/manifest.ts`
