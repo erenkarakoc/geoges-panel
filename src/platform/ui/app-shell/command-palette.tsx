@@ -131,8 +131,9 @@ export function CommandPalette({
               )}
             </CommandList>
           </CommandPanel>
-          {/* Keyboard hints belong to a keyboard: a phone never sees them (owner 2026-09-23). */}
-          <CommandFooter className="hidden md:flex">
+          {/* COSS's own footer, on every screen (owner 2026-09-23): only the header's trigger
+              drops its shortcut on a phone. */}
+          <CommandFooter>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <KbdGroup>
