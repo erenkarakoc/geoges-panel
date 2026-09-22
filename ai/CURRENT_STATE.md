@@ -7,8 +7,8 @@ PROJECT STATUS:              IMPLEMENTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
 CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0107 documents and storage (T1), step 1 of 4 built (D-262). Next: browser uploader logic, text recognition, ZIP bulk download. TASK-0112 follows TASK-0103/0105/0108 (D-257).
-STATUS:              IMPLEMENTING
+CURRENT TASK:        TASK-0107 documents and storage (T1), all four steps built (D-262); waiting for its CI run. Next: TASK-0108 notifications and tasks. TASK-0112 follows TASK-0103/0105/0108 (D-257).
+STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
 CODE ALLOWED:        Phase 07 permits product code (ADR-007), but only after the question round and a written implementation plan for each T1/T2 task (PROJECT_RULES §3, §10). Spike code is never merged; the scratchpad scripts stay outside the repository.
@@ -18,6 +18,8 @@ CODE ALLOWED:        Phase 07 permits product code (ADR-007), but only after the
 ```
 
 ## LAST COMPLETED TASK
+2026-09-22: TASK-0107 steps 2-4: browser uploader logic, local text recognition in the job queue (images, PDF text layer, scanned PDF pages), hourly close of expired uploads, ZIP bulk download of a record's or a project's documents with an audit event first; migration 0010. Local: check (228 unit tests), build, doc database tests 12/12, live R2 adapter test 2/2.
+
 2026-09-22: TASK-0107 step 1: migration 0009 (`doc` schema: documents carrying their record's scope and data class, numbered versions, resumable upload sessions, recognised text; no delete, archive with reason), seed 0005 (document types), `platform/storage` (R2 and in-memory adapters), `modules/doc` service, composition root `src/records`, eight `/api/documents` routes; D-262. Local: check (218 unit tests), build, `npm run test:db` 105/105; routes answered correctly in the dev server with the owner signed in. Also fixed: server actions and route handlers accepted a session that had not passed its second factor.
 
 2026-09-22: TASK-0106 DONE (CI green): migration 0008 (calendar, holidays, append-only rates, fetch state), seed 0004 (company calendar, 2026 holidays, fetch rules), TCMB adapter and job every 10 minutes; the dev worker fetched the real bulletins of 15-21 September; D-261.

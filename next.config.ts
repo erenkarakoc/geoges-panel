@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Text recognition and PDF reading load native code, WebAssembly and model files at run time
+  // from node_modules; bundling them would break those paths (TASK-0107).
+  serverExternalPackages: [
+    "tesseract.js",
+    "pdfjs-dist",
+    "@napi-rs/canvas",
+    "@tesseract.js-data/tur",
+    "@tesseract.js-data/eng",
+  ],
   // The entry screen is "Bugün" (Today Screen) in the glossary; its old address keeps working (TASK-0043).
   async redirects() {
     return [{ source: "/dashboard", destination: "/today", permanent: true }];

@@ -1,6 +1,21 @@
 import { describe, expect, it } from "vitest";
 
-import { checkFile, checkPart, PART_BYTES, tidyRecognisedText } from "./documents";
+import { checkFile, checkPart, PART_BYTES, tidyRecognisedText, zipEntryNames } from "./documents";
+
+describe("names in a bulk download (REQ-DOC-007)", () => {
+  it("keeps Turkish names, strips folders and numbers repeats", () => {
+    expect(
+      zipEntryNames(["Hakediş.pdf", "hakediş.pdf", "../../etc/passwd", "Hakediş.pdf", ".env", ""]),
+    ).toEqual([
+      "Hakediş.pdf",
+      "hakediş (2).pdf",
+      "__.._etc_passwd",
+      "Hakediş (3).pdf",
+      "_env",
+      "belge",
+    ]);
+  });
+});
 
 describe("accepted files (REQ-DOC-001)", () => {
   it("takes allowed types up to 200 MB and refuses the rest with a Turkish reason", () => {

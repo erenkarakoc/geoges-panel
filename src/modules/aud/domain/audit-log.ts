@@ -28,6 +28,10 @@ export const AUDIT_EVENT_LABELS: Readonly<Record<string, string>> = {
   "environment.reset_config": "Yapılandırma fabrika ayarına döndü",
   "configuration.exported": "Yapılandırma dışa aktarıldı",
   "configuration.imported": "Yapılandırma içe aktarıldı",
+  "document.archived": "Belge arşivlendi",
+  "document.bulk_downloaded": "Belgeler toplu indirildi",
+  "exchange_rate.entered": "Elle kur girildi",
+  "system.dead_letter_retried": "Başarısız iş yeniden denendi",
 };
 
 /** Event groups offered by the "işlem türü" filter; the value is an event code prefix. */
@@ -40,6 +44,9 @@ export const AUDIT_EVENT_GROUPS = [
   { value: "user_manager.", label: "Elle amir atamaları" },
   { value: "environment.", label: "Sıfırlamalar" },
   { value: "configuration.", label: "Yapılandırma aktarımı" },
+  { value: "document.", label: "Belgeler" },
+  { value: "exchange_rate.", label: "Döviz kurları" },
+  { value: "system.", label: "Sistem işleri" },
 ] as const;
 
 /** Record types offered by the "kayıt türü" filter (`schema.table`). */
@@ -49,6 +56,9 @@ export const AUDIT_TARGET_TABLES = [
   { value: "iam.role_permission", label: "Rol yetkisi" },
   { value: "iam.user_exception", label: "Kişisel istisna" },
   { value: "iam.user_manager", label: "Elle amir" },
+  { value: "doc.document", label: "Belge" },
+  { value: "adm.exchange_rate", label: "Döviz kuru" },
+  { value: "core.dead_letter", label: "Başarısız iş" },
 ] as const;
 
 export const AUDIT_PAGE_SIZE = 50;

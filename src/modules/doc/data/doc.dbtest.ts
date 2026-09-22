@@ -7,14 +7,19 @@
  * the documents, their history and their events. Audit log rows cannot be removed by design
  * (AUD-K1), so each run leaves its "document.archived" events in the log. `npm run test:db`.
  */
-import type pg from "pg";
+import pg from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { connectAdmin } from "../../../../scripts/db-admin.mjs";
+import { readDatabaseConfig } from "@/platform/db/database-config";
+import { kyselyOn } from "@/platform/db/run-as-user";
+import type { DeliveredEvent } from "@/platform/jobs/types";
 import { createMemoryStorage } from "@/platform/storage/memory";
+import type { TextReader } from "@/platform/text-recognition/text-reader";
 
 import { createDocumentService, DocumentError } from "../application/documents";
 import { PART_BYTES, type RecordFacts } from "../domain/documents";
+import { closeExpiredUploads, textRecognition } from "./doc-jobs";
 
 const id = (n: number) => `0192f0c1-0107-7000-8000-${String(n).padStart(12, "0")}`;
 const MANAGER_A = id(1);
@@ -27,10 +32,14 @@ const SITE_B = id(102);
 const RECORD_A = id(201);
 const RECORD_A_PRICE = id(202);
 const RECORD_HIDDEN = id(203);
+const RECORD_P1 = id(204);
+const RECORD_P2 = id(205);
+const PROJECT_1 = id(301);
 const ROLES = ["T0107_MGR", "T0107_VIEW", "T0107_FIN"];
 const P = "zzt";
 
 let admin: pg.Client;
+let workerPool: pg.Pool;
 const role: Record<string, string> = {};
 let signedIn: string | null = null;
 const storage = createMemoryStorage();
@@ -43,6 +52,20 @@ const facts: Record<string, RecordFacts> = {
     projectId: null,
     ownerUserId: null,
     dataClass: "internal",
+  },
+  [RECORD_P1]: {
+    module: P,
+    siteId: SITE_A,
+    projectId: PROJECT_1,
+    ownerUserId: null,
+    dataClass: "internal",
+  },
+  [RECORD_P2]: {
+    module: P,
+    siteId: SITE_A,
+    projectId: PROJECT_1,
+    ownerUserId: null,
+    dataClass: "commercial",
   },
   [RECORD_A_PRICE]: {
     module: P,
@@ -156,6 +179,7 @@ async function cleanUp() {
 
 beforeAll(async () => {
   admin = await connectAdmin();
+  workerPool = new pg.Pool(readDatabaseConfig(process.env, undefined, "DATABASE_WORKER_URL"));
   await cleanUp();
   await admin.query(`
     insert into iam.permission (code, module, name, created_from) values
@@ -192,6 +216,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  await workerPool?.end();
   if (admin) {
     await cleanUp();
     await admin.end();
@@ -373,5 +398,164 @@ describe("versions, deletion and archiving (REQ-DOC-005/006, DOC-K4)", () => {
       [documentId],
     );
     expect(history.map((r) => r.reason)).toContain("yanlış kayda eklenmiş");
+  });
+});
+
+describe("background work (SPIKE-15, SPIKE-16)", () => {
+  /** Runs `work` in one worker transaction, as the worker does. */
+  async function asWorker<T>(work: (db: ReturnType<typeof kyselyOn>) => Promise<T>) {
+    const client = await workerPool.connect();
+    try {
+      await client.query("begin");
+      const result = await work(kyselyOn(client));
+      await client.query("commit");
+      return result;
+    } catch (error) {
+      await client.query("rollback");
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
+
+  const reader: TextReader = {
+    async read(_bytes, mimeType) {
+      if (mimeType !== "application/pdf") throw new Error("unreadable image");
+      return {
+        passes: ["Net: 12 . 450 kg", "Plaka 34 ABC 12 / 3"],
+        confidence: 61.237,
+        method: "ocr",
+        pages: 1,
+        pagesRead: 1,
+      };
+    },
+    async close() {},
+  };
+  const recognise = textRecognition(storage, reader);
+  const uploaded = (versionId: string) =>
+    ({ payload: { version_id: versionId } }) as unknown as DeliveredEvent;
+  const textOf = async (versionId: string) =>
+    (
+      await admin.query(
+        `select status, method, text_content, confidence::float, is_low_quality, error
+           from doc.extracted_text where document_version_id = $1`,
+        [versionId],
+      )
+    ).rows[0];
+
+  it("stores tidied text, flags a poor scan and leaves finished text alone", async () => {
+    await asWorker((db) =>
+      recognise.handle(db, uploaded(firstVersion), { readModelVersion: async () => 1 }),
+    );
+    expect(await textOf(firstVersion)).toMatchObject({
+      status: "ready",
+      method: "ocr",
+      text_content: "Net: 12.450 kg\nPlaka 34 ABC 12/3",
+      confidence: 61.24,
+      is_low_quality: true,
+      error: null,
+    });
+    const failing: TextReader = { ...reader, read: async () => Promise.reject(new Error("x")) };
+    await asWorker((db) =>
+      textRecognition(storage, failing).handle(db, uploaded(firstVersion), {
+        readModelVersion: async () => 1,
+      }),
+    );
+    expect((await textOf(firstVersion)).status).toBe("ready");
+  });
+
+  it("marks a file the reader cannot handle as failed instead of retrying it", async () => {
+    const { rows } = await admin.query(
+      `select v.id from doc.document_version v join doc.document d on d.id = v.document_id
+        where d.record_schema = $1 and v.mime_type = 'image/jpeg'`,
+      [P],
+    );
+    await asWorker((db) =>
+      recognise.handle(db, uploaded(rows[0].id), { readModelVersion: async () => 1 }),
+    );
+    expect(await textOf(rows[0].id)).toMatchObject({ status: "failed", error: "unreadable image" });
+  });
+
+  it("aborts uploads left open past their expiry", async () => {
+    as(MANAGER_A);
+    const { rows: docs } = await admin.query(
+      "select id from doc.document where record_schema = $1 and status = 'active' limit 1",
+      [P],
+    );
+    const started = await service.startVersion(docs[0].id, file(10));
+    await admin.query(
+      "update doc.upload set expires_at = now() - interval '1 minute' where id = $1",
+      [started.uploadId],
+    );
+    expect(await asWorker((db) => closeExpiredUploads(db, storage))).toBeGreaterThanOrEqual(1);
+    expect((await service.uploadState(started.uploadId)).status).toBe("aborted");
+    expect(await failure(service.putPart(started.uploadId, 0, bytes(10)))).toBe(400);
+  });
+});
+
+/** Names and contents of a ZIP's entries, read from its central directory (stored entries). */
+async function unzip(stream: ReadableStream<Uint8Array>) {
+  const zip = Buffer.from(await new Response(stream).arrayBuffer());
+  const end = zip.lastIndexOf(Buffer.from([0x50, 0x4b, 0x05, 0x06]));
+  const count = zip.readUInt16LE(end + 10);
+  let at = zip.readUInt32LE(end + 16);
+  const entries: Record<string, Buffer> = {};
+  for (let i = 0; i < count; i += 1) {
+    expect(zip.readUInt32LE(at)).toBe(0x02014b50);
+    const size = zip.readUInt32LE(at + 20);
+    const nameLength = zip.readUInt16LE(at + 28);
+    const skip = nameLength + zip.readUInt16LE(at + 30) + zip.readUInt16LE(at + 32);
+    const local = zip.readUInt32LE(at + 42);
+    const name = zip.subarray(at + 46, at + 46 + nameLength).toString("utf8");
+    const data = local + 30 + zip.readUInt16LE(local + 26) + zip.readUInt16LE(local + 28);
+    entries[name] = zip.subarray(data, data + size);
+    at += 46 + skip;
+  }
+  return entries;
+}
+
+describe("bulk download (REQ-DOC-007)", () => {
+  it("zips only what the person may see, names repeats apart and audits it first", async () => {
+    as(MANAGER_A);
+    for (const [recordId, content] of [
+      [RECORD_P1, 11],
+      [RECORD_P1, 12],
+      [RECORD_P2, 13],
+    ] as const) {
+      const started = await service.startDocument({
+        record: record(recordId),
+        typeCode: "delivery_note",
+        title: "İrsaliye",
+        file: file(content, "application/pdf", "İrsaliye.pdf"),
+      });
+      await upload(started.uploadId, bytes(content));
+    }
+    const before = (await admin.query("select clock_timestamp() as t")).rows[0].t;
+
+    const viewer = await as(VIEWER_A).bulkDownload({ projectId: PROJECT_1 });
+    expect(viewer.count).toBe(2);
+    const files = await unzip(viewer.zip);
+    expect(Object.keys(files)).toEqual(["İrsaliye.pdf", "İrsaliye (2).pdf"]);
+    expect(Buffer.compare(files["İrsaliye (2).pdf"], Buffer.from(bytes(12)))).toBe(0);
+
+    const finance = await as(FINANCE_A).bulkDownload({ projectId: PROJECT_1 });
+    expect(finance.count).toBe(3);
+    expect(Object.keys(await unzip(finance.zip)).length).toBe(3);
+    expect((await as(VIEWER_B).bulkDownload({ projectId: PROJECT_1 })).count).toBe(0);
+    expect((await as(VIEWER_A).bulkDownload({ record: record(RECORD_P2) })).count).toBe(0);
+
+    const { rows } = await admin.query(
+      `select actor_user_id, payload from aud.audit_log
+        where event_type = 'document.bulk_downloaded' and occurred_at >= $1
+        order by occurred_at`,
+      [before],
+    );
+    expect(rows.map((r) => [r.actor_user_id, r.payload.count])).toEqual([
+      [VIEWER_A, 2],
+      [FINANCE_A, 3],
+      [VIEWER_B, 0],
+      [VIEWER_A, 0],
+    ]);
+    expect(rows[0].payload.scope).toEqual({ project_id: PROJECT_1 });
   });
 });

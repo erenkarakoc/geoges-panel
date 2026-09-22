@@ -1,15 +1,19 @@
+import { makeZip } from "client-zip";
+
 import {
   archive,
   completeUpload,
   insertDocumentWithUpload,
   insertVersionUpload,
   markSigned,
+  prepareBulkDownload,
   readDocumentsOf,
   readParts,
   readUpload,
   readVisibleVersion,
   recordPart,
   saveMultipartId,
+  type BulkScope,
   type DbIdentity,
   type UploadRow,
 } from "@/modules/doc/data/doc-store";
@@ -18,6 +22,7 @@ import {
   checkPart,
   PART_BYTES,
   PREVIEWABLE,
+  zipEntryNames,
   type RecordFacts,
   type RecordRef,
 } from "@/modules/doc/domain/documents";
@@ -238,6 +243,27 @@ export function createDocumentService(deps: DocumentServiceDeps) {
     async archive(documentId: string, reason: string) {
       if (!reason.trim()) throw new DocumentError(400, "Arşivleme için gerekçe yazın.");
       if (!(await archive(await who(), documentId, reason))) throw notFound();
+    },
+
+    /**
+     * All documents of a record or a project the person may see, newest version each, as one
+     * ZIP streamed file by file (REQ-DOC-007). The audit event is written before anything is
+     * sent.
+     */
+    async bulkDownload(scope: BulkScope) {
+      const items = await prepareBulkDownload(await who(), scope);
+      const names = zipEntryNames(items.map((i) => i.fileName));
+      async function* entries() {
+        for (const [n, item] of items.entries()) {
+          yield {
+            name: names[n],
+            input: await storage.getObjectStream(item.storageKey),
+            size: item.sizeBytes,
+            lastModified: item.uploadedAt,
+          };
+        }
+      }
+      return { count: items.length, zip: makeZip(entries()) };
     },
 
     /** Marks a version as the signed one (REQ-DOC-005). */

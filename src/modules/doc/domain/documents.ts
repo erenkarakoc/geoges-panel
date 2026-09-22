@@ -86,6 +86,27 @@ export function tidyRecognisedText(passes: readonly string[]): string {
     .trim();
 }
 
+/**
+ * Names inside a bulk-download ZIP: the uploaded file names, made safe (no folders, no parent
+ * paths, no control characters) and unique by a " (2)" before the extension, as file managers do.
+ */
+export function zipEntryNames(fileNames: readonly string[]): string[] {
+  const used = new Set<string>();
+  return fileNames.map((raw) => {
+    const safe =
+      raw
+        .replace(/[\\/:*?"<>|\p{Cc}]/gu, "_")
+        .replace(/^\.+/, "_")
+        .trim() || "belge";
+    const dot = safe.lastIndexOf(".");
+    const [stem, ext] = dot > 0 ? [safe.slice(0, dot), safe.slice(dot)] : [safe, ""];
+    let name = safe;
+    for (let n = 2; used.has(name.toLocaleLowerCase("tr")); n += 1) name = `${stem} (${n})${ext}`;
+    used.add(name.toLocaleLowerCase("tr"));
+    return name;
+  });
+}
+
 /** Below this mean confidence a scan is flagged "kalite düşük, yeniden tarayın" (SPIKE-16). */
 export const LOW_CONFIDENCE = 80;
 

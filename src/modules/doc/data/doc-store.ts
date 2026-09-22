@@ -262,3 +262,56 @@ export function markSigned(identity: DbIdentity, versionId: string) {
     return rows.length > 0;
   });
 }
+
+/** What a bulk download covers (REQ-DOC-007): one record's documents, or a project's. */
+export type BulkScope = { record: RecordRef } | { projectId: string };
+
+export type BulkItem = {
+  documentId: string;
+  versionId: string;
+  storageKey: string;
+  fileName: string;
+  sizeBytes: number;
+  uploadedAt: Date;
+};
+
+/**
+ * The newest version of every active document in the scope the person may see, and the audit
+ * event naming them, in one transaction: nothing is sent that was not logged first.
+ */
+export function prepareBulkDownload(identity: DbIdentity, scope: BulkScope) {
+  return runAsUser(identity, async (db: Db) => {
+    const where =
+      "record" in scope
+        ? sql`d.record_schema = ${scope.record.schema} and d.record_table = ${scope.record.table}
+              and d.record_id = ${scope.record.id}::uuid`
+        : sql`d.project_id = ${scope.projectId}::uuid`;
+    const { rows } = await sql<Record<string, unknown>>`
+      select d.id as document_id, v.id as version_id, v.storage_key, v.file_name, v.size_bytes,
+             v.created_at
+        from doc.document d
+        join lateral (select * from doc.document_version x where x.document_id = d.id
+                       order by x.version_no desc limit 1) v on true
+       where d.status = 'active' and ${where}
+       order by d.created_at, d.id`.execute(db);
+    const items = rows.map((r): BulkItem => ({
+      documentId: r.document_id as string,
+      versionId: r.version_id as string,
+      storageKey: r.storage_key as string,
+      fileName: r.file_name as string,
+      sizeBytes: Number(r.size_bytes),
+      uploadedAt: new Date(r.created_at as string),
+    }));
+    const described =
+      "record" in scope
+        ? {
+            record_schema: scope.record.schema,
+            record_table: scope.record.table,
+            record_id: scope.record.id,
+          }
+        : { project_id: scope.projectId };
+    await sql`select doc.record_bulk_download(${items.map((i) => i.documentId)}::uuid[],
+                                              ${JSON.stringify(described)}::jsonb)`.execute(db);
+    return items;
+  });
+}

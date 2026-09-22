@@ -61,6 +61,11 @@ export function createR2Storage(config = readR2Config()): StorageProvider {
       if (!object.Body) throw new Error(`empty object ${key}`);
       return object.Body.transformToByteArray();
     },
+    async getObjectStream(key) {
+      const object = await client.send(new GetObjectCommand({ Bucket, Key: key }));
+      if (!object.Body) throw new Error(`empty object ${key}`);
+      return object.Body.transformToWebStream() as ReadableStream<Uint8Array>;
+    },
     async signedGetUrl(key, options) {
       return getSignedUrl(
         client,

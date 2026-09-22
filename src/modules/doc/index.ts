@@ -23,3 +23,6 @@ export {
   type RecordRef,
 } from "./domain/documents";
 export type { DocumentSummary, TextStatus } from "./data/doc-store";
+
+// Background work, collected by src/jobs/registry.ts (text recognition, expired uploads).
+export { docJobs } from "./data/doc-jobs";

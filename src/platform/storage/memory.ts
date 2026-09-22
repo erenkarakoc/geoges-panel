@@ -25,6 +25,11 @@ export function createMemoryStorage(): StorageProvider & { objects: Map<string, 
       if (!body) throw new Error(`no object ${key}`);
       return body;
     },
+    async getObjectStream(key) {
+      const body = objects.get(key);
+      if (!body) throw new Error(`no object ${key}`);
+      return new Blob([new Uint8Array(body)]).stream();
+    },
     async signedGetUrl(key, options) {
       if (!objects.has(key)) throw new Error(`no object ${key}`);
       const disposition = encodeURIComponent(contentDisposition(options.fileName, options.inline));

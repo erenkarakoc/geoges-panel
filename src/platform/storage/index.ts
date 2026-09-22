@@ -27,3 +27,20 @@ export function storageProvider(env: Record<string, string | undefined> = proces
   }
   return chosen;
 }
+
+/**
+ * The same adapter, chosen at the first call instead of at import, so that code wired at start
+ * (the worker's registry) does not fail before any document work is asked for.
+ */
+export const processStorage: StorageProvider = {
+  putObject: (...a) => storageProvider().putObject(...a),
+  headObject: (...a) => storageProvider().headObject(...a),
+  getObject: (...a) => storageProvider().getObject(...a),
+  getObjectStream: (...a) => storageProvider().getObjectStream(...a),
+  signedGetUrl: (...a) => storageProvider().signedGetUrl(...a),
+  createMultipart: (...a) => storageProvider().createMultipart(...a),
+  uploadPart: (...a) => storageProvider().uploadPart(...a),
+  completeMultipart: (...a) => storageProvider().completeMultipart(...a),
+  abortMultipart: (...a) => storageProvider().abortMultipart(...a),
+  deleteObject: (...a) => storageProvider().deleteObject(...a),
+};

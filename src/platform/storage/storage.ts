@@ -22,6 +22,8 @@ export interface StorageProvider {
   /** Size and type of a stored object, or null when there is none. */
   headObject(key: string): Promise<{ size: number; contentType: string | null } | null>;
   getObject(key: string): Promise<Uint8Array>;
+  /** The object as a stream, so a large file never sits in memory whole (bulk download). */
+  getObjectStream(key: string): Promise<ReadableStream<Uint8Array>>;
   signedGetUrl(key: string, options: SignedGetOptions): Promise<string>;
   createMultipart(key: string, contentType: string): Promise<string>;
   uploadPart(key: string, uploadId: string, partNumber: number, body: Uint8Array): Promise<string>;

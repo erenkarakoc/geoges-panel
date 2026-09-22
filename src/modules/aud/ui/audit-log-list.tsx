@@ -119,8 +119,9 @@ export function AuditLogList({
       <FrameHeader>
         <FrameTitle>Denetim Kayıtları</FrameTitle>
         <FrameDescription>
-          Giriş ve çıkışlar, rol ve yetki değişiklikleri, sıfırlamalar ve yapılandırma aktarımları.
-          Kayıtlar değiştirilemez ve silinemez.
+          Giriş ve çıkışlar, rol ve yetki değişiklikleri, belge arşivleme ve toplu indirmeler, elle
+          girilen kurlar, sıfırlamalar ve yapılandırma aktarımları. Kayıtlar değiştirilemez ve
+          silinemez.
         </FrameDescription>
       </FrameHeader>
 
