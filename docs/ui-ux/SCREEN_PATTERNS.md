@@ -1,6 +1,6 @@
 # Standart Ekran Kalıpları: Liste, Detay, Form
 
-Durum: CONFIRMED (sahip, 2026-09-19; alt bant bölümü D-228, 2026-09-20) · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-19; alt bant bölümü D-228, 2026-09-20) · Son güncelleme: 2026-09-22
 
 Ekran envanterindeki (`docs/ui-ux/SCREEN_INVENTORY.md`) her L, D ve F ekranı bu üç kalıptan birini kullanır (REQ-NFR-006, REQ-NFR-013…015). Kalıplar CHG-004 kabuğunun üzerine oturur: üst bar, açık kayıtta ikinci satır (bağlam satırı, D-064), çalışma katmanı ve telefonda alt çubuk (D-054…D-070) değişmez. Bileşenlerin hepsi projede kurulu COSS bileşenleridir; özel bileşen gerekmez (ADR-009). Kararlar: D-219.
 
@@ -36,7 +36,7 @@ Her kalıpta geçerli ortak kurallar:
 - **Satır / kart:** masaüstünde varsayılan satır, telefonda varsayılan kart; kullanıcı değiştirebilir.
 - **Yoğunluk:** sık / ferah; yalnızca satır görünümünü etkiler.
 - **Hatırlama:** görünüm, yoğunluk, sıralama ve filtreler ekran bazında kullanıcıya göre hatırlanır (REQ-NFR-013). Adı verilen hâl "kayıtlı görünüm" olur ve role paylaşılabilir (REQ-RPT-017).
-- **Sayfalama:** masaüstünde sayfa numaraları ve sayfa başına kayıt seçimi; telefonda listenin sonunda "Daha fazla göster". Toplam kayıt sayısı her zaman görünür (D-219).
+- **Sayfalama:** masaüstünde sayfa numaraları ve sayfa başına kayıt seçimi; telefonda listenin sonunda "Daha fazla göster". Toplam kayıt sayısı her zaman görünür (D-219). Bileşen: `ListPagination` (`platform/ui/list`, DESIGN_SYSTEM_RULES §4.1 satır 20); ekranlar COSS sayfalama parçalarını doğrudan kullanmaz. Sayfa başına kayıt seçimi ve telefondaki "Daha fazla göster" ortak standart liste bileşeniyle (Faz 09) gelir; o zamana kadar telefonda önceki/sonraki ve "3 / 12" görünür.
 - **Satıra tıklamak** detayı açar. Satırın kendi eylemleri sağdaki "…" menüsündedir (`Menu`); telefonda aynı eylemler `Drawer` menüsünde.
 - **Toplu seçim** yalnızca toplu eylemi olan listelerde vardır (ör. toplu dışa aktarım); seçim olunca araç çubuğu toplu eylem çubuğuna döner.
 - **Dışa aktarım** ekranda görülebilenden fazlasını içermez ve denetime yazılır (REQ-RPT-019).

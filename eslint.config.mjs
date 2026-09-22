@@ -23,6 +23,24 @@ const boundaryElements = [
 
 const cossLayers = ["coss-ui", "coss-support"];
 
+// Database access (TASK-0101): the driver and query builder stay behind src/platform/db.
+const databaseImports = {
+  paths: [{ name: "pg", message: "Only src/platform/db uses the driver (ADR-015)." }],
+  patterns: [
+    {
+      group: ["kysely", "kysely/*", "@/platform/db", "@/platform/db/*"],
+      message:
+        "Database access belongs in src/modules/<code>/data/ (PORTS_AND_SERVICES section 2).",
+    },
+  ],
+};
+// Every list pages through the shared Turkish ListPagination (DESIGN_SYSTEM_RULES 4.1 row 20).
+const paginationImport = {
+  name: "@/components/ui/pagination",
+  message:
+    "Use ListPagination from @/platform/ui/list/list-pagination; COSS pagination parts carry English text.",
+};
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
@@ -101,18 +119,14 @@ const eslintConfig = defineConfig([
     rules: {
       "no-restricted-imports": [
         "error",
-        {
-          paths: [{ name: "pg", message: "Only src/platform/db uses the driver (ADR-015)." }],
-          patterns: [
-            {
-              group: ["kysely", "kysely/*", "@/platform/db", "@/platform/db/*"],
-              message:
-                "Database access belongs in src/modules/<code>/data/ (PORTS_AND_SERVICES section 2).",
-            },
-          ],
-        },
+        { ...databaseImports, paths: [...databaseImports.paths, paginationImport] },
       ],
     },
+  },
+  {
+    // The one place allowed to compose COSS pagination.
+    files: ["src/platform/ui/list/**/*.{ts,tsx}"],
+    rules: { "no-restricted-imports": ["error", databaseImports] },
   },
   {
     files: ["src/modules/*/data/**/*.{ts,tsx}"],

@@ -20,12 +20,6 @@ import {
 } from "@/components/ui/frame";
 import { Input } from "@/components/ui/input";
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-} from "@/components/ui/pagination";
-import {
   Select,
   SelectItem,
   SelectPopup,
@@ -48,9 +42,9 @@ import {
   auditEventLabel,
   auditLogQuery,
   auditTargetLabel,
-  pageWindow,
   type AuditLogFilters,
 } from "@/modules/aud/domain/audit-log";
+import { ListPagination } from "@/platform/ui/list/list-pagination";
 
 const ROUTE = "/audit-log";
 
@@ -243,29 +237,11 @@ export function AuditLogList({
         <span className="text-sm text-muted-foreground">
           Toplam {countFormat.format(data.total)} kayıt
         </span>
-        {data.lastPage > 1 && (
-          <Pagination aria-label="Sayfalar" className="mx-0 w-auto">
-            <PaginationContent>
-              {pageWindow(data.page, data.lastPage).map((p, i) =>
-                p === null ? (
-                  <PaginationItem aria-hidden="true" key={`gap-${i}`}>
-                    <span className="px-1 text-muted-foreground">…</span>
-                  </PaginationItem>
-                ) : (
-                  <PaginationItem key={p}>
-                    <PaginationLink
-                      aria-label={`Sayfa ${p}`}
-                      isActive={p === data.page}
-                      render={<Link href={`${ROUTE}${auditLogQuery(filters, p)}`} />}
-                    >
-                      {p}
-                    </PaginationLink>
-                  </PaginationItem>
-                ),
-              )}
-            </PaginationContent>
-          </Pagination>
-        )}
+        <ListPagination
+          hrefFor={(p) => `${ROUTE}${auditLogQuery(filters, p)}`}
+          lastPage={data.lastPage}
+          page={data.page}
+        />
       </FramePanel>
     </Frame>
   );

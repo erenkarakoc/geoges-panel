@@ -6,7 +6,6 @@ import {
   auditLogQuery,
   auditLogRange,
   auditTargetLabel,
-  pageWindow,
   parseAuditLogFilters,
 } from "./audit-log";
 
@@ -68,7 +67,7 @@ describe("audit log filters (SCR-193)", () => {
   });
 });
 
-describe("audit log labels and pages", () => {
+describe("audit log labels", () => {
   it("names known events in Turkish and shows unknown codes as they are", () => {
     expect(auditEventLabel("role_assignment.created")).toBe("Rol atandı");
     expect(auditEventLabel("sit.unknown")).toBe("sit.unknown");
@@ -77,12 +76,5 @@ describe("audit log labels and pages", () => {
     expect(auditActorLabel("x", "geoges-admin")).toBe("geoges-admin");
     expect(auditActorLabel("x", null)).toBe("Kaldırılmış hesap");
     expect(auditActorLabel(null, null)).toBe("Sistem");
-  });
-
-  it("shows every page when there are few, and a window with gaps otherwise", () => {
-    expect(pageWindow(1, 3)).toEqual([1, 2, 3]);
-    expect(pageWindow(5, 20)).toEqual([1, null, 4, 5, 6, null, 20]);
-    expect(pageWindow(1, 20)).toEqual([1, 2, null, 20]);
-    expect(pageWindow(20, 20)).toEqual([1, null, 19, 20]);
   });
 });

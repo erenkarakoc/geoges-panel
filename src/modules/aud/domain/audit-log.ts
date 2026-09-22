@@ -144,20 +144,3 @@ export function auditLogQuery(filters: AuditLogFilters, page = filters.page): st
   const text = q.toString();
   return text ? `?${text}` : "";
 }
-
-/** Page numbers to show around the current page, with `null` for a gap. */
-export function pageWindow(current: number, last: number): (number | null)[] {
-  if (last <= 7) return Array.from({ length: last }, (_, i) => i + 1);
-  const pages = new Set(
-    [1, last, current - 1, current, current + 1].filter((p) => p >= 1 && p <= last),
-  );
-  const sorted = [...pages].sort((a, b) => a - b);
-  const out: (number | null)[] = [];
-  let previous = 0;
-  for (const p of sorted) {
-    if (previous && p - previous > 1) out.push(null);
-    out.push(p);
-    previous = p;
-  }
-  return out;
-}
