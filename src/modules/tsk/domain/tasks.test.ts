@@ -5,6 +5,7 @@ import {
   digestText,
   dueAtFromDay,
   historyLine,
+  homeScreenAsk,
   NOTIFICATION_TEMPLATES,
   notificationText,
   sortTasks,
@@ -163,5 +164,35 @@ describe("the daily digest (REQ-TSK-013, D-133)", () => {
     expect(owner.lines).toEqual([
       "Şirket dün: 4 görev açıldı, 3 kapandı, 1 geciken, 0 sistem sorunu",
     ]);
+  });
+});
+
+describe("asking for the Home Screen (D-264)", () => {
+  const facts = (patch: Partial<Parameters<typeof homeScreenAsk>[0]> = {}) =>
+    homeScreenAsk({
+      introShown: false,
+      onHomeScreen: false,
+      standaloneNow: false,
+      platform: "ios" as const,
+      ...patch,
+    });
+
+  it("opens the window once and keeps the strip on phones until it is done", () => {
+    expect(facts()).toEqual({ dialog: true, strip: true });
+    expect(facts({ introShown: true })).toEqual({ dialog: false, strip: true });
+    expect(facts({ introShown: true, platform: "android" })).toEqual({
+      dialog: false,
+      strip: true,
+    });
+  });
+
+  it("asks nothing of someone who already has it, and no strip on a computer", () => {
+    expect(facts({ onHomeScreen: true })).toEqual({ dialog: false, strip: false });
+    expect(facts({ standaloneNow: true })).toEqual({ dialog: false, strip: false });
+    expect(facts({ platform: "other" })).toEqual({ dialog: true, strip: false });
+    expect(facts({ platform: "other", introShown: true })).toEqual({
+      dialog: false,
+      strip: false,
+    });
   });
 });

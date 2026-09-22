@@ -271,3 +271,28 @@ export function digestText(counts: DigestCounts): {
           : "Bugün işiniz yok";
   return { isEmpty: own === 0 && companyTotal === 0, subject: headline, lines };
 }
+
+// ---------------------------------------------------------------------------------------------
+// The panel on the Home Screen (TASK-0113, D-264)
+// ---------------------------------------------------------------------------------------------
+
+export type HomeScreenPlatform = "ios" | "android" | "other";
+
+export type HomeScreenFacts = {
+  /** What the person's row says: window already shown, Home Screen already done. */
+  introShown: boolean;
+  onHomeScreen: boolean;
+  /** Whether the panel is running from the Home Screen right now. */
+  standaloneNow: boolean;
+  platform: HomeScreenPlatform;
+};
+
+/**
+ * What to ask for, if anything (D-264): the window opens once, at the first sign-in of someone
+ * who has not added the panel yet; the strip stays on phones until they do. Someone reading the
+ * panel from their Home Screen is asked nothing, on any screen.
+ */
+export function homeScreenAsk(facts: HomeScreenFacts): { dialog: boolean; strip: boolean } {
+  if (facts.onHomeScreen || facts.standaloneNow) return { dialog: false, strip: false };
+  return { dialog: !facts.introShown, strip: facts.platform !== "other" };
+}

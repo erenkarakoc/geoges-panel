@@ -20,6 +20,7 @@ import {
   readPushSubscriptionState,
   savePushSubscription,
 } from "@/modules/tsk/data/tsk-push-store";
+import { noteAppState, readAppState, type AppState } from "@/modules/tsk/data/tsk-install-store";
 import {
   assignTaskSchema,
   dueAtFromDay,
@@ -188,4 +189,22 @@ export async function rememberPushBrowser(subscription: {
 /** Switches this browser off again; the row is kept as "expired". */
 export async function forgetPushBrowser(endpoint: string) {
   return expirePushSubscription(await identity(), endpoint);
+}
+
+// ---------------------------------------------------------------------------------------------
+// The panel on the Home Screen (TASK-0113, D-264, D-252)
+// ---------------------------------------------------------------------------------------------
+
+/** Where the signed-in person stands: window shown, Home Screen done, phone notification on. */
+export async function appState(): Promise<AppState> {
+  return readAppState(await identity());
+}
+
+/** The screen reports what it saw; both notes are safe to repeat. */
+export async function noteApp(note: {
+  introShown?: boolean;
+  onHomeScreen?: boolean;
+  platform?: string | null;
+}): Promise<void> {
+  await noteAppState(await identity(), note);
 }

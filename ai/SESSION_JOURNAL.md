@@ -311,3 +311,11 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-22 20:06:40Z · b13a9554 · Write · `src/app/api/dev-log/route.ts`
 - 2026-09-22 20:06:46Z · b13a9554 · Write · `src/platform/ui/dev/browser-report.tsx`
 - 2026-09-22 21:09:40Z · 5c627231 · Edit · `next.config.ts`
+- 2026-09-22 21:25:30Z · 5c627231 · Write · `scripts/make-app-icons.mjs`
+- 2026-09-22 21:26:17Z · 5c627231 · Write · `db/migrations/0016_app_install.sql`
+- 2026-09-22 21:27:02Z · 5c627231 · Write · `src/modules/tsk/data/tsk-install-store.ts`
+- 2026-09-22 21:27:24Z · 5c627231 · Write · `src/app/api/app-install/route.ts`
+- 2026-09-22 21:28:22Z · 5c627231 · Write · `src/modules/tsk/ui/install-prompt.tsx`
+- 2026-09-22 21:28:40Z · 5c627231 · Write · `src/modules/tsk/ui/install-followup.tsx`
+- 2026-09-22 21:28:51Z · 5c627231 · Write · `src/app/(app)/today/page.tsx`
+- 2026-09-22 21:40:11Z · 5c627231 · Edit · `src/modules/tsk/ui/install-prompt.tsx`

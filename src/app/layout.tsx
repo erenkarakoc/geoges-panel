@@ -28,7 +28,12 @@ export const metadata: Metadata = {
       { url: brandTileUrls.primary, type: "image/svg+xml" },
       { url: brandTileUrls.light, type: "image/svg+xml", media: "(prefers-color-scheme: dark)" },
     ],
+    // An iPhone needs a square PNG for the Home Screen; without it, it shows a screenshot of the
+    // page (TASK-0113). Drawn by `node scripts/make-app-icons.mjs`.
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
+  // On the Home Screen the panel opens as an app, with its own name under the icon (D-252).
+  appleWebApp: { capable: true, title: "GEOGES", statusBarStyle: "black-translucent" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

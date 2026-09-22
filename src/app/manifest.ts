@@ -19,12 +19,17 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: "#0b0b0c",
     theme_color: "#0f4c81",
     icons: [
+      // A phone cannot use the SVG for its Home Screen; the PNGs are drawn by
+      // `node scripts/make-app-icons.mjs` from the brand mark (TASK-0113).
+      { src: "/assets/brand/app-icon-192.png", type: "image/png", sizes: "192x192" },
+      { src: "/assets/brand/app-icon-512.png", type: "image/png", sizes: "512x512" },
       {
-        src: "/assets/brand/icon_primary.svg",
-        type: "image/svg+xml",
-        sizes: "any",
-        purpose: "any",
+        src: "/assets/brand/app-icon-maskable-512.png",
+        type: "image/png",
+        sizes: "512x512",
+        purpose: "maskable",
       },
+      { src: "/assets/brand/icon_primary.svg", type: "image/svg+xml", sizes: "any" },
     ],
   };
 }

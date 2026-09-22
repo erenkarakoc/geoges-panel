@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-23 — Panel telefonun ana ekranına çıkıyor
+
+- Panel artık kendisini ana ekrana ekletiyor: ilk girişte "Bugün" ekranında bir kez pencere, sonrasında ekleyene kadar telefonda küçük bir şerit. Android'de tek tuşla kuruluyor; iPhone'da Apple izin vermediği için pencere paylaş simgesiyle iki adımı gösteriyor (D-264).
+- Ana ekran simgesi marka işaretinden üretildi (mavi zemin, beyaz işaret); iPhone artık sayfanın ekran görüntüsünü değil gerçek simgeyi koyuyor.
+- Telefonda alt çubuğun düğmeleri 44 pikselden 56 piksele çıktı, Görevler listesi tablo yerine kart basıyor.
+- Telefonla yerel ağdan girildiğinde ekranın betiksiz davranmasının sebebi bulundu ve giderildi: geliştirme sunucusu, başka bir adresten gelen istekleri reddediyordu.
+
 ## 2026-09-22 — Tasks can be given
 
 - TASK-0108 step 1 (plan approved, D-263). "Görev ver" in the header opens a form listing only the people in your scope; the database refuses anyone outside it (D-130). A task closes when the assignee says it is done and the giver is told, or, with "onayım gereksin", only after the giver approves; the giver can send it back or reopen it, and every step shows in the task's history with person, time and reason (D-131).

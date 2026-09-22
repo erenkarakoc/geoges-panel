@@ -300,3 +300,20 @@ Temel özellikler T1 kapısından geçer; M1 yerel kabulü sahibin geri bildirim
 - **Göç:** 0011 test projesine uygulanır. **Geri dönüş:** `0011_tasks_and_notifications.down.sql` `tsk` şemasını kaldırır.
 - **Kabul:** yukarıdaki testler geçer; `npm run check` ve derleme geçer; sahip panelde kendine görev verir, zilde bildirimi canlı görür, telefon bildirimini alır, görevi kapatır; ölü mektup oluşturulunca sahibe kritik bildirim ve sistem sorunu görevi düşer.
 - **Uygulama notları (sahip onayı 2026-09-22):** uygulanmış göç dosyası değiştirilemediği için her adım kendi göçünü getirir (adım 1: 0011; sonraki adımlar 0012…); plandaki tek 0011 dosyası böylece adımlara bölünür, içerik aynıdır. Aynı bildirimin tekrar gönderilmediği "kısa süre" 10 dakikadır. Yeri (şantiye/proje) olmayan görevde sorumlunun herhangi bir etkin vekili görevi görür ve tamamlayabilir. Görev geçmişi `tsk.task_history` ile, görevin kendi görünürlük kuralıyla okunur. Görev ekranı (`/tasks/<id>`) her görevin ve bildirimin gittiği yerdir: kaynak ("neden bende"), adımlar ve geçmiş burada. "Görev ver" formu, sahibin isteğiyle (2026-09-22) ayrı sayfa yerine üstte açılır: masaüstünde COSS `Dialog`, telefonda `Drawer` (DESIGN_SYSTEM_RULES "kısa form → Dialog, mobil karşılığı Drawer"; COSS `p-drawer-12`). Next.js yakalayan rotasıyla (`@modal/(.)tasks/new`) kurulur: adres `/tasks/new` olur, geri tuşu formu kapatır, adres doğrudan ya da yenilenerek açılırsa form sayfa olarak gelir.
+
+### TASK-0113 — Panel ana ekranda: tek tuşla kurulum, ilk giriş penceresi, büyüyen dokunma alanı (T2)
+
+- **Amaç:** Paneli telefonun ana ekranına ekletmek. Bildirim ancak böyle telefona düşüyor (D-252) ve panel gün içinde defalarca açılıyor; kullanıcıyı paylaş menüsünde "Ana Ekrana Ekle" aramaya bırakmıyoruz (sahip isteği 2026-09-23, D-264).
+- **Kararlar (D-264):**
+  - **İlk giriş:** "Bugün" ekranında bir kez pencere açılır; gösterildiği kişi bazında kaydedilir, ikinci kez açılmaz.
+  - **Sonrası:** telefon genişliğinde, ana ekrana eklenene kadar duran bir şerit. Kapatılamaz (kapatılan uyarı bir daha görülmez) ama işi engellemez.
+  - **Android ve masaüstü Chrome:** tarayıcının kurulum teklifi yakalanır, düğmeye basınca sistemin kendi kurulum penceresi açılır — arama yok.
+  - **iPhone:** Apple sayfadan ana ekrana ekleme izni vermiyor; pencere paylaş simgesiyle iki adımı gösterir.
+  - **Dil:** kaybı söyler (şu an telefona bildirim gitmiyor), işi küçültür (iki adım, on saniye); geri sayım, engelleme, tekrar eden pencere yok.
+  - **Tutulan veri:** yalnız "pencere gösterildi" ve "panel ana ekrandan açıldı" (`tsk.app_install`), yalnız kişinin kendisi görür. Sahip katmanına "kurmayanlar" listesi **yok** (sahip, 2026-09-23).
+  - **Simgeler:** marka işaretinden üretilir (`node scripts/make-app-icons.mjs`): 192, 512, maskable 512 ve 180 px `apple-touch-icon`; marka mavisi zemin üzerine beyaz işaret. Telefon ana ekranda SVG kullanamaz.
+  - **Dokunma alanı:** alt çubuk girişleri ve birincil eylem 44 px yerine 56 px (DESIGN_SYSTEM_RULES §4.1 satır 17a); Görevler listesi telefonda tablo yerine kart.
+- **Etkilenen dosyalar:** yeni `db/migrations/0016_app_install.sql` + `.down.sql`, `scripts/make-app-icons.mjs`, `public/apple-touch-icon.png`, `public/assets/brand/app-icon-192.png`, `src/modules/tsk/data/tsk-install-store.ts`, `src/modules/tsk/ui/install-prompt.tsx`, `src/app/api/app-install/route.ts`; değişen `src/app/manifest.ts`, `src/app/layout.tsx`, `src/app/(app)/today/page.tsx`, `src/platform/ui/app-shell/mobile-bottom-bar.tsx`, `src/modules/tsk/ui/task-list.tsx`.
+- **Güvenlik:** kişi yalnız kendi satırını okur ve yazar (RLS + tanımlayıcı işlev); cihaz kimliği tutulmaz.
+- **Testler:** birim — pencere ve şeridin hangi durumda görüneceği; gerçek veritabanı — durumun kişiye özel olması ve notun tekrarının zarar vermemesi. Tarayıcı — telefon genişliğinde şerit ve pencere.
+- **Kabul:** `npm run check` ve derleme geçer; telefonda şerit görünür, iPhone penceresi iki adımı gösterir; Android tek tuş kurulumu HTTPS adres kurulduğunda (DEF-008) doğrulanır.

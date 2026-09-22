@@ -64,6 +64,12 @@ function viewHref(view: TaskView, showClosed: boolean) {
   return query ? `${TASKS_ROUTE}?${query}` : TASKS_ROUTE;
 }
 
+/** The other person of a row: whom it was given to, or who gave it. */
+function personOf(task: TaskSummary, view: TaskView) {
+  if (view === "given") return task.assigneeName;
+  return task.sourceType === "manual" ? (task.givenByName ?? "Bilinmeyen kişi") : "Sistem";
+}
+
 /** The status cell: late tasks say so first (REQ-TSK-007, SCREEN_STATES "vurgulu"). */
 function StatusBadge({ task, now }: { task: TaskSummary; now: Date }) {
   const group = taskGroup(task, now);
@@ -154,47 +160,70 @@ export function TaskList({
             </EmptyContent>
           </Empty>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Görev</TableHead>
-                <TableHead>{other}</TableHead>
-                <TableHead>Son tarih</TableHead>
-                <TableHead>Öncelik</TableHead>
-                <TableHead>Durum</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+          <>
+            {/* A phone shows one card per task: five columns would scroll sideways under a
+                thumb, and the daily screens must work on site (DESIGN_SYSTEM_RULES section 8). */}
+            <ul className="flex flex-col gap-2 md:hidden">
               {tasks.map((task) => (
-                <TableRow key={task.id}>
-                  <TableCell className="max-w-96 whitespace-normal">
-                    <Link
-                      className="font-medium underline-offset-4 hover:underline"
-                      href={`${TASKS_ROUTE}/${task.id}`}
-                    >
-                      {task.title}
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    {view === "given"
-                      ? task.assigneeName
-                      : task.sourceType === "manual"
-                        ? task.givenByName
-                        : "Sistem"}
-                  </TableCell>
-                  <TableCell>{task.dueAt ? dueFormat.format(task.dueAt) : "—"}</TableCell>
-                  <TableCell>
-                    <Badge variant={PRIORITY_BADGE[task.priority]}>
-                      {PRIORITY_LABELS[task.priority]}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <StatusBadge now={now} task={task} />
-                  </TableCell>
-                </TableRow>
+                <li key={task.id}>
+                  <Link
+                    className="flex min-h-16 flex-col gap-1.5 rounded-lg border p-3 transition-colors active:bg-accent/50"
+                    href={`${TASKS_ROUTE}/${task.id}`}
+                  >
+                    <span className="font-medium">{task.title}</span>
+                    <span className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+                      <StatusBadge now={now} task={task} />
+                      {task.priority === "normal" || task.priority === "low" ? null : (
+                        <Badge variant={PRIORITY_BADGE[task.priority]}>
+                          {PRIORITY_LABELS[task.priority]}
+                        </Badge>
+                      )}
+                      {task.dueAt ? <span>{dueFormat.format(task.dueAt)}</span> : null}
+                      <span>
+                        {other}: {personOf(task, view)}
+                      </span>
+                    </span>
+                  </Link>
+                </li>
               ))}
-            </TableBody>
-          </Table>
+            </ul>
+
+            <Table className="hidden md:block">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Görev</TableHead>
+                  <TableHead>{other}</TableHead>
+                  <TableHead>Son tarih</TableHead>
+                  <TableHead>Öncelik</TableHead>
+                  <TableHead>Durum</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {tasks.map((task) => (
+                  <TableRow key={task.id}>
+                    <TableCell className="max-w-96 whitespace-normal">
+                      <Link
+                        className="font-medium underline-offset-4 hover:underline"
+                        href={`${TASKS_ROUTE}/${task.id}`}
+                      >
+                        {task.title}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{personOf(task, view)}</TableCell>
+                    <TableCell>{task.dueAt ? dueFormat.format(task.dueAt) : "—"}</TableCell>
+                    <TableCell>
+                      <Badge variant={PRIORITY_BADGE[task.priority]}>
+                        {PRIORITY_LABELS[task.priority]}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <StatusBadge now={now} task={task} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </>
         )}
       </FramePanel>
     </Frame>

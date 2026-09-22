@@ -29,6 +29,7 @@ import {
   readTasks,
   reopenTask,
 } from "./tsk-store";
+import { noteAppState, readAppState } from "./tsk-install-store";
 import {
   exchangeRateAlarm,
   handleLateTasks,
@@ -84,6 +85,7 @@ async function cleanUp() {
   );
   const taskIds = tasks.map((r) => r.id as string);
   await admin.query("delete from tsk.notification where user_id = any($1)", [PEOPLE]);
+  await admin.query("delete from tsk.app_install where user_id = any($1)", [PEOPLE]);
   await admin.query("delete from tsk.push_subscription where user_id = any($1)", [PEOPLE]);
   await admin.query("delete from tsk.daily_digest where user_id = any($1)", [PEOPLE]);
   // The digest test blocks everybody else's morning with an empty placeholder; take those back.
@@ -740,5 +742,44 @@ describe("system problems (REQ-TSK-005, EVENT_BACKBONE)", () => {
       }),
     );
     expect(await problemTask(key)).toMatchObject({ status: "closed" });
+  });
+});
+
+describe("the panel on the Home Screen (D-264)", () => {
+  it("remembers per person and repeating a note changes nothing", async () => {
+    // Phone notifications are a separate thing; this row starts empty either way.
+    expect(await readAppState(as(PEER_A))).toMatchObject({
+      introShown: false,
+      onHomeScreen: false,
+    });
+
+    await noteAppState(as(PEER_A), { introShown: true, platform: "ios" });
+    await noteAppState(as(PEER_A), { introShown: true, platform: "ios" });
+    expect(await readAppState(as(PEER_A))).toMatchObject({
+      introShown: true,
+      onHomeScreen: false,
+    });
+    // Nobody else is touched by one person's note.
+    expect(await readAppState(as(OTHER_B))).toMatchObject({ introShown: false });
+
+    await noteAppState(as(PEER_A), { onHomeScreen: true, platform: "ios" });
+    expect(await readAppState(as(PEER_A))).toMatchObject({ introShown: true, onHomeScreen: true });
+
+    const { rows } = await admin.query(
+      "select platform, home_screen_at, last_home_screen_at from tsk.app_install where user_id = $1",
+      [PEER_A],
+    );
+    expect(rows[0].platform).toBe("ios");
+    expect(rows[0].home_screen_at).toEqual(rows[0].last_home_screen_at);
+  });
+
+  it("is each person's own row; nobody reads another's", async () => {
+    await noteAppState(as(GIVER_A), { onHomeScreen: true, platform: "android" });
+    const { rows } = await admin.query(
+      "select count(*)::int as n from tsk.app_install where user_id = any($1)",
+      [PEOPLE],
+    );
+    expect(rows[0].n).toBeGreaterThanOrEqual(2);
+    expect((await readAppState(as(OTHER_B))).onHomeScreen).toBe(false);
   });
 });

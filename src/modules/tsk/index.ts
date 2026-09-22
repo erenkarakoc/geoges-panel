@@ -3,6 +3,7 @@
  * only from here, apart from the `ui/` screens that routes render. Server-only.
  */
 export {
+  appState,
   approveTaskDone,
   assignablePeople,
   assignTask,
@@ -13,6 +14,7 @@ export {
   forgetPushBrowser,
   markRead,
   markTaskDone,
+  noteApp,
   notificationSummary,
   pushSettings,
   rememberPushBrowser,
@@ -21,6 +23,7 @@ export {
   type NotificationItem,
 } from "./application/tasks";
 export type { TaskDetail, TaskHistoryEntry, TaskView } from "./data/tsk-store";
+export type { AppState } from "./data/tsk-install-store";
 export {
   assignTaskSchema,
   notificationText,
