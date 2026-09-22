@@ -7,7 +7,7 @@ PROJECT STATUS:              IMPLEMENTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
 CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0106 calendar and exchange rates (T1) built and TESTING — waiting for CI. Next: TASK-0107 documents and storage. TASK-0112 follows TASK-0103/0105/0108 (D-257).
+CURRENT TASK:        TASK-0106 DONE. Next: TASK-0107 documents and storage (T1), plan first. TASK-0112 follows TASK-0103/0105/0108 (D-257).
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -18,7 +18,7 @@ CODE ALLOWED:        Phase 07 permits product code (ADR-007), but only after the
 ```
 
 ## LAST COMPLETED TASK
-2026-09-22: TASK-0106 built (TESTING): migration 0008 (calendar, holidays, append-only rates, fetch state), seed 0004 (company calendar, 2026 holidays, fetch rules), TCMB adapter and job every 10 minutes; the dev worker fetched the real bulletins of 15-21 September; D-261.
+2026-09-22: TASK-0106 DONE (CI green): migration 0008 (calendar, holidays, append-only rates, fetch state), seed 0004 (company calendar, 2026 holidays, fetch rules), TCMB adapter and job every 10 minutes; the dev worker fetched the real bulletins of 15-21 September; D-261.
 
 2026-09-22: TASK-0105 DONE (CI green): migration 0007 (`adm` catalogs, append-only dated rules with `adm.rule_value`, custom field definitions and value check, Turkish folding, per-field custom value history), seed 0003, `modules/adm`, feature switches (browser-checked: `FEATURES_OFF=FIN` hides Finans and Dönem Kapanışı and shows "Bu bölüm henüz açık değil"); D-260.
 
