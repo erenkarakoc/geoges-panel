@@ -263,3 +263,16 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-22 11:41:49Z · b13a9554 · Edit · `src/modules/doc/data/doc.dbtest.ts`
 - 2026-09-22 11:42:45Z · b13a9554 · Write · `src/platform/storage/r2.dbtest.ts`
 - 2026-09-22 11:43:00Z · b13a9554 · Edit · `src/platform/storage/r2.dbtest.ts`
+- 2026-09-22 15:44:05Z · 5c627231 · Write · `db/migrations/0011_tasks_and_notifications.sql`
+- 2026-09-22 15:45:21Z · 5c627231 · Write · `src/modules/tsk/domain/tasks.ts`
+- 2026-09-22 15:46:15Z · 5c627231 · Write · `src/modules/tsk/data/tsk-store.ts`
+- 2026-09-22 15:47:57Z · 5c627231 · Write · `src/modules/tsk/ui/task-list.tsx`
+- 2026-09-22 15:48:25Z · 5c627231 · Write · `src/modules/tsk/ui/assign-task-form.tsx`
+- 2026-09-22 15:50:15Z · 5c627231 · Write · `src/modules/tsk/ui/task-step-buttons.tsx`
+- 2026-09-22 15:50:29Z · 5c627231 · Write · `src/modules/tsk/ui/task-detail.tsx`
+- 2026-09-22 15:50:33Z · 5c627231 · Write · `src/app/(app)/tasks/page.tsx`
+- 2026-09-22 15:50:35Z · 5c627231 · Write · `src/app/(app)/tasks/new/page.tsx`
+- 2026-09-22 15:50:39Z · 5c627231 · Write · `src/app/(app)/tasks/[taskId]/page.tsx`
+- 2026-09-22 15:52:51Z · 5c627231 · Write · `src/modules/tsk/domain/tasks.test.ts`
+- 2026-09-22 15:54:36Z · 5c627231 · Write · `src/modules/tsk/data/tsk.dbtest.ts`
+- 2026-09-22 15:56:43Z · 5c627231 · Edit · `scripts/boundaries.test.mjs`

@@ -85,8 +85,8 @@ const cases = [
   ],
   [
     "a platform module uses another with no arrow in the map, even through index.ts",
-    "src/modules/tsk/domain/probe.ts",
-    "import { readAuthSession } from '@/modules/iam';\nexport const p = readAuthSession;\n",
+    "src/modules/doc/domain/probe.ts",
+    "import { listTasks } from '@/modules/tsk';\nexport const p = listTasks;\n",
     "block",
   ],
   [

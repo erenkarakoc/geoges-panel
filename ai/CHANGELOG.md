@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-22 — Tasks can be given
+
+- TASK-0108 step 1 (plan approved, D-263). "Görev ver" in the header opens a form listing only the people in your scope; the database refuses anyone outside it (D-130). A task closes when the assignee says it is done and the giver is told, or, with "onayım gereksin", only after the giver approves; the giver can send it back or reopen it, and every step shows in the task's history with person, time and reason (D-131).
+- "Görevler" lists late tasks first, then today's, those waiting for approval and the rest; tabs for tasks given to you and by you, and "Tümü" for owners. Each task has its own screen saying who gave it or which problem opened it.
+- The system opens at most one task per open problem and closes it with "sebebi çözüldü" when the cause goes away (REQ-TSK-005). Notifications are written for new, completed, approved and reopened tasks, visible only to their recipient; the bell shows them in the next step.
+
 ## 2026-09-22 — Two resets, a lock and portable configuration
 
 - TASK-0076 DONE (D-246). `npm run db:reset:data` clears sample business data and keeps your flows and definitions; `npm run db:reset:config` first saves your configuration to a file, asks you to type SIFIRLA, then returns everything to factory state. `npm run config:export` / `config:import` carry configuration to another environment; if even one row differs, nothing is written and the differences are listed. Once the environment is marked as holding real data, both resets are locked.

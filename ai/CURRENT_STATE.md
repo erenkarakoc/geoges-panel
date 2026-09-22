@@ -7,7 +7,7 @@ PROJECT STATUS:              IMPLEMENTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
 CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0107 documents and storage (T1), DONE (D-262, CI run 35723626554 green). Next: TASK-0108 notifications and tasks — plan written (D-263 proposed), waiting for the owner's approval. TASK-0112 follows TASK-0103/0105/0108 (D-257).
+CURRENT TASK:        TASK-0107 documents and storage (T1), DONE (D-262, CI run 35723626554 green). Now: TASK-0108 notifications and tasks (T2), IMPLEMENTING — plan approved 2026-09-22 (D-263); step 1 (tasks, SCR-013/014, task screen) built, migration 0011 applied; next step 2 (notification drawer, SSE signals). TASK-0112 follows TASK-0103/0105/0108 (D-257).
 STATUS:              IMPLEMENTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
