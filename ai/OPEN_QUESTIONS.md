@@ -73,12 +73,17 @@ company, every person by day and by hour is a cost, all of it tied to revenue, w
 loss, delay and collection tables in front of me; materials tracked properly, with their
 galvanising differences and waste rates". Most of that is already confirmed scope (REQ-SIT-003,
 REQ-SIT-024…027, REQ-HR-004…009, REQ-FAC-008/009, REQ-INV-003/004/012, REQ-FIN-013…017/021/022,
-REQ-RPT-013/015/016). Three points differ from decisions the owner already took, so they are
-questions, not assumptions.
+REQ-RPT-013/015/016). Below are three points where the customer's wording could be read as more
+than the agreed scope.
 
-| ID | Question | Today's answer in the records | Blocks |
+**ANSWERED 2026-09-22 by the owner: the scope does not change.** The customer is not a software
+person and may phrase things in a way that sounds like a wider promise; the decisions below stand
+as they are, and none of the three is reopened. They are kept here as the words to use when
+talking to the customer, not as pending questions.
+
+| ID | Point raised | The answer that stands | Where |
 |---|---|---|---|
-| OQ-030 | Should general expenses (office rent, head office) be shared out onto projects after all? The customer says "everything ties back to revenue". | No: D-149 keeps project profit to direct costs and shows general expenses company-wide only; D-173 does the same for quotes. | Phase 11 (FIN slice) |
-| OQ-031 | Should an own employee's wage follow the site they actually worked at that day, instead of the unit they are registered to? | No: D-164 / REQ-HR-009 writes the wage to the registered unit's cost centre, split by days only when the unit itself changes mid-month. | Phase 12 (HR slice) |
-| OQ-032 | Is an hourly cost per activity expected (cost per casting or installation hour), or are hours only for productivity? | Hours are recorded to the minute (REQ-SIT-024, REQ-SIT-027) and used for output per hour; cost comes from monthly payroll on the cost centre, so there is no hourly cost rate today. | Phase 12 (HR slice), Phase 15 (performance) |
+| OQ-030 | Should general expenses (office rent, head office) be shared out onto projects, since "everything ties back to revenue"? | No. D-149 keeps project profit to direct costs and shows general expenses company-wide only; D-173 does the same for quotes. Owner confirmed again 2026-09-22. | Phase 11 (FIN slice) |
+| OQ-031 | Should an own employee's wage follow the site they actually worked at that day, instead of the unit they are registered to? | No. D-164 / REQ-HR-009 writes the wage to the registered unit's cost centre, split by days only when the unit itself changes mid-month. Owner confirmed again 2026-09-22. | Phase 12 (HR slice) |
+| OQ-032 | Is an hourly cost rate per activity expected (cost per casting or installation hour)? | No. Hours are recorded to the minute (REQ-SIT-024, REQ-SIT-027) and used for output per hour; cost comes from monthly payroll on the cost centre. Owner confirmed again 2026-09-22. | Phase 12 (HR slice), Phase 15 (performance) |
 
