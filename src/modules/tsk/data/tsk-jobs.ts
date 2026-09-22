@@ -25,6 +25,9 @@ import { notePushResult, readNotificationForPush, readPushTargets } from "./tsk-
 
 export type SignalSender = (userId: string, type: SignalType) => void;
 
+/** Where a revision request is decided (SCR-192). */
+const REVISION_PATH = "/approvals/revision-requests";
+
 const TASK_EVENTS = ["task.created", "task.completed", "task.overdue", "task.escalated"] as const;
 
 export function liveSignals(send: SignalSender): EventSubscriber {
@@ -270,6 +273,69 @@ export function exchangeRateAlarm(): EventSubscriber {
         title: `${day} günü için TCMB kuru alınamadı; kuru elle girin`,
         permission: "adm.module.manage",
       });
+    },
+  };
+}
+
+/**
+ * Revision requests become work (TASK-0109 step 4, REQ-AUD-008, D-265): a new request opens one
+ * task for its approvers and tells each of them; the decision closes that task and tells the
+ * person who asked. One task per request, so a second event changes nothing (REQ-TSK-005).
+ */
+export function revisionAlerts(): EventSubscriber {
+  return {
+    name: "tsk.revision-alerts",
+    events: [
+      "revision_request.submitted",
+      "revision_request.approved",
+      "revision_request.rejected",
+    ],
+    replayable: false,
+    async handle(db, event) {
+      const requestId = String(event.payload.revision_request_id ?? "");
+      if (!requestId) return;
+      const problemKey = `revision:${requestId}`;
+      const label = String(event.payload.label ?? "Kayıt");
+      const record = {
+        schema: (event.payload.record_schema as string | null) ?? null,
+        table: (event.payload.record_table as string | null) ?? null,
+        id: (event.payload.record_id as string | null) ?? null,
+      };
+
+      if (event.code === "revision_request.submitted") {
+        const approvers = Array.isArray(event.payload.approver_user_ids)
+          ? (event.payload.approver_user_ids as string[])
+          : [];
+        if (!approvers.length) return;
+        const title = `Revizyon talebi kararınızı bekliyor: ${label}`;
+        const { rows } = await sql<{ id: string }>`
+          select tsk.open_problem_task(${problemKey}, ${event.code}, ${title},
+                                       ${approvers[0]}::uuid, 'high', null,
+                                       ${REVISION_PATH}, ${record.schema}, ${record.table},
+                                       ${record.id}::uuid) as id`.execute(db);
+        for (const approver of approvers) {
+          await sql`
+            select tsk.notify(${approver}::uuid, 'approval.requested', ${label}, ${REVISION_PATH},
+                              ${problemKey}, ${rows[0].id}::uuid, ${record.schema},
+                              ${record.table}, ${record.id}::uuid)`.execute(db);
+        }
+        return;
+      }
+
+      await sql`select tsk.resolve_problem(${problemKey})`.execute(db);
+      const requester = event.payload.requested_by_user_id;
+      if (typeof requester !== "string") return;
+      const stale = event.payload.stale === true;
+      const type =
+        event.code === "revision_request.approved"
+          ? "revision.approved"
+          : stale
+            ? "revision.stale"
+            : "revision.rejected";
+      await sql`
+        select tsk.notify(${requester}::uuid, ${type}, ${label}, ${REVISION_PATH},
+                          ${`${problemKey}:${type}`}, null, ${record.schema}, ${record.table},
+                          ${record.id}::uuid)`.execute(db);
     },
   };
 }

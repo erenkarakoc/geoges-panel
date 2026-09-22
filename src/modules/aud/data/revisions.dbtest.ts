@@ -115,6 +115,31 @@ async function cleanUp() {
       [ids],
     );
   }
+  const { rows: raised } = await admin.query(
+    "select id from tsk.task where problem_key like 'revision:%' and record_schema = $1",
+    [P],
+  );
+  if (raised.length) {
+    const taskIds = raised.map((r) => r.id as string);
+    await admin.query("select aud.purge_record_history_for_reset('tsk.task', $1::uuid[])", [
+      taskIds,
+    ]);
+    await admin.query("begin");
+    await admin.query("select set_config('aud.reset_purge', 'on', true)");
+    await admin.query("delete from tsk.notification where task_id = any($1::uuid[])", [taskIds]);
+    await admin.query("delete from tsk.task where id = any($1::uuid[])", [taskIds]);
+    await admin.query("commit");
+    await admin.query(
+      `delete from core.outbox_delivery where outbox_id in
+         (select id from core.outbox where record_schema = 'tsk' and record_id = any($1::uuid[]))`,
+      [taskIds],
+    );
+    await admin.query(
+      "delete from core.outbox where record_schema = 'tsk' and record_id = any($1::uuid[])",
+      [taskIds],
+    );
+  }
+  await admin.query("delete from tsk.notification where user_id = any($1)", [PEOPLE]);
   const { rows: register } = await admin.query(
     "select id from aud.revisable_record where record_schema = $1",
     [P],

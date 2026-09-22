@@ -7,6 +7,7 @@ import {
   liveSignals,
   overdueAndEscalation,
   phonePush,
+  revisionAlerts,
   systemWatch,
 } from "@/modules/tsk";
 import type { JobRegistry } from "@/platform/jobs/types";
@@ -29,6 +30,7 @@ export const jobRegistry: JobRegistry = {
     liveSignals(sendSignal),
     phonePush(processPushSender),
     exchangeRateAlarm(),
+    revisionAlerts(),
   ],
   jobs: [
     ...iamJobs,

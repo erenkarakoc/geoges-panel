@@ -330,3 +330,5 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-22 22:57:14Z · b13a9554 · Write · `src/modules/aud/ui/revision-requests.tsx`
 - 2026-09-22 22:57:22Z · b13a9554 · Write · `src/app/(app)/approvals/revision-requests/actions.ts`
 - 2026-09-22 22:57:28Z · b13a9554 · Write · `src/app/(app)/approvals/revision-requests/page.tsx`
+- 2026-09-22 23:11:04Z · b13a9554 · Write · `db/migrations/0019_revision_events_carry_the_requester.sql`
+- 2026-09-22 23:11:07Z · b13a9554 · Write · `db/migrations/0019_revision_events_carry_the_requester.down.sql`

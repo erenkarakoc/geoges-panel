@@ -45,6 +45,7 @@ export {
   liveSignals,
   overdueAndEscalation,
   phonePush,
+  revisionAlerts,
   systemWatch,
   type SignalSender,
 } from "./data/tsk-jobs";

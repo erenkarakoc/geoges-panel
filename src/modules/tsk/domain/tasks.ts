@@ -94,6 +94,9 @@ export const NOTIFICATION_TEMPLATES = {
   "task.escalated": { title: "Size eskale edilen görev var", phone: false },
   "approval.requested": { title: "Onayınızı bekleyen bir talep var", phone: true },
   "revision.requested": { title: "Bir kayıt için düzeltme istendi", phone: false },
+  "revision.approved": { title: "Revizyon talebiniz onaylandı", phone: false },
+  "revision.rejected": { title: "Revizyon talebiniz reddedildi", phone: false },
+  "revision.stale": { title: "Kayıt değişmiş; revizyon talebiniz yeniden açılmalı", phone: false },
   "system.problem": { title: "Sistem sorunu", phone: true },
   "digest.daily": { title: "Günlük özetiniz", phone: false },
 } as const;

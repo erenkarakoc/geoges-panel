@@ -32,6 +32,7 @@ import {
 import { noteAppState, readAppState } from "./tsk-install-store";
 import {
   exchangeRateAlarm,
+  revisionAlerts,
   handleLateTasks,
   liveSignals,
   phonePush,
@@ -80,7 +81,8 @@ async function worker<T>(work: (client: pg.PoolClient) => Promise<T>): Promise<T
 async function cleanUp() {
   const { rows: tasks } = await admin.query(
     `select id from tsk.task where assignee_user_id = any($1) or given_by_user_id = any($1)
-        or problem_key like 't0108:%' or problem_key like 'exchange_rate.missing:2030-%'`,
+        or problem_key like 't0108:%' or problem_key like 'exchange_rate.missing:2030-%'
+        or problem_key like 'revision:0192f0c1-0108-%'`,
     [PEOPLE],
   );
   const taskIds = tasks.map((r) => r.id as string);
@@ -781,5 +783,98 @@ describe("the panel on the Home Screen (D-264)", () => {
     );
     expect(rows[0].n).toBeGreaterThanOrEqual(2);
     expect((await readAppState(as(OTHER_B))).onHomeScreen).toBe(false);
+  });
+});
+
+describe("revision requests become work (TASK-0109 step 4, REQ-AUD-008)", () => {
+  /**
+   * The payloads AUD publishes (migration 0018/0019). They are written out here rather than
+   * imported, because TSK does not depend on AUD: the subscriber's contract is this shape.
+   */
+  const requestId = "0192f0c1-0108-7000-8000-000000000901";
+  const record = { schema: "zzt", table: "record", id: "0192f0c1-0108-7000-8000-000000000902" };
+  const submitted = {
+    code: "revision_request.submitted",
+    payload: {
+      revision_request_id: requestId,
+      record_schema: record.schema,
+      record_table: record.table,
+      record_id: record.id,
+      label: "Deneme kaydı",
+      requested_by_user_id: PEER_A,
+      approver_user_ids: [GIVER_A, COMPANY],
+    },
+  } as unknown as DeliveredEvent;
+  const decided = (code: string, stale = false) =>
+    ({
+      code,
+      payload: {
+        revision_request_id: requestId,
+        record_schema: record.schema,
+        record_table: record.table,
+        record_id: record.id,
+        label: "Deneme kaydı",
+        requested_by_user_id: PEER_A,
+        stale,
+      },
+    }) as unknown as DeliveredEvent;
+
+  const run = (event: DeliveredEvent) =>
+    worker((client) =>
+      revisionAlerts().handle(kyselyOn(client), event, { readModelVersion: async () => 1 }),
+    );
+
+  const problemTask = async () =>
+    (
+      await admin.query(
+        "select id, title, status, assignee_user_id, priority, link_path from tsk.task where problem_key = $1",
+        [`revision:${requestId}`],
+      )
+    ).rows[0];
+
+  it("opens one task for the approvers and tells each of them", async () => {
+    await run(submitted);
+    const task = await problemTask();
+    expect(task).toMatchObject({
+      status: "open",
+      assignee_user_id: GIVER_A,
+      priority: "high",
+      link_path: "/approvals/revision-requests",
+    });
+    expect(task.title).toContain("Deneme kaydı");
+    for (const approver of [GIVER_A, COMPANY]) {
+      const { rows } = await admin.query(
+        "select type, link_path from tsk.notification where user_id = $1 and source_key = $2",
+        [approver, `revision:${requestId}`],
+      );
+      expect(rows).toEqual([
+        { type: "approval.requested", link_path: "/approvals/revision-requests" },
+      ]);
+    }
+
+    // The same event again opens no second task and tells nobody twice (REQ-TSK-005).
+    await run(submitted);
+    const { rows: tasks } = await admin.query("select id from tsk.task where problem_key = $1", [
+      `revision:${requestId}`,
+    ]);
+    expect(tasks).toHaveLength(1);
+  });
+
+  it("closes the task on a decision and tells the person who asked", async () => {
+    await run(decided("revision_request.rejected"));
+    expect((await problemTask()).status).toBe("closed");
+    const { rows } = await admin.query(
+      "select type from tsk.notification where user_id = $1 and source_key like $2",
+      [PEER_A, `revision:${requestId}:%`],
+    );
+    expect(rows.map((r) => r.type)).toEqual(["revision.rejected"]);
+
+    // A request that went stale says so in its own words.
+    await run(decided("revision_request.rejected", true));
+    const { rows: after } = await admin.query(
+      "select type from tsk.notification where user_id = $1 and source_key like $2 order by created_at",
+      [PEER_A, `revision:${requestId}:%`],
+    );
+    expect(after.map((r) => r.type)).toEqual(["revision.rejected", "revision.stale"]);
   });
 });
