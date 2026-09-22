@@ -19,6 +19,9 @@ const boundaryElements = [
   { type: "coss-support", pattern: "src/{lib,hooks}" },
   // Composition root of the event backbone (TASK-0104): collects modules' jobs for the worker.
   { type: "jobs", pattern: "src/jobs" },
+  // Composition root of documents (TASK-0107): the storage adapter and each module's record
+  // resolver, handed to DOC's service.
+  { type: "records", pattern: "src/records" },
   // Development-only presentation sandbox (D-052): fully self-contained, removable as one folder.
   { type: "sandbox", pattern: "src/sandbox/*", capture: ["sandboxName"] },
 ];
@@ -71,7 +74,11 @@ const eslintConfig = defineConfig([
               from: { element: { type: "app" } },
               allow: {
                 to: [
-                  { element: { types: { anyOf: ["app", "platform", "sandbox", ...cossLayers] } } },
+                  {
+                    element: {
+                      types: { anyOf: ["app", "platform", "records", "sandbox", ...cossLayers] },
+                    },
+                  },
                   { element: { type: "module", fileInternalPath: ["index.ts", "ui/**"] } },
                 ],
               },
@@ -99,8 +106,8 @@ const eslintConfig = defineConfig([
               allow: { to: { element: { types: { anyOf: ["platform", ...cossLayers] } } } },
             },
             {
-              // The jobs registry may use platform and each module's public `index.ts` only.
-              from: { element: { type: "jobs" } },
+              // The composition roots may use platform and each module's public `index.ts` only.
+              from: { element: { types: { anyOf: ["jobs", "records"] } } },
               allow: {
                 to: [
                   { element: { type: "platform" } },

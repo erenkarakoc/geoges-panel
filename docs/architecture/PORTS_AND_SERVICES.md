@@ -11,7 +11,7 @@ Her port bir arayüz, her sağlayıcı bir adaptördür. Modüller yalnız aray�
 | Port | Ne yapar | İlk adaptör | Not |
 |---|---|---|---|
 | `AuthProvider` | Giriş, oturum, parola, TOTP | Supabase Auth | Roller ve kapsam bizim tablolarımızda (ADR-002) |
-| `StorageProvider` | `upload`, `download`, `delete`, `exists`, `getSignedUrl` | Cloudflare R2 | Erişim yetkisi her zaman uygulamada denetlenir (ADR-003) |
+| `StorageProvider` | `putObject`, `headObject`, `getObject`, `signedGetUrl`, `createMultipart`, `uploadPart`, `completeMultipart`, `abortMultipart`, `deleteObject` (yalnız sıfırlamada örnek dosyalar) | Cloudflare R2 (AWS S3 SDK); testte bellek içi | Erişim yetkisi her zaman uygulamada denetlenir (ADR-003); bağlantı 5 dakikalık, Türkçe dosya adı RFC 5987 ile, günlüğe yazılmaz (D-262). `src/platform/storage` |
 | `JobRunner` | Zamanlanmış ve kuyruklu işler | Uygulamayla aynı sunucuda çalışan kuyruk | Outbox işleyicisi ve akış zamanlayıcısı buradan (`EVENT_BACKBONE.md`). Kuruldu: `src/platform/jobs`, sunucu açılırken başlar (TASK-0104, D-259) |
 | `NotificationSender` | Panel içi, telefon bildirimi (web push), e-posta | Web Push + SMTP | Kanal kuralları REQ-TSK-010; metinde hassas veri yok (REQ-TSK-011) |
 | `ExchangeRateProvider` | Günlük TCMB alış kuru | TCMB XML | Alınamazsa `exchange_rate.missing` (REQ-ADM-013). Kuruldu: `src/platform/exchange-rates`, tarihli adres ve `Tarih` doğrulaması; iş `adm.exchange-rates` (TASK-0106, D-261) |

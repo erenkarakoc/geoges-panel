@@ -40,11 +40,12 @@ Sütun listeleri **ayırt edici** olanları verir; ortak sütunlar yazılmaz.
 
 | Tablo | Ne tutar | Ayırt edici sütunlar | Notlar |
 |---|---|---|---|
-| `doc.document` | Bir kayda bağlı belge | `record_schema`, `record_table`, `record_id`, `doc_type`, `data_class`, `title` | Kayda bağlı olmayan belge yok (DOC-K1) |
-| `doc.document_version` | Sürüm | `document_id`, `version_no`, `storage_key`, `size`, `mime`, `is_signed`, `uploaded_by_user_id` | Yeni sürüm öncekini silmez (DOC-K4) |
-| `doc.extracted_text` | Metin tanıma çıktısı | `document_version_id`, `text`, `status` (pending/ready/failed) | Arşiv içerik araması buradan (REQ-DOC-004) |
+| `doc.document` | Bir kayda bağlı belge | `record_schema`, `record_table`, `record_id`, `site_id`, `project_id`, `record_owner_user_id`, `data_class`, `doc_type_item_id`, `title`, `status`, `archive_reason` | Kayda bağlı olmayan belge yok (DOC-K1); kayıt, kapsam ve veri sınıfı sonradan değişmez; silinmez, gerekçeyle arşivlenir (D-262) |
+| `doc.document_version` | Sürüm | `document_id`, `version_no`, `storage_key`, `file_name`, `mime_type`, `size_bytes`, `sha256`, `is_signed`, `uploaded_by_user_id` | Yeni sürüm öncekini silmez (DOC-K4); numarayı veritabanı verir; yalnız imzalı işareti değişebilir |
+| `doc.upload` | Sürdürülebilir yükleme oturumu | `document_id`, `file_name`, `mime_type`, `size_bytes`, `part_size`, `received_bytes`, `storage_key`, `multipart_upload_id`, `parts`, `status` | Yalnız başlatan kişi görür; konum sunucudadır, uyuşmazlıkta 409 (SPIKE-15, D-262) |
+| `doc.extracted_text` | Metin tanıma çıktısı | `document_version_id`, `status` (pending/ready/failed/skipped), `method`, `text_content`, `confidence`, `is_low_quality` | Arşiv içerik araması buradan (REQ-DOC-004); "okunuyor" = pending |
 
-Belgenin kapsamı ve veri sınıfı **bağlı kayıttan** türetilir; RLS politikası bağlı kaydın politikasına bakar (DOC-K2).
+Belgenin kapsamı ve veri sınıfı **bağlı kayıttan** türetilir ve belgeye yazılır; RLS politikası `doc.can_access` ile geçmişle aynı kuralı uygular (DOC-K2, D-262). Belge türü ADM kataloğu `document_type`'tır.
 
 ## wfl — Akış, onay, kilit
 

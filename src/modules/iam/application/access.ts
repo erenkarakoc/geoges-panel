@@ -25,6 +25,7 @@ import {
   type ScopeItem,
 } from "@/modules/iam/domain/permissions";
 
+import { requiresTwoFactorStep } from "./auth-routing";
 import { readAuthSession } from "./auth-session";
 
 /**
@@ -42,10 +43,20 @@ export class AccessDeniedError extends Error {
   }
 }
 
+/**
+ * The verified session that may use the panel: signed in and, when the person has a second
+ * factor, past it. Pages are also guarded by their layout; server actions and route handlers
+ * have no layout, so this is the check they rely on.
+ */
+async function panelSession() {
+  const session = await readAuthSession();
+  return session && !requiresTwoFactorStep(session) ? session : null;
+}
+
 /** Who the database transaction runs as, from the verified session; null when signed out. */
 export const signInIdentity = cache(
   async (): Promise<{ identity: DbIdentity; account: PanelAccount } | null> => {
-    const session = await readAuthSession();
+    const session = await panelSession();
     if (!session) return null;
     const identity: DbIdentity = { userId: session.user.id, actingRoleId: null };
     const account = await findAccount(identity);
@@ -55,7 +66,7 @@ export const signInIdentity = cache(
 
 /** This request's permission snapshot; null when the person may not use the panel. */
 export const readEffectivePermissions = cache(async (): Promise<PermissionSnapshot | null> => {
-  const session = await readAuthSession();
+  const session = await panelSession();
   if (!session) return null;
   const access = await readAccess({ userId: session.user.id, actingRoleId: null });
   return access?.snapshot ?? null;
