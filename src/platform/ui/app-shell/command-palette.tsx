@@ -98,7 +98,14 @@ export function CommandPalette({
         </KbdGroup>
       </CommandDialogTrigger>
       <CommandDialogTrigger
-        render={<Button aria-label="Ara" className="sm:hidden" size="icon" variant="ghost" />}
+        render={
+          <Button
+            aria-label="Ara"
+            className="size-11 sm:hidden md:size-9"
+            size="icon"
+            variant="ghost"
+          />
+        }
       >
         <SearchIcon aria-hidden="true" />
       </CommandDialogTrigger>

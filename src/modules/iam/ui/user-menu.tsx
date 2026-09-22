@@ -64,7 +64,16 @@ export function UserMenu({
 
   return (
     <Menu>
-      <MenuTrigger render={<Button aria-label="Hesap menüsü" size="icon" variant="ghost" />}>
+      <MenuTrigger
+        render={
+          <Button
+            aria-label="Hesap menüsü"
+            className="size-11 md:size-9"
+            size="icon"
+            variant="ghost"
+          />
+        }
+      >
         <UserIcon aria-hidden="true" />
       </MenuTrigger>
       <MenuPopup align="end">

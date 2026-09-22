@@ -120,6 +120,7 @@ export function TaskList({
           {VIEWS.filter((v) => !v.ownerOnly || canSeeAll).map((v) => (
             <Button
               aria-current={v.value === view ? "page" : undefined}
+              className="h-11 md:h-8"
               key={v.value}
               render={<Link href={viewHref(v.value, showClosed)} />}
               size="sm"
@@ -129,7 +130,7 @@ export function TaskList({
             </Button>
           ))}
           <Button
-            className="ms-auto"
+            className="ms-auto h-11 md:h-8"
             render={<Link href={viewHref(view, !showClosed)} />}
             size="sm"
             variant="ghost"

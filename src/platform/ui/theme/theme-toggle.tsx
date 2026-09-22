@@ -17,6 +17,7 @@ export function ThemeToggle() {
     <Button
       aria-label="Açık ve koyu görünüm arasında geçiş yap"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+      className="size-11 md:size-9"
       size="icon"
       type="button"
       variant="ghost"

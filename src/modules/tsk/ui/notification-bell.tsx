@@ -95,7 +95,7 @@ export function NotificationBell() {
   const unread = summary?.unread ?? 0;
   const label = unread > 0 ? `Bildirimler, ${unread} okunmamış` : "Bildirimler";
   const trigger = (
-    <Button aria-label={label} className="relative" size="icon" variant="ghost">
+    <Button aria-label={label} className="relative size-11 md:size-9" size="icon" variant="ghost">
       <BellIcon aria-hidden="true" />
       {unread > 0 ? (
         <Badge
@@ -185,7 +185,7 @@ export function NotificationBell() {
   return (
     <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger render={trigger} />
-      <PopoverPopup align="end" className="w-96">
+      <PopoverPopup align="end" className="w-[min(24rem,calc(100vw-1.5rem))]">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <PopoverTitle className="text-base">Bildirimler</PopoverTitle>
           {filterSelect}
