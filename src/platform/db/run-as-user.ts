@@ -24,6 +24,11 @@ export const STATEMENT_TIMEOUT = "15s";
 const FORBIDDEN =
   /^\s*(begin|start\s+transaction|commit|end|rollback(?!\s+to\b)|abort|reset|discard|set\s+(?!local\b|constraints\b|transaction\b)|set\s+local\s+(role|session\s+authorization)\b)/i;
 
+/** Kysely over one checked-out connection inside an open transaction (also used by the worker). */
+export function kyselyOn<DB>(client: PooledClient): Kysely<DB> {
+  return new Kysely<DB>({ dialect: new PostgresDialect({ pool: singleClientPool(client) }) });
+}
+
 /** Hands the one checked-out connection to Kysely; Kysely's release is a no-op here. */
 function singleClientPool(client: PooledClient): PostgresPool {
   const guarded = {
@@ -66,10 +71,7 @@ export function createRunAsUser(pool: ClientPool) {
         "select set_config('app.user_id', $1, true), set_config('app.role_id', $2, true), set_config('statement_timeout', $3, true)",
         [userId, actingRoleId ?? "", STATEMENT_TIMEOUT],
       );
-      const db = new Kysely<DB>({
-        dialect: new PostgresDialect({ pool: singleClientPool(client) }),
-      });
-      const result = await work(db);
+      const result = await work(kyselyOn<DB>(client));
       await client.query("commit");
       client.release();
       return result;

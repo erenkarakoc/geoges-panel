@@ -87,10 +87,12 @@ Belgenin kapsamı ve veri sınıfı **bağlı kayıttan** türetilir; RLS politi
 
 | Tablo | Ne tutar | Notlar |
 |---|---|---|
-| `core.outbox` | Yayımlanacak olay | `event_code`, `event_version`, `publisher_module`, `record_*`, `sequence_key`, `payload`, `status`, `attempts`, `available_at` | Kayıtla aynı işlemde yazılır (ADR-014) |
-| `core.outbox_delivery` | Abone × olay teslimi | `outbox_id`, `subscriber`, `status`, `attempts`, `last_error`, `processed_at` | Tekrarsızlık anahtarı `(outbox_id, subscriber)` |
-| `core.dead_letter` | Beş denemede teslim edilemeyen | `outbox_id`, `subscriber`, `error`, `payload` | Sahip katmanına kritik bildirim üretir |
-| `core.scheduled_job` | Zamanlanmış iş ve uyandırma | `job_type`, `run_at`, `idempotency_key`, `payload`, `status` | Akışın bekleme adımları burada (WORKFLOW_ENGINE bölüm 4) |
+| `core.outbox` | Yayımlanan olay | `event_id`, `event_code`, `event_version`, `publisher_module`, `record_*`, `sequence_key`, `payload`, `actor_user_id`, `occurred_at` | Kayıtla aynı işlemde, yalnız `core.publish_event()` ile yazılır; silinmez (ADR-014, D-231). Deneme ve durum teslim satırındadır (TASK-0104) |
+| `core.event_subscription` | Abone × olay kodu | `subscriber`, `event_code`, `replayable` | İşleyici kod içindeki kayıt defterinden yazar; yayımlama her satır için teslim açar (D-259) |
+| `core.outbox_delivery` | Abone × olay teslimi | `outbox_id`, `subscriber`, `sequence_key`, `status` (pending/done/dead), `attempts`, `available_at`, `last_error`, `processed_at` | Tekrarsızlık anahtarı `(outbox_id, subscriber)`; aynı abone ve sıra anahtarında eski teslim bitmeden sonraki alınmaz (SPIKE-03) |
+| `core.dead_letter` | Beş denemede teslim edilemeyen teslim veya iş | `delivery_id` / `scheduled_job_id`, `handler`, `error`, `payload`, `resolved_at` | Denetim kaydına `system.dead_letter` yazar; sahip katmanına kritik bildirim TASK-0108'de. Elle yeniden çalıştırma: `npm run jobs:retry` |
+| `core.scheduled_job` | Zamanlanmış iş ve uyandırma | `job_type`, `run_at`, `idempotency_key`, `payload`, `status`, `attempts`, `available_at` | Akışın bekleme adımları burada (WORKFLOW_ENGINE bölüm 4); aynı anahtar ikinci kez kaydedilmez |
+| `core.read_model` | Okuma modelinin etkin sürümü | `name`, `active_table`, `version`, `rebuilt_at`, `last_difference` | Yeniden kurma sürümü tek güncellemeyle değiştirir (D-233, SPIKE-14) |
 | `core.search_row` | Arama satırı | `record_*`, `record_type`, `title`, `secondary`, `search_vector`, `scope_type`, `scope_ids[]`, `search_document_id`, `normalization_version`, `projection_version`, `source_event_id` | UUID kimlik korunur; benzersiz iç arama numarası ve üç yardımcı veri kümesi D-247 / ADR-017 ile eklenir. Ticari/hassas alan girmez |
 
 | `core.search_posting` | Sözcük → arama kaydı | `search_row_id`, `word`, `scope_type`, `scope_ids[]`, `projection_version` | Kaynak arama satırına FK; aynı sürümde kayıt/sözcük tekil; kaynak görünürlüğüyle RLS |

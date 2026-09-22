@@ -52,6 +52,7 @@ Tarayıcıda `http://localhost:3000` adresini açın. Kapatmak için komut istem
 
 Panel örnek veriyle gelir: örnek şantiye, örnek proje, örnek kullanıcılar. Ekranlarda "örnek veri" işareti görürsünüz.
 
+- Arka plandaki işler (olayların işlenmesi, gece çalışan işler) panel açıkken kendiliğinden çalışır. Durumlarını görmek için `npm run jobs:status`; beş kez başarısız olmuş bir işi yeniden çalıştırmak için `npm run jobs:retry -- <kimlik>`.
 - Örnek iş verisini temizlemek için: `npm run db:reset:data` — kurduğunuz akışlar, kataloglar ve eşikler **durur**, yalnız örnek şantiye, günlük kayıt, stok ve görevler silinir.
 - Yapılandırmayı da fabrika ayarına döndürmek için: `npm run db:reset:config` — önce yapılandırmanızın bir kopyasını `exports/` klasörüne alır, sonra onay için `SIFIRLA` yazmanızı ister.
 - Örnek veriyi yeniden yüklemek için: `npm run db:sample`.

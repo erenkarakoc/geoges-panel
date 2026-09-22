@@ -1,6 +1,6 @@
 # Olay Altyapısı
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-22
 
 Modüller arası her tepki ve akış motorunun her tetiklenmesi olaylarla yürür (`docs/architecture/MODULE_BOUNDARIES.md` bölüm 3, REQ-WFL-007). Bu belge olayın nasıl yayımlandığını, nasıl teslim edildiğini ve hata olunca ne olduğunu belirler. Görev: TASK-0058. Kararlar: D-234. Olayların listesi modüllerin yetenek kataloglarındadır (D-078).
 
@@ -68,3 +68,12 @@ Bir kullanıcı işlemi en çok iki modülü senkron zincire sokar; üçüncüs�
 - Outbox + kuyruk, tek sunucuda beklenen yükle çalışıyor mu (TASK-0064'e girer).
 - Aynı olayın iki kez işlenmesi hiçbir yerde ikinci kayıt üretmiyor mu.
 - Okuma modelinin sıfırdan yeniden kurulması ne kadar sürüyor.
+
+## 10. Kurulum (TASK-0104, D-259)
+
+- **İşleyici** uygulama sunucusunun içinde çalışır (`src/instrumentation.ts`); sahip ayrıca bir komut çalıştırmaz. Kendi veritabanı rolüyle bağlanır (`geoges_worker`): RLS'i atlar, silemez, yapı değiştiremez.
+- **Yayımlama** yalnız `publishEvent` ile olur; aynı işlemde her abone için bir teslim satırı açılır. Abonelikleri işleyici koddaki kayıt defterinden yazar (`src/jobs/registry.ts`).
+- **Teslim** bölüm 2 ve 4'teki gibidir: abone ve kayıt başına sıra, etki ile "teslim edildi" işareti aynı işlemde, 1/5/15/60 dakika aralıkla deneme, beşinci hatada ölü mektup. Ölü mektup o abonenin o kayıttaki sonraki olaylarını bekletir; `npm run jobs:retry -- <kimlik>` ile devam eder.
+- **Zamanlanmış işler** tekrarsızlık anahtarıyla bir kez çalışır; tekrarlayan işler "her gün SS:DD (İstanbul)" veya "her N dakika" olarak tanımlanır.
+- **Okuma modeli yeniden kurma** (bölüm 6) bir sonraki sürüme yazar, yetişir, kaynakla karşılaştırır, tek güncellemeyle geçer ve farkı denetime yazar; yalnız modelin kendi yeniden oynatması çalışır (`npm run jobs:rebuild -- <model>`).
+- **Gecikme ve ölü mektup** şimdilik denetim kaydına yazılır ve `npm run jobs:status` ile görünür; sahip katmanına bildirim ve sistem sorunu görevi TASK-0108'de bağlanır.

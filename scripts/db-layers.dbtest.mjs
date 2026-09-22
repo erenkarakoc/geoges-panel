@@ -39,6 +39,7 @@ beforeAll(async () => {
     drop schema if exists ${P} cascade;
     delete from core.table_layer where schema_name = '${P}';
     create schema ${P};
+    grant usage on schema ${P} to geoges_worker;
     create table ${P}.catalog (id int primary key, name text not null);
     create table ${P}.flow (
       id uuid primary key default core.uuid_v7(),

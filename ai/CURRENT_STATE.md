@@ -7,7 +7,7 @@ PROJECT STATUS:              IMPLEMENTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
 CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0103 DONE (browser-checked with the owner signed in). Next: TASK-0104 outbox, job runner, scheduler and read-model rebuild (T1), plan first. TASK-0112 follows TASK-0103/0105/0108 (D-257).
+CURRENT TASK:        TASK-0104 event backbone (T1) built and TESTING — waiting for CI and for the owner to restart `npm run dev` so the in-process worker can be seen starting. Next: TASK-0105 catalogs, dated rules, custom fields. TASK-0112 follows TASK-0103/0105/0108 (D-257).
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -18,6 +18,8 @@ CODE ALLOWED:        Phase 07 permits product code (ADR-007), but only after the
 ```
 
 ## LAST COMPLETED TASK
+2026-09-22: TASK-0104 built (TESTING): migration 0006 (outbox with deliveries created at publish time from `core.event_subscription`, dead letters, scheduled jobs, read-model register, worker role `geoges_worker`, IAM catalog events and daily IAM jobs), worker in `platform/jobs` started from `src/instrumentation.ts`, `npm run jobs:status` / `jobs:retry` / `jobs:rebuild`; D-259. Local: check (196 unit tests), build, `npm run test:db` 79/79. Also 2026-09-22: shared Turkish `ListPagination` (COSS particle pattern, arrows only, lint-enforced; DESIGN_SYSTEM_RULES 4.1 row 20).
+
 2026-09-22: TASK-0103 DONE: migration 0004 (record history by one trigger, append-only audit log, history kind and column data classes in the register, IAM events, owner-only audit permission), `modules/aud` with SCR-193 at `/audit-log`, sign-in/sign-out events, reset and transfer events; D-258. Local: check (187 unit tests), build, `npm run test:db` 62/62.
 
 2026-09-22: TASK-0102 DONE (CI run 35664127779 green, database job 52/52 twice around a full rollback): migration 0003 `iam` schema with RLS and guards, PERMISSION_MATRIX role templates as seed data, `iam:bootstrap-owner`, the permission service in `modules/iam`; D-256. 0003 applied to the test project; local `npm run check`, build and `npm run test:db` 52/52 pass. TASK-0112 opened for recovery codes, sign-in lockout and session inactivity (Phase 07 IAM scope not in TASK-0025).

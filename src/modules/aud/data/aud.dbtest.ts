@@ -147,7 +147,7 @@ beforeAll(async () => {
       for each row execute function aud.capture_history();
     alter table ${P}.record enable row level security;
     create policy record_all on ${P}.record for all to geoges_app using (true) with check (true);
-    grant usage on schema ${P} to geoges_app;
+    grant usage on schema ${P} to geoges_app, geoges_worker;
     grant select, insert, update on ${P}.record to geoges_app;
     insert into core.column_data_class values ('${P}', 'record', 'price', 'commercial');
     insert into core.table_layer (schema_name, table_name, layer, history)

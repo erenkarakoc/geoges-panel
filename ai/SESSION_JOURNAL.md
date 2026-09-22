@@ -187,3 +187,10 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-21 23:16:44Z · b13a9554 · Write · `src/modules/aud/data/aud-store.ts`
 - 2026-09-21 23:17:29Z · b13a9554 · Write · `src/modules/aud/ui/audit-log-list.tsx`
 - 2026-09-21 23:19:29Z · b13a9554 · Write · `src/modules/aud/data/aud.dbtest.ts`
+- 2026-09-22 00:13:29Z · b13a9554 · Edit · `src/platform/db/database-config.ts`
+- 2026-09-22 00:14:36Z · b13a9554 · Write · `src/platform/db/events.ts`
+- 2026-09-22 00:15:12Z · b13a9554 · Write · `src/platform/db/job-store.ts`
+- 2026-09-22 00:16:33Z · b13a9554 · Write · `src/platform/jobs/worker.ts`
+- 2026-09-22 00:20:19Z · b13a9554 · Write · `scripts/jobs-cli.mjs`
+- 2026-09-22 00:21:25Z · b13a9554 · Write · `src/platform/jobs/worker.dbtest.ts`
+- 2026-09-22 00:25:13Z · b13a9554 · Edit · `src/platform/jobs/worker.dbtest.ts`

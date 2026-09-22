@@ -12,7 +12,7 @@ Her port bir arayüz, her sağlayıcı bir adaptördür. Modüller yalnız aray�
 |---|---|---|---|
 | `AuthProvider` | Giriş, oturum, parola, TOTP | Supabase Auth | Roller ve kapsam bizim tablolarımızda (ADR-002) |
 | `StorageProvider` | `upload`, `download`, `delete`, `exists`, `getSignedUrl` | Cloudflare R2 | Erişim yetkisi her zaman uygulamada denetlenir (ADR-003) |
-| `JobRunner` | Zamanlanmış ve kuyruklu işler | Uygulamayla aynı sunucuda çalışan kuyruk | Outbox işleyicisi ve akış zamanlayıcısı buradan (`EVENT_BACKBONE.md`) |
+| `JobRunner` | Zamanlanmış ve kuyruklu işler | Uygulamayla aynı sunucuda çalışan kuyruk | Outbox işleyicisi ve akış zamanlayıcısı buradan (`EVENT_BACKBONE.md`). Kuruldu: `src/platform/jobs`, sunucu açılırken başlar (TASK-0104, D-259) |
 | `NotificationSender` | Panel içi, telefon bildirimi (web push), e-posta | Web Push + SMTP | Kanal kuralları REQ-TSK-010; metinde hassas veri yok (REQ-TSK-011) |
 | `ExchangeRateProvider` | Günlük TCMB alış kuru | TCMB XML | Alınamazsa `exchange_rate.missing` (REQ-ADM-013) |
 | `WeatherProvider` | Şantiye günü için hava | Bir hava servisi | Yanıt yoksa alan elle girilir (REQ-SIT-006) |

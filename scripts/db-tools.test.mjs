@@ -176,6 +176,11 @@ describe("runtime role password (TASK-0101)", () => {
       "postgresql://geoges_app:PW@db.local:5432/geoges",
     );
   });
+  expect(
+    appUrl("postgresql://postgres.abcref:x@pooler.example:6543/postgres", "PW", "geoges_worker", {
+      sessionMode: true,
+    }),
+  ).toBe("postgresql://geoges_worker.abcref:PW@pooler.example:5432/postgres");
 });
 
 describe("admin helpers (TASK-0101)", () => {

@@ -17,6 +17,8 @@ const boundaryElements = [
   // Vendored COSS UI layer, managed by the shadcn CLI (`@coss/*`). Do not edit by hand.
   { type: "coss-ui", pattern: "src/components" },
   { type: "coss-support", pattern: "src/{lib,hooks}" },
+  // Composition root of the event backbone (TASK-0104): collects modules' jobs for the worker.
+  { type: "jobs", pattern: "src/jobs" },
   // Development-only presentation sandbox (D-052): fully self-contained, removable as one folder.
   { type: "sandbox", pattern: "src/sandbox/*", capture: ["sandboxName"] },
 ];
@@ -96,6 +98,16 @@ const eslintConfig = defineConfig([
               from: { element: { type: "module" } },
               allow: { to: { element: { types: { anyOf: ["platform", ...cossLayers] } } } },
             },
+            {
+              // The jobs registry may use platform and each module's public `index.ts` only.
+              from: { element: { type: "jobs" } },
+              allow: {
+                to: [
+                  { element: { type: "platform" } },
+                  { element: { type: "module", fileInternalPath: ["index.ts"] } },
+                ],
+              },
+            },
             ...modulePolicies,
             {
               from: { element: { type: "platform" } },
@@ -115,7 +127,8 @@ const eslintConfig = defineConfig([
     // layer reaches the database, through `@/platform/db`'s runAsUser. The driver and the query
     // builder stay behind it, so routes, screens and application code cannot open a query.
     files: ["src/**/*.{ts,tsx}"],
-    ignores: ["src/platform/db/**", "src/modules/*/data/**"],
+    // The outbox worker (platform/jobs) drives transactions on its own pool (TASK-0104).
+    ignores: ["src/platform/db/**", "src/modules/*/data/**", "src/platform/jobs/**"],
     rules: {
       "no-restricted-imports": [
         "error",

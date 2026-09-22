@@ -38,3 +38,6 @@ export {
   type PermissionSnapshot,
   type ScopeItem,
 } from "./domain/permissions";
+
+// Scheduled work, collected by src/jobs/registry.ts (TASK-0104).
+export { iamJobs } from "./data/iam-jobs";

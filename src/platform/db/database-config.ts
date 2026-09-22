@@ -17,19 +17,26 @@ type DatabaseEnv = Record<string, string | undefined>;
 export function readDatabaseConfig(
   env: DatabaseEnv = process.env,
   readCa: (path: string) => string = (path) => readFileSync(resolve(path), "utf8"),
+  variable: "DATABASE_APP_URL" | "DATABASE_WORKER_URL" = "DATABASE_APP_URL",
 ): PoolConfig {
-  const raw = env.DATABASE_APP_URL;
+  const raw = env[variable];
   if (!raw) {
     throw new Error(
-      "DATABASE_APP_URL is missing. Run `npm run db:app-role` to create the runtime role password.",
+      variable === "DATABASE_APP_URL"
+        ? "DATABASE_APP_URL is missing. Run `npm run db:app-role` to create the runtime role password."
+        : `${variable} is missing. Run \`npm run db:app-role\` to create the role password.`,
     );
   }
   const url = new URL(raw);
   if (!/^postgres(ql)?:$/.test(url.protocol)) {
-    throw new Error("DATABASE_APP_URL must be a postgresql:// connection string.");
+    throw new Error(`${variable} must be a postgresql:// connection string.`);
   }
   if (url.username.startsWith("postgres")) {
-    throw new Error("DATABASE_APP_URL must use the restricted runtime role, not the admin user.");
+    throw new Error(
+      variable === "DATABASE_APP_URL"
+        ? "DATABASE_APP_URL must use the restricted runtime role, not the admin user."
+        : `${variable} must use its own role, not the admin user.`,
+    );
   }
 
   let ca: string;

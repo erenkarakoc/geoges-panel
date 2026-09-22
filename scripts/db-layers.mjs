@@ -44,8 +44,12 @@ export function layerProblems({
   primaryKeys,
   portable = null,
   history = null,
+  schemasWithoutWorker = [],
 }) {
   const problems = [];
+  // The outbox worker must reach every schema that holds registered tables (D-259).
+  for (const schema of schemasWithoutWorker)
+    problems.push(`schema ${schema} does not grant usage to geoges_worker`);
   for (const [table, kind] of history ?? []) {
     if (!registered.has(table) || !tables.includes(table)) continue;
     const t = history.triggers.get(table) ?? new Set();
@@ -141,6 +145,12 @@ export async function readLayerState(client) {
       where column_name = 'id' and data_type = 'uuid' and table_schema = any($1)`,
     [schemas],
   );
+  const { rows: withoutWorker } = await client.query(
+    `select distinct l.schema_name as name from core.table_layer l
+      where exists (select from pg_roles where rolname = 'geoges_worker')
+        and not has_schema_privilege('geoges_worker', l.schema_name, 'USAGE')
+      order by 1`,
+  );
   const references = await client.query(
     `select fn.nspname || '.' || fc.relname as "from", tn.nspname || '.' || tc.relname as "to"
        from pg_constraint k
@@ -171,6 +181,7 @@ export async function readLayerState(client) {
       },
     ),
     references: references.rows,
+    schemasWithoutWorker: withoutWorker.map((r) => r.name),
     primaryKeys: new Set(keys.rows.map((r) => r.name)),
   };
 }

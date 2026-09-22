@@ -76,7 +76,7 @@ m² gibi türetilen ölçüler **saklanır ve hesaplandığı kural sürümüyle
 
 - **Her tabloda RLS açıktır.** Politikasız tablo yoktur; yeni tablo eklerken politika aynı göçte yazılır.
 - Politika kapsam sütunlarını ve kullanıcının etkin yetkisini okur (`PERMISSIONS.md` bölüm 2). Etkin yetki `iam.*` işlevleriyle okunur (TASK-0102); kalıp: `(select iam.has_company_scope('sit.module.view')) or site_id = any ((select iam.scope_ids('sit.module.view', 'site'))::uuid[])`. Alt sorgu biçimi işlevin sorgu başına bir kez çalışmasını sağlar. Yazma politikaları `iam.acting_role_valid()` ile kişinin taşımadığı bir rolün kaydedilmesini de reddeder.
-- RLS'i atlayan servis bağlantısı yalnız göçler ve outbox işleyicisi içindir (ADR-015).
+- RLS'i atlayan servis bağlantısı yalnız göçler ve outbox işleyicisi içindir (ADR-015). İşleyicinin rolü `geoges_worker`'dır (D-259): yeni şema oluşturan göç şemaya `geoges_app` ile birlikte ona da `usage` verir (göç aracı denetler); tablolar ve diziler ona varsayılan yetkiyle gelir; okuma modeli tablosu ona ayrıca `delete` verir ve `model_version` sütunu taşır.
 
 ## 11. Göç düzeni
 

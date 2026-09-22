@@ -14,7 +14,7 @@ Phase 04 çıkış denetimi: verisi olan her gereksinimin bir tablosu var mı, h
 | `wfl` | 8 | REQ-WFL (39) |
 | `tsk` | 5 | REQ-TSK (13) |
 | `adm` | 9 | REQ-ADM (15) |
-| `core` | 8 | Altyapı (ADR-014, ADR-017, D-247) |
+| `core` | 10 | Altyapı (ADR-014, ADR-017, D-247, D-259) |
 | `prj` | 7 | REQ-PRJ (11) |
 | `sit` | 17 | REQ-SIT (35) |
 | `inv` | 11 | REQ-INV (27) |
@@ -34,9 +34,9 @@ Phase 04 çıkış denetimi: verisi olan her gereksinimin bir tablosu var mı, h
 | `int` | 5 | REQ-INT (14) |
 | `str` | 7 | REQ-STR (8) |
 | `cst` | 6 | REQ-WFL-035…039 |
-| **Toplam** | **216** | 438 gereksinim |
+| **Toplam** | **218** | 438 gereksinim |
 
-İlk Phase 04 belgeleri 212 tablo içeriyordu; önceki toplamın 211 yazılması sayım hatasıydı (TASK-0092). CHG-007 / D-247 üç türetilmiş arama tablosu ekledi. REQ-NFR-012 artık bu yardımcılarla birlikte core.search_row üzerinden açıkça izlenir. TASK-0102, işlemde hangi rolün seçildiğini hatırlayan `iam.user_action_role_choice` tablosunu ekledi (REQ-IAM-013, D-256). Tasarım sayısıdır; göç uygulanmış tablo sayısı değildir.
+İlk Phase 04 belgeleri 212 tablo içeriyordu; önceki toplamın 211 yazılması sayım hatasıydı (TASK-0092). CHG-007 / D-247 üç türetilmiş arama tablosu ekledi. REQ-NFR-012 artık bu yardımcılarla birlikte core.search_row üzerinden açıkça izlenir. TASK-0102, işlemde hangi rolün seçildiğini hatırlayan `iam.user_action_role_choice` tablosunu ekledi (REQ-IAM-013, D-256). TASK-0104 olay omurgasına `core.event_subscription` ve `core.read_model`'i ekledi (D-259). Tasarım sayısıdır; göç uygulanmış tablo sayısı değildir.
 
 MIG (veri aktarımı) ertelendiği için tablosu yoktur (DEF-001).
 
