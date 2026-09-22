@@ -78,7 +78,10 @@ export function InstallPrompt({ state }: { state: AppState }) {
 
   useEffect(() => {
     const here = platformOf();
-    if (onHomeScreenNow()) {
+    // A computer's own window, and an embedded browser, also answer "standalone"; only a phone's
+    // Home Screen counts, or the strip would disappear for a phone that still has nothing.
+    const onPhoneHomeScreen = here !== "other" && onHomeScreenNow();
+    if (onPhoneHomeScreen) {
       note({ onHomeScreen: true, platform: here });
       return;
     }
@@ -89,7 +92,7 @@ export function InstallPrompt({ state }: { state: AppState }) {
     };
     const done = () => {
       setInstalled(true);
-      note({ onHomeScreen: true, platform: here });
+      if (here !== "other") note({ onHomeScreen: true, platform: here });
     };
     window.addEventListener("beforeinstallprompt", keepOffer);
     window.addEventListener("appinstalled", done);
@@ -106,7 +109,8 @@ export function InstallPrompt({ state }: { state: AppState }) {
     setOffer(null);
     if (outcome === "accepted") {
       setInstalled(true);
-      note({ onHomeScreen: true, platform: platformOf() });
+      const here = platformOf();
+      if (here !== "other") note({ onHomeScreen: true, platform: here });
     }
     setDialogClosed(true);
     setDialogAsked(false);

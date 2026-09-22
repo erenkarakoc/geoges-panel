@@ -31,7 +31,7 @@ import { PrimaryActionButton } from "@/platform/ui/app-shell/primary-action";
  * drawer with a search box. The sidebar drawer and the header's menu button are gone on this
  * width, so there is one way to navigate, not two.
  *
- * Targets are 56px tall, not the 44px minimum: the owner found the bar hard to hit on site
+ * Targets are 64px tall, not the 44px minimum: the owner found the bar hard to hit on site
  * (2026-09-23, DESIGN_SYSTEM_RULES section 4.1 row 17a), and these are pressed with a thumb,
  * often with gloves on.
  */
@@ -75,7 +75,7 @@ export function MobileBottomBar({
     return (
       <Link
         aria-current={isActive ? "page" : undefined}
-        className={`relative flex min-h-14 flex-1 flex-col items-center justify-center gap-1 rounded-lg px-1 py-1.5 text-[0.6875rem] leading-tight transition-colors ${
+        className={`relative flex min-h-16 flex-1 flex-col items-center justify-center gap-1 rounded-lg px-1 py-2 text-xs leading-tight transition-colors ${
           isActive ? "text-foreground" : "text-muted-foreground"
         }`}
         href={item.href}
@@ -102,7 +102,7 @@ export function MobileBottomBar({
       aria-label="Telefon gezinmesi"
       // Sits under the scrolling content, so nothing is ever covered. The safe-area inset keeps
       // it clear of the home indicator on phones that have one.
-      className="flex shrink-0 items-center justify-around gap-1 border-t bg-background px-2 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))] md:hidden"
+      className="flex shrink-0 items-center justify-around gap-1 border-t bg-background px-2 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:hidden"
     >
       {leftItems.map(renderItem)}
 
@@ -111,7 +111,7 @@ export function MobileBottomBar({
        * carries it on a phone (owner 2026-09-17); the label stays as the accessible name.
        */}
       <PrimaryActionButton
-        className="mx-2 size-14 shrink-0 rounded-full [&_svg]:size-6"
+        className="mx-2 size-16 shrink-0 rounded-full [&_svg]:size-7"
         label={primaryAction}
         labelClassName="hidden"
         size="icon-lg"
@@ -123,7 +123,7 @@ export function MobileBottomBar({
         <DrawerTrigger
           render={
             <button
-              className="flex min-h-14 flex-1 flex-col items-center justify-center gap-1 rounded-lg px-1 py-1.5 text-[0.6875rem] leading-tight text-muted-foreground"
+              className="flex min-h-16 flex-1 flex-col items-center justify-center gap-1 rounded-lg px-1 py-2 text-xs leading-tight text-muted-foreground"
               type="button"
             />
           }

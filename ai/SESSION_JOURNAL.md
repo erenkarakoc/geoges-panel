@@ -319,3 +319,4 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-22 21:28:40Z · 5c627231 · Write · `src/modules/tsk/ui/install-followup.tsx`
 - 2026-09-22 21:28:51Z · 5c627231 · Write · `src/app/(app)/today/page.tsx`
 - 2026-09-22 21:40:11Z · 5c627231 · Edit · `src/modules/tsk/ui/install-prompt.tsx`
+- 2026-09-22 22:00:08Z · 5c627231 · Write · `db/migrations/0017_home_screen_is_a_phone.sql`
