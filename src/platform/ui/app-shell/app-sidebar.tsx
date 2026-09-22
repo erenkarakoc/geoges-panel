@@ -141,7 +141,7 @@ export function AppSidebar({
          */}
         <Link
           aria-label="GEOGES Panel ana sayfa"
-          className="flex h-14 items-center gap-2 rounded-lg ps-1 pe-2"
+          className="flex h-14 items-center gap-2 overflow-hidden rounded-lg ps-1 pe-2"
           href="/today"
           onClick={closeMobileDrawer}
         >
@@ -149,9 +149,11 @@ export function AppSidebar({
           {/* The link already carries the accessible name, so the wordmark is decoration. */}
           <span
             aria-hidden="true"
-            className={`flex min-w-0 flex-col leading-tight ${labelMotionClassName}`}
+            className={`flex min-w-0 flex-col leading-tight group-data-[collapsible=icon]:pointer-events-none ${labelMotionClassName}`}
           >
-            <span className="text-sm font-semibold tracking-wide text-[#efefef]">GEOGES</span>
+            <span className="text-sm font-semibold tracking-wide text-sidebar-foreground">
+              GEOGES
+            </span>
             <span className="text-[0.6875rem] tracking-[0.2em]">PANEL</span>
           </span>
         </Link>
