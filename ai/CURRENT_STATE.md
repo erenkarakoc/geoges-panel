@@ -7,7 +7,7 @@ PROJECT STATUS:              IMPLEMENTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
 CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0105 configuration (T1) built and TESTING — waiting for CI. Next: TASK-0106 exchange rates and business-day calendar. TASK-0112 follows TASK-0103/0105/0108 (D-257).
+CURRENT TASK:        TASK-0105 DONE. Next: TASK-0106 exchange rates and business-day calendar (T1), plan first. TASK-0112 follows TASK-0103/0105/0108 (D-257).
 STATUS:              TESTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -18,7 +18,7 @@ CODE ALLOWED:        Phase 07 permits product code (ADR-007), but only after the
 ```
 
 ## LAST COMPLETED TASK
-2026-09-22: TASK-0105 built (TESTING): migration 0007 (`adm` catalogs, append-only dated rules with `adm.rule_value`, custom field definitions and value check, Turkish folding, per-field custom value history), seed 0003, `modules/adm`, feature switches (browser-checked: `FEATURES_OFF=FIN` hides Finans and Dönem Kapanışı and shows "Bu bölüm henüz açık değil"); D-260.
+2026-09-22: TASK-0105 DONE (CI green): migration 0007 (`adm` catalogs, append-only dated rules with `adm.rule_value`, custom field definitions and value check, Turkish folding, per-field custom value history), seed 0003, `modules/adm`, feature switches (browser-checked: `FEATURES_OFF=FIN` hides Finans and Dönem Kapanışı and shows "Bu bölüm henüz açık değil"); D-260.
 
 2026-09-22: TASK-0104 DONE: migration 0006 (outbox with deliveries created at publish time from `core.event_subscription`, dead letters, scheduled jobs, read-model register, worker role `geoges_worker`, IAM catalog events and daily IAM jobs), worker in `platform/jobs` started from `src/instrumentation.ts`, `npm run jobs:status` / `jobs:retry` / `jobs:rebuild`; D-259. Local: check (196 unit tests), build, `npm run test:db` 79/79. Also 2026-09-22: shared Turkish `ListPagination` (COSS particle pattern, arrows only, lint-enforced; DESIGN_SYSTEM_RULES 4.1 row 20).
 
