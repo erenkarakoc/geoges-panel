@@ -16,8 +16,10 @@ import { pageWindow } from "./page-window";
  * The pagination of every list (SCREEN_PATTERNS section 1, D-219), composed from COSS Pagination
  * the way its particles do (`p-pagination-1…3`): `PaginationLink` renders a COSS `Button`, which
  * renders a Next.js `Link` (with `render`, PaginationLink leaves styling to the rendered element),
- * and at the first and last page "Önceki" / "Sonraki" become disabled buttons instead of links. COSS's own `PaginationPrevious` / `PaginationNext` carry English text, so their
- * markup is repeated here with Turkish text (DESIGN_SYSTEM_RULES section 4.1, row 20); the COSS
+ * and at the first and last page the previous / next arrows become disabled buttons instead of
+ * links. Previous and next are arrows only (owner request 2026-09-22); their names stay for
+ * screen readers. COSS's own `PaginationPrevious` / `PaginationNext` carry English text, so they
+ * are composed here instead, with Turkish accessible names (DESIGN_SYSTEM_RULES section 4.1, row 20); the COSS
  * files themselves are not edited. `PaginationEllipsis` is used as is: its text is hidden from
  * sight and from screen readers.
  *
@@ -41,23 +43,17 @@ export function ListPagination({
       <PaginationContent>
         <PaginationItem>
           {onFirst ? (
-            <Button
-              aria-label="Önceki sayfa"
-              className="max-sm:aspect-square max-sm:p-0"
-              disabled
-              variant="ghost"
-            >
-              <ChevronLeftIcon className="sm:-ms-1" />
-              <span className="max-sm:hidden">Önceki</span>
+            <Button aria-label="Önceki sayfa" disabled size="icon" variant="ghost">
+              <ChevronLeftIcon />
             </Button>
           ) : (
             <PaginationLink
               aria-label="Önceki sayfa"
-              className="max-sm:aspect-square max-sm:p-0"
-              render={<Button render={<Link href={hrefFor(page - 1)} />} variant="ghost" />}
+              render={
+                <Button render={<Link href={hrefFor(page - 1)} />} size="icon" variant="ghost" />
+              }
             >
-              <ChevronLeftIcon className="sm:-ms-1" />
-              <span className="max-sm:hidden">Önceki</span>
+              <ChevronLeftIcon />
             </PaginationLink>
           )}
         </PaginationItem>
@@ -91,23 +87,17 @@ export function ListPagination({
 
         <PaginationItem>
           {onLast ? (
-            <Button
-              aria-label="Sonraki sayfa"
-              className="max-sm:aspect-square max-sm:p-0"
-              disabled
-              variant="ghost"
-            >
-              <span className="max-sm:hidden">Sonraki</span>
-              <ChevronRightIcon className="sm:-me-1" />
+            <Button aria-label="Sonraki sayfa" disabled size="icon" variant="ghost">
+              <ChevronRightIcon />
             </Button>
           ) : (
             <PaginationLink
               aria-label="Sonraki sayfa"
-              className="max-sm:aspect-square max-sm:p-0"
-              render={<Button render={<Link href={hrefFor(page + 1)} />} variant="ghost" />}
+              render={
+                <Button render={<Link href={hrefFor(page + 1)} />} size="icon" variant="ghost" />
+              }
             >
-              <span className="max-sm:hidden">Sonraki</span>
-              <ChevronRightIcon className="sm:-me-1" />
+              <ChevronRightIcon />
             </PaginationLink>
           )}
         </PaginationItem>
