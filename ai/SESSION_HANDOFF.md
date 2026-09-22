@@ -1,10 +1,12 @@
 # SESSION HANDOFF
 
-Last updated: 2026-09-22
+Last updated: 2026-09-23
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
 ## Verified state
+
+- 2026-09-23: the phone could not use the panel over the office network because Next 16's dev server answers 403 to every request from another origin than the one it was started with (`allowedDevOrigins`). Measured on the running server: a dev asset asked for with `Origin: http://192.168.1.10:3000` answered 403, script tags (which send no `Origin`) answered 200 — so the page arrived without working scripts and the 2FA screen behaved like plain HTML. `next.config.ts` now allows the private ranges in development only. Waiting for the owner to reload on the phone and say whether the boxes advance. A development-only browser reporter (`/api/dev-log`, `BrowserReport`) posts a phone's script errors to the dev server's output; it is off in production.
 
 - 2026-09-22: the owner reported the 2FA screen on their phone: the code did not move to the next box, a pasted code landed whole in the first box and "Doğrula ve devam et" stayed disabled. Reproduced in the browser pane with the page forced into `verify` mode (reverted afterwards): with scripts running, typing advances, a pasted code spreads and the button enables — so on the phone the page's JavaScript was not running, most likely a page left open across a dev-server restart (the dev chunk names change, so the old page's scripts 404). The three symptoms are exactly the server-rendered HTML: the first box carries `maxLength=6`, nothing advances and the button keeps its `disabled` attribute. Changed anyway: the sixth digit now submits by itself (`autoSubmit`), and the button is no longer disabled by browser state, so a page whose scripts have not started is not a dead end.
 

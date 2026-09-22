@@ -308,3 +308,6 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-22 18:25:58Z · b13a9554 · Write · `db/seeds/0006_tsk_rules.sql`
 - 2026-09-22 18:32:06Z · b13a9554 · Write · `db/migrations/0015_overdue_and_system_problems.sql`
 - 2026-09-22 18:32:09Z · b13a9554 · Write · `db/migrations/0015_overdue_and_system_problems.down.sql`
+- 2026-09-22 20:06:40Z · b13a9554 · Write · `src/app/api/dev-log/route.ts`
+- 2026-09-22 20:06:46Z · b13a9554 · Write · `src/platform/ui/dev/browser-report.tsx`
+- 2026-09-22 21:09:40Z · 5c627231 · Edit · `next.config.ts`

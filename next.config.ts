@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [{ source: "/dashboard", destination: "/today", permanent: true }];
   },
+  // Development only: the panel is tried from a phone on the office network, so the dev server
+  // must accept its own local address as an origin. Without this Next answers 403 to every
+  // request that carries an `Origin` header (the hot-reload channel and server actions), and the
+  // screen behaves as if it had no scripts. Private ranges only; production is unaffected.
+  allowedDevOrigins: ["192.168.*.*", "10.*.*.*", "172.16.*.*", "172.17.*.*"],
   // The panel is an internal company system and must never be indexed (ADR-012).
   async headers() {
     return [

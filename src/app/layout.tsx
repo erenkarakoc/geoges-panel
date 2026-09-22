@@ -6,6 +6,7 @@ import "@/platform/ui/theme/brand.css";
 import { ToastProvider } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import { brandTileUrls } from "@/platform/ui/brand/brand-logo";
+import { BrowserReport } from "@/platform/ui/dev/browser-report";
 import { ThemeProvider } from "@/platform/ui/theme/theme-provider";
 
 // Owner choice: Geist everywhere (COSS default is Inter). latin-ext is required for Turkish
@@ -43,6 +44,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="relative flex min-h-full flex-col font-sans">
+        {/* Development only: a phone on the local network has no console we can open. */}
+        {process.env.NODE_ENV === "production" ? null : <BrowserReport />}
         <ThemeProvider>
           {/* Errors, warnings and success messages are reported here, never inside a form (§13). */}
           <ToastProvider>
