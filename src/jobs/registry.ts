@@ -1,3 +1,4 @@
+import { admJobs } from "@/modules/adm";
 import { iamJobs } from "@/modules/iam";
 import type { JobRegistry } from "@/platform/jobs/types";
 
@@ -8,6 +9,6 @@ import type { JobRegistry } from "@/platform/jobs/types";
  */
 export const jobRegistry: JobRegistry = {
   subscribers: [],
-  jobs: [...iamJobs],
+  jobs: [...iamJobs, ...admJobs],
   readModels: [],
 };

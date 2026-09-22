@@ -80,9 +80,10 @@ Belgenin kapsamı ve veri sınıfı **bağlı kayıttan** türetilir; RLS politi
 | `adm.strip_type` | Şerit tipi | `code`, `width_mm`, `thickness_mm`, `hole_count`, `standard_lengths[]` | |
 | `adm.consumption_recipe` | Sarf reçetesi | `output_type`, `material_item_id`, `qty_per_unit`, `valid_from`, `project_id` | Günlük kayıttaki öneri buradan (REQ-ADM-004) |
 | `adm.custom_field` | Özel alan tanımı | `record_table`, `code`, `label`, `field_type`, `options`, `is_required`, `is_searchable`, `data_class`, `order_no`, `retired_at` | Yalnız D-237'nin dokuz referans kaydında (kısıt). Değerler kaydın `custom_fields` JSONB sütununda, yazarken `adm.check_custom_fields()` denetler; kod ve tip değişmez (D-260) |
-| `adm.working_calendar` | Takvim | `scope_type`, `scope_ids[]`, `valid_from`, `work_hours`, `weekend_days[]`, `overtime_rules` | Birim/şantiye takvimi şirketi geçersiz kılar |
-| `adm.holiday` | Resmî tatil | `calendar_id`, `date`, `name` | |
-| `adm.exchange_rate` | Günlük kur | `currency`, `rate_date`, `buying_rate`, `source` (tcmb/manual), `entered_by_user_id`, `reason` | Alınamazsa satır yok → "kur bekliyor" (ADM-K4) |
+| `adm.working_calendar` | Takvim | `scope_type` (company/unit/site), `scope_id`, `valid_from`, `office_start`/`office_end`, `field_start`/`field_end`, `weekend_days[]`, `overtime_rules`, `salary_day`, `reason` | Birim/şantiye takvimi şirketi geçersiz kılar; satır hiç güncellenmez, değişiklik yeni geçerlilik satırıdır (D-261) |
+| `adm.holiday` | Resmî tatil | `scope_type`, `scope_id`, `holiday_on`, `name`, `is_half_day`, `revoked_at` | Yıl bazında girilir; yarım gün arife iş günüdür (D-261) |
+| `adm.exchange_rate` | Günlük kur | `currency`, `bulletin_on`, `buying_rate` (bir birim için), `source` (tcmb/manual), `entered_by_user_id`, `reason` | Alınamazsa satır yok → "kur bekliyor" (ADM-K4). Bir günün kuru önceki iş gününün bültenidir (`adm.rate_for`, D-140); satır değişmez, elle kur gerekçelidir (D-261) |
+| `adm.exchange_rate_fetch` | Bülten günü başına alım durumu | `bulletin_on`, `attempts`, `last_attempt_at`, `last_outcome`, `received_at`, `missing_published_at` | `exchange_rate.missing` gün başına bir kez (SPIKE-11) |
 
 ## Ortak altyapı tabloları
 

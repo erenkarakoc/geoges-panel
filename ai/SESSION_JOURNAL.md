@@ -197,3 +197,10 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-22 06:36:25Z · b13a9554 · Write · `src/modules/adm/domain/configuration.ts`
 - 2026-09-22 06:36:39Z · b13a9554 · Write · `src/modules/adm/data/adm-store.ts`
 - 2026-09-22 06:38:36Z · b13a9554 · Write · `src/modules/adm/data/adm.dbtest.ts`
+- 2026-09-22 10:42:56Z · b13a9554 · Write · `db/migrations/0008_calendar_and_rates.sql`
+- 2026-09-22 10:47:07Z · b13a9554 · Write · `src/platform/time/istanbul.ts`
+- 2026-09-22 10:47:10Z · b13a9554 · Write · `src/platform/time/istanbul.test.ts`
+- 2026-09-22 10:47:21Z · b13a9554 · Write · `src/platform/exchange-rates/exchange-rates.ts`
+- 2026-09-22 10:47:28Z · b13a9554 · Write · `src/platform/exchange-rates/exchange-rates.test.ts`
+- 2026-09-22 10:48:04Z · b13a9554 · Write · `src/modules/adm/data/calendar-and-rates.ts`
+- 2026-09-22 10:50:06Z · b13a9554 · Write · `src/modules/adm/data/calendar-and-rates.dbtest.ts`

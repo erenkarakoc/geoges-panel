@@ -14,7 +14,7 @@ Her port bir arayüz, her sağlayıcı bir adaptördür. Modüller yalnız aray�
 | `StorageProvider` | `upload`, `download`, `delete`, `exists`, `getSignedUrl` | Cloudflare R2 | Erişim yetkisi her zaman uygulamada denetlenir (ADR-003) |
 | `JobRunner` | Zamanlanmış ve kuyruklu işler | Uygulamayla aynı sunucuda çalışan kuyruk | Outbox işleyicisi ve akış zamanlayıcısı buradan (`EVENT_BACKBONE.md`). Kuruldu: `src/platform/jobs`, sunucu açılırken başlar (TASK-0104, D-259) |
 | `NotificationSender` | Panel içi, telefon bildirimi (web push), e-posta | Web Push + SMTP | Kanal kuralları REQ-TSK-010; metinde hassas veri yok (REQ-TSK-011) |
-| `ExchangeRateProvider` | Günlük TCMB alış kuru | TCMB XML | Alınamazsa `exchange_rate.missing` (REQ-ADM-013) |
+| `ExchangeRateProvider` | Günlük TCMB alış kuru | TCMB XML | Alınamazsa `exchange_rate.missing` (REQ-ADM-013). Kuruldu: `src/platform/exchange-rates`, tarihli adres ve `Tarih` doğrulaması; iş `adm.exchange-rates` (TASK-0106, D-261) |
 | `WeatherProvider` | Şantiye günü için hava | Bir hava servisi | Yanıt yoksa alan elle girilir (REQ-SIT-006) |
 | `DocumentRenderer` | Teklif belgesi, resmî günlük rapor, bildirim yazısı (PDF) | Sunucuda HTML → PDF | Türkçe karakter ve tablo kalitesi Phase 06 denemesi |
 | `TextExtractor` | PDF/Office metni, taranmış belgede metin tanıma | Sunucu içi | Belgeyi dışarı göndermek gerekirse önce sahibe sorulur (REQ-DOC-004) |
