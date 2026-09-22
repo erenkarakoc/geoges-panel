@@ -190,7 +190,10 @@ function CodeEntryForm() {
       <Form action={formAction} className="mt-8 flex flex-col gap-4" {...impulse}>
         <div className="flex flex-col gap-2">
           <Label htmlFor="two-factor-code">Doğrulama kodu</Label>
+          {/* The sixth digit submits by itself (owner's request 2026-09-22); the button stays
+              for anyone who fills the code by other means. */}
           <OTPField
+            autoSubmit
             id="two-factor-code"
             length={codeLength}
             name="code"
@@ -207,13 +210,9 @@ function CodeEntryForm() {
           </OTPField>
         </div>
 
-        <Button
-          className="mt-2"
-          disabled={code.length < codeLength}
-          loading={pending}
-          size="lg"
-          type="submit"
-        >
+        {/* Never disabled by the browser's state: a page whose scripts have not started yet
+            would leave a dead button, and the server checks the code anyway. */}
+        <Button className="mt-2" loading={pending} size="lg" type="submit">
           Doğrula ve devam et
         </Button>
       </Form>
