@@ -133,6 +133,10 @@ async function cleanUp() {
   }
   await admin.query("delete from iam.role_assignment where user_id = any($1)", [PEOPLE]);
   await admin.query("delete from iam.user where id = any($1)", [PEOPLE]);
+  await admin.query(
+    "delete from iam.role_permission where role_id in (select id from iam.role where code = any($1))",
+    [ROLES],
+  );
   await admin.query("delete from iam.role where code = any($1)", [ROLES]);
 }
 
@@ -142,7 +146,11 @@ beforeAll(async () => {
   await cleanUp();
   await admin.query(`
     insert into iam.role (code, name, level) values
-      ('T0108_SITE', 'Deneme şantiye', 10), ('T0108_CO', 'Deneme şirket', 20);`);
+      ('T0108_SITE', 'Deneme şantiye', 10), ('T0108_CO', 'Deneme şirket', 20);
+    -- The company role may enter an exchange rate by hand, so the rate alarm has a target.
+    insert into iam.role_permission (role_id, permission_id)
+      select r.id, p.id from iam.role r, iam.permission p
+       where r.code = 'T0108_CO' and p.code = 'adm.module.manage';`);
   const { rows } = await admin.query("select code, id from iam.role where code = any($1)", [ROLES]);
   for (const r of rows) role[r.code] = r.id;
   await admin.query(
@@ -687,7 +695,7 @@ describe("system problems (REQ-TSK-005, EVENT_BACKBONE)", () => {
   const problemTask = async (key: string) =>
     (
       await admin.query(
-        "select id, title, status, priority from tsk.task where problem_key = $1 order by created_at desc limit 1",
+        "select id, title, status, priority, assignee_user_id from tsk.task where problem_key = $1 order by created_at desc limit 1",
         [key],
       )
     ).rows[0];
@@ -711,6 +719,8 @@ describe("system problems (REQ-TSK-005, EVENT_BACKBONE)", () => {
     );
     const opened = await problemTask(key);
     expect(opened).toMatchObject({ status: "open", priority: "critical" });
+    // It went to somebody who may enter a rate by hand, not to everyone.
+    expect(opened.assignee_user_id).toBe(COMPANY);
     expect(opened.title).toContain(day);
 
     // The same alarm again does not open a second task (REQ-TSK-005).

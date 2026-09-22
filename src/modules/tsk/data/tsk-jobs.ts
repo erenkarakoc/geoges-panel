@@ -226,12 +226,16 @@ async function problem(
     await sql`select tsk.resolve_problem(${input.key})`.execute(db);
     return null;
   }
-  const { rows: people } = await sql<{ id: string }>`
+  const { rows } = await sql<{ id: string }>`
     select id from ${
       input.permission
         ? sql`tsk.people_with_permission(${input.permission})`
         : sql`tsk.owner_people()`
     } as people(id)`.execute(db);
+  // Nobody holds that right today: the owner layer hears it instead, so no alarm is lost.
+  const people = rows.length
+    ? rows
+    : (await sql<{ id: string }>`select id from tsk.owner_people() as people(id)`.execute(db)).rows;
   if (!people.length) return null;
   const { rows: opened } = await sql<{ id: string }>`
     select tsk.open_problem_task(${input.key}, ${input.eventCode}, ${input.title},
