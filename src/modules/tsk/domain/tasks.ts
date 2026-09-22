@@ -95,6 +95,7 @@ export const NOTIFICATION_TEMPLATES = {
   "approval.requested": { title: "Onayınızı bekleyen bir talep var", phone: true },
   "revision.requested": { title: "Bir kayıt için düzeltme istendi", phone: false },
   "system.problem": { title: "Sistem sorunu", phone: true },
+  "digest.daily": { title: "Günlük özetiniz", phone: false },
 } as const;
 
 export type NotificationType = keyof typeof NOTIFICATION_TEMPLATES;
@@ -198,4 +199,72 @@ export function historyLine(entry: HistoryFacts): string | null {
   if (entry.field === "due_at") return "Son tarihi değiştirdi";
   if (entry.field === "priority") return "Önceliği değiştirdi";
   return null;
+}
+
+// ---------------------------------------------------------------------------------------------
+// The daily digest (REQ-TSK-013, D-133)
+// ---------------------------------------------------------------------------------------------
+
+export type DigestCounts = {
+  overdue?: number;
+  due_today?: number;
+  open_tasks?: number;
+  waiting_my_approval?: number;
+  unread?: number;
+  company?: { opened?: number; closed?: number; overdue?: number; system_problems?: number };
+};
+
+/** Default sending time of the morning summary; the dated rule `tsk.digest-time` overrides it. */
+export const DEFAULT_DIGEST_TIME = "07:30";
+
+const count = (value: number | undefined) => value ?? 0;
+
+/**
+ * The words of one person's morning summary, built from counts only (REQ-TSK-011). Nothing is
+ * sent to somebody with no work: `isEmpty` says so, and the owner's company lines count as work.
+ */
+export function digestText(counts: DigestCounts): {
+  isEmpty: boolean;
+  subject: string;
+  lines: string[];
+} {
+  const own =
+    count(counts.overdue) +
+    count(counts.due_today) +
+    count(counts.open_tasks) +
+    count(counts.waiting_my_approval) +
+    count(counts.unread);
+  const company = counts.company;
+  const companyTotal = company
+    ? count(company.opened) +
+      count(company.closed) +
+      count(company.overdue) +
+      count(company.system_problems)
+    : 0;
+
+  const lines: string[] = [];
+  if (count(counts.overdue) > 0) lines.push(`${counts.overdue} geciken görev`);
+  if (count(counts.due_today) > 0) lines.push(`bugün biten ${counts.due_today} görev`);
+  const later = count(counts.open_tasks) - count(counts.overdue) - count(counts.due_today);
+  if (later > 0) lines.push(`${later} açık görev`);
+  if (count(counts.waiting_my_approval) > 0) {
+    lines.push(`onayınızı bekleyen ${counts.waiting_my_approval} görev`);
+  }
+  if (count(counts.unread) > 0) lines.push(`${counts.unread} okunmamış bildirim`);
+  if (company && companyTotal > 0) {
+    lines.push(
+      `Şirket dün: ${count(company.opened)} görev açıldı, ${count(company.closed)} kapandı, ` +
+        `${count(company.overdue)} geciken, ${count(company.system_problems)} sistem sorunu`,
+    );
+  }
+
+  const headline =
+    count(counts.overdue) > 0
+      ? `${counts.overdue} geciken işiniz var`
+      : count(counts.due_today) > 0
+        ? `Bugün ${counts.due_today} işiniz var`
+        : lines.length > 0
+          ? "Günlük özetiniz"
+          : "Bugün işiniz yok";
+  return { isEmpty: own === 0 && companyTotal === 0, subject: headline, lines };
 }

@@ -29,7 +29,7 @@ import {
   readTasks,
   reopenTask,
 } from "./tsk-store";
-import { liveSignals, phonePush } from "./tsk-jobs";
+import { liveSignals, phonePush, sendDailyDigests } from "./tsk-jobs";
 import {
   expirePushSubscription,
   readPushSubscriptionState,
@@ -78,6 +78,9 @@ async function cleanUp() {
   const taskIds = tasks.map((r) => r.id as string);
   await admin.query("delete from tsk.notification where user_id = any($1)", [PEOPLE]);
   await admin.query("delete from tsk.push_subscription where user_id = any($1)", [PEOPLE]);
+  await admin.query("delete from tsk.daily_digest where user_id = any($1)", [PEOPLE]);
+  // The digest test blocks everybody else's morning with an empty placeholder; take those back.
+  await admin.query("delete from tsk.daily_digest where is_empty and payload = '{}'::jsonb");
   await admin.query(
     `delete from core.outbox_delivery where outbox_id in
        (select id from core.outbox where event_code like 'notification.%'
@@ -530,5 +533,87 @@ describe("phone notifications (REQ-TSK-010, D-132)", () => {
       ),
     );
     expect(service.sent).toEqual([]);
+  });
+});
+
+describe("the daily digest (REQ-TSK-013, D-133)", () => {
+  /** A mail sender that keeps what it was asked to send. */
+  function fakeMail() {
+    const sent: { to: string; subject: string; text: string }[] = [];
+    return {
+      sender: {
+        kind: "deneme",
+        async send(message: { to: string; subject: string; text: string }) {
+          sent.push(message);
+          return true;
+        },
+      },
+      sent,
+    };
+  }
+
+  const morning = (day: string) => new Date(`${day}T08:00:00+03:00`);
+  const digestRow = async (userId: string, day: string) =>
+    (
+      await admin.query(
+        "select is_empty, sent_at, email_sent_at, payload from tsk.daily_digest where user_id = $1 and for_date = $2",
+        [userId, day],
+      )
+    ).rows[0];
+
+  it("sums up the day once, skips people with nothing to do and waits for the hour", async () => {
+    const day = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Istanbul" }).format(
+      new Date(),
+    );
+    // Everybody else in the test project already has their row, so only these people are new.
+    await admin.query(
+      `insert into tsk.daily_digest (user_id, for_date, payload, is_empty)
+       select id, $1::date, '{}', true from iam.user where id <> all($2::uuid[])
+       on conflict do nothing`,
+      [day, PEOPLE],
+    );
+    await give(GIVER_A, PEER_A, false, "Özet görevi");
+
+    const early = fakeMail();
+    // Before the hour of the rule (07:30) nothing happens.
+    expect(
+      await worker((c) =>
+        sendDailyDigests(kyselyOn(c), early.sender, new Date(`${day}T06:00:00+03:00`)),
+      ),
+    ).toBe(0);
+    expect(await digestRow(PEER_A, day)).toBeUndefined();
+
+    const mail = fakeMail();
+    const sent = await worker((c) => sendDailyDigests(kyselyOn(c), mail.sender, morning(day)));
+    expect(sent).toBeGreaterThanOrEqual(1);
+
+    const peer = await digestRow(PEER_A, day);
+    expect(peer).toMatchObject({ is_empty: false });
+    expect(peer.sent_at).not.toBeNull();
+    expect(peer.email_sent_at).not.toBeNull();
+    expect(peer.payload.open_tasks).toBeGreaterThanOrEqual(1);
+    expect(mail.sent.some((m) => m.to.startsWith("t0108-2@"))).toBe(true);
+
+    // Somebody with no work gets a row, no e-mail and no notification.
+    const idle = await digestRow(OTHER_B, day);
+    expect(idle).toMatchObject({ is_empty: true, sent_at: null, email_sent_at: null });
+    expect(mail.sent.some((m) => m.to.startsWith("t0108-3@"))).toBe(false);
+    const { rows: idleNotes } = await admin.query(
+      "select id from tsk.notification where user_id = $1 and type = 'digest.daily'",
+      [OTHER_B],
+    );
+    expect(idleNotes).toHaveLength(0);
+
+    const { rows: notes } = await admin.query(
+      "select subject from tsk.notification where user_id = $1 and type = 'digest.daily'",
+      [PEER_A],
+    );
+    expect(notes).toHaveLength(1);
+    expect(notes[0].subject).toContain("açık görev");
+
+    // A second run the same morning changes nothing.
+    const again = fakeMail();
+    expect(await worker((c) => sendDailyDigests(kyselyOn(c), again.sender, morning(day)))).toBe(0);
+    expect(again.sent).toEqual([]);
   });
 });

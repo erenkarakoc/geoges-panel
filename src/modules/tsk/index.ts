@@ -36,4 +36,4 @@ export {
 } from "./domain/tasks";
 
 // Background work, collected by src/jobs/registry.ts (live signals).
-export { liveSignals, phonePush, type SignalSender } from "./data/tsk-jobs";
+export { dailyDigest, liveSignals, phonePush, type SignalSender } from "./data/tsk-jobs";

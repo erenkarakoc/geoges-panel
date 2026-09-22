@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   assignTaskSchema,
+  digestText,
   dueAtFromDay,
   historyLine,
   NOTIFICATION_TEMPLATES,
@@ -136,5 +137,31 @@ describe("history lines (REQ-TSK-004)", () => {
         reason: null,
       }),
     ).toBeNull();
+  });
+});
+
+describe("the daily digest (REQ-TSK-013, D-133)", () => {
+  it("counts the day in Turkish and leads with what is late", () => {
+    const digest = digestText({ overdue: 2, due_today: 1, open_tasks: 5, unread: 3 });
+    expect(digest.subject).toBe("2 geciken işiniz var");
+    expect(digest.lines).toEqual([
+      "2 geciken görev",
+      "bugün biten 1 görev",
+      "2 açık görev",
+      "3 okunmamış bildirim",
+    ]);
+    expect(digest.isEmpty).toBe(false);
+  });
+
+  it("is empty for somebody with nothing to do, but not for an owner with a company line", () => {
+    expect(digestText({}).isEmpty).toBe(true);
+    expect(
+      digestText({ company: { opened: 0, closed: 0, overdue: 0, system_problems: 0 } }).isEmpty,
+    ).toBe(true);
+    const owner = digestText({ company: { opened: 4, closed: 3, overdue: 1, system_problems: 0 } });
+    expect(owner.isEmpty).toBe(false);
+    expect(owner.lines).toEqual([
+      "Şirket dün: 4 görev açıldı, 3 kapandı, 1 geciken, 0 sistem sorunu",
+    ]);
   });
 });

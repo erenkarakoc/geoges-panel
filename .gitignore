@@ -61,3 +61,6 @@ yarn-error.log*
 # see ai/AI_SKILLS.md); .codex holds local tool config. Includes a Tailwind docs copy (D-024).
 .agents/
 .codex/
+
+# Daily digest messages written by the file mail adapter until a provider is chosen (OQ-015).
+.mail/
