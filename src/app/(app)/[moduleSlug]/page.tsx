@@ -6,6 +6,8 @@ import {
   findNavigationItemByHref,
   navigationRegistry,
 } from "@/platform/navigation/navigation-registry";
+import { isModuleEnabled } from "@/platform/features/features";
+import { FeatureOff } from "@/platform/ui/feature-off";
 import { ModulePlaceholder } from "@/platform/ui/module-placeholder";
 
 // Placeholder pages for every registered module except those with their own route.
@@ -31,6 +33,10 @@ export default async function ModulePage({ params }: PageProps<"/[moduleSlug]">)
 
   if (!item) {
     notFound();
+  }
+
+  if (!isModuleEnabled(item.moduleCode)) {
+    return <FeatureOff />;
   }
 
   return <ModulePlaceholder item={item} />;

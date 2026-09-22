@@ -110,3 +110,18 @@ describe("indicatorRegistry", () => {
     expect(indicatorRegistry.every((indicator) => Boolean(indicator.sampleValue))).toBe(true);
   });
 });
+
+describe("getVisibleNavigation with feature switches (CONFIGURATION section 5)", () => {
+  it("leaves a switched-off module out of the menu", () => {
+    const all = getVisibleNavigation(navigationRegistry, previewAccessPolicy);
+    const withoutFin = getVisibleNavigation(
+      navigationRegistry,
+      previewAccessPolicy,
+      (code) => code !== "FIN",
+    );
+    const codes = (groups: typeof all) => groups.flatMap((g) => g.items.map((i) => i.moduleCode));
+    expect(codes(all)).toContain("FIN");
+    expect(codes(withoutFin)).not.toContain("FIN");
+    expect(codes(withoutFin).length).toBe(codes(all).filter((c) => c !== "FIN").length);
+  });
+});

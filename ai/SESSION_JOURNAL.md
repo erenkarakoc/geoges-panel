@@ -194,3 +194,6 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-22 00:20:19Z · b13a9554 · Write · `scripts/jobs-cli.mjs`
 - 2026-09-22 00:21:25Z · b13a9554 · Write · `src/platform/jobs/worker.dbtest.ts`
 - 2026-09-22 00:25:13Z · b13a9554 · Edit · `src/platform/jobs/worker.dbtest.ts`
+- 2026-09-22 06:36:25Z · b13a9554 · Write · `src/modules/adm/domain/configuration.ts`
+- 2026-09-22 06:36:39Z · b13a9554 · Write · `src/modules/adm/data/adm-store.ts`
+- 2026-09-22 06:38:36Z · b13a9554 · Write · `src/modules/adm/data/adm.dbtest.ts`

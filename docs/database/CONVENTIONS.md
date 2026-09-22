@@ -50,6 +50,7 @@ m² gibi türetilen ölçüler **saklanır ve hesaplandığı kural sürümüyle
 
 - Durum sütunları `text` + `check` kısıtıdır; değerler kodda sabittir (`draft`, `submitted`, `approved`, `cancelled`…). Durum makinesi kodda tanımlanır, veritabanı yalnız geçersiz değeri engeller.
 - **Kullanıcının yönettiği listeler** (gider kategorisi, panel tipi, iş kalemi) `enum` değil **katalog tablosudur**; kalem eklemek göç gerektirmez (REQ-ADM-001).
+- **Özel alan alan tablo** (D-237'nin dokuz referans kaydı) `custom_fields jsonb not null default '{}'` sütunu taşır ve aynı göçte `adm.check_custom_fields()` tetikleyicisini `before insert or update` olarak bağlar (TASK-0105, D-260).
 - Katalog kalemleri silinmez, pasifleşir; birleştirme yönlendirme bırakır (`CONFIGURATION.md` bölüm 2).
 
 ## 7. Geçmiş ve denetim

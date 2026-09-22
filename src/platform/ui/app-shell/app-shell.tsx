@@ -4,6 +4,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { type AccessPolicy, filterByPermission } from "@/platform/access/access-policy";
+import { isModuleEnabled } from "@/platform/features/features";
 import {
   getVisibleNavigation,
   navigationRegistry,
@@ -86,7 +87,9 @@ export async function AppShell({
   headerActions,
   children,
 }: AppShellProps) {
-  const visibleGroups = getVisibleNavigation(navigationRegistry, access);
+  const visibleGroups = getVisibleNavigation(navigationRegistry, access, (code) =>
+    isModuleEnabled(code),
+  );
   const visibleItemIds = visibleGroups.flatMap((group) => group.items.map((item) => item.id));
   const visibleWorkIds = filterByPermission(workNavigation, access).map((item) => item.id);
 

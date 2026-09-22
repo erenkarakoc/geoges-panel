@@ -14,6 +14,8 @@ import {
 import { parseAuditLogFilters, readAuditLog } from "@/modules/aud";
 import { AuditLogList } from "@/modules/aud/ui/audit-log-list";
 import { AccessDeniedError, listPeople, todayRoute } from "@/modules/iam";
+import { isModuleEnabled } from "@/platform/features/features";
+import { FeatureOff } from "@/platform/ui/feature-off";
 
 export const metadata: Metadata = { title: "Denetim Kayıtları" };
 
@@ -30,6 +32,8 @@ async function load(filters: ReturnType<typeof parseAuditLogFilters>) {
 
 // SCR-193 (TASK-0103). Read on every request: the log grows while the owner looks at it.
 export default async function AuditLogPage({ searchParams }: PageProps<"/audit-log">) {
+  if (!isModuleEnabled("AUD")) return <FeatureOff />;
+
   const filters = parseAuditLogFilters(await searchParams);
   const loaded = await load(filters);
 

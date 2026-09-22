@@ -418,9 +418,16 @@ export const navigationRegistry: readonly NavigationGroup[] = [
 export function getVisibleNavigation(
   groups: readonly NavigationGroup[],
   access: AccessPolicy,
+  isModuleEnabled: (moduleCode: ModuleCode) => boolean = () => true,
 ): NavigationGroup[] {
   return groups
-    .map((group) => ({ ...group, items: filterByPermission(group.items, access) }))
+    .map((group) => ({
+      ...group,
+      // A module switched off in this environment is not in the menu (CONFIGURATION section 5).
+      items: filterByPermission(group.items, access).filter((item) =>
+        isModuleEnabled(item.moduleCode),
+      ),
+    }))
     .filter((group) => group.items.length > 0);
 }
 

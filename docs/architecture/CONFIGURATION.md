@@ -1,6 +1,6 @@
 # Kural, Katalog ve Özel Alan Mimarisi
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-22
 
 Panelin "ayarlanabilir" yanının mimarisi: kataloglar, tarihli kurallar, özel alanlar ve özellik anahtarları. Üç katman kuralı (Sabit / Akış / Tanım, D-077) her gereksinimin başında yazılıdır; burası Tanım katmanının nasıl çalıştığını belirler. Görev: TASK-0061. Kararlar: D-237.
 
@@ -59,3 +59,11 @@ Bir kural satırı: kural anahtarı + kapsam (şirket / proje / şantiye / birim
 
 - Phase 04: katalog, kural geçerlilik ve özel alan tablolarının şeması; özel alan değerlerinin saklanma biçimi (kullanıcı tanımlı kayıt türleriyle aynı kararın parçasıdır, TASK-0063).
 - Phase 06 denemesi: tarihli kural çözümlemesinin hakediş ve bordro hesabında doğru sürümü seçtiği; geçmişe dönük kural girişinin kapanmış dönemi bozmadığı.
+
+## 8. Kurulum (TASK-0105, D-260)
+
+- Tarihli kurallar `adm.rule`'dadır; her kuralın anahtarı `adm.rule_key`'de tanımlıdır (tip, birim, izinli kapsamlar, veri sınıfı). Okuma: `getRule(anahtar, tarih, kapsam)` istek içinde, `readRule(işlem, …)` bir hesabın kendi işleminde. Çözümleme şantiye → proje → birim → şirket; bulunamayan kural "yok" döner. Kural satırı değiştirilemez ve silinemez.
+- Katalog kalemleri `adm.catalog_item`'dadır; benzer kalem önerisi Türkçe harf ve ek farkına duyarsızdır; birleştirme yönlendirme bırakır ve `catalog_item.merged` yayımlar.
+- Özel alan tanımları `adm.custom_field`'dadır; değerler kaydın `custom_fields` sütununda durur ve yazarken denetlenir. Özel alan alacak her tablo bu sütunu ve `adm.check_custom_fields()` tetikleyicisini kendi göçünde kurar. Geçmiş özel alanları alan alan ve veri sınıfıyla yazar.
+- Özellik anahtarları `FEATURES_OFF` ortam ayarıdır (bölüm 5); sunucu açılırken okunur.
+- Tanımlar ekranı (SCR-190) ve panel tipi, şerit tipi, sarf reçetesi tanımları Faz 09'da gelir.

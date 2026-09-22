@@ -57,7 +57,6 @@ Belgenin kapsamı ve veri sınıfı **bağlı kayıttan** türetilir; RLS politi
 | `wfl.approval` | Onay isteği | `step_run_id`, `record_*`, `assigned_user_id`, `decision` (approve/reject/return), `reason`, `decided_at`, `decided_by_user_id` | Onaylar kuyruğu buradan okur; gerekçe zorunluluğu kısıtla (WFL-K4) |
 | `wfl.lock` | Bağımlılık kilidi | `record_*`, `reason_code`, `message`, `created_by_instance_id`, `released_at`, `overridden_by_user_id`, `override_reason` | Aşma yalnız sahip/GM (WFL-K6) |
 | `wfl.trial_run` | Deneme çalıştırması | `workflow_version_id`, `sample_record_*`, `result` (jsonb), `run_at`, `run_by_user_id` | Kuru mod; gerçek kayıt üretmez |
-| `wfl.rule` | Tarihli şirket kuralı | `key`, `scope_type`, `scope_ids[]`, `valid_from`, `value` (jsonb), `reason` | Tek okuma noktası `getRule` (`CONFIGURATION.md`) |
 
 ## tsk — Görev ve bildirim
 
@@ -73,12 +72,14 @@ Belgenin kapsamı ve veri sınıfı **bağlı kayıttan** türetilir; RLS politi
 
 | Tablo | Ne tutar | Ayırt edici sütunlar | Notlar |
 |---|---|---|---|
-| `adm.catalog` | Katalog türü | `key`, `name`, `allows_project_scope` | Gider kategorisi, birim, iş kalemi… |
-| `adm.catalog_item` | Katalog kalemi | `catalog_id`, `code`, `name`, `status`, `project_id`, `merged_into_item_id` | Silinmez, pasifleşir; birleşme yönlendirme bırakır (ADM-K3) |
+| `adm.catalog` | Katalog türü | `key`, `name`, `allows_project_scope`, `allows_user_additions` | Gider kategorisi, birim, iş kalemi… Kullanıcı eklemesine açık kataloğa rolü olan herkes kalem ekler (REQ-ADM-006) |
+| `adm.catalog_item` | Katalog kalemi | `catalog_id`, `code`, `name`, `name_folded`, `status`, `project_id`, `merged_into_item_id` | Silinmez, pasifleşir; birleşme yönlendirme bırakır ve `catalog_item.merged` yayımlar (ADM-K3). `project_id` yabancı anahtar değildir (D-260) |
+| `adm.rule_key` | Kural anahtarı | `key`, `module`, `value_type`, `unit`, `allowed_scopes[]`, `data_class` | Modüller kendi anahtarlarını başlangıç verisiyle ekler |
+| `adm.rule` | Tarihli şirket kuralı | `rule_key_id`, `scope_type` (company/unit/project/site), `scope_id`, `valid_from`, `value` (jsonb), `reason` | Hiç güncellenmez ve silinmez; tek okuma noktası `getRule` / `adm.rule_value` (`CONFIGURATION.md`). Önceki taslakta `wfl.rule` idi; kurallar Tanımlar'da yönetildiği için ADM'ye alındı (D-260) |
 | `adm.panel_type` | Panel tipi | `code`, `width`, `height`, `area_m2` (türetilmiş), `neighbour_type_id` | m² en × boydan hesaplanır (ADM-K2) |
 | `adm.strip_type` | Şerit tipi | `code`, `width_mm`, `thickness_mm`, `hole_count`, `standard_lengths[]` | |
 | `adm.consumption_recipe` | Sarf reçetesi | `output_type`, `material_item_id`, `qty_per_unit`, `valid_from`, `project_id` | Günlük kayıttaki öneri buradan (REQ-ADM-004) |
-| `adm.custom_field` | Özel alan tanımı | `record_table`, `code`, `label`, `type`, `data_class`, `is_searchable`, `retired_at` | Yalnız referans kayıtlarda (D-237) |
+| `adm.custom_field` | Özel alan tanımı | `record_table`, `code`, `label`, `field_type`, `options`, `is_required`, `is_searchable`, `data_class`, `order_no`, `retired_at` | Yalnız D-237'nin dokuz referans kaydında (kısıt). Değerler kaydın `custom_fields` JSONB sütununda, yazarken `adm.check_custom_fields()` denetler; kod ve tip değişmez (D-260) |
 | `adm.working_calendar` | Takvim | `scope_type`, `scope_ids[]`, `valid_from`, `work_hours`, `weekend_days[]`, `overtime_rules` | Birim/şantiye takvimi şirketi geçersiz kılar |
 | `adm.holiday` | Resmî tatil | `calendar_id`, `date`, `name` | |
 | `adm.exchange_rate` | Günlük kur | `currency`, `rate_date`, `buying_rate`, `source` (tcmb/manual), `entered_by_user_id`, `reason` | Alınamazsa satır yok → "kur bekliyor" (ADM-K4) |
