@@ -20,7 +20,7 @@ Veri aktarımı (SCR-194) ertelenmiştir.
 | SCR-010 Bugün | CHG-004'te kuruldu (D-065). Kişinin iş bloğu ve göstergeler. Her gösterge kartında küçük bir eğilim grafiği (D-226); karta tıklanınca dökümüne inilir | `Card`, `Frame`, `Tabs` (Sistem gözü sekmesi), `Badge`, `Figure`, grafik |
 | SCR-011 Sistem gözü | Bugün'ün ikinci sekmesi. Zaman aralığı seçici; en önemli 5 sorun ve fırsat; sağlık karnesi başlıklarının renkleri | `Tabs`, `ToggleGroup`, `Card`, `Badge`, `Figure`, grafik |
 | SCR-012 Onaylar | CHG-004'te kuruldu (D-070): tek kayıt ekranı doldurur, kararla sıradaki gelir. Üstte "Bekleyenler" ve "Revizyon talepleri" sekmeleri (SCR-192, D-223). Karar düğmeleri: onayla, düzeltmeye gönder, reddet; gerekçe `Dialog` içinde zorunlu | `Tabs`, `Card`, `Button`, `Dialog`, `Textarea`, `Badge`, `Empty` |
-| SCR-015 Bildirim çekmecesi | Üst bardaki zilden. Masaüstünde `Popover`, telefonda `Drawer`. Türe göre süzme açılır listeyle (Tümü, Görevler, Onay ve düzeltme, Kritik; sahip isteği 2026-09-22); her bildirim kaynağına gider | `Popover`, `Drawer`, `Select`, `ScrollArea`, `Empty`, `Badge` |
+| SCR-015 Bildirim çekmecesi | Üst bardaki zilden. Masaüstünde `Popover`, telefonda `Drawer`. Türe göre süzme, başlığın yanındaki açılır listeyle (Tümü, Görevler, Onay ve düzeltme, Kritik; sahip isteği 2026-09-22); her bildirim kaynağına gider | `Popover`, `Drawer`, `Select`, `ScrollArea`, `Empty`, `Badge` |
 
 ## Saha, stok ve satın alma
 

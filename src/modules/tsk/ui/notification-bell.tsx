@@ -109,35 +109,34 @@ export function NotificationBell() {
   );
 
   const items = (summary?.items ?? []).filter((item) => matchesNotificationFilter(filter, item));
+  // Next to the title (owner's request 2026-09-22), so the list starts right under the header.
+  const filterSelect = (
+    <Select
+      items={NOTIFICATION_FILTERS}
+      onValueChange={(value) => setFilter((value as NotificationFilter | null) ?? "all")}
+      value={filter}
+    >
+      <SelectTrigger aria-label="Bildirim türü" className="w-auto min-w-36" size="sm">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectPopup>
+        {NOTIFICATION_FILTERS.map((f) => (
+          <SelectItem key={f.value} value={f.value}>
+            {f.label}
+          </SelectItem>
+        ))}
+      </SelectPopup>
+    </Select>
+  );
+  const markAllButton =
+    unread > 0 ? (
+      <Button onClick={() => void markRead({ all: true }).then(reload)} size="sm" variant="ghost">
+        Tümünü okundu say
+      </Button>
+    ) : null;
+
   const body = (
     <div className="flex min-h-0 flex-col gap-3">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <Select
-          items={NOTIFICATION_FILTERS}
-          onValueChange={(value) => setFilter((value as NotificationFilter | null) ?? "all")}
-          value={filter}
-        >
-          <SelectTrigger aria-label="Bildirim türü" className="w-auto min-w-44" size="sm">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectPopup>
-            {NOTIFICATION_FILTERS.map((f) => (
-              <SelectItem key={f.value} value={f.value}>
-                {f.label}
-              </SelectItem>
-            ))}
-          </SelectPopup>
-        </Select>
-        {unread > 0 ? (
-          <Button
-            onClick={() => void markRead({ all: true }).then(reload)}
-            size="sm"
-            variant="ghost"
-          >
-            Tümünü okundu say
-          </Button>
-        ) : null}
-      </div>
       {items.length === 0 ? (
         <Empty className="py-6">
           <EmptyHeader>
@@ -169,7 +168,11 @@ export function NotificationBell() {
         <DrawerTrigger render={trigger} />
         <DrawerPopup showBar>
           <DrawerHeader>
-            <DrawerTitle>Bildirimler</DrawerTitle>
+            <div className="flex flex-wrap items-center gap-2">
+              <DrawerTitle>Bildirimler</DrawerTitle>
+              {filterSelect}
+              <span className="ms-auto">{markAllButton}</span>
+            </div>
           </DrawerHeader>
           <DrawerPanel>{body}</DrawerPanel>
         </DrawerPopup>
@@ -181,7 +184,11 @@ export function NotificationBell() {
     <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger render={trigger} />
       <PopoverPopup align="end" className="w-96">
-        <PopoverTitle className="mb-3 text-base">Bildirimler</PopoverTitle>
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <PopoverTitle className="text-base">Bildirimler</PopoverTitle>
+          {filterSelect}
+          <span className="ms-auto">{markAllButton}</span>
+        </div>
         {body}
       </PopoverPopup>
     </Popover>
