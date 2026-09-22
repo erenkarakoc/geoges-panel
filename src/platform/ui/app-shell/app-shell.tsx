@@ -15,6 +15,7 @@ import {
   SIDEBAR_GROUPS_COOKIE,
 } from "@/platform/navigation/sidebar-group-preference";
 import { resolveSiteScope, SITE_SCOPE_COOKIE } from "@/platform/navigation/site-scope-preference";
+import { SignalProvider } from "@/platform/signals/signal-provider";
 import { AppHeader, type HeaderSeat } from "@/platform/ui/app-shell/app-header";
 import { AppSidebar } from "@/platform/ui/app-shell/app-sidebar";
 import { MobileBottomBar } from "@/platform/ui/app-shell/mobile-bottom-bar";
@@ -77,6 +78,8 @@ type AppShellProps = {
   contextBar?: ReactNode;
   /** Right end of the top bar (account menu with the role switcher — §40.3). */
   headerActions?: ReactNode;
+  /** The notification bell (SCR-015), rendered by TSK. */
+  notifications?: ReactNode;
   children: ReactNode;
 };
 
@@ -85,6 +88,7 @@ export async function AppShell({
   seat,
   contextBar,
   headerActions,
+  notifications,
   children,
 }: AppShellProps) {
   const visibleGroups = getVisibleNavigation(navigationRegistry, access, (code) =>
@@ -105,44 +109,47 @@ export async function AppShell({
   const initialSite = resolveSiteScope(cookieStore.get(SITE_SCOPE_COOKIE)?.value, seat.sites);
 
   return (
-    <div className={outerClassName}>
-      <SidebarProvider
-        className={frameClassName}
-        defaultOpen={sidebarOpen}
-        style={sidebarWidthStyle}
-      >
-        <AppSidebar
-          defaultOpenGroupIds={openGroupIds}
-          visibleItemIds={visibleItemIds}
-          visibleWorkIds={visibleWorkIds}
-        />
-        {/* Inset variant: on desktop the app sits in a bordered, rounded card of fixed height. */}
-        <SidebarInset className={appCardClassName}>
-          <AppHeader
-            actions={
-              <>
-                <ThemeToggle />
-                {headerActions}
-              </>
-            }
-            initialSite={initialSite}
-            seat={seat}
+    <SignalProvider>
+      <div className={outerClassName}>
+        <SidebarProvider
+          className={frameClassName}
+          defaultOpen={sidebarOpen}
+          style={sidebarWidthStyle}
+        >
+          <AppSidebar
+            defaultOpenGroupIds={openGroupIds}
             visibleItemIds={visibleItemIds}
             visibleWorkIds={visibleWorkIds}
           />
-          {contextBar}
-          {/* Page-specific functional footer is planned for Phase 02 (TASK-0028). */}
-          <ScrollArea className="min-h-0 flex-1">
-            <div className="flex flex-col gap-6 p-4 md:p-6">{children}</div>
-          </ScrollArea>
-          {/* Phones navigate from here; on desktop the rail does the same job (D-069). */}
-          <MobileBottomBar
-            primaryAction={seat.primaryAction}
-            visibleItemIds={visibleItemIds}
-            visibleWorkIds={visibleWorkIds}
-          />
-        </SidebarInset>
-      </SidebarProvider>
-    </div>
+          {/* Inset variant: on desktop the app sits in a bordered, rounded card of fixed height. */}
+          <SidebarInset className={appCardClassName}>
+            <AppHeader
+              actions={
+                <>
+                  <ThemeToggle />
+                  {headerActions}
+                </>
+              }
+              initialSite={initialSite}
+              notifications={notifications}
+              seat={seat}
+              visibleItemIds={visibleItemIds}
+              visibleWorkIds={visibleWorkIds}
+            />
+            {contextBar}
+            {/* Page-specific functional footer is planned for Phase 02 (TASK-0028). */}
+            <ScrollArea className="min-h-0 flex-1">
+              <div className="flex flex-col gap-6 p-4 md:p-6">{children}</div>
+            </ScrollArea>
+            {/* Phones navigate from here; on desktop the rail does the same job (D-069). */}
+            <MobileBottomBar
+              primaryAction={seat.primaryAction}
+              visibleItemIds={visibleItemIds}
+              visibleWorkIds={visibleWorkIds}
+            />
+          </SidebarInset>
+        </SidebarProvider>
+      </div>
+    </SignalProvider>
   );
 }

@@ -4,8 +4,11 @@ import { AccessDeniedError, readEffectivePermissions, signInIdentity } from "@/m
 import {
   approveTask,
   completeTask,
+  countUnread,
   insertManualTask,
+  markNotificationsRead,
   readAssignablePeople,
+  readNotifications,
   readTask,
   readTaskHistory,
   readTasks,
@@ -15,6 +18,7 @@ import {
 import {
   assignTaskSchema,
   dueAtFromDay,
+  notificationText,
   sortTasks,
   TASK_RULE_MESSAGES,
 } from "@/modules/tsk/domain/tasks";
@@ -106,4 +110,49 @@ export async function approveTaskDone(taskId: string) {
 export async function reopen(taskId: string, reason: string | null) {
   const who = await identity();
   return refusalsAsMessages(() => reopenTask(who, taskId, reason?.trim() || null));
+}
+
+// ---------------------------------------------------------------------------------------------
+// Notifications (SCR-015, REQ-TSK-009…011)
+// ---------------------------------------------------------------------------------------------
+
+export type NotificationItem = {
+  id: string;
+  type: string;
+  title: string;
+  body: string | null;
+  linkPath: string | null;
+  isCritical: boolean;
+  isRead: boolean;
+  createdAt: string;
+};
+
+/**
+ * The bell's data: the unread count and the newest notifications, their words built from the
+ * type's fixed template (REQ-TSK-011). The count is unread notifications only, apart from open
+ * tasks (REQ-TSK-009).
+ */
+export async function notificationSummary(): Promise<{
+  unread: number;
+  items: NotificationItem[];
+}> {
+  const who = await identity();
+  const [unread, rows] = await Promise.all([countUnread(who), readNotifications(who, 30)]);
+  return {
+    unread,
+    items: rows.map((n) => ({
+      id: n.id,
+      type: n.type,
+      ...notificationText(n.type, n.subject),
+      linkPath: n.linkPath,
+      isCritical: n.isCritical,
+      isRead: n.readAt !== null,
+      createdAt: n.createdAt.toISOString(),
+    })),
+  };
+}
+
+/** Marks the given notifications read, or all of them when `ids` is null. */
+export async function markRead(ids: readonly string[] | null): Promise<number> {
+  return markNotificationsRead(await identity(), ids);
 }

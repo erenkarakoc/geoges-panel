@@ -1,6 +1,6 @@
 "use client";
 
-import { BellIcon, ChevronDownIcon } from "lucide-react";
+import { ChevronDownIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useState } from "react";
@@ -15,7 +15,6 @@ import {
   MenuRadioItem,
   MenuTrigger,
 } from "@/components/ui/menu";
-import { Popover, PopoverPopup, PopoverTitle, PopoverTrigger } from "@/components/ui/popover";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   findNavigationGroupOfItem,
@@ -44,12 +43,15 @@ export function AppHeader({
   visibleWorkIds,
   seat,
   initialSite,
+  notifications,
   actions,
 }: {
   visibleItemIds: readonly string[];
   visibleWorkIds: readonly string[];
   seat: HeaderSeat;
   initialSite: string;
+  /** The bell, rendered by TSK (SCR-015); platform code does not know notifications. */
+  notifications?: ReactNode;
   actions?: ReactNode;
 }) {
   const pathname = usePathname();
@@ -121,7 +123,7 @@ export function AppHeader({
           label={primaryAction}
           labelClassName="hidden md:inline"
         />
-        <NotificationsButton />
+        {notifications}
         {actions}
       </div>
     </header>
@@ -163,24 +165,5 @@ function SiteScopeSelector({
         </MenuGroup>
       </MenuPopup>
     </Menu>
-  );
-}
-
-/**
- * Notifications. There is no notification service yet, so the list is empty; the sample entries
- * were removed at the owner's request (D-106). Real notifications must say what produced them
- * and link to it (D-087).
- */
-function NotificationsButton() {
-  return (
-    <Popover>
-      <PopoverTrigger render={<Button aria-label="Bildirimler" size="icon" variant="ghost" />}>
-        <BellIcon aria-hidden="true" />
-      </PopoverTrigger>
-      <PopoverPopup align="end" className="w-80">
-        <PopoverTitle className="text-base">Bildirimler</PopoverTitle>
-        <p className="mt-3 text-sm text-muted-foreground">Bildirim yok.</p>
-      </PopoverPopup>
-    </Popover>
   );
 }

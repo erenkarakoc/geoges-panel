@@ -103,6 +103,26 @@ export function isNotificationType(type: string): type is NotificationType {
   return Object.hasOwn(NOTIFICATION_TEMPLATES, type);
 }
 
+/** The bell's filter (SPECIAL_SCREENS SCR-015 "türe göre süzme"). */
+export const NOTIFICATION_FILTERS = [
+  { value: "all", label: "Tümü" },
+  { value: "tasks", label: "Görevler" },
+  { value: "approvals", label: "Onay ve düzeltme" },
+  { value: "critical", label: "Kritik" },
+] as const;
+
+export type NotificationFilter = (typeof NOTIFICATION_FILTERS)[number]["value"];
+
+export function matchesNotificationFilter(
+  filter: NotificationFilter,
+  item: { type: string; isCritical: boolean },
+): boolean {
+  if (filter === "all") return true;
+  if (filter === "critical") return item.isCritical;
+  if (filter === "tasks") return item.type.startsWith("task.");
+  return item.type.startsWith("approval.") || item.type.startsWith("revision.");
+}
+
 /** The words of a notification: the type's title, and the subject when there is one. */
 export function notificationText(
   type: string,

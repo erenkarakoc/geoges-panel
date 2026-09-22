@@ -278,3 +278,15 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-22 15:56:43Z · 5c627231 · Edit · `scripts/boundaries.test.mjs`
 - 2026-09-22 16:47:16Z · 5c627231 · Write · `src/modules/tsk/ui/assign-task-form.tsx`
 - 2026-09-22 16:47:42Z · 5c627231 · Write · `src/app/(app)/@modal/(.)tasks/new/page.tsx`
+- 2026-09-22 17:15:06Z · 5c627231 · Write · `db/migrations/0012_notification_events.sql`
+- 2026-09-22 17:15:59Z · 5c627231 · Write · `src/platform/signals/signals.ts`
+- 2026-09-22 17:16:04Z · 5c627231 · Write · `src/platform/signals/hub.ts`
+- 2026-09-22 17:16:09Z · 5c627231 · Write · `src/platform/signals/stream.ts`
+- 2026-09-22 17:16:38Z · 5c627231 · Write · `src/platform/signals/client.ts`
+- 2026-09-22 17:16:44Z · 5c627231 · Write · `src/platform/signals/signal-provider.tsx`
+- 2026-09-22 17:17:20Z · 5c627231 · Write · `src/modules/tsk/data/tsk-jobs.ts`
+- 2026-09-22 17:17:40Z · 5c627231 · Write · `src/app/api/signals/route.ts`
+- 2026-09-22 17:17:44Z · 5c627231 · Write · `src/app/api/notifications/route.ts`
+- 2026-09-22 17:30:01Z · b13a9554 · Edit · `src/modules/tsk/domain/tasks.ts`
+- 2026-09-22 17:30:19Z · b13a9554 · Write · `src/modules/tsk/ui/notification-bell.tsx`
+- 2026-09-22 17:31:01Z · b13a9554 · Write · `src/platform/signals/signals.test.ts`

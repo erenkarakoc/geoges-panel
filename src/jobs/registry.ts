@@ -1,7 +1,9 @@
 import { admJobs } from "@/modules/adm";
 import { docJobs } from "@/modules/doc";
 import { iamJobs } from "@/modules/iam";
+import { liveSignals } from "@/modules/tsk";
 import type { JobRegistry } from "@/platform/jobs/types";
+import { sendSignal } from "@/platform/signals/hub";
 import { processStorage } from "@/platform/storage";
 import { createTesseractReader } from "@/platform/text-recognition/text-reader";
 
@@ -13,7 +15,7 @@ const doc = docJobs(processStorage, createTesseractReader());
  * may, through each module's `index.ts` only.
  */
 export const jobRegistry: JobRegistry = {
-  subscribers: [...doc.subscribers],
+  subscribers: [...doc.subscribers, liveSignals(sendSignal)],
   jobs: [...iamJobs, ...admJobs, ...doc.jobs],
   readModels: [],
 };

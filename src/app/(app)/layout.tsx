@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { readAuthSession, resolveProtectedPageRedirect } from "@/modules/iam";
 import { UserMenu } from "@/modules/iam/ui/user-menu";
+import { NotificationBell } from "@/modules/tsk/ui/notification-bell";
 import {
   createPreviewRolePolicy,
   PREVIEW_ROLE_COOKIE,
@@ -34,6 +35,7 @@ export default async function AppLayout({ children, context, modal }: LayoutProp
     <AppShell
       access={createPreviewRolePolicy(role)}
       contextBar={context}
+      notifications={<NotificationBell />}
       headerActions={
         <UserMenu
           email={session.user.email}

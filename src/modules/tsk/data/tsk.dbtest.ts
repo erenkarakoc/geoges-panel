@@ -12,6 +12,8 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { connectAdmin } from "../../../../scripts/db-admin.mjs";
 import { readDatabaseConfig } from "@/platform/db/database-config";
+import { kyselyOn } from "@/platform/db/run-as-user";
+import type { DeliveredEvent } from "@/platform/jobs/types";
 
 import {
   approveTask,
@@ -26,6 +28,7 @@ import {
   readTasks,
   reopenTask,
 } from "./tsk-store";
+import { liveSignals } from "./tsk-jobs";
 
 const id = (n: number) => `0192f0c1-0108-7000-8000-${String(n).padStart(12, "0")}`;
 const GIVER_A = id(1);
@@ -68,6 +71,17 @@ async function cleanUp() {
   );
   const taskIds = tasks.map((r) => r.id as string);
   await admin.query("delete from tsk.notification where user_id = any($1)", [PEOPLE]);
+  await admin.query(
+    `delete from core.outbox_delivery where outbox_id in
+       (select id from core.outbox where event_code like 'notification.%'
+           and payload ->> 'user_id' = any($1::text[]))`,
+    [PEOPLE],
+  );
+  await admin.query(
+    `delete from core.outbox where event_code like 'notification.%'
+        and payload ->> 'user_id' = any($1::text[])`,
+    [PEOPLE],
+  );
   if (taskIds.length) {
     await admin.query("select aud.purge_record_history_for_reset('tsk.task', $1::uuid[])", [
       taskIds,
@@ -366,6 +380,57 @@ describe("system tasks (REQ-TSK-005)", () => {
     const taskId = await give(GIVER_A, PEER_A, false, "Silinmez");
     expect(await refusal(admin.query("delete from tsk.task where id = $1", [taskId]))).toBe(
       "tsk.no_delete",
+    );
+  });
+});
+
+describe("live signals (ADR-018, D-240)", () => {
+  const eventsOf = async (codes: string[], since: Date) =>
+    (
+      await admin.query(
+        `select event_code as code, record_id, payload from core.outbox
+          where event_code = any($1) and occurred_at >= $2 order by id`,
+        [codes, since],
+      )
+    ).rows as { code: string; record_id: string | null; payload: Record<string, unknown> }[];
+
+  // PEER_A's delegate (set up above) is concerned by PEER_A's tasks too.
+  it("tell each person concerned that notifications or tasks changed, and nothing more", async () => {
+    const since = (await admin.query("select clock_timestamp() as t")).rows[0].t;
+    const taskId = await give(GIVER_A, PEER_A, false, "Canlı sinyal");
+    await markNotificationsRead(as(PEER_A), null);
+
+    const created = await eventsOf(["notification.created", "notification.read"], since);
+    expect(created.map((e) => e.code)).toEqual(["notification.created", "notification.read"]);
+    // The event carries the recipient, never the words of the notification.
+    expect(Object.keys(created[0].payload).sort()).toEqual([
+      "is_critical",
+      "notification_id",
+      "user_id",
+    ]);
+
+    const sent: string[] = [];
+    const subscriber = liveSignals((userId, type) => sent.push(`${userId}:${type}`));
+    const events = [
+      ...created,
+      ...(await eventsOf(["task.created"], since)).filter((e) => e.record_id === taskId),
+    ];
+    await worker(async (client) => {
+      for (const e of events) {
+        await subscriber.handle(
+          kyselyOn(client),
+          {
+            code: e.code,
+            payload: e.payload,
+            record: e.record_id ? { schema: "tsk", table: "task", id: e.record_id } : null,
+          } as unknown as DeliveredEvent,
+          { readModelVersion: async () => 1 },
+        );
+      }
+    });
+    expect(sent.slice(0, 2)).toEqual([`${PEER_A}:notifications`, `${PEER_A}:notifications`]);
+    expect(new Set(sent.slice(2))).toEqual(
+      new Set([`${PEER_A}:tasks`, `${GIVER_A}:tasks`, `${DELEGATE}:tasks`]),
     );
   });
 });

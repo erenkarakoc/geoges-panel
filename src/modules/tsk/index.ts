@@ -10,9 +10,12 @@ export {
   getTask,
   getTaskWithHistory,
   listTasks,
+  markRead,
   markTaskDone,
+  notificationSummary,
   reopen,
   TaskError,
+  type NotificationItem,
 } from "./application/tasks";
 export type { TaskDetail, TaskHistoryEntry, TaskView } from "./data/tsk-store";
 export {
@@ -28,3 +31,6 @@ export {
   type TaskStatus,
   type TaskSummary,
 } from "./domain/tasks";
+
+// Background work, collected by src/jobs/registry.ts (live signals).
+export { liveSignals, type SignalSender } from "./data/tsk-jobs";
