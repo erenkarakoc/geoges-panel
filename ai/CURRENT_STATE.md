@@ -3,11 +3,11 @@
 Last updated: 2026-09-22
 
 ```text
-PROJECT STATUS:              IMPLEMENTING
+PROJECT STATUS:              TESTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
 CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0107 documents and storage (T1), DONE (D-262, CI run 35723626554 green). Now: TASK-0108 notifications and tasks (T2), IMPLEMENTING — plan approved 2026-09-22 (D-263); step 1 (tasks, SCR-013/014, task screen) built, migration 0011 applied; next step 2 (notification drawer, SSE signals). TASK-0112 follows TASK-0103/0105/0108 (D-257).
+CURRENT TASK:        TASK-0108 notifications and tasks (T2) DONE 2026-09-22 (D-263, CI run 35769543866 green; five steps, migrations 0011-0015). Next: TASK-0109 revision requests, then TASK-0110 search, TASK-0028, TASK-0112 and TASK-0111 (M1).
 STATUS:              IMPLEMENTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -18,6 +18,8 @@ CODE ALLOWED:        Phase 07 permits product code (ADR-007), but only after the
 ```
 
 ## LAST COMPLETED TASK
+2026-09-22: TASK-0108 DONE (CI green): tasks with their two ways of closing, the bell with live signals, phone notifications, the daily digest written as an e-mail file, late-task escalation and self-closing system-problem tasks; migrations 0011-0015, seed 0006; D-263.
+
 2026-09-22: TASK-0107 steps 2-4: browser uploader logic, local text recognition in the job queue (images, PDF text layer, scanned PDF pages), hourly close of expired uploads, ZIP bulk download of a record's or a project's documents with an audit event first; migration 0010. Local: check (228 unit tests), build, doc database tests 12/12, live R2 adapter test 2/2.
 
 2026-09-22: TASK-0107 step 1: migration 0009 (`doc` schema: documents carrying their record's scope and data class, numbered versions, resumable upload sessions, recognised text; no delete, archive with reason), seed 0005 (document types), `platform/storage` (R2 and in-memory adapters), `modules/doc` service, composition root `src/records`, eight `/api/documents` routes; D-262. Local: check (218 unit tests), build, `npm run test:db` 105/105; routes answered correctly in the dev server with the owner signed in. Also fixed: server actions and route handlers accepted a session that had not passed its second factor.
