@@ -13,3 +13,28 @@ export {
   parseAuditLogFilters,
   type AuditLogFilters,
 } from "./domain/audit-log";
+
+// Revision requests (TASK-0109, D-265). The service is built by the composition root
+// `src/records`, which hands it the appliers of the modules that own the records.
+export {
+  createRevisionService,
+  currentIdentity,
+  RevisionError,
+  type RevisionApplier,
+  type RevisionAppliers,
+  type RevisionEffect,
+  type RevisionOutcome,
+  type RevisionService,
+} from "./application/revisions";
+export type { RevisionRequest, RevisionView } from "./data/revision-store";
+export {
+  buildChanges,
+  decideRevisionSchema,
+  REVISION_RULE_MESSAGES,
+  REVISION_STATUS_LABELS,
+  showValue,
+  stillCurrent,
+  submitRevisionSchema,
+  type RevisionChange,
+  type RevisionStatus,
+} from "./domain/revisions";

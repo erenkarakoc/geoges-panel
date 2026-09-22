@@ -33,6 +33,7 @@ Sütun listeleri **ayırt edici** olanları verir; ortak sütunlar yazılmaz.
 |---|---|---|---|
 | `aud.record_history` | Alan bazlı değişiklik | `record_schema`, `record_table`, `record_id`, `operation` (insert/update), `field`, `old_value`, `new_value`, `data_class`, `reason`, `site_id`, `project_id`, `record_created_by_user_id`, `changed_by_user_id`, `changed_in_role_id` | Tek kanaldan yazılır (`aud.capture_history`, TASK-0103); `data_class` süzmeyi, kapsam ve oluşturan görünürlüğü mümkün kılar (REQ-AUD-004). Okuma yalnız `aud.history_of()` ile |
 | `aud.audit_log` | Şirket geneli işlem ve giriş olayları | `event_type`, `actor_user_id`, `actor_role_id`, `target_schema`, `target_table`, `target_id`, `payload`, `occurred_at` | Yalnız ekleme; `UPDATE`/`DELETE`/`TRUNCATE` yönetici bağlantısında da reddedilir (AUD-K1). Yazma `aud.record_event()`, okuma `aud.audit_log_page()` (yalnız sahip katmanı) |
+| `aud.revisable_record` | Revizyona açık kayıt türü kütüğü | `module`, `record_schema`, `record_table`, `label`, `revisable_fields[]`, `approver` (manager/owner) | Kilit kaydın sahibi modülde, kütük AUD'de; uygulayıcısı olmayan tür için talep açılmaz (D-265) |
 | `aud.revision_request` | Kilitli kayıtta değişiklik talebi | `record_*`, `requested_changes` (alan, eski, yeni), `reason`, `status`, `decided_by_user_id`, `decision_reason` | Ret gerekçesiz olamaz (AUD-K4) |
 | `aud.revision_effect` | Onaylanan revizyonun ürettiği düzeltme | `revision_request_id`, `ledger_ref` | Önceki değer silinmez, fark ayrı hareket olur (AUD-K3) |
 
