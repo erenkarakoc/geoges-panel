@@ -1,6 +1,6 @@
 # OPEN QUESTIONS
 
-Last updated: 2026-09-21 · Format: `OQ-NNN` · Blocking = blocks the stated phase
+Last updated: 2026-09-22 · Format: `OQ-NNN` · Blocking = blocks the stated phase
 
 IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no missing records).
 
@@ -65,3 +65,20 @@ IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no m
 | OQ-023 | ANSWERED 2026-09-15 → D-041: owner-designated delegate for an owner-defined period; all actions reported to the owner. |
 | OQ-024 | ANSWERED 2026-09-16 → D-050: no legal review commissioned; RISK-001 stays open and is raised again before real HR data is entered. |
 | OQ-026 | **ANSWERED 2026-09-20 → D-230:** at least 8 characters with a complexity requirement, no expiry, common passwords refused; session 30 days, 3 days of inactivity ends it; temporary lockout after repeated failures stays as REQ-IAM-005 with admin-set numbers. | — | — |
+
+## Customer scope confirmations — raised 2026-09-22 (not blocking Phase 07)
+
+The customer described what they expect from the panel: "everything is data — every step in the
+company, every person by day and by hour is a cost, all of it tied to revenue, with profit and
+loss, delay and collection tables in front of me; materials tracked properly, with their
+galvanising differences and waste rates". Most of that is already confirmed scope (REQ-SIT-003,
+REQ-SIT-024…027, REQ-HR-004…009, REQ-FAC-008/009, REQ-INV-003/004/012, REQ-FIN-013…017/021/022,
+REQ-RPT-013/015/016). Three points differ from decisions the owner already took, so they are
+questions, not assumptions.
+
+| ID | Question | Today's answer in the records | Blocks |
+|---|---|---|---|
+| OQ-030 | Should general expenses (office rent, head office) be shared out onto projects after all? The customer says "everything ties back to revenue". | No: D-149 keeps project profit to direct costs and shows general expenses company-wide only; D-173 does the same for quotes. | Phase 11 (FIN slice) |
+| OQ-031 | Should an own employee's wage follow the site they actually worked at that day, instead of the unit they are registered to? | No: D-164 / REQ-HR-009 writes the wage to the registered unit's cost centre, split by days only when the unit itself changes mid-month. | Phase 12 (HR slice) |
+| OQ-032 | Is an hourly cost per activity expected (cost per casting or installation hour), or are hours only for productivity? | Hours are recorded to the minute (REQ-SIT-024, REQ-SIT-027) and used for output per hour; cost comes from monthly payroll on the cost centre, so there is no hourly cost rate today. | Phase 12 (HR slice), Phase 15 (performance) |
+
