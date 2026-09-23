@@ -25,9 +25,12 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 | **13 — Dilim 5** | Müşteri adayları, ihale, teklif/kârlılık, teklif belgeleri, ürün satışları ve maliyet geri beslemesi | ⬜ Başlamadı |
 | **14 — Dilim 6** | Sözleşme yükümlülükleri, sertifikalar, kalite/İSG, uygunsuzluk, toplantılar ve destek talepleri | ⬜ Başlamadı |
 | **15 — Dilim 7** | Arşiv ve içerik araması, raporlama, performans/KPI, prim, öneriler, strateji ve bütçe-gerçekleşme | ⬜ Başlamadı |
+| **15M — Panel MCP sunucusu** | Panelin, sahibin ve yetkili kişilerin sorularını kendi dilleriyle cevaplaması; asistan panele bağlanır, kullanıcının kendi yetkisiyle okur | ⬜ Dilimlerden sonra; kararlar alındı, yapımı başlamadı |
 | **19 — Canlıya geçiş** | Gerçek veriden önce kendi sunucusuna geçiş, güvenlik/yük incelemesi, yedekten dönüş tatbikatı, eğitim ve şirket geneli kullanım | ⬜ Başlamadı |
 
 16–18 numaraları, dilimler birleştirilirken kaldırıldı; atlanan iş yok. Faz 19, mevcut atıflar bozulmasın diye numarasını koruyor.
+
+**15M — Panel MCP sunucusu (2026-09-23 eklendi).** Bitmiş ürün için, panelin içinde çalışan bir MCP sunucusu: asistan panele bağlanır, sunucunun kendi yetkisi yoktur, her çağrı soruyu soran kişinin kimliğiyle aynı satır güvenliğinden geçer. Yani kanal, o kişinin ekranda görebildiğinin tam olarak aynısını görür; yetkisiz kayıt yokmuş gibi davranır. Sahip iki kararı verdi: veri bulut bir modele çıkabilir ve kapı kullanıcının kendi yetkisi dahilinde her şeye açıktır. Okuma tarafı arama, kayıt detayı, yönetim kartları ve raporlar, görevler, bildirimler, onay kuyruğu ve revizyon talepleridir; belgelerde yalnız üstveri ve panel bağlantısı döner, imzalı depolama bağlantısı asla dışarı çıkmaz. Yazma tarafının görev, not, revizyon talebi ve taslakla sınırlı kalması öneriliyor ve **sahibin onayını bekliyor**; onay, imza ve para-stok-personel kaydı panelde kalır. Araç yüzeyi her modülün kendi kaydından toplandığı için sıra dilimlerden sonradır: bugün yapılsa yüzeyin büyük bölümü henüz yok. Açık nokta: personel verisi bulut modele geçtiğinde KVKK yurt dışına aktarım dayanağı ve İK modülünün kanalda olup olmayacağının yönetici ayarı olması.
 
 ## Faz 07 — Ayrıntılı durum
 

@@ -99,3 +99,9 @@ talking to the customer, not as pending questions.
 | ID | Question | Recommendation | Blocks |
 |---|---|---|---|
 | OQ-034 | PENDING owner answer: may a person authorised for site A find a record shared by sites A and B, or must they be authorised for both? Existing IAM unions grants, but does not define the visibility of a single multi-scope record. Commercial/sensitive class checks remain mandatory. | Decide explicitly before changing search visibility; no inferred expansion of access. | TASK-0110 multi-scope visibility only; normalization metadata and independent validation can proceed. |
+
+## Product MCP server — raised 2026-09-23 (not blocking Phase 07)
+
+| ID | Question | Recommendation | Blocks |
+|---|---|---|---|
+| OQ-035 | The owner decided that panel data may reach a cloud model through the product MCP server, inside each person's own permission (D-267, ADR-019). A cloud model sits outside Türkiye and the EU, so personnel data passing through the channel becomes a cross-border transfer under KVKK article 9. RISK-001 already asks for a legal opinion before real HR data is entered (OQ-024). Two things need an answer before the channel is built: on what basis the transfer rests (employee notice and explicit consent, a data processing agreement with the provider, or keeping HR out of the surface), and whether "the HR module is on the MCP surface" becomes an administrator setting rather than a fixed rule, so the choice stays with the owner. | Tie the answer to OQ-024's legal opinion and make the HR surface a setting, not a rule; that way the decision can change without a code change. | The MCP build (TASK-0114, Phase 15M) only; nothing in Phase 07. |

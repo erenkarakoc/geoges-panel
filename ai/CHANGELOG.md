@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-23 — Product MCP server added to the plan (Phase 15M)
+
+- The owner asked for an MCP server for the finished product and answered its two open questions: panel data may reach a cloud model, and the channel is open to everything the asking person is authorised for. Recorded as ADR-019 (Önerildi) and D-267, with Phase 15M in the master roadmap, TASK-0114 in the task register and a row in the root roadmap.
+- The server runs inside the panel with no authority of its own: every call runs as the person through runAsUser and the same row level security, so the channel sees exactly what they see on screen. The tool surface is collected from each module's own registration, like search projections, which is why it comes after the slices.
+- Two records that said the opposite were corrected rather than left to contradict it: REQ-INT-002's ban is narrowed to recommendation generation (rules only, no model, D-195 unchanged), and RISK-001 keeps covering development sessions while the product channel becomes its own item.
+- Still open: D-268 (a write surface limited to tasks, notes, revision requests and drafts) awaits the owner's approval, and OQ-035 asks for the KVKK cross-border basis, tied to OQ-024. No Phase 07 work is affected.
+
 ## 2026-09-23 — Search helpers carry their normalizer version
 
 - TASK-0110: 0029 adds `normalization_version` to `core.search_word` and `core.search_word_bucket` and extends both primary keys with it, so two normalizer generations can sit side by side instead of sharing a bucket or a count. Partial indexes for foreign versions stay empty in a healthy index, as in 0027.

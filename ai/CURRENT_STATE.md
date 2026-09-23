@@ -104,9 +104,11 @@ Nothing blocks the Phase 07 discovery. The question round will need owner answer
 
 ## OPEN QUESTIONS
 OQ-034 awaits the owner: ANY versus ALL scope coverage for a shared record. Only multi-scope visibility implementation is blocked; independent search work continues.
+OQ-035 awaits the owner and a legal opinion (tied to OQ-024): the KVKK cross-border basis for the product MCP channel and whether the HR module is an administrator setting on it. It blocks only TASK-0114 (Phase 15M), nothing in Phase 07. D-268 also awaits the owner's approval.
 See `ai/OPEN_QUESTIONS.md`. OQ-029 was answered 2026-09-21 by D-248 (cold-start exception). OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.
 
 ## RECENT DECISIONS
+- D-267 / ADR-019 (2026-09-23): a product MCP server is added to the plan as Phase 15M (TASK-0114), after the module slices. It runs inside the panel with no authority of its own; every call runs as the asking person through runAsUser and the same row level security. The owner answered that panel data may reach a cloud model and that the channel is open to everything the person is authorised for. D-195 stays in force for recommendation generation. D-268 (a write surface limited to tasks, notes, revision requests and drafts) is PROPOSED and awaits the owner; OQ-035 asks for the KVKK cross-border basis and whether the HR module is an administrator setting on that surface.
 - CHG-009 / D-250…D-253 (2026-09-21): self-host move decided in Phase 19 before real data; site-wide search built in the Phase 07 foundation; iPhone Home Screen condition for push accepted; npm 11 + Node 24 final.
 - 2026-09-21: Phase 06 exit approved by the owner; Phase 07 is current.
 - D-249 (2026-09-21): the non-EU R2 bucket stays for synthetic data; EU jurisdiction is decided before real personnel files.

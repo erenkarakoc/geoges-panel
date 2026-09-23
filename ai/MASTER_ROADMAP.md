@@ -1,6 +1,6 @@
 # MASTER ROADMAP
 
-Status: APPROVED by owner (2026-09-15, incl. CHG-001 resolution) · Last updated: 2026-09-21
+Status: APPROVED by owner (2026-09-15, incl. CHG-001 resolution) · Last updated: 2026-09-23
 
 **This file is the single authority for the plan.** Every other record derives from it and may not contradict it:
 `ai/TASKS.md` says who does what and in which state, `ai/DECISIONS.md` + ADRs say why, `ai/CURRENT_STATE.md` says where we are right now, `ai/REQUIREMENTS.md` says what is wanted. An approved change request is written into this file **in the same session it is approved** (`ai/PROJECT_RULES.md` §9); a change request that is not in this file may not be implemented. Consistency is machine-checked by `npm run records` (`scripts/check-records.mjs`), not by memory.
@@ -34,6 +34,7 @@ Module codes: see `docs/architecture/MODULE_MAP.md`.
 | 13 | Slice 5 — CRM, Quotes, Quote Documents, Product Sales | Build + Pilot | NOT_STARTED |
 | 14 | Slice 6 — Contracts & Compliance, Quality, OHS, Meetings, Support | Build + Pilot | NOT_STARTED |
 | 15 | Slice 7 — Archive, Reporting, Performance & Bonus, Intelligence, Strategy | Build + Pilot | NOT_STARTED |
+| 15M | Panel MCP Server — product surface (after the slices, ADR-019, D-267) | Build | NOT_STARTED |
 | 19 | Production Readiness & Company-wide Rollout | Release | NOT_STARTED |
 
 **Milestone M0 — early first screen (CHG-002, approved 2026-09-15) — DONE 2026-09-16, owner approved:** runs in parallel with Phase 01. Real Supabase Auth (sign-in, 2FA, password reset), new-role onboarding, app shell and empty dashboard skeleton, local only. Built as the first part of the Phase 07 foundation, not throwaway. Plan: `docs/features/m0-early-first-screen-plan.md`; tasks TASK-0022…TASK-0026.
@@ -53,8 +54,9 @@ Measured so far (2026-09-15…20, six days, 135 commits): Phase 00 half a day; P
 | 09 Slice 1 | 7–10 |
 | 09R Record-type builder | 5–7 |
 | 10–15 Six slices | 36–49 |
+| 15M Panel MCP server | 3–5 |
 | 19 Production readiness & rollout | 4–6 |
-| **Total** | **~72–101** |
+| **Total** | **~75–106** |
 
 This is effort, not a schedule; no target date exists (D-049). It already accounts for merging ten slices into seven (D-229), which removes three build-test-acceptance-pilot cycles. Four things move it: build work is slower per unit than design work; pilots need calendar time for real users; owner answer latency; and Phase 08, the least predictable phase (RISK-005). Re-estimate after slice 2, when build velocity is measured rather than inferred.
 
@@ -264,6 +266,18 @@ Ten slices were merged into seven on 2026-09-20 at the owner's request (D-229): 
 - **Rules:** normal permission model (D-092); search/report/entry-screen inclusion chosen per type (D-093); structure changes never destroy history (D-094); user-defined records never write the ledger (D-077).
 - **Acceptance:** a type defined through the builder works end to end under RLS, appears where its definition says, survives a field removal with its history intact, and can be used by a flow; T1 gate.
 - **Risks:** RISK-010, RISK-002.
+
+## PHASE 15M — Panel MCP Server (product surface, ADR-019)
+
+- **Purpose:** let the owner and authorised people ask the panel in their own words from an assistant, instead of only through screens. REQ-NFR-004 already requires management's 26 questions to be answerable from the panel; this is the spoken form of the same answers, never a second source of truth (ADR-012).
+- **Shape:** an MCP server inside the panel (`/api/mcp`) with no authority of its own. Every call runs as the asking person through `runAsUser` and the same row level security, so the channel sees exactly what that person sees on screen. The tool surface is collected from each module's own registration, the way search projections are (`src/records`), which is why the phase sits after the slices: before them, most of the surface does not exist yet.
+- **Reading:** search and record detail, the management cards and reports the slices produce, tasks, notifications, the approval queue, revision requests, and whatever else the person is authorised for (D-267). Documents return metadata and a panel address only — a signed storage link is a bearer key and never leaves through the channel; content is resolved to text by the server.
+- **Writing:** limited by D-268 (PROPOSED) to tasks, notes, revision requests and drafts, each with a preview, an idempotency key and an audit entry marked `channel='mcp'`. Approvals and money, stock and personnel records stay in the panel.
+- **Identity:** a time-limited, revocable token per person, a new permission (`int.mcp.use`) in the permission matrix, every call recorded as a KVKK access entry, and unusual reading volume raised as a critical alert (REQ-NFR-005) with a daily cap as an administrator setting.
+- **Records to correct before the build:** REQ-INT-002's ban narrows to recommendation generation (rules only, no model — D-195 stays), and RISK-001's sentence keeps covering development/test/AI sessions while the product channel becomes its own item.
+- **Dependencies:** Phases 09–15 (the tool surface), Phase 07 IAM and audit, OQ-035 (KVKK basis, tied to OQ-024), owner approval of D-268.
+- **Acceptance:** two people with different permissions ask the same question and each receives only their own answer; an unauthorised record behaves as if it does not exist; no signed link appears in any response; every call is in the access log; the write surface refuses anything outside D-268; T1 gate.
+- **Risks:** RISK-001 (cross-border transfer of personnel data), token loss, prompt injection through text entered in the panel.
 
 ## PHASE 19 — Production Readiness & Company-wide Rollout
 

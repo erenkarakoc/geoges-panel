@@ -28,10 +28,10 @@ Terimler (`docs/domain/GLOSSARY.md`): Recommendation, Recommendation Type, Resou
 - Öncelik: Must · Kademe: T1
 - Katman: Sabit + Tanım
 - Tanımla ayarlanan: her öneri türünün eşikleri (ör. kaç gün atıl kalınca önerileceği)
-- Açıklama: Her öneri türü açık bir hesaba dayanır; önerinin gerekçesi ve rakamları her zaman görünür. Öneri üretmek için veri panel dışına çıkmaz; yapay zekâ modeli kullanılmaz (D-195). Yeni öneri türü eklemek geliştirme ister.
+- Açıklama: Her öneri türü açık bir hesaba dayanır; önerinin gerekçesi ve rakamları her zaman görünür. Öneri üretmek için veri panel dışına çıkmaz; yapay zekâ modeli kullanılmaz (D-195). Yeni öneri türü eklemek geliştirme ister. Bu yasak öneri üretimini kapsar: ürün MCP sunucusu ayrı bir kanaldır ve öneri üretmez, kullanıcının kendi yetkisiyle mevcut kaydı okur (ADR-019, D-267).
 - Kabul kriterleri:
   - [ ] Her öneride, hangi kuralın hangi değerlerle tetiklendiği okunur.
-  - [ ] Öneri üretimi hiçbir dış hizmete veri göndermez.
+  - [ ] Öneri üretimi hiçbir dış hizmete veri göndermez; MCP kanalı da öneri üretmez.
 - Durum: CONFIRMED
 
 ### REQ-INT-003 — Başlangıç öneri türleri

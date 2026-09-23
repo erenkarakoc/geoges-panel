@@ -4,7 +4,17 @@ Last updated: 2026-09-23
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — helper normalization versions (0029)
+## Latest continuation — product MCP server written into the plan (ADR-019)
+
+The owner asked for an MCP server for the finished product, not for development tooling, and answered its two blocking questions on 2026-09-23: panel data may reach a cloud model, and the channel is open to everything the asking person is authorised for, with no separate data-class list. Written into the plan as ADR-019 (status Önerildi), D-267, Phase 15M in ai/MASTER_ROADMAP.md, TASK-0114 in ai/TASKS.md and a row plus a paragraph in the root YOL-HARITASI.md. Nothing is built; nothing in Phase 07 changes.
+
+Shape recorded: the server runs inside the panel at /api/mcp with no authority of its own; every call runs as the person through runAsUser and the same row level security, so the channel sees exactly what that person sees on screen and an unauthorised record behaves as if it does not exist. The tool surface is collected from each module's own registration, the way search projections are in src/records, which is why the phase sits after the slices rather than now. Documents return metadata and a panel address only: a signed storage link is a bearer key and never leaves through the channel; content is resolved to text by the server. Answers are summaries with ids, paged and capped, and unusual reading volume raises a critical alert (REQ-NFR-005) with a daily cap as an administrator setting.
+
+Two records said the opposite and were corrected rather than left to contradict the decision: REQ-INT-002's ban is narrowed to recommendation generation, which stays rule-based with no model (D-195 unchanged), and RISK-001 in docs/security/README.md keeps covering development, test and AI sessions while the product channel becomes its own item. Both changes name ADR-019 and D-267.
+
+Still open and explicitly not assumed: D-268 is PROPOSED only — the write surface limited to tasks, notes, revision requests and drafts, with approvals and money/stock/personnel records staying in the panel — and awaits the owner's approval. OQ-035 asks for the KVKK cross-border basis for personnel data on the channel, tied to OQ-024's legal opinion, and whether the HR module is an administrator setting rather than a fixed rule. A requirement round for the channel and the int.mcp.use permission row are owed before the build starts.
+
+## Previous continuation — helper normalization versions (0029)
 
 0029_search_helper_versions is applied to the test project. core.search_word and core.search_word_bucket now carry normalization_version (not null, default 1, check > 0) and both primary keys include it, so two normalizer generations can sit side by side instead of sharing a bucket or mixing counts folded by different rules. Two partial indexes on foreign versions stay empty in a healthy index, exactly like 0027; a future normalizer version migration MUST update their predicates together with 0027's.
 
