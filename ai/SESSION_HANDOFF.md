@@ -14,7 +14,7 @@ One consequence had to be fixed in the same migration: the read-time helper chec
 
 Four tests cover it: found from the site, found from the project by someone who may not see the site, no false damage report on the project's side, and a commercial record staying with the place that grants the class — including the person who may view the site and may see commercial only on the project, who still does not see it. Two of the four were verified to fail with the migration rolled back, so they measure the change rather than restating the old behaviour.
 
-Validation: 208 database tests across 15 files, 273 unit tests, lint, types, prettier and the production build pass.
+Validation: 208 database tests across 15 files, 273 unit tests, lint, types, prettier and the production build pass. Committed/pushed a8f294e; CI 35928366252 green before and after a full rollback and reapply.
 
 ## Previous continuation — the bottom band is built, not yet seen
 

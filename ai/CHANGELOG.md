@@ -6,7 +6,7 @@
 - Each place is judged whole. A place must grant both the module's view and, for a commercial or sensitive record, the data class; half a grant here and half there does not add up to visibility. That is the narrower reading of the owner's answer and it is written down rather than assumed.
 - The read-time helper check (0030) now names the bucket's own place. A bucket is kept under one place — the site when there is one — so judging it with "any place" reported a healthy index as damaged to anyone who reached the record through its other place.
 - Four new tests, two of which fail without the migration (verified by rolling it back): found from the site, found from the project by someone who may not see the site, no false damage report on the project's side, and a commercial record staying with the place that grants the class.
-- Verification: 208 database tests across 15 files, 273 unit tests, lint, types, format and the production build pass.
+- Verification: 208 database tests across 15 files, 273 unit tests, lint, types, format and the production build pass. Committed as a8f294e; CI 35928366252 green before and after a full rollback and reapply.
 
 ## 2026-09-24 — The app card has a functional bottom band
 

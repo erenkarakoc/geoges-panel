@@ -81,7 +81,7 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 ### Son doğrulamalar
 
-- **Çoklu kapsam kuruldu (0037).** Bir kayıt hem şantiye hem proje taşıyorsa eskiden yalnız ilkine bakılıyordu; artık her yer ayrı değerlendiriliyor ve birine yetki yetiyor. Okuma anı denetimi de kovanın kendi yerine bakıyor, yoksa kaydı projesinden bulan kişiye sağlıklı dizin bozukmuş gibi görünüyordu. Dört yeni test; ikisi göç geri alındığında düşüyor. **208 veritabanı testi**, **273 birim testi**, biçim ve derleme geçti.
+- **Çoklu kapsam kuruldu (0037).** Bir kayıt hem şantiye hem proje taşıyorsa eskiden yalnız ilkine bakılıyordu; artık her yer ayrı değerlendiriliyor ve birine yetki yetiyor. Okuma anı denetimi de kovanın kendi yerine bakıyor, yoksa kaydı projesinden bulan kişiye sağlıklı dizin bozukmuş gibi görünüyordu. Dört yeni test; ikisi göç geri alındığında düşüyor. **208 veritabanı testi**, **273 birim testi**, biçim ve derleme geçti; `a8f294e` ile gönderildi, CI **35928366252 yeşil**.
 
 - **Yeniden kurma da ölçüldü (0036).** 20.000 kayıtlık yeniden kurma on dakikada bitmiyordu: yayın her kaydı sıradan yazıcıyla yazıyor, o da her kayıtta kovayı ve sözlüğü güncelliyordu — üç bin kimlik taşıyan bir kova eklenen her kimlik için baştan yazılıyor, üstelik yayın zaten sonunda hepsini yeniden kuruyor. Yayına özel toplu yazıcıyla süre **29 saniyeye** indi. **204 veritabanı testi**, **273 birim testi**, biçim ve derleme geçti; `b79c36a` ile gönderildi, CI **35916332932 yeşil**.
 
