@@ -81,7 +81,7 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 ### Son doğrulamalar
 
-- 0030 ile arama, cevap verirken yardımcılarını da denetliyor: dönen kayıtlar için (tür başına en çok altı) kova üyeliği anahtar okumasıyla kontrol ediliyor. **61 arama testi** (5 yeni), **15 dosyada 203 veritabanı testi**, **273 birim testi**, biçim ve derleme yerelde geçti; göçün down/up turu cevabı değiştirmiyor. Bu adımın CI sonucu bekleniyor.
+- 0030 ile arama, cevap verirken yardımcılarını da denetliyor: dönen kayıtlar için (tür başına en çok altı) kova üyeliği anahtar okumasıyla kontrol ediliyor. **61 arama testi** (5 yeni), **15 dosyada 203 veritabanı testi**, **273 birim testi**, biçim ve derleme yerelde geçti; göçün down/up turu cevabı değiştirmiyor. Değişiklik `7dc54c1` ile gönderildi; CI **35867217424 yeşil**: 61 arama testi dahil **201 veritabanı testi**, tam geri dönüş/yeniden kurulum öncesinde ve sonrasında geçti.
 
 - 0029 ile kova ve sözlük de normalleştirme sürümünü taşıyor. **56 arama testi** (5 yeni sürüm senaryosu), **15 dosyada 198 veritabanı testi**, **273 birim testi**, biçim ve derleme yerelde geçti; göçün down/up turu sonrasında kova içeriği ile bütünlük raporu birebir aynı kaldı. Değişiklik `0b82633` ile gönderildi; CI **35862720223 yeşil**: 56 arama testi dahil **196 veritabanı testi**, tam geri dönüş/yeniden kurulum öncesinde ve sonrasında geçti. Kimlik bilgisi olmayan 2 canlı R2 testi CI'da atlandı.
 
