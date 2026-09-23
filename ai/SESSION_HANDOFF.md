@@ -4,7 +4,15 @@ Last updated: 2026-09-23
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — production volume measured, and five migrations to fit it (0031-0035)
+## Latest continuation — the rebuild figure (0036)
+
+The last open number of the volume gate is measured and fixed. A 20,000-record source was rebuilt through the real path (rebuildSearch on the worker's transaction, staging, catch-up, publication and the integrity gate) and did not finish in ten minutes. The publication wrote every staged record with core.index_search_row, the ordinary per-record writer, which keeps the helpers in step: it appends the record's id to the bucket of each of its words and recounts the vocabulary entries it touched. A bucket that already holds three thousand ids is rewritten whole for every id appended, so filling an empty index one record at a time costs more with every record added. None of that upkeep survives either: publishSearchStage ends by rebuilding every bucket from the postings and recounting the whole vocabulary, because a damaged helper is not repaired by per-row upserts.
+
+0036 adds core.index_search_row_bulk — the same arguments, writing the row and its postings and nothing else, granted to geoges_worker only, with a comment saying it must never be called for a single record. Only publishSearchStage uses it. A record that arrives on its own still goes through core.index_search_row, which is what makes the search answer from an index that is never a moment behind its records. Measured again: 2,000 records in 4.7 s, 20,000 in 29 s, with rows, postings, helpers and the integrity gate all as before.
+
+The measurement itself was a throw-away dbtest file (a zzr source schema of 20,000 generated rows, a registration whose scan pages it in UUID order) and was deleted after the run; nothing of it is in the repository. Validation: 204 database tests across 15 files — the rebuild path is exercised end to end by the search, concurrency and integrity suites — plus 273 unit tests, prettier and the production build. Still open for TASK-0110: a word shared by very many records (ranking still reads every match before keeping six), real-source browser acceptance, and OQ-034.
+
+## Previous continuation — production volume measured, and five migrations to fit it (0031-0035)
 
 The production-volume gate is no longer open on the query side. A 20,000-record fixture of a throw-away module was loaded into the real index and the palette was measured through the real request path (core.search_request over the restricted role, twenty warm samples after three warm-ups, ~70 ms of every figure being the round trip to Supabase). The first reading failed REQ-NFR-012 outright: a common word 942 ms, a place word 663 ms, two common words 1,250 ms, three words 1,173 ms.
 

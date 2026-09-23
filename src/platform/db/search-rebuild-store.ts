@@ -120,7 +120,10 @@ export async function publishSearchStage(
       and not exists (select from pg_temp.geoges_search_stage s where s.record_schema = r.record_schema
         and s.record_table = r.record_table and s.record_id = r.record_id)`.execute(db);
   }
-  await sql`select count(core.index_search_row(record_schema, record_table, record_id,
+  // The bulk writer, not the per-record one: it writes rows and postings only, because the two
+  // statements below build every bucket and the whole vocabulary again anyway. Keeping the
+  // helpers per record while filling an empty index costs more with every record added (0036).
+  await sql`select count(core.index_search_row_bulk(record_schema, record_table, record_id,
     projection->>'recordType', projection->>'title', projection->>'secondary', projection->>'text',
     projection->>'linkPath', (projection->>'siteId')::uuid, (projection->>'projectId')::uuid,
     (projection->>'ownerUserId')::uuid, coalesce(projection->>'dataClass', 'internal'), null, ${version}))

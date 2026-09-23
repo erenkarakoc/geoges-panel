@@ -460,3 +460,13 @@ Aynı işlemde kural ve düzeltmesi `now()` nedeniyle aynı `created_at` alıyor
 - Güvenlik: işlev SECURITY INVOKER kalır, RLS aynen geçerlidir; okunamayan kova "yok" gibi davranır ve `null` üretir, hata değil. Bayrak sorgu metni, başlık veya kimlik taşımaz.
 - Testler: sağlıklı dizinde bayrak kapalı; bir sözcüğün kovası silindiğinde cevap eksilmeden bayrak açılıyor; kaydı yalnız sahibi olduğu için gören kişide denetlenmemiş (`null`) kalıyor ve yanlış alarm üretmiyor; başka sürümün kovası bayrağı etkilemiyor; göç down/up sonrası eski çıktı biçimi geri geliyor.
 - Geri dönüş: 0030 down, `core.search_records` ve `core.search_palette` işlevlerini önceki çıktı biçimine döndürür; veri, kova veya satır silinmez. Uygulama kodu bayrağı okumasa da çalışır.
+
+#### TASK-0110 — Yeniden kurmanın toplu yazıcısı (0036)
+
+- Amaç: kaynaklardan yeniden kurmanın üretim hacminde bitebilmesi. Ölçüm: 20.000 kayıtlık bir yeniden kurma on dakikada bitmedi; aynı kayıtlar teker teker geldiğinde saniyeler sürüyor. D-247/D-266 uygulanır; yeni iş kuralı, görünürlük kararı veya izin değişikliği yoktur.
+- Sebep: yayın, her kayıt için sıradan yazıcıyı çağırıyordu. O yazıcı her kayıtta yardımcıları da güncel tutar: kaydın kimliğini her sözcüğünün kovasına ekler ve dokunduğu sözlük girdilerini yeniden sayar. Üç bin kimlik taşıyan bir kova, eklenen her kimlik için baştan yazılır; boş bir dizini teker teker doldurmanın maliyeti bu yüzden boyutun karesiyle büyür. Üstelik bu emeğin hiçbiri kalmaz: yayın zaten sonunda bütün kovaları eşlemelerden yeniden kurar ve sözlüğü baştan sayar.
+- Tasarım: yalnız yayın yolunun kullandığı `core.index_search_row_bulk`, satırı ve eşlemelerini yazar; kovaya ve sözlüğe dokunmaz. Yardımcılar, eskiden olduğu gibi, sonunda bir kez kurulur. Tek başına gelen bir kayıt yine `core.index_search_row` ile yazılır: aramanın bir an bile geride olmayan bir dizinden cevap vermesini sağlayan şey odur. İşlev yalnız işlemciye açıktır ve yorumu tek başına çağrılmaması gerektiğini söyler.
+- Güvenlik: yeni izin veya tablo erişimi yok; aynı tanımlayıcı (definer) düzeni ve aynı satır güvenliği. Yayın kapısı, kaynak karşılaştırması ve bütünlük denetimi değişmez — yayın yine ancak bütün uyuşmazlıklar sıfırsa tamamlanır.
+- Testler: mevcut yeniden kurma testleri (arama, eşzamanlılık, bütünlük paketleri) bu yolu zaten uçtan uca kullanıyor; yayın sonrası kova/sözlük/eşleme eşitliği ve bozuk yardımcıda ret senaryoları aynen geçmelidir.
+- Kapsam sınırı: bu adım yalnız yeniden kurmanın maliyetidir. Tek tek silmenin hacimdeki maliyeti, çok sayıda kaydın paylaştığı sözcükte sıralama ve gerçek kaynaklarla kabul açık kalır.
+- Geri dönüş: önce uygulama kodu eski yazıcıya döndürülür, sonra 0036 down yalnız yeni işlevi kaldırır. Veri, satır veya yardımcı silinmez.
