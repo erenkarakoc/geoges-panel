@@ -68,8 +68,8 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 | Son açılanlar | Yalnız adresler kullanıcıya göre oturumda tutuluyor; başlıklar güncel yetkiyle yeniden okunuyor |
 | Mobil palet | Tam ekran, kayan liste, sabit COSS footer ve kapatma düğmesi 390 px tarayıcı görünümünde doğrulandı |
 | Kaynaktan yeniden dizinleme | Geçici veri kümesi, karşılaştırma, tek işlemde yayın ve hata halinde geri dönüş kuruldu |
-| Küçük veri kümesinde hız | 56 sentetik kayıt / 20 sıcak istekte p95 **279 ms**, en yüksek **284 ms** (son ölçüm; 0030 okuma anı denetimi bu ölçümde yaklaşık 10 ms tutuyor); önceki ölçümler 271/263/274/255/258 ms, 0025 öncesi p95 348 ms idi. Bu ölçüm 300 ms hedefinin altında |
-| Normalleştirme sürümü | Satır, sözcük eşlemeleri, kova ve sözlüğün tamamına eklendi (0029); yazma yalnız yürürlükteki sürüme, okuma yalnız yürürlükteki sürümden yapılıyor ve bütünlük denetimi sürüm bazında karşılaştırıyor. Görünür eski sürümde kontrollü hata korunuyor. Kullanıcı sorgusunda görünürlükle sınırlı tam yardımcı tutarlılığı açık |
+| Küçük veri kümesinde hız | 56 sentetik kayıtta p95 koşudan koşuya 250-303 ms arasında geziniyor; bu ölçekte süreyi ağ turu belirlediği için artık belirleyici sayı büyük veri satırındaki ölçüm. (Tarihçe: 0025 öncesi 348 ms, sonra 255-279 ms) |
+| Normalleştirme sürümü | Satır, sözcük eşlemeleri, kova ve sözlüğün tamamına eklendi (0029); yazma yalnız yürürlükteki sürüme, okuma yalnız yürürlükteki sürümden yapılıyor ve bütünlük denetimi sürüm bazında karşılaştırıyor. Görünür eski sürümde kontrollü hata korunuyor; 0035'te bu reddin atlandığı bir gerileme oluştu ve kendi testiyle yakalanıp düzeltildi |
 | Yardımcı bütünlüğü | 0028 ile eşlemeler, kova dizileri ve sözcük sayıları doğrudan arama metninden türetilip karşılaştırılıyor; bozuk yayın reddediliyor ve işletim komutu aynı denetimi kullanıyor. 0030 ile kullanıcı sorgusunda da sınırlı bir denetim var: dönen kayıtlar için kova üyeliği kontrol ediliyor, cevap değişmiyor, kullanıcıya bir şey gösterilmiyor. Var olup bir kimliği düşmüş kovanın kaydı gizlemesi bu yolla görülemez; o yön tam taramanın işi olarak kalıyor |
 | Çoklu kapsam | OQ-034 yanıtı bekleniyor: ortak kaydı görmek için ilgili şantiyelerden birine mi, tümüne mi yetki gerekecek? |
 | Eşzamanlı kaynak değişiklikleri | Gerçek kaynak ve olay kuyruğuyla commit/geri alma, taşıma/silme, tarama sırasının gerisine ekleme ve tekrar teslim sınandı. Yakalanan değişiklikler kuyruk işleyicisi çalışmadan yayın adayına yansıyor; hata eski sürümü koruyor |
@@ -77,7 +77,7 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 | Büyük veri | **20.000 kayıtla ölçüldü (23 Eylül).** İlk ölçümde arama hedefin çok üstündeydi: yaygın bir sözcük 942 ms, iki sözcük 1.250 ms. Beş göçten sonra (0031-0035) örneklenen altı sorgunun tamamı **90-287 ms**, yani 300 ms hedefinin içinde — ağ turu dahil. Dizin kayıt başına yaklaşık 260 bayt yer tutuyor; 20.000 satırın tam bütünlük taraması 1,5-2,4 sn. Açık kalan: çok sayıda kaydın paylaştığı bir sözcükte sıralama hâlâ bütün eşleşmeleri okumak zorunda, bu hacimde yeniden kurma maliyeti ve gerçek veri şekliyle doğrulama |
 | Gerçek kaynaklarla tarayıcı kabulü | Modüller kendi dilimlerinde arama kaynağını kaydedecek; gerçek telefon klavyesiyle kabul de açık |
 
-**Arama henüz tamamlandı sayılmıyor.** Küçük veri kümesindeki hız sonucu, büyük veri kabulünün yerine geçmiyor.
+**Arama henüz tamamlandı sayılmıyor.** Hız kapısı 20.000 kayıtta geçildi; kalanlar çoklu kapsam kararı (OQ-034), bu hacimde yeniden kurma maliyeti ve gerçek kayıtlarla tarayıcı kabulü.
 
 ### Son doğrulamalar
 
@@ -100,7 +100,7 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 ## Buradan sonraki sıra
 
-1. **TASK-0110:** çoklu kapsam kararını uygulamak, kalan yardımcı sürüm/tutarlılık işlerini ve üretim hacminde hız/yeniden kurma ve gerçek cihaz kabulünü tamamlamak.
+1. **TASK-0110:** çoklu kapsam kararını (OQ-034) uygulamak, 20.000 kayıtta yeniden kurma maliyetini ölçmek ve gerçek kayıt kaynaklarıyla tarayıcı kabulünü yapmak. Hız, sürüm ayrımı ve yardımcı tutarlılığı tamamlandı.
 2. **TASK-0028:** ekran altı işlevsel şeridi kurmak.
 3. **TASK-0112:** kalan hesap güvenliği özelliklerini kurmak.
 4. **TASK-0111 — M1:** yerel kabul turu ve Faz 07 çıkış kontrolü.
