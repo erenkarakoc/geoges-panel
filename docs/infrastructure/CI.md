@@ -59,3 +59,5 @@ Her T1 işinde "bu nasıl yanlış gidebilir" listesi test olarak yazılır (`do
 ## 5. Sürüm ve dağıtım
 
 Sunucu kararı ertelendiği için otomatik dağıtım yoktur (D-245). Sunucu kurulduğunda bu belgeye şu adımlar eklenir: derleme → göç → dağıtım → sağlık kontrolü → başarısızsa geri alma. Dağıtım, kapı yeşil olmadan çalışmaz.
+
+Göç aracı, 0020 öncesinde eksik PostgreSQL arama eklentilerini (`pg_trgm`, `intarray`, `btree_gist`) `extensions` şemasına kurar. Başka şemada bulunan eklentiyi kendiliğinden taşımaz. Böylece temiz CI ve kendi sunucumuza kurulum, test projesinde önceden bulunan eklentilere dayanmaz. 0020 geri dönüşü rol izinlerini de kaldırır; sağlayıcının eklentilerini silmez. 2026-09-23: CI 35804892677 bu eksikliği yakaladı; düzeltme TASK-0110 kapsamında.

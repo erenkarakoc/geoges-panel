@@ -1,5 +1,7 @@
 -- Reverses 0020_search.sql: the search row, its helpers and their functions.
--- The grant on `extensions` stays: other work may already rely on it, and it exposes nothing.
+-- Reverse this migration's role grants too, so a full rollback can drop the runtime roles.
+-- Provider extensions themselves remain installed.
+revoke usage on schema extensions from geoges_app, geoges_worker;
 drop policy search_word_none on core.search_word;
 drop policy search_posting_read on core.search_posting;
 drop policy search_row_read on core.search_row;

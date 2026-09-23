@@ -27,6 +27,7 @@ import { pathToFileURL } from "node:url";
 
 import { ROOT, connectAdmin, readEnvFile, safeError } from "./db-admin.mjs";
 import { SEEDS_DIR, checkLayers, hasLayerRegister, runSqlFolder } from "./db-layers.mjs";
+import { ensureSearchExtensions } from "./db-extensions.mjs";
 
 export const MIGRATIONS_DIR = resolve(ROOT, "db/migrations");
 export const BACKUPS_DIR = resolve(ROOT, "backups");
@@ -235,6 +236,10 @@ async function run({ statusOnly, rollback }) {
     if (problem) throw new Error(problem);
     if (rollback) await rollbackLast(client, files, applied);
     else {
+      // Provider prerequisites are not application migrations. Keep applied checksums intact.
+      if (pending.some((file) => file.name === "0020_search.sql")) {
+        await inLockedTransaction(client, () => ensureSearchExtensions(client));
+      }
       await applyPending(client, pending);
       await applySeeds(client);
     }
