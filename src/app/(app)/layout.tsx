@@ -50,6 +50,7 @@ export default async function AppLayout({ children, context, modal }: LayoutProp
         />
       }
       seat={{
+        userId: session.user.id,
         primaryAction: role.primaryAction,
         sites: role.sites,
       }}

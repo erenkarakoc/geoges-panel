@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-23 — Search palette completion work and clean-install repair
+
+- TASK-0110: owning list destinations, five per type, partial failure handling, permission-revalidated recent paths, quick task action, archive target and fullscreen phone palette with the existing COSS footer.
+- Source rebuild now stages projections, compares and publishes the new version atomically; existing internal search ids remain stable. Migrations 0022/0023 also protect mixed view/own scopes and consolidate palette queries into one database call.
+- Migration 0024 removes repeated IAM expansion from search RLS using statement-local snapshots; 18 search tests pass. SQL time fell from 629 to 45 ms; warm service p95 from 936 to 348 ms, still above the 300 ms acceptance limit.
+- Fixed the clean-database extension prerequisite and rollback grants (ff5cfcb); CI 35805349980 green. Task is not DONE: browser acceptance, multi-scope/normalization metadata parity and production-scale/concurrency acceptance remain.
+
 ## 2026-09-23 — Search palette API integration
 
 - TASK-0110 continues: permission-filtered record groups connected to the existing COSS palette, with cancellable requests, offline/loading/error states and retry. Footer preserved. Four async request tests added; browser acceptance and remaining step-4 scope are open.

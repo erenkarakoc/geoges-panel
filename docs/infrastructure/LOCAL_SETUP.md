@@ -75,3 +75,9 @@ Kurulumla birlikte size bir sahip hesabı ve parolası iletilir. Hesap Supabase'
 ## 10. Telefondan bakmak
 
 Aynı Wi-Fi ağındaysanız, komut isteminde yazan ikinci adresi (`http://192.168...:3000`) telefonunuzdan açabilirsiniz. Saha ekranlarını telefon boyutunda görmek için en pratik yol budur.
+
+## 11. Arama dizinini yeniden kurmak
+
+`npm run search:rebuild`, çalışan işlemciden kayıtların kendi kaynaklarını yeniden okuyup yeni dizin sürümü yayımlamasını ister. Komutun kuyruğa yazması işin tamamlandığı anlamına gelmez; `npm run jobs:status` ile izlenir. Henüz arama kaynağı kaydedilmemişse açıklama verip durur. Her modül `src/records` birleştirme köküne tek kayıt izdüşümünü, sayfalı kaynak tarayıcısını ve gerçek liste adresini ekler.
+
+`npm run search:rebuild -- --check` yalnız arama yardımcılarının tutarlılığını okur; veri değiştirmez. Yeniden kurma sırasında eski sonuçlar okunmaya devam eder. İşlem başarısız olursa eski sürüm korunur; bildirim ve görev aboneleri tekrar oynatılmaz.

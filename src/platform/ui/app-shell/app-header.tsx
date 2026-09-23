@@ -28,6 +28,7 @@ import { PrimaryActionButton } from "@/platform/ui/app-shell/primary-action";
 
 /** What the header needs to know about the current seat; plain values from the server. */
 export type HeaderSeat = {
+  userId: string;
   primaryAction: string;
   sites: readonly string[];
 };
@@ -112,7 +113,12 @@ export function AppHeader({
 
       {/* Middle — where you go */}
       <div className="flex min-w-0 flex-1 justify-center sm:max-w-md">
-        <CommandPalette groups={groups} workItems={workItems} />
+        <CommandPalette
+          key={seat.userId}
+          userId={seat.userId}
+          groups={groups}
+          workItems={workItems}
+        />
       </div>
 
       {/* Right — what you do */}

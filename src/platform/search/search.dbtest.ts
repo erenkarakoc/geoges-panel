@@ -16,6 +16,8 @@ import type { DeliveredEvent } from "@/platform/jobs/types";
 import { searchIndexer, type SearchRegistration } from "@/platform/search/indexer";
 import type { SearchProjection } from "@/platform/search/search";
 import { searchFor } from "@/platform/search/service";
+import { recentSearchFor } from "@/platform/search/service";
+import { rebuildSearch } from "@/platform/search/rebuild";
 
 const id = (n: number) => `0192f0c1-0110-7000-8000-${String(n).padStart(12, "0")}`;
 const VIEWER_A = id(1);
@@ -24,7 +26,7 @@ const FINANCE_A = id(3);
 const PEOPLE = [VIEWER_A, VIEWER_B, FINANCE_A];
 const SITE_A = id(101);
 const SITE_B = id(102);
-const ROLES = ["T0110_SITE", "T0110_FIN"];
+const ROLES = ["T0110_SITE", "T0110_FIN", "T0110_OWN"];
 const P = "zzs";
 
 let admin: pg.Client;
@@ -73,6 +75,12 @@ const registration: SearchRegistration = {
   events: [`${P}.record.saved`],
   removedBy: [`${P}.record.removed`],
   project: async (_db, recordId) => records[recordId] ?? null,
+  scan: async (_db, afterId, limit) =>
+    Object.keys(records)
+      .sort()
+      .filter((id) => !afterId || id > afterId)
+      .slice(0, limit)
+      .map((id) => ({ id, projection: records[id] })),
 };
 
 /** Runs one event through the indexer, as the worker would. */
@@ -283,11 +291,14 @@ describe("the word buckets (D-247, OQ-033)", () => {
 
 describe("keeping the index honest (D-266)", () => {
   it("takes a record out when it goes, and leaves no word behind", async () => {
+    const saved = records[id(202)];
+    delete records[id(202)];
     await deliver(`${P}.record.removed`, id(202));
     expect(await titlesFor(VIEWER_B, "ilgaz")).toEqual([]);
     const { rows } = await admin.query("select word from core.search_word where word = 'kuzey'");
     expect(rows).toEqual([]);
     // Putting it back brings the word back with it.
+    records[id(202)] = saved;
     await deliver(`${P}.record.saved`, id(202));
     expect(await titlesFor(VIEWER_B, "kuzey")).toEqual(["Ilgaz Şantiyesi"]);
   });
@@ -328,6 +339,213 @@ describe("keeping the index honest (D-266)", () => {
       expect(await titlesFor(VIEWER_A, "deneme santiyesi")).toEqual([]);
     } finally {
       client.release();
+    }
+  });
+});
+
+describe("source publication and current visibility", () => {
+  it("matches the original visibility predicate and refreshes identity on a reused connection", async () => {
+    const client = await appPool.connect();
+    try {
+      await client.query("begin");
+      for (const person of [FINANCE_A, VIEWER_B, VIEWER_A]) {
+        await client.query("select set_config('app.user_id', $1, true)", [person]);
+        const comparison = await client.query(
+          `with cases as (
+            select s.site, p.project, o.owner, c.class
+            from unnest(array[null, $1::uuid, $2::uuid]) s(site)
+            cross join unnest(array[null, $1::uuid]) p(project)
+            cross join unnest(array[null, $3::uuid, $4::uuid]) o(owner)
+            cross join unnest(array['general','internal','commercial','sensitive','unknown']) c(class)
+          ) select count(*) filter (where
+            core.can_see_record('zzs', site, project, owner, class) is distinct from
+            core.search_access_allows((select core.search_access_snapshot()),
+              'zzs', site, project, owner, class))::int as differences from cases`,
+          [SITE_A, SITE_B, VIEWER_A, VIEWER_B],
+        );
+        expect(comparison.rows[0].differences).toBe(0);
+        const visible = await client.query(
+          "select record_id from core.search_row where record_schema = 'zzs' order by record_id",
+        );
+        expect(visible.rows.map((row) => row.record_id)).toEqual(
+          person === FINANCE_A ? [id(201), id(203)] : [person === VIEWER_A ? id(201) : id(202)],
+        );
+      }
+    } finally {
+      await client.query("rollback");
+      client.release();
+    }
+  });
+
+  it("stages sources, preserves internal ids, and leaves old readers untouched until commit", async () => {
+    const client = await workerPool.connect();
+    const source = { ...records[id(201)] };
+    try {
+      await client.query("begin");
+      const before = await client.query(
+        "select search_document_id, title from core.search_row where record_id = $1",
+        [id(201)],
+      );
+      records[id(201)] = {
+        ...source,
+        title: "Kaynakta yenilenen başlık",
+        text: "kaynakta yenilenen başlık",
+      };
+      const result = await rebuildSearch(kyselyOn(client), [registration]);
+      expect(result).toMatchObject({ count: 3, difference: 0 });
+      const inside = await client.query(
+        "select search_document_id, title, projection_version from core.search_row where record_id = $1",
+        [id(201)],
+      );
+      expect(inside.rows[0]).toMatchObject({
+        search_document_id: before.rows[0].search_document_id,
+        title: "Kaynakta yenilenen başlık",
+        projection_version: result.version,
+      });
+      expect(await titlesFor(VIEWER_A, "sogut")).toEqual([before.rows[0].title]);
+      expect(await titlesFor(VIEWER_A, "kaynakta")).toEqual([]);
+    } finally {
+      records[id(201)] = source;
+      await client.query("rollback");
+      client.release();
+    }
+  });
+
+  it("leaves the old version intact if a source scanner fails", async () => {
+    const client = await workerPool.connect();
+    const before = await admin.query(
+      "select id, title, projection_version from core.search_row where record_schema = $1 order by id",
+      [P],
+    );
+    try {
+      await client.query("begin");
+      await expect(
+        rebuildSearch(kyselyOn(client), [
+          {
+            ...registration,
+            scan: async () => {
+              throw new Error("source unavailable");
+            },
+          },
+        ]),
+      ).rejects.toThrow("source unavailable");
+    } finally {
+      await client.query("rollback");
+      client.release();
+    }
+    expect(
+      (
+        await admin.query(
+          "select id, title, projection_version from core.search_row where record_schema = $1 order by id",
+          [P],
+        )
+      ).rows,
+    ).toEqual(before.rows);
+  });
+
+  it("does not remove a live source when a stale removal event arrives", async () => {
+    await deliver(`${P}.record.removed`, id(202), new Date(0));
+    expect(await titlesFor(VIEWER_B, "ilgaz")).toEqual(["Ilgaz Şantiyesi"]);
+  });
+
+  it("revalidates saved addresses instead of returning another site's title", async () => {
+    const definitions = [{ type: `${P}.site`, label: "Şantiyeler", listPath: "/sites" }];
+    // Both fixture sites use /today; only the caller's visible row may return.
+    const answer = await recentSearchFor(as(VIEWER_A), ["/today"], definitions);
+    expect(answer.groups.flatMap((group) => group.hits.map((hit) => hit.recordId))).toEqual([
+      id(201),
+    ]);
+    records[id(201)].siteId = SITE_B;
+    try {
+      await deliver(`${P}.record.saved`, id(201));
+      expect((await recentSearchFor(as(VIEWER_A), ["/today"], definitions)).groups).toEqual([]);
+    } finally {
+      records[id(201)].siteId = SITE_A;
+      await deliver(`${P}.record.saved`, id(201));
+    }
+  });
+
+  it("gives each type five places even when another type has more than fifty matches", async () => {
+    const ids = Array.from({ length: 56 }, (_, n) => id(401 + n));
+    const client = await workerPool.connect();
+    try {
+      await client.query("begin");
+      await client.query(
+        `select core.index_search_row('zzs', 'record', x.id,
+        case when x.n = 56 then 'zzs.quote' else 'zzs.site' end,
+        'Denemepalet ' || x.n, null, 'denemepalet', '/today', $2::uuid)
+        from unnest($1::uuid[]) with ordinality as x(id, n)`,
+        [ids, SITE_A],
+      );
+      await client.query("commit");
+      const answer = await searchFor(as(FINANCE_A), "denemepalet");
+      expect(answer.groups.find((group) => group.type === "zzs.site")).toMatchObject({
+        hasMore: true,
+      });
+      expect(answer.groups.find((group) => group.type === "zzs.site")?.hits).toHaveLength(5);
+      expect(answer.groups.find((group) => group.type === "zzs.quote")?.hits).toHaveLength(1);
+      if (process.env.SEARCH_PROFILE === "1") {
+        const probe = await appPool.connect();
+        try {
+          await probe.query("begin");
+          await probe.query("select set_config('app.user_id', $1, true)", [FINANCE_A]);
+          for (const statement of [
+            "select distinct record_type from core.search_row",
+            "select core.search_suggest('denemepalet', array['zzs.site','zzs.quote'])",
+            "select * from core.search_records('denemepalet', array['zzs.site'], 6)",
+            "select core.search_palette('denemepalet')",
+          ]) {
+            const plan = await probe.query(`explain (analyze, buffers, format json) ${statement}`);
+            console.info(JSON.stringify({ statement, plan: plan.rows[0]["QUERY PLAN"] }));
+          }
+        } finally {
+          await probe.query("rollback");
+          probe.release();
+        }
+      }
+      const timings: number[] = [];
+      for (let n = 0; n < 20; n++) {
+        const started = performance.now();
+        await searchFor(as(FINANCE_A), "denemepalet");
+        timings.push(performance.now() - started);
+      }
+      timings.sort((a, b) => a - b);
+      console.info(
+        `Search warm smoke (56 synthetic rows, 20 samples): p95=${Math.round(timings[18])}ms max=${Math.round(timings[19])}ms`,
+      );
+    } finally {
+      await client.query("rollback");
+      await client.query(
+        `select core.remove_search_row('zzs', 'record', x) from unnest($1::uuid[]) x`,
+        [ids],
+      );
+      client.release();
+    }
+  });
+
+  it("retains own records in another scope even when a readable bucket covers the same word", async () => {
+    await admin.query(`
+      insert into iam.permission (code, module, name, created_from) values ('zzs.module.own', 'zzs', 'Deneme: kendisi', 'seed');
+      insert into iam.role (code, name, level) values ('T0110_OWN', 'Deneme kişisel', 10);
+      insert into iam.role_permission (role_id, permission_id) select r.id, p.id from iam.role r, iam.permission p where r.code = 'T0110_OWN' and p.code = 'zzs.module.own';
+    `);
+    await admin.query(
+      `insert into iam.role_assignment (user_id, role_id, scope_type, starts_on)
+      select $1, id, 'company', iam.today() - 1 from iam.role where code = 'T0110_OWN'`,
+      [VIEWER_A],
+    );
+    records[id(301)] = {
+      ...records[id(202)],
+      ownerUserId: VIEWER_A,
+      text: "Söğüt kişisel",
+      title: "Kişisel Söğüt",
+    };
+    try {
+      await deliver(`${P}.record.saved`, id(301));
+      expect(await titlesFor(VIEWER_A, "sogut")).toContain("Kişisel Söğüt");
+    } finally {
+      delete records[id(301)];
+      await deliver(`${P}.record.removed`, id(301));
     }
   });
 });

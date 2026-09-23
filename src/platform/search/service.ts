@@ -1,45 +1,76 @@
 import "server-only";
 
-import { searchRecords, suggestWord } from "@/platform/db/search-store";
+import { searchPalette, readRecentSearchRecords } from "@/platform/db/search-store";
 import {
   groupHits,
   isSearchable,
-  queryWords,
+  isPanelPath,
+  searchListHref,
   type SearchResultGroup,
+  type SearchTypeDefinition,
 } from "@/platform/search/search";
 
-/**
- * The search a screen asks for (TASK-0110, REQ-NFR-012, D-266). Everything is read as the
- * person, so a record they may not see is in no result and in no count. When their own words
- * find nothing, the nearest words their own records use are tried once, and the answer says
- * which words were used instead. The query is never written to a log.
- */
-
-export type DbIdentity = Parameters<typeof searchRecords>[0];
-
+export type DbIdentity = Parameters<typeof searchPalette>[0];
 export type SearchAnswer = {
   groups: SearchResultGroup[];
-  /** The words actually searched for, when they are not the ones that were typed. */
   corrected: string | null;
+  failedGroups: { type: string; label: string }[];
 };
 
-/** How many hits are fetched before grouping; each group then shows its best five. */
-const FETCH_LIMIT = 50;
-
-export async function searchFor(identity: DbIdentity, query: string): Promise<SearchAnswer> {
-  if (!isSearchable(query)) return { groups: [], corrected: null };
-
-  const hits = await searchRecords(identity, query, { limit: FETCH_LIMIT });
-  if (hits.length > 0) return { groups: groupHits(hits), corrected: null };
-
-  const words = queryWords(query);
-  const nearest = await Promise.all(words.map((word) => suggestWord(identity, word)));
-  const corrected = words.map((word, n) => nearest[n] ?? word);
-  if (corrected.join(" ") === words.join(" ")) return { groups: [], corrected: null };
-
-  const second = await searchRecords(identity, corrected.join(" "), { limit: FETCH_LIMIT });
+/** One bounded query per visible kind, so a popular kind cannot consume the others' five slots. */
+export async function searchFor(
+  identity: DbIdentity,
+  query: string,
+  definitions?: readonly SearchTypeDefinition[],
+): Promise<SearchAnswer> {
+  if (!isSearchable(query) || definitions?.length === 0)
+    return { groups: [], corrected: null, failedGroups: [] };
+  const result = await searchPalette(
+    identity,
+    query,
+    definitions?.map((entry) => entry.type),
+  );
+  const types = definitions?.map((entry) => entry.type) ?? [
+    ...new Set(result.hits.map((hit) => hit.recordType)),
+  ];
+  const groups: SearchResultGroup[] = [];
+  for (const type of types) {
+    const definition = definitions?.find((entry) => entry.type === type);
+    const group = groupHits(result.hits.filter((hit) => hit.recordType === type))[0];
+    if (!group) continue;
+    groups.push({
+      ...group,
+      type,
+      label: definition?.label ?? group.label,
+      ...(definition ? { listHref: searchListHref(definition, query) } : {}),
+    });
+  }
   return {
-    groups: groupHits(second),
-    corrected: second.length > 0 ? corrected.join(" ") : null,
+    groups,
+    corrected: result.corrected,
+    failedGroups: result.failedTypes.map((type) => ({
+      type,
+      label: definitions?.find((entry) => entry.type === type)?.label ?? "Kayıtlar",
+    })),
+  };
+}
+export async function recentSearchFor(
+  identity: DbIdentity,
+  paths: readonly string[],
+  definitions: readonly SearchTypeDefinition[],
+): Promise<SearchAnswer> {
+  const safePaths = [...new Set(paths.filter(isPanelPath))].slice(0, 5);
+  const hits =
+    safePaths.length && definitions.length
+      ? await readRecentSearchRecords(
+          identity,
+          safePaths,
+          definitions.map((entry) => entry.type),
+        )
+      : [];
+  return {
+    groups: hits.length ? [{ type: "recent", label: "Son açılanlar", hits, hasMore: false }] : [],
+    corrected: null,
+    failedGroups: [],
   };
 }

@@ -119,3 +119,11 @@ Belgenin kapsamı ve veri sınıfı **bağlı kayıttan** türetilir ve belgeye 
 ## Phase 06'ya giden not
 
 `core.outbox` ve `core.search_row` en çok yazılan tablolardır; SPIKE-03 ve SPIKE-12 bunların yük altındaki davranışını ölçer.
+
+### Arama uygulama notu — 2026-09-23 (TASK-0110)
+
+Yukarıdaki arama satırları tasarım sözleşmesini gösterir. Göç 0020–0023'te fiilen bulunan alanlar: arama satırında `search_text`, `site_id`, `project_id`, `record_owner_user_id`, `data_class`, `projection_version`, `source_event_at`; eşlemelerde aynı kapsam/sahip/sınıf; sözlükte `word`, `record_type`, `record_count`; kovada sözcük/tür/yer/sınıf ve iç kimlik dizisi. Kullanıcı sözlüğü doğrudan okuyamaz; öneri kendi görünür eşlemelerinden hesaplanır. Kovalar tüm kayıtlara bakma hakkı olan kapsamda okunur; kişisel erişimde kaynak RLS yolu korunur.
+
+0022 ortak yayınlama kilidiyle kaynak okumayı ve arama yazıcılarını yeniden kurmayla sıralar. İşlemci geçici gölge tabloda kaynakların izdüşümünü üretir, alanları ve sayımı karşılaştırır; aynı işlemde satırları, yardımcıları ve `core.read_model` içindeki `core.search` sürümünü yayımlar. MVCC nedeniyle diğer okuyucular commit'e kadar eski satırları görür. Mevcut `search_document_id` korunur. Kalıcı tablo sayısı değişmedi; geçici küme commit/rollback sonrasında kalmaz.
+
+Tasarımdaki çok kapsamlı kayıtlar, normalleştirme sürümünün ayrı izlenmesi ve üretim hacminde yeniden kurma kabulü henüz kapanmış değildir. TASK-0110 bu farklar ve tarayıcı kabulü nedeniyle IMPLEMENTING durumundadır; tasarım sözleşmesi kaldırılmaz.

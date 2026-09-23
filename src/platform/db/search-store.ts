@@ -4,6 +4,10 @@ import { runAsUser, type DbIdentity } from "@/platform/db";
 import type { SystemDb } from "@/platform/jobs/types";
 import type { SearchHit, SearchProjection } from "@/platform/search/search";
 
+export async function lockSearchPublication(db: SystemDb) {
+  await sql`select pg_advisory_xact_lock(hashtextextended('geoges.search_index', 0))`.execute(db);
+}
+
 /**
  * The search index in the database (TASK-0110, ADR-017, D-266). Reading runs as the signed-in
  * person, so row level security decides what exists for them — an unauthorised record shows in
@@ -35,6 +39,38 @@ const toHit = (row: HitRow): SearchHit => ({
   linkPath: row.link_path,
   rank: Number(row.rank),
 });
+
+/** Only visible types are used to plan per-type queries; one busy type cannot crowd out others. */
+export function searchPalette(identity: DbIdentity, query: string, types?: readonly string[]) {
+  return runAsUser(identity, async (db) => {
+    const result = await sql<{
+      answer: { hits: HitRow[]; corrected: string | null; failed_types: string[] };
+    }>`
+      select core.search_palette(${query}, ${types ?? null}::text[]) as answer`.execute(db);
+    const answer = result.rows[0].answer;
+    return {
+      hits: answer.hits.map(toHit),
+      corrected: answer.corrected,
+      failedTypes: answer.failed_types,
+    };
+  });
+}
+
+/** Re-read recent paths with current RLS, never trust a browser's saved title or permission. */
+export function readRecentSearchRecords(
+  identity: DbIdentity,
+  paths: readonly string[],
+  types: readonly string[],
+) {
+  return runAsUser(identity, async (db) => {
+    const result = await sql<HitRow>`
+      select record_schema, record_table, record_id, record_type, title, secondary, link_path,
+             0::real as rank from core.search_row
+      where link_path = any(${paths}::text[]) and record_type = any(${types}::text[])
+      order by array_position(${paths}::text[], link_path), id limit 5`.execute(db);
+    return result.rows.map(toHit);
+  });
+}
 
 /** Records holding every word of the query that the person may see (REQ-NFR-012). */
 export function searchRecords(
@@ -77,7 +113,7 @@ export async function indexSearchRow(
                                  ${projection.projectId ?? null}::uuid,
                                  ${projection.ownerUserId ?? null}::uuid,
                                  ${projection.dataClass ?? "internal"},
-                                 ${occurredAt}::timestamptz, 1) as id`.execute(db);
+                                 ${occurredAt}::timestamptz, null) as id`.execute(db);
   return rows[0].id;
 }
 

@@ -89,7 +89,27 @@ export type SearchResultGroup = {
   hits: SearchHit[];
   /** More than the palette shows; "Tümünü gör" opens the list screen with the same words. */
   hasMore: boolean;
+  listHref?: string;
 };
+
+/** The owning module supplies a real list route; never derive routes from record names. */
+export type SearchTypeDefinition = {
+  type: string;
+  label: string;
+  listPath: string;
+  queryParameter?: string;
+};
+
+export function isPanelPath(path: string): boolean {
+  return /^\/[A-Za-z0-9]/.test(path) && !/[\\\u0000-\u0020]/.test(path);
+}
+
+export function searchListHref(definition: SearchTypeDefinition, query: string): string {
+  if (!isPanelPath(definition.listPath)) throw new Error("Search lists require a panel path");
+  const url = new URL(definition.listPath, "https://panel.invalid");
+  url.searchParams.set(definition.queryParameter ?? "q", query);
+  return `${url.pathname}${url.search}${url.hash}`;
+}
 
 const GROUP_LABELS = new Map(RESULT_GROUPS.map((group) => [group.type as string, group.label]));
 

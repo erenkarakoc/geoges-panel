@@ -15,6 +15,7 @@ import { sendSignal } from "@/platform/signals/hub";
 import { processMailSender } from "@/platform/mail/mail";
 import { processPushSender } from "@/platform/push/push";
 import { searchIndexer } from "@/platform/search/indexer";
+import { searchRebuildJob } from "@/platform/search/rebuild";
 import { processStorage } from "@/platform/storage";
 import { createTesseractReader } from "@/platform/text-recognition/text-reader";
 import { searchIndex } from "@/records";
@@ -42,6 +43,7 @@ export const jobRegistry: JobRegistry = {
     dailyDigest(processMailSender),
     overdueAndEscalation(),
     systemWatch(),
+    ...(searchIndex.length > 0 ? [searchRebuildJob(searchIndex)] : []),
   ],
   readModels: [],
 };

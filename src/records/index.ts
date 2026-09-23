@@ -4,6 +4,7 @@ import { createRevisionService, type RevisionAppliers } from "@/modules/aud";
 import { createDocumentService, type RecordResolvers } from "@/modules/doc";
 import { signInIdentity } from "@/modules/iam";
 import type { SearchRegistration } from "@/platform/search/indexer";
+import type { SearchTypeDefinition } from "@/platform/search/search";
 import { processStorage } from "@/platform/storage";
 
 /**
@@ -55,3 +56,5 @@ export function revisions() {
  * the first slice (Phase 09).
  */
 export const searchIndex: readonly SearchRegistration[] = [];
+/** Searchable record kinds and their implemented list routes, supplied by each owning slice. */
+export const searchTypes: readonly SearchTypeDefinition[] = [];

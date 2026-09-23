@@ -53,3 +53,21 @@ Kayıt aramasında yazılan bütün sözcükler aynı kayıtta bulunur; sıralar
 ## 5. Bileşenler
 
 `Command` (`CommandDialog`, `CommandInput`, `CommandPanel`, `CommandList`, `CommandGroup`, `CommandGroupLabel`, `CommandItem`, `CommandEmpty`, `CommandFooter`), `Kbd`, `Badge`, `Skeleton`. Telefonda ayrı bir `Drawer` kullanılmaz; aynı `CommandDialog` tam ekran açılır. Özel öğe gerekmez.
+
+## 6. Uygulama durumu — 2026-09-23
+
+TASK-0110 devam ediyor. Palet gerçek yetkili arama API'sine bağlıdır. `searchTypes` kütüğüne kaydolan tür, liste adresini ve sorgu parametresini bildirir. Her görünür türden altı aday alınır; beşi gösterilir, devamı varsa “Tümünü gör” o listeye gider. Sorgu, yazım düzeltmesi ve gruplar tek PostgreSQL çağrısında üretilir; bir türün hata vermesi başarılı grupları gizlemez.
+
+Son açılanlar tarayıcının oturum depolamasında kullanıcıya göre ayrılmış beş adres olarak tutulur. Başlık/veri saklanmaz; her açılışta kayıtlar kişinin güncel yetkisiyle yeniden okunur. Ekran ve işlem araması ağdan bağımsızdır; kayıtlar çevrimdışıyken gösterilmez. Görev ver işlemi mevcut forma gider. Arşiv satırının hedefi hazırdır; belge içeriği araması Faz 15'teki arşiv ekranının işidir.
+
+COSS alt bandı korunur. Telefonda aynı pencere tam ekran açılır; görünür kapatma düğmesi ve klavyenin küçülttüğü görünür alana uyan yükseklik eklenmiştir (DESIGN_SYSTEM_RULES bölüm 4.1, satır 22). Gerçek telefon ve oturumlu tarayıcı kabulü henüz tamamlanmadı.
+
+Henüz bir iş modülü arama izdüşümü kaydetmedi; `src/records` kütükleri boştur. Örnek türle veritabanı doğrulanmıştır. Çok kapsamlı kayıt sözleşmesi ve üretim büyüklüğünde performans/eşzamanlı yeniden kurma kabulü TASK-0110'un açık maddeleridir; bu belge bunları tamamlanmış veya ertelenmiş saymaz.
+
+### 2026-09-23 — Gecikme incelemesi
+
+56 sentetik kayıtta, 20 sıcak servis çağrısının p95 süresi önce 936 ms (ikinci tur 916 ms) çıktı. Satır başına tekrarlanan IAM hesabı, 0024 ile RLS içindeki sorgu-yerel izin özetine taşındı. Özet mevcut IAM işlevlerinden üretilir; istemci izin veremez ve sonraki sorgu yeni kimlik/yetkileri tekrar okur. Eski görünürlük işleviyle kapsam/sahip/sınıf eşitliği ve aynı bağlantıda kimlik değişimi dahil 18 arama testi geçti.
+
+EXPLAIN ANALYZE: görünür türler 81,861 → 4,053 ms; paletin tamamı 628,884 → 45,463 ms. Ağ ve işlem yönetimi dahil sıcak servis p95'i **348 ms**, en yüksek 355 ms oldu. **300 ms kabul hedefi hâlâ karşılanmıyor.** Bunlar küçük sentetik küme ölçümleridir; üretim hacmi kabulü değildir. Sonraki inceleme `runAsUser` içindeki dört ağ turunu, kimlik temizliği ve süre sınırını koruyarak azaltmaktır.
+
+Tarayıcı kontrolü: oturum açıldıktan sonra masaüstünde arama ve footer; 390×844 telefon görünümünde tam ekran, uzun listenin kayması sırasında sabit kalan footer, kapatma düğmesi ve "Görev ver" kısa yolundan Drawer'ın açılması doğrulandı. Form kaydedilmeden kapatıldı. Gerçek telefon klavyesi ve henüz kayıtlı iş kaynağı olmadığı için canlı kayıt/son açılanlar grupları tarayıcıda doğrulanmadı; bu grupların veri ve servis testleri ayrı geçti.

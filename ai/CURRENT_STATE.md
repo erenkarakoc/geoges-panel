@@ -7,7 +7,7 @@ PROJECT STATUS:              TESTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
 CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0110 site-wide search IMPLEMENTING: palette API integration in progress; versioned source rebuild, recent records, list destinations and mobile fullscreen remain. TASK-0113 still IMPLEMENTING. Then TASK-0028, TASK-0112 and TASK-0111 (M1).
+CURRENT TASK:        TASK-0110 site-wide search IMPLEMENTING: per-type list links, permission-revalidated recents, mobile fullscreen and transactional source rebuild implemented; warm latency still fails (348 ms p95 after 0024, down from 936 ms); browser acceptance, multi-scope projection/normalization-version design parity and production-scale performance/concurrency remain. TASK-0113 still IMPLEMENTING. Then TASK-0028, TASK-0112 and TASK-0111 (M1).
 STATUS:              IMPLEMENTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)

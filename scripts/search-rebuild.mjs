@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
- * Builds the search helpers again from the rows that are already indexed (TASK-0110, D-247).
+ * Requests a source-projection rebuild from the running worker (TASK-0110, D-247).
  *
  * The buckets are kept up to date as records are written, so this is for the moments when that
  * cannot be trusted: after a restore, after a projection changed what a record puts into search,
- * or when a check says a bucket and its postings disagree. It counts first, rebuilds, and counts
- * again, so the output says what changed.
+ * or when a check says a bucket and its postings disagree. The worker stages the registered
+ * sources, compares the published rows and records the new version in one transaction.
  *
- *   npm run search:rebuild            rebuilds every bucket
+ *   npm run search:rebuild            queues a versioned source rebuild
  *   npm run search:rebuild -- --check reports disagreements without changing anything
  */
 import { connectAdmin, safeError } from "./db-admin.mjs";
@@ -43,14 +43,22 @@ async function main() {
       return;
     }
 
-    const built = await client.query("select core.rebuild_search_buckets() as n");
-    const after = await client.query(DISAGREEMENTS);
-    console.log(`kurulan kova: ${built.rows[0].n}`);
-    console.log(`kalan uyuşmazlık: ${after.rows[0].n}`);
-    if (after.rows[0].n > 0) {
-      console.error("kovalar hâlâ uyuşmuyor; kayıtların izdüşümü gözden geçirilmeli");
+    const source = await client.query(
+      "select 1 from core.event_subscription where subscriber = 'core.search-index'",
+    );
+    if (!source.rowCount) {
+      console.error("Arama kaynağı henüz kayıtlı değil; modül kaydını ekleyip işlemciyi başlatın.");
       process.exitCode = 1;
+      return;
     }
+    const result = await client.query(
+      "select core.schedule_job('core.search-rebuild', now(), $1, '{}'::jsonb) as id",
+      [`search-rebuild:${crypto.randomUUID()}`],
+    );
+    console.log(`kaynaklardan yeniden kurma kuyruğa alındı: ${result.rows[0].id}`);
+    console.log(
+      "Tamamlanma ve hata durumu: npm run jobs:status. Kuyruğa alınması, tamamlandığı anlamına gelmez.",
+    );
   } catch (error) {
     console.error(safeError(error));
     process.exitCode = 1;
