@@ -10,6 +10,7 @@ import pg from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { connectAdmin } from "../../../scripts/db-admin.mjs";
+import { restoreNewer, functionsOf } from "../../../scripts/db-replay.mjs";
 import { releaseTestPeople } from "../../../scripts/db-test-people.mjs";
 import { readDatabaseConfig } from "@/platform/db/database-config";
 import { kyselyOn } from "@/platform/db/run-as-user";
@@ -647,6 +648,9 @@ describe("normalization versions (TASK-0110)", () => {
         [P, id(201)],
       );
       await admin.query(migration(""));
+      // Later migrations redefine some of these functions; the replay must not leave the
+      // database on the old definitions (2026-09-23).
+      await restoreNewer(admin, "0027", functionsOf(migration("")));
       const postings = await admin.query(
         `select p.normalization_version, p.projection_version from core.search_posting p
          join core.search_row r on r.id = p.search_row_id
@@ -865,6 +869,7 @@ describe("helper versions (TASK-0110, D-247)", () => {
     );
     expect(column.rows[0].n).toBe(0);
     await admin.query(migration(""));
+    await restoreNewer(admin, "0029", functionsOf(migration("")));
     expect(await buckets()).toEqual(before);
     expect(await integrity()).toEqual(reportBefore);
   });
@@ -972,6 +977,7 @@ describe("read-time helper check (TASK-0110, 0030)", () => {
     expect(without.hits.map((hit) => hit.title)).toEqual(before.hits.map((hit) => hit.title));
     expect(without.helper_mismatch).toBeUndefined();
     await admin.query(migration(""));
+    await restoreNewer(admin, "0030", functionsOf(migration("")));
     expect(await paletteFor(VIEWER_A, "sogut kavakli")).toEqual(before);
   });
 });

@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import pg from "pg";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { connectAdmin } from "../../../scripts/db-admin.mjs";
+import { functionsOf, restoreNewer } from "../../../scripts/db-replay.mjs";
 import { readDatabaseConfig } from "@/platform/db/database-config";
 import { kyselyOn } from "@/platform/db/run-as-user";
 import { assertSearchIntegrity, type SearchIntegrity } from "@/platform/db/search-integrity";
@@ -266,6 +267,7 @@ describe("source-derived search integrity", () => {
       (await admin.query("select to_regprocedure('core.search_integrity()') as f")).rows[0].f,
     ).toBeNull();
     await admin.query(migration(""));
+    await restoreNewer(admin, "0028", functionsOf(migration("")));
     expect(await report()).toEqual(before);
   });
 });
