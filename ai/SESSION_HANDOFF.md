@@ -4,6 +4,12 @@ Last updated: 2026-09-23
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
+## Current continuation — 2026-09-23
+
+TASK-0110 remains IMPLEMENTING. Search migrations 0020/0021 and the bucket rebuild were already committed at ca9631e. The palette now consumes `/api/search`: server-grouped hits bypass the local title filter (so spelling corrections and secondary-field matches survive), local navigation remains searchable, requests debounce and abort, late replies cannot publish after cancellation, errors offer retry and a toast, offline hides record results, and the existing footer remains intact. No browser verification yet and no record projector is registered. Four request tests cover cancellation before dispatch, ignored late responses, encoding/no-cache, and HTTP failure.
+
+Review: no database/auth changes, no disk storage of search results or query logging; result navigation refuses external URLs, backslashes and control characters. Next: list destinations and “Tümünü gör”, permission-revalidated recent records, mobile fullscreen, source projection registration and versioned shadow rebuild. The existing search:rebuild command rebuilds buckets only; it does NOT satisfy the planned versioned source rebuild. TASK-0110 must not be marked DONE from current tests alone. Earlier next-work bullets below are historical.
+
 ## Verified state
 
 - 2026-09-23: TASK-0109 DONE; CI run 35797575645 green. Migrations 0018 and 0019 are applied to the test project (0018 was reverted and re-applied four times during development, never committed in between; its down file was exercised). No module registers a revision applier yet, so `/approvals/revision-requests` can only be exercised with a hand-written request row, as it was for the browser check. The owner's phone round of the same day is recorded in TASK-0113; part of it rode along in commit cad247d, whose message names only the revision screen.

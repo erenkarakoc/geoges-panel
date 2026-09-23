@@ -21,12 +21,20 @@ import {
   CommandPanel,
   CommandSeparator,
 } from "@/components/ui/command";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useRecordSearch } from "./use-record-search";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import type { NavigationGroup, NavigationItem } from "@/platform/navigation/navigation-registry";
 import { matchesSearch } from "@/platform/navigation/search-text";
 
-type PaletteItem = { value: string; label: string; href: string };
-type PaletteGroup = { value: string; items: PaletteItem[] };
+type PaletteItem = {
+  value: string;
+  label: string;
+  href: string;
+  secondary?: string | null;
+  remote?: boolean;
+};
+type PaletteGroup = { value: string; id?: string; items: PaletteItem[] };
 
 const toPaletteItem = ({ id, label, href }: NavigationItem): PaletteItem => ({
   value: id,
@@ -52,6 +60,8 @@ export function CommandPalette({
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const records = useRecordSearch(query, open);
   const modifierLabel = useSyncExternalStore(
     subscribeToNothing,
     () => (isApplePlatform() ? "⌘" : "Ctrl"),
@@ -61,6 +71,17 @@ export function CommandPalette({
   const groupedItems: PaletteGroup[] = [
     ...(workItems.length > 0 ? [{ value: "İşler", items: workItems.map(toPaletteItem) }] : []),
     ...groups.map((group) => ({ value: group.label, items: group.items.map(toPaletteItem) })),
+    ...records.groups.map((group) => ({
+      value: group.label,
+      id: `records:${group.type}`,
+      items: group.hits.map((hit) => ({
+        value: `${hit.recordSchema}.${hit.recordTable}.${hit.recordId}`,
+        label: hit.title,
+        href: hit.linkPath,
+        secondary: hit.secondary,
+        remote: true,
+      })),
+    })),
   ];
 
   useEffect(() => {
@@ -75,6 +96,12 @@ export function CommandPalette({
   }, []);
 
   function handleItemClick(item: PaletteItem) {
+    if (
+      !item.href.startsWith("/") ||
+      item.href.startsWith("//") ||
+      /[\\\u0000-\u0020]/.test(item.href)
+    )
+      return;
     setOpen(false);
     router.push(item.href);
   }
@@ -100,18 +127,42 @@ export function CommandPalette({
           <Kbd>K</Kbd>
         </KbdGroup>
       </CommandDialogTrigger>
-      <CommandDialogPopup>
+      <CommandDialogPopup aria-label="Site içi arama">
         {/* COSS's example leaves filtering to Base UI; ours also ignores Turkish letters. */}
         <Command
-          filter={(item, query) => matchesSearch((item as PaletteItem).label, query)}
+          value={query}
+          onValueChange={setQuery}
+          filter={(item, query) =>
+            Boolean((item as PaletteItem).remote) ||
+            matchesSearch((item as PaletteItem).label, query)
+          }
           items={groupedItems}
         >
-          <CommandInput placeholder="Sayfa veya modül arayın…" />
+          <CommandInput placeholder="Sayfa veya kayıt arayın…" />
           <CommandPanel>
-            <CommandEmpty>Sonuç bulunamadı.</CommandEmpty>
+            {records.status !== "loading" && <CommandEmpty>Sonuç bulunamadı.</CommandEmpty>}
+            {records.status === "loading" && (
+              <div className="space-y-2 p-4" role="status" aria-label="Kayıtlar aranıyor">
+                <Skeleton className="h-4 w-40" />
+                <Skeleton className="h-4 w-56" />
+              </div>
+            )}
+            {records.status === "offline" && (
+              <p className="px-4 py-2 text-sm text-muted-foreground" role="status">
+                Bağlantı yok. Ekranlarda arama yapabilirsiniz.
+              </p>
+            )}
+            {records.status === "error" && (
+              <Button variant="ghost" onClick={records.retry}>
+                Kayıt aramasını tekrar dene
+              </Button>
+            )}
+            {records.corrected && (
+              <p className="px-4 py-2 text-sm text-muted-foreground">Aranan: {records.corrected}</p>
+            )}
             <CommandList>
               {(group: PaletteGroup) => (
-                <Fragment key={group.value}>
+                <Fragment key={group.id ?? group.value}>
                   <CommandGroup items={group.items}>
                     <CommandGroupLabel>{group.value}</CommandGroupLabel>
                     <CommandCollection>
@@ -121,7 +172,14 @@ export function CommandPalette({
                           onClick={() => handleItemClick(item)}
                           value={item.value}
                         >
-                          <span className="flex-1">{item.label}</span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate">{item.label}</span>
+                            {item.secondary && (
+                              <span className="block truncate text-xs text-muted-foreground">
+                                {item.secondary}
+                              </span>
+                            )}
+                          </span>
                         </CommandItem>
                       )}
                     </CommandCollection>

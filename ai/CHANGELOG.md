@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2026-09-23 — Search palette API integration
+
+- TASK-0110 continues: permission-filtered record groups connected to the existing COSS palette, with cancellable requests, offline/loading/error states and retry. Footer preserved. Four async request tests added; browser acceptance and remaining step-4 scope are open.
+
 ## 2026-09-23 — Panel telefonun ana ekranına çıkıyor
 
 - Panel artık kendisini ana ekrana ekletiyor: ilk girişte "Bugün" ekranında bir kez pencere, sonrasında ekleyene kadar telefonda küçük bir şerit. Android'de tek tuşla kuruluyor; iPhone'da Apple izin vermediği için pencere paylaş simgesiyle iki adımı gösteriyor (D-264).
