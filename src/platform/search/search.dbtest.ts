@@ -10,6 +10,7 @@ import pg from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { connectAdmin } from "../../../scripts/db-admin.mjs";
+import { releaseTestPeople } from "../../../scripts/db-test-people.mjs";
 import { readDatabaseConfig } from "@/platform/db/database-config";
 import { kyselyOn } from "@/platform/db/run-as-user";
 import { createRunSearchAsUser } from "@/platform/db/run-search-as-user";
@@ -136,9 +137,7 @@ async function cleanUp() {
       rows.filter((r) => r.t === table).map((r) => r.id),
     ]);
   }
-  // A jobs worker may be running against the same database: the daily digest writes an empty
-  // placeholder for every user, and that row then holds these throw-away identities in place.
-  await admin.query("delete from tsk.daily_digest where user_id = any($1)", [PEOPLE]);
+  await releaseTestPeople(admin, PEOPLE);
   await admin.query("delete from iam.role_assignment where user_id = any($1)", [PEOPLE]);
   await admin.query("delete from iam.user where id = any($1)", [PEOPLE]);
   await admin.query(

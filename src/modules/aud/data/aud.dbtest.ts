@@ -12,6 +12,7 @@ import pg from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { connectAdmin } from "../../../../scripts/db-admin.mjs";
+import { releaseTestPeople } from "../../../../scripts/db-test-people.mjs";
 import { checkLayers, purgeHistory } from "../../../../scripts/db-layers.mjs";
 import { readDatabaseConfig } from "@/platform/db/database-config";
 import { createRunAsUser } from "@/platform/db/run-as-user";
@@ -65,6 +66,7 @@ async function cleanUp() {
         tableIds,
       ]);
   }
+  await releaseTestPeople(admin, PEOPLE);
   await admin.query(`delete from iam.user_exception where user_id = any(${ids})`, [PEOPLE]);
   await admin.query(`delete from iam.role_assignment where user_id = any(${ids})`, [PEOPLE]);
   await admin.query(`delete from iam.user where id = any(${ids})`, [PEOPLE]);

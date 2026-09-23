@@ -10,6 +10,7 @@ import type pg from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { connectAdmin } from "../../../../scripts/db-admin.mjs";
+import { releaseTestPeople } from "../../../../scripts/db-test-people.mjs";
 import { kyselyOn, type PooledClient } from "@/platform/db/run-as-user";
 
 import { insertCatalogItem, mergeItems, readRule, readSimilarItems } from "./adm-store";
@@ -89,6 +90,7 @@ async function cleanUp() {
   );
   await admin.query("delete from adm.catalog where key = any($1)", [[CATALOG, CLOSED_CATALOG]]);
   await admin.query("delete from iam.role_assignment where user_id = any($1::uuid[])", [PEOPLE]);
+  await releaseTestPeople(admin, PEOPLE);
   await admin.query("delete from iam.user where id = any($1::uuid[])", [PEOPLE]);
 }
 

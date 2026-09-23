@@ -13,6 +13,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { exportConfig } from "../../../../scripts/config-transfer.mjs";
 import { connectAdmin } from "../../../../scripts/db-admin.mjs";
+import { releaseTestPeople } from "../../../../scripts/db-test-people.mjs";
 import {
   SEEDS_DIR,
   emptyLayers,
@@ -42,6 +43,7 @@ let runAsUser: ReturnType<typeof createRunAsUser>;
 const role: Record<string, string> = {};
 
 async function cleanUp() {
+  await releaseTestPeople(admin, PEOPLE);
   for (const statement of [
     "delete from iam.user_action_role_choice where user_id = any($1)",
     "delete from iam.user_exception where user_id = any($1)",

@@ -10,6 +10,7 @@ import pg from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { connectAdmin } from "../../../../scripts/db-admin.mjs";
+import { releaseTestPeople } from "../../../../scripts/db-test-people.mjs";
 import { purgeHistory } from "../../../../scripts/db-layers.mjs";
 
 import { createRevisionService, type RevisionApplier } from "../application/revisions";
@@ -165,6 +166,7 @@ async function cleanUp() {
       rows.filter((r) => r.t === table).map((r) => r.id),
     ]);
   }
+  await releaseTestPeople(admin, PEOPLE);
   await admin.query("delete from iam.user_manager where user_id = any($1)", [PEOPLE]);
   await admin.query("delete from iam.role_assignment where user_id = any($1)", [PEOPLE]);
   await admin.query("delete from iam.user where id = any($1)", [PEOPLE]);

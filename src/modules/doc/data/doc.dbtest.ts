@@ -11,6 +11,7 @@ import pg from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { connectAdmin } from "../../../../scripts/db-admin.mjs";
+import { releaseTestPeople } from "../../../../scripts/db-test-people.mjs";
 import { readDatabaseConfig } from "@/platform/db/database-config";
 import { kyselyOn } from "@/platform/db/run-as-user";
 import type { DeliveredEvent } from "@/platform/jobs/types";
@@ -163,6 +164,7 @@ async function cleanUp() {
     ]);
   }
   await admin.query("delete from iam.role_assignment where user_id = any($1)", [PEOPLE]);
+  await releaseTestPeople(admin, PEOPLE);
   await admin.query("delete from iam.user where id = any($1)", [PEOPLE]);
   await admin.query(
     `delete from iam.role_permission where role_id in (select id from iam.role where code = any($1))

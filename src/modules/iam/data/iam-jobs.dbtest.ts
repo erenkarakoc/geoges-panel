@@ -7,6 +7,7 @@ import pg from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { connectAdmin } from "../../../../scripts/db-admin.mjs";
+import { releaseTestPeople } from "../../../../scripts/db-test-people.mjs";
 import { readDatabaseConfig } from "@/platform/db/database-config";
 import { kyselyOn } from "@/platform/db/run-as-user";
 
@@ -20,6 +21,7 @@ let admin: pg.Client;
 let workerPool: pg.Pool;
 
 async function cleanUp() {
+  await releaseTestPeople(admin, [LEAVER, DELEGATOR, DELEGATE]);
   for (const q of [
     "delete from core.outbox_delivery where outbox_id in (select id from core.outbox where record_schema = 'iam' and (payload ->> 'user_id' = any($1) or record_id = any($1::uuid[])))",
     "delete from core.outbox where record_schema = 'iam' and (payload ->> 'user_id' = any($1) or record_id = any($1::uuid[]))",

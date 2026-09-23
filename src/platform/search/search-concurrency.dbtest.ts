@@ -3,6 +3,7 @@ import { sql } from "kysely";
 import pg from "pg";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { connectAdmin } from "../../../scripts/db-admin.mjs";
+import { releaseTestPeople } from "../../../scripts/db-test-people.mjs";
 import { readDatabaseConfig } from "@/platform/db/database-config";
 import { publishEvent } from "@/platform/db/events";
 import { readSearchChanges } from "@/platform/db/search-rebuild-store";
@@ -92,6 +93,7 @@ async function cleanUp() {
       history.rows.filter((r) => r.t === table).map((r) => r.id),
     ]);
   }
+  await releaseTestPeople(admin, [PERSON]);
   await admin.query("delete from iam.role_assignment where user_id = $1", [PERSON]);
   await admin.query("delete from iam.user where id = $1", [PERSON]);
   await admin.query(
