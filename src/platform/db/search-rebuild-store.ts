@@ -58,9 +58,10 @@ export async function captureSearchChanges(
 }
 
 export async function readSearchChanges(db: SystemDb, after: string, limit: number) {
-  const result = await sql<SearchChange>`select id::text, event_code as code,
-    record_id as "recordId", payload from pg_temp.geoges_search_changes
-    where id > ${after}::bigint order by id limit ${limit}`.execute(db);
+  // Qualify the bigint: ORDER BY id would bind to the text output alias and sort lexically.
+  const result = await sql<SearchChange>`select c.id::text, c.event_code as code,
+    c.record_id as "recordId", c.payload from pg_temp.geoges_search_changes c
+    where c.id > ${after}::bigint order by c.id limit ${limit}`.execute(db);
   return result.rows;
 }
 

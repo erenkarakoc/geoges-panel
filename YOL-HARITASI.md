@@ -77,7 +77,7 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 ### Son doğrulamalar
 
-- Yayın öncesi yakalama için arama senaryoları **31** oldu; yerelde toplu ve hedefli koşularda geçti. **273 birim testi** ve üretim derlemesi geçti. Bu değişikliğin CI sonucu bekleniyor; yeni veritabanı göçü yok.
+- Yayın öncesi yakalama için arama senaryoları **32** oldu; yerelde toplu ve hedefli koşularda geçti. **273 birim testi** ve üretim derlemesi geçti. İlk CI turunun geri dönüş sonrası testinde olay numaralarının metin sırasıyla okunması hatası yakalandı ve düzeltildi; yeni sınır testi yerelde geçti. Düzeltmenin CI sonucu bekleniyor; yeni veritabanı göçü yok.
 
 - Eşzamanlılık testleri `9b6a9f9` ile gönderildi. CI 35830079315 yeşil: toplam **26 arama testi**, **273 birim testi** ve temiz kurulum/tam geri dönüş/yeniden kurulum geçti. Test şeması, sentetik olaylar, roller ve dizin satırları temizlendi.
 

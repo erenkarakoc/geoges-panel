@@ -426,3 +426,5 @@ Aynı işlemde kural ve düzeltmesi `now()` nedeniyle aynı `created_at` alıyor
 - Testler: mevcut commit/rollback yarışına ek olarak olay işleyicisi çalışmadan yayın adayının kaynakla eşleşmesi; başlangıçtaki en büyük olay numarasından küçük kimlikli geç commit; yakalama sırasında hata ve eski sürümün korunması; sınırdan sonraki değişikliğin normal teslimi; yanlış işlem yalıtımının reddi. Kaynak silinmesi, imleç gerisine eklenme ve tekrar teslim korunur.
 - Kabul: yeni/önceki arama DB testleri, kalite kapısı, derleme, CI apply/down/up. Geçici başlangıç olay kümesinin disk/süre maliyeti büyük hacim kabulünde ayrıca ölçülür; bu adım hız hedefini sağlamış sayılmaz.
 - Geri dönüş: uygulama kodunu önceki sürüme döndürmek yeterlidir; geçici tablolar commit/rollback ile kalkar. Kalıcı veri dönüşümü veya göç geri alma yoktur.
+
+- CI regresyonu: olay sayfalamasında `ORDER BY` metne çevrilmiş çıktı takma adına değil, kaynak `bigint` sütununa bağlanır. Basamak değişimi (9/10/11) ve JavaScript güvenli sayı sınırından büyük bitişik kimlikler test edilir.

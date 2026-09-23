@@ -5,6 +5,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { connectAdmin } from "../../../scripts/db-admin.mjs";
 import { readDatabaseConfig } from "@/platform/db/database-config";
 import { publishEvent } from "@/platform/db/events";
+import { readSearchChanges } from "@/platform/db/search-rebuild-store";
 import { createRunAsUser, kyselyOn } from "@/platform/db/run-as-user";
 import type { SystemDb } from "@/platform/jobs/types";
 import { createWorker, type Worker } from "@/platform/jobs/worker";
@@ -303,6 +304,33 @@ afterAll(async () => {
 });
 
 describe("search publication with concurrent durable source changes", () => {
+  it("pages captured bigint ids numerically across digit and safe-integer boundaries", async () => {
+    const holder = await workerPool.connect();
+    try {
+      await holder.query("begin");
+      await holder.query(`create temporary table geoges_search_changes (
+        id bigint primary key, event_code text not null, record_id uuid, payload jsonb not null
+      ) on commit drop`);
+      const ids = ["9", "10", "11", "9007199254740992", "9007199254740993"];
+      await holder.query(
+        `insert into pg_temp.geoges_search_changes
+         select n, $2, null, '{}'::jsonb from unnest($1::bigint[]) n`,
+        [ids, EVENT],
+      );
+      const db = kyselyOn(holder);
+      const first = await readSearchChanges(db, "0", 2);
+      expect(first.map((event) => event.id)).toEqual(ids.slice(0, 2));
+      const second = await readSearchChanges(db, first[1].id, 2);
+      expect(second.map((event) => event.id)).toEqual(ids.slice(2, 4));
+      const third = await readSearchChanges(db, second[1].id, 2);
+      expect(third.map((event) => event.id)).toEqual(ids.slice(4));
+      expect(await readSearchChanges(db, third[0].id, 2)).toEqual([]);
+    } finally {
+      await holder.query("rollback");
+      holder.release();
+    }
+  });
+
   it.each(["commit", "rollback", "catchup-failure"] as const)(
     "catches changes before publication and preserves delivery after %s",
     async (outcome) => {
