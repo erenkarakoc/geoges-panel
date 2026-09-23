@@ -11,6 +11,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { connectAdmin } from "../../../scripts/db-admin.mjs";
 import { readDatabaseConfig } from "@/platform/db/database-config";
 import { kyselyOn } from "@/platform/db/run-as-user";
+import { createRunSearchAsUser } from "@/platform/db/run-search-as-user";
 import { indexSearchRow, removeSearchRow } from "@/platform/db/search-store";
 import type { DeliveredEvent } from "@/platform/jobs/types";
 import { searchIndexer, type SearchRegistration } from "@/platform/search/indexer";
@@ -344,6 +345,61 @@ describe("keeping the index honest (D-266)", () => {
 });
 
 describe("source publication and current visibility", () => {
+  it("cleans the search identity on success and cancellation on the same connection", async () => {
+    const client = await appPool.connect();
+    let cancelAfterSearch = false;
+    const run = createRunSearchAsUser({
+      connect: async () => ({
+        async query(statement, params) {
+          const result = await client.query(statement, params);
+          if (statement.startsWith("begin")) {
+            const settings = await client.query(
+              "select current_setting('transaction_read_only') as readonly, current_setting('statement_timeout') as timeout",
+            );
+            expect(settings.rows[0]).toEqual({ readonly: "on", timeout: "15s" });
+          }
+          if (cancelAfterSearch && statement.startsWith("select core.search_request")) {
+            await client.query("set local statement_timeout = '50ms'");
+            await client.query("select pg_sleep(1)");
+          }
+          return result;
+        },
+        release() {},
+      }),
+    });
+    const clean = async () => {
+      const result = await client.query(
+        "select core.current_user_id() as person, core.current_role_id() as role, current_setting('transaction_read_only') as readonly",
+      );
+      expect(result.rows[0]).toEqual({ person: null, role: null, readonly: "off" });
+    };
+    try {
+      for (const [person, expected] of [
+        [VIEWER_A, id(201)],
+        [VIEWER_B, id(202)],
+      ]) {
+        const answer = await run<{ hits: { record_id: string }[] }>(
+          { userId: person, actingRoleId: role.T0110_SITE },
+          "santiyesi",
+        );
+        expect(answer.hits.map((hit) => hit.record_id)).toEqual([expected]);
+        await clean();
+      }
+      cancelAfterSearch = true;
+      await expect(run(as(VIEWER_A), "sogut")).rejects.toMatchObject({ code: "57014" });
+      await clean();
+      cancelAfterSearch = false;
+      expect((await run<{ hits: unknown[] }>(as(VIEWER_B), "sogut")).hits).toEqual([]);
+      await clean();
+      await expect(
+        admin.query("select core.search_request($1, null, 'sogut', null)", [VIEWER_A]),
+      ).rejects.toMatchObject({ code: "42501" });
+    } finally {
+      await client.query("rollback");
+      client.release();
+    }
+  });
+
   it("matches the original visibility predicate and refreshes identity on a reused connection", async () => {
     const client = await appPool.connect();
     try {

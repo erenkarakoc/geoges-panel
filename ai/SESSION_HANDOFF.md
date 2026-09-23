@@ -4,6 +4,16 @@ Last updated: 2026-09-23
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
+## Latest continuation — 0025 search request
+
+Migration 0025 is applied to the test project. `runSearchAsUser` uses the existing private app pool: a constant BEGIN READ ONLY + SET LOCAL statement_timeout=15s request, then parameterized core.search_request(user,role,query,types), then COMMIT. SECURITY INVOKER, only geoges_app; function sets transaction-local identity before existing search_palette. Error/cancellation rolls back; failed rollback destroys connection. No session-level identity and no RLS bypass. General runAsUser unchanged.
+
+Same 56-row/20-warm-sample service measurement now p95 258 ms / max 259, down from 348/355. Small-fixture warm gate passes; no production-scale claim. All 19 search DB tests and 273 unit tests pass, including real timeout then identity cleanup on the reused connection and explicit read-only/15s setup checks. Production build passed. CI for this commit is the remaining delivery check. Previous task-overlay fix a2e5506 also passed CI 35808418739.
+
+Self-review: timeout is set before the search statement, not ineffectively inside the currently running function; identity and text are bound parameters, the transaction setup string is constant; the wrapper refuses admin/worker context; no caller SQL or raw client is exposed. Applied migration checksum is immutable.
+
+Next TASK-0110 work: implement the documented multi-scope projection contract and normalization metadata, then production-scale/concurrent rebuild acceptance; real phone keyboard and registered-source browser acceptance remain. Preserve historical failures below; 0025 only supersedes the 56-row warm latency failure.
+
 ## Current continuation — 2026-09-23
 
 TASK-0110 remains IMPLEMENTING. The earlier search commits failed CI at migration 0020 because vanilla PostgreSQL lacked Supabase's extensions schema. Commit ff5cfcb fixes infrastructure prerequisites without changing an applied forward migration and revokes the migration's grants on rollback; CI 35805349980 passed the full apply/down/up cycle.

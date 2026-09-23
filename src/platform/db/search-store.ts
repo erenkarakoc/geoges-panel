@@ -1,6 +1,6 @@
 import { sql } from "kysely";
 
-import { runAsUser, type DbIdentity } from "@/platform/db";
+import { runAsUser, runSearchAsUser, type DbIdentity } from "@/platform/db";
 import type { SystemDb } from "@/platform/jobs/types";
 import type { SearchHit, SearchProjection } from "@/platform/search/search";
 
@@ -41,19 +41,21 @@ const toHit = (row: HitRow): SearchHit => ({
 });
 
 /** Only visible types are used to plan per-type queries; one busy type cannot crowd out others. */
-export function searchPalette(identity: DbIdentity, query: string, types?: readonly string[]) {
-  return runAsUser(identity, async (db) => {
-    const result = await sql<{
-      answer: { hits: HitRow[]; corrected: string | null; failed_types: string[] };
-    }>`
-      select core.search_palette(${query}, ${types ?? null}::text[]) as answer`.execute(db);
-    const answer = result.rows[0].answer;
-    return {
-      hits: answer.hits.map(toHit),
-      corrected: answer.corrected,
-      failedTypes: answer.failed_types,
-    };
-  });
+export async function searchPalette(
+  identity: DbIdentity,
+  query: string,
+  types?: readonly string[],
+) {
+  const answer = await runSearchAsUser<{
+    hits: HitRow[];
+    corrected: string | null;
+    failed_types: string[];
+  }>(identity, query, types);
+  return {
+    hits: answer.hits.map(toHit),
+    corrected: answer.corrected,
+    failedTypes: answer.failed_types,
+  };
 }
 
 /** Re-read recent paths with current RLS, never trust a browser's saved title or permission. */

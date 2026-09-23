@@ -37,7 +37,7 @@ Kurallar:
 - Ham SQL yalnız veri katmanında (`modules/<kod>/data/`) bulunur; modül dışında SQL yazılmaz.
 - Phase 06 denemesi bunu doğrular: çok rollü ve kapsamlı kullanıcıda RLS doğru ve yeterince hızlı mı (TASK-0064).
 
-**Uygulama (TASK-0101, 2026-09-22, D-254):** sürücü `pg`, tipli sorgu kurucu Kysely. Tek giriş kapısı `src/platform/db` içindeki `runAsUser`'dır: işlemi açar, kullanıcı kimliğini ve etkin rolü işlem yerel ayar olarak parametreyle yazar, işi aynı bağlantıda çalıştırır; hata olursa geri alır, geri alma da başarısızsa bağlantıyı havuza döndürmeden yok eder. Havuz ve ham istemci dışa verilmez. `pg`, `kysely` ve `@/platform/db` yalnız `modules/<kod>/data/` içinden içe aktarılabilir (ESLint); SQL cümlesi olan dizge de yalnız orada durabilir (`npm run boundaries`). RLS politikaları kimliği `core.current_user_id()` ve `core.current_role_id()` ile okur; kimlik yoksa hiçbir satır görünmez.
+**Uygulama (TASK-0101, 2026-09-22, D-254):** sürücü `pg`, tipli sorgu kurucu Kysely. Genel giriş kapısı `src/platform/db` içindeki `runAsUser`'dır: işlemi açar, kullanıcı kimliğini ve etkin rolü işlem yerel ayar olarak parametreyle yazar, işi aynı bağlantıda çalıştırır; hata olursa geri alır, geri alma da başarısızsa bağlantıyı havuza döndürmeden yok eder. Havuz ve ham istemci dışa verilmez. `pg`, `kysely` ve `@/platform/db` yalnız `modules/<kod>/data/` içinden içe aktarılabilir (ESLint); SQL cümlesi olan dizge de yalnız orada durabilir (`npm run boundaries`). RLS politikaları kimliği `core.current_user_id()` ve `core.current_role_id()` ile okur; kimlik yoksa hiçbir satır görünmez.
 
 ## 3. Arama (D-239)
 
@@ -78,3 +78,7 @@ Kurallar:
 - PostgreSQL tam metin araması, Türkçe ve yazım yakınlığıyla yeterli mi (D-239)?
 - Sunucuda üretilen PDF, Türkçe karakter ve tablo düzeniyle basılabilir kalitede mi?
 - TCMB kuru her iş günü güvenilir alınabiliyor mu, alınamadığında akış doğru davranıyor mu?
+
+### Arama isteğinin yürütülmesi (TASK-0110, 0025)
+
+`runSearchAsUser`, aynı gizli uygulama havuzuyla yalnız sabit palet sorgusunu yürütür: `BEGIN READ ONLY` ve işlem-yerel 15 saniye sınırı → parametreli `core.search_request` → COMMIT. İşlev SECURITY INVOKER'dır, yalnız `geoges_app` çağırabilir; kullanıcı ve etkin rolü işlem yerel kurduktan sonra mevcut RLS'li paleti çağırır. Dört ağ turu üçe iner. Kimlik oturum doğrulamasından gelir; ham havuz/istemci dışa verilmez. Hata ve iptal geri alınır, geri alma başarısızsa bağlantı yok edilir. Genel yazma işlemleri `runAsUser` kullanmaya devam eder.

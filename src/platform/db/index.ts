@@ -4,11 +4,12 @@ import { Pool } from "pg";
 
 import { readDatabaseConfig } from "./database-config";
 import { createRunAsUser, type ClientPool } from "./run-as-user";
+import { createRunSearchAsUser } from "./run-search-as-user";
 
 /**
  * Database access for request code (TASK-0101, ADR-015, PORTS_AND_SERVICES section 2).
  *
- * The only way in is `runAsUser`: the pool and raw client are not exported, so no code path can
+ * Entry points require an identity: the pool and raw client are not exported, so no code path can
  * query without an identity. Module data layers (`modules/<code>/data/`) call it with their own
  * table types; SQL lives only there. The admin connection is not reachable from here at all.
  */
@@ -25,3 +26,4 @@ function pool(): ClientPool {
 }
 
 export const runAsUser = createRunAsUser({ connect: () => pool().connect() });
+export const runSearchAsUser = createRunSearchAsUser({ connect: () => pool().connect() });

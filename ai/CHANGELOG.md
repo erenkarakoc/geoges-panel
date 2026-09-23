@@ -1074,3 +1074,8 @@
 ## 2026-09-23 — Task overlay dismissal across screen sizes
 
 - Keep the closing Drawer/Dialog mounted when the screen crosses the mobile breakpoint, so its completion callback can return from the intercepted route. Verified mobile dismissal with and without immediate desktop resize; no task created. Search continuation ad35f0b passed CI 35808126517, including the full database rollback/reapply cycle.
+
+## 2026-09-23 — Search request network overhead
+
+- TASK-0110, migration 0025: fixed SECURITY INVOKER search request binds identity inside the palette call. A read-only transaction and 15s timeout are established first; commit/rollback identity cleanup remains mandatory. Network trips reduced from four to three; general write access unchanged.
+- Same 56 synthetic rows / 20 warm requests: p95 258 ms, max 259 ms (previously 348/355). This is not production-scale acceptance. Search DB suite 19/19 and 273 unit tests passed; explicit connection reuse, cancellation cleanup and wrong-role rejection covered.

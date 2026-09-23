@@ -73,3 +73,7 @@ EXPLAIN ANALYZE: görünür türler 81,861 → 4,053 ms; paletin tamamı 628,884
 Tarayıcı kontrolü: oturum açıldıktan sonra masaüstünde arama ve footer; 390×844 telefon görünümünde tam ekran, uzun listenin kayması sırasında sabit kalan footer, kapatma düğmesi ve "Görev ver" kısa yolundan Drawer'ın açılması doğrulandı. Form kaydedilmeden kapatıldı. Gerçek telefon klavyesi ve henüz kayıtlı iş kaynağı olmadığı için canlı kayıt/son açılanlar grupları tarayıcıda doğrulanmadı; bu grupların veri ve servis testleri ayrı geçti.
 
 Paletten açılan görev formu kapanırken telefon/masaüstü eşiği geçildiğinde adresin geri dönmemesi ayrıca yakalandı. Görev formu kapanış boyunca aynı Dialog/Drawer türünü koruyacak şekilde düzeltildi. Sayfa yenilendikten sonra hem normal mobil kapanışta hem kapanışla aynı anda masaüstü genişliğine geçişte `/tasks/new` → önceki ekran dönüşü doğrulandı.
+
+### 0025 sonrası aynı küçük veri ölçümü
+
+Kimlik kurulumu ve palet sorgusu tek parametreli işlevde birleştirildi. İşlem yine açıkça başlatılır ve bitirilir; salt okunur çalışır ve 15 saniye sınırı arama başlamadan kurulur. Dört ağ turunun üçe inmesiyle aynı 56 kayıt/20 sıcak örnekte p95 **258 ms**, en yüksek **259 ms** ölçüldü. Bu küçük kümede 300 ms hedefi karşılandı; önceki 348 ms sonucu tarihsel ölçümdür. Üretim hacmi, çoklu kapsam ve eşzamanlı yeniden kurma kabulü açık kalır. 19 arama veritabanı testi geçti; başarı ve gerçek zaman aşımı sonrasında aynı bağlantıda kullanıcı/rol temizliği, salt okunurluk, önceden kurulan süre sınırı ve yanlış rol reddi ayrıca doğrulandı.
