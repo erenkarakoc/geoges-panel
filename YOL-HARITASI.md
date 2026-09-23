@@ -1,61 +1,101 @@
 # GEOGES Panel — Yol Haritası
 
-Son güncelleme: 2026-09-23 · Ayrıntılı ve bağlayıcı kayıt: `ai/MASTER_ROADMAP.md` ve `ai/TASKS.md`.
-Bu dosya o kayıtların okunması kolay özetidir; çelişirse asıl olan `ai/MASTER_ROADMAP.md`'dir.
+Son güncelleme: 2026-09-23. Şu an **Faz 07 — Temel yapım** içindeyiz; aktif iş **TASK-0110 — Site geneli arama**.
 
-## Fazlar
+Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının](ai/TASKS.md) ve [güncel durumun](ai/CURRENT_STATE.md) okunması kolay özetidir. Faz sırası ve kapsam için bağlayıcı kaynak `ai/MASTER_ROADMAP.md`'dir. “Tamamlandı” temel altyapının kabulünü ifade eder; sonraki fazlardaki iş ekranlarının da yapıldığı anlamına gelmez.
 
-| | Faz | Ne yapılır | Durum |
-|---|---|---|---|
-| ✅ | **00** Kurulum | Depo, kural sistemi, standartlar, yapay zekâ altyapısı | bitti (2026-09-15) |
-| ✅ | **01** Gereksinimler | 26 dosya, 438 gereksinim, iş kuralları, rol-yetki matrisi, veri sınıfları | bitti (2026-09-19) |
-| ✅ | **02** Ekran tasarımı | 108 ekranın envanteri, durumları, sekiz uçtan uca akış, gezinme | bitti (2026-09-20) |
-| ✅ | **03** Sistem mimarisi | Modül sınırları, olay omurgası, iş akışı mimarisi, arama mimarisi | bitti (2026-09-20) |
-| ✅ | **04** Veritabanı mimarisi | 222 tablo, geçmiş, kapsam, satır düzeyi güvenlik, defter yapıları | bitti (2026-09-20) |
-| ✅ | **05** Altyapı | Ortamlar, CI, yedekleme, kurtarma, çalışma kitapları | bitti (2026-09-20) |
-| ✅ | **06** Doğrulama denemeleri | 17 deneme: yetki, kuyruk, R2, metin tanıma, arama, canlı sinyal | bitti (2026-09-21) |
-| 🔨 | **07** Temel yapım | Panelin altyapısı — **şu an buradayız** | devam ediyor |
-| ⬜ | **08** İş akışı motoru | Akış tanımları, sürümleme, çalıştırma, görsel tasarımcı, onay merkezi | sırada |
-| ⬜ | **09** Dilim 1 | Projeler, şantiyeler, duvarlar, günlük saha kaydı, onaylar, "niye zarardayız", sahip kokpiti, resmî günlük rapor | — |
-| ⬜ | **10** Dilim 2 | Malzeme, tartım ve sevkiyat, stok defteri, sayım, satın alma, fabrika günlüğü ve birim maliyet, fire ve hurda | — |
-| ⬜ | **11** Dilim 3 | Hakedişler, gelir-gider, cari hesaplar, nakit projeksiyonu, çoklu döviz, dönem kapanışı | — |
-| ⬜ | **12** Dilim 4 | Ekipman, amortisman, bakım, vinç günlüğü; personel dosyası, puantaj, bordro, izin | — |
-| ⬜ | **13** Dilim 5 | Müşteri adayları, ihale, teklif ve kârlılık, teklif belgeleri, maliyet geri beslemesi | — |
-| ⬜ | **14** Dilim 6 | Sözleşme yükümlülükleri, sertifikalar, İSG, uygunsuzluk, toplantılar, destek talepleri | — |
-| ⬜ | **15** Dilim 7 | Arşiv (tek pencere arama, metin tanıma), raporlama, performans ve KPI, prim, öneriler, bütçe-gerçekleşme | — |
-| ⬜ | **09R** Kayıt tipi oluşturucu | Kullanıcının kendi kayıt türünü tanımlaması (dilim 1 pilotundan sonra) | — |
-| ⬜ | **19** Canlıya geçiş | Kendi sunucumuza taşıma, güvenlik ve yük incelemesi, yedek geri yükleme tatbikatı, gerçek veri | — |
+## Tüm fazlar
 
-## Faz 07 — nerede olduğumuz
-
-| | İş | Durum |
+| Faz | Kapsam | Güncel durum |
 |---|---|---|
-| ✅ | CI hattı (TASK-0100) | bitti |
-| ✅ | Veri erişimi, göçler, kısıtlı çalışma rolü (TASK-0101) | bitti |
-| ✅ | Yetki: kapsamlı roller, hiyerarşi, vekâlet, görünürlük (TASK-0102) | bitti |
-| ✅ | Denetim kaydı ve kayıt geçmişi (TASK-0103) | bitti |
-| ✅ | Olay kuyruğu, iş kuyruğu, zamanlayıcı (TASK-0104) | bitti |
-| ✅ | Kataloglar, tarihli kurallar, özel alanlar (TASK-0105) | bitti |
-| ✅ | Döviz kuru ve iş günü takvimi (TASK-0106) | bitti |
-| ✅ | Belgeler ve depolama: R2, imzalı bağlantı, metin tanıma (TASK-0107) | bitti |
-| ✅ | Bildirim ve görev çekirdeği (TASK-0108) | bitti |
-| ✅ | Revizyon talebi çekirdeği (TASK-0109) | bitti |
-| 🔨 | Site geneli arama (TASK-0110) | dört adımın ikisi bitti |
-| 🔨 | Ana ekran ve telefon dokunma alanları (TASK-0113) | devam ediyor |
-| ⬜ | Hesap güvenliği: kurtarma kodları, kilit, oturum sonu (TASK-0112) | başlamadı |
-| ⬜ | Ekran altı işlevsel şerit (TASK-0028) | başlamadı |
-| ⬜ | **M1 — sahibin kendi makinesinde kabul turu (TASK-0111)** | Faz 07'nin kapanışı |
+| **00 — Kurulum** | Depo, proje kuralları, standartlar ve geliştirme altyapısı | ✅ Tamamlandı |
+| **01 — Gereksinimler** | 438 gereksinim, iş kuralları, rol-yetki matrisi ve veri sınıfları | ✅ Tamamlandı |
+| **02 — Ekran tasarımı** | 108 ekranın envanteri, ekran durumları, gezinme ve uçtan uca kullanıcı akışları | ✅ Tamamlandı |
+| **03 — Sistem mimarisi** | Modül sınırları, veri erişimi, olay omurgası, iş akışı ve arama mimarisi | ✅ Tamamlandı |
+| **04 — Veritabanı mimarisi** | 222 tabloluk tasarım; kayıt geçmişi, kapsam, satır güvenliği ve defterler | ✅ Tamamlandı — 222, tasarlanan tablo sayısıdır |
+| **05 — Altyapı tasarımı** | Ortamlar, CI, yedekleme, kurtarma ve işletim yönergeleri | ✅ Tamamlandı |
+| **06 — Doğrulama denemeleri** | 17 deneme: yetki, kuyruk, depolama, metin tanıma, arama, canlı sinyal ve diğer riskler | ✅ Tamamlandı |
+| **07 — Temel yapım** | Kimlik/yetki, denetim, kuyruklar, belgeler, görevler, bildirimler, tanımlar ve arama | 🔨 **Devam ediyor — şu an buradayız** |
+| **08 — İş akışı motoru** | Akış tanımları, sürümleme, çalıştırma, test, görsel tasarımcı ve onay merkezi | ⬜ Başlamadı |
+| **09 — Dilim 1** | Projeler, şantiyeler, duvarlar, günlük saha kaydı, onaylar, maliyet/zarar görünümü, sahip kokpiti ve resmî günlük rapor | ⬜ Başlamadı |
+| **09R — Kayıt tipi oluşturucu** | Kullanıcının kendi kayıt türünü, alanlarını ve bunların akış/arama bağlantısını tanımlaması | ⬜ Dilim 1 pilotundan sonra; diğer dilimleri bekletmez |
+| **10 — Dilim 2** | Malzeme, tartım, sevkiyat, stok defteri, sayım, satın alma, fabrika günlüğü, birim maliyet, galvaniz/fire ve hurda takibi | ⬜ Başlamadı |
+| **11 — Dilim 3** | Hakedişler, gelir-gider, cari hesaplar, tahsilat/ödeme, nakit projeksiyonu, çoklu döviz ve dönem kapanışı | ⬜ Başlamadı |
+| **12 — Dilim 4** | Ekipman, amortisman, bakım, vinç günlüğü; personel dosyası, puantaj, bordro ve izin | ⬜ Başlamadı |
+| **13 — Dilim 5** | Müşteri adayları, ihale, teklif/kârlılık, teklif belgeleri, ürün satışları ve maliyet geri beslemesi | ⬜ Başlamadı |
+| **14 — Dilim 6** | Sözleşme yükümlülükleri, sertifikalar, kalite/İSG, uygunsuzluk, toplantılar ve destek talepleri | ⬜ Başlamadı |
+| **15 — Dilim 7** | Arşiv ve içerik araması, raporlama, performans/KPI, prim, öneriler, strateji ve bütçe-gerçekleşme | ⬜ Başlamadı |
+| **19 — Canlıya geçiş** | Gerçek veriden önce kendi sunucusuna geçiş, güvenlik/yük incelemesi, yedekten dönüş tatbikatı, eğitim ve şirket geneli kullanım | ⬜ Başlamadı |
 
-## Kilometre taşları
+16–18 numaraları, dilimler birleştirilirken kaldırıldı; atlanan iş yok. Faz 19, mevcut atıflar bozulmasın diye numarasını koruyor.
 
-- **M0 — ilk ekranlar:** giriş, iki adımlı doğrulama ve uygulama kabuğu. Bitti (2026-09-16).
-- **M1 — yerel kabul:** sahip paneli kendi makinesine kurar, girer ve uçtan uca bir akışı gezer. Faz 07'nin sonunda.
-- **Pilot ve barındırma:** gerçek kullanıcılarla pilot ve sunucu kararı Faz 09 çıkışında.
-- **Gerçek veri:** Faz 19; öncesinde kendi sunucumuza taşınır ve KVKK kontrolü yapılır.
+## Faz 07 — Ayrıntılı durum
 
-## Panelde ne zaman ne görünür
+| Görev | İş ve teslim edilenler | Güncel durum / kalan |
+|---|---|---|
+| M0 ve erken kabuk işleri | Giriş, TOTP 2FA, parola sıfırlama, rol başlangıcı, uygulama kabuğu, tema ve gezinme | ✅ Tamamlandı; ek hesap güvenliği TASK-0112'de |
+| TASK-0099 | Modül sınırları, bağımlılık kuralları ve SQL erişim denetimi | ✅ Tamamlandı |
+| TASK-0100 | GitHub CI: kalite kontrolleri ve temiz veritabanında göç/geri dönüş testleri | ✅ Tamamlandı |
+| TASK-0101 | PostgreSQL veri erişimi, göçler, sınırlı çalışma rolü, işlem-yerel kimlik ve TLS | ✅ Tamamlandı |
+| TASK-0076 | Örnek veri/yapılandırma sıfırlama, dışa/içe aktarma ve gerçek veri kilidi | ✅ Tamamlandı |
+| TASK-0102 | Kapsamlı roller, hiyerarşi, kişisel istisnalar, etkin rol, vekâlet ve görünürlük | ✅ Tamamlandı |
+| TASK-0103 | Denetim kaydı, kayıt geçmişi ve değişiklik gerekçesi | ✅ Tamamlandı |
+| TASK-0104 | Olay kuyruğu, iş kuyruğu, zamanlayıcı, yeniden deneme ve okuma modeli altyapısı | ✅ Tamamlandı |
+| TASK-0105 | Kataloglar, tarihli kurallar ve özel alanlar | ✅ Tamamlandı; aynı zaman damgalı düzeltme sıralaması 0026 ile ayrıca düzeltildi |
+| TASK-0106 | TCMB döviz kuru, iş günü takvimi ve tatiller | ✅ Tamamlandı |
+| TASK-0107 | R2 depolama, imzalı bağlantılar, sürdürülebilir yükleme, metin tanıma ve toplu indirme | ✅ Temel altyapı tamamlandı; arşiv içerik araması Faz 15'te |
+| TASK-0108 | Görevler, görev verme formu, bildirim çekmecesi, canlı sayaç, telefon bildirimi, günlük özet ve gecikme uyarıları | ✅ Çekirdek tamamlandı; gerçek telefonda push kabulü açık, e-posta sağlayıcısı seçilene kadar özet dosyaya yazılıyor |
+| TASK-0109 | Revizyon talebi, eski/yeni karşılaştırması, gerekçeli karar, düzeltme hareketi ve bildirim bağlantısı | ✅ Çekirdek tamamlandı; iş kaydı uygulayıcıları ilgili modül dilimlerinde |
+| TASK-0110 | Site geneli arama: yetkili sonuçlar, Türkçe eşleşme, öneri, tür grupları, son açılanlar ve yeniden dizinleme | 🔨 Devam ediyor — ayrıntı aşağıda |
+| TASK-0113 | Ana ekrana ekleme, uygulama simgeleri, mobil dokunma alanları ve görev kartları | 🔨 Yapıldı; HTTPS üzerinden kurulum ve gerçek cihaz kabulü bekliyor |
+| TASK-0028 | Sayfaya göre eylem/kaydetme düğmeleri taşıyan sabit alt şerit | ⬜ Tasarım hazır, uygulamaya hazır |
+| TASK-0112 | Tek kullanımlık 2FA kurtarma kodları, giriş kilidi, hareketsizlik/oturum sonu ve ikinci faktör sıfırlama | ⬜ Başlamadı |
+| TASK-0111 — M1 | Sahibin kendi makinesinde kurulum, 2FA ile giriş ve uçtan uca kabul turu | ⬜ Faz 07'nin kapanış kabulü |
 
-- **Bugün:** giriş ve iki adımlı doğrulama, uygulama kabuğu, "Bugün" ekranı, görevler, görev ver, bildirim çekmecesi, denetim kayıtları, revizyon talepleri.
-- **Faz 07 sonunda:** arama, telefon bildirimi ve ana ekrana ekleme, kabul turu.
-- **Faz 08:** akış tasarımcısı ve onay merkezi.
-- **Faz 09'dan itibaren:** asıl iş ekranları — şantiye günlüğü, stok, hakediş, personel ve raporlar dilim dilim.
+“Bugün” ekranının adlandırması (TASK-0043) ve odak/erişilebilirlik düzeltmeleri (TASK-0054) de tamamlandı.
+
+### Aktif iş: TASK-0110 — Arama
+
+| Parça | Güncel durum |
+|---|---|
+| Yetki, kapsam ve veri sınıfına göre arama | Kuruldu; yetkisiz kayıtların sonuç, sayı ve öneriye sızmaması test edildi |
+| Türkçe harf eşleştirme, bütün sözcüklerle eşleşme ve yazım önerisi | Kuruldu ve test edildi |
+| Sözcük yardımcıları ve olaylarla güncelleme | Kuruldu; kayıt taşıma, silme ve eski olay senaryoları test edildi |
+| Tür başına beş sonuç ve “Tümünü gör” | Kuruldu; bir türün diğerinin sonuçlarını bastırmaması test edildi |
+| Son açılanlar | Yalnız adresler kullanıcıya göre oturumda tutuluyor; başlıklar güncel yetkiyle yeniden okunuyor |
+| Mobil palet | Tam ekran, kayan liste, sabit COSS footer ve kapatma düğmesi 390 px tarayıcı görünümünde doğrulandı |
+| Kaynaktan yeniden dizinleme | Geçici veri kümesi, karşılaştırma, tek işlemde yayın ve hata halinde geri dönüş kuruldu |
+| Küçük veri kümesinde hız | 56 sentetik kayıt / 20 sıcak istekte p95 **258 ms**, en yüksek **259 ms**; önceki p95 348 ms idi. Bu ölçüm 300 ms hedefinin altında |
+| Çoklu kapsam ve normalleştirme sürümü | Tasarımla eşitleme bekliyor |
+| Büyük veri ve eşzamanlılık | Üretim hacmine yakın hız ve yeniden dizinleme sırasında kaynak değişimi kabulü bekliyor |
+| Gerçek kaynaklarla tarayıcı kabulü | Modüller kendi dilimlerinde arama kaynağını kaydedecek; gerçek telefon klavyesiyle kabul de açık |
+
+**Arama henüz tamamlandı sayılmıyor.** Küçük veri kümesindeki hız sonucu, büyük veri kabulünün yerine geçmiyor.
+
+### Son doğrulamalar
+
+- 273 birim testi, 19 arama veritabanı testi ve üretim derlemesi geçti.
+- 0025 ile arama için ağ turu dörtten üçe indi; RLS, salt okunur işlem, önceden kurulan 15 saniye sınırı ve hata/iptalde kimlik temizliği korundu.
+- CI, mevcut tarihli kural kodunda aynı işlemde eski düzeltmenin seçilebildiğini yakaladı. 0026 düzeltmesiyle ters UUID sırası kullanılarak da son düzeltmenin seçildiği ve 10 ADM veritabanı testinin geçtiği doğrulandı.
+- `c62f80e` için CI **35809769758 geçti**: temiz kurulum, testler, tüm göçleri geri alma ve yeniden uygulama doğrulandı.
+
+## Buradan sonraki sıra
+
+1. **TASK-0110:** çoklu kapsam, normalleştirme sürümü ve büyük veri/eşzamanlılık kabulünü tamamlamak.
+2. **TASK-0028:** ekran altı işlevsel şeridi kurmak.
+3. **TASK-0112:** kalan hesap güvenliği özelliklerini kurmak.
+4. **TASK-0111 — M1:** yerel kabul turu ve Faz 07 çıkış kontrolü.
+5. **Faz 08:** iş akışı motoru ve görsel tasarımcı.
+
+**Paralel kabul:** TASK-0113 mobil kurulum doğrulaması HTTPS/gerçek cihaz koşullarını bekliyor. Barındırma bağımlılığı DEF-008 olarak açık; barındırma kararı Faz 09 çıkışına bağlı.
+
+## Kilometre taşları ve veri kullanımı
+
+| Aşama | Ne zaman / koşul |
+|---|---|
+| **M0 — İlk ekranlar** | Tamamlandı: giriş, iki adımlı doğrulama ve uygulama kabuğu |
+| **M1 — Yerel kabul** | Faz 07 sonunda; sahibi kendi makinesinde tam akışı yürütür, geri bildirim kayda girer |
+| **Pilot ve barındırma** | Faz 09 çıkışında sunucu/dağıtım kararı ve pilot kullanıcılar belirlenir; pilot örnek veriyle yapılır |
+| **Gerçek şirket verisi** | Faz 19'da; kendi sunucusuna geçiş, KVKK kontrolü, yedekten dönüş ve sahip onayı sonrasında |
+
+İş ekranları Faz 09'dan başlayarak dilim dilim gelir. Mevcut arama ve revizyon altyapısına gerçek kayıt türleri, o kayıtların sahibi modüller yapılırken bağlanır.

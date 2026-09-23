@@ -1084,3 +1084,7 @@
 
 - Search CI 35809458042 exposed a pre-existing ADM failure after rollback/reapply: same-transaction rule timestamps tie, and UUIDv7 random bits can select the older correction.
 - Migration 0026 gives new rule rows an owned insertion sequence used after effective/creation dates. Legacy rows keep NULL and their previous UUID tie order. Configuration transfer already preserves columns and advances owned sequences. Ten ADM DB tests pass, including deliberately reversed UUIDs at one transaction timestamp; no sleeps or retries hide the failure.
+
+## 2026-09-23 — Owner-facing roadmap refresh
+
+- Updated root YOL-HARITASI.md from MASTER_ROADMAP/TASKS: all phases including 09R in the correct position, complete Phase 07 foundation list, search implementation vs. outstanding acceptance, mobile hosting dependency, and latest 258ms small-fixture latency evidence. TASK-0110 remains IMPLEMENTING. Code fix c62f80e passed CI 35809769758 including full rollback/reapply.
