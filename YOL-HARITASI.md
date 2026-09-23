@@ -65,8 +65,9 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 | Son açılanlar | Yalnız adresler kullanıcıya göre oturumda tutuluyor; başlıklar güncel yetkiyle yeniden okunuyor |
 | Mobil palet | Tam ekran, kayan liste, sabit COSS footer ve kapatma düğmesi 390 px tarayıcı görünümünde doğrulandı |
 | Kaynaktan yeniden dizinleme | Geçici veri kümesi, karşılaştırma, tek işlemde yayın ve hata halinde geri dönüş kuruldu |
-| Küçük veri kümesinde hız | 56 sentetik kayıt / 20 sıcak istekte p95 **274 ms**, en yüksek **278 ms** (son ölçüm); önceki ölçümler 255/258 ms, 0025 öncesi p95 348 ms idi. Bu ölçüm 300 ms hedefinin altında |
+| Küçük veri kümesinde hız | 56 sentetik kayıt / 20 sıcak istekte p95 **263 ms**, en yüksek **264 ms** (son ölçüm); önceki ölçümler 274/255/258 ms, 0025 öncesi p95 348 ms idi. Bu ölçüm 300 ms hedefinin altında |
 | Normalleştirme sürümü | Satır ve sözcük eşlemelerine eklendi; görünür eski sürümde kontrollü hata, yazma/yeniden kurma ve sürüm denetimi test edildi. Kova/sözlük sürüm düzeni ve tam yardımcı tutarlılığı açık |
+| Yayın öncesi yardımcı bütünlüğü | 0028 ile eşlemeler, kova dizileri ve sözcük sayıları doğrudan arama metninden türetilip karşılaştırılıyor; bozuk yayın reddediliyor. İşletim komutu aynı denetimi kullanıyor. Her kullanıcı sorgusundaki tam kontrol ayrıca açık |
 | Çoklu kapsam | OQ-034 yanıtı bekleniyor: ortak kaydı görmek için ilgili şantiyelerden birine mi, tümüne mi yetki gerekecek? |
 | Eşzamanlı kaynak değişiklikleri | Gerçek kaynak ve olay kuyruğuyla commit/geri alma, taşıma/silme, tarama sırasının gerisine ekleme ve tekrar teslim sınandı. Yakalanan değişiklikler kuyruk işleyicisi çalışmadan yayın adayına yansıyor; hata eski sürümü koruyor |
 | Yayın öncesi olay yakalama | Uygulandı ve küçük veri kümesinde doğrulandı. Geç tamamlanan düşük numaralı olaylar da yakalanıyor; belirlenen sınırdan sonrakiler normal kuyruktan işleniyor |
@@ -76,6 +77,8 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 **Arama henüz tamamlandı sayılmıyor.** Küçük veri kümesindeki hız sonucu, büyük veri kabulünün yerine geçmiyor.
 
 ### Son doğrulamalar
+
+- 0028 yardımcı bütünlüğü göçü test projesine uygulandı. **51 arama testi**, **273 birim testi** ve üretim derlemesi geçti; 19 yeni test kasıtlı bozulma, yetki ve geri dönüş senaryolarını kapsıyor. Salt okunur işletim kontrolü testlerden sonra sıfır uyuşmazlık raporladı. Bu adımın CI sonucu bekleniyor.
 
 - Yayın öncesi yakalama için arama senaryoları **32** oldu; yerelde toplu ve hedefli koşularda geçti. **273 birim testi** ve üretim derlemesi geçti. İlk CI turunun geri dönüş sonrası testinde olay numaralarının metin sırasıyla okunması hatası yakalandı ve düzeltildi; yeni sınır testi yerelde geçti. Düzeltme `73116da` ile gönderildi; CI **35832578935 yeşil**: 32 arama testi dahil **172 veritabanı testi**, tam geri dönüş/yeniden kurulum öncesi ve sonrasında geçti. CI kimlik bilgileri olmayan 2 canlı R2 testi atlandı. Yeni veritabanı göçü yok.
 

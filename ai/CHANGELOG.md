@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-23 — Independent search helper integrity
+
+- TASK-0110: 0028 adds a worker-only invoker integrity function, deriving expected words and helpers directly from indexed text. It detects mutually consistent corruption across helpers, posting visibility/version drift, exact bucket differences, vocabulary counts and row normalization drift. No application permission or search-query change.
+- Publication refuses any mismatch before updating version/audit; the read-only CLI shares the same SQL and reports only bigint counts under a 60-second limit. No business data or helper table is removed by the down migration.
+- Verification: 51 search DB tests including 19 new fault/permission/rollback cases, 273 unit tests and production build pass. CLI after cleanup: zero indexed rows and zero mismatches. Warm small-fixture p95 263 ms/max 264 ms. CI pending.
+- Review: operational full scan, not user-visible global diagnostics; no definer privilege escalation or raw records logged. Bucket/vocabulary version partition, visible-only read-time checks, production-scale acceptance and OQ-034 remain open.
+
 ## 2026-09-23 — Search pre-publication catch-up
 
 - TASK-0110: capture newly visible source events after scanning, refresh staged projections and publish atomically. Compare visible ID sets rather than relying on max(id), so an earlier allocated event that commits late is included. Copy historical IDs only; fetch payloads only for changed events.

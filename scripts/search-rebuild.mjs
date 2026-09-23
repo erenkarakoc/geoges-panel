@@ -14,40 +14,29 @@ import { connectAdmin, safeError } from "./db-admin.mjs";
 
 const CHECK_ONLY = process.argv.includes("--check");
 
-/** Buckets that do not hold exactly the records their postings say they should. */
-const DISAGREEMENTS = `
-  with wanted as (
-    select p.word, r.record_type, core.search_scope_key(r.site_id, r.project_id) as scope_key,
-           r.data_class, array_agg(distinct r.search_document_id order by r.search_document_id) as ids
-      from core.search_posting p
-      join core.search_row r on r.id = p.search_row_id
-     group by 1, 2, 3, 4
-  )
-  select count(*)::int as n
-    from wanted w
-    full join core.search_word_bucket b
-      on b.word = w.word and b.record_type = w.record_type and b.scope_key = w.scope_key
-     and b.data_class = w.data_class
-   where w.ids is distinct from b.search_document_ids`;
-
 async function main() {
   const client = await connectAdmin();
   try {
-    const before = await client.query(DISAGREEMENTS);
-    const rows = await client.query("select count(*)::int as n from core.search_row");
-    console.log(`arama satırı: ${rows.rows[0].n}`);
-    console.log(`uyuşmayan kova: ${before.rows[0].n}`);
-    const versions = await client.query(`select
-      (select count(*) from core.search_row
-        where normalization_version <> core.search_normalization_version()) +
-      (select count(*) from core.search_posting p join core.search_row r on r.id = p.search_row_id
-        where p.normalization_version <> r.normalization_version
-          or p.normalization_version <> core.search_normalization_version()
-          or p.projection_version <> r.projection_version) as n`);
-    console.log(`uyuşmayan sürüm: ${versions.rows[0].n}`);
+    await client.query("begin read only");
+    await client.query("set local statement_timeout = '60s'");
+    const result = await client.query("select * from core.search_integrity()");
+    const report = result.rows[0];
+    await client.query("commit");
+    console.log(`arama satırı: ${report.search_rows}`);
+    console.log(`uyuşmayan satır: ${report.row_mismatches}`);
+    console.log(`uyuşmayan eşleme: ${report.posting_mismatches}`);
+    console.log(`uyuşmayan kova: ${report.bucket_mismatches}`);
+    console.log(`uyuşmayan sözlük girdisi: ${report.vocabulary_mismatches}`);
 
     if (CHECK_ONLY) {
-      process.exitCode = before.rows[0].n > 0 || Number(versions.rows[0].n) > 0 ? 1 : 0;
+      process.exitCode = [
+        report.row_mismatches,
+        report.posting_mismatches,
+        report.bucket_mismatches,
+        report.vocabulary_mismatches,
+      ].some((count) => BigInt(count) !== 0n)
+        ? 1
+        : 0;
       return;
     }
 
@@ -59,11 +48,11 @@ async function main() {
       process.exitCode = 1;
       return;
     }
-    const result = await client.query(
+    const scheduled = await client.query(
       "select core.schedule_job('core.search-rebuild', now(), $1, '{}'::jsonb) as id",
       [`search-rebuild:${crypto.randomUUID()}`],
     );
-    console.log(`kaynaklardan yeniden kurma kuyruğa alındı: ${result.rows[0].id}`);
+    console.log(`kaynaklardan yeniden kurma kuyruğa alındı: ${scheduled.rows[0].id}`);
     console.log(
       "Tamamlanma ve hata durumu: npm run jobs:status. Kuyruğa alınması, tamamlandığı anlamına gelmez.",
     );

@@ -1,6 +1,7 @@
 import { sql } from "kysely";
 import type { SystemDb } from "@/platform/jobs/types";
 import type { SearchProjection } from "@/platform/search/search";
+import { assertSearchIntegrity } from "./search-integrity";
 
 /** All functions run on the worker's existing transaction: readers see old data until commit. */
 export async function beginSearchRebuild(db: SystemDb, eventCodes: readonly string[]) {
@@ -144,11 +145,7 @@ export async function publishSearchStage(
         core.search_normalization_version())`.execute(db);
   const difference = result.rows[0].difference;
   if (difference) throw new Error("Search publication differs from the staged sources");
-  const metadata = await sql<{ n: number }>`select count(*)::int as n
-    from core.search_posting p join core.search_row r on r.id = p.search_row_id
-    where p.normalization_version <> r.normalization_version
-      or p.projection_version <> r.projection_version`.execute(db);
-  if (metadata.rows[0].n) throw new Error("Search posting versions differ from their source rows");
+  await assertSearchIntegrity(db);
   await sql`update core.read_model set version = ${version}, rebuilt_at = now(), last_difference = 0
     where name = 'core.search'`.execute(db);
   await sql`select aud.record_event('read_model.rebuilt', 'core', 'read_model', null,

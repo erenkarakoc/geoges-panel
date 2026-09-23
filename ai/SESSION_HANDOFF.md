@@ -4,7 +4,19 @@ Last updated: 2026-09-23
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — pre-publication source catch-up
+## Latest continuation — independent helper integrity (0028)
+
+0028_search_integrity is applied to the test project. It adds core.search_integrity(), a stable SECURITY INVOKER full-scan operational function. One statement derives expected words from search_row.search_text and independently compares posting membership plus scope/owner/class/type/normalization/projection metadata, exact sorted bucket IDs, and vocabulary counts. It also checks indexed-text folding and the current row normalizer version. Only bigint category counts are returned; no titles/IDs. It deliberately does not derive expected buckets/vocabulary from possibly corrupt postings.
+
+PUBLIC/geoges_app cannot execute; only geoges_worker receives a grant. row_security=off does not elevate privileges: it prevents a restricted caller from silently obtaining partial 'healthy' counts. Actual worker invocation and app refusal are tested; anon/authenticated have no execute privilege. Existing user search/RLS paths are unchanged. Rebuild calls the shared assertion after source-to-stage comparison and helper generation, before updating read-model version/audit. The CLI calls the same SQL in READ ONLY with a pre-established 60-second timeout; --check exits 1 on any mismatch without scheduling a job. Whole-index scanning remains an operational cost to measure at scale, never added to each user request.
+
+Validation: all 51 search database tests passed together (23 existing + 9 concurrency + 19 new integrity scenarios), 273 unit tests and production build pass. New cases cover mutually consistent missing/invented words, each posting metadata field, reversed/duplicate/missing/orphan bucket IDs, incorrect vocabulary counts, old normalization/unfolded text, no-word rows, privilege boundaries, migration down/up, and trigger-induced bad helper output that rejects publication and preserves rows after rollback. Every corruption is uncommitted and rolled back. The initial test assumed Supabase's admin could SET ROLE geoges_worker; it cannot, so the publication fault injection uses its admin transaction, while worker privilege is tested on the real worker connection separately. CLI after cleanup reports zero search rows and all mismatch categories zero. Small-fixture warm p95 263 ms/max 264 ms (56 rows, 20 warm samples). CI pending.
+
+Distinct self-review: global counts are operational only, no new application grants, no business-table access or notifications, exact arrays detect duplicates/order as well as membership, and expected helpers are independently reconstructed. The indexed row is the reference; truth of business data still belongs to the module projector. Existing migrations through 0027 unchanged; 0028 down removes only the function, so revert the new application/CLI call first if rolling it back. SQL tests use fixed synthetic identifiers; triggers/functions created for fault injection are rolled back.
+
+Next: bucket/vocabulary version partition and visibility-safe read-time mismatch handling remain open, as do production-scale timing/storage and real-source/phone browser acceptance. OQ-034 still awaits an explicit ANY/ALL owner answer; 'continue' is not that answer. No scope silently closed or deferred. Root YOL-HARITASI.md updated; TASK-0110 remains IMPLEMENTING.
+
+## Previous continuation — pre-publication source catch-up
 
 TASK-0110 now remembers initially visible matching outbox IDs in a transaction-local temporary table, scans source projections, and captures the newly visible ID set in one SQL statement. It refreshes each affected staged record through its owning projector before atomic publication, adjusting the expected count for additions/removals. Live indexing and catch-up share the record-id parser. A maximum ID is audit evidence only, never the lower-bound filter: sequence allocation is not commit order. Historical payloads are not materialized; only changed-event payloads are copied. No permanent transaction IDs/xmin, schema migration, new permission or business rule.
 
