@@ -68,9 +68,9 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 | Son açılanlar | Yalnız adresler kullanıcıya göre oturumda tutuluyor; başlıklar güncel yetkiyle yeniden okunuyor |
 | Mobil palet | Tam ekran, kayan liste, sabit COSS footer ve kapatma düğmesi 390 px tarayıcı görünümünde doğrulandı |
 | Kaynaktan yeniden dizinleme | Geçici veri kümesi, karşılaştırma, tek işlemde yayın ve hata halinde geri dönüş kuruldu |
-| Küçük veri kümesinde hız | 56 sentetik kayıt / 20 sıcak istekte p95 **271 ms**, en yüksek **272 ms** (son ölçüm); önceki ölçümler 263/274/255/258 ms, 0025 öncesi p95 348 ms idi. Bu ölçüm 300 ms hedefinin altında |
+| Küçük veri kümesinde hız | 56 sentetik kayıt / 20 sıcak istekte p95 **279 ms**, en yüksek **284 ms** (son ölçüm; 0030 okuma anı denetimi bu ölçümde yaklaşık 10 ms tutuyor); önceki ölçümler 271/263/274/255/258 ms, 0025 öncesi p95 348 ms idi. Bu ölçüm 300 ms hedefinin altında |
 | Normalleştirme sürümü | Satır, sözcük eşlemeleri, kova ve sözlüğün tamamına eklendi (0029); yazma yalnız yürürlükteki sürüme, okuma yalnız yürürlükteki sürümden yapılıyor ve bütünlük denetimi sürüm bazında karşılaştırıyor. Görünür eski sürümde kontrollü hata korunuyor. Kullanıcı sorgusunda görünürlükle sınırlı tam yardımcı tutarlılığı açık |
-| Yayın öncesi yardımcı bütünlüğü | 0028 ile eşlemeler, kova dizileri ve sözcük sayıları doğrudan arama metninden türetilip karşılaştırılıyor; bozuk yayın reddediliyor. İşletim komutu aynı denetimi kullanıyor. Her kullanıcı sorgusundaki tam kontrol ayrıca açık |
+| Yardımcı bütünlüğü | 0028 ile eşlemeler, kova dizileri ve sözcük sayıları doğrudan arama metninden türetilip karşılaştırılıyor; bozuk yayın reddediliyor ve işletim komutu aynı denetimi kullanıyor. 0030 ile kullanıcı sorgusunda da sınırlı bir denetim var: dönen kayıtlar için kova üyeliği kontrol ediliyor, cevap değişmiyor, kullanıcıya bir şey gösterilmiyor. Var olup bir kimliği düşmüş kovanın kaydı gizlemesi bu yolla görülemez; o yön tam taramanın işi olarak kalıyor |
 | Çoklu kapsam | OQ-034 yanıtı bekleniyor: ortak kaydı görmek için ilgili şantiyelerden birine mi, tümüne mi yetki gerekecek? |
 | Eşzamanlı kaynak değişiklikleri | Gerçek kaynak ve olay kuyruğuyla commit/geri alma, taşıma/silme, tarama sırasının gerisine ekleme ve tekrar teslim sınandı. Yakalanan değişiklikler kuyruk işleyicisi çalışmadan yayın adayına yansıyor; hata eski sürümü koruyor |
 | Yayın öncesi olay yakalama | Uygulandı ve küçük veri kümesinde doğrulandı. Geç tamamlanan düşük numaralı olaylar da yakalanıyor; belirlenen sınırdan sonrakiler normal kuyruktan işleniyor |
@@ -80,6 +80,8 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 **Arama henüz tamamlandı sayılmıyor.** Küçük veri kümesindeki hız sonucu, büyük veri kabulünün yerine geçmiyor.
 
 ### Son doğrulamalar
+
+- 0030 ile arama, cevap verirken yardımcılarını da denetliyor: dönen kayıtlar için (tür başına en çok altı) kova üyeliği anahtar okumasıyla kontrol ediliyor. **61 arama testi** (5 yeni), **15 dosyada 203 veritabanı testi**, **273 birim testi**, biçim ve derleme yerelde geçti; göçün down/up turu cevabı değiştirmiyor. Bu adımın CI sonucu bekleniyor.
 
 - 0029 ile kova ve sözlük de normalleştirme sürümünü taşıyor. **56 arama testi** (5 yeni sürüm senaryosu), **15 dosyada 198 veritabanı testi**, **273 birim testi**, biçim ve derleme yerelde geçti; göçün down/up turu sonrasında kova içeriği ile bütünlük raporu birebir aynı kaldı. Değişiklik `0b82633` ile gönderildi; CI **35862720223 yeşil**: 56 arama testi dahil **196 veritabanı testi**, tam geri dönüş/yeniden kurulum öncesinde ve sonrasında geçti. Kimlik bilgisi olmayan 2 canlı R2 testi CI'da atlandı.
 

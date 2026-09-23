@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-09-23 — The search checks its helpers while it answers
+
+- TASK-0110: 0030 gives `core.search_palette` a bounded check. For the records it is about to return — at most six per type — it asks whether each one is in the bucket of every word of the query, for its own type, place, data class and the normalizer in force, and returns one `helper_mismatch` flag for the whole answer. Each question is a key lookup; there is no scan, and `core.search_records` keeps its shape so no earlier migration or caller is touched.
+- A record a person sees only because they own it is not judged: the bucket is kept by place and class, they have no broad access to it, so its absence from their view proves nothing.
+- The answer never changes — the postings decide, as before. The flag is an operational signal: the data layer writes one server-side line with no query text, title or id in it, and nothing about the index reaches the browser.
+- Stated limit, not closed by this step: a bucket that still exists but has lost one id hides that record, and a row that is not returned cannot be checked. That direction stays with `core.search_integrity()` and the publication gate.
+- Verification: 61 search DB tests (5 new), 203 database tests across 15 files, 273 unit tests, format and build pass; the 0030 down/up round trip leaves the answer identical. Warm smoke on the 56-row fixture 279 ms p95 / 284 ms max, against 271/272 before the check — roughly 10 ms for the check on this fixture, still inside the 300 ms target. CI pending.
+- Also fixed: the search suite's cleanup now removes the daily digest's empty placeholder rows for its own throw-away users, the way the TSK suite already does. A jobs worker running against the same database writes one for every user every five minutes, which held the test identities in place and failed the suite twice.
+
 ## 2026-09-23 — Product MCP server added to the plan (Phase 15M)
 
 - The owner asked for an MCP server for the finished product and answered its two open questions: panel data may reach a cloud model, and the channel is open to everything the asking person is authorised for. Recorded as ADR-019 (Önerildi) and D-267, with Phase 15M in the master roadmap, TASK-0114 in the task register and a row in the root roadmap.

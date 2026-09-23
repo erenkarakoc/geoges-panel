@@ -4,7 +4,19 @@ Last updated: 2026-09-23
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — product MCP server written into the plan (ADR-019)
+## Latest continuation — the search checks its helpers while it answers (0030)
+
+0030_search_read_time_check is applied to the test project. Only core.search_palette changes: for the records it is about to return, at most six per type, it asks whether each one is in the bucket of every word of the query, for its own record type, scope key, data class and the normalizer in force, and returns one helper_mismatch flag for the whole answer. The words and the access snapshot are settled once before the per-type loop, so the check adds no repeated work; each question is a key lookup on the bucket primary key, never a scan. core.search_records keeps its eight-column shape on purpose — changing its return type broke the 0027 and 0029 down/up tests, because an earlier down file cannot create-or-replace a function whose return type a later migration changed, so the first attempt was rewritten this way.
+
+A record a person sees only because they own it is not judged: core.search_access_allows gates the check exactly as it gates the narrowing, because that bucket is kept by place and class and is unreadable to them, so its absence proves nothing. The answer never changes; the postings decide as they always did. The flag is operational only: search-store writes one server-side warning with no query text, title or id, and nothing about the index reaches the browser.
+
+Stated limit, recorded rather than glossed: a bucket that still exists but has lost one id hides that record from the answer, and a row that is not returned cannot be checked. That direction cannot be caught without running the query unnarrowed, which is what the narrowing exists to avoid, so it stays with core.search_integrity() and the publication gate. What this does catch is a word whose readable bucket is missing entirely: the narrowing is skipped, the postings still answer, and every returned row reports the gap.
+
+Validation: 61 search DB tests (5 new), 203 DB tests across 15 files, 273 unit tests, prettier and production build pass. New cases: healthy index silent, a deleted bucket flagged while the answer stays whole, an own-record hit not judged and raising no false alarm, a foreign-generation bucket ignored, and a 0030 down/up round trip after which the answer is identical. Warm smoke 56 rows/20 samples p95 279 ms / max 284 ms, against 271/272 before the check on the same fixture: roughly 10 ms for the check, inside the 300 ms target but with less headroom. Small-fixture only; no production-scale claim. CI pending.
+
+Environment fix carried into the suite: a jobs worker running against the same development database runs tsk.daily-digest every five minutes and writes an empty placeholder digest for every user, which held the search suite's throw-away identities in place and failed its cleanup twice. search.dbtest.ts now deletes those placeholder rows for its own users before deleting them, exactly as tsk.dbtest.ts already did. Every other suite that creates users has the same exposure and was left alone; it is worth a separate pass.
+
+## Previous continuation — product MCP server written into the plan (ADR-019)
 
 The owner asked for an MCP server for the finished product, not for development tooling, and answered its two blocking questions on 2026-09-23: panel data may reach a cloud model, and the channel is open to everything the asking person is authorised for, with no separate data-class list. Written into the plan as ADR-019 (status Önerildi), D-267, Phase 15M in ai/MASTER_ROADMAP.md, TASK-0114 in ai/TASKS.md and a row plus a paragraph in the root YOL-HARITASI.md. Nothing is built; nothing in Phase 07 changes.
 

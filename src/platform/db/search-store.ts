@@ -50,7 +50,16 @@ export async function searchPalette(
     hits: HitRow[];
     corrected: string | null;
     failed_types: string[];
+    helper_mismatch: boolean;
   }>(identity, query, types);
+  // A bounded check the database ran on the rows it returned (0030): a helper disagreed about a
+  // record this person may see. The answer itself is sound — the postings decide — so nothing
+  // is said to the person and nothing about the index reaches the browser. One line here, with
+  // no query text, title or id in it, is what tells an operator to look.
+  if (answer.helper_mismatch)
+    console.warn(
+      "[arama] yardımcı yapı uyuşmuyor; `npm run search:rebuild -- --check` çalıştırın.",
+    );
   return {
     hits: answer.hits.map(toHit),
     corrected: answer.corrected,

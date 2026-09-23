@@ -136,6 +136,9 @@ async function cleanUp() {
       rows.filter((r) => r.t === table).map((r) => r.id),
     ]);
   }
+  // A jobs worker may be running against the same database: the daily digest writes an empty
+  // placeholder for every user, and that row then holds these throw-away identities in place.
+  await admin.query("delete from tsk.daily_digest where user_id = any($1)", [PEOPLE]);
   await admin.query("delete from iam.role_assignment where user_id = any($1)", [PEOPLE]);
   await admin.query("delete from iam.user where id = any($1)", [PEOPLE]);
   await admin.query(
@@ -856,5 +859,111 @@ describe("helper versions (TASK-0110, D-247)", () => {
     await admin.query(migration(""));
     expect(await buckets()).toEqual(before);
     expect(await integrity()).toEqual(reportBefore);
+  });
+});
+
+describe("read-time helper check (TASK-0110, 0030)", () => {
+  const SITE_TYPE = `${P}.site`;
+  type Palette = { hits: { title: string }[]; helper_mismatch: boolean };
+  /** The answer as the palette builds it, including the operational flag the app never shows. */
+  const paletteFor = async (userId: string, query: string) => {
+    const client = await appPool.connect();
+    try {
+      await client.query("begin");
+      await client.query("select set_config('app.user_id', $1, true)", [userId]);
+      const { rows } = await client.query("select core.search_palette($1) as answer", [query]);
+      await client.query("rollback");
+      return rows[0].answer as Palette;
+    } finally {
+      client.release();
+    }
+  };
+
+  it("says nothing is wrong while the helpers agree", async () => {
+    const answer = await paletteFor(VIEWER_A, "sogut kavakli");
+    expect(answer.hits.map((hit) => hit.title)).toEqual([records[id(201)].title]);
+    expect(answer.helper_mismatch).toBe(false);
+  });
+
+  it("reports a missing bucket without taking the record out of the answer", async () => {
+    await admin.query(
+      "delete from core.search_word_bucket where word = 'kavakli' and record_type = $1",
+      [SITE_TYPE],
+    );
+    try {
+      const answer = await paletteFor(VIEWER_A, "sogut kavakli");
+      // The postings still decide, so the person's answer is whole; only the flag changes.
+      expect(answer.hits.map((hit) => hit.title)).toEqual([records[id(201)].title]);
+      expect(answer.helper_mismatch).toBe(true);
+    } finally {
+      await deliver(`${P}.record.saved`, id(201));
+    }
+    expect((await paletteFor(VIEWER_A, "sogut kavakli")).helper_mismatch).toBe(false);
+  });
+
+  it("does not judge a record the person sees only as its owner", async () => {
+    await admin.query(`
+      insert into iam.permission (code, module, name, created_from) values ('${P}.module.own', '${P}', 'Deneme: kendisi', 'seed') on conflict do nothing;
+      insert into iam.role (code, name, level) values ('T0110_OWN', 'Deneme kişisel', 10) on conflict do nothing;
+      insert into iam.role_permission (role_id, permission_id) select r.id, p.id from iam.role r, iam.permission p
+        where r.code = 'T0110_OWN' and p.code = '${P}.module.own' on conflict do nothing;
+    `);
+    await admin.query(
+      `insert into iam.role_assignment (user_id, role_id, scope_type, starts_on)
+       select $1, r.id, 'company', iam.today() - 1 from iam.role r where r.code = 'T0110_OWN'
+        and not exists (select from iam.role_assignment a where a.user_id = $1 and a.role_id = r.id)`,
+      [VIEWER_A],
+    );
+    records[id(303)] = {
+      ...records[id(202)],
+      ownerUserId: VIEWER_A,
+      text: "Söğüt kisisel kaydi",
+      title: "Kişisel Söğüt",
+    };
+    try {
+      await deliver(`${P}.record.saved`, id(303));
+      // The bucket belongs to a place and class this person has no broad access to, so its
+      // absence from their view proves nothing and must not raise an alarm.
+      const answer = await paletteFor(VIEWER_A, "kisisel");
+      expect(answer.hits.map((hit) => hit.title)).toEqual(["Kişisel Söğüt"]);
+      expect(answer.helper_mismatch).toBe(false);
+    } finally {
+      delete records[id(303)];
+      await deliver(`${P}.record.removed`, id(303));
+    }
+  });
+
+  it("ignores a bucket another normalizer left behind", async () => {
+    await admin.query(
+      `insert into core.search_word_bucket (word, record_type, scope_key, data_class,
+         normalization_version, search_document_ids)
+       select b.word, b.record_type, b.scope_key, b.data_class,
+              core.search_normalization_version() + 1, array[2147483647]
+         from core.search_word_bucket b
+        where b.record_type = $1 and b.normalization_version = core.search_normalization_version()`,
+      [SITE_TYPE],
+    );
+    try {
+      expect((await paletteFor(VIEWER_A, "sogut kavakli")).helper_mismatch).toBe(false);
+    } finally {
+      await admin.query(
+        "delete from core.search_word_bucket where normalization_version <> core.search_normalization_version()",
+      );
+    }
+  });
+
+  it("rolls the check back and reapplies it without changing the answer", async () => {
+    const migration = (suffix: string) =>
+      readFileSync(
+        new URL(`../../../db/migrations/0030_search_read_time_check${suffix}.sql`, import.meta.url),
+        "utf8",
+      );
+    const before = await paletteFor(VIEWER_A, "sogut kavakli");
+    await admin.query(migration(".down"));
+    const without = await paletteFor(VIEWER_A, "sogut kavakli");
+    expect(without.hits.map((hit) => hit.title)).toEqual(before.hits.map((hit) => hit.title));
+    expect(without.helper_mismatch).toBeUndefined();
+    await admin.query(migration(""));
+    expect(await paletteFor(VIEWER_A, "sogut kavakli")).toEqual(before);
   });
 });

@@ -358,3 +358,6 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-23 12:46:40Z · b13a9554 · Edit · `ai/SESSION_HANDOFF.md`
 - 2026-09-23 12:49:17Z · b13a9554 · Edit · `YOL-HARITASI.md`
 - 2026-09-23 12:56:50Z · b13a9554 · Write · `docs/decisions/ADR-019-panel-mcp-server.md`
+- 2026-09-23 13:12:59Z · b13a9554 · Write · `db/migrations/0030_search_read_time_check.sql`
+- 2026-09-23 13:13:15Z · b13a9554 · Write · `db/migrations/0030_search_read_time_check.down.sql`
+- 2026-09-23 13:16:48Z · b13a9554 · Write · `db/migrations/0030_search_read_time_check.sql`
