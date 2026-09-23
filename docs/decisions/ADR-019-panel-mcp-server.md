@@ -34,7 +34,7 @@ Veri dış modele çıkar; belirteç, sahibinin tüm görüş alanı kadar değe
 - **İstem enjeksiyonu:** panele girilmiş metin (tedarikçi notu, açıklama) dış modelde veri olarak işlenir, komut olarak değil.
 
 ## Geçiş (Migration) Notları
-Yapımdan önce üç kayıt düzeltilmelidir: REQ-INT-002'nin yasağı öneri üretimine daraltılır, RISK-001'in cümlesi geliştirme oturumları için kalır ve ürün kanalı ayrı madde olur, yeni bir izin (`int.mcp.use`) izin matrisine girer. Yazma yüzeyi D-268 ile sınırlıdır ve sahibin onayını bekler. Yerel modele geçilecek olursa bu mimari değişmez.
+Yapımdan önce üç kayıt düzeltilmelidir: REQ-INT-002'nin yasağı öneri üretimine daraltılır, RISK-001'in cümlesi geliştirme oturumları için kalır ve ürün kanalı ayrı madde olur, yeni bir izin (`int.mcp.use`) izin matrisine girer. Yazma yüzeyi D-268 ile taslakla sınırlıdır: MCP bir taslak hazırlar, hiçbir şey yürürlüğe girmez; kişi taslağı panelde açıp kendisi onaylayana kadar bekler. Yerel modele geçilecek olursa bu mimari değişmez.
 
 ## Tarih
 2026-09-23
