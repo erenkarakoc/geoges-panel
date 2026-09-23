@@ -4,7 +4,7 @@
 
 - TASK-0110: 0028 adds a worker-only invoker integrity function, deriving expected words and helpers directly from indexed text. It detects mutually consistent corruption across helpers, posting visibility/version drift, exact bucket differences, vocabulary counts and row normalization drift. No application permission or search-query change.
 - Publication refuses any mismatch before updating version/audit; the read-only CLI shares the same SQL and reports only bigint counts under a 60-second limit. No business data or helper table is removed by the down migration.
-- Verification: 51 search DB tests including 19 new fault/permission/rollback cases, 273 unit tests and production build pass. CLI after cleanup: zero indexed rows and zero mismatches. Warm small-fixture p95 263 ms/max 264 ms. CI pending.
+- Verification: 51 search DB tests including 19 new fault/permission/rollback cases, 273 unit tests and production build pass. CLI after cleanup: zero indexed rows and zero mismatches. Warm small-fixture p95 263 ms/max 264 ms. Code 7490e1c passed CI 35857129525: 191 DB tests including 51 search tests, before/after full rollback/reapply; two live R2 tests skipped without credentials.
 - Review: operational full scan, not user-visible global diagnostics; no definer privilege escalation or raw records logged. Bucket/vocabulary version partition, visible-only read-time checks, production-scale acceptance and OQ-034 remain open.
 
 ## 2026-09-23 — Search pre-publication catch-up

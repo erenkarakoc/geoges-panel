@@ -78,7 +78,7 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 ### Son doğrulamalar
 
-- 0028 yardımcı bütünlüğü göçü test projesine uygulandı. **51 arama testi**, **273 birim testi** ve üretim derlemesi geçti; 19 yeni test kasıtlı bozulma, yetki ve geri dönüş senaryolarını kapsıyor. Salt okunur işletim kontrolü testlerden sonra sıfır uyuşmazlık raporladı. Bu adımın CI sonucu bekleniyor.
+- 0028 yardımcı bütünlüğü göçü test projesine uygulandı. **51 arama testi**, **273 birim testi** ve üretim derlemesi geçti; 19 yeni test kasıtlı bozulma, yetki ve geri dönüş senaryolarını kapsıyor. Salt okunur işletim kontrolü testlerden sonra sıfır uyuşmazlık raporladı. Değişiklik `7490e1c` ile gönderildi; CI **35857129525 yeşil**: 51 arama testi dahil **191 veritabanı testi**, tam geri dönüş/yeniden kurulum öncesinde ve sonrasında geçti. Kimlik bilgisi olmayan 2 canlı R2 testi CI’da atlandı.
 
 - Yayın öncesi yakalama için arama senaryoları **32** oldu; yerelde toplu ve hedefli koşularda geçti. **273 birim testi** ve üretim derlemesi geçti. İlk CI turunun geri dönüş sonrası testinde olay numaralarının metin sırasıyla okunması hatası yakalandı ve düzeltildi; yeni sınır testi yerelde geçti. Düzeltme `73116da` ile gönderildi; CI **35832578935 yeşil**: 32 arama testi dahil **172 veritabanı testi**, tam geri dönüş/yeniden kurulum öncesi ve sonrasında geçti. CI kimlik bilgileri olmayan 2 canlı R2 testi atlandı. Yeni veritabanı göçü yok.
 
