@@ -18,6 +18,7 @@ import { resolveSiteScope, SITE_SCOPE_COOKIE } from "@/platform/navigation/site-
 import { SignalProvider } from "@/platform/signals/signal-provider";
 import { AppHeader, type HeaderSeat } from "@/platform/ui/app-shell/app-header";
 import { AppSidebar } from "@/platform/ui/app-shell/app-sidebar";
+import { BottomBandOutlet, BottomBandProvider } from "@/platform/ui/app-shell/bottom-band";
 import { MobileBottomBar } from "@/platform/ui/app-shell/mobile-bottom-bar";
 import { ThemeToggle } from "@/platform/ui/theme/theme-toggle";
 
@@ -56,7 +57,9 @@ const sidebarWidthStyle = {
 } as CSSProperties;
 
 const appCardClassName = [
-  "min-h-0 overflow-hidden md:border",
+  // `relative` and the height default belong to the card: the bottom band lies over the
+  // scrolling content inside it and writes its measured height here (TASK-0028, D-269).
+  "relative [--bottom-band-height:0px] min-h-0 overflow-hidden md:border",
   // The rail animates its width over 200ms; without the same transition here the card jumped
   // to its new margin at once while the menu was still sliding.
   "transition-[margin] duration-200 ease-linear",
@@ -110,47 +113,59 @@ export async function AppShell({
 
   return (
     <SignalProvider>
-      <div className={outerClassName}>
-        <SidebarProvider
-          className={frameClassName}
-          defaultOpen={sidebarOpen}
-          style={sidebarWidthStyle}
-        >
-          <AppSidebar
-            defaultOpenGroupIds={openGroupIds}
-            visibleItemIds={visibleItemIds}
-            visibleWorkIds={visibleWorkIds}
-          />
-          {/* Inset variant: on desktop the app sits in a bordered, rounded card of fixed height. */}
-          <SidebarInset className={appCardClassName}>
-            <AppHeader
-              actions={
-                <>
-                  <ThemeToggle />
-                  {headerActions}
-                </>
-              }
-              initialSite={initialSite}
-              notifications={notifications}
-              seat={seat}
+      {/* The band's slot, the screens that fill it and the phone's navigation all read the same
+          provider: the navigation steps aside while a band is shown (D-228). */}
+      <BottomBandProvider>
+        <div className={outerClassName}>
+          <SidebarProvider
+            className={frameClassName}
+            defaultOpen={sidebarOpen}
+            style={sidebarWidthStyle}
+          >
+            <AppSidebar
+              defaultOpenGroupIds={openGroupIds}
               visibleItemIds={visibleItemIds}
               visibleWorkIds={visibleWorkIds}
             />
-            {contextBar}
-            {/* Page-specific functional footer is planned for Phase 02 (TASK-0028). */}
-            {/* The page's own area scrolls; scrolling never chains out to the shell. */}
-            <ScrollArea className="min-h-0 flex-1" overscrollContain>
-              <div className="flex flex-col gap-6 p-4 md:p-6">{children}</div>
-            </ScrollArea>
-            {/* Phones navigate from here; on desktop the rail does the same job (D-069). */}
-            <MobileBottomBar
-              primaryAction={seat.primaryAction}
-              visibleItemIds={visibleItemIds}
-              visibleWorkIds={visibleWorkIds}
-            />
-          </SidebarInset>
-        </SidebarProvider>
-      </div>
+            {/* Inset variant: on desktop the app sits in a bordered, rounded card of fixed height. */}
+            <SidebarInset className={appCardClassName}>
+              <AppHeader
+                actions={
+                  <>
+                    <ThemeToggle />
+                    {headerActions}
+                  </>
+                }
+                initialSite={initialSite}
+                notifications={notifications}
+                seat={seat}
+                visibleItemIds={visibleItemIds}
+                visibleWorkIds={visibleWorkIds}
+              />
+              {contextBar}
+              {/* The page's own area scrolls; scrolling never chains out to the shell. The band's
+                height becomes both paddings, so it covers nothing and hides no focused element. */}
+              <ScrollArea
+                // The viewport is what scrolls, not the root, so the scroll padding has to land there.
+                className="min-h-0 flex-1 [&_[data-slot=scroll-area-viewport]]:scroll-pb-[var(--bottom-band-height)]"
+                overscrollContain
+              >
+                <div className="flex flex-col gap-6 p-4 pb-[calc(var(--bottom-band-height)+1rem)] md:p-6 md:pb-[calc(var(--bottom-band-height)+1.5rem)]">
+                  {children}
+                </div>
+              </ScrollArea>
+              {/* Phones navigate from here; on desktop the rail does the same job (D-069). */}
+              <MobileBottomBar
+                primaryAction={seat.primaryAction}
+                visibleItemIds={visibleItemIds}
+                visibleWorkIds={visibleWorkIds}
+              />
+              {/* The screen's own actions, when it has any (TASK-0028, D-228). */}
+              <BottomBandOutlet />
+            </SidebarInset>
+          </SidebarProvider>
+        </div>
+      </BottomBandProvider>
     </SignalProvider>
   );
 }

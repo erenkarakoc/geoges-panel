@@ -371,3 +371,5 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-23 19:17:58Z · b13a9554 · Write · `db/migrations/0035_search_posting_module.sql`
 - 2026-09-23 19:59:53Z · b13a9554 · Write · `src/platform/search/zz-volume-rebuild.dbtest.ts`
 - 2026-09-23 20:12:57Z · b13a9554 · Write · `db/migrations/0036_search_rebuild_bulk.sql`
+- 2026-09-23 20:57:25Z · b13a9554 · Write · `src/platform/ui/app-shell/bottom-band.tsx`
+- 2026-09-23 22:06:42Z · b13a9554 · Edit · `src/platform/ui/app-shell/bottom-band.tsx`

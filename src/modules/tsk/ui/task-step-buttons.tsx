@@ -8,6 +8,7 @@ import { Form } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { taskStepAction } from "@/modules/tsk/application/task-actions";
 import { initialTaskFormState } from "@/modules/tsk/application/task-form-state";
+import { BottomBand } from "@/platform/ui/app-shell/bottom-band";
 import { useActionToast } from "@/platform/ui/feedback/use-action-toast";
 
 export type TaskSteps = {
@@ -30,8 +31,13 @@ export function TaskStepButtons({ taskId, steps }: { taskId: string; steps: Task
 
   if (!steps.complete && !steps.approve && !steps.reopen) return null;
 
+  // The buttons leave the page for the band, and reach their form through `form=` — a button
+  // may submit a form it does not sit inside. The reason stays here, with the record it is
+  // about: a band carries actions, not fields (D-228).
+  const formId = `task-steps-${taskId}`;
+
   return (
-    <Form action={formAction} className="flex flex-col gap-4">
+    <Form action={formAction} className="flex flex-col gap-4" id={formId}>
       <input name="taskId" type="hidden" value={taskId} />
       {steps.reopen ? (
         <Field>
@@ -41,23 +47,30 @@ export function TaskStepButtons({ taskId, steps }: { taskId: string; steps: Task
           <Textarea id="reason" maxLength={1000} name="reason" rows={2} />
         </Field>
       ) : null}
-      <div className="flex flex-wrap gap-2">
+      <BottomBand>
+        {steps.reopen ? (
+          <Button
+            form={formId}
+            loading={pending}
+            name="step"
+            type="submit"
+            value="reopen"
+            variant="outline"
+          >
+            {steps.reopen === "send_back" ? "Geri gönder" : "Yeniden aç"}
+          </Button>
+        ) : null}
         {steps.complete ? (
-          <Button loading={pending} name="step" type="submit" value="complete">
+          <Button form={formId} loading={pending} name="step" type="submit" value="complete">
             Tamamladım
           </Button>
         ) : null}
         {steps.approve ? (
-          <Button loading={pending} name="step" type="submit" value="approve">
+          <Button form={formId} loading={pending} name="step" type="submit" value="approve">
             Onayla ve kapat
           </Button>
         ) : null}
-        {steps.reopen ? (
-          <Button loading={pending} name="step" type="submit" value="reopen" variant="outline">
-            {steps.reopen === "send_back" ? "Geri gönder" : "Yeniden aç"}
-          </Button>
-        ) : null}
-      </div>
+      </BottomBand>
     </Form>
   );
 }

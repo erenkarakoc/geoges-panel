@@ -1,10 +1,22 @@
 # SESSION HANDOFF
 
-Last updated: 2026-09-23
+Last updated: 2026-09-24
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — TASK-0028 planned, awaiting approval
+## Latest continuation — the bottom band is built, not yet seen
+
+D-269 was approved, so TASK-0028 was built on 2026-09-24. platform/ui/app-shell/bottom-band.tsx holds a provider, the shell's slot and the band a screen writes; the content reaches the slot through a portal, which is what lets a band carry something only the screen knows. The slot measures itself with a ResizeObserver and writes --bottom-band-height onto the card; the scrolling area uses it for padding-bottom on its content and for scroll-padding-bottom on the viewport — note the viewport is what scrolls in COSS's ScrollArea, not its root, so the class had to land there through a descendant selector. The phone's navigation returns null while a band is shown and comes back when it goes.
+
+Two screens use it. The task detail moves its closing steps into the band while the reason textarea stays with the record: a band carries actions, not fields, and a button reaches the form it no longer sits inside through the `form` attribute. The "Görev ver" page moves its one action out of the frame footer; the overlay version of the same form keeps its dialog footer, because a dialog has a bottom of its own.
+
+Two screens the plan named were deliberately left alone rather than forced: the approval queue has been an empty state since its sample data was removed (D-106), so it has no action to carry, and the revision request screen is a list whose cards each carry their own decision, where a screen-level band would not know which card it belongs to. Both take a band when they become single-record screens.
+
+One safety choice worth keeping: used outside the shell — where there is no provider — the band renders its actions where they stand instead of portalling into nothing. A screen silently losing its only way to submit is the worse failure. Inside the shell the slot is unknown for the first render only, as with any portal.
+
+Validation: 273 unit tests, lint, types, prettier and the production build pass. It has NOT been seen on screen: the owner deferred signing in, so the browser pass at desktop and 390 px is owed and TASK-0028 stays IMPLEMENTING. What that pass still has to confirm: the band actually fixed to the card's bottom while content scrolls, nothing hidden behind it, keyboard focus never landing under it, and the phone navigation stepping aside and returning.
+
+## Previous continuation — TASK-0028 planned, awaiting approval
 
 TASK-0110's remaining items are all blocked or speculative — OQ-034 is the owner's to answer, ranking over a very large match set is a question beyond this volume, and real-source browser acceptance waits for the module slices — so the next task in the roadmap's order was taken up. TASK-0028's design was already approved as D-228 and written into SCREEN_PATTERNS section 4; what was missing was how to build it.
 

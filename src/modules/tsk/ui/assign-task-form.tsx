@@ -38,7 +38,6 @@ import { Form } from "@/components/ui/form";
 import {
   Frame,
   FrameDescription,
-  FrameFooter,
   FrameHeader,
   FramePanel,
   FrameTitle,
@@ -57,6 +56,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { assignTaskAction } from "@/modules/tsk/application/task-actions";
 import { initialTaskFormState } from "@/modules/tsk/application/task-form-state";
 import { PRIORITY_LABELS, TASK_PRIORITIES } from "@/modules/tsk/domain/tasks";
+import { BottomBand } from "@/platform/ui/app-shell/bottom-band";
 import { useActionToast } from "@/platform/ui/feedback/use-action-toast";
 
 type Person = { id: string; displayName: string };
@@ -152,6 +152,9 @@ function AssignTaskFields({ people, selfId }: Props) {
 }
 
 /** SCR-014 as a full page, for an address opened directly; opens the new task when done. */
+/** The page keeps one id so the band's button can reach the form it does not sit inside. */
+const PAGE_FORM_ID = "assign-task";
+
 export function AssignTaskPage(props: Props) {
   const [state, formAction, pending] = useActionState(assignTaskAction, initialTaskFormState);
   useActionToast(state, state.error ? { type: "error", title: state.error } : null);
@@ -162,16 +165,18 @@ export function AssignTaskPage(props: Props) {
         <FrameTitle>{TITLE}</FrameTitle>
         <FrameDescription>{DESCRIPTION}</FrameDescription>
       </FrameHeader>
-      <Form action={formAction} className="contents">
+      <Form action={formAction} className="contents" id={PAGE_FORM_ID}>
         <FramePanel className="flex flex-col gap-4">
           <AssignTaskFields {...props} />
         </FramePanel>
-        <FrameFooter>
-          <Button loading={pending} type="submit">
-            Görevi ver
-          </Button>
-        </FrameFooter>
       </Form>
+      {/* A long form's action belongs in the band, not at the end of the page (D-228). The
+          overlay below keeps its own footer: a dialog has a bottom of its own. */}
+      <BottomBand>
+        <Button form={PAGE_FORM_ID} loading={pending} type="submit">
+          Görevi ver
+        </Button>
+      </BottomBand>
     </Frame>
   );
 }

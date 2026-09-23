@@ -24,6 +24,7 @@ import {
   workNavigation,
 } from "@/platform/navigation/navigation-registry";
 import { matchesSearch } from "@/platform/navigation/search-text";
+import { useBottomBandShown } from "@/platform/ui/app-shell/bottom-band";
 import { PrimaryActionButton } from "@/platform/ui/app-shell/primary-action";
 
 /**
@@ -46,6 +47,7 @@ export function MobileBottomBar({
   primaryAction: string;
 }) {
   const pathname = usePathname();
+  const bandShown = useBottomBandShown();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const groups = pickNavigationItems(navigationRegistry, visibleItemIds);
@@ -97,6 +99,10 @@ export function MobileBottomBar({
       </Link>
     );
   };
+
+  // While a screen shows its own band there is one bar at the bottom, not two (D-228); leaving
+  // the screen brings the navigation back.
+  if (bandShown) return null;
 
   return (
     <nav

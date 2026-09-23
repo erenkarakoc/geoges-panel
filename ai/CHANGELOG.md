@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-09-24 — The app card has a functional bottom band
+
+- TASK-0028 (D-228, D-269): the shell gained an optional slot under the card. A screen writes a `BottomBand` where its own state is and a portal carries the content into that slot, which is what lets a band say something only the screen knows — the form it belongs to, the rows selected, the step.
+- The band lies over the scrolling content and its measured height becomes the scrolling area's bottom padding and its scroll padding, so nothing is covered and a focused element never ends up underneath it. On phones the navigation bar steps aside while a band is shown and returns when it goes.
+- Two screens use it: the task detail, whose closing steps now sit in the band while the reason field stays with the record (a button reaches its form through `form=`), and the "Görev ver" page, whose one action left the frame's footer. The overlay version of that form keeps its own dialog footer.
+- Two screens named in the plan turned out not to qualify and were left alone, rather than given a band that does not fit: the approval queue has been an empty state since its sample data was removed (D-106), so it has no action to carry, and the revision request screen is a list whose cards each carry their own decision — a screen-level band would not know which one it belongs to. Both join when they become single-record screens.
+- Used outside the shell the band draws its actions where they stand instead of vanishing: a screen silently losing its only way to submit would be the worse failure.
+- Verification: 273 unit tests, lint, types, format and the production build pass. **Not yet seen on screen** — the browser pass at desktop and phone width is owed and TASK-0028 stays IMPLEMENTING until then (the owner deferred signing in for it).
+
 ## 2026-09-23 — A rebuild of 20,000 records: ten minutes to 29 seconds
 
 - TASK-0110: the last open figure of the volume gate was the cost of rebuilding the index from its sources. Measured with a 20,000-record source through the real rebuild path, it did not finish in ten minutes.
