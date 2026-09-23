@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-23 — Search rebuild concurrency tests
+
+- TASK-0110: three integration scenarios use real source/outbox transactions and separate PostgreSQL connections. Lock contention is observed with pg_blocking_pids; readers retain the old full index while the rebuild is uncommitted.
+- Update/scope move, delete and insertion behind the scan cursor converge after delivery on both rebuild commit and rollback; duplicate delivery keeps ids/results stable; a rolled-back source write publishes nothing. Assertions compare all three helpers and row versions.
+- No runtime code, permission rule or migration changed. The marked synthetic schema and test rows are cleaned; genuine rebuild metadata/audit remains. Large-scale performance and pre-publication high-watermark catch-up remain acceptance gaps. OQ-034 still awaits an explicit visibility choice.
+
 ## 2026-09-23 — Search normalization metadata
 
 - TASK-0110: migration 0027 adds explicit row/posting normalization versions and backfills posting projection versions from each row. Atomic indexing and source rebuild keep them aligned; older events leave metadata intact.

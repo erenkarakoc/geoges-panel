@@ -4,7 +4,17 @@ Last updated: 2026-09-23
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — 0027 normalization metadata
+## Latest continuation — concurrent source rebuild validation
+
+Added search-concurrency.dbtest.ts: an explicitly marked synthetic zsr source schema, its own IAM viewer, a test-named subscriber that runs the real searchIndexer, real durable outbox writes and separate source/rebuild/delivery/app connections. A barrier pauses the first source page; committed updates move that row to an inaccessible site, remove a later row and insert a UUID behind the cursor. pg_blocking_pids verifies that the delivery is actually blocked by the rebuild transaction, rather than assuming a sleep means contention.
+
+Three tests cover publication COMMIT, publication ROLLBACK, and rollback of a source change with its event. Readers observe the old complete rows/postings/buckets until publication; after pending deliveries drain, source rows, words, vocabulary counts, bucket ids and versions agree. Internal ids survive; replaying completed fixture deliveries creates no duplicate results; moved records are hidden from the old site's viewer. A source rollback produces no delivery. Product code, visibility semantics and migration history are unchanged.
+
+Both three-scenario runs passed, including the final vocabulary-count parity assertions added during distinct self-review. Quality check passed (273 unit tests). CI pending for this increment. Fixture cleanup is restricted to the marked schema/test identities/test events and index rows. The real core.search publication epoch and read_model.rebuilt audit entry are retained as genuine rebuild activity; no business record is modified. Normalization-version migration 0027 remains immutable.
+
+Acceptance limit: this proves small-fixture eventual convergence AFTER queued events drain and atomic index publication, not a single source snapshot or a high-watermark catch-up before publication. That stronger requirement, production-scale performance, multi-scope/helpers and browser acceptance remain open. OQ-034 still has no explicit ANY/ALL answer; 'continue' is not a choice. TASK-0110 remains IMPLEMENTING. Next independent work can address scale and pre-publication catch-up while that visibility decision is pending.
+
+## Previous continuation — 0027 normalization metadata
 
 Migration 0027 is applied to the test project and immutable. Search rows/postings now carry normalization_version=1; postings also carry their source row's projection_version. Initial metadata is backfilled from each row. Index writes stamp both versions atomically, including updates; older events cannot upgrade metadata without reindexing. Search records and spelling suggestions check visible requested types under SECURITY INVOKER/RLS and raise only the fixed search_normalization_mismatch error. Hidden mismatches do not alter another user's result/error. Normally empty partial indexes avoid scanning valid rows; a future normalizer version migration MUST also replace their version predicates. Rebuild comparison and search:rebuild -- --check validate metadata.
 

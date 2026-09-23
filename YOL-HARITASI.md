@@ -68,7 +68,8 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 | Küçük veri kümesinde hız | 56 sentetik kayıt / 20 sıcak istekte p95 **255 ms**, en yüksek **255 ms** (0027 sonrası); 0025 ölçümü 258 ms, ondan önceki p95 348 ms idi. Bu ölçüm 300 ms hedefinin altında |
 | Normalleştirme sürümü | Satır ve sözcük eşlemelerine eklendi; görünür eski sürümde kontrollü hata, yazma/yeniden kurma ve sürüm denetimi test edildi. Kova/sözlük sürüm düzeni ve tam yardımcı tutarlılığı açık |
 | Çoklu kapsam | OQ-034 yanıtı bekleniyor: ortak kaydı görmek için ilgili şantiyelerden birine mi, tümüne mi yetki gerekecek? |
-| Büyük veri ve eşzamanlılık | Üretim hacmine yakın hız ve yeniden dizinleme sırasında kaynak değişimi kabulü bekliyor |
+| Eşzamanlı kaynak değişiklikleri | Gerçek kaynak ve olay kuyruğuyla commit/geri alma, kayıt taşıma/silme, tarama sırasının gerisine ekleme ve tekrar teslim sınandı. Kuyruk işlendiğinde kaynak/dizin/yardımcılar eşleşiyor |
+| Büyük veri ve yayın öncesi güncellik | Üretim hacmine yakın hız ve yayın öncesi olay yakalama kabulü bekliyor; küçük eşzamanlılık testi bunların yerine geçmiyor |
 | Gerçek kaynaklarla tarayıcı kabulü | Modüller kendi dilimlerinde arama kaynağını kaydedecek; gerçek telefon klavyesiyle kabul de açık |
 
 **Arama henüz tamamlandı sayılmıyor.** Küçük veri kümesindeki hız sonucu, büyük veri kabulünün yerine geçmiyor.
