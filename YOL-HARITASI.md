@@ -76,6 +76,8 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 ### Son doğrulamalar
 
+- Eşzamanlılık testleri `9b6a9f9` ile gönderildi. CI 35830079315 yeşil: toplam **26 arama testi**, **273 birim testi** ve temiz kurulum/tam geri dönüş/yeniden kurulum geçti. Test şeması, sentetik olaylar, roller ve dizin satırları temizlendi.
+
 - 273 birim testi, göç geri dönüş/sürüm doldurma senaryosu dahil 23 arama veritabanı testi ve üretim derlemesi geçti. 0027 değişikliği `3d493bd` ile gönderildi; CI 35811145952 temiz kurulum/tam geri dönüş/yeniden kurulum testleriyle yeşil.
 - 0025 ile arama için ağ turu dörtten üçe indi; RLS, salt okunur işlem, önceden kurulan 15 saniye sınırı ve hata/iptalde kimlik temizliği korundu.
 - CI, mevcut tarihli kural kodunda aynı işlemde eski düzeltmenin seçilebildiğini yakaladı. 0026 düzeltmesiyle ters UUID sırası kullanılarak da son düzeltmenin seçildiği ve 10 ADM veritabanı testinin geçtiği doğrulandı.

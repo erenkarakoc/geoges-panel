@@ -4,6 +4,7 @@
 
 - TASK-0110: three integration scenarios use real source/outbox transactions and separate PostgreSQL connections. Lock contention is observed with pg_blocking_pids; readers retain the old full index while the rebuild is uncommitted.
 - Update/scope move, delete and insertion behind the scan cursor converge after delivery on both rebuild commit and rollback; duplicate delivery keeps ids/results stable; a rolled-back source write publishes nothing. Assertions compare all three helpers and row versions.
+- Validation: all three new DB scenarios and 273 unit tests passed locally; commit 9b6a9f9 passed CI 35830079315, including all 26 search tests and full apply/down/up. Cleanup verified zero test schema/index rows/events/roles.
 - No runtime code, permission rule or migration changed. The marked synthetic schema and test rows are cleaned; genuine rebuild metadata/audit remains. Large-scale performance and pre-publication high-watermark catch-up remain acceptance gaps. OQ-034 still awaits an explicit visibility choice.
 
 ## 2026-09-23 — Search normalization metadata
