@@ -6,7 +6,7 @@
 - The publication wrote every record with the ordinary per-record writer, which keeps the helpers in step: it appends the record's id to the bucket of each of its words and recounts the vocabulary entries it touched. A bucket holding three thousand ids is rewritten whole for every id added, so filling an empty index one record at a time costs more with every record. None of that work survived, because the publication ends by rebuilding every bucket and recounting the whole vocabulary anyway.
 - 0036 adds `core.index_search_row_bulk`, used only by the publication: it writes the row and its postings and leaves the helpers to the rebuild that follows. A record that arrives on its own still goes through `core.index_search_row`, so the index is never a moment behind its records.
 - Measured again: 2,000 records rebuild in 4.7 s and 20,000 in 29 s, with the index, its postings and the integrity gate all verified as before.
-- Verification: 204 database tests across 15 files (the rebuild path is exercised by the search, concurrency and integrity suites), 273 unit tests, format and build pass. The measuring fixture was a throw-away test file, removed after the measurement.
+- Verification: 204 database tests across 15 files (the rebuild path is exercised by the search, concurrency and integrity suites), 273 unit tests, format and build pass. The measuring fixture was a throw-away test file, removed after the measurement. Committed as b79c36a; CI 35916332932 green before and after a full rollback and reapply.
 
 ## 2026-09-23 — Search measured at 20,000 records, and made to fit
 
