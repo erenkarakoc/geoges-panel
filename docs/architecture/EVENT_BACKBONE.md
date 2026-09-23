@@ -50,6 +50,8 @@ Bir kullanıcı işlemi en çok iki modülü senkron zincire sokar; üçüncüs�
 - Yeniden oynatma yalnız okuma modellerini besler; defter kayıtlarını, görevleri veya bildirimleri yeniden üretmez. Bu ayrım abone tanımında yazılıdır: `yeniden oynatılabilir` evet/hayır.
 - Bildirim ve görev üreten aboneler yeniden oynatmada atlanır; kimse geçmişin bildirimini ikinci kez almaz.
 
+Arama yeniden kurması (TASK-0110, D-266) kayıtlı kaynak izdüşümlerini tarar. Başlangıçta görünen ilgili olay kimlikleri geçici tutulur; tarama sonunda tek sorguda yeni görünen olay kümesi yakalanıp yalnız ilgili kaynak izdüşümleri yeniden okunur. Olay numarası commit sırası sayılmaz; düşük kimlikli geç commit de yakalanır. Yayın öncesi bu sonlu küme tamamlanır; yakalama sınırından sonraki değişiklikler normal teslimle gelir. Başka abone çalıştırılmaz ve teslimler tamamlandı işaretlenmez. Kalıcı işlem kimliği tutulmaz; hata tüm yeniden kurmayı geri alır. Bu kaynak tabanlı yol, genel yeniden oynatılabilir abone yolunun yerine geçmez.
+
 ## 7. İşleyici altyapısı
 
 - Outbox'ı okuyan süreç, uygulamayla aynı sunucuda çalışan bir **iş kuyruğu**dur (Phase 05'te barındırma ayrıntısı).

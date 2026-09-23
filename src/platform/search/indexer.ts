@@ -30,7 +30,10 @@ export type SearchRegistration = {
 };
 
 /** The id of the record an event is about: its own field first, then the event's record. */
-function recordIdOf(payload: Record<string, unknown>, fallback: string | null): string | null {
+export function searchRecordId(
+  payload: Record<string, unknown>,
+  fallback: string | null,
+): string | null {
   const own = payload.record_id ?? payload.id;
   return typeof own === "string" ? own : fallback;
 }
@@ -53,7 +56,7 @@ export function searchIndexer(registrations: readonly SearchRegistration[]): Eve
     async handle(db, event) {
       await lockSearchPublication(db);
       for (const { entry } of byEvent.get(event.code) ?? []) {
-        const id = recordIdOf(event.payload, event.record?.id ?? null);
+        const id = searchRecordId(event.payload, event.record?.id ?? null);
         if (!id) continue;
         const record = { ...entry.record, id };
         // Always read the source, including removal events: a late event must not delete a

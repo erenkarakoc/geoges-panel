@@ -114,7 +114,7 @@ Belgenin kapsamı ve veri sınıfı **bağlı kayıttan** türetilir ve belgeye 
 - pg_trgm, btree_gist ve intarray gereklidir; göç öncesi sürüm/şema/izin kontrolü yapılır. RUM bağımlılığı yoktur. FK ve sözcük/kapsam/tür indeksleri gerçek sorgularla doğrulanır; intarray yalnız NULL içermeyen dizilerde kullanılır.
 - Yeniden kurma, kaynak arama satırlarından sürümlü bir gölge veri kümesi üretir; sayım, RLS ve sonuç karşılaştırması sonrası okuma sürümü atomik değiştirilir. Hata halinde önceki sürüm okunur. Eski yavaş yolun varlığı performans kabulü değildir. Güncel kaynakla tutarlılık için olay yüksek su işareti ve değişimlerin tamamlanması SPIKE-14 ile doğrulanır.
 - Kaynak, yardımcı ve eşleme uyuşmazlığında eksik veriyi başarılı sonuç diye sunmak yerine kontrollü hata üretilir. Yeniden kurma kaynak olay/görev/bildirim doğurmaz. Genel iş tablosu AUD zorunluluğundan `core.*` muafiyeti geçerlidir; kurulum/yeniden kurma işletim günlüğüne yazılır.
-- Bu belge tasarım ekidir; ürün göçü veya kodu teslim edilmedi. İlk istek, eşzamanlılık, UUID eşlemesi, tüm kapsam türleri, kısmi yetki ve olayla güncelleme kabul testleri açıkça korunur.
+- Bu maddeler hedef tasarım sözleşmesidir; teslim edilen ürün kodunun kapsamı yukarıdaki ve aşağıdaki uygulama notlarında ayrılır. İlk istek, eşzamanlılık, UUID eşlemesi, tüm kapsam türleri, kısmi yetki ve olayla güncelleme kabul testleri açıkça korunur.
 
 `core` şeması modüllerin ortak altyapısıdır; iş verisi tutmaz ve yalnız platform kodu yazar.
 
@@ -128,6 +128,8 @@ Yukarıdaki arama satırları tasarım sözleşmesini gösterir. Göç 0020–00
 
 0022 ortak yayınlama kilidiyle kaynak okumayı ve arama yazıcılarını yeniden kurmayla sıralar. İşlemci geçici gölge tabloda kaynakların izdüşümünü üretir, alanları ve sayımı karşılaştırır; aynı işlemde satırları, yardımcıları ve `core.read_model` içindeki `core.search` sürümünü yayımlar. MVCC nedeniyle diğer okuyucular commit'e kadar eski satırları görür. Mevcut `search_document_id` korunur. Kalıcı tablo sayısı değişmedi; geçici küme commit/rollback sonrasında kalmaz.
 
-Tasarımdaki çok kapsamlı kayıtlar, normalleştirme sürümünün ayrı izlenmesi ve üretim hacminde yeniden kurma kabulü henüz kapanmış değildir. TASK-0110 bu farklar ve tarayıcı kabulü nedeniyle IMPLEMENTING durumundadır; tasarım sözleşmesi kaldırılmaz.
+Yayın öncesi yakalama (TASK-0110): READ COMMITTED işleminde, tarama öncesinde görünen ilgili outbox kimlikleri geçici tabloda tutulur. Tarama sonunda tek SQL anlık görüntüsünde yeni görünen olay kümesi yakalanır; kaynak izdüşümleri yeniden okunarak geçici satır/sayım düzeltilir. Büyük olay numarası tek başına filtre değildir: küçük numaralı geç commit de kapsanır. Yakalama sınırından sonrakiler normal teslimle güncellenir; tüm kaynakların tek anlık görüntüsü iddia edilmez. İşlem kimliği/xmin kalıcı tutulmaz, kalıcı tablo eklenmez. Denetime yalnız yakalanan olay sayısı ve son görünen numara yazılır. Hata tüm yayını geri alır; büyük olay geçmişinde geçici kümenin maliyeti ayrıca ölçülecektir.
+
+Tasarımdaki çok kapsamlı kayıtlar, kova/sözlük sürüm düzeni ve tam yardımcı içerik tutarlılığı ile üretim hacminde yeniden kurma kabulü henüz kapanmış değildir. TASK-0110 bu farklar ve tarayıcı kabulü nedeniyle IMPLEMENTING durumundadır; tasarım sözleşmesi kaldırılmaz.
 
 **0026 kural düzeltme sırası:** `adm.rule.revision_order bigint`, yeni eklenen aynı tarih/zamanlı kuralların sırasını belirler; `adm.rule_revision_order_seq` kolona aittir. Eski satırlarda NULL korunur. `adm.rule_value` geçerlilik ve kayıt zamanından sonra bu alanı, en son UUID'yi sıralar. Tablo sayısı değişmez.

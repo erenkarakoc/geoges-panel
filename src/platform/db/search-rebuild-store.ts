@@ -3,16 +3,87 @@ import type { SystemDb } from "@/platform/jobs/types";
 import type { SearchProjection } from "@/platform/search/search";
 
 /** All functions run on the worker's existing transaction: readers see old data until commit. */
-export async function beginSearchRebuild(db: SystemDb) {
+export async function beginSearchRebuild(db: SystemDb, eventCodes: readonly string[]) {
+  const isolation = await sql<{
+    level: string;
+  }>`select current_setting('transaction_isolation') as level`.execute(db);
+  if (isolation.rows[0].level !== "read committed")
+    throw new Error("Search rebuild requires READ COMMITTED to catch concurrent source changes");
   await sql`select pg_advisory_xact_lock(hashtextextended('geoges.search_index', 0))`.execute(db);
   await sql`create temporary table geoges_search_stage (
     record_schema text not null, record_table text not null, record_id uuid not null,
     projection jsonb not null, primary key (record_schema, record_table, record_id)
   ) on commit drop`.execute(db);
+  // Sequence allocation is not commit order. Remember visibility, not just max(outbox.id).
+  await sql`create temporary table geoges_search_seen_events (id bigint primary key) on commit drop`.execute(
+    db,
+  );
+  await sql`insert into pg_temp.geoges_search_seen_events
+    select id from core.outbox where event_code = any(${eventCodes}::text[])`.execute(db);
   const result = await sql<{ version: number }>`insert into core.read_model (name, active_table)
     values ('core.search', 'core.search_row') on conflict (name) do update
     set active_table = excluded.active_table returning version + 1 as version`.execute(db);
   return result.rows[0].version;
+}
+
+export type SearchCatchup = { events: number; highWatermark: string };
+export type SearchChange = {
+  id: string;
+  code: string;
+  recordId: string | null;
+  payload: Record<string, unknown>;
+};
+
+/** Materialize a finite visibility cut in ONE statement; late commits remain normal deliveries. */
+export async function captureSearchChanges(
+  db: SystemDb,
+  eventCodes: readonly string[],
+): Promise<SearchCatchup> {
+  await sql`create temporary table geoges_search_changes (
+    id bigint primary key, event_code text not null, record_id uuid, payload jsonb not null
+  ) on commit drop`.execute(db);
+  const result = await sql<SearchCatchup>`with visible as materialized (
+    select id from core.outbox
+    where event_code = any(${eventCodes}::text[])
+  ), changed as materialized (
+    select v.id from visible v
+    where not exists (select from pg_temp.geoges_search_seen_events s where s.id = v.id)
+  ), captured as (
+    insert into pg_temp.geoges_search_changes
+    select o.id, o.event_code, o.record_id, o.payload from changed c join core.outbox o on o.id = c.id
+    returning geoges_search_changes.id
+  ) select (select count(*)::int from captured) as events,
+    coalesce((select max(id) from visible), 0)::text as "highWatermark"`.execute(db);
+  return result.rows[0];
+}
+
+export async function readSearchChanges(db: SystemDb, after: string, limit: number) {
+  const result = await sql<SearchChange>`select id::text, event_code as code,
+    record_id as "recordId", payload from pg_temp.geoges_search_changes
+    where id > ${after}::bigint order by id limit ${limit}`.execute(db);
+  return result.rows;
+}
+
+/** Replace a staged source projection, returning the exact change in staged row count. */
+export async function refreshSearchStage(
+  db: SystemDb,
+  record: { schema: string; table: string },
+  id: string,
+  projection: SearchProjection | null,
+) {
+  if (!projection) {
+    const removed = await sql`delete from pg_temp.geoges_search_stage
+      where record_schema = ${record.schema} and record_table = ${record.table}
+        and record_id = ${id}::uuid returning record_id`.execute(db);
+    return -removed.rows.length;
+  }
+  const updated =
+    await sql`update pg_temp.geoges_search_stage set projection = ${JSON.stringify(projection)}::jsonb
+    where record_schema = ${record.schema} and record_table = ${record.table}
+      and record_id = ${id}::uuid returning record_id`.execute(db);
+  if (updated.rows.length) return 0;
+  await stageSearchBatch(db, record, [{ id, projection }]);
+  return 1;
 }
 
 export async function stageSearchBatch(
@@ -33,6 +104,7 @@ export async function publishSearchStage(
   records: readonly { schema: string; table: string }[],
   version: number,
   expectedCount: number,
+  catchup: SearchCatchup,
 ) {
   const count = await sql<{
     n: number;
@@ -79,8 +151,9 @@ export async function publishSearchStage(
   await sql`update core.read_model set version = ${version}, rebuilt_at = now(), last_difference = 0
     where name = 'core.search'`.execute(db);
   await sql`select aud.record_event('read_model.rebuilt', 'core', 'read_model', null,
-    jsonb_build_object('name', 'core.search', 'version', ${version}::int, 'difference', 0))`.execute(
+    jsonb_build_object('name', 'core.search', 'version', ${version}::int, 'difference', 0,
+      'caught_up_events', ${catchup.events}::int, 'outbox_watermark', ${catchup.highWatermark}::text))`.execute(
     db,
   );
-  return { version, count: expectedCount, difference };
+  return { version, count: expectedCount, difference, catchup };
 }

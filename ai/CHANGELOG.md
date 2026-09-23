@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-23 — Search pre-publication catch-up
+
+- TASK-0110: capture newly visible source events after scanning, refresh staged projections and publish atomically. Compare visible ID sets rather than relying on max(id), so an earlier allocated event that commits late is included. Copy historical IDs only; fetch payloads only for changed events.
+- Finite statement cut, READ COMMITTED guard, exact addition/removal counts and shared live/rebuild record-id parsing. Catch-up does not replay subscribers or acknowledge deliveries; failures roll back. Audit adds only event count and watermark. No migration or visibility rule change.
+- Validation: 30 search tests passed together, then the added deletion case and related races passed (4); final SQL optimization passed late-commit/post-cut tests (2). Total 31 search tests defined; quality gate 273 unit tests and build passed. CI pending. Remote small-fixture p95 274 ms/max 278 ms; production-scale acceptance remains open.
+- Self-review preserved transaction atomicity, RLS readers, late low-ID events and ordinary post-cut delivery. OQ-034 is still pending; roadmap and source/rebuild contracts updated.
+
 ## 2026-09-23 — Search rebuild concurrency tests
 
 - TASK-0110: three integration scenarios use real source/outbox transactions and separate PostgreSQL connections. Lock contention is observed with pg_blocking_pids; readers retain the old full index while the rebuild is uncommitted.

@@ -65,16 +65,19 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 | Son açılanlar | Yalnız adresler kullanıcıya göre oturumda tutuluyor; başlıklar güncel yetkiyle yeniden okunuyor |
 | Mobil palet | Tam ekran, kayan liste, sabit COSS footer ve kapatma düğmesi 390 px tarayıcı görünümünde doğrulandı |
 | Kaynaktan yeniden dizinleme | Geçici veri kümesi, karşılaştırma, tek işlemde yayın ve hata halinde geri dönüş kuruldu |
-| Küçük veri kümesinde hız | 56 sentetik kayıt / 20 sıcak istekte p95 **255 ms**, en yüksek **255 ms** (0027 sonrası); 0025 ölçümü 258 ms, ondan önceki p95 348 ms idi. Bu ölçüm 300 ms hedefinin altında |
+| Küçük veri kümesinde hız | 56 sentetik kayıt / 20 sıcak istekte p95 **274 ms**, en yüksek **278 ms** (son ölçüm); önceki ölçümler 255/258 ms, 0025 öncesi p95 348 ms idi. Bu ölçüm 300 ms hedefinin altında |
 | Normalleştirme sürümü | Satır ve sözcük eşlemelerine eklendi; görünür eski sürümde kontrollü hata, yazma/yeniden kurma ve sürüm denetimi test edildi. Kova/sözlük sürüm düzeni ve tam yardımcı tutarlılığı açık |
 | Çoklu kapsam | OQ-034 yanıtı bekleniyor: ortak kaydı görmek için ilgili şantiyelerden birine mi, tümüne mi yetki gerekecek? |
-| Eşzamanlı kaynak değişiklikleri | Gerçek kaynak ve olay kuyruğuyla commit/geri alma, kayıt taşıma/silme, tarama sırasının gerisine ekleme ve tekrar teslim sınandı. Kuyruk işlendiğinde kaynak/dizin/yardımcılar eşleşiyor |
-| Büyük veri ve yayın öncesi güncellik | Üretim hacmine yakın hız ve yayın öncesi olay yakalama kabulü bekliyor; küçük eşzamanlılık testi bunların yerine geçmiyor |
+| Eşzamanlı kaynak değişiklikleri | Gerçek kaynak ve olay kuyruğuyla commit/geri alma, taşıma/silme, tarama sırasının gerisine ekleme ve tekrar teslim sınandı. Yakalanan değişiklikler kuyruk işleyicisi çalışmadan yayın adayına yansıyor; hata eski sürümü koruyor |
+| Yayın öncesi olay yakalama | Uygulandı ve küçük veri kümesinde doğrulandı. Geç tamamlanan düşük numaralı olaylar da yakalanıyor; belirlenen sınırdan sonrakiler normal kuyruktan işleniyor |
+| Büyük veri | Üretim hacmine yakın sorgu hızı ve yeniden kurma maliyeti açık; geçici olay kümesinin disk/süre maliyeti de ölçülecek |
 | Gerçek kaynaklarla tarayıcı kabulü | Modüller kendi dilimlerinde arama kaynağını kaydedecek; gerçek telefon klavyesiyle kabul de açık |
 
 **Arama henüz tamamlandı sayılmıyor.** Küçük veri kümesindeki hız sonucu, büyük veri kabulünün yerine geçmiyor.
 
 ### Son doğrulamalar
+
+- Yayın öncesi yakalama için arama senaryoları **31** oldu; yerelde toplu ve hedefli koşularda geçti. **273 birim testi** ve üretim derlemesi geçti. Bu değişikliğin CI sonucu bekleniyor; yeni veritabanı göçü yok.
 
 - Eşzamanlılık testleri `9b6a9f9` ile gönderildi. CI 35830079315 yeşil: toplam **26 arama testi**, **273 birim testi** ve temiz kurulum/tam geri dönüş/yeniden kurulum geçti. Test şeması, sentetik olaylar, roller ve dizin satırları temizlendi.
 
@@ -85,7 +88,7 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 ## Buradan sonraki sıra
 
-1. **TASK-0110:** çoklu kapsam kararını uygulamak, kalan yardımcı sürüm/tutarlılık işlerini ve büyük veri/eşzamanlılık kabulünü tamamlamak.
+1. **TASK-0110:** çoklu kapsam kararını uygulamak, kalan yardımcı sürüm/tutarlılık işlerini ve üretim hacminde hız/yeniden kurma ve gerçek cihaz kabulünü tamamlamak.
 2. **TASK-0028:** ekran altı işlevsel şeridi kurmak.
 3. **TASK-0112:** kalan hesap güvenliği özelliklerini kurmak.
 4. **TASK-0111 — M1:** yerel kabul turu ve Faz 07 çıkış kontrolü.

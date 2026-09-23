@@ -4,7 +4,19 @@ Last updated: 2026-09-23
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — concurrent source rebuild validation
+## Latest continuation — pre-publication source catch-up
+
+TASK-0110 now remembers initially visible matching outbox IDs in a transaction-local temporary table, scans source projections, and captures the newly visible ID set in one SQL statement. It refreshes each affected staged record through its owning projector before atomic publication, adjusting the expected count for additions/removals. Live indexing and catch-up share the record-id parser. A maximum ID is audit evidence only, never the lower-bound filter: sequence allocation is not commit order. Historical payloads are not materialized; only changed-event payloads are copied. No permanent transaction IDs/xmin, schema migration, new permission or business rule.
+
+The catch-up cut is finite. Later commits use normal durable delivery; source reads use READ COMMITTED and do not claim one snapshot across all records. Frozen transaction isolation is rejected. Other subscribers and delivery state are untouched, so no task/notification replay occurs. Audit records only caught_up_events and outbox_watermark. Any projection/comparison failure rolls back staging/publication together.
+
+Distinct self-review and tests: eight real-source concurrency scenarios now cover publication commit/rollback, source rollback, catch-up failure after a prior stage change, low-ID late commit, post-cut delivery, isolation rejection and removal of an already scanned record. Candidate rows/postings/vocabulary/buckets/versions match source before the delivery worker runs; external readers keep the old complete index until commit. The marked synthetic fixture is cleaned by the suite; genuine rebuild epoch/audit remains. Applied migration 0027 is unchanged.
+
+Validation: full search run 30/30, then deletion regression plus related races 4/4; final IDs-only SQL optimization passed both late-commit and finite-cut tests. There are now 31 search tests (23 existing + 8 concurrency). Quality check passed with 273 unit tests and production build passed. Remote 56-row/20-warm-request smoke p95 274 ms / max 278 ms; not a production-scale claim. CI pending for this increment.
+
+Remaining: measure temporary historical-ID set and publication costs at production scale, helper version/content parity, multi-scope semantics pending explicit OQ-034 ANY/ALL answer, and actual-source/phone browser acceptance. TASK-0110 remains IMPLEMENTING. A repeated 'continue' is not an answer to OQ-034. Next independent work can address helper parity or scale. Root YOL-HARITASI.md updated; no phase/order/scope change.
+
+## Previous continuation — concurrent source rebuild validation
 
 Added search-concurrency.dbtest.ts: an explicitly marked synthetic zsr source schema, its own IAM viewer, a test-named subscriber that runs the real searchIndexer, real durable outbox writes and separate source/rebuild/delivery/app connections. A barrier pauses the first source page; committed updates move that row to an inaccessible site, remove a later row and insert a UUID behind the cursor. pg_blocking_pids verifies that the delivery is actually blocked by the rebuild transaction, rather than assuming a sleep means contention.
 
