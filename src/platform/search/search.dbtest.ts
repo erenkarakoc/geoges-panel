@@ -718,3 +718,143 @@ describe("normalization versions (TASK-0110)", () => {
     expect(await titlesFor(VIEWER_A, "sogut")).not.toEqual([]);
   });
 });
+
+describe("helper versions (TASK-0110, D-247)", () => {
+  const SITE_TYPE = `${P}.site`;
+  const version = async () =>
+    (await admin.query("select core.search_normalization_version() as v")).rows[0].v as number;
+  /** How many buckets and vocabulary entries the throw-away module has at one version. */
+  const helperRows = async (at: number) =>
+    (
+      await admin.query(
+        `select count(*)::int as n from (
+           select normalization_version from core.search_word where record_type like $1
+           union all
+           select normalization_version from core.search_word_bucket where record_type like $1
+         ) h where h.normalization_version = $2`,
+        [`${P}.%`, at],
+      )
+    ).rows[0].n as number;
+  const wordCount = async (at: number) =>
+    (
+      await admin.query(
+        `select coalesce(sum(record_count), 0)::int as n from core.search_word
+          where word = 'sogut' and record_type = $1 and normalization_version = $2`,
+        [SITE_TYPE, at],
+      )
+    ).rows[0].n as number;
+  const dropOtherVersions = () =>
+    admin.query(`delete from core.search_word_bucket
+        where normalization_version <> core.search_normalization_version();
+      delete from core.search_word
+        where normalization_version <> core.search_normalization_version()`);
+
+  it("stamps every bucket and vocabulary entry with the normalizer in force", async () => {
+    const now = await version();
+    expect(await helperRows(now)).toBeGreaterThan(0);
+    expect(await helperRows(now + 1)).toBe(0);
+  });
+
+  it("never narrows an answer with a bucket another normalizer wrote", async () => {
+    // A bucket from another generation may hold other ids. If the narrowing trusted it, a record
+    // whose postings hold every asked word would disappear from the answer.
+    await admin.query(
+      `update core.search_word_bucket set normalization_version = $2,
+         search_document_ids = array[2147483647]
+       where word = 'kavakli' and record_type = $1`,
+      [SITE_TYPE, (await version()) + 1],
+    );
+    try {
+      expect(await titlesFor(VIEWER_A, "sogut kavakli")).toEqual([records[id(201)].title]);
+    } finally {
+      await dropOtherVersions();
+      await deliver(`${P}.record.saved`, id(201));
+    }
+  });
+
+  it("takes a record out of the bucket another normalizer wrote for it", async () => {
+    await admin.query(
+      `insert into core.search_word_bucket (word, record_type, scope_key, data_class,
+         normalization_version, search_document_ids)
+       select b.word, b.record_type, b.scope_key, b.data_class, $2, b.search_document_ids
+         from core.search_word_bucket b
+        where b.word = 'sogut' and b.record_type = $1
+          and b.normalization_version = core.search_normalization_version()`,
+      [SITE_TYPE, (await version()) + 1],
+    );
+    try {
+      expect(await helperRows((await version()) + 1)).toBeGreaterThan(0);
+      await deliver(`${P}.record.saved`, id(201));
+      const left = await admin.query(
+        `select count(*)::int as n from core.search_word_bucket
+          where record_type = $1 and normalization_version <> core.search_normalization_version()`,
+        [SITE_TYPE],
+      );
+      expect(left.rows[0].n).toBe(0);
+    } finally {
+      await dropOtherVersions();
+    }
+  });
+
+  it("counts a word for one normalizer without reading another's count", async () => {
+    const now = await version();
+    const before = await wordCount(now);
+    const foreign = () =>
+      admin.query(
+        `insert into core.search_word (word, record_type, normalization_version, record_count)
+         values ('sogut', $1, $2, 99)`,
+        [SITE_TYPE, now + 1],
+      );
+    records[id(302)] = { ...records[id(201)], title: "Söğüt Kavaklı ikinci" };
+    try {
+      await foreign();
+      await deliver(`${P}.record.saved`, id(302));
+      // The count in force is exact, never the other generation's 99 added to it. The foreign
+      // entry itself goes: no posting of that version is behind it any more.
+      expect(await wordCount(now)).toBe(before + 1);
+      expect(await wordCount(now + 1)).toBe(0);
+
+      await foreign();
+      delete records[id(302)];
+      await deliver(`${P}.record.removed`, id(302));
+      expect(await wordCount(now)).toBe(before);
+      // Removing a record of this generation leaves the other generation's count alone.
+      expect(await wordCount(now + 1)).toBe(99);
+    } finally {
+      delete records[id(302)];
+      await deliver(`${P}.record.removed`, id(302));
+      await dropOtherVersions();
+    }
+  });
+
+  it("rolls the helper versions back and reapplies without changing what is indexed", async () => {
+    const migration = (suffix: string) =>
+      readFileSync(
+        new URL(`../../../db/migrations/0029_search_helper_versions${suffix}.sql`, import.meta.url),
+        "utf8",
+      );
+    const buckets = async () =>
+      (
+        await admin.query(
+          `select word, record_type, scope_key, data_class, search_document_ids
+             from core.search_word_bucket where record_type like $1
+            order by word, record_type, scope_key, data_class`,
+          [`${P}.%`],
+        )
+      ).rows;
+    const integrity = async () =>
+      (await admin.query("select * from core.search_integrity()")).rows[0];
+    const before = await buckets();
+    const reportBefore = await integrity();
+    await admin.query(migration(".down"));
+    const column = await admin.query(
+      `select count(*)::int as n from information_schema.columns
+        where table_schema = 'core' and table_name = 'search_word'
+          and column_name = 'normalization_version'`,
+    );
+    expect(column.rows[0].n).toBe(0);
+    await admin.query(migration(""));
+    expect(await buckets()).toEqual(before);
+    expect(await integrity()).toEqual(reportBefore);
+  });
+});

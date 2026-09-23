@@ -128,10 +128,9 @@ export async function publishSearchStage(
   // Recreate helpers too: an orphan id in a damaged bucket is not repaired by per-row upserts.
   await sql`select core.rebuild_search_buckets()`.execute(db);
   await sql`delete from core.search_word`.execute(db);
-  await sql`insert into core.search_word (word, record_type, record_count)
-    select word, record_type, count(*)::int from core.search_posting group by word, record_type`.execute(
-    db,
-  );
+  await sql`insert into core.search_word (word, record_type, normalization_version, record_count)
+    select word, record_type, normalization_version, count(*)::int from core.search_posting
+    group by word, record_type, normalization_version`.execute(db);
   const result = await sql<{ difference: number }>`select count(*)::int as difference
     from pg_temp.geoges_search_stage s left join core.search_row r
       on r.record_schema = s.record_schema and r.record_table = s.record_table and r.record_id = s.record_id

@@ -346,3 +346,13 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-23 00:16:42Z · b13a9554 · Write · `db/migrations/0021_search_word_buckets.sql`
 - 2026-09-23 00:17:01Z · b13a9554 · Write · `db/migrations/0021_search_word_buckets.down.sql`
 - 2026-09-23 00:17:21Z · b13a9554 · Write · `scripts/search-rebuild.mjs`
+- 2026-09-23 12:16:18Z · b13a9554 · Write · `db/migrations/0029_search_helper_versions.sql`
+- 2026-09-23 12:22:13Z · b13a9554 · Write · `db/migrations/0029_search_helper_versions.down.sql`
+- 2026-09-23 12:22:19Z · b13a9554 · Edit · `src/platform/db/search-rebuild-store.ts`
+- 2026-09-23 12:26:23Z · b13a9554 · Edit · `src/platform/search/search.dbtest.ts`
+- 2026-09-23 12:45:33Z · b13a9554 · Edit · `YOL-HARITASI.md`
+- 2026-09-23 12:45:36Z · b13a9554 · Edit · `YOL-HARITASI.md`
+- 2026-09-23 12:45:50Z · b13a9554 · Edit · `ai/CHANGELOG.md`
+- 2026-09-23 12:45:57Z · b13a9554 · Edit · `ai/CURRENT_STATE.md`
+- 2026-09-23 12:46:23Z · b13a9554 · Edit · `ai/TASKS.md`
+- 2026-09-23 12:46:40Z · b13a9554 · Edit · `ai/SESSION_HANDOFF.md`

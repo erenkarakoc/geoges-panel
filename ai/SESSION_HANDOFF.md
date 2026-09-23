@@ -4,7 +4,21 @@ Last updated: 2026-09-23
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — independent helper integrity (0028)
+## Latest continuation — helper normalization versions (0029)
+
+0029_search_helper_versions is applied to the test project. core.search_word and core.search_word_bucket now carry normalization_version (not null, default 1, check > 0) and both primary keys include it, so two normalizer generations can sit side by side instead of sharing a bucket or mixing counts folded by different rules. Two partial indexes on foreign versions stay empty in a healthy index, exactly like 0027; a future normalizer version migration MUST update their predicates together with 0027's.
+
+Maintenance: set_search_buckets captures the version once, evicts the record from any bucket of another generation as well as from words/scopes/classes it left, and conflicts on the version-qualified key. index_search_row_unlocked stamps postings, groups the vocabulary recount by version and deletes only entries with no posting of their own version behind them. remove_search_row_unlocked decrements by (word, version) pairs, so another generation's count is untouched. rebuild_search_buckets_unlocked groups by the row's version. The rebuild data layer refreshes core.search_word per version too.
+
+Reading: the bucket narrowing CTE, the posting join and core.search_suggest all require the version in force, and search_records also filters the row. A foreign generation's bucket therefore cannot change coverage or candidates, so it cannot narrow a visible record out of an answer; postings still decide and a missing bucket still hides nothing. assert_search_normalization is unchanged and still closes search for the requested types while any visible row or posting is stale. core.search_integrity() now compares expected buckets and vocabulary per version.
+
+Validation: 56 search DB tests (5 new), 198 DB tests across 15 files, 273 unit tests, prettier and production build pass locally. New cases: helpers stamped with the version in force, a foreign-generation bucket holding other ids never narrowing a two-word answer out, re-indexing evicting the record from a foreign bucket, counts staying apart across generations on both index and remove, and a 0029 down/up round trip after which bucket contents and the integrity report are identical. Warm smoke 56 rows/20 samples p95 271 ms / max 272 ms; small-fixture only, no production-scale claim. CI pending.
+
+Environment note, not a code fault: the first full test:db run failed in the search suite's afterAll because a jobs worker was running against the same development database and the 15:30 tsk.daily-digest job inserted placeholder digests for the suite's throw-away users, so iam.user could not be deleted. Stop the worker before npm run test:db. The four placeholder rows for test identities were removed and the full suite then passed.
+
+Distinct self-review: no new grant, table access, definer change, business rule or interface change; the answer a person gets is unchanged. The down migration restores the previous function bodies first and then refuses with search_helper_versions_present rather than silently deleting rows left from another generation. Migrations through 0028 are untouched. Next: read-time helper consistency limited to visible records, then production-scale query/rebuild acceptance and real-source browser acceptance. OQ-034 still awaits an explicit ANY/ALL owner answer; 'continue' is not that answer. Root YOL-HARITASI.md updated; TASK-0110 remains IMPLEMENTING.
+
+## Previous continuation — independent helper integrity (0028)
 
 0028_search_integrity is applied to the test project. It adds core.search_integrity(), a stable SECURITY INVOKER full-scan operational function. One statement derives expected words from search_row.search_text and independently compares posting membership plus scope/owner/class/type/normalization/projection metadata, exact sorted bucket IDs, and vocabulary counts. It also checks indexed-text folding and the current row normalizer version. Only bigint category counts are returned; no titles/IDs. It deliberately does not derive expected buckets/vocabulary from possibly corrupt postings.
 
