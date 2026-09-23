@@ -362,3 +362,4 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-23 13:13:15Z · b13a9554 · Write · `db/migrations/0030_search_read_time_check.down.sql`
 - 2026-09-23 13:16:48Z · b13a9554 · Write · `db/migrations/0030_search_read_time_check.sql`
 - 2026-09-23 14:38:58Z · 5c627231 · Write · `scripts/db-test-people.mjs`
+- 2026-09-23 16:08:12Z · 5c627231 · Write · `db/migrations/0031_search_suggest_short_circuit.sql`

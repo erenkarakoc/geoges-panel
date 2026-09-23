@@ -238,6 +238,15 @@ describe("how words match (ADR-017, D-247)", () => {
     // Somebody who cannot see that record is corrected towards nothing they may not see.
     expect((await searchFor(as(VIEWER_B), "sogud kavakli")).groups).toEqual([]);
   });
+
+  it("leaves a word the person can already find alone (0031)", async () => {
+    // The short circuit answers from the index before the trigram comparison runs; a word that
+    // exists must come back as itself, even beside a similar word other records use more often.
+    expect(await suggestWord(as(VIEWER_A), "istinat")).toBe("istinat");
+    expect(await suggestWord(as(VIEWER_A), "Söğüt")).toBe("sogut");
+    // A word that exists only where this person may not look is still not "found" for them.
+    expect(await suggestWord(as(VIEWER_B), "istinat")).not.toBe("istinat");
+  });
 });
 
 describe("the word buckets (D-247, OQ-033)", () => {
