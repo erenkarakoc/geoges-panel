@@ -9,6 +9,7 @@
 - Result at 20,000 records, p95 including the round trip: common word 958 → 167 ms, place word 676 → 287 ms, unique word 352 → 90 ms, two common words 1,552 → 212 ms, two words no record shares 1,251 → 202 ms, three words 1,293 → 264 ms. All inside the 300 ms target. The index costs about 260 bytes per record; a full integrity scan of 20,000 rows takes 1.5–2.4 s.
 - Caught by its own test while making 0035: skipping the suggestion also skipped the normalizer-version check it used to carry, and the palette turned the refusal into "this kind could not be read" instead of refusing. The check is now asked explicitly, before the block that catches a failed read.
 - Verification: 204 database tests across 15 files, 273 unit tests, format and build pass. Also fixed: a TSK test asserted that no dead-letter problem task exists at all, which a development database fails once a real incident has ever opened and closed one; it now asserts that none is open.
+- 0034 and 0035 committed as 927b455; CI 35911823080 green on a clean database before and after a full rollback and reapply.
 
 ## 2026-09-23 — The search checks its helpers while it answers
 
