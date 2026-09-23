@@ -29,7 +29,8 @@
     "iam:bootstrap-owner": "node scripts/iam-bootstrap-owner.mjs",
     "jobs:status": "node scripts/jobs-cli.mjs status",
     "jobs:retry": "node scripts/jobs-cli.mjs retry",
-    "jobs:rebuild": "node scripts/jobs-cli.mjs rebuild"
+    "jobs:rebuild": "node scripts/jobs-cli.mjs rebuild",
+    "search:rebuild": "node scripts/search-rebuild.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1137.0",

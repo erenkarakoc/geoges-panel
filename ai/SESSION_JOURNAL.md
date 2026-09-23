@@ -342,3 +342,7 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-22 23:47:56Z · b13a9554 · Write · `src/platform/search/service.ts`
 - 2026-09-22 23:47:59Z · b13a9554 · Write · `src/app/api/search/route.ts`
 - 2026-09-22 23:49:00Z · b13a9554 · Write · `src/platform/search/search.dbtest.ts`
+- 2026-09-23 00:15:00Z · b13a9554 · Write · `YOL-HARITASI.md`
+- 2026-09-23 00:16:42Z · b13a9554 · Write · `db/migrations/0021_search_word_buckets.sql`
+- 2026-09-23 00:17:01Z · b13a9554 · Write · `db/migrations/0021_search_word_buckets.down.sql`
+- 2026-09-23 00:17:21Z · b13a9554 · Write · `scripts/search-rebuild.mjs`

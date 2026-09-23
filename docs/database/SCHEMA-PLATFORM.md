@@ -101,7 +101,7 @@ Belgenin kapsamı ve veri sınıfı **bağlı kayıttan** türetilir ve belgeye 
 
 | `core.search_posting` | Sözcük → arama kaydı | `search_row_id`, `word`, `scope_type`, `scope_ids[]`, `projection_version` | Kaynak arama satırına FK; aynı sürümde kayıt/sözcük tekil; kaynak görünürlüğüyle RLS |
 | `core.search_word` | Kapsam/tür bazında sözcük adedi | `word`, `record_type`, `scope_type`, `scope_ids[]`, `record_count`, `projection_version` | Türetilmiş sözlük; yetkisiz varlık veya adet açığa çıkmaz |
-| `core.search_word_bucket` | Sözcüğün sıralı arama numaraları | `word`, `record_type`, `scope_type`, `scope_ids[]`, `search_document_ids integer[]`, `projection_version` | Kapsam/tür/sözcük/sürüm tekil; sıralı, tekrarsız, NULL içermeyen dizi |
+| `core.search_word_bucket` | Sözcüğün sıralı arama numaraları | `word`, `record_type`, `scope_key` (`site:<id>` / `project:<id>` / `company`), `data_class`, `search_document_ids integer[]` | Kapsam/tür/sözcük/sürüm tekil; sıralı, tekrarsız, NULL içermeyen dizi |
 
 ### Arama yardımcıları sözleşmesi (D-247, CHG-007)
 

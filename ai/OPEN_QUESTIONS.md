@@ -1,6 +1,6 @@
 # OPEN QUESTIONS
 
-Last updated: 2026-09-22 · Format: `OQ-NNN` · Blocking = blocks the stated phase
+Last updated: 2026-09-23 · Format: `OQ-NNN` · Blocking = blocks the stated phase
 
 IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no missing records).
 
@@ -86,4 +86,10 @@ talking to the customer, not as pending questions.
 | OQ-030 | Should general expenses (office rent, head office) be shared out onto projects, since "everything ties back to revenue"? | No. D-149 keeps project profit to direct costs and shows general expenses company-wide only; D-173 does the same for quotes. Owner confirmed again 2026-09-22. | Phase 11 (FIN slice) |
 | OQ-031 | Should an own employee's wage follow the site they actually worked at that day, instead of the unit they are registered to? | No. D-164 / REQ-HR-009 writes the wage to the registered unit's cost centre, split by days only when the unit itself changes mid-month. Owner confirmed again 2026-09-22. | Phase 12 (HR slice) |
 | OQ-032 | Is an hourly cost rate per activity expected (cost per casting or installation hour)? | No. Hours are recorded to the minute (REQ-SIT-024, REQ-SIT-027) and used for output per hour; cost comes from monthly payroll on the cost centre. Owner confirmed again 2026-09-22. | Phase 12 (HR slice), Phase 15 (performance) |
+
+## Search — raised 2026-09-23 (not blocking Phase 07)
+
+| ID | Question | Recommendation | Blocks |
+|---|---|---|---|
+| OQ-033 | **ANSWERED 2026-09-23 by the owner: build it now.** D-247 adopted three derived search structures. Two are built and answer correctly (word postings and the vocabulary). The third, `core.search_word_bucket` (each word's sorted internal record ids, partitioned by scope and data class), is a **speed** structure: it narrows the candidate set before the rows are read. Should it be built now, or when the first slice brings real records? Owner's answer: build the bucket now, with the rest of TASK-0110. Recommendation that was not taken: build it with the first slice (Phase 09), not now. With zero records nothing can be measured, and a bucket has to be invalidated or rebuilt on every write, so building it blind risks a structure that is either stale or expensive. SPIKE-12 measured it at 500,000 rows; that is the moment to bring it back and measure again. The plan and the task row both say it is owed. | Nothing today; the search answers correctly without it |
 

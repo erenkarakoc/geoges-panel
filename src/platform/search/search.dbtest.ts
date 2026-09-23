@@ -29,6 +29,7 @@ const P = "zzs";
 
 let admin: pg.Client;
 let workerPool: pg.Pool;
+let appPool: pg.Pool;
 const role: Record<string, string> = {};
 
 const as = (userId: string) => ({ userId, actingRoleId: null });
@@ -96,6 +97,11 @@ const titlesFor = async (userId: string, query: string) => {
 };
 
 async function cleanUp() {
+  await admin.query(
+    `select core.clear_search_buckets(search_document_id) from core.search_row
+      where record_schema = $1`,
+    [P],
+  );
   await admin.query("delete from core.search_row where record_schema = $1", [P]);
   await admin.query(
     `delete from core.search_word w
@@ -133,6 +139,7 @@ async function cleanUp() {
 beforeAll(async () => {
   admin = await connectAdmin();
   workerPool = new pg.Pool(readDatabaseConfig(process.env, undefined, "DATABASE_WORKER_URL"));
+  appPool = new pg.Pool(readDatabaseConfig());
   await cleanUp();
   await admin.query(`
     insert into iam.permission (code, module, name, created_from) values
@@ -170,6 +177,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await workerPool?.end();
+  await appPool?.end();
   if (admin) {
     await cleanUp();
     await admin.end();
@@ -212,6 +220,64 @@ describe("how words match (ADR-017, D-247)", () => {
     expect(answer.groups[0]?.hits[0]?.title).toBe("Söğüt Şantiyesi");
     // Somebody who cannot see that record is corrected towards nothing they may not see.
     expect((await searchFor(as(VIEWER_B), "sogud kavakli")).groups).toEqual([]);
+  });
+});
+
+describe("the word buckets (D-247, OQ-033)", () => {
+  const bucketsFor = async (word: string) =>
+    (
+      await admin.query(
+        `select scope_key, data_class, cardinality(search_document_ids) as n
+           from core.search_word_bucket where word = $1 and record_type like $2
+          order by scope_key, data_class`,
+        [word, `${P}.%`],
+      )
+    ).rows as { scope_key: string; data_class: string; n: number }[];
+
+  it("keeps one bucket per place and class, and agrees with the words", async () => {
+    const expected = [
+      { scope_key: `site:${SITE_A}`, data_class: "commercial", n: 1 },
+      { scope_key: `site:${SITE_A}`, data_class: "internal", n: 1 },
+    ];
+    expect(await bucketsFor("sogut")).toEqual(expected);
+    // Rebuilding from the words changes nothing: the upkeep and the rebuild agree.
+    const { rows } = await admin.query("select core.rebuild_search_buckets() as n");
+    expect(rows[0].n).toBeGreaterThan(0);
+    expect(await bucketsFor("sogut")).toEqual(expected);
+  });
+
+  it("is read only by people who may see what is in it", async () => {
+    // The worker sees every bucket; a person sees only those of their own place and class.
+    const all = await workerPool.query(
+      "select count(*)::int as n from core.search_word_bucket where word = 'sogut'",
+    );
+    expect(all.rows[0].n).toBeGreaterThanOrEqual(2);
+    const countFor = async (userId: string) => {
+      const client = await appPool.connect();
+      try {
+        await client.query("begin");
+        await client.query("select set_config('app.user_id', $1, true)", [userId]);
+        const { rows } = await client.query(
+          "select count(*)::int as n from core.search_word_bucket where word = 'sogut'",
+        );
+        await client.query("rollback");
+        return rows[0].n;
+      } finally {
+        client.release();
+      }
+    };
+    expect(await countFor(VIEWER_A)).toBe(1); // the internal one only
+    expect(await countFor(FINANCE_A)).toBe(2); // and the commercial one as well
+    expect(await countFor(VIEWER_B)).toBe(0); // another site: nothing at all
+  });
+
+  it("follows a record that moves to another place", async () => {
+    records[id(202)].siteId = SITE_A;
+    await deliver(`${P}.record.saved`, id(202));
+    expect((await bucketsFor("ilgaz")).map((b) => b.scope_key)).toEqual([`site:${SITE_A}`]);
+    records[id(202)].siteId = SITE_B;
+    await deliver(`${P}.record.saved`, id(202));
+    expect((await bucketsFor("ilgaz")).map((b) => b.scope_key)).toEqual([`site:${SITE_B}`]);
   });
 });
 
