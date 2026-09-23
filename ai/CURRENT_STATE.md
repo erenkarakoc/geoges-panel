@@ -7,7 +7,7 @@ PROJECT STATUS:              TESTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
 CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0110 site-wide search IMPLEMENTING: per-type list links, permission-revalidated recents, mobile fullscreen and transactional source rebuild implemented; small-fixture warm latency passes after 0025 (258 ms p95, previously 348 ms); 0027 adds row/posting normalization versions and controlled errors for visible stale versions (22 search DB tests plus the new rollback/backfill test passed; latest 56-row p95 255 ms). Multi-scope visibility awaits OQ-034; helper version parity, browser acceptance and production-scale performance/concurrency remain. TASK-0113 still IMPLEMENTING. Then TASK-0028, TASK-0112 and TASK-0111 (M1).
+CURRENT TASK:        TASK-0110 site-wide search IMPLEMENTING: per-type list links, permission-revalidated recents, mobile fullscreen and transactional source rebuild implemented; small-fixture warm latency passes after 0025 (258 ms p95, previously 348 ms); 0027 adds row/posting normalization versions and controlled errors for visible stale versions (23 search DB tests pass including rollback/backfill; CI 35811145952 green; latest remote 56-row p95 255 ms). Multi-scope visibility awaits OQ-034; helper version parity, browser acceptance and production-scale performance/concurrency remain. TASK-0113 still IMPLEMENTING. Then TASK-0028, TASK-0112 and TASK-0111 (M1).
 STATUS:              IMPLEMENTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)

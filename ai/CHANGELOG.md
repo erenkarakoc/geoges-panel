@@ -4,7 +4,7 @@
 
 - TASK-0110: migration 0027 adds explicit row/posting normalization versions and backfills posting projection versions from each row. Atomic indexing and source rebuild keep them aligned; older events leave metadata intact.
 - RLS-protected reads reject stale visible requested types with a fixed error; hidden stale records produce no error signal. Partial mismatch indexes keep the healthy path small. Rebuild comparison and CLI diagnostics include version agreement.
-- Validation: apply/down preflight, 22 search DB tests plus new rollback/backfill regression, 273 unit tests, production build and clean diagnostics pass. Latest 56-row/20-warm-sample p95/max 255 ms. Production-scale acceptance remains open.
+- Validation: apply/down preflight, 22 search DB tests plus new rollback/backfill regression, 273 unit tests, production build and clean diagnostics pass. Latest 56-row/20-warm-sample p95/max 255 ms. Production-scale acceptance remains open. Code commit 3d493bd passed CI 35811145952, including clean apply/down/up and all 23 search tests.
 - OQ-034 records the pending owner decision on ANY/ALL coverage for one multi-scope record; no visibility expansion assumed. Root roadmap refreshed.
 
 ## 2026-09-23 — Search palette completion work and clean-install repair

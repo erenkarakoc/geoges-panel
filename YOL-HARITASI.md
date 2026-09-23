@@ -75,7 +75,7 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 ### Son doğrulamalar
 
-- 273 birim testi, 22 arama veritabanı testi ve ayrıca eklenen göç geri dönüş/sürüm doldurma testi geçti (toplam 23 arama testi tanımlı); üretim derlemesi geçti.
+- 273 birim testi, göç geri dönüş/sürüm doldurma senaryosu dahil 23 arama veritabanı testi ve üretim derlemesi geçti. 0027 değişikliği `3d493bd` ile gönderildi; CI 35811145952 temiz kurulum/tam geri dönüş/yeniden kurulum testleriyle yeşil.
 - 0025 ile arama için ağ turu dörtten üçe indi; RLS, salt okunur işlem, önceden kurulan 15 saniye sınırı ve hata/iptalde kimlik temizliği korundu.
 - CI, mevcut tarihli kural kodunda aynı işlemde eski düzeltmenin seçilebildiğini yakaladı. 0026 düzeltmesiyle ters UUID sırası kullanılarak da son düzeltmenin seçildiği ve 10 ADM veritabanı testinin geçtiği doğrulandı.
 - `c62f80e` için CI **35809769758 geçti**: temiz kurulum, testler, tüm göçleri geri alma ve yeniden uygulama doğrulandı.
