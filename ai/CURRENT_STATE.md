@@ -7,7 +7,7 @@ PROJECT STATUS:              TESTING
 CURRENT PHASE:       PHASE 07 — Foundation Build (Phase 06 DONE 2026-09-21, owner approved)
 CURRENT SUBPHASE:    IMPLEMENT
 CURRENT FEATURE:     —
-CURRENT TASK:        TASK-0110 site-wide search IMPLEMENTING: per-type list links, permission-revalidated recents, mobile fullscreen and transactional source rebuild implemented; small-fixture warm latency passes after 0025 (258 ms p95, previously 348 ms); browser acceptance, multi-scope projection/normalization-version design parity and production-scale performance/concurrency remain. TASK-0113 still IMPLEMENTING. Then TASK-0028, TASK-0112 and TASK-0111 (M1).
+CURRENT TASK:        TASK-0110 site-wide search IMPLEMENTING: per-type list links, permission-revalidated recents, mobile fullscreen and transactional source rebuild implemented; small-fixture warm latency passes after 0025 (258 ms p95, previously 348 ms); 0027 adds row/posting normalization versions and controlled errors for visible stale versions (22 search DB tests plus the new rollback/backfill test passed; latest 56-row p95 255 ms). Multi-scope visibility awaits OQ-034; helper version parity, browser acceptance and production-scale performance/concurrency remain. TASK-0113 still IMPLEMENTING. Then TASK-0028, TASK-0112 and TASK-0111 (M1).
 STATUS:              IMPLEMENTING
 BRANCH:              main — single branch, direct commits (D-109, 2026-09-18)
 PARALLEL TRACK:      none — CHG-003/CHG-004 shell work and CHG-005 approved and DONE 2026-09-18 (TASK-0030, TASK-0032…TASK-0038)
@@ -103,6 +103,7 @@ Earlier: Phase 00 DONE (2026-09-15): owner approved TASK-0002, 0003, 0005, 0006,
 Nothing blocks the Phase 07 discovery. The question round will need owner answers. No owner action is open for storage; real personnel files wait for D-249.
 
 ## OPEN QUESTIONS
+OQ-034 awaits the owner: ANY versus ALL scope coverage for a shared record. Only multi-scope visibility implementation is blocked; independent search work continues.
 See `ai/OPEN_QUESTIONS.md`. OQ-029 was answered 2026-09-21 by D-248 (cold-start exception). OQ-020 (data access) and OQ-026 (password policy) are answered; OQ-013…015 and OQ-017 remain infrastructure/runtime follow-ups. Hosting is deferred under DEF-008; KVKK inventory under DEF-007.
 
 ## RECENT DECISIONS

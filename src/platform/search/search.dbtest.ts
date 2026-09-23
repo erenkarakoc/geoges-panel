@@ -5,6 +5,7 @@
  * roles and people are written over the admin connection and removed afterwards, together with
  * every search row they produced. `npm run test:db`.
  */
+import { readFileSync } from "node:fs";
 import pg from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
@@ -12,7 +13,12 @@ import { connectAdmin } from "../../../scripts/db-admin.mjs";
 import { readDatabaseConfig } from "@/platform/db/database-config";
 import { kyselyOn } from "@/platform/db/run-as-user";
 import { createRunSearchAsUser } from "@/platform/db/run-search-as-user";
-import { indexSearchRow, removeSearchRow } from "@/platform/db/search-store";
+import {
+  indexSearchRow,
+  removeSearchRow,
+  searchRecords,
+  suggestWord,
+} from "@/platform/db/search-store";
 import type { DeliveredEvent } from "@/platform/jobs/types";
 import { searchIndexer, type SearchRegistration } from "@/platform/search/indexer";
 import type { SearchProjection } from "@/platform/search/search";
@@ -448,6 +454,15 @@ describe("source publication and current visibility", () => {
         text: "kaynakta yenilenen başlık",
       };
       const result = await rebuildSearch(kyselyOn(client), [registration]);
+      const metadata = await client.query(
+        `select count(*)::int as n from core.search_posting p
+         join core.search_row r on r.id = p.search_row_id where r.record_schema = $1
+         and (r.normalization_version <> core.search_normalization_version()
+           or p.normalization_version <> r.normalization_version
+           or p.projection_version <> r.projection_version)`,
+        [P],
+      );
+      expect(metadata.rows[0].n).toBe(0);
       expect(result).toMatchObject({ count: 3, difference: 0 });
       const inside = await client.query(
         "select search_document_id, title, projection_version from core.search_row where record_id = $1",
@@ -566,8 +581,8 @@ describe("source publication and current visibility", () => {
         timings.push(performance.now() - started);
       }
       timings.sort((a, b) => a - b);
-      console.info(
-        `Search warm smoke (56 synthetic rows, 20 samples): p95=${Math.round(timings[18])}ms max=${Math.round(timings[19])}ms`,
+      process.stdout.write(
+        `Search warm smoke (56 synthetic rows, 20 samples): p95=${Math.round(timings[18])}ms max=${Math.round(timings[19])}ms\n`,
       );
     } finally {
       await client.query("rollback");
@@ -603,5 +618,103 @@ describe("source publication and current visibility", () => {
       delete records[id(301)];
       await deliver(`${P}.record.removed`, id(301));
     }
+  });
+});
+
+describe("normalization versions (TASK-0110)", () => {
+  it("backfills posting versions from their own rows after rollback and reapply", async () => {
+    const migration = (suffix: string) =>
+      readFileSync(
+        new URL(`../../../db/migrations/0027_search_normalization${suffix}.sql`, import.meta.url),
+        "utf8",
+      );
+    await admin.query("begin");
+    try {
+      await admin.query(migration(".down"));
+      await admin.query(
+        "update core.search_row set projection_version = 77 where record_schema = $1 and record_id = $2",
+        [P, id(201)],
+      );
+      await admin.query(migration(""));
+      const postings = await admin.query(
+        `select p.normalization_version, p.projection_version from core.search_posting p
+         join core.search_row r on r.id = p.search_row_id
+         where r.record_schema = $1 and r.record_id = $2`,
+        [P, id(201)],
+      );
+      expect(postings.rows.length).toBeGreaterThan(0);
+      for (const posting of postings.rows) {
+        expect(posting).toEqual({ normalization_version: 1, projection_version: 77 });
+      }
+    } finally {
+      await admin.query("rollback");
+    }
+  });
+
+  it("stamps initial rows and postings, including their projection version", async () => {
+    const result = await admin.query(
+      `select r.normalization_version as row_version, p.normalization_version as posting_version,
+        r.projection_version as row_projection, p.projection_version as posting_projection
+       from core.search_row r join core.search_posting p on p.search_row_id = r.id
+       where r.record_schema = $1`,
+      [P],
+    );
+    expect(result.rows.length).toBeGreaterThan(0);
+    for (const row of result.rows) {
+      expect(row.row_version).toBe(1);
+      expect(row.posting_version).toBe(1);
+      expect(row.posting_projection).toBe(row.row_projection);
+    }
+  });
+
+  it("rejects stale visible rows without disclosing a hidden row's mismatch", async () => {
+    await admin.query(
+      "update core.search_row set normalization_version = 2 where record_schema = $1 and record_id = $2",
+      [P, id(202)],
+    );
+    try {
+      expect(await titlesFor(VIEWER_A, "sogut")).not.toEqual([]);
+      await expect(titlesFor(VIEWER_B, "ilgaz")).rejects.toMatchObject({
+        code: "P0001",
+        message: "search_normalization_mismatch",
+      });
+      await expect(searchRecords(as(VIEWER_B), "ilgaz")).rejects.toThrow(
+        "search_normalization_mismatch",
+      );
+      await expect(suggestWord(as(VIEWER_B), "ilgaz")).rejects.toThrow(
+        "search_normalization_mismatch",
+      );
+      // An older event must neither rewrite text nor pretend to upgrade the version.
+      await deliver(`${P}.record.saved`, id(202), new Date(0));
+      const stale = await admin.query(
+        "select normalization_version from core.search_row where record_schema = $1 and record_id = $2",
+        [P, id(202)],
+      );
+      expect(stale.rows[0].normalization_version).toBe(2);
+    } finally {
+      await deliver(`${P}.record.saved`, id(202));
+    }
+    expect(await titlesFor(VIEWER_B, "ilgaz")).toEqual([records[id(202)].title]);
+  });
+
+  it("rejects stale visible postings but respects a requested type filter", async () => {
+    await admin.query(
+      `update core.search_posting p set normalization_version = 2 from core.search_row r
+       where r.id = p.search_row_id and r.record_schema = $1 and r.record_id = $2`,
+      [P, id(201)],
+    );
+    try {
+      await expect(titlesFor(VIEWER_A, "sogut")).rejects.toThrow("search_normalization_mismatch");
+      expect(await titlesFor(VIEWER_B, "ilgaz")).not.toEqual([]);
+      const quoteOnly = await searchFor(as(FINANCE_A), "teklif", [
+        { type: `${P}.quote`, label: "Teklifler", listPath: "/today" },
+      ]);
+      expect(quoteOnly.groups.flatMap((group) => group.hits.map((hit) => hit.recordId))).toEqual([
+        id(203),
+      ]);
+    } finally {
+      await deliver(`${P}.record.saved`, id(201));
+    }
+    expect(await titlesFor(VIEWER_A, "sogut")).not.toEqual([]);
   });
 });

@@ -62,15 +62,20 @@ export async function publishSearchStage(
     from pg_temp.geoges_search_stage s left join core.search_row r
       on r.record_schema = s.record_schema and r.record_table = s.record_table and r.record_id = s.record_id
     where r.id is null or row(r.record_type, r.title, r.secondary, r.search_text, r.link_path,
-      r.site_id, r.project_id, r.record_owner_user_id, r.data_class, r.projection_version)
+      r.site_id, r.project_id, r.record_owner_user_id, r.data_class, r.projection_version,
+      r.normalization_version)
       is distinct from row(s.projection->>'recordType', s.projection->>'title', s.projection->>'secondary',
         core.fold_tr(coalesce(s.projection->>'text', '')), s.projection->>'linkPath',
         (s.projection->>'siteId')::uuid, (s.projection->>'projectId')::uuid,
-        (s.projection->>'ownerUserId')::uuid, coalesce(s.projection->>'dataClass', 'internal'), ${version}::int)`.execute(
-    db,
-  );
+        (s.projection->>'ownerUserId')::uuid, coalesce(s.projection->>'dataClass', 'internal'), ${version}::int,
+        core.search_normalization_version())`.execute(db);
   const difference = result.rows[0].difference;
   if (difference) throw new Error("Search publication differs from the staged sources");
+  const metadata = await sql<{ n: number }>`select count(*)::int as n
+    from core.search_posting p join core.search_row r on r.id = p.search_row_id
+    where p.normalization_version <> r.normalization_version
+      or p.projection_version <> r.projection_version`.execute(db);
+  if (metadata.rows[0].n) throw new Error("Search posting versions differ from their source rows");
   await sql`update core.read_model set version = ${version}, rebuilt_at = now(), last_difference = 0
     where name = 'core.search'`.execute(db);
   await sql`select aud.record_event('read_model.rebuilt', 'core', 'read_model', null,

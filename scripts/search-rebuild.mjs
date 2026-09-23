@@ -37,9 +37,17 @@ async function main() {
     const rows = await client.query("select count(*)::int as n from core.search_row");
     console.log(`arama satırı: ${rows.rows[0].n}`);
     console.log(`uyuşmayan kova: ${before.rows[0].n}`);
+    const versions = await client.query(`select
+      (select count(*) from core.search_row
+        where normalization_version <> core.search_normalization_version()) +
+      (select count(*) from core.search_posting p join core.search_row r on r.id = p.search_row_id
+        where p.normalization_version <> r.normalization_version
+          or p.normalization_version <> core.search_normalization_version()
+          or p.projection_version <> r.projection_version) as n`);
+    console.log(`uyuşmayan sürüm: ${versions.rows[0].n}`);
 
     if (CHECK_ONLY) {
-      process.exitCode = before.rows[0].n > 0 ? 1 : 0;
+      process.exitCode = before.rows[0].n > 0 || Number(versions.rows[0].n) > 0 ? 1 : 0;
       return;
     }
 

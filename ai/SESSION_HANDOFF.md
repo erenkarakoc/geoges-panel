@@ -4,7 +4,17 @@ Last updated: 2026-09-23
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — 0025 search request
+## Latest continuation — 0027 normalization metadata
+
+Migration 0027 is applied to the test project and immutable. Search rows/postings now carry normalization_version=1; postings also carry their source row's projection_version. Initial metadata is backfilled from each row. Index writes stamp both versions atomically, including updates; older events cannot upgrade metadata without reindexing. Search records and spelling suggestions check visible requested types under SECURITY INVOKER/RLS and raise only the fixed search_normalization_mismatch error. Hidden mismatches do not alter another user's result/error. Normally empty partial indexes avoid scanning valid rows; a future normalizer version migration MUST also replace their version predicates. Rebuild comparison and search:rebuild -- --check validate metadata.
+
+Verification: transactional apply/down preflight passed; 22 search database tests passed, then the added rollback/reapply backfill test passed separately (23 tests now defined). Quality check passed (273 unit tests), production build passed, consistency CLI reports zero rows/mismatches after fixture cleanup. Warm smoke was measured again through stdout because the runner hid console.info: 56 synthetic rows, 20 samples, p95/max 255 ms. This is a small-fixture measurement only. Commit/CI pending at this note.
+
+Distinct self-review: no definer read helper, no new application write grants, no query/title in error text; hidden-row and type-filter regressions cover the failure signal. Worker writer privileges and publication lock are unchanged. Down migration restores original functions before dropping columns. Bucket/vocabulary version partition and complete helper-content mismatch detection remain acceptance gaps; this increment does not claim them complete.
+
+OQ-034 is pending owner answer (asked asynchronously): may a user authorised only for site A see a record shared by A and B (ANY), or must every scope be authorised (ALL)? PROJECT_RULES section 3 forbids assuming a critical visibility rule. No answer yet; do not infer approval from elapsed time. Continue independent production-scale/concurrent rebuild work while waiting; dependent multi-scope code is not implemented. Update user-facing root roadmap as progress changes.
+
+## Previous continuation — 0025 search request
 
 Migration 0025 is applied to the test project. `runSearchAsUser` uses the existing private app pool: a constant BEGIN READ ONLY + SET LOCAL statement_timeout=15s request, then parameterized core.search_request(user,role,query,types), then COMMIT. SECURITY INVOKER, only geoges_app; function sets transaction-local identity before existing search_palette. Error/cancellation rolls back; failed rollback destroys connection. No session-level identity and no RLS bypass. General runAsUser unchanged.
 

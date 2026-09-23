@@ -65,8 +65,9 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 | Son açılanlar | Yalnız adresler kullanıcıya göre oturumda tutuluyor; başlıklar güncel yetkiyle yeniden okunuyor |
 | Mobil palet | Tam ekran, kayan liste, sabit COSS footer ve kapatma düğmesi 390 px tarayıcı görünümünde doğrulandı |
 | Kaynaktan yeniden dizinleme | Geçici veri kümesi, karşılaştırma, tek işlemde yayın ve hata halinde geri dönüş kuruldu |
-| Küçük veri kümesinde hız | 56 sentetik kayıt / 20 sıcak istekte p95 **258 ms**, en yüksek **259 ms**; önceki p95 348 ms idi. Bu ölçüm 300 ms hedefinin altında |
-| Çoklu kapsam ve normalleştirme sürümü | Tasarımla eşitleme bekliyor |
+| Küçük veri kümesinde hız | 56 sentetik kayıt / 20 sıcak istekte p95 **255 ms**, en yüksek **255 ms** (0027 sonrası); 0025 ölçümü 258 ms, ondan önceki p95 348 ms idi. Bu ölçüm 300 ms hedefinin altında |
+| Normalleştirme sürümü | Satır ve sözcük eşlemelerine eklendi; görünür eski sürümde kontrollü hata, yazma/yeniden kurma ve sürüm denetimi test edildi. Kova/sözlük sürüm düzeni ve tam yardımcı tutarlılığı açık |
+| Çoklu kapsam | OQ-034 yanıtı bekleniyor: ortak kaydı görmek için ilgili şantiyelerden birine mi, tümüne mi yetki gerekecek? |
 | Büyük veri ve eşzamanlılık | Üretim hacmine yakın hız ve yeniden dizinleme sırasında kaynak değişimi kabulü bekliyor |
 | Gerçek kaynaklarla tarayıcı kabulü | Modüller kendi dilimlerinde arama kaynağını kaydedecek; gerçek telefon klavyesiyle kabul de açık |
 
@@ -74,14 +75,14 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 ### Son doğrulamalar
 
-- 273 birim testi, 19 arama veritabanı testi ve üretim derlemesi geçti.
+- 273 birim testi, 22 arama veritabanı testi ve ayrıca eklenen göç geri dönüş/sürüm doldurma testi geçti (toplam 23 arama testi tanımlı); üretim derlemesi geçti.
 - 0025 ile arama için ağ turu dörtten üçe indi; RLS, salt okunur işlem, önceden kurulan 15 saniye sınırı ve hata/iptalde kimlik temizliği korundu.
 - CI, mevcut tarihli kural kodunda aynı işlemde eski düzeltmenin seçilebildiğini yakaladı. 0026 düzeltmesiyle ters UUID sırası kullanılarak da son düzeltmenin seçildiği ve 10 ADM veritabanı testinin geçtiği doğrulandı.
 - `c62f80e` için CI **35809769758 geçti**: temiz kurulum, testler, tüm göçleri geri alma ve yeniden uygulama doğrulandı.
 
 ## Buradan sonraki sıra
 
-1. **TASK-0110:** çoklu kapsam, normalleştirme sürümü ve büyük veri/eşzamanlılık kabulünü tamamlamak.
+1. **TASK-0110:** çoklu kapsam kararını uygulamak, kalan yardımcı sürüm/tutarlılık işlerini ve büyük veri/eşzamanlılık kabulünü tamamlamak.
 2. **TASK-0028:** ekran altı işlevsel şeridi kurmak.
 3. **TASK-0112:** kalan hesap güvenliği özelliklerini kurmak.
 4. **TASK-0111 — M1:** yerel kabul turu ve Faz 07 çıkış kontrolü.

@@ -93,3 +93,9 @@ talking to the customer, not as pending questions.
 |---|---|---|---|
 | OQ-033 | **ANSWERED 2026-09-23 by the owner: build it now.** D-247 adopted three derived search structures. Two are built and answer correctly (word postings and the vocabulary). The third, `core.search_word_bucket` (each word's sorted internal record ids, partitioned by scope and data class), is a **speed** structure: it narrows the candidate set before the rows are read. Should it be built now, or when the first slice brings real records? Owner's answer: build the bucket now, with the rest of TASK-0110. Recommendation that was not taken: build it with the first slice (Phase 09), not now. With zero records nothing can be measured, and a bucket has to be invalidated or rebuilt on every write, so building it blind risks a structure that is either stale or expensive. SPIKE-12 measured it at 500,000 rows; that is the moment to bring it back and measure again. The plan and the task row both say it is owed. | Nothing today; the search answers correctly without it |
 
+
+## Multi-scope search visibility — raised 2026-09-23
+
+| ID | Question | Recommendation | Blocks |
+|---|---|---|---|
+| OQ-034 | PENDING owner answer: may a person authorised for site A find a record shared by sites A and B, or must they be authorised for both? Existing IAM unions grants, but does not define the visibility of a single multi-scope record. Commercial/sensitive class checks remain mandatory. | Decide explicitly before changing search visibility; no inferred expansion of access. | TASK-0110 multi-scope visibility only; normalization metadata and independent validation can proceed. |

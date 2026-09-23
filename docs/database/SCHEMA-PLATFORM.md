@@ -99,11 +99,13 @@ Belgenin kapsamı ve veri sınıfı **bağlı kayıttan** türetilir ve belgeye 
 | `core.read_model` | Okuma modelinin etkin sürümü | `name`, `active_table`, `version`, `rebuilt_at`, `last_difference` | Yeniden kurma sürümü tek güncellemeyle değiştirir (D-233, SPIKE-14) |
 | `core.search_row` | Arama satırı | `record_*`, `record_type`, `title`, `secondary`, `search_vector`, `scope_type`, `scope_ids[]`, `search_document_id`, `normalization_version`, `projection_version`, `source_event_id` | UUID kimlik korunur; benzersiz iç arama numarası ve üç yardımcı veri kümesi D-247 / ADR-017 ile eklenir. Ticari/hassas alan girmez |
 
-| `core.search_posting` | Sözcük → arama kaydı | `search_row_id`, `word`, `scope_type`, `scope_ids[]`, `projection_version` | Kaynak arama satırına FK; aynı sürümde kayıt/sözcük tekil; kaynak görünürlüğüyle RLS |
+| `core.search_posting` | Sözcük → arama kaydı | `search_row_id`, `word`, `scope_type`, `scope_ids[]`, `normalization_version`, `projection_version` | Kaynak arama satırına FK; aynı sürümde kayıt/sözcük tekil; kaynak görünürlüğüyle RLS |
 | `core.search_word` | Kapsam/tür bazında sözcük adedi | `word`, `record_type`, `scope_type`, `scope_ids[]`, `record_count`, `projection_version` | Türetilmiş sözlük; yetkisiz varlık veya adet açığa çıkmaz |
 | `core.search_word_bucket` | Sözcüğün sıralı arama numaraları | `word`, `record_type`, `scope_key` (`site:<id>` / `project:<id>` / `company`), `data_class`, `search_document_ids integer[]` | Kapsam/tür/sözcük/sürüm tekil; sıralı, tekrarsız, NULL içermeyen dizi |
 
 ### Arama yardımcıları sözleşmesi (D-247, CHG-007)
+
+0027 uygulama notu (2026-09-23): satır ve eşlemede normalleştirme sürümü, eşlemede ayrıca satırın izdüşüm sürümü uygulanmıştır. `core.search_normalization_version()` şu anda 1 döndürür. Eski sürüm kontrolü RLS kapsamındaki istenen türlerle sınırlıdır. Normalleştirici değiştiğinde sürüm işlevi, eski sürüm kısmi indekslerinin koşulları ve kaynaklardan yeniden kurma birlikte ele alınır; yalnız sürüm numarasını değiştirmek yeterli değildir. Çoklu kapsam görünürlüğü OQ-034 yanıtını, kova/sözlük sürüm düzeni ve tam içerik tutarlılığı kalan uygulama adımlarını bekler. Aşağıdaki maddeler hedef sözleşmedir.
 
 - Ortak `id uuid` anahtarları korunur. `search_row.search_document_id` pozitif, UNIQUE int4 iç numaradır; UUID dökümü değildir, iş kaydının anahtarı veya dış API kimliği olmaz. Kaynak satıra kalıcı ve tekil eşlenir; yeniden kurmada keyfi yeniden atanmaz. 2.147.483.647 sınırına varmadan kapasite kontrolü ve uyarı gerekir; taşma/sarma veya başka kayda numara yeniden kullanma yoktur. Kapasite artışı yeni göç ve doğrulama gerektirir.
 - Kapsam kümesi sıralı, tekrarsız UUID dizisiyle normalleştirilir; `scope_type` aynı IAM anlamını taşır. Sırf ortak bir şantiyesi var diye farklı görünürlük kümeleri birleştirilmez. Çok kapsamlı kayıt bir sonuç olarak döner; deneydeki tek skaler kapsam ürün yetkilerinin yerine geçmez.
