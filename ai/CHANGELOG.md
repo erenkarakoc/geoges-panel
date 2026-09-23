@@ -1079,3 +1079,8 @@
 
 - TASK-0110, migration 0025: fixed SECURITY INVOKER search request binds identity inside the palette call. A read-only transaction and 15s timeout are established first; commit/rollback identity cleanup remains mandatory. Network trips reduced from four to three; general write access unchanged.
 - Same 56 synthetic rows / 20 warm requests: p95 258 ms, max 259 ms (previously 348/355). This is not production-scale acceptance. Search DB suite 19/19 and 273 unit tests passed; explicit connection reuse, cancellation cleanup and wrong-role rejection covered.
+
+## 2026-09-23 — Deterministic rule corrections
+
+- Search CI 35809458042 exposed a pre-existing ADM failure after rollback/reapply: same-transaction rule timestamps tie, and UUIDv7 random bits can select the older correction.
+- Migration 0026 gives new rule rows an owned insertion sequence used after effective/creation dates. Legacy rows keep NULL and their previous UUID tie order. Configuration transfer already preserves columns and advances owned sequences. Ten ADM DB tests pass, including deliberately reversed UUIDs at one transaction timestamp; no sleeps or retries hide the failure.

@@ -183,3 +183,5 @@ DEF-001 Data import · DEF-002 Offline entry · DEF-003 Native mobile app · DEF
 | RISK-008 | Tailwind docs license (source-available, educational) for local AI use | Low | Owner-accepted local use only; never committed or redistributed (D-024) | Owner |
 
 - Latest verification (2026-09-23): search continuation ad35f0b passed CI 35808126517 including full migration rollback/reapply. Desktop and 390px palette/footer checked in the owner session. A task overlay resize-during-dismissal race was corrected and the previous route return browser-verified after a fresh reload; real phone keyboard acceptance remains open.
+
+- 0025 latency change committed as be5a2b2. Its CI exposed an existing same-timestamp ADM correction ordering defect after rollback/reapply; 0026 now supplies an insertion-order tie-break for new rule rows. Ten ADM tests pass with a deterministic reversed-UUID regression case; final CI validation follows.

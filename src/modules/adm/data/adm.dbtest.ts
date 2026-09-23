@@ -152,14 +152,15 @@ describe("dated rules (REQ-ADM-007, CONFIGURATION section 3 and 6)", () => {
       await admin.query(
         `insert into adm.rule_key (key, module, name, value_type, allowed_scopes)
          values ('zzr.limit', 'zzr', 'Deneme eşiği', 'number', '{company,project,site}');
-         insert into adm.rule (rule_key_id, scope_type, scope_id, valid_from, value, reason)
-         select id, 'company', null::uuid, date '2026-01-01', '5'::jsonb, 'şirket' from adm.rule_key where key = 'zzr.limit'
+         insert into adm.rule (id, rule_key_id, scope_type, scope_id, valid_from, value, reason)
+         select '${id(803)}'::uuid, id, 'company', null::uuid, date '2026-01-01', '5'::jsonb, 'şirket' from adm.rule_key where key = 'zzr.limit'
          union all
-         select id, 'site', '${SITE_A}'::uuid, date '2026-01-01', '7'::jsonb, 'şantiye' from adm.rule_key where key = 'zzr.limit';`,
+         select '${id(802)}'::uuid, id, 'site', '${SITE_A}'::uuid, date '2026-01-01', '7'::jsonb, 'şantiye' from adm.rule_key where key = 'zzr.limit';`,
       );
       await admin.query(
-        `insert into adm.rule (rule_key_id, scope_type, scope_id, valid_from, value, reason)
-         select id, 'site', '${SITE_A}', '2026-01-01', '8', 'düzeltme' from adm.rule_key where key = 'zzr.limit'`,
+        // Deliberately lower UUID and the same transaction timestamp: insertion order must win.
+        `insert into adm.rule (id, rule_key_id, scope_type, scope_id, valid_from, value, reason)
+         select '${id(801)}', id, 'site', '${SITE_A}', '2026-01-01', '8', 'düzeltme' from adm.rule_key where key = 'zzr.limit'`,
       );
       expect(await readRule(db(), "zzr.limit", "2026-05-01", { siteId: SITE_A })).toMatchObject({
         value: 8,

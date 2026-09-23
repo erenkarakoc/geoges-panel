@@ -68,3 +68,7 @@ Bir kural satırı: kural anahtarı + kapsam (şirket / proje / şantiye / birim
 - Özellik anahtarları `FEATURES_OFF` ortam ayarıdır (bölüm 5); sunucu açılırken okunur.
 - Tanımlar ekranı (SCR-190) ve panel tipi, şerit tipi, sarf reçetesi tanımları Faz 09'da gelir.
 - **Takvim ve kur (TASK-0106, D-261):** takvim `adm.working_calendar` ve `adm.holiday`'dedir; iş günü soruları `isBusinessDay` / `addBusinessDays` ile. Bir günün kuru `rateFor(para birimi, gün)` ile bulunur: önceki iş gününün TCMB döviz alış kuru, aynı gün için elle girilen kur önce; kur yoksa tutar "kur bekliyor"dur ve `exchange_rate.received` gelince tamamlanır. Kur her iş günü 16:00'dan sonra tarihli bülten adresinden alınır; gelmezse 10, 30, 60 dakika sonra denenir ve gün için bir kez `exchange_rate.missing` yayımlanır.
+
+### Aynı işlemde yapılan düzeltmelerin sırası (0026)
+
+Aynı geçerlilik ve kayıt zamanındaki yeni kural satırları `revision_order` iç sıra numarasıyla seçilir; UUID'nin rastgele kısmına güvenilmez. Eski satırlara tahmini sıra atanmaz, önceki UUID eşitlik sırası korunur. Alan yapılandırma aktarımına dahildir; aktarım sonrası mevcut dizi ilerletme yordamı yeni yazıların sırasını korur. Bu alan iş verisinin kimliği değildir; `id` UUID kalır. Ters sıralı UUID'lerle aynı işlemde yapılan düzeltmenin kazanması gerçek veritabanında doğrulanır.

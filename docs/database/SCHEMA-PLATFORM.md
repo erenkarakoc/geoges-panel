@@ -127,3 +127,5 @@ Yukarıdaki arama satırları tasarım sözleşmesini gösterir. Göç 0020–00
 0022 ortak yayınlama kilidiyle kaynak okumayı ve arama yazıcılarını yeniden kurmayla sıralar. İşlemci geçici gölge tabloda kaynakların izdüşümünü üretir, alanları ve sayımı karşılaştırır; aynı işlemde satırları, yardımcıları ve `core.read_model` içindeki `core.search` sürümünü yayımlar. MVCC nedeniyle diğer okuyucular commit'e kadar eski satırları görür. Mevcut `search_document_id` korunur. Kalıcı tablo sayısı değişmedi; geçici küme commit/rollback sonrasında kalmaz.
 
 Tasarımdaki çok kapsamlı kayıtlar, normalleştirme sürümünün ayrı izlenmesi ve üretim hacminde yeniden kurma kabulü henüz kapanmış değildir. TASK-0110 bu farklar ve tarayıcı kabulü nedeniyle IMPLEMENTING durumundadır; tasarım sözleşmesi kaldırılmaz.
+
+**0026 kural düzeltme sırası:** `adm.rule.revision_order bigint`, yeni eklenen aynı tarih/zamanlı kuralların sırasını belirler; `adm.rule_revision_order_seq` kolona aittir. Eski satırlarda NULL korunur. `adm.rule_value` geçerlilik ve kayıt zamanından sonra bu alanı, en son UUID'yi sıralar. Tablo sayısı değişmez.
