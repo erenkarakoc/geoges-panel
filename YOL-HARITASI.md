@@ -74,12 +74,14 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 | Çoklu kapsam | OQ-034 yanıtı bekleniyor: ortak kaydı görmek için ilgili şantiyelerden birine mi, tümüne mi yetki gerekecek? |
 | Eşzamanlı kaynak değişiklikleri | Gerçek kaynak ve olay kuyruğuyla commit/geri alma, taşıma/silme, tarama sırasının gerisine ekleme ve tekrar teslim sınandı. Yakalanan değişiklikler kuyruk işleyicisi çalışmadan yayın adayına yansıyor; hata eski sürümü koruyor |
 | Yayın öncesi olay yakalama | Uygulandı ve küçük veri kümesinde doğrulandı. Geç tamamlanan düşük numaralı olaylar da yakalanıyor; belirlenen sınırdan sonrakiler normal kuyruktan işleniyor |
-| Büyük veri | Üretim hacmine yakın sorgu hızı ve yeniden kurma maliyeti açık; geçici olay kümesinin disk/süre maliyeti de ölçülecek |
+| Büyük veri | **20.000 kayıtla ölçüldü (23 Eylül).** İlk ölçümde arama hedefin çok üstündeydi: yaygın bir sözcük 942 ms, iki sözcük 1.250 ms. Beş göçten sonra (0031-0035) örneklenen altı sorgunun tamamı **90-287 ms**, yani 300 ms hedefinin içinde — ağ turu dahil. Dizin kayıt başına yaklaşık 260 bayt yer tutuyor; 20.000 satırın tam bütünlük taraması 1,5-2,4 sn. Açık kalan: çok sayıda kaydın paylaştığı bir sözcükte sıralama hâlâ bütün eşleşmeleri okumak zorunda, bu hacimde yeniden kurma maliyeti ve gerçek veri şekliyle doğrulama |
 | Gerçek kaynaklarla tarayıcı kabulü | Modüller kendi dilimlerinde arama kaynağını kaydedecek; gerçek telefon klavyesiyle kabul de açık |
 
 **Arama henüz tamamlandı sayılmıyor.** Küçük veri kümesindeki hız sonucu, büyük veri kabulünün yerine geçmiyor.
 
 ### Son doğrulamalar
+
+- **Hacim ölçümü ve beş hızlandırma göçü (0031-0035).** 20.000 kayıtlık gerçek bir dizinle ölçüldü: sorgu tüm kayıt tablosunu dolaşıp her satıra yetki denetimi uyguluyormuş (790 ms'in 718'i). Artık önce eşlemeler sayılıyor ve yalnız eşleşen satırlar anahtarla okunuyor; eşleme politikası modülü satırı okumadan buluyor; bütün sözcükleri bilinen sorgu tür listesini hiç sormuyor. Sonuç: 958 → 167 ms, 676 → 287 ms, 1.552 → 212 ms, 1.293 → 264 ms. **204 veritabanı testi**, **273 birim testi**, biçim ve derleme geçti. 0035'te kendi testinin yakaladığı bir gerileme de düzeltildi: yazım önerisi atlanınca normalleştirme sürümü denetimi de atlanıyor, arama reddetmek yerine boş cevap veriyordu.
 
 - 0030 ile arama, cevap verirken yardımcılarını da denetliyor: dönen kayıtlar için (tür başına en çok altı) kova üyeliği anahtar okumasıyla kontrol ediliyor. **61 arama testi** (5 yeni), **15 dosyada 203 veritabanı testi**, **273 birim testi**, biçim ve derleme yerelde geçti; göçün down/up turu cevabı değiştirmiyor. Değişiklik `7dc54c1` ile gönderildi; CI **35867217424 yeşil**: 61 arama testi dahil **201 veritabanı testi**, tam geri dönüş/yeniden kurulum öncesinde ve sonrasında geçti.
 

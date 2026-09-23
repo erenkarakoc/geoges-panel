@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2026-09-23 — Search measured at 20,000 records, and made to fit
+
+- TASK-0110: the production-volume gate was finally measured on a real fixture of 20,000 records, and the search did not meet REQ-NFR-012: one common word took 942 ms, two of them 1,250 ms, against a 300 ms target (70 ms of every figure is the round trip to the database).
+- 0031 stops looking for a spelling suggestion when the word is already in the index (385 ms to 48 at 2,000 records). 0032 loops only the kinds whose postings hold the words instead of reading every kind. 0033 asks once for every kind and keeps the best six of each with a window, instead of running the same search once per kind. All three were committed earlier and are recorded here.
+- 0034 is the big one: the match was a join between rows and postings grouped by the row, and the planner walked all 20,000 rows and ran row level security on each, throwing 19,091 away — 718 of 790 ms. The postings are now counted first in a materialized CTE and only the rows that hold every word are read, by primary key.
+- 0035 removes the last two per-posting costs. The posting's own policy asked the record's module by reading its row — one key lookup per posting; a new CHECK states what the bucket policy has assumed since 0021 (a record type's first part is its module), so the policy reads it from the posting. And a query whose words are all known no longer asks which kinds hold them, because it needs no spelling suggestion and the kinds are whatever the answer holds.
+- Result at 20,000 records, p95 including the round trip: common word 958 → 167 ms, place word 676 → 287 ms, unique word 352 → 90 ms, two common words 1,552 → 212 ms, two words no record shares 1,251 → 202 ms, three words 1,293 → 264 ms. All inside the 300 ms target. The index costs about 260 bytes per record; a full integrity scan of 20,000 rows takes 1.5–2.4 s.
+- Caught by its own test while making 0035: skipping the suggestion also skipped the normalizer-version check it used to carry, and the palette turned the refusal into "this kind could not be read" instead of refusing. The check is now asked explicitly, before the block that catches a failed read.
+- Verification: 204 database tests across 15 files, 273 unit tests, format and build pass. Also fixed: a TSK test asserted that no dead-letter problem task exists at all, which a development database fails once a real incident has ever opened and closed one; it now asserts that none is open.
+
 ## 2026-09-23 — The search checks its helpers while it answers
 
 - TASK-0110: 0030 gives `core.search_palette` a bounded check. For the records it is about to return — at most six per type — it asks whether each one is in the bucket of every word of the query, for its own type, place, data class and the normalizer in force, and returns one `helper_mismatch` flag for the whole answer. Each question is a key lookup; there is no scan, and `core.search_records` keeps its shape so no earlier migration or caller is touched.

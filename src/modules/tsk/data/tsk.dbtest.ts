@@ -707,7 +707,9 @@ describe("system problems (REQ-TSK-005, EVENT_BACKBONE)", () => {
   it("opens one task while the queue is unhappy and closes it when it recovers", async () => {
     const health = await worker((c) => watchSystemHealth(kyselyOn(c)));
     expect(health.dead_letters).toBe(0);
-    expect(await problemTask("system.dead_letter")).toBeUndefined();
+    // Nothing is open while the queue is healthy. A closed one may be left from a real
+    // incident on a development database, and that is the state this asserts, not its absence.
+    expect((await problemTask("system.dead_letter"))?.status ?? "closed").toBe("closed");
   });
 
   it("asks the people who may enter a rate by hand, once, and closes when the rate arrives", async () => {
