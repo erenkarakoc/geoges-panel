@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-24 — One place is enough to find a record that names two
+
+- TASK-0110 (D-270, OQ-034): a search row may name both a site and a project, and only the first was ever judged — `coalesce(site, project)` — so a record of both was visible to the site's people and invisible to the project's, whatever their grants said. 0037 judges each place on its own: authorisation for any one of them is enough.
+- Each place is judged whole. A place must grant both the module's view and, for a commercial or sensitive record, the data class; half a grant here and half there does not add up to visibility. That is the narrower reading of the owner's answer and it is written down rather than assumed.
+- The read-time helper check (0030) now names the bucket's own place. A bucket is kept under one place — the site when there is one — so judging it with "any place" reported a healthy index as damaged to anyone who reached the record through its other place.
+- Four new tests, two of which fail without the migration (verified by rolling it back): found from the site, found from the project by someone who may not see the site, no false damage report on the project's side, and a commercial record staying with the place that grants the class.
+- Verification: 208 database tests across 15 files, 273 unit tests, lint, types, format and the production build pass.
+
 ## 2026-09-24 — The app card has a functional bottom band
 
 - TASK-0028 (D-228, D-269): the shell gained an optional slot under the card. A screen writes a `BottomBand` where its own state is and a portal carries the content into that slot, which is what lets a band say something only the screen knows — the form it belongs to, the rows selected, the step.

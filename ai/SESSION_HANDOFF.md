@@ -4,7 +4,19 @@ Last updated: 2026-09-24
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — the bottom band is built, not yet seen
+## Latest continuation — one place is enough (0037)
+
+The owner answered OQ-034 with "one scope is enough" (D-270), and the gap that answer exposed was narrower and more concrete than expected: a search row may name both a site and a project, and core.search_access_allows judged only the first of them — `coalesce(site, project)`. A record of both was therefore visible to the site's people and invisible to the project's, whatever their grants said. 0037 builds the places as a set and asks whether any one of them allows the read.
+
+Each place is judged whole: it must grant both the module's view and, for a commercial or sensitive record, the data class. Half a grant on one place and half on another does not add up to visibility — "any place is enough" is not "any combination is enough". That is the narrower reading of the owner's answer, chosen deliberately and written into the migration, the decision and the roadmap rather than left as an assumption.
+
+One consequence had to be fixed in the same migration: the read-time helper check of 0030 was gated by the record's overall access, but a bucket is kept under a single place (the site when there is one). Someone who reached a record through its project would find the bucket unreadable, and the check would report a healthy index as damaged. It now names the bucket's own place, which is the thing it is actually looking at.
+
+Four tests cover it: found from the site, found from the project by someone who may not see the site, no false damage report on the project's side, and a commercial record staying with the place that grants the class — including the person who may view the site and may see commercial only on the project, who still does not see it. Two of the four were verified to fail with the migration rolled back, so they measure the change rather than restating the old behaviour.
+
+Validation: 208 database tests across 15 files, 273 unit tests, lint, types, prettier and the production build pass.
+
+## Previous continuation — the bottom band is built, not yet seen
 
 D-269 was approved, so TASK-0028 was built on 2026-09-24. platform/ui/app-shell/bottom-band.tsx holds a provider, the shell's slot and the band a screen writes; the content reaches the slot through a portal, which is what lets a band carry something only the screen knows. The slot measures itself with a ResizeObserver and writes --bottom-band-height onto the card; the scrolling area uses it for padding-bottom on its content and for scroll-padding-bottom on the viewport — note the viewport is what scrolls in COSS's ScrollArea, not its root, so the class had to land there through a descendant selector. The phone's navigation returns null while a band is shown and comes back when it goes.
 

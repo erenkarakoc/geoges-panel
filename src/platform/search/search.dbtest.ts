@@ -35,7 +35,7 @@ const FINANCE_A = id(3);
 const PEOPLE = [VIEWER_A, VIEWER_B, FINANCE_A];
 const SITE_A = id(101);
 const SITE_B = id(102);
-const ROLES = ["T0110_SITE", "T0110_FIN", "T0110_OWN"];
+const ROLES = ["T0110_SITE", "T0110_FIN", "T0110_OWN", "T0110_CLS"];
 const P = "zzs";
 
 let admin: pg.Client;
@@ -979,5 +979,96 @@ describe("read-time helper check (TASK-0110, 0030)", () => {
     await admin.query(migration(""));
     await restoreNewer(admin, "0030", functionsOf(migration("")));
     expect(await paletteFor(VIEWER_A, "sogut kavakli")).toEqual(before);
+  });
+});
+
+describe("a record that names two places (TASK-0110, D-270)", () => {
+  const PROJECT_X = id(103);
+  type Palette = { hits: { title: string }[]; helper_mismatch: boolean };
+  const paletteFor = async (userId: string, query: string) => {
+    const client = await appPool.connect();
+    try {
+      await client.query("begin");
+      await client.query("select set_config('app.user_id', $1, true)", [userId]);
+      const { rows } = await client.query("select core.search_palette($1) as answer", [query]);
+      await client.query("rollback");
+      return rows[0].answer as Palette;
+    } finally {
+      client.release();
+    }
+  };
+
+  beforeAll(async () => {
+    // B may view that project, though not the site the record also names.
+    await admin.query(
+      `insert into iam.role_assignment (user_id, role_id, scope_type, scope_ids, starts_on)
+       select $1, id, 'project', $2, iam.today() - 1 from iam.role where code = 'T0110_SITE'`,
+      [VIEWER_B, [PROJECT_X]],
+    );
+    // A may see commercial records on that project, but may not view the project at all: the
+    // two halves of the test for "one place is enough" is not "any combination is enough".
+    await admin.query(`
+      insert into iam.role (code, name, level) values ('T0110_CLS', 'Deneme sınıf', 10);
+      insert into iam.role_data_class (role_id, module, can_see_commercial)
+        select id, '${P}', true from iam.role where code = 'T0110_CLS';
+    `);
+    await admin.query(
+      `insert into iam.role_assignment (user_id, role_id, scope_type, scope_ids, starts_on)
+       select $1, id, 'project', $2, iam.today() - 1 from iam.role where code = 'T0110_CLS'`,
+      [VIEWER_A, [PROJECT_X]],
+    );
+    records[id(401)] = {
+      site: SITE_A,
+      recordType: `${P}.site`,
+      title: "İki yerli kayıt",
+      secondary: null,
+      text: "ikiyerli kayit",
+      linkPath: "/today",
+      siteId: SITE_A,
+      projectId: PROJECT_X,
+      dataClass: "internal",
+    };
+    records[id(402)] = {
+      ...records[id(401)],
+      title: "İki yerli teklif",
+      text: "ikiyerli teklif",
+      recordType: `${P}.quote`,
+      dataClass: "commercial",
+    };
+    await deliver(`${P}.record.saved`, id(401));
+    await deliver(`${P}.record.saved`, id(402));
+  });
+
+  afterAll(async () => {
+    for (const recordId of [id(401), id(402)]) {
+      delete records[recordId];
+      await deliver(`${P}.record.removed`, recordId);
+    }
+  });
+
+  it("is found from the site it names", async () => {
+    expect(await titlesFor(VIEWER_A, "ikiyerli")).toContain("İki yerli kayıt");
+  });
+
+  it("is found from the project it names, by someone who may not see its site", async () => {
+    expect(await titlesFor(VIEWER_B, "ikiyerli")).toEqual(["İki yerli kayıt"]);
+  });
+
+  it("does not report a healthy index as damaged to the project's side", async () => {
+    // The bucket is kept under the site, which this person may not read; its absence from their
+    // view is not a fault (0030, 0037).
+    const answer = await paletteFor(VIEWER_B, "ikiyerli");
+    expect(answer.hits.map((hit) => hit.title)).toEqual(["İki yerli kayıt"]);
+    expect(answer.helper_mismatch).toBe(false);
+  });
+
+  it("keeps the data class with the place that grants it", async () => {
+    // The commercial one: seen from the site by the person who may see commercial there.
+    expect(await titlesFor(FINANCE_A, "ikiyerli")).toContain("İki yerli teklif");
+    // B may view the project but may see no commercial record anywhere.
+    expect(await titlesFor(VIEWER_B, "ikiyerli")).not.toContain("İki yerli teklif");
+    // A may view the site and may see commercial on the project, but neither place grants both,
+    // and one place must grant both (D-270 as recorded).
+    expect(await titlesFor(VIEWER_A, "ikiyerli")).not.toContain("İki yerli teklif");
   });
 });
