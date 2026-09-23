@@ -4,7 +4,7 @@
 
 - TASK-0110: 0029 adds `normalization_version` to `core.search_word` and `core.search_word_bucket` and extends both primary keys with it, so two normalizer generations can sit side by side instead of sharing a bucket or a count. Partial indexes for foreign versions stay empty in a healthy index, as in 0027.
 - Maintenance writes only the version in force, evicts a record from a foreign generation's bucket and recounts within one version; the read path (bucket narrowing, posting join, spelling suggestion) reads only the version in force, so another generation's bucket can never narrow a record out of an answer. `core.search_integrity()` compares buckets and vocabulary per version. No permission, HTTP API, business rule or interface change.
-- Verification: 56 search DB tests (5 new version cases), 198 database tests across 15 files, 273 unit tests, format and build pass locally; the 0029 down/up round trip leaves bucket contents and the integrity report identical. CI pending.
+- Verification: 56 search DB tests (5 new version cases), 198 database tests across 15 files, 273 unit tests, format and build pass locally; the 0029 down/up round trip leaves bucket contents and the integrity report identical. CI 35862720223 green: 196 DB tests including all 56 search tests before and after a full rollback and reapply.
 - Review: the down migration restores the previous function bodies first and refuses rather than deleting rows left from another generation. Read-time helper consistency limited to visible records, production-scale acceptance and OQ-034 remain open.
 
 ## 2026-09-23 — Independent search helper integrity
