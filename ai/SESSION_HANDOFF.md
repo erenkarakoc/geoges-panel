@@ -4,7 +4,17 @@ Last updated: 2026-09-23
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — the rebuild figure (0036)
+## Latest continuation — TASK-0028 planned, awaiting approval
+
+TASK-0110's remaining items are all blocked or speculative — OQ-034 is the owner's to answer, ranking over a very large match set is a question beyond this volume, and real-source browser acceptance waits for the module slices — so the next task in the roadmap's order was taken up. TASK-0028's design was already approved as D-228 and written into SCREEN_PATTERNS section 4; what was missing was how to build it.
+
+The implementation plan is in docs/features/phase-07-foundation-plan.md and D-269 is PROPOSED. Shape: the app shell gains an optional slot under the card, and a page writes a BottomBand in its own tree whose content is carried into that slot by a portal. The portal is the point — a parallel route slot like @context cannot express a band whose content comes from client state (rows selected, missing fields, step number), and D-228 asks for exactly those. The band's height is measured and written to the scrolling area as a CSS variable used for both padding-bottom and scroll-padding-bottom, so nothing hides behind it and keyboard focus never lands under it. On phones the bottom navigation hides while a band is shown. The band filters nothing: each screen decides with its own permission check what to render, and a screen with no action renders no band. COSS Button, Menu, Drawer and Badge only; the band itself is a layout row like the header, not a new visual component.
+
+Applied first to the three screens that carry real actions today: the revision request decision (aud), the task detail (tsk) and the sample approval queue (wfl). Long forms, the daily site log and list bulk actions join the same slot in their own slices.
+
+No code has been written. The owner's approval of D-269 is the next thing needed; after it the build is the slot, those three screens, unit tests and a browser pass at desktop and 390 px.
+
+## Previous continuation — the rebuild figure (0036)
 
 The last open number of the volume gate is measured and fixed. A 20,000-record source was rebuilt through the real path (rebuildSearch on the worker's transaction, staging, catch-up, publication and the integrity gate) and did not finish in ten minutes. The publication wrote every staged record with core.index_search_row, the ordinary per-record writer, which keeps the helpers in step: it appends the record's id to the bucket of each of its words and recounts the vocabulary entries it touched. A bucket that already holds three thousand ids is rewritten whole for every id appended, so filling an empty index one record at a time costs more with every record added. None of that upkeep survives either: publishSearchStage ends by rebuilding every bucket from the postings and recounting the whole vocabulary, because a damaged helper is not repaired by per-row upserts.
 

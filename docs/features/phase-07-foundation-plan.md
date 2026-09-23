@@ -470,3 +470,33 @@ Aynı işlemde kural ve düzeltmesi `now()` nedeniyle aynı `created_at` alıyor
 - Testler: mevcut yeniden kurma testleri (arama, eşzamanlılık, bütünlük paketleri) bu yolu zaten uçtan uca kullanıyor; yayın sonrası kova/sözlük/eşleme eşitliği ve bozuk yardımcıda ret senaryoları aynen geçmelidir.
 - Kapsam sınırı: bu adım yalnız yeniden kurmanın maliyetidir. Tek tek silmenin hacimdeki maliyeti, çok sayıda kaydın paylaştığı sözcükte sıralama ve gerçek kaynaklarla kabul açık kalır.
 - Geri dönüş: önce uygulama kodu eski yazıcıya döndürülür, sonra 0036 down yalnız yeni işlevi kaldırır. Veri, satır veya yardımcı silinmez.
+
+### TASK-0028 — Uygulama kartının işlevsel alt bandı (uygulama planı, 2026-09-23)
+
+Tasarım kararı D-228 ile sahibi tarafından onaylandı ve kalıbı `docs/ui-ux/SCREEN_PATTERNS.md` bölüm 4'te yazılı. Bu plan yalnız **nasıl kurulacağını** anlatır; kalıbı değiştirmez, genişletmez.
+
+**Amaç.** Uygulama kartının altında, içeriğin üstünde duran, ekranın kendi eylemlerini taşıyan bir bant. İçerik altından kayar, hiçbir şey bandın arkasında kalmaz, odaklanan öğe bandın altında kaybolmaz.
+
+**Yerleşim.** Kabukta (`app-shell.tsx`) bugün yer tutan yorum satırının yerine isteğe bağlı bir yuva konur. Yuva üç parçadan oluşur:
+
+- `BottomBandSlot` — kabuğun kart altına yerleştirdiği kap. Bant yoksa hiçbir şey basmaz ve düzen bugünküyle birebir aynı kalır.
+- `BottomBand` — sayfanın kendi ağacında yazdığı bileşen; içeriğini `createPortal` ile yuvaya taşır. Sunucu bileşeni de bunu çocuklarıyla kullanabilir; liste seçimi veya eksik alan sayısı gibi istemci durumları da doğrudan buradan gelir.
+- `BottomBandProvider` — yuvanın o an dolu olup olmadığını ve ölçülen yüksekliğini tutar.
+
+Neden portal: bandın içeriği bazen sunucudan (detay ekranının eylemleri), bazen istemci durumundan (seçili satır sayısı, eksik alan sayısı, adım numarası) gelir. Paralel rota yuvası (`@context` deseni) ikincisini ifade edemez.
+
+**Yükseklik ve boşluk.** Bant `ResizeObserver` ile ölçülür ve yüksekliği kaydırma kabına bir CSS değişkeni olarak yazılır; kap hem `padding-bottom` hem `scroll-padding-bottom` olarak bu değeri kullanır. Telefonda eylemler alt alta düştüğünde de boşluk doğru kalır ve klavyeyle gezinen biri bandın altında kalan bir alana odaklanmaz (`docs/ui-ux/ACCESSIBILITY.md`).
+
+**Telefon.** Bant varken alt gezinme çubuğu gizlenir (D-228): `MobileBottomBar` yuvanın dolu olup olmadığını bağlamdan okur. Bant kalkınca çubuk geri gelir. İkincil eylemler telefonda COSS `Menu`/`Drawer` içine iner, birincil eylem tam genişliğe yakın durur.
+
+**Yetki.** Bant hiçbir eylemi kendisi süzmez; hangi eylemin basılacağına sayfa kendi yetki kontrolüyle karar verir — kullanıcının yapamayacağı eylem bantta da görünmez. Eylemi olmayan ekran bandı hiç basmaz.
+
+**Bileşenler.** Yalnız COSS UI ve Tailwind: `Button`, `Menu`, `Drawer`, `Badge`. Bandın kendisi kabuğun başlığı ve bağlam satırı gibi bir yerleşim öğesidir (kenarlık + arka plan + hizalama); yeni bir görsel bileşen icat edilmez. Varsayılanların dışına çıkmak gerekirse önce sahibe sorulur ve `DESIGN_SYSTEM_RULES.md` §4.1'e yazılır.
+
+**İlk uygulanacağı ekranlar (bugün gerçekten eylem taşıyanlar).** Revizyon talebi kararı (`modules/aud/ui/revision-requests.tsx`: Onayla ve uygula · Reddet), görev detayı (`modules/tsk/ui/task-detail.tsx`: görevin kapanış adımları) ve örnek onay kuyruğu (`modules/wfl/ui/approval-queue.tsx`: Onayla · Düzeltmeye gönder · Reddet). Uzun form, günlük saha kaydı ve liste toplu işlemleri kendi dilimlerinde bu yuvayı kullanır.
+
+**Testler.** Birim: yuva boşken düzenin değişmemesi, bant varken alt gezinme çubuğunun gizlenmesi, yüksekliğin kaydırma kabına yazılması, eylemi olmayan sayfanın bant basmaması. Tarayıcı: masaüstü ve 390 px genişlikte, uzun içerikli bir ekranda bandın sabit kalması, içeriğin arkasında kalmaması ve klavye odağının bandın altında kaybolmaması.
+
+**Kapsam sınırı.** Bu adım yuvayı ve yukarıdaki üç ekranı kapsar. Yeni ekran kalıbı, yeni eylem veya yeni yetki kuralı getirmez; liste toplu işlemleri ve uzun form sayaçları, o ekranlar kendi dilimlerinde yapılırken bu yuvaya bağlanır.
+
+**Geri dönüş.** Yuva isteğe bağlıdır: `BottomBand` kullanan üç ekran geri alınırsa kabuk bugünkü düzenine döner. Veritabanı göçü, izin veya kayıt değişikliği yoktur.
