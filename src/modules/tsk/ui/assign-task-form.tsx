@@ -198,6 +198,10 @@ export function AssignTaskOverlay(props: Props) {
 
   // A given task closes the overlay; so does the person.
   const isOpen = open && !state.taskId;
+  // Keep the closing primitive mounted until its animation completes and returns the route.
+  // Rotating/resizing during dismissal must not replace Drawer with Dialog halfway through.
+  const [mobilePresentation, setMobilePresentation] = useState(isMobile);
+  if (isOpen && mobilePresentation !== isMobile) setMobilePresentation(isMobile);
   const onOpenChange = (next: boolean) => setOpen(next);
   // Once the closing animation ends, leave the intercepted address.
   const onOpenChangeComplete = (isOpen: boolean) => {
@@ -218,7 +222,7 @@ export function AssignTaskOverlay(props: Props) {
     </Button>
   );
 
-  if (isMobile) {
+  if (mobilePresentation) {
     return (
       <Drawer onOpenChange={onOpenChange} onOpenChangeComplete={onOpenChangeComplete} open={isOpen}>
         <DrawerPopup showBar>

@@ -1070,3 +1070,7 @@
 - Skill audit performed; 8 skills vendored at pinned commits into `.claude/skills/` (supabase, supabase-postgres-best-practices, coss, coss-particles, react-best-practices, composition-patterns, cloudflare, tailwind-4-docs).
 - `.claude/settings.json`: `ui-ux-pro-max` disabled, `claude-mem` enabled for this project.
 - CHG-001 proposed (early preview of auth screens and app shell).
+
+## 2026-09-23 — Task overlay dismissal across screen sizes
+
+- Keep the closing Drawer/Dialog mounted when the screen crosses the mobile breakpoint, so its completion callback can return from the intercepted route. Verified mobile dismissal with and without immediate desktop resize; no task created. Search continuation ad35f0b passed CI 35808126517, including the full database rollback/reapply cycle.
