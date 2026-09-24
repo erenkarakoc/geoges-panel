@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-24 — The dependency audit runs, and the checks that never arrived are named
+
+- `docs/infrastructure/CI.md` has promised seven GitHub checks since Phase 05, each to be added "when the thing it tests arrives". One of them needed nothing to arrive: `npm audit` now runs on every push and pull request, and it is strict at every level because the tree reports zero advisories today. An advisory with no fix is a decision to record, not a reason to lower the level quietly.
+- Three others have had their subject for weeks and were never built: the accessibility scan of every screen in both themes at both widths, the keyboard-path test and the contrast test. They are one task now (TASK-0115) and one question (OQ-036), because they share the thing that stopped them — a browser harness that signs in, which in CI means a test account and its secrets.
+- Also recorded rather than assumed: the contrast test cannot be the unit test ACCESSIBILITY.md calls it. The tokens resolve through `color-mix`, `--alpha()` and the Tailwind palette, so the only honest reading is the browser's computed value — which is how TASK-0054 measured the focus ring by hand.
+- The remaining three (schema, contract, and the capability catalog behind it) still wait for what they test, as recorded.
+
 ## 2026-09-24 — Walking the acceptance list before handing it over
 
 - The list written for the owner was walked first, and it found three things the owner would otherwise have found.

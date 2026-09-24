@@ -36,6 +36,8 @@ Aşağıdaki ek adımlar, sınadıkları şey (tablolar, yetenek kataloğu, ekra
 | Derleme | `next build` | Üretim derlemesi kırık |
 | Bağımlılık denetimi | Bilinen güvenlik açığı taraması | Açık bulundu |
 
+**Bağımlılık denetimi kuruldu (2026-09-24):** `npm audit` her çalışmada koşar ve **her seviyede** kırılır. Bugün ağaçta hiçbir seviyede açık yok, o yüzden çıta kaydın yazdığı yerde duruyor. Düzeltmesi olmayan bir uyarı çıkarsa yapılacak şey seviyeyi sessizce düşürmek değil, uyarıyı karar olarak kaydetmek (gerekirse `--audit-level` ile birlikte gerekçesi).
+
 Kırmızı bir adım `main`'e girişi engeller.
 
 ## 3. Test türleri ve ne zaman zorunlu oldukları

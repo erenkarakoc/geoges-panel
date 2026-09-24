@@ -32,6 +32,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check:commit
+      # The dependency audit CI.md section 2 promises. Strict on purpose: the tree reports zero
+      # advisories at every level today (checked 2026-09-24), so the bar is where the record puts
+      # it. An advisory with no fix available is a decision to record, not a reason to quietly
+      # lower the level.
+      - run: npm audit
 
   # Migrations against an empty database (CI.md section 4, TASK-0101): apply every migration,
   # run the database tests, roll every migration back, apply them again and test again. The

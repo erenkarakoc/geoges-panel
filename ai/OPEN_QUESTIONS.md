@@ -1,6 +1,6 @@
 # OPEN QUESTIONS
 
-Last updated: 2026-09-23 · Format: `OQ-NNN` · Blocking = blocks the stated phase
+Last updated: 2026-09-24 · Format: `OQ-NNN` · Blocking = blocks the stated phase
 
 IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no missing records).
 
@@ -99,6 +99,12 @@ talking to the customer, not as pending questions.
 | ID | Question | Recommendation | Blocks |
 |---|---|---|---|
 | OQ-034 | **ANSWERED 2026-09-23 by the owner: one scope is enough.** May a person authorised for site A find a record shared by sites A and B, or must they be authorised for both? The owner chose ANY: authorisation for any one of a record's places makes it visible in search. Written as D-270. Commercial and sensitive class checks stay mandatory and are untouched by it. | The narrower reading (every scope authorised) was the alternative and was not taken. | Nothing; TASK-0110 can now build multi-scope visibility. |
+
+## CI's browser-side gate — raised 2026-09-24
+
+| ID | Question | Recommendation | Blocks |
+|---|---|---|---|
+| OQ-036 | Three checks the records promise for Phase 07's CI have never been built: the accessibility scan of every screen in both themes at both widths, the keyboard-path test, and the contrast test (`docs/infrastructure/CI.md` section 2, D-225, REQ-NFR-016). They were written as arriving "when the thing they test arrives", and the screens have now arrived. All three need the same thing and that is why none exists: a browser harness that signs in, which in CI means a test account and its secrets. Does this block the Phase 07 exit, or does it travel with the other acceptance items into Phase 09, where hosting and a test account are decided anyway? | Travel with Phase 09, and say so in the roadmap rather than leaving it as a promise nobody is tracking. The reasoning: the harness is worth building once, against a deployed address and a real test account, instead of twice; the accessibility and contrast work that has been done so far was measured by hand and recorded (TASK-0054, D-225), so nothing is unmeasured today, only unautomated; and the panel is used by one person on one machine until the pilot. The cost of waiting is that a token change can quietly break a contrast threshold until the harness exists — which is why the recommendation is a dated task (TASK-0115), not a silent deferral. The alternative, building it now, delays M1 and Phase 08 by the length of an E2E setup plus the credential decisions, for a gate on screens the owner is about to walk through by hand anyway | Owner's call: Phase 07 exit or Phase 09 |
 
 ## Product MCP server — raised 2026-09-23 (not blocking Phase 07)
 
