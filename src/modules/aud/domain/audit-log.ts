@@ -35,6 +35,7 @@ export const AUDIT_EVENT_LABELS: Readonly<Record<string, string>> = {
   "document.bulk_downloaded": "Belgeler toplu indirildi",
   "exchange_rate.entered": "Elle kur girildi",
   "system.dead_letter_retried": "Başarısız iş yeniden denendi",
+  "workflow.published": "Akış yayımlandı",
 };
 
 /** Event groups offered by the "işlem türü" filter; the value is an event code prefix. */
@@ -51,6 +52,7 @@ export const AUDIT_EVENT_GROUPS = [
   { value: "configuration.", label: "Yapılandırma aktarımı" },
   { value: "document.", label: "Belgeler" },
   { value: "exchange_rate.", label: "Döviz kurları" },
+  { value: "workflow.", label: "İş akışları" },
   { value: "system.", label: "Sistem işleri" },
 ] as const;
 
@@ -64,6 +66,7 @@ export const AUDIT_TARGET_TABLES = [
   { value: "iam.user_manager", label: "Elle amir" },
   { value: "doc.document", label: "Belge" },
   { value: "adm.exchange_rate", label: "Döviz kuru" },
+  { value: "wfl.flow_version", label: "Akış sürümü" },
   { value: "core.dead_letter", label: "Başarısız iş" },
 ] as const;
 

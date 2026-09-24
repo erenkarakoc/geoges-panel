@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-24 — A flow definition that cannot be edited out from under what is running (TASK-0117, step 1)
+
+- Migration 0045 opens the `wfl` schema: a flow, its versions, and the evidence a publish needs. Instances come with the execution step; this is what they will stand on.
+- Two rules live in the database, not in a screen. A published version's definition cannot be changed — not through the application, which has no privilege to write these tables at all, and not through the administrative connection either, which the test proves by trying. And a publish is refused unless a dry run passed against **this** definition: the evidence carries the content hash, so editing the draft after the run invalidates it, which is what SPIKE-04 measured before the product had any of it.
+- One published version at a time is a unique index rather than a convention. Publishing supersedes the previous version, writes the audit entry and announces `workflow.published` to the outbox.
+- The record decided two details the code had guessed. The event is `workflow.published`, the name REQ-WFL's own catalog gives it, not the `flow.published` the migration first wrote; and a superseded version keeps the day it was published, so the constraint asks whether a version is still a draft rather than whether it is published today.
+- Twelve database tests, including the publish refused before a dry run, the dry run invalidated by an edit, supersession, the audit entry, the outbox event and a person without the design permission seeing no definition at all.
+
 ## 2026-09-24 — The capability catalog, and the four events nobody had written down (TASK-0118)
 
 - Phase 08's first task is built. Each module now declares what it can be asked to do where the module is, and the declaration **carries the function that runs it** — so "declared but not implemented" is a compile error rather than a test failure, and the contract test is left with the things a compiler cannot see.

@@ -123,5 +123,10 @@
     "module": "IAM",
     "kind": "condition",
     "code": "user.roles"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
+    "code": "workflow.published"
   }
 ]

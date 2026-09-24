@@ -388,3 +388,5 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-24 18:07:26Z · b13a9554 · Write · `src/platform/capabilities/catalog.ts`
 - 2026-09-24 18:11:56Z · b13a9554 · Write · `src/platform/capabilities/contract.ts`
 - 2026-09-24 18:12:26Z · b13a9554 · Write · `src/platform/capabilities/contract.test.ts`
+- 2026-09-24 18:18:44Z · b13a9554 · Write · `db/migrations/0045_wfl_definitions.sql`
+- 2026-09-24 18:20:52Z · b13a9554 · Write · `src/modules/wfl/data/wfl.dbtest.ts`

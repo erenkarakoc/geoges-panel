@@ -5,6 +5,7 @@ import { audCapabilities } from "@/modules/aud";
 import { docCapabilities } from "@/modules/doc";
 import { iamCapabilities } from "@/modules/iam";
 import { tskCapabilities } from "@/modules/tsk";
+import { wflCapabilities } from "@/modules/wfl";
 import type { ActionCapability, ModuleCapabilities } from "@/platform/capabilities";
 
 /**
@@ -20,6 +21,7 @@ export const moduleCapabilities: readonly ModuleCapabilities[] = [
   docCapabilities,
   iamCapabilities,
   tskCapabilities,
+  wflCapabilities,
 ];
 
 /** One action by its code, or null when nothing offers it — which is a flow that cannot run. */
