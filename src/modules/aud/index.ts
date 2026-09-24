@@ -38,3 +38,6 @@ export {
   type RevisionChange,
   type RevisionStatus,
 } from "./domain/revisions";
+
+// The module's capability catalog, read by the flow engine (TASK-0118).
+export { audCapabilities } from "@/modules/aud/capabilities";

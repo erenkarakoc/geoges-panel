@@ -331,6 +331,7 @@ Biçim: `docs/requirements/README.md`. IAM, akışların dinleyebileceği olayla
 | `role_delegation.started` | Vekâlet başladı | Vekâlet başlangıç tarihinde | vekâlet veren, vekil, rol, bitiş | iç |
 | `role_delegation.ended` | Vekâlet bitti | Vekâlet bitiş tarihinde | vekâlet veren, vekil, rol | iç |
 | `user.deactivated` | Hesap pasife alındı | Hesap pasifleştiğinde (elle veya ayrılış tarihinde) | kişi, sebep | iç |
+| `two_factor.reset` | İki adımlı doğrulama sıfırlandı | Bir yönetici başkasının ikinci faktörünü sıfırladığında | kişi, sıfırlayan | iç |
 
 ### Aksiyonlar
 

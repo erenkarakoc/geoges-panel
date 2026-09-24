@@ -171,6 +171,8 @@ Biçim: `docs/requirements/README.md`.
 | `task.completed` | Görev tamamlandı | Görev kapandığında | görev, kapatan, nasıl kapandı | iç |
 | `task.overdue` | Görev gecikti | Son tarih geçtiğinde | görev, sorumlu, gecikme | iç |
 | `task.escalated` | Görev eskale oldu | Görev üst seviyeye çıktığında | görev, kimden, kime | iç |
+| `notification.created` | Bildirim oluştu | Birine bildirim yazıldığında | alıcı, tür, konu, bağlantı | iç |
+| `notification.read` | Bildirim okundu | Kişi bildirimini okuduğunda | alıcı, bildirim | iç |
 
 ### Aksiyonlar
 

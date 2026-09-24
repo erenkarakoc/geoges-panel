@@ -47,3 +47,6 @@ export {
 
 // Scheduled work, collected by src/jobs/registry.ts (TASK-0104).
 export { iamJobs } from "./data/iam-jobs";
+
+// The module's capability catalog, read by the flow engine (TASK-0118).
+export { iamCapabilities } from "@/modules/iam/capabilities";

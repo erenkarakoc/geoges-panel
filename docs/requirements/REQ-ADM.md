@@ -192,6 +192,7 @@ Biçim: `docs/requirements/README.md`.
 | `catalog_item.created` | Listeye yeni kalem eklendi | Kullanıcı ortak listeye kalem eklediğinde | liste, kalem, ekleyen | iç |
 | `catalog_item.merged` | Kalemler birleştirildi | Yetkili benzer kalemleri birleştirdiğinde | liste, kalan kalem, birleşenler | iç |
 | `unit_price.changed` | Birim fiyat değişti | Yeni fiyat sürümü girildiğinde | kalem, eski fiyat, yeni fiyat, geçerlilik | ticari |
+| `exchange_rate.received` | Kur alındı | Günlük kur bülteni okunduğunda | para birimi, tarih, kur | iç |
 | `exchange_rate.missing` | Kur alınamadı | Günlük kur alınamadığında | para birimi, tarih | iç |
 
 ### Aksiyonlar

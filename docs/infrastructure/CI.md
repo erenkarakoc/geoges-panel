@@ -30,6 +30,8 @@ Aşağıdaki ek adımlar, sınadıkları şey (tablolar, yetenek kataloğu, ekra
 | Kurulum | `npm ci` (kilit dosyasıyla birebir) | Bağımlılık sürümü ayrışmış |
 | Şema testi | Her tabloda kapsam sütunu, RLS politikası ve geçmiş kanalı var mı (`docs/database/COVERAGE.md` bölüm 3) | Eksik politika |
 | Sözleşme testi | Yetenek kataloğu ile kod ayrışmış mı (D-078) | İlan ile kod uyuşmuyor |
+
+**Sözleşme testi kuruldu (2026-09-24, TASK-0118):** `src/records/capabilities.test.ts`, birim testleriyle birlikte her çalışmada koşar. Üç şeyi denetler: kodda ilan edilen her yetenek modülün kendi REQ kataloğunda aynı ad ve veri sınıfıyla var mı; ilan edilen her olay gerçekten yayımlanıyor mu ve yayımlanan her olay ilan edilmiş mi; ve bir zamanlar yayımlanmış bir yetenek kaybolmuş ya da türü değişmiş mi (REQ-WFL-004). "İlan var, kod yok" dördüncü bir denetim değil: ilan, çalıştıran fonksiyonu taşıdığı için bu ayrışma derleme zamanında imkânsız.
 | Erişilebilirlik taraması | Her ekran, iki temada, iki genişlikte (D-225) | WCAG ihlali |
 | Klavye yolu testi | Ekran baştan sona klavyeyle kullanılabiliyor mu (REQ-NFR-016) | Ulaşılamayan öğe |
 | Kontrast testi | Tema renk çiftleri eşiği tutuyor mu | Token değişikliği eşiği bozmuş |

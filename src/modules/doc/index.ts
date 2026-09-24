@@ -26,3 +26,6 @@ export type { DocumentSummary, TextStatus } from "./data/doc-store";
 
 // Background work, collected by src/jobs/registry.ts (text recognition, expired uploads).
 export { docJobs } from "./data/doc-jobs";
+
+// The module's capability catalog, read by the flow engine (TASK-0118).
+export { docCapabilities } from "@/modules/doc/capabilities";

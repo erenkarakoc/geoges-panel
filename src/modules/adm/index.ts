@@ -28,3 +28,6 @@ export {
   type RuleResult,
   type RuleScope,
 } from "./domain/configuration";
+
+// The module's capability catalog, read by the flow engine (TASK-0118).
+export { admCapabilities } from "@/modules/adm/capabilities";

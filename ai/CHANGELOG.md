@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-24 — The capability catalog, and the four events nobody had written down (TASK-0118)
+
+- Phase 08's first task is built. Each module now declares what it can be asked to do where the module is, and the declaration **carries the function that runs it** — so "declared but not implemented" is a compile error rather than a test failure, and the contract test is left with the things a compiler cannot see.
+- Three of them, all in CI from today: the declaration against the module's own written catalog (same code, same name, same data class); the declared events against the events the migrations really publish, in both directions; and a snapshot of everything ever published, so a capability that disappears or changes kind breaks the build while `deprecated` passes (REQ-WFL-004).
+- It found four drifts on its first run, and they were real: `exchange_rate.received`, `two_factor.reset`, `notification.created` and `notification.read` are published by the code and were named in no catalog. A flow could not have listened to any of them. They are in the records now — added, because a published capability is added or deprecated and never quietly dropped.
+- One action is declared and only one. `notification.send` runs today under the authority a flow will have (`tsk.notify` is granted to the worker alone). `task.open` is in TSK's written catalog and is deliberately not declared yet: opening a task as the flow rather than as a person needs the system-authority path that comes with the engine, and a declaration that carries its function cannot promise what the code cannot do.
+- Twenty-five capabilities across five modules. The catalogs are joined in `src/records`, because platform may not import a module (ADR-001) — which is also where the engine will read them.
+
 ## 2026-09-24 — The mandatory trio, enforced the way the tables actually are (TASK-0116)
 
 - Migration 0044 gives `core.table_layer` a `scope_source`, and every one of the fifty tables now says where its scope comes from: thirteen carry their own, nine reach it through the row they belong to, seven belong to a person, twenty-one are company-wide. The migration that creates a table declares it; the column is `not null`, so the next one cannot forget.

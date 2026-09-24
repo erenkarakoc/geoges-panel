@@ -1,6 +1,7 @@
 import { sql } from "kysely";
 
 import { runAsUser, type DbIdentity, type DbTransaction } from "@/platform/db";
+import type { SystemDb } from "@/platform/jobs/types";
 
 import type { TaskPriority, TaskSource, TaskStatus, TaskSummary } from "@/modules/tsk/domain/tasks";
 
@@ -224,4 +225,32 @@ export function markNotificationsRead(identity: DbIdentity, ids: readonly string
       select tsk.mark_read(${ids ? [...ids] : null}::uuid[]) as n`.execute(db);
     return rows[0].n;
   });
+}
+
+/**
+ * Writes one notification inside a transaction the caller owns, under the system authority the
+ * worker holds (`tsk.notify` is granted to it alone). This is the shape a flow's step needs: its
+ * effect and the step's own mark commit or roll back together.
+ *
+ * Returns the notification's id, or null when there was nothing to write — an account that is no
+ * longer active, or the same notification already sent within the last ten minutes, which the
+ * database decides rather than this code.
+ */
+export function notifyPerson(
+  db: SystemDb,
+  input: {
+    userId: string;
+    type: string;
+    subject: string;
+    linkPath: string;
+    sourceKey: string;
+    isCritical?: boolean;
+  },
+): Promise<string | null> {
+  return sql<{ id: string | null }>`
+    select tsk.notify(${input.userId}::uuid, ${input.type}, ${input.subject}, ${input.linkPath},
+                      ${input.sourceKey}, null, null, null, null,
+                      ${input.isCritical ?? false}) as id`
+    .execute(db)
+    .then(({ rows }) => rows[0]?.id ?? null);
 }

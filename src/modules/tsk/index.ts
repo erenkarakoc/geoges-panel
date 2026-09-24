@@ -50,3 +50,6 @@ export {
   systemWatch,
   type SignalSender,
 } from "./data/tsk-jobs";
+
+// The module's capability catalog, read by the flow engine (TASK-0118).
+export { tskCapabilities } from "@/modules/tsk/capabilities";

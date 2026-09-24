@@ -1,0 +1,127 @@
+[
+  {
+    "module": "ADM",
+    "kind": "condition",
+    "code": "catalog_item.list"
+  },
+  {
+    "module": "ADM",
+    "kind": "event",
+    "code": "catalog_item.merged"
+  },
+  {
+    "module": "DOC",
+    "kind": "condition",
+    "code": "document.type"
+  },
+  {
+    "module": "DOC",
+    "kind": "event",
+    "code": "document.uploaded"
+  },
+  {
+    "module": "ADM",
+    "kind": "event",
+    "code": "exchange_rate.missing"
+  },
+  {
+    "module": "ADM",
+    "kind": "event",
+    "code": "exchange_rate.received"
+  },
+  {
+    "module": "TSK",
+    "kind": "event",
+    "code": "notification.created"
+  },
+  {
+    "module": "TSK",
+    "kind": "event",
+    "code": "notification.read"
+  },
+  {
+    "module": "TSK",
+    "kind": "action",
+    "code": "notification.send"
+  },
+  {
+    "module": "AUD",
+    "kind": "condition",
+    "code": "revision_request.record_type"
+  },
+  {
+    "module": "AUD",
+    "kind": "event",
+    "code": "revision_request.rejected"
+  },
+  {
+    "module": "AUD",
+    "kind": "event",
+    "code": "revision_request.submitted"
+  },
+  {
+    "module": "AUD",
+    "kind": "condition",
+    "code": "revision_request.waiting_days"
+  },
+  {
+    "module": "IAM",
+    "kind": "condition",
+    "code": "role_assignment.scope"
+  },
+  {
+    "module": "TSK",
+    "kind": "event",
+    "code": "task.completed"
+  },
+  {
+    "module": "TSK",
+    "kind": "event",
+    "code": "task.created"
+  },
+  {
+    "module": "TSK",
+    "kind": "event",
+    "code": "task.escalated"
+  },
+  {
+    "module": "TSK",
+    "kind": "event",
+    "code": "task.overdue"
+  },
+  {
+    "module": "TSK",
+    "kind": "condition",
+    "code": "task.overdue_days"
+  },
+  {
+    "module": "TSK",
+    "kind": "condition",
+    "code": "task.priority"
+  },
+  {
+    "module": "TSK",
+    "kind": "condition",
+    "code": "task.status"
+  },
+  {
+    "module": "IAM",
+    "kind": "event",
+    "code": "two_factor.reset"
+  },
+  {
+    "module": "IAM",
+    "kind": "condition",
+    "code": "user.is_owner"
+  },
+  {
+    "module": "IAM",
+    "kind": "condition",
+    "code": "user.manager"
+  },
+  {
+    "module": "IAM",
+    "kind": "condition",
+    "code": "user.roles"
+  }
+]
