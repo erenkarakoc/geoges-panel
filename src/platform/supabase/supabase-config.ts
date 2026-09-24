@@ -1,6 +1,10 @@
 /**
- * Supabase connection values (TASK-0024). Only the publishable key belongs here: it is sent to
- * the browser by design. The secret / service_role key is never read by this application.
+ * Supabase connection values (TASK-0024). Only the publishable key belongs here: it is sent to the
+ * browser by design.
+ *
+ * The service_role key is not read here and never reaches the browser. Since TASK-0112 one file
+ * does read it — `modules/iam/infrastructure/supabase/supabase-second-factor-admin.ts`, to take a
+ * lost second factor away (D-236, D-272) — and it is the only one.
  */
 export function readSupabaseConfig(): { url: string; publishableKey: string } {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

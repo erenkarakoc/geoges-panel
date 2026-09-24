@@ -27,6 +27,8 @@ cd geoges-panel
 
 Size ayrı olarak ileteceğim `.env.local` dosyasını proje klasörüne koyun. İçinde Supabase ve dosya deposu anahtarları vardır. **Bu dosyayı kimseyle paylaşmayın ve Git'e eklemeyin.**
 
+Dosyada `SUPABASE_SERVICE_ROLE_KEY` de bulunur. Bu anahtar yalnız iki iş için okunur: kurtarma koduyla giriş ve yöneticinin bir başkasının ikinci faktörünü sıfırlaması (TASK-0112). Anahtar eksikse panel çalışır, yalnız bu iki işlem açık bir mesajla reddedilir.
+
 ## 4. Bağımlılıkları kurun (bir kez, sonra ara sıra)
 
 ```powershell

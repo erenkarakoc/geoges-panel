@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-24 — The records catch up with what is built
+
+- The setup files did not know about a key the panel now needs. `SUPABASE_SERVICE_ROLE_KEY` is in `.env.example` and `LOCAL_SETUP.md` with what it is for, which one file reads it, and what happens without it: the panel works, and only signing in with a recovery code and a manager's reset refuse. `supabase-config.ts` said the service_role key "is never read by this application", which stopped being true today and now says where it is read.
+- Phase 07's status in the master roadmap still listed as owed a dozen things that have been built since 2026-09-21. It now names what was delivered and what is actually left: the browser and real-device verification of the last three pieces, the "Kullanıcılar & Roller" screen the manager's reset needs a button on, M1 itself, and the two search acceptance items that belong to Phase 09.
+- TASK-0029 is DONE: its three deliverables — the requirements, the palette's UX (D-227) and the architecture (ADR-017, D-247) — all exist and were owner-confirmed, and the build they describe was carried by TASK-0110.
+
 ## 2026-09-24 — TASK-0112's last step: who must use a second factor, and who may see a page
 
 - Which roles must use a second factor is the administrator's dated rule (0042, REQ-IAM-003, seeded empty). The function answers only about the person asking, reads the rule itself, and is combined with the panel's own `must_setup_2fa`: somebody who owes a factor and has none is sent to set one up, from the panel and from the sign-in page alike.
