@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-25 — Conditions that look back (TASK-0117, step 10)
+
+- A condition can now count: how many times this flow has run for this record in the last thirty days, how many approvals came back. It is a counting query rather than a field, which is why it has a shape of its own and a time limit of its own.
+- Three guarantees, all of them D-100's. The count is read **fresh** every time — nothing cached inside the instance, because a condition that answers from an old count is one nobody can reason about. The query is given two seconds and the previous limit is restored afterwards, so one slow condition cannot spend the whole step's budget. And past the limit the flow **stops with the reason**: it must not take the "no" branch because the database was busy.
+- Migration 0053 puts the step's own detail into the run log as well as on the step state. The log is what the run screen and "why is this mine" are built from, and a condition that answered "no" was readable there without the number it counted.
+- Said plainly about the test: forcing a real timeout would need a table big enough to make counting four rows slow, which this suite does not build. What is tested is the contract the engine rests on — past the limit the database cancels with 57014 — plus the branch each count actually takes, asserted over three runs that see one, two and three.
+
 ## 2026-09-25 — An approval that waits too long moves on (TASK-0117, step 9)
 
 - The architecture writes it as a property of the step — "after eight hours, to the general manager" — and migration 0052 makes it exact. The approval **moves**; it is not copied, because one approval has one person who must answer it, and the run log says it moved, from whom and to whom, so "why is this mine" has an answer.

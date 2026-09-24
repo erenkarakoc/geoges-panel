@@ -52,11 +52,14 @@ export { flowWakeJob } from "@/modules/wfl/application/wake-job";
 export { flowClockJob } from "@/modules/wfl/application/clock-job";
 export { flowEscalationJob } from "@/modules/wfl/application/escalation-job";
 export {
+  countPasses,
+  isWindowTest,
   parseDefinition,
   RUNNABLE_STEP_TYPES,
   STEP_TYPES,
   type FlowDefinition,
   type FlowStep,
+  type WindowTest,
 } from "@/modules/wfl/domain/definition";
 
 // The module's capability catalog, read by the flow engine (TASK-0118).

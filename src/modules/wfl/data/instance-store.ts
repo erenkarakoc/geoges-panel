@@ -406,3 +406,88 @@ export async function escalateApproval(
     select wfl.escalate_approval(${approvalId}::uuid, ${toUserId}::uuid) as moved`.execute(db);
   return rows[0]?.moved === true;
 }
+
+/** A condition's counting query took longer than the engine allows (REQ-WFL-008). */
+export class ConditionTimeout extends Error {
+  constructor(readonly limitMs: number) {
+    super(`koşul sorgusu ${limitMs} ms sınırını aştı`);
+    this.name = "ConditionTimeout";
+  }
+}
+
+/**
+ * Counts what a looking-back condition asks about, under a time limit (D-100, SPIKE-06).
+ *
+ * Three guarantees live here. The query is given a limit of its own and the limit is restored
+ * afterwards, so one slow condition cannot spend the whole step's budget. The count is read fresh
+ * every time — nothing is cached inside the instance, because a condition that answers from an old
+ * count is a condition nobody can reason about. And a query that runs out of time raises rather
+ * than returning zero: a flow must not take the "no" branch because the database was busy.
+ */
+export async function countInWindow(
+  db: SystemDb,
+  ask: {
+    countOf: "flow_runs" | "returned_approvals";
+    withinDays: number;
+    flowId: string;
+    record: { schema: string; table: string; id: string } | null;
+    limitMs?: number;
+  },
+): Promise<number> {
+  const limitMs = ask.limitMs ?? 2000;
+  const { rows: before } = await sql<{ was: string }>`
+    select current_setting('statement_timeout') as was`.execute(db);
+  await sql.raw(`set local statement_timeout = ${limitMs}`).execute(db);
+  try {
+    const since = sql`now() - (${ask.withinDays} || ' days')::interval`;
+    const { rows } =
+      ask.countOf === "flow_runs"
+        ? await sql<{ n: number }>`
+            select count(*)::int as n from wfl.instance i
+             where i.flow_id = ${ask.flowId}::uuid and i.started_at >= ${since}
+               and (${ask.record?.id ?? null}::uuid is null or i.record_id = ${ask.record?.id ?? null}::uuid)`.execute(
+            db,
+          )
+        : await sql<{ n: number }>`
+            select count(*)::int as n from wfl.approval a
+             join wfl.instance i on i.id = a.instance_id
+             where i.flow_id = ${ask.flowId}::uuid and a.decided_at >= ${since}
+               and a.decision = 'return'
+               and (${ask.record?.id ?? null}::uuid is null or i.record_id = ${ask.record?.id ?? null}::uuid)`.execute(
+            db,
+          );
+    return Number(rows[0]?.n ?? 0);
+  } catch (error) {
+    // 57014 is the database saying it stopped the query, which is the case REQ-WFL-008 is about.
+    if ((error as { code?: string }).code === "57014") throw new ConditionTimeout(limitMs);
+    throw error;
+  } finally {
+    await sql.raw(`set local statement_timeout = '${before[0].was}'`).execute(db);
+  }
+}
+
+/** The flow a running instance belongs to, for a condition that counts the flow's own history. */
+export async function readInstanceFlow(
+  db: SystemDb,
+  instanceId: string,
+): Promise<{
+  flowId: string;
+  record: { schema: string; table: string; id: string } | null;
+} | null> {
+  const { rows } = await sql<{
+    flow_id: string;
+    record_schema: string | null;
+    record_table: string | null;
+    record_id: string | null;
+  }>`select flow_id, record_schema, record_table, record_id from wfl.instance
+       where id = ${instanceId}::uuid`.execute(db);
+  const row = rows[0];
+  if (!row) return null;
+  return {
+    flowId: row.flow_id,
+    record:
+      row.record_schema && row.record_table && row.record_id
+        ? { schema: row.record_schema, table: row.record_table, id: row.record_id }
+        : null,
+  };
+}

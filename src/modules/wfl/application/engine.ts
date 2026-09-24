@@ -1,6 +1,8 @@
 import { istanbulDay, istanbulMinutes, minutesOf } from "@/platform/time/istanbul";
 import { readDefinitionOf, recordDryRunAsSystem } from "@/modules/wfl/data/flow-store";
 import {
+  ConditionTimeout,
+  countInWindow,
   endInstance,
   enterStep,
   clockFlows,
@@ -8,6 +10,7 @@ import {
   leaveStep,
   noteWaiting,
   readDecision,
+  readInstanceFlow,
   readRunnable,
   escalateApproval,
   readStepRun,
@@ -18,7 +21,9 @@ import {
   type FlowTrigger,
 } from "@/modules/wfl/data/instance-store";
 import {
+  countPasses,
   durationMs,
+  isWindowTest,
   parseDefinition,
   RUNNABLE_STEP_TYPES,
   stepOf,
@@ -49,6 +54,13 @@ import type { SystemDb } from "@/platform/jobs/types";
  * nothing and remembers everything. That is SPIKE-05's finding made structural: a second evaluator
  * would be a second behaviour, and then the thing people test would not be the thing that runs.
  */
+
+/**
+ * How long a looking-back condition may take (WORKFLOW_ENGINE section 7, D-100). An engineering
+ * limit rather than a designer's setting: a flow says what it wants counted, not how long the
+ * database may spend counting it.
+ */
+const conditionLimitMs = 2000;
 
 export type RunResult =
   | { state: "ended"; status: "done" | "failed"; reason?: string }
@@ -200,6 +212,8 @@ async function walk(
   sink: StepSink,
   context: Record<string, unknown>,
   relations: FlowRuntime,
+  /** The running instance, when there is one; a dry run counts nothing and has none. */
+  instanceId?: string,
 ): Promise<RunResult> {
   let stepId: string | null = from;
 
@@ -289,10 +303,46 @@ async function walk(
 
     let passed = true;
     if (step.type === "condition") {
-      passed = testPasses(step.test, context);
+      const test = step.test;
+
+      // A condition that looks back is a counting query with a limit of its own; running out of
+      // time stops the flow with the reason rather than quietly answering "no" (REQ-WFL-008).
+      if (isWindowTest(test)) {
+        if (!instanceId) {
+          // A dry run has no history of its own to count, and says so rather than inventing one.
+          await sink.leave(stateId, "done", "unknown", { countOf: test.countOf });
+          stepId = step.whenTrue ?? step.next ?? null;
+          continue;
+        }
+        const where = await readInstanceFlow(db, instanceId);
+        try {
+          const count = await countInWindow(db, {
+            countOf: test.countOf,
+            withinDays: test.withinDays,
+            flowId: where?.flowId ?? "",
+            record: where?.record ?? null,
+            limitMs: conditionLimitMs,
+          });
+          passed = countPasses(test, count);
+          await sink.leave(stateId, "done", passed ? "true" : "false", {
+            countOf: test.countOf,
+            withinDays: test.withinDays,
+            count,
+          });
+        } catch (error) {
+          if (!(error instanceof ConditionTimeout)) throw error;
+          await sink.leave(stateId, "failed", "timeout", { countOf: test.countOf });
+          await sink.end("failed", error.message, step.id);
+          return { state: "ended", status: "failed", reason: error.message };
+        }
+        stepId = passed ? (step.whenTrue ?? null) : (step.whenFalse ?? null);
+        continue;
+      }
+
+      passed = testPasses(test, context);
       await sink.leave(stateId, "done", passed ? "true" : "false", {
-        field: step.test.field,
-        op: step.test.op,
+        field: test.field,
+        op: test.op,
       });
     } else {
       // `start` carries nothing of its own; it is the door the flow came in through.
@@ -322,6 +372,7 @@ export async function runInstance(
     writingSink(db, instanceId, relations),
     instance.context,
     relations,
+    instanceId,
   );
 }
 
@@ -395,6 +446,7 @@ export async function resumeFromApproval(
     writingSink(db, decided.instanceId, relations),
     instance.context,
     relations,
+    decided.instanceId,
   );
 }
 
@@ -427,6 +479,7 @@ export async function resumeFromTask(
     writingSink(db, open.instanceId, relations),
     instance.context,
     relations,
+    open.instanceId,
   );
 }
 
@@ -597,6 +650,7 @@ export async function resumeFromWait(
     writingSink(db, open.instanceId, relations),
     instance.context,
     relations,
+    open.instanceId,
   );
 }
 

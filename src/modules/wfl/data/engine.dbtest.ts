@@ -20,6 +20,7 @@ import { releaseTestPeople } from "../../../../scripts/db-test-people.mjs";
 import { runEventTriggers, runInstance } from "@/modules/wfl/application/engine";
 import { publishVersion, recordDryRun, saveDraft } from "@/modules/wfl/data/flow-store";
 import {
+  ConditionTimeout,
   decideApproval,
   readInstance,
   readMyApprovals,
@@ -53,6 +54,7 @@ const DRY = "zz-t0147-dry";
 const SLEEPY = "zz-t0147-sleepy";
 const NIGHTLY = "zz-t0147-nightly";
 const PATIENT = "zz-t0147-patient";
+const REPEATING = "zz-t0147-repeating";
 const EVENT = "zzw_record.submitted";
 
 let admin: pg.Client;
@@ -150,7 +152,7 @@ async function cleanUp() {
       [taskIds],
     );
   }
-  const keys = [BIG, SMALL, UNBUILT, APPROVING, TASKING, DRY, SLEEPY, NIGHTLY, PATIENT];
+  const keys = [BIG, SMALL, UNBUILT, APPROVING, TASKING, DRY, SLEEPY, NIGHTLY, PATIENT, REPEATING];
   await admin.query(
     "delete from wfl.instance where flow_id in (select id from wfl.flow where key = any($1))",
     [keys],
@@ -1021,5 +1023,97 @@ describe("an approval that waits too long (REQ-WFL-005, REQ-IAM-020)", () => {
     expect(report.passed).toBe(true);
     expect(report.steps.some((step) => step.outcome.startsWith("escalates at "))).toBe(true);
     expect(after.rows[0].n).toBe(before.rows[0].n);
+  });
+});
+
+describe("a condition that looks back (REQ-WFL-008, D-100, SPIKE-06)", () => {
+  /** Ends quietly the first two times for a record, and takes the other branch after that. */
+  const repeating = {
+    trigger: { type: "event", event: `${EVENT}_repeat` },
+    start: "r1",
+    steps: [
+      {
+        id: "r1",
+        type: "condition",
+        test: { countOf: "flow_runs", withinDays: 30, op: ">", value: 2 },
+        whenTrue: "r2",
+        whenFalse: "r3",
+      },
+      { id: "r2", type: "end" },
+      { id: "r3", type: "end" },
+    ],
+  };
+
+  const trigger = (n: number) =>
+    runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_repeat`,
+        id: id(650 + n),
+        record: { schema: "zzw", table: "record", id: id(750) },
+        payload: {},
+      },
+      relations,
+    );
+
+  it("counts the flow's own history for this record, and takes the branch that count deserves", async () => {
+    await publish(REPEATING, repeating);
+
+    // The flow allows many runs for one record, so each trigger opens its own.
+    const first = await trigger(1);
+    const second = await trigger(2);
+    const third = await trigger(3);
+
+    const pathOf = async (instanceId: string) =>
+      (await readRunLog(as(DESIGNER), instanceId))
+        .filter((line) => line.kind === "entered")
+        .map((line) => line.stepId);
+
+    // The first two runs see one and two runs in the window; the third sees three.
+    expect(await pathOf(first[0])).toEqual(["r1", "r3"]);
+    expect(await pathOf(second[0])).toEqual(["r1", "r3"]);
+    expect(await pathOf(third[0])).toEqual(["r1", "r2"]);
+  });
+
+  it("writes the number it counted, so the answer can be read afterwards", async () => {
+    const { rows } = await admin.query(
+      `select l.detail from wfl.run_log l
+         join wfl.instance i on i.id = l.instance_id
+         join wfl.flow f on f.id = i.flow_id
+        where f.key = $1 and l.kind = 'left' and l.step_id = 'r1'
+        order by l.at`,
+      [REPEATING],
+    );
+    expect(rows.map((row: { detail: { count: number } }) => row.detail.count)).toEqual([1, 2, 3]);
+    expect(rows[0].detail).toMatchObject({ countOf: "flow_runs", withinDays: 30 });
+  });
+
+  it("is given a limit of its own, and the database cancels past it (REQ-WFL-008)", async () => {
+    // What the engine relies on: past the limit the database stops the statement with 57014, and
+    // that is the case it turns into a stopped flow with a reason rather than a quiet "no".
+    // Forcing a real timeout on this count would need a table big enough to make counting four
+    // rows slow, which this suite does not build; what is checked here is the contract it rests on.
+    const cancelled = await errorOf(
+      runAsUser(as(DESIGNER), async (db) => {
+        await sql.raw("set local statement_timeout = 1").execute(db);
+        await sql`select pg_sleep(0.05)`.execute(db);
+      }),
+    );
+    expect(cancelled).toBe("57014");
+  });
+
+  it("names the limit when it gives up, so the run log can say why", () => {
+    expect(new ConditionTimeout(2000).message).toContain("2000");
+  });
+
+  it("says in a dry run that it cannot count a history the run does not have", async () => {
+    const versionId = await saveDraft(as(DESIGNER), {
+      key: REPEATING,
+      name: "Deneme tekrar",
+      definition: repeating,
+    });
+    const report = await dryRunVersion(worker, versionId, {}, relations);
+    expect(report.passed).toBe(true);
+    expect(report.steps[0]).toMatchObject({ stepId: "r1", outcome: "unknown" });
   });
 });

@@ -74,9 +74,26 @@ const baseStep = z.object({
   next: stepId.nullish(),
 });
 
+/**
+ * A condition that looks back (REQ-WFL-008, D-100): "this flow has run more than three times for
+ * this record in the last thirty days". It is a counting query, not a field, which is why it is a
+ * shape of its own and why the engine gives it a time limit.
+ *
+ * What can be counted is the engine's own history for now. The modules' own records join it when
+ * they arrive, through the catalog, the same way everything else does.
+ */
+export const windowTestSchema = z.object({
+  countOf: z.enum(["flow_runs", "returned_approvals"]),
+  withinDays: z.number().int().min(1).max(365),
+  op: z.enum([">", ">=", "<", "<=", "=", "!="]),
+  value: z.number().int().min(0),
+});
+
+export type WindowTest = z.infer<typeof windowTestSchema>;
+
 const conditionStep = baseStep.extend({
   type: z.literal("condition"),
-  test: testSchema,
+  test: z.union([testSchema, windowTestSchema]),
   whenTrue: stepId.nullish(),
   whenFalse: stepId.nullish(),
 });
@@ -261,4 +278,27 @@ export function durationMs(after: string): number {
   const hours = Number(/T(?:(\d+)H)?/.exec(after)?.[1] ?? 0);
   const minutes = Number(/(\d+)M$/.exec(after)?.[1] ?? 0);
   return ((days * 24 + hours) * 60 + minutes) * 60_000;
+}
+
+/** Whether a condition is the kind that counts history rather than reading a field. */
+export function isWindowTest(test: unknown): test is WindowTest {
+  return typeof test === "object" && test !== null && "countOf" in test;
+}
+
+/** Compares a counted number with what the condition asked for. */
+export function countPasses(test: WindowTest, count: number): boolean {
+  switch (test.op) {
+    case ">":
+      return count > test.value;
+    case ">=":
+      return count >= test.value;
+    case "<":
+      return count < test.value;
+    case "<=":
+      return count <= test.value;
+    case "=":
+      return count === test.value;
+    default:
+      return count !== test.value;
+  }
 }
