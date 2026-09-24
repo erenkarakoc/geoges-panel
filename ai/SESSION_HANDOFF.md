@@ -4,7 +4,23 @@ Last updated: 2026-09-24
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — TASK-0112 planned, awaiting approval
+## Latest continuation — account security built end to end (TASK-0112)
+
+The owner approved D-272 on 2026-09-24 — and with it D-265 and D-266, which had stayed PROPOSED although their work was long since built and accepted — so all five steps were built the same day, each with its own tests and commit.
+
+Migrations 0038-0042. The three tables are closed to the application: no privilege at all on the attempts and the code hashes, a select on sessions whose policy shows a person their own, and every change in a definer function. 0039 moved the settings inside those functions, which is D-272's one changed detail: a security threshold that arrives with the call is the caller's to choose, and reading it in the application would have meant an IAM to ADM arrow against an existing ADM to IAM one. The module map now records that IAM reaches the other platform schema in SQL, as it already did for its audit events.
+
+The lock is asked before the provider, so a locked account is refused with the right password too, and the try that crosses the line is told about the lock rather than "wrong password". The panel keeps its own session beside the provider's token for D-230's thirty days and three idle days, revoked at once when an account is disabled; an httpOnly cookie is the only pointer to it and it is not an identity. Ten recovery codes are made at setup and shown once; using one marks that session's own second factor, which is the single widening of the gate, and the factor on the lost device is removed through one server-only file that reads the service-role key for that one operation. A manager's reset does the same to another account, ends its sessions, and reaches the owner layer through the outbox because IAM may not call TSK. The administrator's list of roles that must use a second factor comes from a dated rule, and a provider account with no active panel account now sees no page at all.
+
+Everybody is signed out once by the session change: a session from before it has no cookie.
+
+Two things are left and both are recorded: the reset has no button, because "Kullanıcılar & Roller" has a menu entry and no screen and Phase 02 never specified one — inventing it here was declined and offered to the owner instead; and the whole flow has not been through a browser, which the owner defers. That pass now covers three tasks at once: the bottom band, account security and the Home Screen install.
+
+Also done in the same stretch: the push switch moved from the notification panel (too loud, crowding the notifications) to the account menu, passed in by the layout because IAM may not import TSK; the setup files learned about SUPABASE_SERVICE_ROLE_KEY; Phase 07's status paragraph stopped listing a dozen built things as owed; and TASK-0029 is DONE, its build having been TASK-0110's.
+
+Validation across the stretch: 298 unit tests, 226 database tests across 16 files, lint, types, prettier and the production build; CI green on every commit (the last run 35961770987).
+
+## Previous continuation — TASK-0112 planned, awaiting approval
 
 What TASK-0110 can still do in this phase is done, so the next task in the roadmap's order was taken up. TASK-0112 is T1 and it rewrites the sign-in path, so nothing was coded: the plan is in docs/features/phase-07-foundation-plan.md and D-272 is PROPOSED.
 
