@@ -45,6 +45,9 @@ const definition = (title: string) => ({
 });
 
 async function cleanUp() {
+  // Publishing a flow writes what the engine listens to (migration 0047); the test takes its own
+  // subscriptions back, so a development database does not keep hearing test events.
+  await admin.query("delete from core.event_subscription where event_code like 'zz.%'");
   await admin.query(
     `delete from wfl.dry_run where flow_version_id in (
        select v.id from wfl.flow_version v join wfl.flow f on f.id = v.flow_id where f.key = $1)`,

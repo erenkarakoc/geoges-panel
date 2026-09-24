@@ -3,8 +3,9 @@ import type { JobRegistry } from "./types";
 const NAME = /^[a-z]{2,3}\.[a-z0-9_.-]+$/;
 
 /**
- * Refuses a registry the worker could not run safely: duplicate or malformed names, a
- * subscriber without events, or a read model whose events no replayable subscriber keeps live.
+ * Refuses a registry the worker could not run safely: duplicate or malformed names, a subscriber
+ * that listens to nothing and does not say its subscriptions are written elsewhere, or a read
+ * model whose events no replayable subscriber keeps live.
  */
 export function validateRegistry(registry: JobRegistry): JobRegistry {
   const problems: string[] = [];
@@ -16,7 +17,9 @@ export function validateRegistry(registry: JobRegistry): JobRegistry {
   };
   for (const s of registry.subscribers) {
     unique("subscriber", s.name);
-    if (!s.events.length) problems.push(`subscriber ${s.name} listens to no event`);
+    if (!s.events.length && !s.dynamicEvents) {
+      problems.push(`subscriber ${s.name} listens to no event`);
+    }
   }
   for (const j of registry.jobs) unique("job", j.type);
   for (const m of registry.readModels) {

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-25 — The engine would not let the panel start, and said so at the door
+
+- Running the panel refused to start: the job registry rejects a subscriber that listens to nothing, and the flow engine's list is empty on purpose — what it hears lives in the published definitions, which no code can know (REQ-WFL-007). Found by the owner running `npm run dev`, not by a test, because nothing in the unit suite starts the worker.
+- The validator now takes a subscriber with no events **when it says so**: `dynamicEvents: true` means "my subscriptions are written elsewhere". The check stays for everybody else, because an empty list that means either "dynamic" or "somebody forgot" is how a subscriber goes deaf without anyone noticing. Its own test says both halves.
+- Verified by starting the dev server and watching the worker drain: thirty-seven pending deliveries down to ten, `wfl.clock` scheduled for its next five-minute round, and the engine's fifty-three deliveries done.
+- Tidied while there: the engine's subscriptions are written by publishing a flow, so the database tests had been leaving test event codes behind in the development database — the engine was listening for `zz.record.submitted` for ever. Each test takes its own subscriptions back now, and the two that had leaked are gone.
+
 ## 2026-09-25 — The clock starts a flow, once (TASK-0117, step 8)
 
 - Migration 0051 gives a clock-driven run the slot it belongs to — "this flow, today" or "this flow, at 09:35" — unique per flow. It is the clock's answer to the question an event id answers for an event: the round may run twice, a worker may pick the same minute up after a restart, and neither opens a second run.

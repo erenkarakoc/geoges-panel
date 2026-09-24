@@ -71,6 +71,9 @@ async function publish(key: string, title: string, singleInstance = true) {
 }
 
 async function cleanUp() {
+  // Publishing a flow writes what the engine listens to (migration 0047); the test takes its own
+  // subscriptions back, so a development database does not keep hearing test events.
+  await admin.query("delete from core.event_subscription where event_code like 'zzr.%'");
   await admin.query(
     `delete from wfl.instance where flow_id in (select id from wfl.flow where key = any($1))`,
     [[KEY, MANY]],

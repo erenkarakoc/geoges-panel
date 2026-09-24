@@ -30,6 +30,14 @@ export type EventSubscriber = {
   name: string;
   events: readonly string[];
   /**
+   * Its subscriptions live in the database rather than in this list, and something else writes
+   * them: the flow engine hears whatever the published flow definitions listen to, which nothing
+   * in code can know (REQ-WFL-007). A subscriber says this outright, because the alternative —
+   * an empty list meaning either "dynamic" or "somebody forgot" — is how a subscriber goes deaf
+   * without anybody noticing.
+   */
+  dynamicEvents?: boolean;
+  /**
    * May it run again during a read model rebuild? Only read-model feeders are; anything that
    * creates tasks, notifications, ledger rows or messages is not (D-234).
    */

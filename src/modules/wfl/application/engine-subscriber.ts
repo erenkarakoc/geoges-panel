@@ -21,6 +21,8 @@ export function flowEngine(relations: FlowRuntime): EventSubscriber {
   return {
     name: "wfl.engine",
     events: [],
+    // Written by the publish, not by this list (migration 0047).
+    dynamicEvents: true,
     replayable: false,
     async handle(db, event) {
       // Its own approvals come back here too: a decision is an event like any other, so a flow

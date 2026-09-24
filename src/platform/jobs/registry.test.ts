@@ -52,6 +52,14 @@ describe("job registry", () => {
     );
   });
 
+  it("takes a subscriber whose subscriptions are written in the database, when it says so", () => {
+    // The flow engine hears whatever the published definitions listen to, which nothing in code
+    // can know (REQ-WFL-007). Saying it outright is what keeps an empty list from meaning both
+    // "dynamic" and "somebody forgot".
+    const engine = { ...subscriber("wfl.engine", []), dynamicEvents: true };
+    expect(() => validateRegistry(registry({ subscribers: [engine] }))).not.toThrow();
+  });
+
   it("refuses a read model that no replayable subscriber keeps live (D-234)", () => {
     expect(() =>
       validateRegistry(
