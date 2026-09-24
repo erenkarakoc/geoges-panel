@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-24 — The mandatory trio, enforced the way the tables actually are (TASK-0116)
+
+- Migration 0044 gives `core.table_layer` a `scope_source`, and every one of the fifty tables now says where its scope comes from: thirteen carry their own, nine reach it through the row they belong to, seven belong to a person, twenty-one are company-wide. The migration that creates a table declares it; the column is `not null`, so the next one cannot forget.
+- Why a declaration and not a rule reading column names: `adm.rule_key` has a column called `unit` that holds "gün" or "TL". A name-reading rule would have called it scoped, and been wrong in the same breath as it was satisfied.
+- The migration runner refuses a registered table with no declaration, and one that claims `own` while carrying no scope column. On a database where 0044 has not run it says nothing at all, so a full rollback stays clean — which is what CI does on every push.
+- `scripts/schema-coverage.dbtest.mjs` measures the trio against the live database: the declaration, the `own` claim, row level security and a policy on every table the application can touch, the absence of a grant where there is no policy (the stronger fact behind `iam.login_attempt` and `iam.recovery_code`), and a history channel on every business or configuration record that carries its own scope. It ends by proving it can fail: two throw-away tables break the rules on purpose in a schema of their own.
+- `COVERAGE.md` section 3 is rewritten to the rule that now holds, with the old rule's mistake stated rather than quietly replaced.
+
 ## 2026-09-24 — Two reads that waited on each other, and a number that did not move
 
 - Self-review item nine, performance. Every authenticated page load awaited the panel session and then the account facts, one after the other, although neither depends on the other and each is a round trip to the database. They are asked for together now, in the protected layout and on the sign-in page.

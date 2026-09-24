@@ -249,7 +249,8 @@ beforeAll(async () => {
     create table zsr.source (id uuid primary key, title text not null, site_id uuid not null);
     grant usage on schema zsr to geoges_worker;
     grant select on zsr.source to geoges_worker;
-    insert into core.table_layer(schema_name,table_name,layer,history) values ('zsr','source','system','none');
+    insert into core.table_layer(schema_name,table_name,layer,history,scope_source)
+      values ('zsr','source','system','none','company');
     insert into iam.permission(code,module,name,created_from) values ('zsr.module.view','zsr','Deneme arama eşzamanlılığı','seed');
     insert into iam.role(code,name,level) values ('T0110_CONCURRENCY','Deneme arama eşzamanlılığı',10);
     insert into iam.role_permission(role_id,permission_id) select r.id,p.id from iam.role r,iam.permission p

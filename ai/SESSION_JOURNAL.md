@@ -382,3 +382,5 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-24 04:50:55Z · b13a9554 · Write · `src/modules/iam/application/panel-session.ts`
 - 2026-09-24 13:27:20Z · b13a9554 · Write · `src/modules/iam/ui/people-security-list.tsx`
 - 2026-09-24 13:50:55Z · b13a9554 · Write · `src/modules/iam/ui/people-security-list.tsx`
+- 2026-09-24 17:04:33Z · b13a9554 · Write · `db/migrations/0044_table_scope_source.sql`
+- 2026-09-24 17:06:58Z · b13a9554 · Write · `scripts/schema-coverage.dbtest.mjs`

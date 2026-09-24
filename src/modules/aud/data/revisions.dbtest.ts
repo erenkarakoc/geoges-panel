@@ -222,8 +222,9 @@ beforeAll(async () => {
     create policy entry_all on ${P}.entry for all to geoges_app using (true) with check (true);
     grant usage on schema ${P} to geoges_app, geoges_worker;
     grant select, insert, update on ${P}.entry to geoges_app;
-    insert into core.table_layer (schema_name, table_name, layer, history)
-      values ('${P}', 'entry', 'business', 'tracked'), ('${P}', 'correction', 'business', 'none');
+    insert into core.table_layer (schema_name, table_name, layer, history, scope_source)
+      values ('${P}', 'entry', 'business', 'tracked', 'own'),
+             ('${P}', 'correction', 'business', 'none', 'parent');
 
     insert into iam.permission (code, module, name, created_from) values
       ('${P}.module.view', '${P}', 'Deneme: görür', 'seed'),

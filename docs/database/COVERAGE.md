@@ -57,13 +57,36 @@ Bunlar davranış, hedef veya işletim kuralıdır; tablo beklemezler. Doğrulam
 
 ## 3. Tablo başına zorunlu üçlü
 
-Her tablo için şu üçü otomatik denetlenir (şema testi, `CONVENTIONS.md` bölüm 12):
+Kural 2026-09-24'te ölçülüp yeniden yazıldı (D-277, OQ-037). Önceki metin "her tabloda kapsam
+sütunu" diyordu ve o gün duran elli tablonun yirmiden fazlasını yanlış tarif ediyordu: döviz kuru
+şirket geneli, belge sürümü ve çıkarılmış metin kapsamı taşıyan belgenin altında, bildirim bir yere
+değil bir kişiye ait. Kural artık kayıt defterinin (`core.table_layer`) diliyle söyleniyor ve
+**kapsamın nereden geldiği beyan ediliyor**; test beyanı denetler, sütun adından tahmin etmez.
+(Tahminin neden yetmediği: `adm.rule_key.unit` sütunu değerin birimidir — "gün", "TL" — kapsam
+değil.)
 
-1. **Kapsam sütunu** — `scope_type`/`site_id`/`project_id`/`unit` en az biri.
-2. **RLS politikası** — politikasız tablo göçte reddedilir.
-3. **Geçmiş kanalı** — iş tablosu `aud.record_history`'ye bağlı; defter ve denetim tabloları muaftır (yalnız ekleme).
+1. **Kapsam kaynağı (`scope_source`).** Tabloyu kuran göç dört değerden birini yazar:
+   - `own` — kaydın kökü; `scope_type`/`site_id`/`project_id`/`unit`'ten en az birini taşır.
+   - `parent` — kapsamı ait olduğu satırdan alır (belge sürümü, revizyon etkisi, teslimat).
+   - `person` — satır bir kişiye aittir (bildirim, oturum, kurtarma kodu).
+   - `company` — daha dar bir kapsam yoktur (döviz kuru, katalog, rol, yetki).
+2. **RLS politikası.** Uygulama rolünün herhangi bir yetkisi olan her tabloda satır güvenliği açık
+   ve en az bir politika vardır. Hiç yetki verilmemiş tabloda denetlenen şey **yetkinin yokluğudur**;
+   bu politikadan güçlüdür ve `iam.login_attempt` ile `iam.recovery_code`'un neden politikasız
+   olduğunun cevabıdır (D-272).
+3. **Geçmiş kanalı.** `business` ve `config` katmanında kendi kapsamını taşıyan (`own`) her tablo
+   `tracked`'dır, yani `aud.record_history`'ye bağlıdır. Geri kalan tablolar geçmiş türünü kayıt
+   defterinde ayrıca beyan eder (`tracked` / `append_only` / `none`) ve göç koşucusu beyanı
+   tetikleyicilerle karşılaştırır.
 
-Muaf tablolar açıkça listelenir: `core.*`, `aud.audit_log`, `aud.record_history`, `inv.stock_movement`, `fin.party_account_entry`, `fin.income`, `fin.expense`, `rpt.*` okuma modelleri.
+Muafiyet artık elle tutulan bir liste değil, katmanın kendisidir: `system` katmanı (defterler,
+denetim kaydı, kuyruk, arama yardımcıları, göç kaydı) üçlünün geçmiş maddesinin dışındadır.
+
+Denetimin yeri: kayıt beyanını ve `own` iddiasını göç koşucusu her göçte denetler
+(`scripts/db-layers.mjs`); üçlünün tamamı `npm run test:db` içindeki
+`scripts/schema-coverage.dbtest.mjs` ile gerçek veritabanına karşı ölçülür ve CI'ın `database` işinde
+koşar. Testin kendi sınırı yazılıdır: yanlış beyan edilmiş bir tabloyu ancak `own` dediği halde
+kapsam taşımıyorsa yakalar; ötesi göç incelemesinin işidir.
 
 ## 4. Adlandırma denetimi
 

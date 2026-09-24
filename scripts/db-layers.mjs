@@ -44,6 +44,7 @@ export function layerProblems({
   primaryKeys,
   portable = null,
   history = null,
+  scope = null,
   schemasWithoutWorker = [],
 }) {
   const problems = [];
@@ -66,6 +67,15 @@ export function layerProblems({
     if (!layer) problems.push(`${table} has no layer; register it in core.table_layer`);
     else if ((layer === "config" || layer === "seed") && !primaryKeys.has(table))
       problems.push(`${table} is ${layer} data and needs a primary key`);
+    // Where the scope comes from is declared, not guessed from column names (D-277): `adm.rule_key`
+    // has a `unit` column that means "gün" or "TL", and a name-reading rule would call it scoped.
+    if (scope && layer) {
+      const source = scope.declared.get(table);
+      if (!source)
+        problems.push(`${table} has no scope_source; declare it in core.table_layer (D-277)`);
+      else if (source === "own" && !scope.carried.has(table))
+        problems.push(`${table} declares scope_source 'own' but carries no scope column`);
+    }
   }
   for (const name of registered.keys()) {
     if (!actual.has(name)) problems.push(`${name} is registered but does not exist`);
@@ -130,8 +140,17 @@ export async function readLayerState(client) {
   const registered = await client.query(
     `select schema_name || '.' || table_name as name, layer,
             ${has("portable") ? "portable" : "false"} as portable,
-            ${has("history") ? "history" : "'none'"} as history
+            ${has("history") ? "history" : "'none'"} as history,
+            ${has("scope_source") ? "scope_source" : "null"} as scope_source
        from core.table_layer`,
+  );
+  // Which tables carry a scope of their own, so a table that declares `own` can be held to it.
+  const scopeColumns = await client.query(
+    `select distinct table_schema || '.' || table_name as name
+       from information_schema.columns
+      where table_schema = any($1)
+        and column_name in ('scope_type', 'site_id', 'project_id', 'unit')`,
+    [schemas],
   );
   const triggers = await client.query(
     `select n.nspname || '.' || c.relname as name, t.tgname
@@ -170,6 +189,14 @@ export async function readLayerState(client) {
     tables: tables.rows.map((r) => r.name).sort(),
     registered: new Map(registered.rows.map((r) => [r.name, r.layer])),
     portable: new Set(registered.rows.filter((r) => r.portable).map((r) => r.name)),
+    // Null until 0044 has run: a database in the middle of a rollback is not missing a
+    // declaration, it is missing the column, and that is not a rule violation.
+    scope: has("scope_source")
+      ? {
+          declared: new Map(registered.rows.map((r) => [r.name, r.scope_source])),
+          carried: new Set(scopeColumns.rows.map((r) => r.name)),
+        }
+      : null,
     history: Object.assign(
       new Map(registered.rows.filter((r) => r.history !== "none").map((r) => [r.name, r.history])),
       {

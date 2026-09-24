@@ -208,8 +208,9 @@ beforeAll(async () => {
     );
     grant select, insert, update on ${P}.source, ${P}.effect, ${P}.summary to geoges_worker;
     grant delete on ${P}.summary to geoges_worker;
-    insert into core.table_layer (schema_name, table_name, layer) values
-      ('${P}', 'source', 'business'), ('${P}', 'effect', 'business'), ('${P}', 'summary', 'business');
+    insert into core.table_layer (schema_name, table_name, layer, scope_source) values
+      ('${P}', 'source', 'business', 'company'), ('${P}', 'effect', 'business', 'parent'),
+      ('${P}', 'summary', 'business', 'company');
   `);
   worker = createWorker({ pool: workerPool, registry });
   await worker.syncRegistry();

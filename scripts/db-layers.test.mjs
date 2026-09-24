@@ -16,6 +16,35 @@ const state = (layers, references = [], withoutKey = []) => ({
   primaryKeys: new Set(Object.keys(layers).filter((t) => !withoutKey.includes(t))),
 });
 
+describe("declared scope source (TASK-0116, D-277)", () => {
+  const withScope = (declared, carried) => ({
+    ...state({ "sit.site": "business", "sit.wall": "business" }),
+    scope: { declared: new Map(Object.entries(declared)), carried: new Set(carried) },
+  });
+
+  it("accepts a root that carries its scope and a child that reaches it", () => {
+    expect(
+      layerProblems(withScope({ "sit.site": "own", "sit.wall": "parent" }, ["sit.site"])),
+    ).toEqual([]);
+  });
+
+  it("reports a table that declares nothing", () => {
+    expect(layerProblems(withScope({ "sit.site": "own" }, ["sit.site"]))).toEqual([
+      "sit.wall has no scope_source; declare it in core.table_layer (D-277)",
+    ]);
+  });
+
+  it("holds a table to what it declared: 'own' without a scope column is a problem", () => {
+    expect(
+      layerProblems(withScope({ "sit.site": "own", "sit.wall": "own" }, ["sit.site"])),
+    ).toEqual(["sit.wall declares scope_source 'own' but carries no scope column"]);
+  });
+
+  it("says nothing about a database that has not run the migration yet", () => {
+    expect(layerProblems(state({ "sit.site": "business" }))).toEqual([]);
+  });
+});
+
 describe("table layer rules (TASK-0076)", () => {
   it("accepts registered tables with references in allowed directions", () => {
     const s = state({ "adm.catalog": "seed", "wfl.flow": "config", "sit.site": "business" }, [
