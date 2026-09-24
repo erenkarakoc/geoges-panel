@@ -27,5 +27,15 @@ export {
   type TriggerKind,
 } from "@/modules/wfl/data/instance-store";
 
+export { runEventTriggers, runInstance, type RunResult } from "@/modules/wfl/application/engine";
+export { flowEngine } from "@/modules/wfl/application/engine-subscriber";
+export {
+  parseDefinition,
+  RUNNABLE_STEP_TYPES,
+  STEP_TYPES,
+  type FlowDefinition,
+  type FlowStep,
+} from "@/modules/wfl/domain/definition";
+
 // The module's capability catalog, read by the flow engine (TASK-0118).
 export { wflCapabilities } from "@/modules/wfl/capabilities";

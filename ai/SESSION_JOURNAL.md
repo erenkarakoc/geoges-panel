@@ -392,3 +392,7 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-24 18:20:52Z · b13a9554 · Write · `src/modules/wfl/data/wfl.dbtest.ts`
 - 2026-09-24 18:41:52Z · b13a9554 · Write · `db/migrations/0046_wfl_instances.sql`
 - 2026-09-24 18:43:43Z · b13a9554 · Write · `src/modules/wfl/data/wfl-instances.dbtest.ts`
+- 2026-09-24 19:51:32Z · b13a9554 · Write · `src/modules/wfl/domain/definition.ts`
+- 2026-09-24 19:52:47Z · b13a9554 · Write · `src/modules/wfl/application/engine.ts`
+- 2026-09-24 19:53:31Z · b13a9554 · Write · `db/migrations/0047_wfl_event_triggers.sql`
+- 2026-09-24 19:56:16Z · b13a9554 · Write · `src/modules/wfl/application/engine.dbtest.ts`

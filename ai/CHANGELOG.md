@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-24 — The engine takes its first steps (TASK-0117, step 3)
+
+- A definition is now a thing with rules: the fourteen steps of the palette and nothing else, every path checked against the steps that exist, every branch of a condition named. There is no free code and no escape hatch, which is what makes "a flow cannot write the ledger" a missing ability rather than a rule somebody polices.
+- The engine's loop runs start, condition and end — it enters a step, decides what it means, leaves it with what it decided, and moves on until the flow ends. A step it has not learned stops the instance with that step's name in the log, rather than being quietly skipped.
+- A published flow starts listening the same moment. Which events matter lives in the definitions, not in code, so publishing writes the engine's subscription itself (migration 0047) and there is no second list to keep in step. The engine is one subscriber whose own event list is empty on purpose.
+- Proved end to end against a throw-away record type, which is what D-279 asked for: a real event published through the real outbox creates the delivery, the engine runs the flow, and the run log says which way it went and why — the condition's own answer is in it. A repeated delivery changes nothing, because the instance carries the event's id.
+- Nine unit tests for the schema and the condition, eight database tests for the engine; 327 unit and 270 database tests in all.
+
 ## 2026-09-24 — Instances: what a running flow is, and what stops it (TASK-0117, step 2)
 
 - Migration 0046 adds the instance, its step states and the run log. An instance holds the **version** it started on, so publishing a newer definition over it changes nothing about the job already half done — a foreign key, not a rule somebody has to remember, and the test publishes a second version over a running instance to prove it.

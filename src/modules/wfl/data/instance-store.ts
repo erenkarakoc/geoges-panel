@@ -171,3 +171,54 @@ export function readRunLog(identity: DbIdentity, instanceId: string) {
     }));
   });
 }
+
+export type RunnableRow = {
+  id: string;
+  status: string;
+  context: Record<string, unknown>;
+  definition: unknown;
+  /** The step the instance is sitting in, when it is waiting inside one. */
+  openStepId: string | null;
+};
+
+/** What the engine needs to take the next step, read as the worker. */
+export async function readRunnable(db: SystemDb, instanceId: string): Promise<RunnableRow | null> {
+  const { rows } = await sql<{
+    id: string;
+    status: string;
+    context: Record<string, unknown>;
+    definition: unknown;
+    open_step_id: string | null;
+  }>`select i.id, i.status, i.context, v.definition,
+            (select s.step_id from wfl.step_state s
+              where s.instance_id = i.id and s.status = 'running'
+              order by s.entered_at desc limit 1) as open_step_id
+       from wfl.instance i
+       join wfl.flow_version v on v.id = i.flow_version_id
+      where i.id = ${instanceId}::uuid`.execute(db);
+  const row = rows[0];
+  return row
+    ? {
+        id: row.id,
+        status: row.status,
+        context: row.context ?? {},
+        definition: row.definition,
+        openStepId: row.open_step_id,
+      }
+    : null;
+}
+
+/**
+ * The flows whose published definition listens to this event. Asking the definitions themselves
+ * is what lets a flow start listening the moment it is published (REQ-WFL-007).
+ */
+export async function flowsListeningTo(db: SystemDb, eventCode: string): Promise<string[]> {
+  const { rows } = await sql<{ key: string }>`
+    select f.key
+      from wfl.flow_version v
+      join wfl.flow f on f.id = v.flow_id
+     where v.status = 'published' and f.disabled_at is null
+       and v.definition -> 'trigger' ->> 'type' = 'event'
+       and v.definition -> 'trigger' ->> 'event' = ${eventCode}`.execute(db);
+  return rows.map((row) => row.key);
+}

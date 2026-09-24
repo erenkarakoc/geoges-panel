@@ -11,6 +11,7 @@ import {
   securityAlerts,
   systemWatch,
 } from "@/modules/tsk";
+import { flowEngine } from "@/modules/wfl";
 import type { JobRegistry } from "@/platform/jobs/types";
 import { sendSignal } from "@/platform/signals/hub";
 import { processMailSender } from "@/platform/mail/mail";
@@ -36,6 +37,7 @@ export const jobRegistry: JobRegistry = {
     exchangeRateAlarm(),
     revisionAlerts(),
     securityAlerts(),
+    flowEngine(),
     ...(searchIndex.length > 0 ? [searchIndexer(searchIndex)] : []),
   ],
   jobs: [
