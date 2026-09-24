@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-24 — The mandatory trio, measured before it was enforced
+
+- The schema test CI.md promises was the next check whose subject has arrived, so the 50 shipped tables were measured against `COVERAGE.md` section 3 first. The rule does not describe them: of the 14 tables the register calls `business`, 11 have no scope column and are right not to — an exchange rate is company-wide, a document version and an extracted text hang off the document that carries the scope, a notification belongs to a person rather than a place. Two tables have no RLS policy on purpose, because the application has no privilege on them at all, which is stronger than a policy.
+- Written literally the test would fail on more than twenty tables, and satisfying it by adding scope columns nobody needs would be worse than not having the test. So nothing was written: the measurement is OQ-037 with a proposed rule in the register's own terms, and TASK-0116 is BLOCKED on the answer.
+- The proposal, in short: declare where a table's scope comes from (`own` / `parent` / `person` / `company`) in `core.table_layer`, so the test reads a declaration the migration makes rather than guessing from column names.
+
 ## 2026-09-24 — The dependency audit runs, and the checks that never arrived are named
 
 - `docs/infrastructure/CI.md` has promised seven GitHub checks since Phase 05, each to be added "when the thing it tests arrives". One of them needed nothing to arrive: `npm audit` now runs on every push and pull request, and it is strict at every level because the tree reports zero advisories today. An advisory with no fix is a decision to record, not a reason to lower the level quietly.
