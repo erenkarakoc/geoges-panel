@@ -4,7 +4,62 @@ Last updated: 2026-09-25
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — walking the list, and what walking it found
+## Latest continuation — Phase 08: the capability catalog, and an engine that runs
+
+Phase 07's build work is finished and the owner postponed the acceptance walks that need them
+(D-278), so Phase 08 opened with its question round. Two questions were real and both were answered
+the same day: the engine is accepted against a probe record type rather than waiting for the modules
+its default flows act on (D-279), and the capability catalog is written with the five modules that
+exist rather than defined and left empty (D-280). The plan is `docs/features/phase-08-workflow-plan.md`,
+approved as D-281.
+
+TASK-0118 is DONE. Every module declares what a flow may ask of it where the module is, and the
+declaration carries the function that runs it, so "declared but not implemented" is a compile error.
+The contract test is left with the three things a compiler cannot see — the declaration against the
+module's own REQ catalog, the declared events against the events the migrations really publish in
+both directions, and a snapshot that breaks the build when a published capability disappears. It
+found four real drifts on its first run: four events the code publishes were named in no catalog, so
+no flow could have heard them.
+
+TASK-0117 is IMPLEMENTING, eight steps in, across migrations 0045-0051:
+
+1. Definitions, versions and the dry-run evidence a publish needs. A published version's content
+   cannot be changed by anyone, including the administrative connection, and a publish without a dry
+   run of exactly this definition is refused.
+2. Instances, step states and the run log. An instance holds the version it started on; a
+   single-instance flow keeps one run per record through a partial unique index; the step limit is a
+   recorded outcome rather than an exception, because an exception would roll back the log line that
+   says why.
+3. The definition schema (the fourteen steps and nothing else), the loop over start/condition/end,
+   and the event trigger: publishing writes the engine's own subscription, so a flow starts listening
+   the moment it is published.
+4. The approval step: three outcomes, a reason enforced by a check constraint, and a decision that
+   comes back as an event rather than resuming the flow itself.
+5. The task step, which is the first time the engine calls a capability action rather than writing
+   something itself.
+6. The dry run — the same loop with a sink that writes nothing, which is SPIKE-05's warning answered
+   structurally rather than by care.
+7. The notify and wait steps; a wait leaves a row in the scheduler, so an eight-hour wait survives a
+   restart.
+8. The clock trigger: every day at a time, or every N minutes, with the slot a run belongs to keeping
+   a double round to one run.
+
+Left in TASK-0117: the threshold trigger, seven steps (escalate, parallel, join, subflow, lock,
+record, for each) and the windowed conditions. Then TASK-0119 (the designer) and TASK-0120 (the
+approval centre's real queue and the eight templates), each of which takes its own plan once the
+engine runs.
+
+Three real engine faults came out of the tests rather than out of review: re-entering a step an
+instance was already sitting in, a policy subquery that shadowed the outer id and hid every run from
+the person it was waiting on, and an event code chosen by a `case`, which tells the contract test
+nothing.
+
+Validation: 333 unit tests, 291 database tests, seven migrations with their down files, lint, types,
+prettier and the production build; CI green on every commit.
+
+Waiting on the owner: M1 itself (TASK-0111).
+
+## Previous continuation — walking the list, and what walking it found
 
 Phase 07 has no build work left that is not the owner's to answer, so the time went on looking at what is built.
 

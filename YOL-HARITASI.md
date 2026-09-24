@@ -1,6 +1,6 @@
 # GEOGES Panel — Yol Haritası
 
-Son güncelleme: 2026-09-24. Şu an **Faz 07 — Temel yapım** içindeyiz; fazın kalan tek işi **TASK-0111 — M1 yerel kabul turu**: on bir adımlık kontrol listesi hazır, turu sahibi atacak.
+Son güncelleme: 2026-09-25. Şu an **Faz 08 — İş akışı motoru** içindeyiz. Faz 07'nin yapım işi bitti; kalan tek işi **M1 yerel kabul turu** ve o sizde — siz turları sonraya bıraktığınız için faz kapanmadan Faz 08 başladı (D-278).
 
 Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının](ai/TASKS.md) ve [güncel durumun](ai/CURRENT_STATE.md) okunması kolay özetidir. Faz sırası ve kapsam için bağlayıcı kaynak `ai/MASTER_ROADMAP.md`'dir. “Tamamlandı” temel altyapının kabulünü ifade eder; sonraki fazlardaki iş ekranlarının da yapıldığı anlamına gelmez.
 
@@ -15,8 +15,8 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 | **04 — Veritabanı mimarisi** | 222 tabloluk tasarım; kayıt geçmişi, kapsam, satır güvenliği ve defterler | ✅ Tamamlandı — 222, tasarlanan tablo sayısıdır |
 | **05 — Altyapı tasarımı** | Ortamlar, CI, yedekleme, kurtarma ve işletim yönergeleri | ✅ Tamamlandı |
 | **06 — Doğrulama denemeleri** | 17 deneme: yetki, kuyruk, depolama, metin tanıma, arama, canlı sinyal ve diğer riskler | ✅ Tamamlandı |
-| **07 — Temel yapım** | Kimlik/yetki, denetim, kuyruklar, belgeler, görevler, bildirimler, tanımlar ve arama | 🔨 **Devam ediyor — şu an buradayız** |
-| **08 — İş akışı motoru** | Akış tanımları, sürümleme, çalıştırma, test, görsel tasarımcı ve onay merkezi | ⬜ Başlamadı |
+| **07 — Temel yapım** | Kimlik/yetki, denetim, kuyruklar, belgeler, görevler, bildirimler, tanımlar ve arama | 🔨 Yapım bitti; **M1 kabul turu** sahipte, o yüzden faz açık |
+| **08 — İş akışı motoru** | Akış tanımları, sürümleme, çalıştırma, test, görsel tasarımcı ve onay merkezi | 🔨 **Devam ediyor — şu an buradayız** |
 | **09 — Dilim 1** | Projeler, şantiyeler, duvarlar, günlük saha kaydı, onaylar, maliyet/zarar görünümü, sahip kokpiti ve resmî günlük rapor | ⬜ Başlamadı |
 | **09R — Kayıt tipi oluşturucu** | Kullanıcının kendi kayıt türünü, alanlarını ve bunların akış/arama bağlantısını tanımlaması | ⬜ Dilim 1 pilotundan sonra; diğer dilimleri bekletmez |
 | **10 — Dilim 2** | Malzeme, tartım, sevkiyat, stok defteri, sayım, satın alma, fabrika günlüğü, birim maliyet, galvaniz/fire ve hurda takibi | ⬜ Başlamadı |
@@ -31,6 +31,61 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 16–18 numaraları, dilimler birleştirilirken kaldırıldı; atlanan iş yok. Faz 19, mevcut atıflar bozulmasın diye numarasını koruyor.
 
 **15M — Panel MCP sunucusu (2026-09-23 eklendi).** Bitmiş ürün için, panelin içinde çalışan bir MCP sunucusu: asistan panele bağlanır, sunucunun kendi yetkisi yoktur, her çağrı soruyu soran kişinin kimliğiyle aynı satır güvenliğinden geçer. Yani kanal, o kişinin ekranda görebildiğinin tam olarak aynısını görür; yetkisiz kayıt yokmuş gibi davranır. Sahip iki kararı verdi: veri bulut bir modele çıkabilir ve kapı kullanıcının kendi yetkisi dahilinde her şeye açıktır. Okuma tarafı arama, kayıt detayı, yönetim kartları ve raporlar, görevler, bildirimler, onay kuyruğu ve revizyon talepleridir; belgelerde yalnız üstveri ve panel bağlantısı döner, imzalı depolama bağlantısı asla dışarı çıkmaz. Yazma tarafı sahibin kararıyla **yalnız taslakla sınırlı**: kanal bir taslak hazırlar, kişi paneli açıp onaylayana kadar hiçbir şey yürürlüğe girmez. Görev açmak, not yazmak veya revizyon talebi başlatmak doğrudan kanaldan yapılmaz; onay, imza ve para-stok-personel kaydı da panelde kalır. Araç yüzeyi her modülün kendi kaydından toplandığı için sıra dilimlerden sonradır: bugün yapılsa yüzeyin büyük bölümü henüz yok. KVKK sorusu da sahibin kararıyla kapandı (D-271): kanal kurulabilir ve **İK modülü de kanalda** olacak; her okuma yine kişinin kendi yetkisi dahilinde ve denetim kaydıyla. Gerçek personel verisi panele girmeden önceki hukuki değerlendirme (OQ-024) Faz 19 kapısı olarak yerinde duruyor.
+
+## Faz 08 — İş akışı motoru (şu an burada)
+
+Motor, panelin süreçleri yürüten parçası: bir olay olduğunda ya da saati geldiğinde akışı başlatır,
+adım adım yürütür, birinin onayını veya bir görevin kapanmasını bekler, sonra devam eder.
+
+**Fazın şekli iki kararla belirlendi (24 Eylül):** motor, kayıtları Faz 09-11'de gelecek gerçek
+akışlar yerine **deneme kayıt türüyle** uçtan uca kabul edilecek (D-279) — sekiz gerçek şablon kendi
+diliminde etkinleştirilip orada kabul edilir; ve **yetenek kataloğu** mevcut beş modül için de
+yazıldı (D-280).
+
+| Sıra | İş | Durum |
+|---|---|---|
+| 1 | **TASK-0118 — Yetenek kataloğu ve sözleşme testi** | ✅ Tamamlandı |
+| 2 | **TASK-0117 — Motor çekirdeği** | 🔨 Devam ediyor — sekiz adımın sekizi yapıldı, aşağıda |
+| 3 | TASK-0119 — Görsel tasarımcı ve soru-cevap | ⬜ Motor bitince kendi planını alacak |
+| 4 | TASK-0120 — Onay Merkezi'nin gerçek kuyruğa bağlanması ve sekiz şablon | ⬜ Motor bitince |
+
+### Yetenek kataloğu (TASK-0118, tamamlandı)
+
+Her modül, bir akışın kendisinden ne isteyebileceğini kendi yerinde ilan ediyor — ve ilan,
+**çalıştıran fonksiyonu taşıyor**. Yani "ilan var, kod yok" bir test hatası değil, **derleme hatası**.
+Sözleşme testi de derleyicinin göremediği üç şeye bakıyor: ilan modülün kendi REQ kataloğuyla uyuşuyor
+mu, ilan edilen olaylar gerçekten yayımlanıyor mu (ve yayımlanan her olay ilan edilmiş mi), ve bir
+zamanlar yayımlanmış bir yetenek kaybolmuş mu. İlk koşuşunda dört gerçek ayrışma yakaladı: kodun
+yayımladığı dört olayın hiçbir katalogda adı geçmiyordu, yani hiçbir akış onları duyamazdı.
+
+### Motor çekirdeği (TASK-0117, devam ediyor)
+
+| Parça | Durum |
+|---|---|
+| Sürümlü tanım, taslak, yayın | ✅ Yayımlanmış bir sürümün tanımı **kimse tarafından** değiştirilemiyor — yönetici bağlantısı dahil; aynı anda tek yayımlanmış sürüm tekil indeks |
+| Denemesiz yayın yasağı | ✅ Yayın, **tam olarak bu tanımın** geçmiş bir denemesini istiyor; tanım denemeden sonra değişirse kanıt geçersiz (içerik özeti) |
+| Örnekler ve çalışma günlüğü | ✅ Örnek, **başladığı sürümü** tutuyor; üstüne yeni sürüm yayımlansa da yarım iş değişmiyor. Tek örnekli akışta kayıt başına tek koşu |
+| Adım sınırı | ✅ Bitmeyen döngü, sayılarak durduruluyor; sınır bir istisna değil **kayıtlı bir sonuç** (sebebi günlükte, örnek "başarısız" kapanıyor) |
+| Tetikleyici: olay | ✅ Yayımlanan akış aynı anda dinlemeye başlıyor (abonelik yayının kendisi tarafından yazılıyor); aynı teslimat ikinci koşu açmıyor |
+| Tetikleyici: saat | ✅ "Her gün 07:30" ya da "her 30 dakika"; her koşu ait olduğu **zaman dilimini** taşıyor, tur iki kez dönerse ikinci koşu açılmıyor |
+| Tetikleyici: eşik / elle | 🔨 Elle başlatma var (tasarım yetkisi istiyor); eşik tetikleyicisi kalan iş |
+| Adım: başlangıç, koşul, bitiş | ✅ Koşullar kaydın verisiyle değerlendiriliyor; hangi daldan neden gidildiği günlükte |
+| Adım: onay | ✅ Üç sonuç (onayla / reddet / geri gönder), gerekçesiz ret veya geri gönderme **tablonun kısıtıyla** reddediliyor; karar akışı kendisi yürütmüyor, olay olarak geri geliyor |
+| Adım: görev | ✅ Motor görevi kendi yazmıyor, **kataloğun aksiyonunu** çağırıyor; görev kapanınca akış kaldığı yerden devam ediyor |
+| Adım: bekleme (süre) | ✅ Bellekte zamanlayıcı değil, **veritabanında satır**: sekiz saatlik bekleme yeniden başlatmayı ve dağıtımı atlatıyor |
+| Adım: bildirim | ✅ Yine kataloğun aksiyonu üzerinden |
+| Kalan yedi adım | ⬜ Eskalasyon, paralel dal, birleşme, alt akış, kilit, kayıt oluştur/durum değiştir, her biri için |
+| Kuru mod (deneme çalıştırması) | ✅ **Gerçek çalışmanın ta kendisi**: adımın yaptığı şey bir portun arkasında, deneme hiçbir şey yazmayan bir port veriyor. Koşullar gerçek veriyle, sahipler gerçekten hesaplanıyor; örnek/onay/görev/bildirim **hiç** yazılmıyor |
+| Pencereli koşullar ("son 30 günde 3'ten fazla") | ⬜ Kalan iş |
+
+Bugüne kadar: **yedi göç** (0045-0051), **333 birim testi**, **291 veritabanı testi**. Motorun her
+adımı kendi testleriyle geldi ve testler yol boyunca üç gerçek motor kusuru buldurdu: açık adımda
+bekleyen örneğin yeniden yürütülünce aynı adıma ikinci kez girmesi, görünürlük politikasında dıştaki
+kimliği gölgeleyen bir alt sorgu, ve olay kodunu `case` ile seçtiği için sözleşme testine görünmeyen
+bir yayın çağrısı.
+
+**Fazın bilinen riski (D-278):** motor, temelin sizin kullanımınızla doğrulanmadığı bir zeminde
+kuruluyor. M1 turundan çıkacak bir düzeltme temeli değiştirirse, üstünde motor dururken yapılacak.
 
 ## Faz 07 — Ayrıntılı durum
 
@@ -121,10 +176,11 @@ Fazın yapım işi bitti. Kalan üç şeyin hiçbiri kod işi değil: **M1 turu*
 
 ## Buradan sonraki sıra
 
-1. **TASK-0111 — M1:** kontrol listesi hazır, tur sizde. Notlarınız kayda girer (düzeltme → görev, kapsam → CHG), sonra Faz 07 çıkış kontrolü.
-2. **Faz 08:** iş akışı motoru ve görsel tasarımcı.
-3. **Faz 09'da açılacak arama işleri:** modüller kendi kaynaklarını kaydedince gerçek kayıtlarla kabul, ve tek bir sözcüğü çok sayıda kaydın paylaştığı durumda sıralama.
-4. **TASK-0113'ün kalan kabulü:** barındırma geldiğinde ana ekrana kurulum ve gerçek cihazda bildirim.
+1. **Motorun kalan işi (TASK-0117):** eşik tetikleyicisi, yedi adım ve pencereli koşullar.
+2. **TASK-0119 ve TASK-0120:** görsel tasarımcı, ve Onay Merkezi'nin motorun açtığı gerçek kuyruğa bağlanması.
+3. **TASK-0111 — M1:** kontrol listesi hazır, tur sizde. Notlarınız kayda girer (düzeltme → görev, kapsam → CHG) ve Faz 07 kapanır.
+4. **Faz 09'da açılacak arama işleri:** modüller kendi kaynaklarını kaydedince gerçek kayıtlarla kabul, ve tek bir sözcüğü çok sayıda kaydın paylaştığı durumda sıralama.
+5. **TASK-0113'ün kalan kabulü:** barındırma geldiğinde ana ekrana kurulum ve gerçek cihazda bildirim.
 
 **Paralel kabul:** TASK-0113'ün mobil kurulum doğrulaması HTTPS ve gerçek cihaz koşullarını bekliyor; sahip bunun için geçici bir tünel istemedi (D-274). Barındırma bağımlılığı DEF-008 olarak açık ve barındırma kararı Faz 09 çıkışına bağlı, yani bu kabul M1'i ve Faz 08'i bekletmiyor.
 
