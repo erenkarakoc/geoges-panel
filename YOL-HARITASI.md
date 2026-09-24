@@ -32,62 +32,84 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 **15M — Panel MCP sunucusu (2026-09-23 eklendi).** Bitmiş ürün için, panelin içinde çalışan bir MCP sunucusu: asistan panele bağlanır, sunucunun kendi yetkisi yoktur, her çağrı soruyu soran kişinin kimliğiyle aynı satır güvenliğinden geçer. Yani kanal, o kişinin ekranda görebildiğinin tam olarak aynısını görür; yetkisiz kayıt yokmuş gibi davranır. Sahip iki kararı verdi: veri bulut bir modele çıkabilir ve kapı kullanıcının kendi yetkisi dahilinde her şeye açıktır. Okuma tarafı arama, kayıt detayı, yönetim kartları ve raporlar, görevler, bildirimler, onay kuyruğu ve revizyon talepleridir; belgelerde yalnız üstveri ve panel bağlantısı döner, imzalı depolama bağlantısı asla dışarı çıkmaz. Yazma tarafı sahibin kararıyla **yalnız taslakla sınırlı**: kanal bir taslak hazırlar, kişi paneli açıp onaylayana kadar hiçbir şey yürürlüğe girmez. Görev açmak, not yazmak veya revizyon talebi başlatmak doğrudan kanaldan yapılmaz; onay, imza ve para-stok-personel kaydı da panelde kalır. Araç yüzeyi her modülün kendi kaydından toplandığı için sıra dilimlerden sonradır: bugün yapılsa yüzeyin büyük bölümü henüz yok. KVKK sorusu da sahibin kararıyla kapandı (D-271): kanal kurulabilir ve **İK modülü de kanalda** olacak; her okuma yine kişinin kendi yetkisi dahilinde ve denetim kaydıyla. Gerçek personel verisi panele girmeden önceki hukuki değerlendirme (OQ-024) Faz 19 kapısı olarak yerinde duruyor.
 
-## Faz 08 — İş akışı motoru (şu an burada)
+## Faz 08 — Ayrıntılı durum (şu an burada)
 
 Motor, panelin süreçleri yürüten parçası: bir olay olduğunda ya da saati geldiğinde akışı başlatır,
-adım adım yürütür, birinin onayını veya bir görevin kapanmasını bekler, sonra devam eder.
+adım adım yürütür, birinin onayını ya da bir görevin kapanmasını bekler, sonra devam eder.
 
 **Fazın şekli iki kararla belirlendi (24 Eylül):** motor, kayıtları Faz 09-11'de gelecek gerçek
 akışlar yerine **deneme kayıt türüyle** uçtan uca kabul edilecek (D-279) — sekiz gerçek şablon kendi
 diliminde etkinleştirilip orada kabul edilir; ve **yetenek kataloğu** mevcut beş modül için de
-yazıldı (D-280).
+yazıldı (D-280). Plan: `docs/features/phase-08-workflow-plan.md` (D-281, sahip onayladı).
 
-| Sıra | İş | Durum |
+| Görev | İş ve teslim edilenler | Güncel durum / kalan |
 |---|---|---|
-| 1 | **TASK-0118 — Yetenek kataloğu ve sözleşme testi** | ✅ Tamamlandı |
-| 2 | **TASK-0117 — Motor çekirdeği** | 🔨 Devam ediyor — sekiz adımın sekizi yapıldı, aşağıda |
-| 3 | TASK-0119 — Görsel tasarımcı ve soru-cevap | ⬜ Motor bitince kendi planını alacak |
-| 4 | TASK-0120 — Onay Merkezi'nin gerçek kuyruğa bağlanması ve sekiz şablon | ⬜ Motor bitince |
+| TASK-0118 | Yetenek kataloğu ve sözleşme testi: her modül ne yapabildiğini ilan eder, CI ilan ile kodu karşılaştırır | ✅ Tamamlandı; beş modül 25 yetenek ilan etti, test ilk koşuşunda dört gerçek ayrışma buldu |
+| TASK-0117 | Motor çekirdeği: sürümlü tanım, örnek, yürütme, tetikleyiciler, adım paleti, koşullar, kuru mod | 🔨 **Devam ediyor** — on adım teslim edildi (aşağıda); kalan: eşik tetikleyicisi ve altı adım |
+| TASK-0119 | Görsel tasarımcı ve soru-cevap (ikisi de aynı JSON'u üretir) | ⬜ Motor bitince kendi planını alacak |
+| TASK-0120 | Onay Merkezi'nin motorun açtığı gerçek kuyruğa bağlanması ve sekiz şablonun gelmesi | ⬜ Motor bitince; şablonlar kendi dilimlerinde etkinleşir |
 
-### Yetenek kataloğu (TASK-0118, tamamlandı)
-
-Her modül, bir akışın kendisinden ne isteyebileceğini kendi yerinde ilan ediyor — ve ilan,
-**çalıştıran fonksiyonu taşıyor**. Yani "ilan var, kod yok" bir test hatası değil, **derleme hatası**.
-Sözleşme testi de derleyicinin göremediği üç şeye bakıyor: ilan modülün kendi REQ kataloğuyla uyuşuyor
-mu, ilan edilen olaylar gerçekten yayımlanıyor mu (ve yayımlanan her olay ilan edilmiş mi), ve bir
-zamanlar yayımlanmış bir yetenek kaybolmuş mu. İlk koşuşunda dört gerçek ayrışma yakaladı: kodun
-yayımladığı dört olayın hiçbir katalogda adı geçmiyordu, yani hiçbir akış onları duyamazdı.
-
-### Motor çekirdeği (TASK-0117, devam ediyor)
+### Motorun parçaları
 
 | Parça | Durum |
 |---|---|
-| Sürümlü tanım, taslak, yayın | ✅ Yayımlanmış bir sürümün tanımı **kimse tarafından** değiştirilemiyor — yönetici bağlantısı dahil; aynı anda tek yayımlanmış sürüm tekil indeks |
+| Sürümlü tanım, taslak, yayın | ✅ Yayımlanmış sürümün tanımını **kimse** değiştiremiyor (yönetici bağlantısı dahil); aynı anda tek yayımlanmış sürüm tekil indeks |
 | Denemesiz yayın yasağı | ✅ Yayın, **tam olarak bu tanımın** geçmiş bir denemesini istiyor; tanım denemeden sonra değişirse kanıt geçersiz (içerik özeti) |
-| Örnekler ve çalışma günlüğü | ✅ Örnek, **başladığı sürümü** tutuyor; üstüne yeni sürüm yayımlansa da yarım iş değişmiyor. Tek örnekli akışta kayıt başına tek koşu |
-| Adım sınırı | ✅ Bitmeyen döngü, sayılarak durduruluyor; sınır bir istisna değil **kayıtlı bir sonuç** (sebebi günlükte, örnek "başarısız" kapanıyor) |
-| Tetikleyici: olay | ✅ Yayımlanan akış aynı anda dinlemeye başlıyor (abonelik yayının kendisi tarafından yazılıyor); aynı teslimat ikinci koşu açmıyor |
-| Tetikleyici: saat | ✅ "Her gün 07:30" ya da "her 30 dakika"; her koşu ait olduğu **zaman dilimini** taşıyor, tur iki kez dönerse ikinci koşu açılmıyor |
-| Tetikleyici: eşik / elle | 🔨 Elle başlatma var (tasarım yetkisi istiyor); eşik tetikleyicisi kalan iş |
-| Adım: başlangıç, koşul, bitiş | ✅ Koşullar kaydın verisiyle değerlendiriliyor; hangi daldan neden gidildiği günlükte |
-| Adım: onay | ✅ Üç sonuç (onayla / reddet / geri gönder), gerekçesiz ret veya geri gönderme **tablonun kısıtıyla** reddediliyor; karar akışı kendisi yürütmüyor, olay olarak geri geliyor |
-| Adım: görev | ✅ Motor görevi kendi yazmıyor, **kataloğun aksiyonunu** çağırıyor; görev kapanınca akış kaldığı yerden devam ediyor |
-| Adım: bekleme (süre) | ✅ Bellekte zamanlayıcı değil, **veritabanında satır**: sekiz saatlik bekleme yeniden başlatmayı ve dağıtımı atlatıyor |
+| Örnek, adım durumları, çalışma günlüğü | ✅ Örnek **başladığı sürümü** tutuyor; tek örnekli akışta kayıt başına tek koşu; günlük adımın kendi ayrıntısını da taşıyor |
+| Motorun sınırları | ✅ Bitmeyen döngü sayılarak durduruluyor; sınır bir istisna değil **kayıtlı bir sonuç** |
+| Tetikleyici: olay | ✅ Yayımlanan akış aynı anda dinlemeye başlıyor; abonelik yayının kendisi tarafından yazılıyor; aynı teslimat ikinci koşu açmıyor |
+| Tetikleyici: saat | ✅ "Her gün 07:30" ya da "her 30 dakika"; her koşu ait olduğu **zaman dilimini** taşıyor |
+| Tetikleyici: elle | ✅ Ayrı bir kapı; tasarım yetkisi istiyor (motorunki istemiyor, çünkü motor sistemin kendisi) |
+| Tetikleyici: eşik | ⬜ Kalan iş |
+| Adımlar: başlangıç, koşul, bitiş | ✅ |
+| Adım: onay | ✅ Üç sonuç; gerekçesiz ret/geri gönderme **tablonun kısıtıyla** reddediliyor; karar akışı kendisi yürütmüyor, olay olarak geri geliyor |
+| Adım: görev | ✅ Motor görevi kendi yazmıyor, **kataloğun aksiyonunu** çağırıyor; görev kapanınca akış devam ediyor |
+| Adım: bekleme (süre) | ✅ Bellekte zamanlayıcı değil **veritabanında satır**; sekiz saatlik bekleme yeniden başlatmayı atlatıyor |
 | Adım: bildirim | ✅ Yine kataloğun aksiyonu üzerinden |
-| Kalan yedi adım | ⬜ Eskalasyon, paralel dal, birleşme, alt akış, kilit, kayıt oluştur/durum değiştir, her biri için |
-| Kuru mod (deneme çalıştırması) | ✅ **Gerçek çalışmanın ta kendisi**: adımın yaptığı şey bir portun arkasında, deneme hiçbir şey yazmayan bir port veriyor. Koşullar gerçek veriyle, sahipler gerçekten hesaplanıyor; örnek/onay/görev/bildirim **hiç** yazılmıyor |
-| Pencereli koşullar ("son 30 günde 3'ten fazla") | ⬜ Kalan iş |
+| Adım: eskalasyon | ✅ Onay taşınıyor (kopyalanmıyor); kime taşınacağı zamanlayıcı çaldığında hesaplanıyor; cevaplanmış onay taşınmıyor |
+| Kalan altı adım | ⬜ Paralel dal, birleşme, alt akış, kilit, kayıt oluştur/durum değiştir, her biri için |
+| Koşullar: alan | ✅ Kaydın verisiyle değerlendiriliyor; hangi daldan neden gidildiği günlükte |
+| Koşullar: geçmişe bakan | ✅ Sayım sorgusu, **her seferinde taze**, kendi süre sınırıyla (2 sn); sınır aşılırsa akış sessizce "hayır" demiyor, **gerekçesiyle duruyor** |
+| Kuru mod (deneme çalıştırması) | ✅ **Gerçek çalışmanın ta kendisi**: adımın yaptığı şey bir portun arkasında, deneme hiçbir şey yazmayan bir port veriyor |
 
-Bugüne kadar: **yedi göç** (0045-0051), **333 birim testi**, **291 veritabanı testi**. Motorun her
-adımı kendi testleriyle geldi ve testler yol boyunca üç gerçek motor kusuru buldurdu: açık adımda
-bekleyen örneğin yeniden yürütülünce aynı adıma ikinci kez girmesi, görünürlük politikasında dıştaki
-kimliği gölgeleyen bir alt sorgu, ve olay kodunu `case` ile seçtiği için sözleşme testine görünmeyen
-bir yayın çağrısı.
+### Son doğrulamalar
+
+- **Yetenek kataloğu kuruldu (TASK-0118).** İlan, çalıştıran fonksiyonu taşıyor; "ilan var, kod yok"
+  bir test hatası değil **derleme hatası**. Sözleşme testi derleyicinin göremediği üçüne bakıyor: ilan
+  modülün kendi REQ kataloğuyla uyuşuyor mu, ilan edilen olaylar gerçekten yayımlanıyor mu (ve
+  yayımlanan her olay ilan edilmiş mi), bir zamanlar yayımlanmış bir yetenek kaybolmuş mu. İlk
+  koşuşunda **dört gerçek ayrışma** buldu: kodun yayımladığı dört olayın hiçbir katalogda adı
+  geçmiyordu, yani hiçbir akış onları duyamazdı. Kayıtlara eklendi.
+
+- **Motor uçtan uca çalışıyor (D-279'un istediği gibi).** Gerçek bir olay gerçek outbox'tan
+  yayımlanıyor, teslimat oluşuyor, motor akışı yürütüyor ve çalışma günlüğü hangi daldan **neden**
+  gidildiğini söylüyor. Aynı teslimat ikinci kez gelince hiçbir şey değişmiyor. Kullanılan kayıt tipi
+  yalnız testin içinde yaşayan bir deneme tipi; hiçbir modül beklenmedi.
+
+- **Kuru mod, gerçek çalışmanın ta kendisi (SPIKE-05).** Adımın *yaptığı* şey tek bir portun
+  arkasında; deneme, hiçbir şey yazmayan bir port veriyor. Koşullar gerçek veriyle değerlendiriliyor,
+  sahipler gerçekten hesaplanıyor, ama örnek/onay/görev/bildirim/zamanlayıcı **hiç** yazılmıyor —
+  testi bunu üçünü de sayarak doğruluyor. Sapabilecek ikinci bir değerlendirici yok.
+
+- **Testler üç gerçek motor kusuru buldurdu.** (1) Açık adımda bekleyen örnek yeniden yürütülünce
+  aynı adıma ikinci kez giriyordu — tekrar gelen teslimatın yaptığı şey buydu. (2) Görünürlük
+  politikasındaki bir alt sorgu dıştaki kimliği gölgeliyor, koşuyu tam da beklediği kişiden
+  gizliyordu. (3) Olay kodunu `case` ile seçen bir yayın çağrısı veritabanına doğru şeyi, sözleşme
+  testine hiçbir şeyi söylüyordu.
+
+- **Bir kusuru siz buldunuz.** Panel açılmıyordu: iş kayıt defteri olaysız aboneyi reddediyor, motorun
+  listesi ise bilerek boş (neyi duyacağı yayımlanmış tanımlarda yazıyor). Abone artık bunu açıkça
+  söylüyor (`dynamicEvents`), denetim herkes için duruyor. Birim testlerinin hiçbiri worker'ı
+  başlatmadığı için testler bunu yakalayamazdı; dev sunucusunu çalıştırıp worker'ın kuyruğu
+  boşalttığını izleyerek doğruladım.
+
+Bugüne kadar: **dokuz göç** (0045-0053), **334 birim testi**, WFL'in **42 veritabanı testi** (toplam
+291+). Her adım kendi testleriyle geldi.
 
 **Fazın bilinen riski (D-278):** motor, temelin sizin kullanımınızla doğrulanmadığı bir zeminde
 kuruluyor. M1 turundan çıkacak bir düzeltme temeli değiştirirse, üstünde motor dururken yapılacak.
 
-## Faz 07 — Ayrıntılı durum
+## Faz 07 — Ayrıntılı durum (yapımı bitti)
 
 | Görev | İş ve teslim edilenler | Güncel durum / kalan |
 |---|---|---|
@@ -139,7 +161,7 @@ Fazın yapım işi bitti. Kalan üç şeyin hiçbiri kod işi değil: **M1 turu*
 
 **Arama henüz tamamlandı sayılmıyor,** ama bu fazda yapılabilecek işi bitti: hız kapısı 20.000 kayıtta geçildi, yeniden kurma 29 saniyeye indi, çoklu kapsam kuruldu. Kalanlar Faz 09'a bağlı: modüller kendi arama kaynaklarını kaydedince gerçek kayıtlarla tarayıcı kabulü, ve çok büyük hacimde tek bir sözcüğü paylaşan yüz binlerce kayıtta sıralama.
 
-### Son doğrulamalar
+### Faz 07'nin son doğrulamaları
 
 - **M1 kontrol listesi yazıldı (TASK-0111, 24 Eylül).** Kurulum yönergesi paneli nasıl çalıştıracağınızı söylüyordu, çalıştıktan sonra ne yapacağınızı söylemiyordu. Tur artık yazılı: [m1-local-acceptance.md](docs/features/m1-local-acceptance.md) — on bir adım, her birinde *ne yapacağınız* ve *ne görmeniz gerektiği*. Başında bilerek yapılmayanların tablosu var (modül ekranları, iş akışı tasarımcısı, aramada gerçek kayıt sonuçları, telefona bildirim), çünkü yoksa henüz gelmemiş bir dilim hata olarak not alınır. Geri bildirim düzeltmeyse görev, kapsamı değiştiriyorsa CHG olur.
 
