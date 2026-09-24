@@ -26,11 +26,10 @@ const roleSwitchingAllowed = process.env.NODE_ENV === "development";
 export default async function AppLayout({ children, context, modal }: LayoutProps<"/">) {
   const session = await readAuthSession();
   // The panel's own session decides how long somebody stays, not the provider's token (D-230).
-  const redirectTo = resolveProtectedPageRedirect(
-    session,
-    await readPanelSession(),
-    await readAccountFacts(),
-  );
+  // The two reads do not depend on each other and each is a round trip to the database, so they
+  // are asked for together: awaiting them in turn cost every page load one trip it did not need.
+  const [panelSession, account] = await Promise.all([readPanelSession(), readAccountFacts()]);
+  const redirectTo = resolveProtectedPageRedirect(session, panelSession, account);
 
   if (redirectTo || !session) {
     redirect(redirectTo ?? "/sign-in");

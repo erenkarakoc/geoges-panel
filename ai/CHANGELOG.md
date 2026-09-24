@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-24 — Two reads that waited on each other, and a number that did not move
+
+- Self-review item nine, performance. Every authenticated page load awaited the panel session and then the account facts, one after the other, although neither depends on the other and each is a round trip to the database. They are asked for together now, in the protected layout and on the sign-in page.
+- Measured before and after on the same screen, from the browser, six requests each: the median server time was 1,462 ms before and 1,475 ms after — **no difference**. The serialised trip was not where the time goes. Recorded as it was measured rather than written up as a win; the change stays because two independent reads waiting on each other is wrong whatever the clock says.
+- Worth knowing for later: this is a development server rendering every request against a database in another country, so the figure says nothing about production. Nothing in the requirements sets a response time for an ordinary page — REQ-NFR-012's 300 ms is the search's alone — so there is no line to be under and no measurement to repeat until there is a deployed address to measure on.
+
 ## 2026-09-24 — Self-review of the people screen: the id it is handed
 
 - The quality gate's self-review step was run over the newest work. Most of it held: the reset is refused by the permission service, by the database function and by the screen's own permission-denied state; it is audited; the owner layer is told; the screen shows counts and never content.
