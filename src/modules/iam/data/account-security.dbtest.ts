@@ -107,11 +107,15 @@ describe("the sign-in lock (REQ-IAM-005)", () => {
 
     for (let n = 1; n < LIMIT; n += 1) expect(await attempt(false)).toBeNull();
     const locked = await attempt(false);
-    expect(locked).toBeInstanceOf(Date);
+    expect(locked?.endsAt).toBeInstanceOf(Date);
+    // The wait is measured by the database, which owns the lock: near a quarter of an hour, and
+    // not a number that depends on this machine's clock.
+    expect(locked!.remainingMs).toBeGreaterThan(14 * 60_000);
+    expect(locked!.remainingMs).toBeLessThanOrEqual(15 * 60_000);
     // Knocking again neither extends the lock nor clears it.
     const again = await attempt(false);
-    expect(again?.getTime()).toBe(locked?.getTime());
-    expect((await loginLock(mail(1)))?.getTime()).toBe(locked?.getTime());
+    expect(again?.endsAt.getTime()).toBe(locked?.endsAt.getTime());
+    expect((await loginLock(mail(1)))?.endsAt.getTime()).toBe(locked?.endsAt.getTime());
 
     // The lock is the audit log's business too, with no actor: nobody is signed in yet.
     const { rows } = await admin.query(
@@ -136,7 +140,7 @@ describe("the sign-in lock (REQ-IAM-005)", () => {
     for (let n = 1; n < LIMIT; n += 1) expect(await attempt(false)).toBeNull();
     expect(await attempt(true)).toBeNull();
     for (let n = 1; n < LIMIT; n += 1) expect(await attempt(false)).toBeNull();
-    expect(await attempt(false)).toBeInstanceOf(Date);
+    expect((await attempt(false))?.endsAt).toBeInstanceOf(Date);
   });
 
   it("is closed to the application: only its functions answer", async () => {

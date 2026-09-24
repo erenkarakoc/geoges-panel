@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-24 — The lock announces the right number of minutes
+
+- The browser pass drove five wrong passwords at a throw-away address and the lock appeared as designed — with one wrong digit: a fifteen-minute lock said "16 dakika". The remaining time was measured against the machine running the panel, whose clock sits about a minute behind the database's, and the database is what wrote the lock.
+- The remaining time now comes back with the lock, measured by the database in the same statement, so this machine's clock never enters the sentence. Its own test says the number is the setting's own.
+- Found by looking, not by testing: every test passed before and after, because they all compared the same two clocks the code did.
+
 ## 2026-09-24 — Two things the owner caught on the recovery-code screen
 
 - The recovery field's placeholder read like a real code (`A7K2M-P9XQ4`), which invites somebody to type it. It shows the shape now: `XXXXX-XXXXX`.

@@ -14,13 +14,26 @@ export type { DbIdentity };
  * themselves are closed to the application, and the code hashes are never read back at all.
  */
 
-/** When an e-mail's lock ends, or null when it may try (REQ-IAM-005). */
+/**
+ * How long an e-mail's lock still has to run, or null when it may try (REQ-IAM-005).
+ *
+ * The remaining time is measured against the database's own clock, asked for in the same
+ * statement: the lock was written by that clock, and this machine's may be a minute off — the
+ * browser pass caught a lock of fifteen minutes announcing itself as sixteen.
+ */
 export function loginLock(email: string) {
   return runSignedOut(async (db) => {
-    const { rows } = await sql<{ until: Date | null }>`
-      select iam.login_lock(${email}) as until`.execute(db);
-    return rows[0]?.until ?? null;
+    const { rows } = await sql<{ until: Date | null; at: Date }>`
+      select iam.login_lock(${email}) as until, now() as at`.execute(db);
+    return remainingLock(rows[0]);
   });
+}
+
+export type LoginLock = { endsAt: Date; remainingMs: number };
+
+function remainingLock(row: { until: Date | null; at: Date } | undefined): LoginLock | null {
+  if (!row?.until) return null;
+  return { endsAt: row.until, remainingMs: row.until.getTime() - row.at.getTime() };
 }
 
 /**
@@ -35,10 +48,10 @@ export function noteLoginAttempt(attempt: {
   userAgent: string | null;
 }) {
   return runSignedOut(async (db) => {
-    const { rows } = await sql<{ until: Date | null }>`
+    const { rows } = await sql<{ until: Date | null; at: Date }>`
       select iam.note_login_attempt(${attempt.email}, ${attempt.succeeded}, ${attempt.ip},
-                                    ${attempt.userAgent}) as until`.execute(db);
-    return rows[0]?.until ?? null;
+                                    ${attempt.userAgent}) as until, now() as at`.execute(db);
+    return remainingLock(rows[0]);
   });
 }
 
