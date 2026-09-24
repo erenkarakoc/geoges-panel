@@ -20,6 +20,7 @@ export type { AuthSession } from "./domain/auth-provider";
 // the `iam.*` database functions; server code asks these.
 export {
   AccessDeniedError,
+  listPeopleSecurity,
   readAccountFacts,
   actingIdentity,
   approvalOwner,

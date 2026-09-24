@@ -380,7 +380,7 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         href: "/users-roles",
         icon: UsersIcon,
         moduleCode: "IAM",
-        requiredPermission: "iam.user.manage",
+        requiredPermission: "iam.module.manage",
         description: "Kullanıcılar, dinamik roller, vekâlet ve görünürlük ayarları.",
       },
       {

@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-24 — A minimal people screen, so a reset has a button
+
+- The manager's second-factor reset had nowhere to be pressed: "Kullanıcılar & Roller" has a menu entry and no screen, and Phase 02 never designed one. Offered the choice, the owner asked for a minimal screen now (D-273), so that is what this is — the people and their access, and the reset. Roles, assignments, delegation and visibility are the real screen's job and are deliberately absent; it is replaced, not extended, when that design exists.
+- What it shows about access is counted, never revealed: how many recovery codes are left and how many sessions are open, so a manager can see whether somebody has a way back in before taking their factor away. 0043 answers it, because the application has no privilege on the code hashes and may read only its own sessions — and it answers nothing at all without `iam.module.manage`.
+- The reset asks first, and says what will happen: the lost device's record goes, the person is asked for a new factor, their sessions end, the audit log records it and the owners are told.
+- The menu entry asked for a permission that does not exist (`iam.user.manage`); it now asks for the one the screen and the database actually check.
+- TASK-0112 is DONE, and TASK-0113's remaining acceptance waits for a real address: the owner declined a tunnel (D-274), so installing on a phone's Home Screen and receiving a push are verified when hosting exists (DEF-008).
+
 ## 2026-09-24 — The lock announces the right number of minutes
 
 - The browser pass drove five wrong passwords at a throw-away address and the lock appeared as designed — with one wrong digit: a fifteen-minute lock said "16 dakika". The remaining time was measured against the machine running the panel, whose clock sits about a minute behind the database's, and the database is what wrote the lock.

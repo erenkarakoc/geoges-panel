@@ -166,3 +166,44 @@ export function secondFactorRequired(identity: DbIdentity) {
     return rows[0]?.required === true;
   });
 }
+
+export type PersonSecurity = {
+  id: string;
+  displayName: string;
+  email: string | null;
+  active: boolean;
+  mustSetUpSecondFactor: boolean;
+  recoveryCodesLeft: number;
+  liveSessions: number;
+  lastSeenAt: Date | null;
+};
+
+/**
+ * The people and what a user manager needs to know about their access (0043, D-273). Counts only:
+ * a manager needs to know whether somebody has a way back in, not what it is. The database answers
+ * nothing at all to anybody without `iam.module.manage`.
+ */
+export function readPeopleSecurity(identity: DbIdentity) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{
+      id: string;
+      display_name: string;
+      email: string | null;
+      status: string;
+      must_setup_2fa: boolean;
+      recovery_codes_left: number;
+      live_sessions: number;
+      last_seen_at: Date | null;
+    }>`select * from iam.people_security()`.execute(db);
+    return rows.map((row): PersonSecurity => ({
+      id: row.id,
+      displayName: row.display_name,
+      email: row.email,
+      active: row.status === "active",
+      mustSetUpSecondFactor: row.must_setup_2fa,
+      recoveryCodesLeft: Number(row.recovery_codes_left),
+      liveSessions: Number(row.live_sessions),
+      lastSeenAt: row.last_seen_at,
+    }));
+  });
+}

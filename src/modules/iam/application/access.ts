@@ -26,7 +26,10 @@ import {
 } from "@/modules/iam/domain/permissions";
 
 import { requiresTwoFactorStep } from "./auth-routing";
-import { secondFactorRequired } from "@/modules/iam/data/account-security-store";
+import {
+  readPeopleSecurity,
+  secondFactorRequired,
+} from "@/modules/iam/data/account-security-store";
 import { readPanelSession } from "./panel-session";
 import { readAuthSession } from "./auth-session";
 
@@ -159,6 +162,16 @@ export async function listPeople() {
 export async function noteSession(userId: string, kind: "signed_in" | "signed_out") {
   const identity: DbIdentity = { userId, actingRoleId: null };
   if (await findAccount(identity)) await recordSession(identity, kind);
+}
+
+/**
+ * The people a user manager may act on, with the state of their access (D-273). The permission is
+ * asked here so the screen can say "you may not see this"; the database asks it again and answers
+ * nothing without it.
+ */
+export async function listPeopleSecurity() {
+  await assertCan("iam.module.manage");
+  return readPeopleSecurity(await currentIdentity());
 }
 
 /** A person's manager in one place: manual manager first, then the role hierarchy. */
