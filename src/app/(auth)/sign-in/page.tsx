@@ -10,7 +10,7 @@ export default async function SignInPage() {
   const session = await readAuthSession();
   // Someone whose panel session is over sees the form again: the protected page would send them
   // straight back here, and signing in is what starts a new session (TASK-0112).
-  const redirectTo = resolveSignInPageRedirect(session, (await readPanelSession()) !== null);
+  const redirectTo = resolveSignInPageRedirect(session, await readPanelSession());
 
   if (redirectTo) {
     redirect(redirectTo);

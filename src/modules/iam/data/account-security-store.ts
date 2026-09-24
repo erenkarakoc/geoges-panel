@@ -59,7 +59,8 @@ export function startSession(
  * The session as the request path needs it, or null when it is over. Reading it also keeps it
  * alive, at most one write every five minutes (D-230).
  */
-export function useSession(sessionId: string) {
+/** Named for what it does rather than after `iam.use_session`: `use` is React's word. */
+export function touchSession(sessionId: string) {
   return runSignedOut(async (db) => {
     const { rows } = await sql<{
       user_id: string;
@@ -112,8 +113,8 @@ export function issueRecoveryCodes(identity: DbIdentity, userId: string, hashes:
   });
 }
 
-/** Uses one code, once. False when it is unknown to this person or already spent. */
-export function useRecoveryCode(identity: DbIdentity, hash: string) {
+/** Spends one code, once. False when it is unknown to this person or already spent. */
+export function spendRecoveryCode(identity: DbIdentity, hash: string) {
   return runAsUser(identity, async (db) => {
     const { rows } = await sql<{ used: boolean | null }>`
       select iam.use_recovery_code(${identity.userId}::uuid, ${hash}) as used`.execute(db);
@@ -126,5 +127,17 @@ export function recoveryCodesLeft(identity: DbIdentity, userId: string) {
     const { rows } = await sql<{ left: number }>`
       select iam.recovery_codes_left(${userId}::uuid) as left`.execute(db);
     return Number(rows[0]?.left ?? 0);
+  });
+}
+
+/**
+ * Keeps `iam.user.must_setup_2fa` in step with what the provider holds, and writes who did it
+ * (0040). Allowed for the person themselves or a user manager; the database checks that, not this.
+ */
+export function noteSecondFactor(identity: DbIdentity, userId: string, present: boolean) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{ done: boolean | null }>`
+      select iam.note_second_factor(${userId}::uuid, ${present}) as done`.execute(db);
+    return rows[0]?.done === true;
   });
 }

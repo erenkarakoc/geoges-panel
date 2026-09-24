@@ -55,9 +55,13 @@ export class AccessDeniedError extends Error {
  */
 async function panelSession() {
   const session = await readAuthSession();
-  if (!session || requiresTwoFactorStep(session)) return null;
+  if (!session) return null;
   const panel = await readPanelSession();
-  return panel && panel.userId === session.user.id ? session : null;
+  if (!panel || panel.userId !== session.user.id) return null;
+  // The provider cannot know about the panel's own recovery codes, so a session it still calls
+  // aal1 may have passed the second step here (D-236). This is the only widening of the gate.
+  if (requiresTwoFactorStep(session) && !panel.secondFactorAt) return null;
+  return session;
 }
 
 /** Who the database transaction runs as, from the verified session; null when signed out. */

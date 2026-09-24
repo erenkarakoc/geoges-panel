@@ -12,12 +12,22 @@ export type TwoFactorEnrollmentState = {
   enrollment: { qrCode: string; secret: string } | null;
 };
 
+/**
+ * Verifying a code. A first enrolment answers with the ten recovery codes, which are shown once and
+ * never again (D-236); signing in with a code that is already set up simply goes on to the panel.
+ */
+export type TwoFactorVerifyState = { error: string | null; recoveryCodes: string[] | null };
+
 /** Removing the second factor reports success too, so the screen can switch to the setup view. */
 export type TwoFactorRemovalState = { error: string | null; removed: boolean };
 
 export const initialAuthFormState: AuthFormState = { error: null };
 export const initialTwoFactorRemovalState: TwoFactorRemovalState = { error: null, removed: false };
 export const initialSignInState: SignInState = { error: null, email: "" };
+export const initialTwoFactorVerifyState: TwoFactorVerifyState = {
+  error: null,
+  recoveryCodes: null,
+};
 export const initialPasswordResetState: PasswordResetState = {
   error: null,
   sentTo: null,

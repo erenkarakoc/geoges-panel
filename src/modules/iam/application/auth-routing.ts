@@ -21,25 +21,38 @@ export function resolvePostSignInRoute(session: AuthSession | null): string {
 }
 
 /**
+ * What the panel's own session says about this visitor, or `null` when there is none
+ * (TASK-0112, D-230, D-236). `secondFactorAt` is set when the second step was passed with a
+ * recovery code: the provider cannot know about the panel's codes, so this is the panel's own
+ * record of it and the one place the gate widens.
+ */
+export type PanelSessionFacts = { secondFactorAt: Date | null } | null;
+
+/** Whether the second step is behind this visitor, by either route. */
+function secondFactorDone(session: AuthSession, panel: PanelSessionFacts): boolean {
+  return !requiresTwoFactorStep(session) || panel?.secondFactorAt != null;
+}
+
+/**
  * Route a protected page must send the visitor to, or `null` when they may stay.
  *
- * `panelSession` is whether the panel's own session is still alive (TASK-0112, D-230): the
- * provider's token may be good for thirty days while the panel's rules have already ended the
- * session — three days without use, a revoked session, a disabled account. Without one the visitor
- * signs in again, which is what starts a new one.
+ * The panel's own session decides how long somebody stays (D-230): the provider's token may be
+ * good for thirty days while the panel's rules have already ended the session — three days without
+ * use, a revoked session, a disabled account. Without one the visitor signs in again, which is
+ * what starts a new one.
  */
 export function resolveProtectedPageRedirect(
   session: AuthSession | null,
-  panelSession: boolean,
+  panel: PanelSessionFacts,
 ): string | null {
   if (!session) {
     return signInRoute;
   }
-  if (requiresTwoFactorStep(session)) {
+  if (!secondFactorDone(session, panel)) {
     return twoFactorRoute;
   }
 
-  return panelSession ? null : signInRoute;
+  return panel ? null : signInRoute;
 }
 
 /**
@@ -50,14 +63,14 @@ export function resolveProtectedPageRedirect(
  */
 export function resolveSignInPageRedirect(
   session: AuthSession | null,
-  panelSession: boolean,
+  panel: PanelSessionFacts,
 ): string | null {
   if (!session) {
     return null;
   }
-  if (requiresTwoFactorStep(session)) {
+  if (!secondFactorDone(session, panel)) {
     return twoFactorRoute;
   }
 
-  return panelSession ? todayRoute : null;
+  return panel ? todayRoute : null;
 }

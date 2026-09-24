@@ -15,6 +15,9 @@ const user = { id: "user-1", email: "eren@example.com" };
 const withoutTwoFactor: AuthSession = { user, currentLevel: "aal1", nextLevel: "aal1" };
 const twoFactorPending: AuthSession = { user, currentLevel: "aal1", nextLevel: "aal2" };
 const twoFactorCleared: AuthSession = { user, currentLevel: "aal2", nextLevel: "aal2" };
+/** A panel session that is alive; the recovery-code case carries a date instead of null. */
+const alive = { secondFactorAt: null };
+const byRecoveryCode = { secondFactorAt: new Date("2026-09-24T10:00:00Z") };
 
 describe("resolvePostSignInRoute", () => {
   it("sends a user without a second factor to the Today screen", () => {
@@ -36,42 +39,54 @@ describe("resolvePostSignInRoute", () => {
 
 describe("resolveProtectedPageRedirect", () => {
   it("lets a cleared session stay on the page", () => {
-    expect(resolveProtectedPageRedirect(twoFactorCleared, true)).toBeNull();
-    expect(resolveProtectedPageRedirect(withoutTwoFactor, true)).toBeNull();
+    expect(resolveProtectedPageRedirect(twoFactorCleared, alive)).toBeNull();
+    expect(resolveProtectedPageRedirect(withoutTwoFactor, alive)).toBeNull();
   });
 
   it("blocks a protected page until the second factor is verified", () => {
-    expect(resolveProtectedPageRedirect(twoFactorPending, true)).toBe(twoFactorRoute);
-    expect(resolveProtectedPageRedirect(twoFactorPending, false)).toBe(twoFactorRoute);
+    expect(resolveProtectedPageRedirect(twoFactorPending, alive)).toBe(twoFactorRoute);
+    expect(resolveProtectedPageRedirect(twoFactorPending, null)).toBe(twoFactorRoute);
   });
 
   it("sends a visitor whose panel session is over back to signing in", () => {
     // The provider's token can still be good for weeks while the panel's own rules have ended
     // the session: three days unused, revoked, or the account disabled (D-230, REQ-IAM-006).
-    expect(resolveProtectedPageRedirect(twoFactorCleared, false)).toBe(signInRoute);
-    expect(resolveProtectedPageRedirect(withoutTwoFactor, false)).toBe(signInRoute);
+    expect(resolveProtectedPageRedirect(twoFactorCleared, null)).toBe(signInRoute);
+    expect(resolveProtectedPageRedirect(withoutTwoFactor, null)).toBe(signInRoute);
   });
 
   it("sends a signed-out visitor to sign-in", () => {
-    expect(resolveProtectedPageRedirect(null, false)).toBe(signInRoute);
+    expect(resolveProtectedPageRedirect(null, null)).toBe(signInRoute);
+  });
+});
+
+describe("the second step by recovery code", () => {
+  it("lets a session the provider still calls aal1 through, because the panel passed it", () => {
+    // Supabase cannot know about the panel's own codes, so the panel's session says it (D-236).
+    expect(resolveProtectedPageRedirect(twoFactorPending, byRecoveryCode)).toBeNull();
+    expect(resolveSignInPageRedirect(twoFactorPending, byRecoveryCode)).toBe(todayRoute);
+  });
+
+  it("still stops a pending step when nothing passed it", () => {
+    expect(resolveProtectedPageRedirect(twoFactorPending, alive)).toBe(twoFactorRoute);
   });
 });
 
 describe("resolveSignInPageRedirect", () => {
   it("shows the form to a visitor with no session at all", () => {
-    expect(resolveSignInPageRedirect(null, false)).toBeNull();
+    expect(resolveSignInPageRedirect(null, null)).toBeNull();
   });
 
   it("sends someone mid-sign-in on to their second step", () => {
-    expect(resolveSignInPageRedirect(twoFactorPending, false)).toBe(twoFactorRoute);
+    expect(resolveSignInPageRedirect(twoFactorPending, null)).toBe(twoFactorRoute);
   });
 
   it("sends a whole session to the panel", () => {
-    expect(resolveSignInPageRedirect(twoFactorCleared, true)).toBe(todayRoute);
+    expect(resolveSignInPageRedirect(twoFactorCleared, alive)).toBe(todayRoute);
   });
 
   it("shows the form again when the panel session is over, instead of bouncing", () => {
     // The protected page would send them straight back here; signing in is what starts a new one.
-    expect(resolveSignInPageRedirect(twoFactorCleared, false)).toBeNull();
+    expect(resolveSignInPageRedirect(twoFactorCleared, null)).toBeNull();
   });
 });

@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-24 — Recovery codes (TASK-0112 step 4)
+
+- Ten one-time codes are made when a second factor is set up, shown once on the screen that follows and kept only as hashes (D-236). The alphabet leaves out the characters people read wrong, and typing forgives case, spaces and dashes: somebody entering one has already lost their phone.
+- The sign-in step offers "Telefonuma erişemiyorum". A code that works spends itself, and the panel's own session records that the second step was passed — the provider cannot know about these codes, and this is the one place the gate widens, stated in the routing rules and covered by tests. A code that does not work says the same thing whether it never existed or was already used.
+- The factor on the lost device is then removed, which needs Supabase's administrator right. `SUPABASE_SERVICE_ROLE_KEY` is read in exactly one server-only file, for exactly that one operation, with no session persisted; every call comes from a place that has already checked who is asking and writes an audit entry (D-272, owner-approved).
+- `must_setup_2fa` finally follows the provider (0040): cleared when a factor is verified, set again after a reset, audited either way. Until now only the bootstrap command wrote it and the owner's flag had to be cleared by hand.
+- Verification: 294 unit tests (eight for the codes, fourteen for the routing rules), 36 IAM database tests, lint, types, format and the production build pass. The flow itself has not been through a browser — it needs the owner to sign in, and the manager's reset screen is still to come.
+
 ## 2026-09-24 — The panel keeps its own session (TASK-0112 step 3)
 
 - Supabase says who somebody is; how long the panel lets them stay is now the panel's own rule (D-230): at most thirty days, over after three days unused, gone the moment the account is disabled. A row in `iam.session` is that rule and an httpOnly cookie is the only pointer to it — it is not an identity, because the provider's session must still be valid and the row must belong to the same person.

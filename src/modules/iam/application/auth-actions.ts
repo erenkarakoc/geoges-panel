@@ -9,6 +9,7 @@ import type {
   SignInState,
   TwoFactorEnrollmentState,
   TwoFactorRemovalState,
+  TwoFactorVerifyState,
 } from "@/modules/iam/application/auth-form-state";
 import { lockedMessage } from "@/modules/iam/application/auth-lock-message";
 import { authFailureMessage } from "@/modules/iam/application/auth-messages";
@@ -16,6 +17,7 @@ import {
   todayRoute,
   resolvePostSignInRoute,
   signInRoute,
+  twoFactorRoute,
   updatePasswordRoute,
 } from "@/modules/iam/application/auth-routing";
 import {
@@ -25,6 +27,17 @@ import {
   twoFactorCodeSchema,
   updatePasswordSchema,
 } from "@/modules/iam/application/auth-schemas";
+import { createSupabaseSecondFactorAdmin } from "@/modules/iam/infrastructure/supabase/supabase-second-factor-admin";
+import {
+  hashRecoveryCode,
+  looksLikeRecoveryCode,
+  newRecoveryCodes,
+} from "@/modules/iam/domain/recovery-codes";
+import {
+  issueRecoveryCodes,
+  noteSecondFactor,
+  spendRecoveryCode,
+} from "@/modules/iam/data/account-security-store";
 import { noteSession } from "@/modules/iam/application/access";
 import { closePanelSession, openPanelSession } from "@/modules/iam/application/panel-session";
 import { loginLock, noteLoginAttempt } from "@/modules/iam/data/account-security-store";
@@ -209,22 +222,71 @@ export async function startTwoFactorEnrollmentAction(
 }
 
 export async function verifyTwoFactorAction(
-  _previous: AuthFormState,
+  _previous: TwoFactorVerifyState,
   formData: FormData,
-): Promise<AuthFormState> {
+): Promise<TwoFactorVerifyState> {
   const parsed = twoFactorCodeSchema.safeParse({ code: formData.get("code") });
 
   if (!parsed.success) {
-    return { error: firstIssueMessage(parsed.error) };
+    return { error: firstIssueMessage(parsed.error), recoveryCodes: null };
   }
 
   const auth = await authProvider();
   const result = await auth.verifyTwoFactorCode(parsed.data);
 
   if (!result.ok) {
-    return { error: authFailureMessage(result.code) };
+    return { error: authFailureMessage(result.code), recoveryCodes: null };
   }
 
-  await noteCompleteSignIn(await auth.getSession());
+  const session = await auth.getSession();
+  await noteCompleteSignIn(session);
+
+  // A factor was just set up for the first time: the ten codes are made now, shown once on the
+  // screen that follows, and kept only as hashes (D-236). Signing in with a factor that already
+  // exists simply goes on to the panel.
+  if (formData.get("intent") === "setup" && session) {
+    const identity = { userId: session.user.id, actingRoleId: null };
+    const codes = newRecoveryCodes();
+    await issueRecoveryCodes(identity, session.user.id, codes.map(hashRecoveryCode));
+    await noteSecondFactor(identity, session.user.id, true);
+    return { error: null, recoveryCodes: codes };
+  }
   redirect(todayRoute);
+}
+
+/**
+ * Signing in with a recovery code instead of the app on the lost phone (D-236).
+ *
+ * The code is spent, the panel's own session records that the second step was passed — the provider
+ * cannot know about these codes — and the factor on the lost device is removed, so whoever holds
+ * that device cannot sign in with it. The person lands on the setup screen, because they now have
+ * no second factor and the panel asks for one again.
+ */
+export async function useRecoveryCodeAction(
+  _previous: AuthFormState,
+  formData: FormData,
+): Promise<AuthFormState> {
+  const typed = String(formData.get("code") ?? "");
+  if (!looksLikeRecoveryCode(typed)) {
+    return { error: "Kurtarma kodu on karakterdir; kâğıttaki kodu olduğu gibi yazın." };
+  }
+
+  const auth = await authProvider();
+  const session = await auth.getSession();
+  if (!session) {
+    return { error: authFailureMessage("not_authenticated") };
+  }
+
+  const identity = { userId: session.user.id, actingRoleId: null };
+  if (!(await spendRecoveryCode(identity, hashRecoveryCode(typed)))) {
+    // The same answer for a code that never existed and one already spent: a person who is being
+    // guessed at learns nothing from the difference.
+    return { error: "Kurtarma kodu geçersiz veya daha önce kullanılmış." };
+  }
+
+  await noteSession(session.user.id, "signed_in");
+  await openPanelSession(identity, true);
+  await createSupabaseSecondFactorAdmin().removeFactorsOf(session.user.id);
+  await noteSecondFactor(identity, session.user.id, false);
+  redirect(twoFactorRoute);
 }

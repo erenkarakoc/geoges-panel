@@ -7,7 +7,7 @@ import { deviceLabel } from "@/modules/iam/application/device-label";
 import {
   revokeSession,
   startSession,
-  useSession,
+  touchSession,
   type DbIdentity,
 } from "@/modules/iam/data/account-security-store";
 
@@ -60,7 +60,7 @@ export const readPanelSession = cache(
   } | null> => {
     const sessionId = (await cookies()).get(SESSION_COOKIE)?.value;
     if (!sessionId || !UUID.test(sessionId)) return null;
-    const live = await useSession(sessionId);
+    const live = await touchSession(sessionId);
     return live ? { sessionId, ...live } : null;
   },
 );

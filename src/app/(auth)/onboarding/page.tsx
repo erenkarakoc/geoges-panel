@@ -10,7 +10,7 @@ export default async function OnboardingPage() {
   // Role guidance is shown to a signed-in user, so it is gated like the app pages.
   const redirectTo = resolveProtectedPageRedirect(
     await readAuthSession(),
-    (await readPanelSession()) !== null,
+    await readPanelSession(),
   );
 
   if (redirectTo) {

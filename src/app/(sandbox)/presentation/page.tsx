@@ -14,7 +14,7 @@ export default async function PresentationRoute() {
 
   const redirectTo = resolveProtectedPageRedirect(
     await readAuthSession(),
-    (await readPanelSession()) !== null,
+    await readPanelSession(),
   );
   if (redirectTo) {
     redirect(redirectTo);

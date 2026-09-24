@@ -130,12 +130,12 @@ describe("the panel's own session (D-230, REQ-IAM-006)", () => {
   const store = async () => await import("./account-security-store");
 
   it("lives until its day, its idle window or its revocation", async () => {
-    const { startSession, useSession, revokeSession } = await store();
+    const { startSession, touchSession, revokeSession } = await store();
     const sessionId = await startSession(as(PERSON), {
       deviceLabel: "deneme cihaz",
       secondFactor: false,
     });
-    const live = await useSession(sessionId);
+    const live = await touchSession(sessionId);
     expect(live).toMatchObject({ userId: PERSON, secondFactorAt: null });
 
     // Idle for longer than the window: the same row no longer answers.
@@ -143,9 +143,9 @@ describe("the panel's own session (D-230, REQ-IAM-006)", () => {
       "update iam.session set last_seen_at = now() - interval '4 days' where id = $1",
       [sessionId],
     );
-    expect(await useSession(sessionId)).toBeNull();
+    expect(await touchSession(sessionId)).toBeNull();
     await admin.query("update iam.session set last_seen_at = now() where id = $1", [sessionId]);
-    expect(await useSession(sessionId)).not.toBeNull();
+    expect(await touchSession(sessionId)).not.toBeNull();
 
     // Past its day, whatever its last use. A session may not be born expired — the constraint
     // says so — so the simulation moves its birth back with it.
@@ -154,7 +154,7 @@ describe("the panel's own session (D-230, REQ-IAM-006)", () => {
                               expires_at = now() - interval '1 hour' where id = $1`,
       [sessionId],
     );
-    expect(await useSession(sessionId)).toBeNull();
+    expect(await touchSession(sessionId)).toBeNull();
     await admin.query(
       `update iam.session set created_at = now(), expires_at = now() + interval '30 days'
         where id = $1`,
@@ -162,7 +162,7 @@ describe("the panel's own session (D-230, REQ-IAM-006)", () => {
     );
 
     expect(await revokeSession(as(PERSON), sessionId, "signed_out")).toBe(true);
-    expect(await useSession(sessionId)).toBeNull();
+    expect(await touchSession(sessionId)).toBeNull();
     // Revoking twice changes nothing, and the row is kept with its reason.
     expect(await revokeSession(as(PERSON), sessionId, "signed_out")).toBe(false);
     const { rows } = await admin.query(
@@ -173,7 +173,7 @@ describe("the panel's own session (D-230, REQ-IAM-006)", () => {
   });
 
   it("writes the last use at most every five minutes", async () => {
-    const { startSession, useSession } = await store();
+    const { startSession, touchSession } = await store();
     const sessionId = await startSession(as(PERSON), {
       deviceLabel: null,
       secondFactor: true,
@@ -182,25 +182,25 @@ describe("the panel's own session (D-230, REQ-IAM-006)", () => {
       (await admin.query("select last_seen_at from iam.session where id = $1", [sessionId])).rows[0]
         .last_seen_at as Date;
     const first = await seenAt();
-    await useSession(sessionId);
+    await touchSession(sessionId);
     expect((await seenAt()).getTime()).toBe(first.getTime());
 
     await admin.query(
       "update iam.session set last_seen_at = now() - interval '6 minutes' where id = $1",
       [sessionId],
     );
-    await useSession(sessionId);
+    await touchSession(sessionId);
     expect((await seenAt()).getTime()).toBeGreaterThan(first.getTime() - 60_000);
   });
 
   it("closes every session of an account the moment it is disabled", async () => {
-    const { startSession, useSession } = await store();
+    const { startSession, touchSession } = await store();
     const one = await startSession(as(OTHER), { deviceLabel: null, secondFactor: true });
     const two = await startSession(as(OTHER), { deviceLabel: null, secondFactor: true });
     await admin.query("update iam.user set status = 'disabled' where id = $1", [OTHER]);
     try {
-      expect(await useSession(one)).toBeNull();
-      expect(await useSession(two)).toBeNull();
+      expect(await touchSession(one)).toBeNull();
+      expect(await touchSession(two)).toBeNull();
       const { rows } = await admin.query(
         "select distinct revoked_reason from iam.session where user_id = $1",
         [OTHER],
@@ -227,13 +227,13 @@ describe("the panel's own session (D-230, REQ-IAM-006)", () => {
   });
 
   it("marks the second step the panel passed itself, once", async () => {
-    const { startSession, useSession, markSessionSecondFactor } = await store();
+    const { startSession, touchSession, markSessionSecondFactor } = await store();
     const sessionId = await startSession(as(PERSON), {
       deviceLabel: null,
       secondFactor: false,
     });
     expect(await markSessionSecondFactor(as(PERSON), sessionId)).toBe(true);
-    expect((await useSession(sessionId))?.secondFactorAt).toBeInstanceOf(Date);
+    expect((await touchSession(sessionId))?.secondFactorAt).toBeInstanceOf(Date);
     // Already marked: nothing to do and no second timestamp.
     expect(await markSessionSecondFactor(as(PERSON), sessionId)).toBe(false);
   });
@@ -243,31 +243,31 @@ describe("recovery codes (D-236)", () => {
   const store = async () => await import("./account-security-store");
 
   it("spends a code once, and only its owner's", async () => {
-    const { issueRecoveryCodes, useRecoveryCode, recoveryCodesLeft } = await store();
+    const { issueRecoveryCodes, spendRecoveryCode, recoveryCodesLeft } = await store();
     const codes = ["1", "2", "3"].map((n) => hash(`code${n}`));
     expect(await issueRecoveryCodes(as(PERSON), PERSON, codes)).toBe(3);
     expect(await recoveryCodesLeft(as(PERSON), PERSON)).toBe(3);
 
-    expect(await useRecoveryCode(as(PERSON), codes[0])).toBe(true);
-    expect(await useRecoveryCode(as(PERSON), codes[0])).toBe(false);
+    expect(await spendRecoveryCode(as(PERSON), codes[0])).toBe(true);
+    expect(await spendRecoveryCode(as(PERSON), codes[0])).toBe(false);
     expect(await recoveryCodesLeft(as(PERSON), PERSON)).toBe(2);
 
     // Another person's code is nobody else's key, even though the hash is known.
-    expect(await useRecoveryCode(as(OTHER), codes[1])).toBe(false);
+    expect(await spendRecoveryCode(as(OTHER), codes[1])).toBe(false);
     expect(await recoveryCodesLeft(as(PERSON), PERSON)).toBe(2);
     // A code that was never issued does not open anything either.
-    expect(await useRecoveryCode(as(PERSON), hash("elsewhere"))).toBe(false);
+    expect(await spendRecoveryCode(as(PERSON), hash("elsewhere"))).toBe(false);
   });
 
   it("replaces what was left when new codes are issued", async () => {
-    const { issueRecoveryCodes, useRecoveryCode, recoveryCodesLeft } = await store();
+    const { issueRecoveryCodes, spendRecoveryCode, recoveryCodesLeft } = await store();
     const old = [hash("old1"), hash("old2")];
     await issueRecoveryCodes(as(PERSON), PERSON, old);
     const fresh = [hash("new1"), hash("new2")];
     expect(await issueRecoveryCodes(as(PERSON), PERSON, fresh)).toBe(2);
     expect(await recoveryCodesLeft(as(PERSON), PERSON)).toBe(2);
-    expect(await useRecoveryCode(as(PERSON), old[0])).toBe(false);
-    expect(await useRecoveryCode(as(PERSON), fresh[0])).toBe(true);
+    expect(await spendRecoveryCode(as(PERSON), old[0])).toBe(false);
+    expect(await spendRecoveryCode(as(PERSON), fresh[0])).toBe(true);
   });
 
   it("never lets the application read a hash", async () => {
