@@ -500,3 +500,28 @@ Neden portal: bandın içeriği bazen sunucudan (detay ekranının eylemleri), b
 **Kapsam sınırı.** Bu adım yuvayı ve yukarıdaki üç ekranı kapsar. Yeni ekran kalıbı, yeni eylem veya yeni yetki kuralı getirmez; liste toplu işlemleri ve uzun form sayaçları, o ekranlar kendi dilimlerinde yapılırken bu yuvaya bağlanır.
 
 **Geri dönüş.** Yuva isteğe bağlıdır: `BottomBand` kullanan üç ekran geri alınırsa kabuk bugünkü düzenine döner. Veritabanı göçü, izin veya kayıt değişikliği yoktur.
+
+### TASK-0112 — Hesap güvenliği: kurtarma kodları, giriş kilidi, oturum ömrü (uygulama planı, 2026-09-24)
+
+Kapsam D-230, D-236, D-257 ve REQ-IAM-003/005/006/007/008 ile belirlenmiş; bu plan yalnız nasıl kurulacağını anlatır. Kimlik doğrulama sistemin en riskli yeri olduğu için beş adım ayrı ayrı yazılır ve her biri kendi testleriyle gelir.
+
+**Adım 1 — Göç 0038: üç tablo ve onların işlevleri.**
+
+- `iam.login_attempt` (`email`, `succeeded`, `ip`, `user_agent`, `locked_until`): giriş denemesi. Satırlar oturum açılmadan önce yazıldığı için işlevler SECURITY DEFINER'dır ve yalnız uygulama rolüne verilir; kimlik gerektirmez.
+- `iam.session` (`user_id`, `device_label`, `last_seen_at`, `expires_at`, `revoked_at`, `second_factor_at`): panelin kendi oturumu. Supabase'in belirteci kimliği doğrular, bu satır oturumun **panel tarafındaki ömrünü** tutar (D-230: 30 gün, 3 günlük hareketsizlikte kapanır). Pasifleşen kullanıcının satırları silinmez, `revoked_at` yazılır.
+- `iam.recovery_code` (`user_id`, `code_hash`, `used_at`): on tek kullanımlık kod, yalnız üretim anında gösterilir, veritabanında yalnız karması (hash) durur (D-236).
+- Ayarlar dated rule olarak gelir (D-257, `getRule`): hatalı deneme sayısı ve kilit süresi (REQ-IAM-005), iki adımlı girişin zorunlu olduğu roller (REQ-IAM-003). Tohum değerler **5 deneme / 15 dakika** ve zorunlu rol listesi boş; ikisi de yöneticinin ayarı olduğu için sahibe sorulmaz, panelden değiştirilir.
+
+**Adım 2 — Giriş kilidi (REQ-IAM-005, REQ-IAM-008).** Sunucu, Supabase'e sormadan önce o e-postanın kilitli olup olmadığına bakar; kilitliyse doğru parolayla bile giremez ve mesaj kilidin ne zaman kalkacağını söyler. Her deneme kaydedilir; eşik aşıldığında kilit yazılır ve denetim kaydına düşer. Kilit yalnız süresiyle kalkar — gereksinimde yöneticinin elle açması yok, bu plan da eklemez. Kayda geçen sınır: e-posta bilinen biri kasten hatalı deneme yaparak o hesabı kilit süresi kadar dışarıda tutabilir; eşik ve süre ayar olduğu için denge yöneticide kalır.
+
+**Adım 3 — Panel oturumu (D-230, REQ-IAM-006).** Girişi tamamlayan kişiye bir oturum satırı ve yalnız sunucunun okuduğu bir çerez (httpOnly) verilir. Korumalı yerleşim ve `proxy` her istekte satırı doğrular: var, iptal edilmemiş, süresi geçmemiş ve son görülme 3 günden yeni. `last_seen_at` her istekte değil, en çok beş dakikada bir yazılır — yoksa her sayfa görüntülemesi bir yazma olurdu. Hesap pasife alındığında satırlar anında iptal edilir (REQ-IAM-006), ayrılış tarihi işi (`iam.deactivate-departed`, TASK-0104) de aynı yolu kullanır (REQ-IAM-007). Oturumun bitmesine az kalırken ekranda uyarı ve "devam et" (D-230, WCAG 2.2.1): uyarı **30 günlük mutlak sınır** içindir, çünkü 3 günlük hareketsizlik sınırına yaklaşan kişi zaten ekranda değildir.
+
+**Adım 4 — Kurtarma kodu ve yöneticinin sıfırlaması (D-236).** Kurulumda on kod üretilir, bir kez gösterilir, karması saklanır. İkinci adım ekranında kod girilebilir: karma doğrulanır, `used_at` yazılır ve panel oturumunun `second_factor_at` alanı işaretlenir — yani ikinci adımı geçtiğini Supabase'in `aal2` değeri değil, panelin kendi oturumu söyler. Bu, kapının (`resolveProtectedPageRedirect`) genişlediği tek yerdir ve testle kapatılır: kod tek kullanımlıktır, başka kullanıcının kodu geçmez, kullanılmış kod geçmez. Kod ile giren kişi doğrudan iki adımlı kurulum ekranına düşer ve kayıp cihazın faktörü kaldırılır; yöneticinin sıfırlaması da aynı işi başkası için yapar, denetime yazılır ve sahip katmanına bildirilir. **Faktörü kaldırmak Supabase'in yönetici hakkını gerektirir:** `SUPABASE_SERVICE_ROLE_KEY` zaten `.env.local`'de duruyor, ama bugün hiçbir kod onu okumuyor. Plan onu tek bir sunucu tarafı adaptöre koyar, yalnız bu iki işlem için kullanır, tarayıcı paketine hiçbir şekilde girmez ve her çağrı denetim kaydına düşer. Bu bir güvenlik duruşu değişikliğidir; kayda geçer.
+
+**Adım 5 — Rolün iki adım zorunluluğu ve sayfa düzeyinde ret (REQ-IAM-003, REQ-IAM-006/007).** Zorunlu roller dated rule'dan okunur; böyle bir rol taşıyan kişi ikinci adımı kurmadan hiçbir sayfaya geçemez. `iam.user.must_setup_2fa` sağlayıcıyı izler: faktör doğrulanınca temizlenir, sıfırlamadan sonra yeniden yazılır. Korumalı yerleşim, Supabase hesabı olan ama etkin panel hesabı olmayan kişiyi reddeder (veri zaten TASK-0102'den beri RLS ile reddediliyor; bu, sayfanın da reddetmesi).
+
+**Testler.** Veritabanı: kilit eşiği ve süresi, kilitliyken doğru parolanın da reddi, denetim kaydı; oturumun süresi/hareketsizliği/iptali ve pasifleşmede anında kapanma; kurtarma kodunun tek kullanımlığı, başkasının kodunun geçmemesi, kullanılmışın geçmemesi. Birim: kapı kararları (ikinci adım beklenirken, kurtarma koduyla geçilmişken, zorunlu rolde faktör yokken). Tarayıcı: kilit mesajı, kurtarma kodu ekranı, oturum uyarısı — sahibin girişiyle.
+
+**Kapsam sınırı.** Parola politikası (D-230'un uzunluk/karmaşıklık kuralı) TASK-0025'te kuruldu; bu adım ona dokunmaz. Yöneticinin elle kilit açması, cihaz listesi/oturum yönetimi ekranı ve "tüm oturumları kapat" düğmesi bu görevin kapsamında değildir.
+
+**Geri dönüş.** 0038 down üç tabloyu ve işlevlerini kaldırır; uygulama kodu önce eski sürüme döner. Tohum kurallar dışında veri dönüşümü yoktur; hiçbir hesap, faktör veya parola değişmez.

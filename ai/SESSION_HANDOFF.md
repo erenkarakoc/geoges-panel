@@ -4,7 +4,17 @@ Last updated: 2026-09-24
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — one place is enough (0037)
+## Latest continuation — TASK-0112 planned, awaiting approval
+
+What TASK-0110 can still do in this phase is done, so the next task in the roadmap's order was taken up. TASK-0112 is T1 and it rewrites the sign-in path, so nothing was coded: the plan is in docs/features/phase-07-foundation-plan.md and D-272 is PROPOSED.
+
+Five steps. Migration 0038 adds iam.login_attempt, iam.session and iam.recovery_code with definer functions the application role may call before anyone is signed in, because an attempt is recorded when there is no identity yet. The sign-in path refuses a locked e-mail before it asks Supabase, records every attempt and audits the lock; the threshold and the length are dated rules (D-257), seeded at 5 attempts and 15 minutes, which are the administrator's settings and were not asked of the owner. The panel keeps its own session row beside Supabase's token, because D-230's 30-day and 3-day rules are the panel's, not the provider's; last_seen_at is written at most every five minutes and the rows are revoked at once when an account is deactivated, which is also the path the existing iam.deactivate-departed job uses. Ten one-time recovery codes are issued at setup and shown once; using one marks the panel session's own second_factor_at instead of Supabase's aal2, and that is the single place the gate widens, so it is closed by tests (one use only, not another person's code, not a used code). The dated rule for roles that require a second factor and the page-level refusal of a Supabase account with no active panel account finish it.
+
+Two things are recorded rather than assumed. Removing a lost factor — after a recovery code or a manager's reset — needs Supabase's admin right; SUPABASE_SERVICE_ROLE_KEY is already in .env.local and read by nothing today, and the plan puts it in one server-only adapter used for exactly those two audited operations, never in the browser bundle. That is a security posture change and it is written down. And the lock releases only with time, as the requirement says, so someone who knows an e-mail can keep that account out for the lock's length; the threshold and the length being settings is what keeps the balance with the administrator.
+
+Out of scope and said so: a manual unlock, a device list, a "close every session" button, and the password policy itself, which TASK-0025 already built.
+
+## Previous continuation — one place is enough (0037)
 
 The owner answered OQ-034 with "one scope is enough" (D-270), and the gap that answer exposed was narrower and more concrete than expected: a search row may name both a site and a project, and core.search_access_allows judged only the first of them — `coalesce(site, project)`. A record of both was therefore visible to the site's people and invisible to the project's, whatever their grants said. 0037 builds the places as a set and asks whether any one of them allows the read.
 
