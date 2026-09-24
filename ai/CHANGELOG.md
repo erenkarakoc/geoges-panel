@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-24 — Signing in can be locked (TASK-0112 step 2)
+
+- The sign-in path asks the lock before it asks the provider, so a locked account is refused even with the right password (REQ-IAM-005), and every try is recorded with where it came from. The try that crosses the line is told about the lock rather than "wrong password"; the one after it gets the same lock back, never a longer one.
+- The wording never says whether the address has an account, exactly as a wrong password and a wrong e-mail read the same today. It does say how long the wait is, rounded up to the minute so the number does not change while the sentence is read. Three unit tests cover that wording.
+- The threshold and the length are the company's dated rules, read inside the database (0039), so they cannot arrive with the call.
+- Verification: 276 unit tests, 11 account-security database tests, lint, types, format and the production build pass.
+
 ## 2026-09-24 — The notification panel drops its "turn notifications on" row
 
 - Owner request: the row was too loud and crowded the notifications above it, and the phone already gets the Home Screen prompt. It is out of the panel.

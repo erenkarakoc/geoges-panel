@@ -10,6 +10,7 @@ import type {
   TwoFactorEnrollmentState,
   TwoFactorRemovalState,
 } from "@/modules/iam/application/auth-form-state";
+import { lockedMessage } from "@/modules/iam/application/auth-lock-message";
 import { authFailureMessage } from "@/modules/iam/application/auth-messages";
 import {
   todayRoute,
@@ -25,6 +26,7 @@ import {
   updatePasswordSchema,
 } from "@/modules/iam/application/auth-schemas";
 import { noteSession } from "@/modules/iam/application/access";
+import { loginLock, noteLoginAttempt } from "@/modules/iam/data/account-security-store";
 import type { AuthProvider, AuthSession } from "@/modules/iam/domain/auth-provider";
 import { createSupabaseAuthProvider } from "@/modules/iam/infrastructure/supabase/supabase-auth-provider";
 import { createSupabaseServerClient } from "@/platform/supabase/server-client";
@@ -40,6 +42,16 @@ async function noteCompleteSignIn(session: AuthSession | null): Promise<void> {
   }
 }
 
+/** Where the try came from, as far as the request knows; both are the lock's evidence. */
+async function whereFrom() {
+  const header = await headers();
+  const forwarded = header.get("x-forwarded-for");
+  return {
+    ip: forwarded?.split(",")[0]?.trim() ?? header.get("x-real-ip") ?? null,
+    userAgent: header.get("user-agent"),
+  };
+}
+
 export async function signInAction(
   _previous: SignInState,
   formData: FormData,
@@ -51,11 +63,25 @@ export async function signInAction(
     return { error: firstIssueMessage(parsed.error), email };
   }
 
+  // Asked before the provider is: while an account is locked, the right password is refused too
+  // (REQ-IAM-005), and the attempt is still recorded below.
+  const standingLock = await loginLock(parsed.data.email);
+  if (standingLock) {
+    await noteLoginAttempt({ email: parsed.data.email, succeeded: false, ...(await whereFrom()) });
+    return { error: lockedMessage(standingLock), email };
+  }
+
   const auth = await authProvider();
   const result = await auth.signInWithPassword(parsed.data);
+  const lock = await noteLoginAttempt({
+    email: parsed.data.email,
+    succeeded: result.ok,
+    ...(await whereFrom()),
+  });
 
   if (!result.ok) {
-    return { error: authFailureMessage(result.code), email };
+    // This try was the one that crossed the line: say the lock, not "wrong password".
+    return { error: lock ? lockedMessage(lock) : authFailureMessage(result.code), email };
   }
 
   const session = await auth.getSession();
