@@ -7,6 +7,7 @@
 - **The account-security events had no Turkish name.** The owner's own log read `sign_in.locked` and `two_factor.reset`: writing an event and naming it are two places, and TASK-0112 touched only the first. They are named now, the two new filter groups with them, and a test says so.
 - **The list itself was wrong about "Tanımlar".** It told the owner to open catalogs and dated rules on a screen that does not exist: ADM is service and data only, so the menu entry is a placeholder. The step is gone and the absence is in the opening table with the rest.
 - Also tidied while there: the placeholder page no longer generates a slug for a screen that has its own route.
+- The rest of the list was walked too and two more steps were corrected against what actually happens: `npm run jobs:status` prints four counts rather than a list of runs, and the palette — which the list did not mention at all — is now a step of its own, with what it finds today and what waits for Phase 09.
 
 ## 2026-09-24 — The light/dark switch moves into the account menu
 

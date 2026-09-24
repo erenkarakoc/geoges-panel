@@ -24,7 +24,7 @@ Bunlar **bilerek** yok; not almanıza gerek yok:
 
 ## Tur
 
-On adımda **ne yapacağınız** ve **ne görmeniz gerektiği** yazıyor. Beklenenden farklı bir şey
+On bir adımda **ne yapacağınız** ve **ne görmeniz gerektiği** yazıyor. Beklenenden farklı bir şey
 görürseniz ekran görüntüsü alıp not edin.
 
 ### 1. Giriş ve iki adımlı doğrulama
@@ -49,7 +49,16 @@ beş yanlış denemeden sonra "giriş … dakika kapalı" uyarısı (isterseniz 
 Görmeniz gereken: tarih, "Dikkat" bloğu ve göstergeler. Rakamların yanında **"Örnek veri"** işareti
 olmalı — bu ekrandaki sayılar gerçek değil, şimdilik yerini tutuyor.
 
-### 4. Görev verme ve alt bant
+### 4. Arama (Ctrl+K)
+
+Üstteki arama kutusuna tıklayın ya da `Ctrl+K`. Bir menü adının parçasını yazın ("denet", "gorev").
+→ Bulduğu sayfayı grubuyla birlikte listeler, Enter ile oraya gider. Türkçe harfler önemsiz: "gorev"
+de "görev" de aynı sonucu bulur.
+
+Bugün yalnız **sayfa ve menü** sonuçları çıkar. Kayıt sonuçları (şantiye, hakediş, belge) modüller
+kendi kayıtlarını Faz 09'da bağlayınca gelecek; altyapı hazır ve 20.000 kayıtla ölçüldü.
+
+### 5. Görev verme ve alt bant
 
 1. Sağ üstten "Görev ver". → Pencere açılır (telefonda aşağıdan çekmece).
 2. Kendinize bir görev verin. → Görevler listesinde görünür, zil sayacı artar.
@@ -57,39 +66,40 @@ olmalı — bu ekrandaki sayılar gerçek değil, şimdilik yerini tutuyor.
    kapanır, geçmişine satır düşer.
 4. "Yeniden aç" deyin, gerekçe yazın. → Gerekçe alanı kayıtla birlikte, düğme bantta.
 
-### 5. Bildirimler
+### 6. Bildirimler
 
 Zile tıklayın. → Görev bildiriminiz listede. Filtreyi (Tümü / Görevler / …) deneyin. Hesap
 menüsünde "Telefona anında bildirim" satırı var; HTTPS olmadan telefonda çalışmaz, bilgisayarda
 açmayı deneyebilirsiniz.
 
-### 6. Onaylar ve revizyon talepleri
+### 7. Onaylar ve revizyon talepleri
 
 "Onaylar" → "Bugün temiz" görmelisiniz; kuyruk Faz 08'de dolacak. Üstteki ikinci sekme (ya da menüdeki
 "Revizyon Talepleri") revizyon taleplerini açar: aynı ekranın sekmesidir (D-223). Bugün boş, çünkü
 henüz kilitli kayıt üreten bir modül yok; ekranın kendisi çalışıyor.
 
-### 7. Denetim kayıtları
+### 8. Denetim kayıtları
 
 "Yönetim → Denetim Kayıtları". → Girişleriniz, görev işlemleriniz ve iki adımlı doğrulama
 değişiklikleriniz burada. Filtreleri deneyin. Bu ekranı yalnız sahipler görür.
 
-### 8. Kullanıcılar
+### 9. Kullanıcılar
 
 "Yönetim → Kullanıcılar & Roller". → Asgari ekran: kişiler, iki adımlı doğrulama durumu, kalan
 kurtarma kodu, açık oturum sayısı ve "İkinci faktörü sıfırla". **Kendinize uygulamayın** (kendi
 faktörünüzü silersiniz); ne sorduğuna bakmak yeterli.
 
-### 9. Telefondan
+### 10. Telefondan
 
 Aynı Wi-Fi'de, komut isteminde yazan `http://192.168...:3000` adresini telefonunuzdan açın. →
 Altta gezinme çubuğu, ortada büyük "+" düğmesi. Bir görev detayına girin: **gezinme çubuğu çekilir,
 yerine ekranın kendi bandı gelir**; çıkınca geri gelir.
 
-### 10. Arka plan işleri
+### 11. Arka plan işleri
 
-Komut isteminde `npm run jobs:status`. → Zamanlanmış işler ve son çalışmaları. Panel açıkken bunlar
-kendiliğinden çalışır.
+Komut isteminde `npm run jobs:status`. → Bekleyen teslim, zamanı gelmiş iş, en eski bekleyen ve
+açık "ölü mektup" sayıları. Panel açıkken işler kendiliğinden çalıştığı için bu sayılar sıfıra yakın
+olmalı; kalıcı olarak artan bir sayı bir şeyin takıldığını söyler.
 
 ## Geri bildiriminiz
 
