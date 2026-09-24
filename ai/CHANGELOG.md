@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-24 — Self-review of the people screen: the id it is handed
+
+- The quality gate's self-review step was run over the newest work. Most of it held: the reset is refused by the permission service, by the database function and by the screen's own permission-denied state; it is audited; the owner layer is told; the screen shows counts and never content.
+- One thing did not. `resetSecondFactorAction` took the user id straight from the browser and passed it to the provider's admin API and to a `::uuid` cast, while every other action in the panel checks an id it is handed. A hand-made request could not reset anybody — the permission check and the database stand in the way — but it could turn a typo into a five-hundred instead of a sentence. The check is a domain function now, with its own tests, and it runs before either call.
+
 ## 2026-09-24 — The mandatory trio, measured before it was enforced
 
 - The schema test CI.md promises was the next check whose subject has arrived, so the 50 shipped tables were measured against `COVERAGE.md` section 3 first. The rule does not describe them: of the 14 tables the register calls `business`, 11 have no scope column and are right not to — an exchange rate is company-wide, a document version and an extracted text hang off the document that carries the scope, a notification belongs to a person rather than a place. Two tables have no RLS policy on purpose, because the application has no privilege on them at all, which is stronger than a policy.

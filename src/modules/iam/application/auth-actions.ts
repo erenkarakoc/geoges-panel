@@ -33,6 +33,7 @@ import {
   looksLikeRecoveryCode,
   newRecoveryCodes,
 } from "@/modules/iam/domain/recovery-codes";
+import { looksLikeUserId } from "@/modules/iam/domain/user-id";
 import {
   issueRecoveryCodes,
   noteSecondFactor,
@@ -270,6 +271,9 @@ export async function verifyTwoFactorAction(
  */
 export async function resetSecondFactorAction(userId: string): Promise<{ error: string | null }> {
   try {
+    // The id arrives from the browser, so it is checked before it reaches the provider's admin
+    // call and the database's cast, the way every other action checks an id it is handed.
+    if (!looksLikeUserId(userId)) return { error: "Kişi bulunamadı; sayfayı yenileyip deneyin." };
     await assertCan("iam.module.manage");
     const actor = await signInIdentity();
     if (!actor) return { error: authFailureMessage("not_authenticated") };
