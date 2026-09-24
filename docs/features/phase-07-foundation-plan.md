@@ -525,3 +525,32 @@ Kapsam D-230, D-236, D-257 ve REQ-IAM-003/005/006/007/008 ile belirlenmiş; bu p
 **Kapsam sınırı.** Parola politikası (D-230'un uzunluk/karmaşıklık kuralı) TASK-0025'te kuruldu; bu adım ona dokunmaz. Yöneticinin elle kilit açması, cihaz listesi/oturum yönetimi ekranı ve "tüm oturumları kapat" düğmesi bu görevin kapsamında değildir.
 
 **Geri dönüş.** 0038 down üç tabloyu ve işlevlerini kaldırır; uygulama kodu önce eski sürüme döner. Tohum kurallar dışında veri dönüşümü yoktur; hiçbir hesap, faktör veya parola değişmez.
+
+## TASK-0116 — Zorunlu üçlü testi (uygulama planı, 2026-09-24)
+
+Karar: D-277 (OQ-037'ye sahibin cevabı). Kural kayıt defterinin kendi diliyle söylenir ve kapsamın
+nereden geldiği **beyan edilir**; test beyanı denetler, sütun adından tahmin etmez.
+
+**Adım 1 — göç 0044.** `core.table_layer` bir sütun kazanır: `scope_source`, değerleri `own`,
+`parent`, `person`, `company`. Bugünkü 50 satır, ölçüme göre doldurulur (kök tablolar `own`;
+belge sürümü, çıkarılmış metin, yükleme, revizyon etkisi gibi çocuklar `parent`; bildirim, push
+aboneliği, günlük özet, uygulama kurulumu gibi kişiye ait satırlar `person`; döviz kuru, katalog,
+kural, rol gibi şirket geneli satırlar `company`). Sütun `not null` olur, yani bundan sonra tabloyu
+kuran göç beyan etmek zorundadır. Geri alma dosyası sütunu düşürür.
+
+**Adım 2 — kayıt denetimi.** `scripts/db-layers.mjs` beyanı da ister: katmanı olan ama kapsam
+kaynağı olmayan tablo, katmanı olmayan tablo gibi sorun sayılır.
+
+**Adım 3 — şema testi** (`npm run test:db`, CI'daki `database` işi). Her kayıtlı tablo için:
+`scope_source = 'own'` ise `scope_type`/`site_id`/`project_id`/`unit`'ten en az biri bulunur;
+uygulama rolünün herhangi bir yetkisi olan her tabloda RLS politikası vardır; hiç yetki verilmemiş
+tabloda testin denetlediği şey **yetkinin yokluğu** olur; `business` ve `config` köklerinde
+`aud.record_history` tetikleyicisi bulunur. Muafiyetler `system` katmanıdır, elle liste değil.
+
+**Adım 4 — kayıt.** `docs/database/COVERAGE.md` bölüm 3, artık geçerli olan kuralla yeniden yazılır;
+eski metin "her tabloda kapsam sütunu" diyordu ve elli tablonun yirmisinden fazlasını yanlış tarif
+ediyordu.
+
+Sınır: bu test yeni bir kural koymaz, var olanı ölçülebilir hale getirir. Bir tablo yanlış beyan
+edilirse test bunu göremez — beyan ile gerçeğin uyuşması `scope_source = 'own'` durumunda denetlenir,
+ötesinde göç incelemesinin işidir ve bu, testin bilinen sınırı olarak yazılıdır.
