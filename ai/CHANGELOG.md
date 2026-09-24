@@ -10,7 +10,7 @@
 ## 2026-09-24 — The notification panel drops its "turn notifications on" row
 
 - Owner request: the row was too loud and crowded the notifications above it, and the phone already gets the Home Screen prompt. It is out of the panel.
-- Stated consequence, not a silent drop: phone notifications can now be switched on nowhere, so TASK-0108's real-phone push acceptance waits until the switch is given a quieter home. `push-toggle.tsx` is unchanged and still works; only its place is missing, and its own comment says so. Candidates are an account or settings screen and the Home Screen dialog itself; the owner picks.
+- The switch moved to the account menu the same day, at the owner's word: it is no longer a row above the notifications but a line under the account items, and it keeps its own state there without closing the menu. IAM may not import TSK — TSK already reads IAM — so the layout passes it in as a node.
 
 ## 2026-09-24 — Three build shapes accepted
 

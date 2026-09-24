@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useTransition, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -44,13 +44,19 @@ type RoleSwitcher = {
 /**
  * Top-bar account menu (§40.3). Roles and profile land here once IAM is designed.
  * `roleSwitcher` is passed only in development (D-061): it views the shell from a sample seat.
+ *
+ * `deviceSwitch` is whatever this device can be told to do — today the phone-notification switch,
+ * which belongs to TSK. It arrives as a node from the layout rather than as an import, because
+ * TSK already reads IAM and the reverse arrow would be a cycle (MODULE_MAP).
  */
 export function UserMenu({
   email,
   roleSwitcher,
+  deviceSwitch,
 }: {
   email: string | null;
   roleSwitcher?: RoleSwitcher;
+  deviceSwitch?: ReactNode;
 }) {
   const router = useRouter();
   const [signingOut, startSignOut] = useTransition();
@@ -119,6 +125,14 @@ export function UserMenu({
                 </MenuGroup>
               </MenuSubPopup>
             </MenuSub>
+          </>
+        ) : null}
+        {deviceSwitch ? (
+          <>
+            <MenuSeparator />
+            {/* Not a menu item: it carries its own state and must not close the menu when it is
+                pressed. The menu is simply where it lives now (owner 2026-09-24). */}
+            <div className="px-2 py-1.5">{deviceSwitch}</div>
           </>
         ) : null}
         <MenuSeparator />

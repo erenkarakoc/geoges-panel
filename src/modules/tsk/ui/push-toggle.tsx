@@ -12,11 +12,10 @@ import { Spinner } from "@/components/ui/spinner";
  * refuse: everything still arrives in the panel (SCREEN_STATES SCR-015). On an iPhone the
  * browser can only do this once the panel has been added to the Home Screen (D-252).
  *
- * **Nothing renders this today.** It sat at the bottom of the notification panel and the owner
- * had it taken out on 2026-09-24: too loud, and it crowded the notifications above it. Phone
- * notifications therefore cannot be switched on anywhere at the moment, so TASK-0108's real-phone
- * push acceptance waits for this to be given a quieter home — an account or settings screen, which
- * does not exist yet. The switch itself is unchanged and works; only its place is missing.
+ * It sat at the bottom of the notification panel until 2026-09-24, when the owner had it taken out
+ * — too loud, and it crowded the notifications above it — and asked for it in the account menu
+ * instead, which is where it is now. The layout passes it into `UserMenu` as a node, because TSK
+ * may not be imported by IAM (MODULE_MAP).
  */
 
 type State =
@@ -133,7 +132,7 @@ export function PushToggle() {
   if (state.kind === "loading" || state.kind === "unsupported") return null;
 
   const note = (text: string) => (
-    <p className="flex items-start gap-2 border-t pt-2 text-xs text-muted-foreground">
+    <p className="flex items-start gap-2 text-xs text-muted-foreground">
       <SmartphoneIcon aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
       {text}
     </p>
@@ -151,7 +150,7 @@ export function PushToggle() {
   }
 
   return (
-    <div className="flex items-center justify-between gap-2 border-t pt-2">
+    <div className="flex items-center justify-between gap-2">
       <span className="flex items-center gap-2 text-xs text-muted-foreground">
         <SmartphoneIcon aria-hidden="true" className="size-4 shrink-0" />
         {state.kind === "on" ? "Bu cihaza bildirim gönderiliyor." : "Telefona anında bildirim."}

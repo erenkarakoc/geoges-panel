@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { readAuthSession, resolveProtectedPageRedirect } from "@/modules/iam";
 import { UserMenu } from "@/modules/iam/ui/user-menu";
 import { NotificationBell } from "@/modules/tsk/ui/notification-bell";
+import { PushToggle } from "@/modules/tsk/ui/push-toggle";
 import {
   createPreviewRolePolicy,
   PREVIEW_ROLE_COOKIE,
@@ -38,6 +39,7 @@ export default async function AppLayout({ children, context, modal }: LayoutProp
       notifications={<NotificationBell />}
       headerActions={
         <UserMenu
+          deviceSwitch={<PushToggle />}
           email={session.user.email}
           roleSwitcher={
             roleSwitchingAllowed
