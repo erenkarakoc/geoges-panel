@@ -33,6 +33,7 @@ export {
 
 export {
   clockSlot,
+  escalateWaitingApproval,
   dryRun,
   dryRunVersion,
   runClockTriggers,
@@ -43,11 +44,13 @@ export {
   type DryRunReport,
   type DryRunStep,
   type FlowRuntime,
+  type OwnerRule,
   type RunResult,
 } from "@/modules/wfl/application/engine";
 export { flowEngine } from "@/modules/wfl/application/engine-subscriber";
 export { flowWakeJob } from "@/modules/wfl/application/wake-job";
 export { flowClockJob } from "@/modules/wfl/application/clock-job";
+export { flowEscalationJob } from "@/modules/wfl/application/escalation-job";
 export {
   parseDefinition,
   RUNNABLE_STEP_TYPES,

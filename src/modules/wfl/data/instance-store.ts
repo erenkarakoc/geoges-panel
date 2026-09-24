@@ -357,6 +357,9 @@ export async function readStepRun(
 /** The job type the engine's own wake-ups use. */
 export const WAKE_JOB = "wfl.wake";
 
+/** The job type an approval's escalation timer uses. */
+export const ESCALATE_JOB = "wfl.escalate";
+
 /**
  * Asks the scheduler to wake this step when its time comes. The key is the step visit, so the
  * same wait never schedules two wake-ups however often the step is retried.
@@ -371,4 +374,35 @@ export async function scheduleWake(
     key: `wfl.wake:${wake.stepRunId}`,
     payload: { stepRunId: wake.stepRunId },
   });
+}
+
+/**
+ * Asks to look at this approval again when its patience runs out. Keyed by the approval, so a
+ * step retried never schedules two timers for the same one.
+ */
+export async function scheduleEscalation(
+  db: SystemDb,
+  escalation: {
+    approvalId: string;
+    at: Date;
+    to: { type: string; userId?: string; role?: string };
+  },
+): Promise<boolean> {
+  return scheduleJob(db, {
+    type: ESCALATE_JOB,
+    runAt: escalation.at,
+    key: `wfl.escalate:${escalation.approvalId}`,
+    payload: { approvalId: escalation.approvalId, to: escalation.to },
+  });
+}
+
+/** Moves a waiting approval to somebody else; false when it was answered in the meantime. */
+export async function escalateApproval(
+  db: SystemDb,
+  approvalId: string,
+  toUserId: string,
+): Promise<boolean> {
+  const { rows } = await sql<{ moved: boolean | null }>`
+    select wfl.escalate_approval(${approvalId}::uuid, ${toUserId}::uuid) as moved`.execute(db);
+  return rows[0]?.moved === true;
 }

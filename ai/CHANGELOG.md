@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-25 — An approval that waits too long moves on (TASK-0117, step 9)
+
+- The architecture writes it as a property of the step — "after eight hours, to the general manager" — and migration 0052 makes it exact. The approval **moves**; it is not copied, because one approval has one person who must answer it, and the run log says it moved, from whom and to whom, so "why is this mine" has an answer.
+- Who it moves to is worked out when the timer fires, not when it was set. Eight hours is long enough for a role to be somebody else, and a flow that says "to the general manager" means whoever holds that then.
+- An approval answered a minute before the timer fires is left alone: a decision beats a clock, and the database is what enforces it.
+- The loop now says what it intends and each sink decides what that means, which is how the dry run learned about escalation: it reports when the approval would move and schedules nothing. The first version scheduled the timer inside the step that opens the approval, and the dry run could not see it at all — a small thing that would have made the designer's preview quietly wrong.
+- The test escalates to a role only its own people hold. The first version escalated to the owner role and moved the approval to the panel's real owner, which is exactly the kind of thing a test on a live development database does when it is not careful.
+
 ## 2026-09-25 — The engine would not let the panel start, and said so at the door
 
 - Running the panel refused to start: the job registry rejects a subscriber that listens to nothing, and the flow engine's list is empty on purpose — what it hears lives in the published definitions, which no code can know (REQ-WFL-007). Found by the owner running `npm run dev`, not by a test, because nothing in the unit suite starts the worker.

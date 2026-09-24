@@ -9,8 +9,10 @@ import {
   noteWaiting,
   readDecision,
   readRunnable,
+  escalateApproval,
   readStepRun,
   requestApproval,
+  scheduleEscalation,
   scheduleWake,
   startInstance,
   type FlowTrigger,
@@ -52,6 +54,15 @@ export type RunResult =
   | { state: "ended"; status: "done" | "failed"; reason?: string }
   | { state: "waiting"; stepId: string };
 
+/** The four ways a step can name who it waits on (D-097). */
+export type OwnerRule = {
+  type: string;
+  userId?: string;
+  role?: string;
+  relation?: string;
+  permission?: string;
+};
+
 export type OwnerRelations = {
   resolve: (db: SystemDb, code: string, argument: string | null) => Promise<string | null>;
 };
@@ -77,7 +88,10 @@ type StepSink = {
   ): Promise<void>;
   end(status: "done" | "failed", failure?: string, stepId?: string): Promise<void>;
   wait(stepId: string, detail: unknown): Promise<void>;
-  approval(stateId: string, step: FlowStep, ownerUserId: string): Promise<void>;
+  /** Opens the approval and answers with its id, or null when nothing was really opened. */
+  approval(stateId: string, step: FlowStep, ownerUserId: string): Promise<string | null>;
+  /** The approval's patience: after this, it moves to somebody else. */
+  escalate(approvalId: string | null, at: Date, to: OwnerRule): Promise<void>;
   action(code: string, input: unknown): Promise<void>;
   /** Asks to be woken at a time; the dry run is never actually woken. */
   sleep(stateId: string, wakeAt: Date): Promise<void>;
@@ -116,14 +130,17 @@ function writingSink(db: SystemDb, instanceId: string, relations: FlowRuntime): 
     async wait(stepId, detail) {
       await noteWaiting(db, { instanceId, stepId, detail });
     },
-    async approval(stateId, step, ownerUserId) {
-      await requestApproval(db, {
+    approval: (stateId, step, ownerUserId) =>
+      requestApproval(db, {
         instanceId,
         stateId,
         stepId: step.id,
         title: step.title ?? "Onay",
         ownerUserId,
-      });
+      }),
+    async escalate(approvalId, at, to) {
+      if (!approvalId) return;
+      await scheduleEscalation(db, { approvalId, at, to });
     },
     async action(code, input) {
       if (!relations.run) throw new Error(`no capability catalog is wired for ${code}`);
@@ -162,7 +179,7 @@ function afterDecision(step: FlowStep, decision: string): string | null {
 async function ownerOf(
   db: SystemDb,
   relations: FlowRuntime,
-  owner: { type: string; userId?: string; role?: string; relation?: string; permission?: string },
+  owner: OwnerRule,
 ): Promise<string | null> {
   if (owner.type === "user") return owner.userId ?? null;
   if (owner.type === "role") return relations.resolve(db, "role.holder", owner.role ?? null);
@@ -243,7 +260,14 @@ async function walk(
         return { state: "ended", status: "failed", reason };
       }
       if (step.type === "approval") {
-        await sink.approval(stateId, step, owner);
+        const approvalId = await sink.approval(stateId, step, owner);
+        if (step.escalation) {
+          await sink.escalate(
+            approvalId,
+            new Date(Date.now() + durationMs(step.escalation.after)),
+            step.escalation.to,
+          );
+        }
       } else {
         await sink.action("task.open", {
           stepRunId: stateId,
@@ -469,6 +493,16 @@ export async function dryRun(
     },
     async approval() {
       // Nothing: a dry run never puts anything in front of anybody.
+      return null;
+    },
+    async escalate(_approvalId, at) {
+      if (entered) {
+        steps.push({
+          stepId: entered.id,
+          type: entered.type,
+          outcome: `escalates at ${at.toISOString()}`,
+        });
+      }
     },
     async action() {
       // Nothing: a dry run calls no action, which is what keeps it from opening real work.
@@ -615,4 +649,23 @@ export async function runClockTriggers(
     if (result) started.push(instanceId);
   }
   return started;
+}
+
+/**
+ * Moves an approval that has waited too long (REQ-WFL-005, REQ-IAM-020).
+ *
+ * The person it moves to is worked out when the timer fires, not when it was set: eight hours is
+ * long enough for the role to be somebody else, and the flow means "whoever holds it then".
+ * Nothing happens when the approval was answered in the meantime, which is a decision winning
+ * over a clock, as it should.
+ */
+export async function escalateWaitingApproval(
+  db: SystemDb,
+  approvalId: string,
+  to: OwnerRule,
+  relations: FlowRuntime,
+): Promise<boolean> {
+  const owner = await ownerOf(db, relations, to);
+  if (!owner) return false;
+  return escalateApproval(db, approvalId, owner);
 }

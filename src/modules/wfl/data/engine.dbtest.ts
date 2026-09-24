@@ -28,6 +28,7 @@ import {
 } from "@/modules/wfl/data/instance-store";
 import {
   clockSlot,
+  escalateWaitingApproval,
   dryRunVersion,
   runClockTriggers,
   resumeFromApproval,
@@ -51,6 +52,7 @@ const TASKING = "zz-t0147-tasking";
 const DRY = "zz-t0147-dry";
 const SLEEPY = "zz-t0147-sleepy";
 const NIGHTLY = "zz-t0147-nightly";
+const PATIENT = "zz-t0147-patient";
 const EVENT = "zzw_record.submitted";
 
 let admin: pg.Client;
@@ -119,7 +121,9 @@ async function publish(key: string, definition: unknown) {
 }
 
 async function cleanUp() {
-  await admin.query("delete from core.scheduled_job where idempotency_key like 'wfl.wake:%'");
+  await admin.query(
+    "delete from core.scheduled_job where idempotency_key like 'wfl.wake:%' or idempotency_key like 'wfl.escalate:%'",
+  );
   // A task is never deleted (REQ-TSK-001); a reset says so explicitly, which is how the other
   // tests clear theirs too.
   const { rows: tasks } = await admin.query(
@@ -146,7 +150,7 @@ async function cleanUp() {
       [taskIds],
     );
   }
-  const keys = [BIG, SMALL, UNBUILT, APPROVING, TASKING, DRY, SLEEPY, NIGHTLY];
+  const keys = [BIG, SMALL, UNBUILT, APPROVING, TASKING, DRY, SLEEPY, NIGHTLY, PATIENT];
   await admin.query(
     "delete from wfl.instance where flow_id in (select id from wfl.flow where key = any($1))",
     [keys],
@@ -170,6 +174,7 @@ async function cleanUp() {
   await releaseTestPeople(admin, PEOPLE);
   await admin.query("delete from iam.role_assignment where user_id = any($1::uuid[])", [PEOPLE]);
   await admin.query("delete from iam.user where id = any($1::uuid[])", [PEOPLE]);
+  await admin.query("delete from iam.role where code = 'T0147_BACKUP'");
 }
 
 beforeAll(async () => {
@@ -183,6 +188,16 @@ beforeAll(async () => {
      select u.id, 't0147-' || u.n || '@example.test', 'Deneme motor ' || u.n, u.id
        from unnest($1::uuid[]) with ordinality as u(id, n)`,
     [PEOPLE],
+  );
+  // A role only this test's people hold, so an escalation to it cannot find the panel's real owner.
+  await admin.query(
+    "insert into iam.role (code, name, level) values ('T0147_BACKUP', 'Deneme yedek onaycı', 10)",
+  );
+  const { rows: backup } = await admin.query("select id from iam.role where code = 'T0147_BACKUP'");
+  await admin.query(
+    `insert into iam.role_assignment (user_id, role_id, scope_type, scope_ids, starts_on)
+     values ($1, $2, 'company', '{}', iam.today() - 1)`,
+    [BYSTANDER, backup[0].id],
   );
   const { rows } = await admin.query("select id from iam.role where code = 'SAH'");
   await admin.query(
@@ -900,5 +915,111 @@ describe("the flows the clock starts (REQ-WFL-007)", () => {
     // A different day would be a different slot; the flow is simply not asked any more.
     const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
     expect(await runClockTriggers(worker, tomorrow, relations)).toEqual([]);
+  });
+});
+
+describe("an approval that waits too long (REQ-WFL-005, REQ-IAM-020)", () => {
+  /** Waits on one person for half an hour, then moves to whoever holds the owner role. */
+  const patient = {
+    trigger: { type: "event", event: `${EVENT}_patient` },
+    start: "p1",
+    steps: [
+      {
+        id: "p1",
+        type: "approval",
+        title: "Sabırlı onay",
+        owner: { type: "user", userId: APPROVER },
+        escalation: { after: "PT30M", to: { type: "role", role: "T0147_BACKUP" } },
+        outcomes: { approve: "p2" },
+      },
+      { id: "p2", type: "end" },
+    ],
+  };
+
+  let approvalId: string;
+
+  it("sets the timer when it opens the approval, once", async () => {
+    await publish(PATIENT, patient);
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_patient`,
+        id: id(640),
+        record: { schema: "zzw", table: "record", id: id(740) },
+        payload: {},
+      },
+      relations,
+    );
+
+    const { rows: approvals } = await admin.query(
+      "select id, owner_user_id from wfl.approval where instance_id = $1",
+      [started[0]],
+    );
+    approvalId = approvals[0].id;
+    expect(approvals[0].owner_user_id).toBe(APPROVER);
+
+    const { rows: timers } = await admin.query(
+      "select job_type, run_at, payload from core.scheduled_job where idempotency_key = $1",
+      [`wfl.escalate:${approvalId}`],
+    );
+    expect(timers).toHaveLength(1);
+    expect(timers[0].job_type).toBe("wfl.escalate");
+    expect(timers[0].payload.to).toEqual({ type: "role", role: "T0147_BACKUP" });
+    const minutes = (new Date(timers[0].run_at).getTime() - Date.now()) / 60_000;
+    expect(minutes).toBeGreaterThan(25);
+  });
+
+  it("moves the approval to whoever holds the role when the time comes", async () => {
+    expect(
+      await escalateWaitingApproval(
+        worker,
+        approvalId,
+        { type: "role", role: "T0147_BACKUP" },
+        relations,
+      ),
+    ).toBe(true);
+
+    // It moved, it was not copied: one approval, one person who must answer it.
+    expect((await readMyApprovals(as(APPROVER))).map((a) => a.id)).not.toContain(approvalId);
+    expect((await readMyApprovals(as(BYSTANDER))).map((a) => a.id)).toContain(approvalId);
+
+    const { rows } = await admin.query(
+      `select detail from wfl.run_log where instance_id =
+         (select instance_id from wfl.approval where id = $1) and kind = 'waiting'
+        order by at desc limit 1`,
+      [approvalId],
+    );
+    expect(rows[0].detail).toMatchObject({ escalated_from: APPROVER, escalated_to: BYSTANDER });
+  });
+
+  it("does nothing to an approval that was answered before the timer fired", async () => {
+    expect(await decideApproval(as(BYSTANDER), approvalId, "approve")).toBe(true);
+    expect(
+      await escalateWaitingApproval(
+        worker,
+        approvalId,
+        { type: "role", role: "T0147_BACKUP" },
+        relations,
+      ),
+    ).toBe(false);
+  });
+
+  it("says in a dry run when the approval would move, and schedules nothing", async () => {
+    const versionId = await saveDraft(as(DESIGNER), {
+      key: PATIENT,
+      name: "Deneme sabır",
+      definition: patient,
+    });
+    const before = await admin.query(
+      "select count(*)::int as n from core.scheduled_job where idempotency_key like 'wfl.escalate:%'",
+    );
+    const report = await dryRunVersion(worker, versionId, {}, relations);
+    const after = await admin.query(
+      "select count(*)::int as n from core.scheduled_job where idempotency_key like 'wfl.escalate:%'",
+    );
+
+    expect(report.passed).toBe(true);
+    expect(report.steps.some((step) => step.outcome.startsWith("escalates at "))).toBe(true);
+    expect(after.rows[0].n).toBe(before.rows[0].n);
   });
 });

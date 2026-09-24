@@ -64,6 +64,9 @@ const testSchema = z.object({
   value: z.unknown().optional(),
 });
 
+/** How long a wait lasts: an ISO-8601 duration, as the architecture's own example writes it. */
+export const DURATION = /^P(?:\d+D(?:T(?:\d+H)?(?:\d+M)?)?|T(?:\d+H(?:\d+M)?|\d+M))$/;
+
 const baseStep = z.object({
   id: stepId,
   title: z.string().trim().min(1).max(200).optional(),
@@ -89,6 +92,13 @@ export const ownerSchema = z.discriminatedUnion("type", [
 const approvalStep = baseStep.extend({
   type: z.literal("approval"),
   owner: ownerSchema,
+  /** After this long without an answer, the approval moves to somebody else (REQ-IAM-020). */
+  escalation: z
+    .object({
+      after: z.string().regex(DURATION, "süre PT8H, PT30M ya da P2D biçiminde yazılır"),
+      to: ownerSchema,
+    })
+    .optional(),
   /** Where each of the three answers sends the flow (D-099); nothing means the flow ends there. */
   outcomes: z
     .object({
@@ -104,9 +114,6 @@ const taskStep = baseStep.extend({
   owner: ownerSchema,
   priority: z.enum(["low", "normal", "high", "critical"]).default("normal"),
 });
-
-/** How long a wait lasts: an ISO-8601 duration, as the architecture's own example writes it. */
-export const DURATION = /^P(?:\d+D(?:T(?:\d+H)?(?:\d+M)?)?|T(?:\d+H(?:\d+M)?|\d+M))$/;
 
 const waitStep = baseStep.extend({
   type: z.literal("wait"),
