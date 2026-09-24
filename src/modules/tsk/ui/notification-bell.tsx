@@ -31,7 +31,6 @@ import {
   NOTIFICATION_FILTERS,
   type NotificationFilter,
 } from "@/modules/tsk/domain/tasks";
-import { PushToggle } from "@/modules/tsk/ui/push-toggle";
 import { createRefresher } from "@/platform/signals/client";
 import { useSignal } from "@/platform/signals/signal-provider";
 
@@ -160,7 +159,6 @@ export function NotificationBell() {
           </ul>
         </ScrollArea>
       )}
-      <PushToggle />
     </div>
   );
 

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-24 — The notification panel drops its "turn notifications on" row
+
+- Owner request: the row was too loud and crowded the notifications above it, and the phone already gets the Home Screen prompt. It is out of the panel.
+- Stated consequence, not a silent drop: phone notifications can now be switched on nowhere, so TASK-0108's real-phone push acceptance waits until the switch is given a quieter home. `push-toggle.tsx` is unchanged and still works; only its place is missing, and its own comment says so. Candidates are an account or settings screen and the Home Screen dialog itself; the owner picks.
+
 ## 2026-09-24 — Three build shapes accepted
 
 - The owner approved every decision that was still waiting: D-272 (TASK-0112's account security shape, including the server-only service-role adapter for removing a lost factor and the lock that releases only with time), and D-265 and D-266, which had stayed PROPOSED although the revision requests and the search were long since built and accepted to those shapes.

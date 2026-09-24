@@ -11,6 +11,12 @@ import { Spinner } from "@/components/ui/spinner";
  * permission only when the person presses the button, and says plainly what happens when they
  * refuse: everything still arrives in the panel (SCREEN_STATES SCR-015). On an iPhone the
  * browser can only do this once the panel has been added to the Home Screen (D-252).
+ *
+ * **Nothing renders this today.** It sat at the bottom of the notification panel and the owner
+ * had it taken out on 2026-09-24: too loud, and it crowded the notifications above it. Phone
+ * notifications therefore cannot be switched on anywhere at the moment, so TASK-0108's real-phone
+ * push acceptance waits for this to be given a quieter home — an account or settings screen, which
+ * does not exist yet. The switch itself is unchanged and works; only its place is missing.
  */
 
 type State =

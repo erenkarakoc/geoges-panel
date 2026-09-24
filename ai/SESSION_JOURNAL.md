@@ -378,3 +378,4 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-24 03:21:56Z · b13a9554 · Write · `src/platform/db/run-signed-out.ts`
 - 2026-09-24 03:22:31Z · b13a9554 · Write · `src/modules/iam/data/account-security-store.ts`
 - 2026-09-24 03:23:44Z · b13a9554 · Write · `src/modules/iam/data/account-security.dbtest.ts`
+- 2026-09-24 03:31:45Z · b13a9554 · Write · `db/migrations/0039_iam_security_settings.sql`
