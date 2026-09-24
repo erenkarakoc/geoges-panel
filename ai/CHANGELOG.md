@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-09-24 — The panel keeps its own session (TASK-0112 step 3)
+
+- Supabase says who somebody is; how long the panel lets them stay is now the panel's own rule (D-230): at most thirty days, over after three days unused, gone the moment the account is disabled. A row in `iam.session` is that rule and an httpOnly cookie is the only pointer to it — it is not an identity, because the provider's session must still be valid and the row must belong to the same person.
+- A sign-in opens it at the one place a sign-in completes, which covers both the password step and the second-factor step; signing out revokes it and takes the cookie back. Reading it keeps it alive, and the database writes that at most once every five minutes.
+- Every server action and query goes through the same guard, so the panel's rules reach them as well as the pages. The routing rules gained the new state and say what it means: someone mid-sign-in still goes to their second step, and someone whose panel session is over sees the sign-in form again rather than being bounced between the two pages. Nine new unit tests, including that bounce.
+- A device label is kept with each session for a person reading their own list ("iPhone · Safari"); the user agent itself is not stored, and three tests cover the browsers that all claim to be Safari or Chrome.
+- **Everybody is signed out once by this change:** a session that started before it has no cookie, so the next page load asks for the password again.
+- Verification: 284 unit tests, 219 database tests across 16 files, lint, types, format and the production build pass. Not yet exercised in a browser — the signed-in half of the flow needs the owner to sign in, and this is the request path, so that pass matters more here than usual.
+
 ## 2026-09-24 — Signing in can be locked (TASK-0112 step 2)
 
 - The sign-in path asks the lock before it asks the provider, so a locked account is refused even with the right password (REQ-IAM-005), and every try is recorded with where it came from. The try that crosses the line is told about the lock rather than "wrong password"; the one after it gets the same lock back, never a longer one.

@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { readAuthSession, resolveProtectedPageRedirect } from "@/modules/iam";
+import { readAuthSession, readPanelSession, resolveProtectedPageRedirect } from "@/modules/iam";
 import { UserMenu } from "@/modules/iam/ui/user-menu";
 import { NotificationBell } from "@/modules/tsk/ui/notification-bell";
 import { PushToggle } from "@/modules/tsk/ui/push-toggle";
@@ -20,7 +20,8 @@ const roleSwitchingAllowed = process.env.NODE_ENV === "development";
 
 export default async function AppLayout({ children, context, modal }: LayoutProps<"/">) {
   const session = await readAuthSession();
-  const redirectTo = resolveProtectedPageRedirect(session);
+  // The panel's own session decides how long somebody stays, not the provider's token (D-230).
+  const redirectTo = resolveProtectedPageRedirect(session, (await readPanelSession()) !== null);
 
   if (redirectTo || !session) {
     redirect(redirectTo ?? "/sign-in");

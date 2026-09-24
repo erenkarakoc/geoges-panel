@@ -26,6 +26,7 @@ import {
 } from "@/modules/iam/domain/permissions";
 
 import { requiresTwoFactorStep } from "./auth-routing";
+import { readPanelSession } from "./panel-session";
 import { readAuthSession } from "./auth-session";
 
 /**
@@ -44,13 +45,19 @@ export class AccessDeniedError extends Error {
 }
 
 /**
- * The verified session that may use the panel: signed in and, when the person has a second
- * factor, past it. Pages are also guarded by their layout; server actions and route handlers
- * have no layout, so this is the check they rely on.
+ * The verified session that may use the panel: signed in, past the second factor when there is
+ * one, and holding a panel session that is still alive (TASK-0112, D-230). Pages are also guarded
+ * by their layout; server actions and route handlers have no layout, so this is the check they
+ * rely on — and it is where the panel's own session rules reach them.
+ *
+ * The row must belong to the same person as the token. A cookie from another account is no more
+ * use than no cookie at all.
  */
 async function panelSession() {
   const session = await readAuthSession();
-  return session && !requiresTwoFactorStep(session) ? session : null;
+  if (!session || requiresTwoFactorStep(session)) return null;
+  const panel = await readPanelSession();
+  return panel && panel.userId === session.user.id ? session : null;
 }
 
 /** Who the database transaction runs as, from the verified session; null when signed out. */

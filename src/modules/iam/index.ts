@@ -7,9 +7,13 @@ export {
   todayRoute,
   resolvePostSignInRoute,
   resolveProtectedPageRedirect,
+  resolveSignInPageRedirect,
   signInRoute,
 } from "./application/auth-routing";
 export { readAuthSession, verifyRecoveryToken } from "./application/auth-session";
+// The panel's own session (TASK-0112, D-230): pages ask whether one is still alive, the routing
+// rules above decide what that means.
+export { readPanelSession } from "./application/panel-session";
 export type { AuthSession } from "./domain/auth-provider";
 
 // Permission service (TASK-0102, PERMISSIONS.md). Module data layers write their RLS policies with

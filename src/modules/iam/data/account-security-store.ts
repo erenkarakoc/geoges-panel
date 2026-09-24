@@ -2,6 +2,9 @@ import { sql } from "kysely";
 
 import { runAsUser, runSignedOut, type DbIdentity } from "@/platform/db";
 
+/** Re-exported for the application layer, which may not name the database module itself. */
+export type { DbIdentity };
+
 /**
  * Account security in the database (TASK-0112, D-230, D-236, D-272; migration 0038).
  *

@@ -26,6 +26,7 @@ import {
   updatePasswordSchema,
 } from "@/modules/iam/application/auth-schemas";
 import { noteSession } from "@/modules/iam/application/access";
+import { closePanelSession, openPanelSession } from "@/modules/iam/application/panel-session";
 import { loginLock, noteLoginAttempt } from "@/modules/iam/data/account-security-store";
 import type { AuthProvider, AuthSession } from "@/modules/iam/domain/auth-provider";
 import { createSupabaseAuthProvider } from "@/modules/iam/infrastructure/supabase/supabase-auth-provider";
@@ -35,10 +36,18 @@ async function authProvider(): Promise<AuthProvider> {
   return createSupabaseAuthProvider(await createSupabaseServerClient());
 }
 
-/** A sign-in is complete once no second step is pending; only then is it recorded. */
+/**
+ * A sign-in is complete once no second step is pending: only then is it recorded, and only then
+ * does the panel's own session begin (TASK-0112, D-230). Both places that can finish a sign-in —
+ * the password step and the second-factor step — come through here.
+ */
 async function noteCompleteSignIn(session: AuthSession | null): Promise<void> {
   if (session && session.currentLevel === session.nextLevel) {
     await noteSession(session.user.id, "signed_in");
+    await openPanelSession(
+      { userId: session.user.id, actingRoleId: null },
+      session.currentLevel === "aal2",
+    );
   }
 }
 
@@ -94,6 +103,7 @@ export async function signOutAction(): Promise<void> {
   const session = await auth.getSession();
   if (session) {
     await noteSession(session.user.id, "signed_out");
+    await closePanelSession({ userId: session.user.id, actingRoleId: null });
   }
   await auth.signOut();
 
