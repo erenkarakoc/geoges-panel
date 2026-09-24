@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
-import { readAuthSession, readPanelSession, resolveProtectedPageRedirect } from "@/modules/iam";
+import {
+  readAccountFacts,
+  readAuthSession,
+  readPanelSession,
+  resolveProtectedPageRedirect,
+} from "@/modules/iam";
 import { PresentationPage } from "@/sandbox/presentation/presentation-page";
 
 export const metadata: Metadata = { title: "Yapı sunumu" };
@@ -15,6 +20,7 @@ export default async function PresentationRoute() {
   const redirectTo = resolveProtectedPageRedirect(
     await readAuthSession(),
     await readPanelSession(),
+    await readAccountFacts(),
   );
   if (redirectTo) {
     redirect(redirectTo);

@@ -26,6 +26,7 @@ import {
 } from "@/modules/iam/domain/permissions";
 
 import { requiresTwoFactorStep } from "./auth-routing";
+import { secondFactorRequired } from "@/modules/iam/data/account-security-store";
 import { readPanelSession } from "./panel-session";
 import { readAuthSession } from "./auth-session";
 
@@ -72,6 +73,28 @@ export const signInIdentity = cache(
     const identity: DbIdentity = { userId: session.user.id, actingRoleId: null };
     const account = await findAccount(identity);
     return account ? { identity, account } : null;
+  },
+);
+
+/**
+ * What the pages need to know about the account behind the provider's session (TASK-0112): whether
+ * an active panel account exists at all, and whether the panel is waiting for a second factor —
+ * after a reset, or because a role is on the administrator's list (REQ-IAM-003).
+ *
+ * Asked with the provider's session alone, not through `panelSession`: somebody standing at the
+ * second-factor step has no panel session yet and still needs an honest answer here.
+ */
+export const readAccountFacts = cache(
+  async (): Promise<{ active: boolean; secondFactorAsked: boolean }> => {
+    const session = await readAuthSession();
+    if (!session) return { active: false, secondFactorAsked: false };
+    const identity: DbIdentity = { userId: session.user.id, actingRoleId: null };
+    const account = await findAccount(identity);
+    if (!account) return { active: false, secondFactorAsked: false };
+    return {
+      active: true,
+      secondFactorAsked: account.mustSetup2fa || (await secondFactorRequired(identity)),
+    };
   },
 );
 

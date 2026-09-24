@@ -141,3 +141,15 @@ export function noteSecondFactor(identity: DbIdentity, userId: string, present: 
     return rows[0]?.done === true;
   });
 }
+
+/**
+ * Whether one of this person's roles is on the list that must use a second factor (0042,
+ * REQ-IAM-003). The list is the administrator's dated rule and the function reads it itself.
+ */
+export function secondFactorRequired(identity: DbIdentity) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{ required: boolean }>`
+      select iam.second_factor_required() as required`.execute(db);
+    return rows[0]?.required === true;
+  });
+}

@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-24 — TASK-0112's last step: who must use a second factor, and who may see a page
+
+- Which roles must use a second factor is the administrator's dated rule (0042, REQ-IAM-003, seeded empty). The function answers only about the person asking, reads the rule itself, and is combined with the panel's own `must_setup_2fa`: somebody who owes a factor and has none is sent to set one up, from the panel and from the sign-in page alike.
+- A provider account with no active panel account — never made, disabled, or past its leaving date — now sees no page at all (REQ-IAM-006, REQ-IAM-007). The database has refused its data since TASK-0102; a page that rendered anyway only looked broken. On the sign-in page such a visitor gets the form rather than a bounce.
+- Both rules live in the pure routing functions with the rest, so they are covered by unit tests rather than by reading the code: eighteen now.
+- The rule test sets the list inside a transaction it rolls back, because a dated rule row is immutable once written and a test must not leave the environment's configuration changed. A third test checks that it did not.
+- Verification: 298 unit tests, 226 database tests across 16 files, lint, types, format and the production build pass.
+
 ## 2026-09-24 — A manager can reset somebody's second factor (TASK-0112 step 4 finished)
 
 - The same three things as a recovery code, but to another account: the factor on the device that is gone is removed, the panel asks that person for a new one, and their open sessions end — a session that passed a factor which no longer exists should not continue.

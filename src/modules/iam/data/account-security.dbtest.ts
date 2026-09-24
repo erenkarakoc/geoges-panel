@@ -372,3 +372,48 @@ describe("the second-factor flag (TASK-0112, D-236; 0040, 0041)", () => {
     expect(await noteSecondFactor(as(OTHER), id(99), false)).toBe(false);
   });
 });
+
+describe("roles that must use a second factor (REQ-IAM-003; 0042)", () => {
+  const store = async () => await import("./account-security-store");
+
+  it("says no while the administrator's list is empty", async () => {
+    const { secondFactorRequired } = await store();
+    expect(await secondFactorRequired(as(OTHER))).toBe(false);
+    expect(await secondFactorRequired(as(PERSON))).toBe(false);
+  });
+
+  it("says yes for somebody carrying a role on the list", async () => {
+    // A rule row is immutable once written, so the list is set inside a transaction that is rolled
+    // back: the environment's real configuration is never touched. The function reads the rule and
+    // the person's own assignments, so both are visible here.
+    await admin.query("begin");
+    try {
+      await admin.query(
+        `insert into adm.rule (rule_key_id, valid_from, value, reason)
+         select id, iam.today(), $1::jsonb, 'Test: iki adımlı zorunlu roller'
+           from adm.rule_key where key = 'iam.two-factor-roles'`,
+        [JSON.stringify([MANAGER_ROLE])],
+      );
+      const asks = async (userId: string) => {
+        await admin.query("select set_config('app.user_id', $1, true)", [userId]);
+        const { rows } = await admin.query<{ required: boolean }>(
+          "select iam.second_factor_required() as required",
+        );
+        return rows[0].required;
+      };
+      // OTHER carries that role; PERSON does not.
+      expect(await asks(OTHER)).toBe(true);
+      expect(await asks(PERSON)).toBe(false);
+    } finally {
+      await admin.query("rollback");
+    }
+  });
+
+  it("leaves the configuration as it was", async () => {
+    const { rows } = await admin.query(
+      `select count(*)::int as n from adm.rule r join adm.rule_key k on k.id = r.rule_key_id
+        where k.key = 'iam.two-factor-roles'`,
+    );
+    expect(rows[0].n).toBe(1);
+  });
+});

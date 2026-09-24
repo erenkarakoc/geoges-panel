@@ -90,3 +90,31 @@ describe("resolveSignInPageRedirect", () => {
     expect(resolveSignInPageRedirect(twoFactorCleared, null)).toBeNull();
   });
 });
+
+describe("what the account owes", () => {
+  const noAccount = { active: false, secondFactorAsked: false };
+  const asksForFactor = { active: true, secondFactorAsked: true };
+
+  it("shows no page to a provider account with no panel account", () => {
+    // Disabled, past its leaving date, or never made: the database has refused its data since
+    // TASK-0102 and the page follows (REQ-IAM-006, REQ-IAM-007).
+    expect(resolveProtectedPageRedirect(twoFactorCleared, alive, noAccount)).toBe(signInRoute);
+  });
+
+  it("shows the sign-in form rather than bouncing such a visitor", () => {
+    expect(resolveSignInPageRedirect(twoFactorCleared, alive, noAccount)).toBeNull();
+  });
+
+  it("sends somebody who owes a second factor to set one up", () => {
+    // No factor yet — the provider says aal1 is all this account can reach — and the panel is
+    // asking for one, either after a reset or because a role requires it (REQ-IAM-003).
+    expect(resolveProtectedPageRedirect(withoutTwoFactor, alive, asksForFactor)).toBe(
+      twoFactorRoute,
+    );
+    expect(resolveSignInPageRedirect(withoutTwoFactor, alive, asksForFactor)).toBe(twoFactorRoute);
+  });
+
+  it("stops asking once a factor exists", () => {
+    expect(resolveProtectedPageRedirect(twoFactorCleared, alive, asksForFactor)).toBeNull();
+  });
+});

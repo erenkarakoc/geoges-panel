@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { readAuthSession, readPanelSession, resolveProtectedPageRedirect } from "@/modules/iam";
+import {
+  readAccountFacts,
+  readAuthSession,
+  readPanelSession,
+  resolveProtectedPageRedirect,
+} from "@/modules/iam";
 import { RoleOnboarding } from "@/modules/iam/ui/role-onboarding";
 
 export const metadata: Metadata = { title: "Yeni rolünüz" };
@@ -11,6 +16,7 @@ export default async function OnboardingPage() {
   const redirectTo = resolveProtectedPageRedirect(
     await readAuthSession(),
     await readPanelSession(),
+    await readAccountFacts(),
   );
 
   if (redirectTo) {
