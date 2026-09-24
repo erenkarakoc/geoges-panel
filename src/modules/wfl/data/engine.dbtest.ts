@@ -18,6 +18,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { connectAdmin } from "../../../../scripts/db-admin.mjs";
 import { releaseTestPeople } from "../../../../scripts/db-test-people.mjs";
 import { runEventTriggers, runInstance } from "@/modules/wfl/application/engine";
+import { parseDefinition } from "@/modules/wfl/domain/definition";
 import { publishVersion, recordDryRun, saveDraft } from "@/modules/wfl/data/flow-store";
 import {
   ConditionTimeout,
@@ -31,6 +32,7 @@ import {
 } from "@/modules/wfl/data/instance-store";
 import {
   clockSlot,
+  dryRun,
   escalateWaitingApproval,
   dryRunVersion,
   runClockTriggers,
@@ -161,35 +163,25 @@ async function cleanUp() {
       [taskIds],
     );
   }
-  const keys = [
-    BIG,
-    SMALL,
-    UNBUILT,
-    APPROVING,
-    TASKING,
-    DRY,
-    SLEEPY,
-    NIGHTLY,
-    PATIENT,
-    REPEATING,
-    BIG_CHANGE,
-    HOLDING,
-  ];
+  // Every flow this suite makes, by its shared prefix: a list written by hand forgets the flow
+  // somebody adds next, and a run that stays behind makes the event-id guard hand the old run
+  // back instead of starting the new one (2026-09-25).
+  const keyLike = "zz-t0147-%";
   await admin.query(
-    "delete from wfl.instance where flow_id in (select id from wfl.flow where key = any($1))",
-    [keys],
+    "delete from wfl.instance where flow_id in (select id from wfl.flow where key like $1)",
+    [keyLike],
   );
   await admin.query(
     `delete from wfl.dry_run where flow_version_id in (
        select v.id from wfl.flow_version v join wfl.flow f on f.id = v.flow_id
-        where f.key = any($1))`,
-    [keys],
+        where f.key like $1)`,
+    [keyLike],
   );
   await admin.query(
-    "delete from wfl.flow_version where flow_id in (select id from wfl.flow where key = any($1))",
-    [keys],
+    "delete from wfl.flow_version where flow_id in (select id from wfl.flow where key like $1)",
+    [keyLike],
   );
-  await admin.query("delete from wfl.flow where key = any($1)", [keys]);
+  await admin.query("delete from wfl.flow where key like $1", [keyLike]);
   await admin.query("delete from core.event_subscription where event_code like 'zzw_%'");
   await admin.query(
     "delete from core.outbox_delivery where outbox_id in (select id from core.outbox where event_code like 'zzw_%')",
@@ -1304,5 +1296,187 @@ describe("the lock step (REQ-WFL-029, REQ-WFL-030, D-084)", () => {
       outcome: "would hold handover.complete",
     });
     expect(after.rows[0].n).toBe(before.rows[0].n);
+  });
+});
+
+describe("parallel paths and the join (REQ-WFL-006, REQ-WFL-011)", () => {
+  /** Two paths at once: one only notifies, the other waits on a task. */
+  const together = {
+    trigger: { type: "event", event: `${EVENT}_split` },
+    start: "p1",
+    steps: [
+      { id: "p1", type: "parallel", paths: ["pa", "pb"], next: "pj" },
+      {
+        id: "pa",
+        type: "notify",
+        owner: { type: "user", userId: APPROVER },
+        subject: "Sol dal",
+      },
+      {
+        id: "pb",
+        type: "task",
+        owner: { type: "user", userId: APPROVER },
+        title: "Sağ dalın işi",
+      },
+      { id: "pj", type: "join", next: "pe" },
+      { id: "pe", type: "end" },
+    ],
+  };
+
+  /** A path that cannot find its owner fails, and the run it belongs to must fail with it. */
+  const broken = {
+    trigger: { type: "event", event: `${EVENT}_broken` },
+    start: "b1",
+    steps: [
+      { id: "b1", type: "parallel", paths: ["ba", "bb"], next: "bj" },
+      { id: "ba", type: "notify", owner: { type: "user", userId: APPROVER }, subject: "İyi dal" },
+      {
+        id: "bb",
+        type: "notify",
+        owner: { type: "relation", relation: "nobody" },
+        subject: "Kötü",
+      },
+      { id: "bj", type: "join", next: "be" },
+      { id: "be", type: "end" },
+    ],
+  };
+
+  const SPLIT = "zz-t0147-split";
+  const BROKEN = "zz-t0147-broken";
+  let parentId: string;
+
+  /** One path notifies and the other opens a task, so this run needs both actions. */
+  const runtime = {
+    ...relations,
+    run: async (db: SystemDb, code: string, input: unknown) => {
+      if (code === "notification.send") {
+        const n = input as {
+          userId: string;
+          type: string;
+          subject: string;
+          linkPath: string;
+          sourceKey: string;
+        };
+        await sql`select tsk.notify(${n.userId}::uuid, ${n.type}, ${n.subject}, ${n.linkPath},
+                                    ${n.sourceKey})`.execute(db);
+        return;
+      }
+      if (code === "task.open") {
+        const t = input as {
+          stepRunId: string;
+          title: string;
+          assigneeUserId: string;
+          priority: string;
+        };
+        await sql`select tsk.open_flow_task(${t.stepRunId}::uuid, ${t.title},
+                                            ${t.assigneeUserId}::uuid, ${t.priority})`.execute(db);
+        return;
+      }
+      throw new Error(`unexpected action ${code}`);
+    },
+  };
+
+  const branchesOf = async (instanceId: string) =>
+    (
+      await admin.query(
+        `select branch_label, status, start_step_id, depth from wfl.instance
+          where parent_instance_id = $1 order by branch_label`,
+        [instanceId],
+      )
+    ).rows;
+
+  it("opens a run for every path and waits inside the step until they are done", async () => {
+    await publish(SPLIT, together);
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_split`,
+        id: id(680),
+        record: { schema: "zzw", table: "record", id: id(780) },
+        payload: {},
+      },
+      runtime,
+    );
+    parentId = started[0];
+
+    const branches = await branchesOf(parentId);
+    expect(branches.map((b) => b.branch_label)).toEqual(["pa", "pb"]);
+    expect(branches.map((b) => b.start_step_id)).toEqual(["pa", "pb"]);
+    expect(branches.map((b) => b.depth)).toEqual([1, 1]);
+    // The notifying path is finished; the one waiting on a task is not, and neither is the parent.
+    expect(branches.map((b) => b.status)).toEqual(["done", "running"]);
+    expect((await readInstance(as(DESIGNER), parentId))?.status).toBe("running");
+
+    const log = await readRunLog(as(DESIGNER), parentId);
+    expect(log.filter((line) => line.kind === "branch_opened")).toHaveLength(2);
+    expect(log.at(-1)?.detail).toMatchObject({ waitingFor: "branches", opened: 2 });
+  });
+
+  it("carries the parent on when the last path finishes", async () => {
+    const { rows } = await admin.query(
+      `select t.id from tsk.task t join wfl.step_state s on s.id = t.source_step_run_id
+         join wfl.instance i on i.id = s.instance_id where i.parent_instance_id = $1`,
+      [parentId],
+    );
+    expect(rows).toHaveLength(1);
+    await runAsUser(as(APPROVER), (db) =>
+      sql`select tsk.complete_task(${rows[0].id}::uuid)`.execute(db),
+    );
+    const { rows: done } = await admin.query(
+      "select payload from core.outbox where event_code = 'task.completed' and record_id = $1",
+      [rows[0].id],
+    );
+    await resumeFromTask(worker, done[0].payload.step_run_id, runtime);
+
+    expect((await branchesOf(parentId)).map((b) => b.status)).toEqual(["done", "done"]);
+    expect((await readInstance(as(DESIGNER), parentId))?.status).toBe("done");
+
+    const log = await readRunLog(as(DESIGNER), parentId);
+    // The parent walked on through the join to the end, once, after the branches came back.
+    expect(log.filter((line) => line.kind === "entered").map((line) => line.stepId)).toEqual([
+      "p1",
+      "pj",
+      "pe",
+    ]);
+    expect(log.find((line) => line.stepId === "p1" && line.kind === "left")?.detail).toMatchObject({
+      outcome: "joined",
+    });
+  });
+
+  it("stops the parent with the branch's own reason when a path fails", async () => {
+    await publish(BROKEN, broken);
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_broken`,
+        id: id(681),
+        record: { schema: "zzw", table: "record", id: id(781) },
+        payload: {},
+      },
+      runtime,
+    );
+    const instance = await readInstance(as(DESIGNER), started[0]);
+    expect(instance?.status).toBe("failed");
+    expect(instance?.failure).toContain("sahibi bulunamadı");
+    // The path that worked still ran: a branch is a run of its own and keeps what it did.
+    expect((await branchesOf(started[0])).map((b) => b.status)).toEqual(["done", "failed"]);
+  });
+
+  it("shows both paths in a dry run and opens no run at all", async () => {
+    const before = (
+      await admin.query("select count(*)::int as n from wfl.instance where flow_key = $1", [SPLIT])
+    ).rows[0].n;
+    const report = await dryRun(worker, parseDefinition(together), {}, runtime);
+    // The join and the end are not shown: the right-hand path waits on a task, and nothing past
+    // it happens until somebody answers (REQ-WFL-025).
+    expect(report.steps.map((step) => step.stepId)).toEqual(["p1", "pa", "pb"]);
+    expect(report.ends).toBe("waiting");
+    expect(
+      (
+        await admin.query("select count(*)::int as n from wfl.instance where flow_key = $1", [
+          SPLIT,
+        ])
+      ).rows[0].n,
+    ).toBe(before);
   });
 });

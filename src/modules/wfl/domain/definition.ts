@@ -18,16 +18,7 @@ import { z } from "zod";
  * with its three answers — are kept apart from the rest, because a union that can be narrowed
  * needs its halves written out rather than filtered.
  */
-const PLAIN_STEP_TYPES = [
-  "start",
-  "escalate",
-  "parallel",
-  "join",
-  "subflow",
-  "end",
-  "record",
-  "for_each",
-] as const;
+const PLAIN_STEP_TYPES = ["start", "escalate", "subflow", "end", "record", "for_each"] as const;
 
 export const STEP_TYPES = [
   "condition",
@@ -36,6 +27,8 @@ export const STEP_TYPES = [
   "wait",
   "notify",
   "lock",
+  "parallel",
+  "join",
   ...PLAIN_STEP_TYPES,
 ] as const;
 
@@ -50,6 +43,8 @@ export const RUNNABLE_STEP_TYPES: readonly StepType[] = [
   "wait",
   "notify",
   "lock",
+  "parallel",
+  "join",
   "end",
 ];
 
@@ -153,6 +148,17 @@ const lockStep = baseStep.extend({
   reason: z.string().trim().min(3).max(300),
 });
 
+const parallelStep = baseStep.extend({
+  type: z.literal("parallel"),
+  /** The paths that run at the same time; each is a branch of its own (REQ-WFL-006). */
+  paths: z.array(stepId).min(2).max(10),
+  /** Where the flow carries on once every path has finished; usually a `join` step. */
+  next: stepId.nullish(),
+});
+
+/** Where the paths come together again; it carries nothing of its own (REQ-WFL-006). */
+const joinStep = baseStep.extend({ type: z.literal("join") });
+
 const plainStep = baseStep.extend({ type: z.enum(PLAIN_STEP_TYPES) });
 
 export const stepSchema = z.discriminatedUnion("type", [
@@ -160,6 +166,8 @@ export const stepSchema = z.discriminatedUnion("type", [
   approvalStep,
   taskStep,
   lockStep,
+  parallelStep,
+  joinStep,
   waitStep,
   notifyStep,
   plainStep,
@@ -227,6 +235,7 @@ export const definitionSchema = z
         step.type === "approval" ? step.outcomes.approve : null,
         step.type === "approval" ? step.outcomes.reject : null,
         step.type === "approval" ? step.outcomes.return : null,
+        ...(step.type === "parallel" ? step.paths : []),
       ]) {
         if (target && !ids.has(target)) {
           ctx.addIssue({ code: "custom", message: `${step.id} olmayan adıma gidiyor: ${target}` });

@@ -12,10 +12,13 @@ import {
   readDecision,
   readInstanceFlow,
   readRunnable,
+  branchParent,
+  branchState,
   escalateApproval,
   readStepRun,
   holdLock,
   requestApproval,
+  startBranch,
   scheduleEscalation,
   scheduleWake,
   startInstance,
@@ -113,6 +116,8 @@ type StepSink = {
   approval(stateId: string, step: FlowStep, ownerUserId: string): Promise<string | null>;
   /** Holds a transition shut on the record the flow is about (REQ-WFL-029). */
   lock(step: FlowStep, transition: string, reason: string): Promise<void>;
+  /** Opens one run per path and answers with their ids; a dry run opens none (REQ-WFL-006). */
+  branch(stateId: string, paths: readonly string[]): Promise<string[]>;
   /** The approval's patience: after this, it moves to somebody else. */
   escalate(approvalId: string | null, at: Date, to: OwnerRule): Promise<void>;
   action(code: string, input: unknown): Promise<void>;
@@ -126,6 +131,8 @@ type Runnable = {
   definition: FlowDefinition;
   /** The step the instance is sitting in, when it is waiting inside one. */
   openStepId: string | null;
+  /** Where a branch begins; null for a run of its own (REQ-WFL-006). */
+  startStepId: string | null;
 };
 
 /** The instance as the engine sees it, or null when it is not running any more. */
@@ -137,6 +144,7 @@ async function runnable(db: SystemDb, instanceId: string): Promise<Runnable | nu
     context: row.context,
     definition: parseDefinition(row.definition),
     openStepId: row.openStepId,
+    startStepId: row.startStepId,
   };
 }
 
@@ -175,6 +183,21 @@ function writingSink(db: SystemDb, instanceId: string, relations: FlowRuntime): 
         instanceId,
         stepId: step.id,
       });
+    },
+    async branch(stateId, paths) {
+      // Every branch is opened before any of them runs: a branch that finished while the others
+      // were still being written would look like "all of them are done" to the join.
+      const opened: string[] = [];
+      for (const path of paths) {
+        const childId = await startBranch(db, {
+          parentInstanceId: instanceId,
+          parentStepStateId: stateId,
+          startStepId: path,
+          label: path,
+        });
+        if (childId) opened.push(childId);
+      }
+      return opened;
     },
     async action(code, input) {
       if (!relations.run) throw new Error(`no capability catalog is wired for ${code}`);
@@ -274,6 +297,49 @@ async function walk(
         transition: step.transition,
         reason: step.reason,
       });
+      stepId = step.next ?? null;
+      continue;
+    }
+
+    if (step.type === "parallel") {
+      // A dry run has no runs to open, so it walks the paths itself: the designer is shown what
+      // each branch would do, in the order they are written (REQ-WFL-025).
+      if (!instanceId) {
+        await sink.leave(stateId, "done", "branches", { paths: step.paths });
+        let waits = false;
+        for (const path of step.paths) {
+          const branch = await walk(db, definition, path, sink, context, relations);
+          if (branch.state === "ended" && branch.status === "failed") return branch;
+          if (branch.state === "waiting") waits = true;
+        }
+        // A path that waits on somebody holds the whole step: the report stops here rather than
+        // showing a join that would not happen until that person answered.
+        if (waits) {
+          await sink.wait(step.id, { waitingFor: "branches", opened: step.paths.length });
+          return { state: "waiting", stepId: step.id };
+        }
+        stepId = step.next ?? null;
+        continue;
+      }
+
+      const opened = await sink.branch(stateId, step.paths);
+      if (opened.length === 0) {
+        // Nothing could be opened — the run is no longer running, or the depth limit was hit.
+        const reason = `paralel adım hiçbir dal açamadı: ${step.id}`;
+        await sink.leave(stateId, "failed", "no_branch");
+        await sink.end("failed", reason, step.id);
+        return { state: "ended", status: "failed", reason };
+      }
+      // The parent sits in this step until the last branch ends; the branches run on their own.
+      await sink.wait(step.id, { waitingFor: "branches", opened: opened.length });
+      for (const childId of opened) await runBranch(db, childId, relations);
+      return { state: "waiting", stepId: step.id };
+    }
+
+    if (step.type === "join") {
+      // The paths are already back together: the parent only reaches a join after its branches
+      // have ended (REQ-WFL-006). It carries nothing of its own.
+      await sink.leave(stateId, "done", "joined");
       stepId = step.next ?? null;
       continue;
     }
@@ -395,6 +461,105 @@ async function walk(
   }
 }
 
+/**
+ * Runs one branch as far as it goes, and joins its parent when it was the last one (REQ-WFL-006).
+ * A branch is an ordinary run: it may wait on an approval, a task or a timer, and then it is the
+ * answer to that which brings it back here.
+ */
+async function runBranch(db: SystemDb, childId: string, relations: FlowRuntime): Promise<void> {
+  const child = await runnable(db, childId);
+  if (!child) return;
+  const result = await walk(
+    db,
+    child.definition,
+    child.startStepId ?? child.definition.start,
+    writingSink(db, childId, relations),
+    child.context,
+    relations,
+    childId,
+  );
+  if (result.state === "ended") await joinParent(db, childId, relations);
+}
+
+/**
+ * Brings a parent back to life once its last branch has ended (REQ-WFL-006).
+ *
+ * A branch that failed fails the parent with the branch's own reason: a process that quietly
+ * carried on without half its work is worse than one that stops and says what stopped it. The
+ * parent may itself be a branch, so the same question is asked one level up.
+ */
+async function joinParent(db: SystemDb, childId: string, relations: FlowRuntime): Promise<void> {
+  const parent = await branchParent(db, childId);
+  if (!parent) return;
+  const state = await branchState(db, parent.parentStepStateId);
+  if (state.running > 0) return;
+
+  const run = await runnable(db, parent.parentInstanceId);
+  // The parent is only waiting in the step that opened the branches; anything else means somebody
+  // has already moved it on, and a repeated delivery must not move it twice.
+  if (!run || !run.openStepId) return;
+  const step = stepOf(run.definition, run.openStepId);
+  if (step?.type !== "parallel") return;
+
+  if (state.failed > 0) {
+    const reason = state.firstFailure ?? `bir dal hata ile durdu: ${step.id}`;
+    await leaveStep(
+      db,
+      { stateId: parent.parentStepStateId, status: "failed", outcome: "branch_failed" },
+      { branches: state.opened, failed: state.failed },
+    );
+    await endInstance(db, {
+      instanceId: parent.parentInstanceId,
+      status: "failed",
+      failure: reason,
+      stepId: step.id,
+    });
+    await joinParent(db, parent.parentInstanceId, relations);
+    return;
+  }
+
+  await leaveStep(
+    db,
+    { stateId: parent.parentStepStateId, status: "done", outcome: "joined" },
+    { branches: state.opened },
+  );
+  const result = await walk(
+    db,
+    run.definition,
+    step.next ?? null,
+    writingSink(db, parent.parentInstanceId, relations),
+    run.context,
+    relations,
+    parent.parentInstanceId,
+  );
+  if (result.state === "ended") await joinParent(db, parent.parentInstanceId, relations);
+}
+
+/**
+ * Runs, and tells the parent when this was a branch that just ended (REQ-WFL-006). Every door a
+ * run can end through — the first walk, an approval, a task, a timer — comes through here.
+ */
+async function walkAndJoin(
+  db: SystemDb,
+  instanceId: string,
+  definition: FlowDefinition,
+  from: string | null,
+  context: Record<string, unknown>,
+  relations: FlowRuntime,
+): Promise<RunResult> {
+  const result = await walk(
+    db,
+    definition,
+    from,
+    writingSink(db, instanceId, relations),
+    context,
+    relations,
+    instanceId,
+  );
+  if (result.state === "ended") await joinParent(db, instanceId, relations);
+  return result;
+}
+
 /** Runs the instance as far as it can go. */
 export async function runInstance(
   db: SystemDb,
@@ -407,14 +572,13 @@ export async function runInstance(
   // instance again — which a repeated delivery does — must change nothing, and re-entering the
   // step it is already in is exactly what a flow must never do.
   if (instance.openStepId) return { state: "waiting", stepId: instance.openStepId };
-  return walk(
+  return walkAndJoin(
     db,
+    instanceId,
     instance.definition,
-    instance.definition.start,
-    writingSink(db, instanceId, relations),
+    instance.startStepId ?? instance.definition.start,
     instance.context,
     relations,
-    instanceId,
   );
 }
 
@@ -489,14 +653,13 @@ export async function resumeFromApproval(
 
   const step = stepOf(instance.definition, instance.openStepId);
   const next = step ? afterDecision(step, decided.decision) : null;
-  return walk(
+  return walkAndJoin(
     db,
+    decided.instanceId,
     instance.definition,
     next,
-    writingSink(db, decided.instanceId, relations),
     instance.context,
     relations,
-    decided.instanceId,
   );
 }
 
@@ -522,14 +685,13 @@ export async function resumeFromTask(
   if (!left) return null;
 
   const step = stepOf(instance.definition, open.stepId);
-  return walk(
+  return walkAndJoin(
     db,
+    open.instanceId,
     instance.definition,
     step?.next ?? null,
-    writingSink(db, open.instanceId, relations),
     instance.context,
     relations,
-    open.instanceId,
   );
 }
 
@@ -597,6 +759,10 @@ export async function dryRun(
     async approval() {
       // Nothing: a dry run never puts anything in front of anybody.
       return null;
+    },
+    async branch() {
+      // A dry run opens no runs; the loop walks each path itself, so the report shows them.
+      return [];
     },
     async lock(step, transition) {
       steps.push({ stepId: step.id, type: step.type, outcome: `would hold ${transition}` });
@@ -696,14 +862,13 @@ export async function resumeFromWait(
   if (!left) return null;
 
   const step = stepOf(instance.definition, open.stepId);
-  return walk(
+  return walkAndJoin(
     db,
+    open.instanceId,
     instance.definition,
     step?.next ?? null,
-    writingSink(db, open.instanceId, relations),
     instance.context,
     relations,
-    open.instanceId,
   );
 }
 

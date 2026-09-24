@@ -182,6 +182,8 @@ export type RunnableRow = {
   definition: unknown;
   /** The step the instance is sitting in, when it is waiting inside one. */
   openStepId: string | null;
+  /** Where a branch begins; null for a run of its own, which begins at the definition's start. */
+  startStepId: string | null;
 };
 
 /** What the engine needs to take the next step, read as the worker. */
@@ -192,7 +194,8 @@ export async function readRunnable(db: SystemDb, instanceId: string): Promise<Ru
     context: Record<string, unknown>;
     definition: unknown;
     open_step_id: string | null;
-  }>`select i.id, i.status, i.context, v.definition,
+    start_step_id: string | null;
+  }>`select i.id, i.status, i.context, v.definition, i.start_step_id,
             (select s.step_id from wfl.step_state s
               where s.instance_id = i.id and s.status = 'running'
               order by s.entered_at desc limit 1) as open_step_id
@@ -207,6 +210,7 @@ export async function readRunnable(db: SystemDb, instanceId: string): Promise<Ru
         context: row.context ?? {},
         definition: row.definition,
         openStepId: row.open_step_id,
+        startStepId: row.start_step_id,
       }
     : null;
 }
@@ -571,4 +575,69 @@ export function locksOn(
       heldSince: row.held_since,
     }));
   });
+}
+
+/**
+ * Opens one branch of a run (REQ-WFL-006): the same flow and record, starting at its own step.
+ * Null when the parent is no longer running; the database refuses a fourth level.
+ */
+export async function startBranch(
+  db: SystemDb,
+  branch: {
+    parentInstanceId: string;
+    parentStepStateId: string;
+    startStepId: string;
+    label: string;
+    context?: Record<string, unknown>;
+  },
+): Promise<string | null> {
+  const { rows } = await sql<{ id: string | null }>`
+    select wfl.start_branch(${branch.parentInstanceId}::uuid, ${branch.parentStepStateId}::uuid,
+                            ${branch.startStepId}, ${branch.label},
+                            ${JSON.stringify(branch.context ?? {})}::jsonb) as id`.execute(db);
+  return rows[0]?.id ?? null;
+}
+
+export type BranchState = {
+  opened: number;
+  running: number;
+  failed: number;
+  firstFailure: string | null;
+};
+
+/** How the branches of one step stand, for the parent that is waiting in it. */
+export async function branchState(db: SystemDb, parentStepStateId: string): Promise<BranchState> {
+  const { rows } = await sql<{
+    opened: number;
+    running: number;
+    failed: number;
+    first_failure: string | null;
+  }>`select * from wfl.branch_state(${parentStepStateId}::uuid)`.execute(db);
+  const row = rows[0];
+  return {
+    opened: Number(row?.opened ?? 0),
+    running: Number(row?.running ?? 0),
+    failed: Number(row?.failed ?? 0),
+    firstFailure: row?.first_failure ?? null,
+  };
+}
+
+/** The run this one branched from, or null when it is a run of its own. */
+export async function branchParent(
+  db: SystemDb,
+  instanceId: string,
+): Promise<{ parentInstanceId: string; parentStepStateId: string; label: string | null } | null> {
+  const { rows } = await sql<{
+    parent_instance_id: string;
+    parent_step_state_id: string;
+    branch_label: string | null;
+  }>`select * from wfl.branch_parent(${instanceId}::uuid)`.execute(db);
+  const row = rows[0];
+  return row
+    ? {
+        parentInstanceId: row.parent_instance_id,
+        parentStepStateId: row.parent_step_state_id,
+        label: row.branch_label,
+      }
+    : null;
 }
