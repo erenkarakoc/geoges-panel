@@ -32,8 +32,10 @@ export {
 } from "@/modules/wfl/data/instance-store";
 
 export {
+  clockSlot,
   dryRun,
   dryRunVersion,
+  runClockTriggers,
   resumeFromApproval,
   resumeFromWait,
   runEventTriggers,
@@ -45,6 +47,7 @@ export {
 } from "@/modules/wfl/application/engine";
 export { flowEngine } from "@/modules/wfl/application/engine-subscriber";
 export { flowWakeJob } from "@/modules/wfl/application/wake-job";
+export { flowClockJob } from "@/modules/wfl/application/clock-job";
 export {
   parseDefinition,
   RUNNABLE_STEP_TYPES,

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-25 — The clock starts a flow, once (TASK-0117, step 8)
+
+- Migration 0051 gives a clock-driven run the slot it belongs to — "this flow, today" or "this flow, at 09:35" — unique per flow. It is the clock's answer to the question an event id answers for an event: the round may run twice, a worker may pick the same minute up after a restart, and neither opens a second run.
+- A flow says when it wants to run in the panel's own words: every day at a time, or every N minutes. The alternative was a cron dialect, which the panel would then have to own, document and defend for ever — for a designer who thinks in "every morning at half past seven".
+- The round itself is a scheduled job every five minutes, and that is also why a flow may not ask for a shorter period: a trigger the round cannot see is a trigger that does not happen, and saying so in the schema is better than letting somebody write `everyMinutes: 1` and wonder.
+- A flow that has been turned off is simply not asked any more; the test disables one and runs the round for the next day to say so.
+
 ## 2026-09-25 — Telling somebody, and waiting for a time (TASK-0117, step 7)
 
 - Two more of the fourteen steps. A flow can now tell somebody something, and it can wait.

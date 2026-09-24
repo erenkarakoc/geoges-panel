@@ -27,7 +27,9 @@ import {
   startInstanceByHand,
 } from "@/modules/wfl/data/instance-store";
 import {
+  clockSlot,
   dryRunVersion,
+  runClockTriggers,
   resumeFromApproval,
   resumeFromTask,
   resumeFromWait,
@@ -48,6 +50,7 @@ const APPROVING = "zz-t0147-approving";
 const TASKING = "zz-t0147-tasking";
 const DRY = "zz-t0147-dry";
 const SLEEPY = "zz-t0147-sleepy";
+const NIGHTLY = "zz-t0147-nightly";
 const EVENT = "zzw_record.submitted";
 
 let admin: pg.Client;
@@ -143,7 +146,7 @@ async function cleanUp() {
       [taskIds],
     );
   }
-  const keys = [BIG, SMALL, UNBUILT, APPROVING, TASKING, DRY, SLEEPY];
+  const keys = [BIG, SMALL, UNBUILT, APPROVING, TASKING, DRY, SLEEPY, NIGHTLY];
   await admin.query(
     "delete from wfl.instance where flow_id in (select id from wfl.flow where key = any($1))",
     [keys],
@@ -842,5 +845,60 @@ describe("waiting for a time, and telling somebody (REQ-WFL-005)", () => {
     expect(report.steps.map((step) => step.stepId)).toEqual(["n1", "w1"]);
     expect(report.steps.at(-1)?.outcome).toMatch(/^waiting until /);
     expect(after.rows[0].n).toBe(before.rows[0].n);
+  });
+});
+
+describe("the flows the clock starts (REQ-WFL-007)", () => {
+  const nightly = {
+    trigger: { type: "clock", dailyAt: "00:05" },
+    start: "c1",
+    steps: [{ id: "c1", type: "end" }],
+  };
+
+  it("names one slot a day for a daily flow, and one per period for a repeating one", () => {
+    const noon = new Date("2026-09-25T09:00:00Z"); // 12:00 in Istanbul
+    expect(clockSlot({ dailyAt: "07:30", everyMinutes: null }, noon)).toBe("2026-09-25@07:30");
+    // Before its hour, the day has no slot yet.
+    expect(clockSlot({ dailyAt: "23:30", everyMinutes: null }, noon)).toBeNull();
+    expect(clockSlot({ dailyAt: null, everyMinutes: 30 }, noon)).toBe("2026-09-25#0720");
+    expect(clockSlot({ dailyAt: null, everyMinutes: null }, noon)).toBeNull();
+  });
+
+  it("starts the flow whose moment has come, once for that slot", async () => {
+    await publish(NIGHTLY, nightly);
+    const now = new Date();
+    const started = await runClockTriggers(worker, now, relations);
+    expect(started).toHaveLength(1);
+
+    const { rows } = await admin.query(
+      `select i.trigger_kind, i.clock_key, i.status from wfl.instance i
+         join wfl.flow f on f.id = i.flow_id where f.key = $1`,
+      [NIGHTLY],
+    );
+    expect(rows).toHaveLength(1);
+    expect(rows[0].trigger_kind).toBe("clock");
+    expect(rows[0].status).toBe("done");
+    expect(rows[0].clock_key).toContain("@00:05");
+  });
+
+  it("starts nothing when the round runs again in the same slot", async () => {
+    await runClockTriggers(worker, new Date(), relations);
+    const { rows } = await admin.query(
+      `select count(*)::int as n from wfl.instance i join wfl.flow f on f.id = i.flow_id
+        where f.key = $1`,
+      [NIGHTLY],
+    );
+    expect(rows[0].n).toBe(1);
+  });
+
+  it("stops driving a flow that has been turned off", async () => {
+    const { rows } = await admin.query("select id from wfl.flow where key = $1", [NIGHTLY]);
+    await admin.query(
+      "update wfl.flow set disabled_at = now(), disabled_by_user_id = $2 where id = $1",
+      [rows[0].id, DESIGNER],
+    );
+    // A different day would be a different slot; the flow is simply not asked any more.
+    const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    expect(await runClockTriggers(worker, tomorrow, relations)).toEqual([]);
   });
 });

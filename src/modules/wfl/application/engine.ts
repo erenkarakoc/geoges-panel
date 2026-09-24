@@ -1,7 +1,9 @@
+import { istanbulDay, istanbulMinutes, minutesOf } from "@/platform/time/istanbul";
 import { readDefinitionOf, recordDryRunAsSystem } from "@/modules/wfl/data/flow-store";
 import {
   endInstance,
   enterStep,
+  clockFlows,
   flowsListeningTo,
   leaveStep,
   noteWaiting,
@@ -562,4 +564,55 @@ export async function resumeFromWait(
     instance.context,
     relations,
   );
+}
+
+/**
+ * The slot a clock-driven flow is being started for (REQ-WFL-007).
+ *
+ * "Every day at 07:30" has one slot a day; "every thirty minutes" has one per half hour, counted
+ * from midnight in Istanbul, which is the panel's day (D-215). The slot is what keeps a second
+ * run from opening when the scheduler runs the round twice or a worker picks the same minute up
+ * after a restart.
+ */
+export function clockSlot(
+  trigger: { dailyAt: string | null; everyMinutes: number | null },
+  now: Date,
+): string | null {
+  const day = istanbulDay(now);
+  const minutes = istanbulMinutes(now);
+  if (trigger.dailyAt) {
+    return minutes >= minutesOf(trigger.dailyAt) ? `${day}@${trigger.dailyAt}` : null;
+  }
+  if (trigger.everyMinutes) {
+    const slot = Math.floor(minutes / trigger.everyMinutes) * trigger.everyMinutes;
+    return `${day}#${String(slot).padStart(4, "0")}`;
+  }
+  return null;
+}
+
+/**
+ * Starts the clock-driven flows whose moment has come and runs each as far as it goes. Called by
+ * the engine's own scheduled round; a round that runs twice starts nothing twice.
+ */
+export async function runClockTriggers(
+  db: SystemDb,
+  now: Date,
+  relations: FlowRuntime,
+): Promise<string[]> {
+  const started: string[] = [];
+  for (const flow of await clockFlows(db)) {
+    const slot = clockSlot(flow, now);
+    if (!slot) continue;
+    const instanceId = await startInstance(db, {
+      flowKey: flow.key,
+      kind: "clock",
+      clockKey: slot,
+      context: { clock: { slot } },
+    });
+    if (!instanceId) continue;
+    const result = await runInstance(db, instanceId, relations);
+    // Only a run this round opened is reported; one the slot already had is not started again.
+    if (result) started.push(instanceId);
+  }
+  return started;
 }

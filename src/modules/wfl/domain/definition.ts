@@ -134,7 +134,17 @@ export type FlowStep = z.infer<typeof stepSchema>;
 
 export const triggerSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("event"), event: z.string().regex(/^[a-z_]+\.[a-z_]+$/) }),
-  z.object({ type: z.literal("clock"), cron: z.string().min(1).max(120) }),
+  // The platform's own recurrence words (`platform/jobs/types`), not a cron dialect: the panel
+  // has one way of saying "every day at" and "every N minutes", and a flow uses that one. Which
+  // of the two it is saying is checked below, where the whole definition is.
+  z.object({
+    type: z.literal("clock"),
+    dailyAt: z
+      .string()
+      .regex(/^\d{2}:\d{2}$/, "günlük saat SS:DD biçiminde yazılır")
+      .optional(),
+    everyMinutes: z.number().int().min(5).max(1440).optional(),
+  }),
   z.object({
     type: z.literal("threshold"),
     event: z.string().regex(/^[a-z_]+\.[a-z_]+$/),
@@ -159,6 +169,16 @@ export const definitionSchema = z
         ctx.addIssue({ code: "custom", message: `adım kimliği iki kez: ${step.id}` });
       }
       ids.add(step.id);
+    }
+    if (definition.trigger.type === "clock") {
+      const daily = Boolean(definition.trigger.dailyAt);
+      const every = Boolean(definition.trigger.everyMinutes);
+      if (daily === every) {
+        ctx.addIssue({
+          code: "custom",
+          message: "saat tetikleyicisi ya günlük bir saat ya da bir dakika aralığı ister",
+        });
+      }
     }
     if (!ids.has(definition.start)) {
       ctx.addIssue({ code: "custom", message: `başlangıç adımı yok: ${definition.start}` });

@@ -21,13 +21,15 @@ export type FlowTrigger = {
   context?: unknown;
   /** The event's own id, so the same delivery never starts the same flow twice. */
   eventId?: string;
+  /** The slot a clock-started run belongs to; one run per slot (REQ-WFL-007). */
+  clockKey?: string;
 };
 
 const startSql = (t: FlowTrigger) => sql<{ id: string | null }>`
   select wfl.start_instance(${t.flowKey}, ${t.kind}, ${t.record?.schema ?? null},
                             ${t.record?.table ?? null}, ${t.record?.id ?? null}::uuid,
                             ${JSON.stringify(t.context ?? {})}::jsonb,
-                            ${t.eventId ?? null}::uuid) as id`;
+                            ${t.eventId ?? null}::uuid, ${t.clockKey ?? null}) as id`;
 
 /**
  * Starts the flow's published version for this record, or returns the instance already running.
@@ -207,6 +209,28 @@ export async function readRunnable(db: SystemDb, instanceId: string): Promise<Ru
         openStepId: row.open_step_id,
       }
     : null;
+}
+
+/** Every published flow the clock drives, with what its trigger says. */
+export async function clockFlows(
+  db: SystemDb,
+): Promise<{ key: string; dailyAt: string | null; everyMinutes: number | null }[]> {
+  const { rows } = await sql<{
+    key: string;
+    daily_at: string | null;
+    every_minutes: number | null;
+  }>`select f.key,
+            v.definition -> 'trigger' ->> 'dailyAt' as daily_at,
+            (v.definition -> 'trigger' ->> 'everyMinutes')::int as every_minutes
+       from wfl.flow_version v
+       join wfl.flow f on f.id = v.flow_id
+      where v.status = 'published' and f.disabled_at is null
+        and v.definition -> 'trigger' ->> 'type' = 'clock'`.execute(db);
+  return rows.map((row) => ({
+    key: row.key,
+    dailyAt: row.daily_at,
+    everyMinutes: row.every_minutes === null ? null : Number(row.every_minutes),
+  }));
 }
 
 /**
