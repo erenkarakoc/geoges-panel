@@ -18,7 +18,7 @@ import { z } from "zod";
  * with its three answers — are kept apart from the rest, because a union that can be narrowed
  * needs its halves written out rather than filtered.
  */
-const PLAIN_STEP_TYPES = ["start", "escalate", "subflow", "end", "record", "for_each"] as const;
+const PLAIN_STEP_TYPES = ["start", "escalate", "subflow", "end", "record"] as const;
 
 export const STEP_TYPES = [
   "condition",
@@ -29,6 +29,7 @@ export const STEP_TYPES = [
   "lock",
   "parallel",
   "join",
+  "for_each",
   ...PLAIN_STEP_TYPES,
 ] as const;
 
@@ -45,6 +46,7 @@ export const RUNNABLE_STEP_TYPES: readonly StepType[] = [
   "lock",
   "parallel",
   "join",
+  "for_each",
   "end",
 ];
 
@@ -159,6 +161,19 @@ const parallelStep = baseStep.extend({
 /** Where the paths come together again; it carries nothing of its own (REQ-WFL-006). */
 const joinStep = baseStep.extend({ type: z.literal("join") });
 
+const forEachStep = baseStep.extend({
+  type: z.literal("for_each"),
+  /** The list the owning module publishes, read for the record the flow is about (REQ-WFL-009). */
+  list: z.string().regex(/^[a-z_]+\.[a-z_]+$/, "liste yeteneği modul.liste biçiminde yazılır"),
+  /** The first step of what runs for each item. */
+  body: stepId,
+  /**
+   * How many items it will fan out to. A longer list stops the flow instead of quietly doing part
+   * of the work: a run nobody can see the end of is worse than one that says the list is too long.
+   */
+  limit: z.number().int().min(1).max(50).default(20),
+});
+
 const plainStep = baseStep.extend({ type: z.enum(PLAIN_STEP_TYPES) });
 
 export const stepSchema = z.discriminatedUnion("type", [
@@ -168,6 +183,7 @@ export const stepSchema = z.discriminatedUnion("type", [
   lockStep,
   parallelStep,
   joinStep,
+  forEachStep,
   waitStep,
   notifyStep,
   plainStep,
@@ -225,6 +241,43 @@ export const definitionSchema = z
     if (!ids.has(definition.start)) {
       ctx.addIssue({ code: "custom", message: `başlangıç adımı yok: ${definition.start}` });
     }
+    // A "her biri için" inside another one is refused (REQ-WFL-009): one level is what a person
+    // can picture, and what the engine's branch depth is written for.
+    const byId = new Map(definition.steps.map((step) => [step.id, step]));
+    const targetsOf = (step: FlowStep): (string | null | undefined)[] => [
+      step.next,
+      step.type === "condition" ? step.whenTrue : null,
+      step.type === "condition" ? step.whenFalse : null,
+      step.type === "approval" ? step.outcomes.approve : null,
+      step.type === "approval" ? step.outcomes.reject : null,
+      step.type === "approval" ? step.outcomes.return : null,
+      step.type === "for_each" ? step.body : null,
+      ...(step.type === "parallel" ? step.paths : []),
+    ];
+    for (const step of definition.steps) {
+      if (step.type !== "for_each") continue;
+      const seen = new Set<string>();
+      const ahead = [step.body];
+      while (ahead.length > 0) {
+        const id = ahead.pop();
+        if (!id || seen.has(id)) continue;
+        seen.add(id);
+        const inside = byId.get(id);
+        if (!inside) continue;
+        if (inside.type === "for_each") {
+          ctx.addIssue({
+            code: "custom",
+            message: `bir "her biri için" adımının içine ikincisi konamaz: ${step.id} → ${id}`,
+          });
+          break;
+        }
+        // The step the loop carries on at is outside the body, so it is not walked into.
+        for (const target of targetsOf(inside)) {
+          if (target && target !== step.next) ahead.push(target);
+        }
+      }
+    }
+
     // A step that points nowhere in particular is the end of a path; a step that points at
     // something that does not exist is a definition nobody can run.
     for (const step of definition.steps) {
@@ -236,6 +289,7 @@ export const definitionSchema = z
         step.type === "approval" ? step.outcomes.reject : null,
         step.type === "approval" ? step.outcomes.return : null,
         ...(step.type === "parallel" ? step.paths : []),
+        step.type === "for_each" ? step.body : null,
       ]) {
         if (target && !ids.has(target)) {
           ctx.addIssue({ code: "custom", message: `${step.id} olmayan adıma gidiyor: ${target}` });

@@ -99,7 +99,24 @@ export type CapabilityActions = {
   run: (db: SystemDb, code: string, input: unknown) => Promise<unknown>;
 };
 
-export type FlowRuntime = OwnerRelations & Partial<CapabilityActions>;
+/** One thing a "her biri için" step will run for; the owning module says what they are. */
+export type FlowListItem = { id: string; label?: string; item?: Record<string, unknown> };
+
+/**
+ * The lists the modules publish (REQ-WFL-009, D-096): "this person's open handovers". The engine
+ * knows no module, so it asks by code, for the record the flow is about, and hands the module the
+ * same time limit a looking-back condition has (D-222): a list that cannot be read in time stops
+ * the flow instead of running half the work.
+ */
+export type CapabilityLists = {
+  list: (
+    db: SystemDb,
+    code: string,
+    ask: { record: { schema: string; table: string; id: string } | null; limitMs: number },
+  ) => Promise<FlowListItem[]>;
+};
+
+export type FlowRuntime = OwnerRelations & Partial<CapabilityActions> & Partial<CapabilityLists>;
 
 /** Everything a step does that leaves a mark. The dry run's sink leaves none. */
 type StepSink = {
@@ -118,6 +135,12 @@ type StepSink = {
   lock(step: FlowStep, transition: string, reason: string): Promise<void>;
   /** Opens one run per path and answers with their ids; a dry run opens none (REQ-WFL-006). */
   branch(stateId: string, paths: readonly string[]): Promise<string[]>;
+  /** Opens one run per item of a list, each carrying its item (REQ-WFL-009). */
+  branchItems(
+    stateId: string,
+    bodyStepId: string,
+    items: readonly FlowListItem[],
+  ): Promise<string[]>;
   /** The approval's patience: after this, it moves to somebody else. */
   escalate(approvalId: string | null, at: Date, to: OwnerRule): Promise<void>;
   action(code: string, input: unknown): Promise<void>;
@@ -194,6 +217,21 @@ function writingSink(db: SystemDb, instanceId: string, relations: FlowRuntime): 
           parentStepStateId: stateId,
           startStepId: path,
           label: path,
+        });
+        if (childId) opened.push(childId);
+      }
+      return opened;
+    },
+    async branchItems(stateId, bodyStepId, items) {
+      const opened: string[] = [];
+      for (const one of items) {
+        const childId = await startBranch(db, {
+          parentInstanceId: instanceId,
+          parentStepStateId: stateId,
+          startStepId: bodyStepId,
+          label: (one.label ?? one.id).slice(0, 80),
+          // The branch carries its own item, so every step inside the body reads `item.…`.
+          context: { item: { id: one.id, ...(one.item ?? {}) } },
         });
         if (childId) opened.push(childId);
       }
@@ -332,6 +370,78 @@ async function walk(
       }
       // The parent sits in this step until the last branch ends; the branches run on their own.
       await sink.wait(step.id, { waitingFor: "branches", opened: opened.length });
+      for (const childId of opened) await runBranch(db, childId, relations);
+      return { state: "waiting", stepId: step.id };
+    }
+
+    if (step.type === "for_each") {
+      // The list is the owning module's answer, read for the record the flow is about and under
+      // the same time limit a looking-back condition has (REQ-WFL-009, D-222).
+      if (!relations.list) {
+        const reason = `liste yeteneği bağlı değil: ${step.list}`;
+        await sink.leave(stateId, "failed", "no_list");
+        await sink.end("failed", reason, step.id);
+        return { state: "ended", status: "failed", reason };
+      }
+      const where = instanceId ? await readInstanceFlow(db, instanceId) : null;
+      let items: FlowListItem[];
+      try {
+        items = await relations.list(db, step.list, {
+          record: where?.record ?? null,
+          limitMs: conditionLimitMs,
+        });
+      } catch (error) {
+        const reason = `liste okunamadı (${step.list}): ${(error as Error).message}`;
+        await sink.leave(stateId, "failed", "list_failed", { list: step.list });
+        await sink.end("failed", reason, step.id);
+        return { state: "ended", status: "failed", reason };
+      }
+
+      if (items.length > step.limit) {
+        // Doing part of the work quietly is the one answer a person cannot act on.
+        const reason = `liste adımın sınırından uzun (${items.length} > ${step.limit}): ${step.id}`;
+        await sink.leave(stateId, "failed", "too_many", { list: step.list, items: items.length });
+        await sink.end("failed", reason, step.id);
+        return { state: "ended", status: "failed", reason };
+      }
+
+      if (items.length === 0) {
+        // An empty list is an answer, not a fault: there is nothing to do for each of nothing.
+        await sink.leave(stateId, "done", "empty", { list: step.list });
+        stepId = step.next ?? null;
+        continue;
+      }
+
+      if (!instanceId) {
+        // A dry run reads the real list and walks the body once, for the first item, so the
+        // designer sees what each round would do without a report as long as the list.
+        await sink.leave(stateId, "done", "items", { list: step.list, items: items.length });
+        const first = items[0];
+        const body = await walk(
+          db,
+          definition,
+          step.body,
+          sink,
+          { ...context, item: { id: first.id, ...(first.item ?? {}) } },
+          relations,
+        );
+        if (body.state === "ended" && body.status === "failed") return body;
+        if (body.state === "waiting") {
+          await sink.wait(step.id, { waitingFor: "items", items: items.length });
+          return { state: "waiting", stepId: step.id };
+        }
+        stepId = step.next ?? null;
+        continue;
+      }
+
+      const opened = await sink.branchItems(stateId, step.body, items);
+      if (opened.length === 0) {
+        const reason = `her biri için adımı hiçbir dal açamadı: ${step.id}`;
+        await sink.leave(stateId, "failed", "no_branch");
+        await sink.end("failed", reason, step.id);
+        return { state: "ended", status: "failed", reason };
+      }
+      await sink.wait(step.id, { waitingFor: "items", opened: opened.length, list: step.list });
       for (const childId of opened) await runBranch(db, childId, relations);
       return { state: "waiting", stepId: step.id };
     }
@@ -499,7 +609,8 @@ async function joinParent(db: SystemDb, childId: string, relations: FlowRuntime)
   // has already moved it on, and a repeated delivery must not move it twice.
   if (!run || !run.openStepId) return;
   const step = stepOf(run.definition, run.openStepId);
-  if (step?.type !== "parallel") return;
+  // Both the parallel step and the "her biri için" step wait on branches the same way.
+  if (step?.type !== "parallel" && step?.type !== "for_each") return;
 
   if (state.failed > 0) {
     const reason = state.firstFailure ?? `bir dal hata ile durdu: ${step.id}`;
@@ -762,6 +873,9 @@ export async function dryRun(
     },
     async branch() {
       // A dry run opens no runs; the loop walks each path itself, so the report shows them.
+      return [];
+    },
+    async branchItems() {
       return [];
     },
     async lock(step, transition) {

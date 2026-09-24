@@ -1480,3 +1480,144 @@ describe("parallel paths and the join (REQ-WFL-006, REQ-WFL-011)", () => {
     ).toBe(before);
   });
 });
+
+describe("the for-each step (REQ-WFL-009, D-096, D-222)", () => {
+  /** One check per item of the module's list; the loop carries on when the last one is done. */
+  const eachOne = {
+    trigger: { type: "event", event: `${EVENT}_each` },
+    start: "f1",
+    steps: [
+      { id: "f1", type: "for_each", list: "zzw.open_handovers", body: "fb", limit: 5, next: "fe" },
+      {
+        id: "fb",
+        type: "notify",
+        owner: { type: "user", userId: APPROVER },
+        subject: "Zimmeti kapat",
+      },
+      { id: "fe", type: "end" },
+    ],
+  };
+
+  const EACH = "zz-t0147-each";
+  /** What the module would answer; the test plays the module the engine never knows about. */
+  let handovers: { id: string; label?: string; item?: Record<string, unknown> }[] = [];
+  let listAsked: { code: string; recordId: string | null; limitMs: number } | null = null;
+
+  const runtime = {
+    ...relations,
+    list: async (
+      _db: SystemDb,
+      code: string,
+      ask: { record: { schema: string; table: string; id: string } | null; limitMs: number },
+    ) => {
+      listAsked = { code, recordId: ask.record?.id ?? null, limitMs: ask.limitMs };
+      return handovers;
+    },
+    run: async (db: SystemDb, code: string, input: unknown) => {
+      if (code !== "notification.send") throw new Error(`unexpected action ${code}`);
+      const n = input as {
+        userId: string;
+        type: string;
+        subject: string;
+        linkPath: string;
+        sourceKey: string;
+      };
+      await sql`select tsk.notify(${n.userId}::uuid, ${n.type}, ${n.subject}, ${n.linkPath},
+                                  ${n.sourceKey})`.execute(db);
+      return null;
+    },
+  };
+
+  const branchesOf = async (instanceId: string) =>
+    (
+      await admin.query(
+        `select branch_label, status, start_step_id, context from wfl.instance
+          where parent_instance_id = $1 order by branch_label`,
+        [instanceId],
+      )
+    ).rows;
+
+  it("runs the body once for each item, carrying the item into the branch", async () => {
+    handovers = [
+      { id: "h-1", label: "Matkap", item: { asset: "Matkap" } },
+      { id: "h-2", label: "Kask", item: { asset: "Kask" } },
+    ];
+    await publish(EACH, eachOne);
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_each`,
+        id: id(690),
+        record: { schema: "zzw", table: "record", id: id(790) },
+        payload: {},
+      },
+      runtime,
+    );
+
+    // The module was asked for its own list, about the record the flow is about, with a limit.
+    expect(listAsked).toMatchObject({ code: "zzw.open_handovers", recordId: id(790) });
+    expect(listAsked?.limitMs).toBeGreaterThan(0);
+
+    const branches = await branchesOf(started[0]);
+    expect(branches.map((b) => b.branch_label)).toEqual(["Kask", "Matkap"]);
+    expect(branches.map((b) => b.start_step_id)).toEqual(["fb", "fb"]);
+    expect(branches.map((b) => b.context.item.asset)).toEqual(["Kask", "Matkap"]);
+    // Both branches only notify, so they are done and the loop has carried the run to its end.
+    expect(branches.every((b) => b.status === "done")).toBe(true);
+    expect((await readInstance(as(DESIGNER), started[0]))?.status).toBe("done");
+  });
+
+  it("carries on without branching when the list is empty", async () => {
+    handovers = [];
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_each`,
+        id: id(691),
+        record: { schema: "zzw", table: "record", id: id(791) },
+        payload: {},
+      },
+      runtime,
+    );
+    expect(await branchesOf(started[0])).toHaveLength(0);
+    expect((await readInstance(as(DESIGNER), started[0]))?.status).toBe("done");
+    expect(
+      (await readRunLog(as(DESIGNER), started[0])).find(
+        (line) => line.stepId === "f1" && line.kind === "left",
+      )?.detail,
+    ).toMatchObject({ outcome: "empty" });
+  });
+
+  it("stops rather than doing part of the work when the list is longer than the step allows", async () => {
+    handovers = Array.from({ length: 6 }, (_, n) => ({ id: `h-${n}` }));
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_each`,
+        id: id(692),
+        record: { schema: "zzw", table: "record", id: id(792) },
+        payload: {},
+      },
+      runtime,
+    );
+    const instance = await readInstance(as(DESIGNER), started[0]);
+    expect(instance?.status).toBe("failed");
+    expect(instance?.failure).toContain("sınırından uzun");
+    expect(await branchesOf(started[0])).toHaveLength(0);
+  });
+
+  it("refuses a definition that puts one for-each inside another", () => {
+    expect(() =>
+      parseDefinition({
+        trigger: { type: "event", event: `${EVENT}_nested` },
+        start: "n1",
+        steps: [
+          { id: "n1", type: "for_each", list: "zzw.a", body: "n2", next: "n4" },
+          { id: "n2", type: "for_each", list: "zzw.b", body: "n3", next: null },
+          { id: "n3", type: "end" },
+          { id: "n4", type: "end" },
+        ],
+      }),
+    ).toThrow(/her biri için/);
+  });
+});
