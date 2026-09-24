@@ -1,3 +1,4 @@
+import { readDefinitionOf, recordDryRunAsSystem } from "@/modules/wfl/data/flow-store";
 import {
   endInstance,
   enterStep,
@@ -22,26 +23,59 @@ import {
 import type { SystemDb } from "@/platform/jobs/types";
 
 /**
- * The engine's loop (TASK-0117, `docs/architecture/WORKFLOW_ENGINE.md` section 4).
+ * The engine's loop (TASK-0117, `docs/architecture/WORKFLOW_ENGINE.md` sections 4 and 6).
  *
  * An instance is a state machine and this is what turns the handle: it enters a step, decides what
- * the step means, leaves it, and moves to the next one until the flow ends or has to wait for
- * somebody. Everything happens inside the transaction it is given, so a step's effect and the
- * record of having taken it commit together — or neither does.
+ * the step means, leaves it, and moves to the next until the flow ends or has to wait for somebody.
+ * Everything happens inside the transaction it is given, so a step's effect and the record of
+ * having taken it commit together — or neither does.
  *
- * Four of the fourteen steps are implemented here: start, condition, approval and end. A step the
- * engine has not learned stops the instance with a reason rather than pretending to take it; what
- * keeps such a definition away from people is the dry run a publish needs (REQ-WFL-025).
+ * Five of the fourteen steps are implemented: start, condition, approval, task and end. A step the
+ * engine has not learned stops the flow with that step's name rather than being skipped.
  *
- * An approval is where the loop lets go. The step opens the approval and the run stops; the
- * decision comes back later as an event, and `resumeFromApproval` picks the flow up from the step
- * it was sitting in. Neither half can lose the other: the decision is written and published in one
- * transaction, and the engine's own transaction is what moves the instance.
+ * An approval or a task is where the loop lets go: the step is opened and the run stops, the answer
+ * comes back later as an event, and `resumeFromApproval` or `resumeFromTask` picks the flow up from
+ * the step it was sitting in. Neither half can lose the other — the answer is written and published
+ * in one transaction, and the engine's own transaction is what moves the instance.
+ *
+ * **The dry run is this same loop.** What a step *does* — writing its state, opening an approval,
+ * asking somebody else to act — is behind `StepSink`, and the dry run passes a sink that writes
+ * nothing and remembers everything. That is SPIKE-05's finding made structural: a second evaluator
+ * would be a second behaviour, and then the thing people test would not be the thing that runs.
  */
 
 export type RunResult =
   | { state: "ended"; status: "done" | "failed"; reason?: string }
   | { state: "waiting"; stepId: string };
+
+export type OwnerRelations = {
+  resolve: (db: SystemDb, code: string, argument: string | null) => Promise<string | null>;
+};
+
+/**
+ * What the engine is allowed to do to the rest of the panel: the catalog's actions, called by
+ * code. The engine knows no module — it knows `task.open` (D-280, TASK-0118).
+ */
+export type CapabilityActions = {
+  run: (db: SystemDb, code: string, input: unknown) => Promise<unknown>;
+};
+
+export type FlowRuntime = OwnerRelations & Partial<CapabilityActions>;
+
+/** Everything a step does that leaves a mark. The dry run's sink leaves none. */
+type StepSink = {
+  enter(step: FlowStep): Promise<string | null>;
+  leave(
+    stateId: string,
+    status: "done" | "failed",
+    outcome: string,
+    detail?: unknown,
+  ): Promise<void>;
+  end(status: "done" | "failed", failure?: string, stepId?: string): Promise<void>;
+  wait(stepId: string, detail: unknown): Promise<void>;
+  approval(stateId: string, step: FlowStep, ownerUserId: string): Promise<void>;
+  action(code: string, input: unknown): Promise<void>;
+};
 
 type Runnable = {
   id: string;
@@ -60,6 +94,35 @@ async function runnable(db: SystemDb, instanceId: string): Promise<Runnable | nu
     context: row.context,
     definition: parseDefinition(row.definition),
     openStepId: row.openStepId,
+  };
+}
+
+/** The sink that actually writes: every mark a real run leaves. */
+function writingSink(db: SystemDb, instanceId: string, relations: FlowRuntime): StepSink {
+  return {
+    enter: (step) => enterStep(db, { instanceId, stepId: step.id, stepType: step.type }),
+    async leave(stateId, status, outcome, detail) {
+      await leaveStep(db, { stateId, status, outcome }, detail ?? {});
+    },
+    async end(status, failure, stepId) {
+      await endInstance(db, { instanceId, status, failure, stepId });
+    },
+    async wait(stepId, detail) {
+      await noteWaiting(db, { instanceId, stepId, detail });
+    },
+    async approval(stateId, step, ownerUserId) {
+      await requestApproval(db, {
+        instanceId,
+        stateId,
+        stepId: step.id,
+        title: step.title ?? "Onay",
+        ownerUserId,
+      });
+    },
+    async action(code, input) {
+      if (!relations.run) throw new Error(`no capability catalog is wired for ${code}`);
+      await relations.run(db, code, input);
+    },
   };
 }
 
@@ -83,22 +146,8 @@ function afterDecision(step: FlowStep, decision: string): string | null {
  * about roles, sites or records.
  *
  * The two forms nothing answers yet — a relation to the record, a permission type — return null,
- * and a step with no owner stops the instance rather than waiting on nobody.
+ * and a step with no owner stops the flow rather than waiting on nobody.
  */
-export type OwnerRelations = {
-  resolve: (db: SystemDb, code: string, argument: string | null) => Promise<string | null>;
-};
-
-/**
- * What the engine is allowed to do to the rest of the panel: the catalog's actions, called by
- * code. The engine knows no module — it knows `task.open` (D-280, TASK-0118).
- */
-export type CapabilityActions = {
-  run: (db: SystemDb, code: string, input: unknown) => Promise<unknown>;
-};
-
-export type FlowRuntime = OwnerRelations & Partial<CapabilityActions>;
-
 async function ownerOf(
   db: SystemDb,
   relations: FlowRuntime,
@@ -113,9 +162,84 @@ async function ownerOf(
 }
 
 /**
- * Runs the instance as far as it can go. It stops at a step that waits for somebody, at the end of
- * the flow, or at a step the engine cannot take; the reason is always in the run log.
+ * The loop itself: the definition, where to start, what to write with, and what the flow carries.
+ * The dry run gives it a sink that writes nothing; everything else is the same.
  */
+async function walk(
+  db: SystemDb,
+  definition: FlowDefinition,
+  from: string | null,
+  sink: StepSink,
+  context: Record<string, unknown>,
+  relations: FlowRuntime,
+): Promise<RunResult> {
+  let stepId: string | null = from;
+
+  for (;;) {
+    const step = stepOf(definition, stepId);
+    if (!step) {
+      // A path that points nowhere is the end of the flow, not a fault (REQ-WFL-011).
+      await sink.end("done");
+      return { state: "ended", status: "done" };
+    }
+
+    if (!RUNNABLE_STEP_TYPES.includes(step.type)) {
+      const reason = `motor bu adımı henüz yürütmüyor: ${step.type}`;
+      await sink.wait(step.id, { reason });
+      await sink.end("failed", reason, step.id);
+      return { state: "ended", status: "failed", reason };
+    }
+
+    const stateId = await sink.enter(step);
+    // Null means the step limit was passed: the instance is already ended and the log says why.
+    if (!stateId) return { state: "ended", status: "failed", reason: "adım sınırı" };
+
+    if (step.type === "approval" || step.type === "task") {
+      const owner = await ownerOf(db, relations, step.owner);
+      if (!owner) {
+        const reason = `adımın sahibi bulunamadı: ${step.id}`;
+        await sink.leave(stateId, "failed", "no_owner");
+        await sink.end("failed", reason, step.id);
+        return { state: "ended", status: "failed", reason };
+      }
+      if (step.type === "approval") {
+        await sink.approval(stateId, step, owner);
+      } else {
+        await sink.action("task.open", {
+          stepRunId: stateId,
+          title: step.title ?? "Görev",
+          assigneeUserId: owner,
+          priority: step.priority,
+        });
+      }
+      // The step stays open on purpose: it is what the answer will come back to.
+      await sink.wait(step.id, { waitingFor: step.type, owner });
+      return { state: "waiting", stepId: step.id };
+    }
+
+    if (step.type === "end") {
+      await sink.leave(stateId, "done", "end");
+      await sink.end("done");
+      return { state: "ended", status: "done" };
+    }
+
+    let passed = true;
+    if (step.type === "condition") {
+      passed = testPasses(step.test, context);
+      await sink.leave(stateId, "done", passed ? "true" : "false", {
+        field: step.test.field,
+        op: step.test.op,
+      });
+    } else {
+      // `start` carries nothing of its own; it is the door the flow came in through.
+      await sink.leave(stateId, "done", "next");
+    }
+
+    stepId = nextOf(step, passed);
+  }
+}
+
+/** Runs the instance as far as it can go. */
 export async function runInstance(
   db: SystemDb,
   instanceId: string,
@@ -127,109 +251,14 @@ export async function runInstance(
   // instance again — which a repeated delivery does — must change nothing, and re-entering the
   // step it is already in is exactly what a flow must never do.
   if (instance.openStepId) return { state: "waiting", stepId: instance.openStepId };
-  return runFrom(db, instanceId, instance.definition.start, relations);
-}
-
-/** The loop itself, from a step the caller chose. */
-async function runFrom(
-  db: SystemDb,
-  instanceId: string,
-  from: string | null,
-  relations: FlowRuntime,
-): Promise<RunResult | null> {
-  const instance = await runnable(db, instanceId);
-  if (!instance) return null;
-  let stepId: string | null = from;
-
-  for (;;) {
-    const step = stepOf(instance.definition, stepId);
-    if (!step) {
-      // A path that points nowhere is the end of the flow, not a fault (REQ-WFL-011).
-      await endInstance(db, { instanceId, status: "done" });
-      return { state: "ended", status: "done" };
-    }
-
-    if (!RUNNABLE_STEP_TYPES.includes(step.type)) {
-      const reason = `motor bu adımı henüz yürütmüyor: ${step.type}`;
-      await noteWaiting(db, { instanceId, stepId: step.id, detail: { reason } });
-      await endInstance(db, { instanceId, status: "failed", failure: reason, stepId: step.id });
-      return { state: "ended", status: "failed", reason };
-    }
-
-    const stateId = await enterStep(db, {
-      instanceId,
-      stepId: step.id,
-      stepType: step.type,
-    });
-    // Null means the step limit was passed: the instance is already ended and the log says why.
-    if (!stateId) return { state: "ended", status: "failed", reason: "adım sınırı" };
-
-    if (step.type === "task") {
-      const owner = await ownerOf(db, relations, step.owner);
-      if (!owner) {
-        const reason = `adımın sahibi bulunamadı: ${step.id}`;
-        await leaveStep(db, { stateId, status: "failed", outcome: "no_owner" });
-        await endInstance(db, { instanceId, status: "failed", failure: reason, stepId: step.id });
-        return { state: "ended", status: "failed", reason };
-      }
-      if (!relations.run) {
-        const reason = "görev adımı için yetenek kataloğu bağlı değil";
-        await leaveStep(db, { stateId, status: "failed", outcome: "no_catalog" });
-        await endInstance(db, { instanceId, status: "failed", failure: reason, stepId: step.id });
-        return { state: "ended", status: "failed", reason };
-      }
-      // The catalog's own action, called by its code: the engine never learns that tasks are TSK's.
-      await relations.run(db, "task.open", {
-        stepRunId: stateId,
-        title: step.title ?? "Görev",
-        assigneeUserId: owner,
-        priority: step.priority,
-      });
-      await noteWaiting(db, { instanceId, stepId: step.id, detail: { waitingFor: "task" } });
-      return { state: "waiting", stepId: step.id };
-    }
-
-    if (step.type === "approval") {
-      const owner = await ownerOf(db, relations, step.owner);
-      if (!owner) {
-        const reason = `adımın sahibi bulunamadı: ${step.id}`;
-        await leaveStep(db, { stateId, status: "failed", outcome: "no_owner" });
-        await endInstance(db, { instanceId, status: "failed", failure: reason, stepId: step.id });
-        return { state: "ended", status: "failed", reason };
-      }
-      await requestApproval(db, {
-        instanceId,
-        stateId,
-        stepId: step.id,
-        title: step.title ?? "Onay",
-        ownerUserId: owner,
-      });
-      // The step stays open on purpose: it is what the decision will come back to.
-      await noteWaiting(db, { instanceId, stepId: step.id, detail: { waitingFor: "approval" } });
-      return { state: "waiting", stepId: step.id };
-    }
-
-    if (step.type === "end") {
-      await leaveStep(db, { stateId, status: "done", outcome: "end" });
-      await endInstance(db, { instanceId, status: "done" });
-      return { state: "ended", status: "done" };
-    }
-
-    let passed = true;
-    if (step.type === "condition") {
-      passed = testPasses(step.test, instance.context);
-      await leaveStep(
-        db,
-        { stateId, status: "done", outcome: passed ? "true" : "false" },
-        { field: step.test.field, op: step.test.op },
-      );
-    } else {
-      // `start` carries nothing of its own; it is the door the flow came in through.
-      await leaveStep(db, { stateId, status: "done", outcome: "next" });
-    }
-
-    stepId = nextOf(step, passed);
-  }
+  return walk(
+    db,
+    instance.definition,
+    instance.definition.start,
+    writingSink(db, instanceId, relations),
+    instance.context,
+    relations,
+  );
 }
 
 /**
@@ -269,10 +298,10 @@ export async function runEventTriggers(
 }
 
 /**
- * Picks the flow up where the decision left it (REQ-WFL-014, D-099).
+ * Picks the flow up where a decision left it (REQ-WFL-014, D-099).
  *
- * The step the approval belonged to is left with the answer as its outcome, and the flow carries
- * on down the path that answer names. An approval whose instance has since ended, or whose step
+ * The step the approval belonged to is left with the answer as its outcome, and the flow carries on
+ * down the path that answer names. An approval whose instance has since ended, or whose step
  * somebody already closed, changes nothing — which is what makes a repeated delivery harmless.
  */
 export async function resumeFromApproval(
@@ -295,11 +324,14 @@ export async function resumeFromApproval(
 
   const step = stepOf(instance.definition, instance.openStepId);
   const next = step ? afterDecision(step, decided.decision) : null;
-  if (!next) {
-    await endInstance(db, { instanceId: decided.instanceId, status: "done" });
-    return { state: "ended", status: "done" };
-  }
-  return runFrom(db, decided.instanceId, next, relations);
+  return walk(
+    db,
+    instance.definition,
+    next,
+    writingSink(db, decided.instanceId, relations),
+    instance.context,
+    relations,
+  );
 }
 
 /**
@@ -324,5 +356,131 @@ export async function resumeFromTask(
   if (!left) return null;
 
   const step = stepOf(instance.definition, open.stepId);
-  return runFrom(db, open.instanceId, step?.next ?? null, relations);
+  return walk(
+    db,
+    instance.definition,
+    step?.next ?? null,
+    writingSink(db, open.instanceId, relations),
+    instance.context,
+    relations,
+  );
+}
+
+export type DryRunStep = {
+  stepId: string;
+  type: string;
+  outcome: string;
+  /** Who the step would wait on, worked out for real (REQ-WFL-025). */
+  owner?: string | null;
+};
+
+export type DryRunReport = {
+  passed: boolean;
+  /** Every step the flow would take, in order. */
+  steps: DryRunStep[];
+  /** Why it would stop, when it would stop badly. */
+  failure?: string;
+  /** Where it ends up: finished, or waiting on somebody. */
+  ends: "done" | "failed" | "waiting";
+};
+
+/**
+ * The dry run a publish needs (REQ-WFL-025).
+ *
+ * The same loop, the same conditions against the same real data, the same owners worked out for
+ * real — and a sink that writes nothing: no instance, no step state, no approval, no task, no
+ * notification. What comes back is the path the flow would take, which is what the designer is
+ * shown and what the publish is checked against.
+ */
+export async function dryRun(
+  db: SystemDb,
+  definition: FlowDefinition,
+  context: Record<string, unknown>,
+  relations: FlowRuntime,
+): Promise<DryRunReport> {
+  const steps: DryRunStep[] = [];
+  // Held in an object rather than in local variables: the sink writes them from inside closures,
+  // which is exactly the case the compiler cannot narrow.
+  const outcome: { ends: DryRunReport["ends"]; failure?: string } = { ends: "done" };
+  let entered: FlowStep | null = null;
+  let counter = 0;
+
+  const sink: StepSink = {
+    async enter(step) {
+      entered = step;
+      counter += 1;
+      // The engine's own limit, so a loop that would never end does not hang the dry run either.
+      return counter > 500 ? null : `dry-${counter}`;
+    },
+    async leave(_stateId, _status, outcome) {
+      if (entered) steps.push({ stepId: entered.id, type: entered.type, outcome });
+    },
+    async end(status, why) {
+      outcome.ends = status;
+      outcome.failure = why;
+    },
+    async wait(stepId, detail) {
+      const owner = (detail as { owner?: string } | null)?.owner ?? null;
+      const step = entered;
+      if (step?.id === stepId && (step.type === "approval" || step.type === "task")) {
+        steps.push({ stepId, type: step.type, outcome: "waiting", owner });
+        outcome.ends = "waiting";
+      }
+    },
+    async approval() {
+      // Nothing: a dry run never puts anything in front of anybody.
+    },
+    async action() {
+      // Nothing: a dry run calls no action, which is what keeps it from opening real work.
+    },
+  };
+
+  const result = await walk(db, definition, definition.start, sink, context, relations);
+  if (result.state === "waiting") outcome.ends = "waiting";
+  return {
+    passed: outcome.ends !== "failed",
+    steps,
+    failure: outcome.failure,
+    ends: outcome.ends,
+  };
+}
+
+/**
+ * Runs a version dry and writes the evidence a publish will look for (REQ-WFL-025).
+ *
+ * The sample the conditions are evaluated against is given by whoever asked for the run — the
+ * designer picks a real record, so the branches are decided by real data, which is the whole point
+ * of a dry run rather than a schema check.
+ */
+export async function dryRunVersion(
+  db: SystemDb,
+  versionId: string,
+  context: Record<string, unknown>,
+  relations: FlowRuntime,
+): Promise<DryRunReport> {
+  const version = await readDefinitionOf(db, versionId);
+  if (!version) {
+    return { passed: false, steps: [], failure: "böyle bir akış sürümü yok", ends: "failed" };
+  }
+
+  let report: DryRunReport;
+  try {
+    report = await dryRun(db, parseDefinition(version.definition), context, relations);
+  } catch (error) {
+    // A definition that will not even parse is a failed dry run, not a crash: the designer is
+    // told what is wrong with it and the publish stays shut.
+    report = {
+      passed: false,
+      steps: [],
+      failure: error instanceof Error ? error.message : "tanım okunamadı",
+      ends: "failed",
+    };
+  }
+
+  await recordDryRunAsSystem(db, {
+    versionId,
+    passed: report.passed,
+    summary: { steps: report.steps, ends: report.ends, failure: report.failure ?? null },
+  });
+  return report;
 }

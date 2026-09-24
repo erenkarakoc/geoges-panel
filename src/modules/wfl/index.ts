@@ -32,9 +32,14 @@ export {
 } from "@/modules/wfl/data/instance-store";
 
 export {
+  dryRun,
+  dryRunVersion,
   resumeFromApproval,
   runEventTriggers,
   runInstance,
+  type DryRunReport,
+  type DryRunStep,
+  type FlowRuntime,
   type RunResult,
 } from "@/modules/wfl/application/engine";
 export { flowEngine } from "@/modules/wfl/application/engine-subscriber";

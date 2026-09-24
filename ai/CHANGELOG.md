@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-09-25 — The dry run, which is the same loop (TASK-0117, step 6)
+
+- A publish has needed a passed dry run since the first migration of this task, and until today nothing produced one: the tests wrote the evidence by hand. Now the engine produces it, and the important part is *how*.
+- What a step **does** — writing its state, opening an approval, asking another module to act — moved behind one small port. The real run passes a sink that writes; the dry run passes one that writes nothing and remembers everything. There is no second evaluator, so there is nothing to drift: SPIKE-05 warned that a separate dry mode becomes a separate behaviour, and that warning is now answered by the shape of the code rather than by care.
+- What a dry run still does for real: it evaluates the conditions against the sample the designer gives, and it works out who each step would wait on. A branch is decided by data, which is the difference between a dry run and a schema check. One test runs the same definition twice with different samples and gets different paths.
+- What it never does: no instance, no step state, no approval, no task, no notification — asserted by counting all three afterwards.
+- The engine writes its own evidence through a door of its own (migration 0050). The person's door asks for the design permission, and the engine has no person to ask about; loosening that check would have been the easy way and the wrong one.
+- A definition that will not parse is a failed dry run with the reason, not a crash — and the publish stays shut.
+
 ## 2026-09-24 — The task step, and the first action the engine asks somebody else to take (TASK-0117, step 5)
 
 - A flow can now open a task and wait for it. This is the first time the engine does something to the rest of the panel, and it does it the way the catalog was built for: it calls `task.open` by code. It never learns that tasks are TSK's.

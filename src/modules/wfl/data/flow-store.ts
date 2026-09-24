@@ -1,6 +1,7 @@
 import { sql } from "kysely";
 
 import { runAsUser, type DbIdentity } from "@/platform/db";
+import type { SystemDb } from "@/platform/jobs/types";
 
 /** Re-exported for the application layer, which may not name the database module itself. */
 export type { DbIdentity };
@@ -108,4 +109,25 @@ export function readPublished(identity: DbIdentity, flowKey: string) {
     const row = rows[0];
     return row ? { id: row.id, version: Number(row.version), definition: row.definition } : null;
   });
+}
+
+/** One version's definition, read as the worker so the engine can run it dry. */
+export async function readDefinitionOf(
+  db: SystemDb,
+  versionId: string,
+): Promise<{ definition: unknown; status: string } | null> {
+  const { rows } = await sql<{ definition: unknown; status: string }>`
+    select definition, status from wfl.flow_version where id = ${versionId}::uuid`.execute(db);
+  return rows[0] ?? null;
+}
+
+/** Writes the evidence of a dry run the engine performed (migration 0050). */
+export async function recordDryRunAsSystem(
+  db: SystemDb,
+  run: { versionId: string; passed: boolean; summary: unknown },
+): Promise<string> {
+  const { rows } = await sql<{ id: string }>`
+    select wfl.record_dry_run_as_system(${run.versionId}::uuid, ${run.passed},
+                                        ${JSON.stringify(run.summary)}::jsonb) as id`.execute(db);
+  return rows[0].id;
 }

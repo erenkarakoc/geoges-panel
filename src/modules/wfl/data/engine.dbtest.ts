@@ -26,7 +26,11 @@ import {
   readRunLog,
   startInstanceByHand,
 } from "@/modules/wfl/data/instance-store";
-import { resumeFromApproval, resumeFromTask } from "@/modules/wfl/application/engine";
+import {
+  dryRunVersion,
+  resumeFromApproval,
+  resumeFromTask,
+} from "@/modules/wfl/application/engine";
 import { runAsUser } from "@/platform/db";
 import { readDatabaseConfig } from "@/platform/db/database-config";
 import type { SystemDb } from "@/platform/jobs/types";
@@ -41,6 +45,7 @@ const SMALL = "zz-t0147-small";
 const UNBUILT = "zz-t0147-unbuilt";
 const APPROVING = "zz-t0147-approving";
 const TASKING = "zz-t0147-tasking";
+const DRY = "zz-t0147-dry";
 const EVENT = "zzw_record.submitted";
 
 let admin: pg.Client;
@@ -135,7 +140,7 @@ async function cleanUp() {
       [taskIds],
     );
   }
-  const keys = [BIG, SMALL, UNBUILT, APPROVING, TASKING];
+  const keys = [BIG, SMALL, UNBUILT, APPROVING, TASKING, DRY];
   await admin.query(
     "delete from wfl.instance where flow_id in (select id from wfl.flow where key = any($1))",
     [keys],
@@ -609,5 +614,109 @@ describe("the task step (REQ-WFL-005, REQ-TSK-001)", () => {
 
   it("does nothing for a task that belongs to no flow", async () => {
     expect(await resumeFromTask(worker, id(999), runtime)).toBeNull();
+  });
+});
+
+describe("the dry run a publish needs (REQ-WFL-025, SPIKE-05)", () => {
+  /** A flow with a branch and a step that waits, so the run has something to report. */
+  const draft = {
+    trigger: { type: "manual" },
+    start: "d1",
+    steps: [
+      {
+        id: "d1",
+        type: "condition",
+        test: { field: "record.amount", op: ">", value: 1000 },
+        whenTrue: "d2",
+        whenFalse: "d3",
+      },
+      {
+        id: "d2",
+        type: "approval",
+        title: "Büyük tutar onayı",
+        owner: { type: "user", userId: APPROVER },
+        outcomes: { approve: "d3" },
+      },
+      { id: "d3", type: "end" },
+    ],
+  };
+
+  let versionId: string;
+
+  it("walks the flow with real data and reports the path it would take", async () => {
+    versionId = await saveDraft(as(DESIGNER), { key: DRY, name: "Deneme kuru", definition: draft });
+
+    const report = await dryRunVersion(worker, versionId, { record: { amount: 5000 } }, relations);
+    expect(report.passed).toBe(true);
+    expect(report.ends).toBe("waiting");
+    expect(report.steps).toEqual([
+      { stepId: "d1", type: "condition", outcome: "true" },
+      { stepId: "d2", type: "approval", outcome: "waiting", owner: APPROVER },
+    ]);
+  });
+
+  it("takes the other branch for other data, which is what makes it a dry run and not a check", async () => {
+    const report = await dryRunVersion(worker, versionId, { record: { amount: 5 } }, relations);
+    expect(report.ends).toBe("done");
+    expect(report.steps.map((step) => step.stepId)).toEqual(["d1", "d3"]);
+  });
+
+  it("writes nothing at all: no instance, no approval, no task", async () => {
+    const counts = await admin.query(
+      `select
+         (select count(*)::int from wfl.instance i join wfl.flow f on f.id = i.flow_id
+           where f.key = $1) as instances,
+         (select count(*)::int from wfl.approval a join wfl.instance i on i.id = a.instance_id
+           join wfl.flow f on f.id = i.flow_id where f.key = $1) as approvals,
+         (select count(*)::int from tsk.task t where t.title = 'Büyük tutar onayı') as tasks`,
+      [DRY],
+    );
+    expect(counts.rows[0]).toEqual({ instances: 0, approvals: 0, tasks: 0 });
+  });
+
+  it("leaves the evidence a publish looks for", async () => {
+    const { rows } = await admin.query(
+      `select passed, summary from wfl.dry_run where flow_version_id = $1 order by ran_at`,
+      [versionId],
+    );
+    expect(rows).toHaveLength(2);
+    expect(rows[0].passed).toBe(true);
+    expect(rows[0].summary.ends).toBe("waiting");
+    expect(rows[0].summary.steps).toHaveLength(2);
+  });
+
+  it("opens the publish once it has run, and not before", async () => {
+    // The evidence above is about this very definition, so the publish is allowed.
+    expect(await publishVersion(as(DESIGNER), versionId)).toBe(true);
+  });
+
+  it("fails on a step the engine cannot take, and the publish stays shut", async () => {
+    const broken = await saveDraft(as(DESIGNER), {
+      key: DRY,
+      name: "Deneme kuru",
+      definition: {
+        trigger: { type: "manual" },
+        start: "b1",
+        steps: [
+          { id: "b1", type: "notify", title: "Haber ver", next: "b2" },
+          { id: "b2", type: "end" },
+        ],
+      },
+    });
+    const report = await dryRunVersion(worker, broken, {}, relations);
+    expect(report.passed).toBe(false);
+    expect(report.failure).toContain("notify");
+    expect(await errorOf(publishVersion(as(DESIGNER), broken))).toBe("wfl.dry_run_required");
+  });
+
+  it("fails on a definition that will not parse, instead of throwing", async () => {
+    const nonsense = await saveDraft(as(DESIGNER), {
+      key: DRY,
+      name: "Deneme kuru",
+      definition: { trigger: { type: "manual" }, start: "x", steps: [] },
+    });
+    const report = await dryRunVersion(worker, nonsense, {}, relations);
+    expect(report.passed).toBe(false);
+    expect(report.ends).toBe("failed");
   });
 });

@@ -1,6 +1,6 @@
 # DECISIONS
 
-Last updated: 2026-09-24
+Last updated: 2026-09-25
 
 ## Data access foundation (TASK-0101, 2026-09-21)
 
