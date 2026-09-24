@@ -20,10 +20,11 @@ Bunlar **bilerek** yok; not almanıza gerek yok:
 | Ana ekrana ekleme ve telefon bildirimi | HTTPS adresi gerektiriyor; barındırma Faz 09 çıkışında (D-274, DEF-008) |
 | E-posta gönderimi | Sağlayıcı seçilmedi; günlük özet `.mail/` klasörüne dosya olarak yazılıyor |
 | Rol, yetki ve vekâlet ekranları | Kullanıcılar ekranı şimdilik asgari (D-273) |
+| **Tanımlar ekranı** | Kataloglar, tarihli kurallar ve özel alanlar veritabanında çalışıyor (TASK-0105) ama ekranı yok; menüdeki girdi "henüz geliştirilmedi" der. Ekran Faz 09'da |
 
 ## Tur
 
-Her adımda **ne yapacağınız** ve **ne görmeniz gerektiği** yazıyor. Beklenenden farklı bir şey
+On adımda **ne yapacağınız** ve **ne görmeniz gerektiği** yazıyor. Beklenenden farklı bir şey
 görürseniz ekran görüntüsü alıp not edin.
 
 ### 1. Giriş ve iki adımlı doğrulama
@@ -64,8 +65,9 @@ açmayı deneyebilirsiniz.
 
 ### 6. Onaylar ve revizyon talepleri
 
-"Onaylar" → bugün temiz görünmeli (kuyruk Faz 08'de dolacak). "Revizyon Talepleri" → henüz kayıt
-tipi bağlı olmadığı için boş; ekranın kendisi çalışıyor.
+"Onaylar" → "Bugün temiz" görmelisiniz; kuyruk Faz 08'de dolacak. Üstteki ikinci sekme (ya da menüdeki
+"Revizyon Talepleri") revizyon taleplerini açar: aynı ekranın sekmesidir (D-223). Bugün boş, çünkü
+henüz kilitli kayıt üreten bir modül yok; ekranın kendisi çalışıyor.
 
 ### 7. Denetim kayıtları
 
@@ -78,18 +80,13 @@ değişiklikleriniz burada. Filtreleri deneyin. Bu ekranı yalnız sahipler gör
 kurtarma kodu, açık oturum sayısı ve "İkinci faktörü sıfırla". **Kendinize uygulamayın** (kendi
 faktörünüzü silersiniz); ne sorduğuna bakmak yeterli.
 
-### 9. Tanımlar
-
-"Yönetim → Tanımlar". → Kataloglar, tarihli kurallar ve özel alanlar. Bir kuralın geçmiş değerlerini
-açıp bakın: kural satırları hiç değişmez, her değişiklik yeni bir satırdır.
-
-### 10. Telefondan
+### 9. Telefondan
 
 Aynı Wi-Fi'de, komut isteminde yazan `http://192.168...:3000` adresini telefonunuzdan açın. →
 Altta gezinme çubuğu, ortada büyük "+" düğmesi. Bir görev detayına girin: **gezinme çubuğu çekilir,
 yerine ekranın kendi bandı gelir**; çıkınca geri gelir.
 
-### 11. Arka plan işleri
+### 10. Arka plan işleri
 
 Komut isteminde `npm run jobs:status`. → Zamanlanmış işler ve son çalışmaları. Panel açıkken bunlar
 kendiliğinden çalışır.

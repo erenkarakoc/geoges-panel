@@ -77,4 +77,15 @@ describe("audit log labels", () => {
     expect(auditActorLabel("x", null)).toBe("Kaldırılmış hesap");
     expect(auditActorLabel(null, null)).toBe("Sistem");
   });
+
+  /**
+   * Seen on the screen on 2026-09-24: the account-security events of TASK-0112 arrived in the log
+   * with no Turkish name, so the owner's own log read `sign_in.locked`. Writing an event and
+   * naming it are two places, and only the screen shows that one was forgotten.
+   */
+  it("names the account-security events too", () => {
+    expect(auditEventLabel("sign_in.locked")).toBe("Giriş kilitlendi");
+    expect(auditEventLabel("two_factor.enrolled")).toBe("İki adımlı doğrulama kuruldu");
+    expect(auditEventLabel("two_factor.reset")).toBe("İki adımlı doğrulama sıfırlandı");
+  });
 });

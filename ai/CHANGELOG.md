@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-24 — Walking the acceptance list before handing it over
+
+- The list written for the owner was walked first, and it found three things the owner would otherwise have found.
+- **"Revizyon Talepleri" opened "Henüz geliştirilmedi".** The screen has existed since TASK-0109 as the approval screen's second tab, exactly where the screen inventory records it; the menu entry pointed at a slug of its own that no route serves. Nothing failed, because a slug with no route is what an unbuilt module looks like — so the menu is now checked against the routes on disk, and a menu entry whose screen sits inside another screen is pinned by name.
+- **The account-security events had no Turkish name.** The owner's own log read `sign_in.locked` and `two_factor.reset`: writing an event and naming it are two places, and TASK-0112 touched only the first. They are named now, the two new filter groups with them, and a test says so.
+- **The list itself was wrong about "Tanımlar".** It told the owner to open catalogs and dated rules on a screen that does not exist: ADM is service and data only, so the menu entry is a placeholder. The step is gone and the absence is in the opening table with the rest.
+- Also tidied while there: the placeholder page no longer generates a slug for a screen that has its own route.
+
 ## 2026-09-24 — The light/dark switch moves into the account menu
 
 - The owner asked for it out of the header (D-275). It is a line in the account menu now, grouped with the phone-notification switch under "Bu cihaz", because both belong to this browser rather than to the account — and SCR-005 already lists the theme among that menu's sections.

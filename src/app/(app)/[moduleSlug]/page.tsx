@@ -11,13 +11,23 @@ import { FeatureOff } from "@/platform/ui/feature-off";
 import { ModulePlaceholder } from "@/platform/ui/module-placeholder";
 
 // Placeholder pages for every registered module except those with their own route.
-const ownRoutes = new Set(["/today", "/sites", "/approvals", "/tasks", "/audit-log"]);
+const ownRoutes = new Set([
+  "/today",
+  "/sites",
+  "/approvals",
+  "/tasks",
+  "/audit-log",
+  "/users-roles",
+]);
+
+/** A screen of its own, either by name or because its address is not a single segment. */
+const hasOwnRoute = (href: string) => ownRoutes.has(href) || href.lastIndexOf("/") > 0;
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
   return allNavigationItems()
-    .filter((item) => !ownRoutes.has(item.href))
+    .filter((item) => !hasOwnRoute(item.href))
     .map((item) => ({ moduleSlug: item.href.slice(1) }));
 }
 

@@ -386,7 +386,10 @@ export const navigationRegistry: readonly NavigationGroup[] = [
       {
         id: "revision-requests",
         label: "Revizyon Talepleri",
-        href: "/revision-requests",
+        // The screen is the approval screen's second tab and lives there (SCR-192, D-223). The
+        // entry pointed at a slug of its own until 2026-09-24, which no route serves: the menu
+        // answered "henüz geliştirilmedi" for a screen that had been built weeks earlier.
+        href: "/approvals/revision-requests",
         icon: FileClockIcon,
         moduleCode: "AUD",
         requiredPermission: "aud.revision-request.view",

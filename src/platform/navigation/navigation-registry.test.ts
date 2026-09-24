@@ -1,3 +1,6 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import { type AccessPolicy, previewAccessPolicy } from "@/platform/access/access-policy";
@@ -21,10 +24,14 @@ describe("navigationRegistry", () => {
     expect(new Set(allItems.map((item) => item.href)).size).toBe(allItems.length);
   });
 
-  it("uses single-segment kebab-case routes so placeholder pages can be generated", () => {
+  it("uses kebab-case routes, and a single segment unless the screen sits inside another", () => {
     for (const item of allItems) {
-      expect(item.href).toMatch(/^\/[a-z0-9]+(-[a-z0-9]+)*$/);
+      expect(item.href).toMatch(/^\/[a-z0-9]+(-[a-z0-9]+)*(\/[a-z0-9]+(-[a-z0-9]+)*)?$/);
     }
+    // A single segment is what the placeholder page can generate; a deeper address means the
+    // screen has a route of its own, which the last test in this file checks against the disk.
+    const deep = allItems.filter((item) => item.href.slice(1).includes("/"));
+    expect(deep.map((item) => item.href)).toEqual(["/approvals/revision-requests"]);
   });
 
   it("guards every item with a permission", () => {
@@ -123,5 +130,40 @@ describe("getVisibleNavigation with feature switches (CONFIGURATION section 5)",
     expect(codes(all)).toContain("FIN");
     expect(codes(withoutFin)).not.toContain("FIN");
     expect(codes(withoutFin).length).toBe(codes(all).filter((c) => c !== "FIN").length);
+  });
+});
+
+/**
+ * Found by walking the acceptance list on 2026-09-24: the "Revizyon Talepleri" entry opened
+ * "Henüz geliştirilmedi" for a screen built weeks earlier, because its address was a slug of its
+ * own while the screen lives as the approval screen's second tab. Nothing failed — a slug with no
+ * route is exactly what an unbuilt module looks like — so the menu is checked against the routes
+ * on disk here.
+ */
+describe("every menu entry opens something", () => {
+  const appDir = path.join(process.cwd(), "src", "app", "(app)");
+  const pageOf = (href: string) => path.join(appDir, ...href.slice(1).split("/"), "page.tsx");
+  const ownScreen = (href: string) => existsSync(pageOf(href));
+  const placeholderSlug = (href: string) => !href.slice(1).includes("/");
+
+  it("leads to a screen of its own or to the module placeholder", () => {
+    const lost = allItems.filter((item) => !ownScreen(item.href) && !placeholderSlug(item.href));
+    expect(lost.map((item) => item.href)).toEqual([]);
+  });
+
+  it("opens the screen that exists rather than a placeholder beside it", () => {
+    // The built screens, by the addresses the screen inventory records for them.
+    for (const href of [
+      "/approvals/revision-requests",
+      "/audit-log",
+      "/users-roles",
+      "/tasks",
+      "/approvals",
+      "/today",
+      "/sites",
+    ]) {
+      expect(ownScreen(href)).toBe(true);
+      expect(findNavigationItemByHref(navigationRegistry, href)).toBeDefined();
+    }
   });
 });

@@ -13,6 +13,9 @@ export const AUDIT_EVENT_LABELS: Readonly<Record<string, string>> = {
   "user.deactivated": "Hesap pasife alındı",
   "user.reactivated": "Hesap yeniden açıldı",
   "user.leaving_date_set": "Ayrılış tarihi girildi",
+  "sign_in.locked": "Giriş kilitlendi",
+  "two_factor.enrolled": "İki adımlı doğrulama kuruldu",
+  "two_factor.reset": "İki adımlı doğrulama sıfırlandı",
   "role_assignment.created": "Rol atandı",
   "role_assignment.ended": "Rol ataması bitirildi",
   "role_assignment.changed": "Rol ataması değişti",
@@ -37,6 +40,8 @@ export const AUDIT_EVENT_LABELS: Readonly<Record<string, string>> = {
 /** Event groups offered by the "işlem türü" filter; the value is an event code prefix. */
 export const AUDIT_EVENT_GROUPS = [
   { value: "user.", label: "Giriş ve hesaplar" },
+  { value: "sign_in.", label: "Giriş kilitleri" },
+  { value: "two_factor.", label: "İki adımlı doğrulama" },
   { value: "role_assignment.", label: "Rol atamaları" },
   { value: "role_delegation.", label: "Vekâletler" },
   { value: "role_permission.", label: "Rol yetkileri" },
@@ -52,6 +57,7 @@ export const AUDIT_EVENT_GROUPS = [
 /** Record types offered by the "kayıt türü" filter (`schema.table`). */
 export const AUDIT_TARGET_TABLES = [
   { value: "iam.user", label: "Kullanıcı" },
+  { value: "iam.login_attempt", label: "Giriş denemesi" },
   { value: "iam.role_assignment", label: "Rol ataması" },
   { value: "iam.role_permission", label: "Rol yetkisi" },
   { value: "iam.user_exception", label: "Kişisel istisna" },
