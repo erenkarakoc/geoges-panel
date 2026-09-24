@@ -291,7 +291,8 @@ function RecoveryCodeForm() {
         className="font-mono"
         id="recovery-code"
         name="code"
-        placeholder="A7K2M-P9XQ4"
+        // The shape, not a code: a realistic-looking one invites somebody to try typing it.
+        placeholder="XXXXX-XXXXX"
         spellCheck={false}
       />
       <p className="text-xs text-muted-foreground">
