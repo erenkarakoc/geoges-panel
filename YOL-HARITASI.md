@@ -52,7 +52,7 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 | TASK-0110 | Site geneli arama: yetkili sonuçlar, Türkçe eşleşme, öneri, tür grupları, son açılanlar ve yeniden dizinleme | 🔨 Bu fazda yapılabilecek işi bitti; gerçek kayıt kaynaklarıyla kabulü Faz 09'da — ayrıntı aşağıda |
 | TASK-0113 | Ana ekrana ekleme, uygulama simgeleri, mobil dokunma alanları ve görev kartları | 🔨 Yapıldı; HTTPS üzerinden kurulum ve gerçek cihaz kabulü bekliyor |
 | TASK-0028 | Sayfaya göre eylem/kaydetme düğmeleri taşıyan sabit alt şerit | 🔨 Kuruldu; görev detayı ve "Görev ver" ekranları kullanıyor. Ekranda görülmesi (masaüstü + telefon turu) bekliyor |
-| TASK-0112 | Tek kullanımlık 2FA kurtarma kodları, giriş kilidi, hareketsizlik/oturum sonu ve ikinci faktör sıfırlama | 🔨 Planı onaylandı (D-272), beş adım sırayla kuruluyor |
+| TASK-0112 | Tek kullanımlık 2FA kurtarma kodları, giriş kilidi, hareketsizlik/oturum sonu ve ikinci faktör sıfırlama | 🔨 Beş adımın hepsi kuruldu (göç 0038-0042); tarayıcı turu bekliyor |
 | TASK-0111 — M1 | Sahibin kendi makinesinde kurulum, 2FA ile giriş ve uçtan uca kabul turu | ⬜ Faz 07'nin kapanış kabulü |
 
 “Bugün” ekranının adlandırması (TASK-0043) ve odak/erişilebilirlik düzeltmeleri (TASK-0054) de tamamlandı.
@@ -81,6 +81,8 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 ### Son doğrulamalar
 
+- **Hesap güvenliği kuruldu (TASK-0112, göç 0038-0042).** Giriş kilidi sağlayıcıya sorulmadan önce bakıyor (kilitliyken doğru parola da geçmiyor); panelin kendi oturumu 30 gün / 3 gün hareketsizlik kurallarını taşıyor ve hesap pasifleşince anında kapanıyor; on tek kullanımlık kurtarma kodu bir kez gösteriliyor ve kullanıldığında ikinci adımı geçtiğini panelin oturumu söylüyor; kayıp faktör tek bir sunucu dosyasındaki yönetici anahtarıyla siliniyor; yöneticinin sıfırlaması sahip katmanına bildiriliyor; iki adım zorunlu roller yöneticinin tarihli kuralından okunuyor. **298 birim testi**, **16 dosyada 226 veritabanı testi**, biçim ve derleme geçti; CI **35961770987 yeşil**. **Tarayıcı turu bekliyor.**
+
 - **Alt bant kuruldu (TASK-0028).** Ekran kendi bandını yazıyor, içerik bandın altından kayıyor ve bandın yüksekliği kadar boşluk alıyor; telefonda gezinme çubuğu bant varken çekiliyor. Görev detayının kapanış adımları ve "Görev ver" sayfasının eylemi banda taşındı. **273 birim testi**, lint, tip, biçim ve derleme geçti, CI yeşil; **ekranda görülmesi bekliyor**.
 
 - **Çoklu kapsam kuruldu (0037).** Bir kayıt hem şantiye hem proje taşıyorsa eskiden yalnız ilkine bakılıyordu; artık her yer ayrı değerlendiriliyor ve birine yetki yetiyor. Okuma anı denetimi de kovanın kendi yerine bakıyor, yoksa kaydı projesinden bulan kişiye sağlıklı dizin bozukmuş gibi görünüyordu. Dört yeni test; ikisi göç geri alındığında düşüyor. **208 veritabanı testi**, **273 birim testi**, biçim ve derleme geçti; `a8f294e` ile gönderildi, CI **35928366252 yeşil**.
@@ -106,8 +108,8 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 ## Buradan sonraki sıra
 
-1. **TASK-0112:** onaylandı, kuruluyor — kurtarma kodları, giriş kilidi, oturum ömrü ve ikinci faktör sıfırlaması.
-2. **Bekleyen iki görsel doğrulama:** alt bandın masaüstü/telefon turu ve TASK-0113'ün gerçek cihazda ana ekran + bildirim kabulü. İkisi de sizin giriş yapmanıza bağlı.
+1. **Bekleyen tarayıcı turu (üç iş birden):** alt bant (masaüstü + telefon), hesap güvenliği (giriş, oturum, kurtarma kodu ekranı) ve TASK-0113'ün gerçek cihazda ana ekran + bildirim kabulü. Üçü de sizin giriş yapmanıza bağlı.
+2. **Kullanıcılar & Roller ekranı:** yöneticinin ikinci faktör sıfırlama düğmesi bu ekranı bekliyor; ekranın tasarımı Faz 02'de yapılmamış.
 3. **TASK-0111 — M1:** yerel kabul turu ve Faz 07 çıkış kontrolü.
 4. **Faz 08:** iş akışı motoru ve görsel tasarımcı.
 5. **Faz 09'da açılacak arama işleri:** modüller kendi kaynaklarını kaydedince gerçek kayıtlarla kabul.
