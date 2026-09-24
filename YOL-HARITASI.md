@@ -52,7 +52,7 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 | TASK-0110 | Site geneli arama: yetkili sonuçlar, Türkçe eşleşme, öneri, tür grupları, son açılanlar ve yeniden dizinleme | 🔨 Bu fazda yapılabilecek işi bitti; gerçek kayıt kaynaklarıyla kabulü Faz 09'da — ayrıntı aşağıda |
 | TASK-0113 | Ana ekrana ekleme, uygulama simgeleri, mobil dokunma alanları ve görev kartları | 🔨 Yapıldı; HTTPS üzerinden kurulum ve gerçek cihaz kabulü bekliyor |
 | TASK-0028 | Sayfaya göre eylem/kaydetme düğmeleri taşıyan sabit alt şerit | 🔨 Kuruldu; görev detayı ve "Görev ver" ekranları kullanıyor. Ekranda görülmesi (masaüstü + telefon turu) bekliyor |
-| TASK-0112 | Tek kullanımlık 2FA kurtarma kodları, giriş kilidi, hareketsizlik/oturum sonu ve ikinci faktör sıfırlama | 📝 Planı yazıldı (beş adım); **onayınız bekleniyor**, sonra kuruluyor |
+| TASK-0112 | Tek kullanımlık 2FA kurtarma kodları, giriş kilidi, hareketsizlik/oturum sonu ve ikinci faktör sıfırlama | 🔨 Planı onaylandı (D-272), beş adım sırayla kuruluyor |
 | TASK-0111 — M1 | Sahibin kendi makinesinde kurulum, 2FA ile giriş ve uçtan uca kabul turu | ⬜ Faz 07'nin kapanış kabulü |
 
 “Bugün” ekranının adlandırması (TASK-0043) ve odak/erişilebilirlik düzeltmeleri (TASK-0054) de tamamlandı.
@@ -106,7 +106,7 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 ## Buradan sonraki sıra
 
-1. **TASK-0112:** planı hazır, **onayınızı bekliyor** — kurtarma kodları, giriş kilidi, oturum ömrü ve ikinci faktör sıfırlaması.
+1. **TASK-0112:** onaylandı, kuruluyor — kurtarma kodları, giriş kilidi, oturum ömrü ve ikinci faktör sıfırlaması.
 2. **Bekleyen iki görsel doğrulama:** alt bandın masaüstü/telefon turu ve TASK-0113'ün gerçek cihazda ana ekran + bildirim kabulü. İkisi de sizin giriş yapmanıza bağlı.
 3. **TASK-0111 — M1:** yerel kabul turu ve Faz 07 çıkış kontrolü.
 4. **Faz 08:** iş akışı motoru ve görsel tasarımcı.

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-24 — Three build shapes accepted
+
+- The owner approved every decision that was still waiting: D-272 (TASK-0112's account security shape, including the server-only service-role adapter for removing a lost factor and the lock that releases only with time), and D-265 and D-266, which had stayed PROPOSED although the revision requests and the search were long since built and accepted to those shapes.
+- TASK-0112 moves to IMPLEMENTING and its five steps are built in order.
+
 ## 2026-09-24 — One place is enough to find a record that names two
 
 - TASK-0110 (D-270, OQ-034): a search row may name both a site and a project, and only the first was ever judged — `coalesce(site, project)` — so a record of both was visible to the site's people and invisible to the project's, whatever their grants said. 0037 judges each place on its own: authorisation for any one of them is enough.
