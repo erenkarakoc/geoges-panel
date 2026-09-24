@@ -20,32 +20,34 @@ export function loginLock(email: string) {
   });
 }
 
-/** Records one try and returns the lock it caused, or the lock already in force. */
+/**
+ * Records one try and returns the lock it caused, or the lock already in force. How many tries
+ * are allowed and how long the lock lasts are not arguments: the function reads the company's
+ * dated rules itself, so the numbers cannot arrive with the call (0039, D-257).
+ */
 export function noteLoginAttempt(attempt: {
   email: string;
   succeeded: boolean;
   ip: string | null;
   userAgent: string | null;
-  limit: number;
-  lockMinutes: number;
 }) {
   return runSignedOut(async (db) => {
     const { rows } = await sql<{ until: Date | null }>`
       select iam.note_login_attempt(${attempt.email}, ${attempt.succeeded}, ${attempt.ip},
-                                    ${attempt.userAgent}, ${attempt.limit},
-                                    ${attempt.lockMinutes}) as until`.execute(db);
+                                    ${attempt.userAgent}) as until`.execute(db);
     return rows[0]?.until ?? null;
   });
 }
 
+/** How long a session may live is the company's rule, read by the function itself (0039). */
 export function startSession(
   identity: DbIdentity,
-  session: { deviceLabel: string | null; days: number; secondFactor: boolean },
+  session: { deviceLabel: string | null; secondFactor: boolean },
 ) {
   return runAsUser(identity, async (db) => {
     const { rows } = await sql<{ id: string }>`
       select iam.start_session(${identity.userId}::uuid, ${session.deviceLabel},
-                               ${session.days}, ${session.secondFactor}) as id`.execute(db);
+                               ${session.secondFactor}) as id`.execute(db);
     return rows[0].id;
   });
 }
@@ -54,13 +56,13 @@ export function startSession(
  * The session as the request path needs it, or null when it is over. Reading it also keeps it
  * alive, at most one write every five minutes (D-230).
  */
-export function useSession(sessionId: string, idleDays: number) {
+export function useSession(sessionId: string) {
   return runSignedOut(async (db) => {
     const { rows } = await sql<{
       user_id: string;
       second_factor_at: Date | null;
       expires_at: Date;
-    }>`select * from iam.use_session(${sessionId}::uuid, ${idleDays})`.execute(db);
+    }>`select * from iam.use_session(${sessionId}::uuid)`.execute(db);
     const row = rows[0];
     return row
       ? {

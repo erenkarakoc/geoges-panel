@@ -20,6 +20,8 @@ const PERSON = id(1);
 const OTHER = id(2);
 const PEOPLE = [PERSON, OTHER];
 const mail = (n: number) => `t0112-${n}@example.test`;
+/** The company's own settings, which the functions read for themselves (seed 0007, 0039). */
+const LIMIT = 5;
 
 let admin: pg.Client;
 let pool: pg.Pool;
@@ -76,17 +78,9 @@ describe("the sign-in lock (REQ-IAM-005)", () => {
     const { loginLock, noteLoginAttempt } = await store();
     expect(await loginLock(mail(1))).toBeNull();
     const attempt = (succeeded: boolean) =>
-      noteLoginAttempt({
-        email: mail(1),
-        succeeded,
-        ip: "127.0.0.1",
-        userAgent: "deneme",
-        limit: 3,
-        lockMinutes: 15,
-      });
+      noteLoginAttempt({ email: mail(1), succeeded, ip: "127.0.0.1", userAgent: "deneme" });
 
-    expect(await attempt(false)).toBeNull();
-    expect(await attempt(false)).toBeNull();
+    for (let n = 1; n < LIMIT; n += 1) expect(await attempt(false)).toBeNull();
     const locked = await attempt(false);
     expect(locked).toBeInstanceOf(Date);
     // Knocking again neither extends the lock nor clears it.
@@ -102,24 +96,21 @@ describe("the sign-in lock (REQ-IAM-005)", () => {
       [mail(1), startedAt],
     );
     expect(rows).toHaveLength(1);
-    expect(rows[0]).toMatchObject({ actor_user_id: null, email: mail(1), failures: "3" });
+    expect(rows[0]).toMatchObject({
+      actor_user_id: null,
+      email: mail(1),
+      failures: String(LIMIT),
+    });
   });
 
   it("counts from the last success, so an old failure does not add up", async () => {
     const { noteLoginAttempt } = await store();
     const attempt = (succeeded: boolean) =>
-      noteLoginAttempt({
-        email: mail(2),
-        succeeded,
-        ip: null,
-        userAgent: null,
-        limit: 2,
-        lockMinutes: 5,
-      });
-    expect(await attempt(false)).toBeNull();
+      noteLoginAttempt({ email: mail(2), succeeded, ip: null, userAgent: null });
+    // Fail up to one short of the limit, then succeed: the count starts over.
+    for (let n = 1; n < LIMIT; n += 1) expect(await attempt(false)).toBeNull();
     expect(await attempt(true)).toBeNull();
-    // One failure after the success is one, not two.
-    expect(await attempt(false)).toBeNull();
+    for (let n = 1; n < LIMIT; n += 1) expect(await attempt(false)).toBeNull();
     expect(await attempt(false)).toBeInstanceOf(Date);
   });
 
@@ -142,10 +133,9 @@ describe("the panel's own session (D-230, REQ-IAM-006)", () => {
     const { startSession, useSession, revokeSession } = await store();
     const sessionId = await startSession(as(PERSON), {
       deviceLabel: "deneme cihaz",
-      days: 30,
       secondFactor: false,
     });
-    const live = await useSession(sessionId, 3);
+    const live = await useSession(sessionId);
     expect(live).toMatchObject({ userId: PERSON, secondFactorAt: null });
 
     // Idle for longer than the window: the same row no longer answers.
@@ -153,9 +143,9 @@ describe("the panel's own session (D-230, REQ-IAM-006)", () => {
       "update iam.session set last_seen_at = now() - interval '4 days' where id = $1",
       [sessionId],
     );
-    expect(await useSession(sessionId, 3)).toBeNull();
+    expect(await useSession(sessionId)).toBeNull();
     await admin.query("update iam.session set last_seen_at = now() where id = $1", [sessionId]);
-    expect(await useSession(sessionId, 3)).not.toBeNull();
+    expect(await useSession(sessionId)).not.toBeNull();
 
     // Past its day, whatever its last use. A session may not be born expired — the constraint
     // says so — so the simulation moves its birth back with it.
@@ -164,7 +154,7 @@ describe("the panel's own session (D-230, REQ-IAM-006)", () => {
                               expires_at = now() - interval '1 hour' where id = $1`,
       [sessionId],
     );
-    expect(await useSession(sessionId, 3)).toBeNull();
+    expect(await useSession(sessionId)).toBeNull();
     await admin.query(
       `update iam.session set created_at = now(), expires_at = now() + interval '30 days'
         where id = $1`,
@@ -172,7 +162,7 @@ describe("the panel's own session (D-230, REQ-IAM-006)", () => {
     );
 
     expect(await revokeSession(as(PERSON), sessionId, "signed_out")).toBe(true);
-    expect(await useSession(sessionId, 3)).toBeNull();
+    expect(await useSession(sessionId)).toBeNull();
     // Revoking twice changes nothing, and the row is kept with its reason.
     expect(await revokeSession(as(PERSON), sessionId, "signed_out")).toBe(false);
     const { rows } = await admin.query(
@@ -186,32 +176,31 @@ describe("the panel's own session (D-230, REQ-IAM-006)", () => {
     const { startSession, useSession } = await store();
     const sessionId = await startSession(as(PERSON), {
       deviceLabel: null,
-      days: 30,
       secondFactor: true,
     });
     const seenAt = async () =>
       (await admin.query("select last_seen_at from iam.session where id = $1", [sessionId])).rows[0]
         .last_seen_at as Date;
     const first = await seenAt();
-    await useSession(sessionId, 3);
+    await useSession(sessionId);
     expect((await seenAt()).getTime()).toBe(first.getTime());
 
     await admin.query(
       "update iam.session set last_seen_at = now() - interval '6 minutes' where id = $1",
       [sessionId],
     );
-    await useSession(sessionId, 3);
+    await useSession(sessionId);
     expect((await seenAt()).getTime()).toBeGreaterThan(first.getTime() - 60_000);
   });
 
   it("closes every session of an account the moment it is disabled", async () => {
     const { startSession, useSession } = await store();
-    const one = await startSession(as(OTHER), { deviceLabel: null, days: 30, secondFactor: true });
-    const two = await startSession(as(OTHER), { deviceLabel: null, days: 30, secondFactor: true });
+    const one = await startSession(as(OTHER), { deviceLabel: null, secondFactor: true });
+    const two = await startSession(as(OTHER), { deviceLabel: null, secondFactor: true });
     await admin.query("update iam.user set status = 'disabled' where id = $1", [OTHER]);
     try {
-      expect(await useSession(one, 3)).toBeNull();
-      expect(await useSession(two, 3)).toBeNull();
+      expect(await useSession(one)).toBeNull();
+      expect(await useSession(two)).toBeNull();
       const { rows } = await admin.query(
         "select distinct revoked_reason from iam.session where user_id = $1",
         [OTHER],
@@ -224,8 +213,8 @@ describe("the panel's own session (D-230, REQ-IAM-006)", () => {
 
   it("shows a person their own sessions and nobody else's", async () => {
     const { startSession } = await store();
-    await startSession(as(PERSON), { deviceLabel: "kendi", days: 30, secondFactor: true });
-    await startSession(as(OTHER), { deviceLabel: "başkası", days: 30, secondFactor: true });
+    await startSession(as(PERSON), { deviceLabel: "kendi", secondFactor: true });
+    await startSession(as(OTHER), { deviceLabel: "başkası", secondFactor: true });
     const mine = await runAsUser()(as(PERSON), async (db) => {
       const { sql } = await import("kysely");
       const { rows } = await sql<{
@@ -241,11 +230,10 @@ describe("the panel's own session (D-230, REQ-IAM-006)", () => {
     const { startSession, useSession, markSessionSecondFactor } = await store();
     const sessionId = await startSession(as(PERSON), {
       deviceLabel: null,
-      days: 30,
       secondFactor: false,
     });
     expect(await markSessionSecondFactor(as(PERSON), sessionId)).toBe(true);
-    expect((await useSession(sessionId, 3))?.secondFactorAt).toBeInstanceOf(Date);
+    expect((await useSession(sessionId))?.secondFactorAt).toBeInstanceOf(Date);
     // Already marked: nothing to do and no second timestamp.
     expect(await markSessionSecondFactor(as(PERSON), sessionId)).toBe(false);
   });
