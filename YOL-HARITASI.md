@@ -1,6 +1,6 @@
 # GEOGES Panel — Yol Haritası
 
-Son güncelleme: 2026-09-24. Şu an **Faz 07 — Temel yapım** içindeyiz; aktif iş **TASK-0110 — Site geneli arama**.
+Son güncelleme: 2026-09-24. Şu an **Faz 07 — Temel yapım** içindeyiz; fazın kalan tek işi **TASK-0111 — M1 yerel kabul turu**: on bir adımlık kontrol listesi hazır, turu sahibi atacak.
 
 Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının](ai/TASKS.md) ve [güncel durumun](ai/CURRENT_STATE.md) okunması kolay özetidir. Faz sırası ve kapsam için bağlayıcı kaynak `ai/MASTER_ROADMAP.md`'dir. “Tamamlandı” temel altyapının kabulünü ifade eder; sonraki fazlardaki iş ekranlarının da yapıldığı anlamına gelmez.
 
@@ -50,14 +50,19 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 | TASK-0108 | Görevler, görev verme formu, bildirim çekmecesi, canlı sayaç, telefon bildirimi, günlük özet ve gecikme uyarıları | ✅ Çekirdek tamamlandı; gerçek telefonda push kabulü açık, e-posta sağlayıcısı seçilene kadar özet dosyaya yazılıyor |
 | TASK-0109 | Revizyon talebi, eski/yeni karşılaştırması, gerekçeli karar, düzeltme hareketi ve bildirim bağlantısı | ✅ Çekirdek tamamlandı; iş kaydı uygulayıcıları ilgili modül dilimlerinde |
 | TASK-0110 | Site geneli arama: yetkili sonuçlar, Türkçe eşleşme, öneri, tür grupları, son açılanlar ve yeniden dizinleme | 🔨 Bu fazda yapılabilecek işi bitti; gerçek kayıt kaynaklarıyla kabulü Faz 09'da — ayrıntı aşağıda |
-| TASK-0113 | Ana ekrana ekleme, uygulama simgeleri, mobil dokunma alanları ve görev kartları | 🔨 Yapıldı; HTTPS üzerinden kurulum ve gerçek cihaz kabulü bekliyor |
-| TASK-0028 | Sayfaya göre eylem/kaydetme düğmeleri taşıyan sabit alt şerit | 🔨 Kuruldu; görev detayı ve "Görev ver" ekranları kullanıyor. Ekranda görülmesi (masaüstü + telefon turu) bekliyor |
-| TASK-0112 | Tek kullanımlık 2FA kurtarma kodları, giriş kilidi, hareketsizlik/oturum sonu ve ikinci faktör sıfırlama | 🔨 Beş adımın hepsi kuruldu (göç 0038-0042); tarayıcı turu bekliyor |
-| TASK-0111 — M1 | Sahibin kendi makinesinde kurulum, 2FA ile giriş ve uçtan uca kabul turu | ⬜ Faz 07'nin kapanış kabulü |
+| TASK-0113 | Ana ekrana ekleme, uygulama simgeleri, mobil dokunma alanları ve görev kartları | 🔨 Yapıldı; ana ekrana kurulum ve gerçek cihazda bildirim kabulü **gerçek bir adres** bekliyor. Sahip tünel istemedi (D-274); barındırma bağımlılığı DEF-008 |
+| TASK-0028 | Sayfaya göre eylem/kaydetme düğmeleri taşıyan sabit alt şerit | ✅ Tamamlandı; 24 Eylül turunda masaüstünde ve 375 px'te görüldü: bant kartın altında, içerik bandın yüksekliği kadar boşluk alıyor, telefonun gezinme çubuğu bant varken çekiliyor ve bandın düğmesi içinde olmadığı formu gönderiyor |
+| TASK-0112 | Tek kullanımlık 2FA kurtarma kodları, giriş kilidi, hareketsizlik/oturum sonu ve ikinci faktör sıfırlama | ✅ Tamamlandı (göç 0038-0043); tarayıcı turunda giriş, oturum satırları, kurtarma kodu ekranı ve giriş kilidi gerçek ekranda doğrulandı, turda çıkan üç kusur düzeltildi |
+| Kullanıcılar & Roller (asgari) | Yöneticinin ikinci faktör sıfırlama düğmesi için asgari kişiler ekranı (D-273) | ✅ Kuruldu (`/users-roles`, göç 0043): kişiler, iki adım durumu, kalan kurtarma kodu ve açık oturum **sayıları**, "İkinci faktörü sıfırla". Rol, yetki ve vekâlet kendi ekranının işi; bu ekran o tasarım gelince değiştirilecek. Tarayıcıda görülmesi bekliyor |
+| TASK-0111 — M1 | Sahibin kendi makinesinde kurulum, 2FA ile giriş ve uçtan uca kabul turu | ⬜ Faz 07'nin kapanış kabulü; **kontrol listesi hazır** ([m1-local-acceptance.md](docs/features/m1-local-acceptance.md)), tur sahibinde |
 
 “Bugün” ekranının adlandırması (TASK-0043) ve odak/erişilebilirlik düzeltmeleri (TASK-0054) de tamamlandı.
 
-### Aktif iş: TASK-0110 — Arama
+### Faz 07'de kalan işler
+
+Fazın yapım işi bitti. Kalan üç şeyin hiçbiri kod işi değil: **M1 turu** sahibinde, **TASK-0113'ün** ana ekran ve bildirim kabulü gerçek bir adres bekliyor, **aramanın** son iki maddesi modüller kendi kayıt kaynaklarını kaydettiğinde Faz 09'da kabul edilecek.
+
+### Arama — TASK-0110 ayrıntısı
 
 | Parça | Güncel durum |
 |---|---|
@@ -81,9 +86,15 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 ### Son doğrulamalar
 
-- **Hesap güvenliği kuruldu (TASK-0112, göç 0038-0042).** Giriş kilidi sağlayıcıya sorulmadan önce bakıyor (kilitliyken doğru parola da geçmiyor); panelin kendi oturumu 30 gün / 3 gün hareketsizlik kurallarını taşıyor ve hesap pasifleşince anında kapanıyor; on tek kullanımlık kurtarma kodu bir kez gösteriliyor ve kullanıldığında ikinci adımı geçtiğini panelin oturumu söylüyor; kayıp faktör tek bir sunucu dosyasındaki yönetici anahtarıyla siliniyor; yöneticinin sıfırlaması sahip katmanına bildiriliyor; iki adım zorunlu roller yöneticinin tarihli kuralından okunuyor. **298 birim testi**, **16 dosyada 226 veritabanı testi**, biçim ve derleme geçti; CI **35961770987 yeşil**. **Tarayıcı turu bekliyor.**
+- **M1 kontrol listesi yazıldı (TASK-0111, 24 Eylül).** Kurulum yönergesi paneli nasıl çalıştıracağınızı söylüyordu, çalıştıktan sonra ne yapacağınızı söylemiyordu. Tur artık yazılı: [m1-local-acceptance.md](docs/features/m1-local-acceptance.md) — on bir adım, her birinde *ne yapacağınız* ve *ne görmeniz gerektiği*. Başında bilerek yapılmayanların tablosu var (modül ekranları, iş akışı tasarımcısı, aramada gerçek kayıt sonuçları, telefona bildirim), çünkü yoksa henüz gelmemiş bir dilim hata olarak not alınır. Geri bildirim düzeltmeyse görev, kapsamı değiştiriyorsa CHG olur.
 
-- **Alt bant kuruldu (TASK-0028).** Ekran kendi bandını yazıyor, içerik bandın altından kayıyor ve bandın yüksekliği kadar boşluk alıyor; telefonda gezinme çubuğu bant varken çekiliyor. Görev detayının kapanış adımları ve "Görev ver" sayfasının eylemi banda taşındı. **273 birim testi**, lint, tip, biçim ve derleme geçti, CI yeşil; **ekranda görülmesi bekliyor**.
+- **Tarayıcı turu yapıldı (24 Eylül, sahip giriş yaptı).** Alt bant, hesap güvenliği ve panelin kendi oturumu gerçek ekranda doğrulandı: iki canlı oturum satırı (tarayıcı panelinden "Windows · Chrome", sahibin telefonundan "iPhone · Safari") ikinci faktör işaretli, otuz günlük bitiş ve ilerleyen son görülme ile duruyordu. **Tur üç kusur buldu, üçü de düzeltildi:** on beş dakikalık kilit "16 dakika" diyordu (kalan süre paneli çalıştıran makinenin saatiyle ölçülüyordu, kilidi yazan ise veritabanının saati — süre artık aynı ifadede veritabanından geliyor); kurtarma kodu alanının placeholder'ı gerçek bir kod gibi okunuyordu (`XXXXX-XXXXX` oldu); ve giriş sütunu hem ortalayıp hem kendi kendine kaydığı için on kodun başlığı logonun altına kayıyordu (sütun kayıyor, içindeki sarmalayıcı `min-h-full` ile ortalıyor; 390x380'de başlık logoyu 50 px boşlukla geçiyor). Hiçbirini test yakalamazdı: üçü de bakmakla görülen şeyler. Kod ekranı tek bir kod okunmadan doğrulandı — desene uyan on ayrı girdi sayıldı, veritabanı on kullanılmamış özet ve bir `two_factor.enrolled` kaydı gösterdi.
+
+- **Kullanıcılar ekranı asgari haliyle kuruldu (D-273, göç 0043).** Yöneticinin ikinci faktör sıfırlama düğmesinin basılacak yeri yoktu: menüde girdi vardı, ekran yoktu ve Faz 02'de tasarlanmamıştı — uydurmak yerine sahibe soruldu, sahip "şimdilik asgari ekran" dedi. Erişim hakkında gösterdiği her şey **sayı**, asla içerik: kalan kurtarma kodu ve açık oturum sayısı, yani yönetici birinin geri dönüş yolu var mı diye bakabiliyor, o yolun ne olduğunu göremiyor. Veritabanı `iam.module.manage` olmayana hiçbir şey cevaplamıyor. Menüdeki girdi de var olmayan bir yetkiyi istiyordu; artık ekranın ve veritabanının gerçekten denetlediği yetkiyi istiyor. **299 birim testi**, lint, tip, biçim ve derleme geçti.
+
+- **Hesap güvenliği kuruldu (TASK-0112, göç 0038-0042).** Giriş kilidi sağlayıcıya sorulmadan önce bakıyor (kilitliyken doğru parola da geçmiyor); panelin kendi oturumu 30 gün / 3 gün hareketsizlik kurallarını taşıyor ve hesap pasifleşince anında kapanıyor; on tek kullanımlık kurtarma kodu bir kez gösteriliyor ve kullanıldığında ikinci adımı geçtiğini panelin oturumu söylüyor; kayıp faktör tek bir sunucu dosyasındaki yönetici anahtarıyla siliniyor; yöneticinin sıfırlaması sahip katmanına bildiriliyor; iki adım zorunlu roller yöneticinin tarihli kuralından okunuyor. **298 birim testi**, **16 dosyada 226 veritabanı testi**, biçim ve derleme geçti; CI **35961770987 yeşil**. Tarayıcı turu 24 Eylül'de yapıldı; aşağıda.
+
+- **Alt bant kuruldu ve görüldü (TASK-0028, artık tamamlandı).** Ekran kendi bandını yazıyor, içerik bandın altından kayıyor ve bandın yüksekliği kadar boşluk alıyor; telefonda gezinme çubuğu bant varken çekiliyor. Görev detayının kapanış adımları ve "Görev ver" sayfasının eylemi banda taşındı. **273 birim testi**, lint, tip, biçim ve derleme geçti, CI yeşil; tur masaüstünde ve 375 px'te doğruladı — bandın düğmesi içinde olmadığı formu gönderip görevi kapattı, gerekçe alanı kayıtla kaldı.
 
 - **Çoklu kapsam kuruldu (0037).** Bir kayıt hem şantiye hem proje taşıyorsa eskiden yalnız ilkine bakılıyordu; artık her yer ayrı değerlendiriliyor ve birine yetki yetiyor. Okuma anı denetimi de kovanın kendi yerine bakıyor, yoksa kaydı projesinden bulan kişiye sağlıklı dizin bozukmuş gibi görünüyordu. Dört yeni test; ikisi göç geri alındığında düşüyor. **208 veritabanı testi**, **273 birim testi**, biçim ve derleme geçti; `a8f294e` ile gönderildi, CI **35928366252 yeşil**.
 
@@ -108,20 +119,20 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 ## Buradan sonraki sıra
 
-1. **Bekleyen tarayıcı turu (üç iş birden):** alt bant (masaüstü + telefon), hesap güvenliği (giriş, oturum, kurtarma kodu ekranı) ve TASK-0113'ün gerçek cihazda ana ekran + bildirim kabulü. Üçü de sizin giriş yapmanıza bağlı.
-2. **Kullanıcılar & Roller ekranı:** yöneticinin ikinci faktör sıfırlama düğmesi bu ekranı bekliyor; ekranın tasarımı Faz 02'de yapılmamış.
-3. **TASK-0111 — M1:** yerel kabul turu ve Faz 07 çıkış kontrolü.
-4. **Faz 08:** iş akışı motoru ve görsel tasarımcı.
-5. **Faz 09'da açılacak arama işleri:** modüller kendi kaynaklarını kaydedince gerçek kayıtlarla kabul.
+1. **TASK-0111 — M1:** kontrol listesi hazır, tur sizde. Notlarınız kayda girer (düzeltme → görev, kapsam → CHG), sonra Faz 07 çıkış kontrolü.
+2. **Kullanıcılar ekranının tarayıcıda görülmesi:** turun 8. adımı; oturum açıldığında doğrulanacak.
+3. **Faz 08:** iş akışı motoru ve görsel tasarımcı.
+4. **Faz 09'da açılacak arama işleri:** modüller kendi kaynaklarını kaydedince gerçek kayıtlarla kabul, ve tek bir sözcüğü çok sayıda kaydın paylaştığı durumda sıralama.
+5. **TASK-0113'ün kalan kabulü:** barındırma geldiğinde ana ekrana kurulum ve gerçek cihazda bildirim.
 
-**Paralel kabul:** TASK-0113 mobil kurulum doğrulaması HTTPS/gerçek cihaz koşullarını bekliyor. Barındırma bağımlılığı DEF-008 olarak açık; barındırma kararı Faz 09 çıkışına bağlı.
+**Paralel kabul:** TASK-0113'ün mobil kurulum doğrulaması HTTPS ve gerçek cihaz koşullarını bekliyor; sahip bunun için geçici bir tünel istemedi (D-274). Barındırma bağımlılığı DEF-008 olarak açık ve barındırma kararı Faz 09 çıkışına bağlı, yani bu kabul M1'i ve Faz 08'i bekletmiyor.
 
 ## Kilometre taşları ve veri kullanımı
 
 | Aşama | Ne zaman / koşul |
 |---|---|
 | **M0 — İlk ekranlar** | Tamamlandı: giriş, iki adımlı doğrulama ve uygulama kabuğu |
-| **M1 — Yerel kabul** | Faz 07 sonunda; sahibi kendi makinesinde tam akışı yürütür, geri bildirim kayda girer |
+| **M1 — Yerel kabul** | Faz 07 sonunda; sahibi kendi makinesinde tam akışı yürütür, geri bildirim kayda girer. Kontrol listesi hazır: [m1-local-acceptance.md](docs/features/m1-local-acceptance.md) |
 | **Pilot ve barındırma** | Faz 09 çıkışında sunucu/dağıtım kararı ve pilot kullanıcılar belirlenir; pilot örnek veriyle yapılır |
 | **Gerçek şirket verisi** | Faz 19'da; kendi sunucusuna geçiş, KVKK kontrolü, yedekten dönüş ve sahip onayı sonrasında |
 

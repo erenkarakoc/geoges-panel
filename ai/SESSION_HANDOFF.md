@@ -4,7 +4,31 @@ Last updated: 2026-09-24
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — account security built end to end (TASK-0112)
+## Latest continuation — the tour, the screen the reset needed, and the M1 walk
+
+The owner signed in and the browser pass finally happened, so the two tasks that were waiting only to be looked at are DONE.
+
+TASK-0028: the band sits at the card's bottom on the desktop and at 375 px, the scrolling area carries its measured height as padding and scroll padding, a screen without a band keeps the slot hidden at 0, and the phone's navigation leaves the DOM while a band is shown. The part that carried the risk was exercised for real — the band's button submitted the form it does not sit inside, closing a task while the reason field stayed with the record.
+
+TASK-0112: sign-in, the panel's own session, the recovery-code screen and the lock were all seen. Two live session rows were there to look at, one from the browser pane and one from the owner's phone, both with the second factor marked and a last-seen that moves. The tour found three faults that no test would have caught, because all three are things you see rather than assert:
+
+- A fifteen-minute lock said "16 dakika". The remaining time was measured against the machine running the panel, whose clock sits about a minute behind the database's — and the database is what wrote the lock. It now comes back with the lock, measured in the same statement.
+- The recovery field's placeholder read like a real code, which invites somebody to type it. It shows the shape now.
+- The auth column centred its content and scrolled by itself, which pushes the top of tall content out of its own scroll range; the ten codes hit exactly that and the heading slid under the logo. The column scrolls, a wrapper inside it centres with `min-h-full`, and the padding is symmetric and wider.
+
+The codes screen was verified without reading a single code: ten distinct entries matching the pattern were counted, and the database confirmed ten unused hashes and a `two_factor.enrolled` entry.
+
+The reset then got somewhere to be pressed. "Kullanıcılar & Roller" had a menu entry, no screen, and no Phase 02 design; inventing the real screen here was declined and the choice was put to the owner, who asked for a minimal one (D-273). `/users-roles` with migration 0043: the people, whether a factor is set up, how many recovery codes are left, how many sessions are open, and the reset behind a confirmation that says what will happen. Everything it says about access is a count and never its content, so a manager can see whether somebody has a way back in without learning what it is; the database answers nothing at all without `iam.module.manage`, which is also the permission the menu entry now asks for instead of one that never existed.
+
+TASK-0113's remaining acceptance waits for a real address. The owner declined a temporary tunnel (D-274), so the Home Screen install and a real push are verified when hosting exists (DEF-008); it blocks neither M1 nor Phase 08.
+
+That leaves TASK-0111, and it is the owner's own work. The setup guide said how to get the panel running and never what to do once it is, so the walk is written down: `docs/features/m1-local-acceptance.md`, eleven steps in order, each with what to do and what should be seen. It opens with a table of what is deliberately absent — module screens, the workflow designer, real search results, push on the phone — because the alternative is the owner writing up an unbuilt slice as a fault.
+
+One thing is owed on our side: `/users-roles` has not been seen in a browser. The owner is signed out after the lock test and we do not type their password, so it is the first thing to look at when they sign in — it is also step 8 of the walk.
+
+Validation: 299 unit tests, lint, types, prettier and the production build; CI green on every commit of the stretch.
+
+## Previous continuation — account security built end to end (TASK-0112)
 
 The owner approved D-272 on 2026-09-24 — and with it D-265 and D-266, which had stayed PROPOSED although their work was long since built and accepted — so all five steps were built the same day, each with its own tests and commit.
 
