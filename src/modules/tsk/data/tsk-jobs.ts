@@ -278,6 +278,35 @@ export function exchangeRateAlarm(): EventSubscriber {
 }
 
 /**
+ * A manager resetting somebody's second factor is the owner layer's business (TASK-0112, D-236):
+ * it is a legitimate operation, so it opens no task and is not marked critical — it is told, and
+ * the audit log holds the detail. IAM publishes the event; only this subscriber knows about
+ * notifications.
+ */
+export function securityAlerts(): EventSubscriber {
+  return {
+    name: "tsk.security-alerts",
+    events: ["two_factor.reset"],
+    replayable: false,
+    async handle(db, event) {
+      const userId = event.payload.user_id;
+      if (typeof userId !== "string") return;
+      const { rows: owners } = await sql<{ id: string }>`
+        select id from tsk.owner_people() as people(id)`.execute(db);
+      const subject = "Bir kullanıcının iki adımlı doğrulaması yönetici tarafından sıfırlandı";
+      for (const owner of owners) {
+        // Not to the person whose factor it was: they are already being asked to set a new one.
+        if (owner.id === userId) continue;
+        await sql`
+          select tsk.notify(${owner.id}::uuid, 'security.two_factor_reset', ${subject},
+                            '/audit-log', ${`two_factor.reset:${userId}`}, null,
+                            'iam', 'user', ${userId}::uuid)`.execute(db);
+      }
+    },
+  };
+}
+
+/**
  * Revision requests become work (TASK-0109 step 4, REQ-AUD-008, D-265): a new request opens one
  * task for its approvers and tells each of them; the decision closes that task and tells the
  * person who asked. One task per request, so a second event changes nothing (REQ-TSK-005).

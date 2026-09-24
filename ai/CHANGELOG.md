@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-24 — A manager can reset somebody's second factor (TASK-0112 step 4 finished)
+
+- The same three things as a recovery code, but to another account: the factor on the device that is gone is removed, the panel asks that person for a new one, and their open sessions end — a session that passed a factor which no longer exists should not continue.
+- Who may is checked inside the database function, not in a policy a caller could read around: the person themselves, or somebody holding `iam.module.manage`. An ordinary person asking for somebody else's account is refused and nothing is published.
+- D-236 asks for the owner layer to be told. IAM may not call TSK in code, so 0041 puts a `two_factor.reset` event on the outbox the way role assignments and deactivations have been published since 0006, and TSK's new `tsk.security-alerts` subscriber turns it into a notification for every owner — not a task and not marked critical, because a manager's reset is a legitimate operation, not an incident. The person whose factor it was is left out: they are already being asked for a new one.
+- Four more database tests, including the refusal publishing nothing and an unknown id changing nothing. One of them found a race in its own making: comparing the database's rows to this machine's clock. The tests now ask the database what time it is.
+- **The reset has no button yet.** "Kullanıcılar & Roller" is in the menu but has no screen, and inventing one here would invent screen design that Phase 02 never specified. The action, its permission check, its audit entry and its notification are all in place and tested.
+
 ## 2026-09-24 — Recovery codes (TASK-0112 step 4)
 
 - Ten one-time codes are made when a second factor is set up, shown once on the screen that follows and kept only as hashes (D-236). The alphabet leaves out the characters people read wrong, and typing forgives case, spaces and dashes: somebody entering one has already lost their phone.

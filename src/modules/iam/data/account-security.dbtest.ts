@@ -20,6 +20,7 @@ const PERSON = id(1);
 const OTHER = id(2);
 const PEOPLE = [PERSON, OTHER];
 const mail = (n: number) => `t0112-${n}@example.test`;
+const MANAGER_ROLE = "T0112_MGR";
 /** The company's own settings, which the functions read for themselves (seed 0007, 0039). */
 const LIMIT = 5;
 
@@ -41,6 +42,16 @@ async function cleanUp() {
   ]);
   // The audit log is append-only by design, so the events this suite writes about its own
   // throw-away addresses stay; the assertions below read only what this run wrote.
+  // Assignments first: a role with one pointing at it cannot be deleted.
+  await admin.query(
+    `delete from iam.role_assignment
+      where role_id in (select id from iam.role where code = '${MANAGER_ROLE}')`,
+  );
+  await admin.query(
+    `delete from iam.role_permission
+      where role_id in (select id from iam.role where code = '${MANAGER_ROLE}')`,
+  );
+  await admin.query(`delete from iam.role where code = '${MANAGER_ROLE}'`);
   await releaseTestPeople(admin, PEOPLE);
   await admin.query("select aud.purge_record_history_for_reset('iam.user', $1::uuid[])", [PEOPLE]);
   await admin.query("delete from iam.user where id = any($1::uuid[])", [PEOPLE]);
@@ -56,6 +67,18 @@ beforeAll(async () => {
        from unnest($1::uuid[]) with ordinality as u(id, n)`,
     [PEOPLE],
   );
+  // One of the two may manage users; the other is an ordinary person (0040, 0041).
+  await admin.query(`
+    insert into iam.role (code, name, level) values ('${MANAGER_ROLE}', 'Deneme kullanıcı yön.', 20);
+    insert into iam.role_permission (role_id, permission_id)
+      select r.id, p.id from iam.role r, iam.permission p
+       where r.code = '${MANAGER_ROLE}' and p.code = 'iam.module.manage';
+  `);
+  await admin.query(
+    `insert into iam.role_assignment (user_id, role_id, scope_type, starts_on)
+     select $1, id, 'company', iam.today() - 1 from iam.role where code = '${MANAGER_ROLE}'`,
+    [OTHER],
+  );
 });
 
 afterAll(async () => {
@@ -66,6 +89,8 @@ afterAll(async () => {
   await pool?.end();
 });
 
+/** The database's own clock: comparing its rows to this machine's clock is a race. */
+const dbNow = async () => (await admin.query<{ t: Date }>("select now() as t")).rows[0].t;
 const runAsUser = () => createRunAsUser({ connect: () => pool.connect() });
 const runSignedOut = () => createRunSignedOut({ connect: () => pool.connect() });
 const as = (userId: string) => ({ userId, actingRoleId: null });
@@ -74,7 +99,7 @@ describe("the sign-in lock (REQ-IAM-005)", () => {
   const store = async () => await import("./account-security-store");
 
   it("locks after the limit and reports the same lock while it lasts", async () => {
-    const startedAt = new Date();
+    const startedAt = await dbNow();
     const { loginLock, noteLoginAttempt } = await store();
     expect(await loginLock(mail(1))).toBeNull();
     const attempt = (succeeded: boolean) =>
@@ -277,5 +302,73 @@ describe("recovery codes (D-236)", () => {
         return sql`select count(*) from iam.recovery_code`.execute(db);
       }),
     ).rejects.toThrow("permission denied for table recovery_code");
+  });
+});
+
+describe("the second-factor flag (TASK-0112, D-236; 0040, 0041)", () => {
+  const store = async () => await import("./account-security-store");
+  const flagOf = async (userId: string) =>
+    (await admin.query("select must_setup_2fa from iam.user where id = $1", [userId])).rows[0]
+      .must_setup_2fa as boolean;
+
+  it("follows the provider for the person themselves, and says so in the audit log", async () => {
+    const { noteSecondFactor } = await store();
+    const startedAt = await dbNow();
+    expect(await noteSecondFactor(as(PERSON), PERSON, true)).toBe(true);
+    expect(await flagOf(PERSON)).toBe(false);
+    expect(await noteSecondFactor(as(PERSON), PERSON, false)).toBe(true);
+    expect(await flagOf(PERSON)).toBe(true);
+
+    const { rows } = await admin.query(
+      `select event_type, actor_user_id, payload->>'by' as by from aud.audit_log
+        where target_id = $1 and occurred_at >= $2 order by occurred_at`,
+      [PERSON, startedAt],
+    );
+    expect(rows.map((row) => [row.event_type, row.by])).toEqual([
+      ["two_factor.enrolled", "self"],
+      ["two_factor.reset", "self"],
+    ]);
+    expect(rows.every((row) => row.actor_user_id === PERSON)).toBe(true);
+  });
+
+  it("lets a user manager reset somebody else and tells the owner layer", async () => {
+    const { noteSecondFactor } = await store();
+    const startedAt = await dbNow();
+    expect(await noteSecondFactor(as(OTHER), PERSON, false)).toBe(true);
+    expect(await flagOf(PERSON)).toBe(true);
+
+    const { rows: audited } = await admin.query(
+      `select payload->>'by' as by, actor_user_id from aud.audit_log
+        where target_id = $1 and event_type = 'two_factor.reset' and occurred_at >= $2`,
+      [PERSON, startedAt],
+    );
+    expect(audited).toEqual([{ by: "manager", actor_user_id: OTHER }]);
+
+    // The notification itself is TSK's business, so IAM only puts the event on the outbox (0041).
+    const { rows: published } = await admin.query(
+      `select payload->>'by' as by, payload->>'actor_user_id' as actor from core.outbox
+        where event_code = 'two_factor.reset' and record_id = $1 and occurred_at >= $2`,
+      [PERSON, startedAt],
+    );
+    expect(published).toEqual([{ by: "manager", actor: OTHER }]);
+  });
+
+  it("refuses somebody with no right over the account, and publishes nothing", async () => {
+    const { noteSecondFactor } = await store();
+    const startedAt = await dbNow();
+    await expect(noteSecondFactor(as(PERSON), OTHER, false)).rejects.toMatchObject({
+      code: "42501",
+    });
+    const { rows } = await admin.query(
+      `select count(*)::int as n from core.outbox
+        where event_code = 'two_factor.reset' and record_id = $1 and occurred_at >= $2`,
+      [OTHER, startedAt],
+    );
+    expect(rows[0].n).toBe(0);
+  });
+
+  it("does not invent an account: an unknown id changes nothing", async () => {
+    const { noteSecondFactor } = await store();
+    expect(await noteSecondFactor(as(OTHER), id(99), false)).toBe(false);
   });
 });

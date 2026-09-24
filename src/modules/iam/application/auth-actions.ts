@@ -36,9 +36,15 @@ import {
 import {
   issueRecoveryCodes,
   noteSecondFactor,
+  revokeSessions,
   spendRecoveryCode,
 } from "@/modules/iam/data/account-security-store";
-import { noteSession } from "@/modules/iam/application/access";
+import {
+  AccessDeniedError,
+  assertCan,
+  noteSession,
+  signInIdentity,
+} from "@/modules/iam/application/access";
 import { closePanelSession, openPanelSession } from "@/modules/iam/application/panel-session";
 import { loginLock, noteLoginAttempt } from "@/modules/iam/data/account-security-store";
 import type { AuthProvider, AuthSession } from "@/modules/iam/domain/auth-provider";
@@ -252,6 +258,29 @@ export async function verifyTwoFactorAction(
     return { error: null, recoveryCodes: codes };
   }
   redirect(todayRoute);
+}
+
+/**
+ * A manager resets somebody else's second factor (D-236, REQ-IAM-003).
+ *
+ * The same three things happen as for a recovery code, but to another account: the factor on the
+ * device that is gone is removed, the panel asks that person for a new one, and their open sessions
+ * end, because a session that passed a factor which no longer exists should not continue. The audit
+ * log records who did it and the owner layer is told (0041).
+ */
+export async function resetSecondFactorAction(userId: string): Promise<{ error: string | null }> {
+  try {
+    await assertCan("iam.module.manage");
+    const actor = await signInIdentity();
+    if (!actor) return { error: authFailureMessage("not_authenticated") };
+    await createSupabaseSecondFactorAdmin().removeFactorsOf(userId);
+    await noteSecondFactor(actor.identity, userId, false);
+    await revokeSessions(actor.identity, userId, "second_factor_reset");
+    return { error: null };
+  } catch (error) {
+    if (error instanceof AccessDeniedError) return { error: error.message };
+    throw error;
+  }
 }
 
 /**

@@ -8,6 +8,7 @@ import {
   overdueAndEscalation,
   phonePush,
   revisionAlerts,
+  securityAlerts,
   systemWatch,
 } from "@/modules/tsk";
 import type { JobRegistry } from "@/platform/jobs/types";
@@ -34,6 +35,7 @@ export const jobRegistry: JobRegistry = {
     phonePush(processPushSender),
     exchangeRateAlarm(),
     revisionAlerts(),
+    securityAlerts(),
     ...(searchIndex.length > 0 ? [searchIndexer(searchIndex)] : []),
   ],
   jobs: [
