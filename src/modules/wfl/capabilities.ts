@@ -5,8 +5,9 @@ import { defineCapabilities } from "@/platform/capabilities/catalog";
  * actions are the palette's own steps and are never catalog actions (REQ-WFL-005), so this is
  * what other flows may listen to.
  *
- * Only what the engine already does is here: publishing a version. The instance and approval
- * events arrive with the execution step of TASK-0117.
+ * Only what the engine already does is here: publishing a version, and the three an instance
+ * announces about its own life. The approval and lock events arrive with the steps that produce
+ * them.
  */
 export const wflCapabilities = defineCapabilities({
   module: "WFL",
@@ -16,6 +17,27 @@ export const wflCapabilities = defineCapabilities({
       name: "Akış yayımlandı",
       when: "Bir akış sürümü canlıya alındığında",
       carries: ["akış", "sürüm", "yayımlayan"],
+      dataClass: "internal",
+    },
+    {
+      code: "workflow_instance.started",
+      name: "Akış başladı",
+      when: "Bir akış örneği tetiklendiğinde",
+      carries: ["akış", "sürüm", "tetikleyen olay/kayıt"],
+      dataClass: "internal",
+    },
+    {
+      code: "workflow_instance.completed",
+      name: "Akış tamamlandı",
+      when: "Bir örnek bitiş adımına ulaştığında",
+      carries: ["akış", "sürüm", "sonuç"],
+      dataClass: "internal",
+    },
+    {
+      code: "workflow_instance.failed",
+      name: "Akış hata ile durdu",
+      when: "Bir adım hata verdiğinde veya koşul süre sınırını aştığında",
+      carries: ["akış", "sürüm", "adım", "hata"],
       dataClass: "internal",
     },
   ],

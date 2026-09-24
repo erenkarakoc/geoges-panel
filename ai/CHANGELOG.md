@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-09-24 — Instances: what a running flow is, and what stops it (TASK-0117, step 2)
+
+- Migration 0046 adds the instance, its step states and the run log. An instance holds the **version** it started on, so publishing a newer definition over it changes nothing about the job already half done — a foreign key, not a rule somebody has to remember, and the test publishes a second version over a running instance to prove it.
+- A single-instance flow keeps one run per record through a partial unique index, so two events arriving together cannot both win. The same delivery never starts a second run either: the event's own id is on the instance.
+- The step limit is a **recorded outcome, not an exception**. Raising would have rolled back the very log line that says why the flow stopped, so entering a step past the limit ends the instance as failed, writes the reason and answers null. Found by a test that expected the log to be there and found it gone.
+- Starting a flow by hand is its own door in the database, because it asks for the design permission and the engine's door must not: the engine is the system and needs none (REQ-WFL-020).
+- Three faults the tests caught in passing: a unique index that could not read the flow's own single-instance flag, so the key it indexes is written by the function that knows; a policy whose subquery shadowed the outer `id` with the step state's own, which silently hid every run from the person it was waiting on; and a `case` that chose an event code, which says the same thing to the database and nothing at all to the contract test that reads these calls.
+- Sixteen more database tests; 262 in all.
+
 ## 2026-09-24 — A flow definition that cannot be edited out from under what is running (TASK-0117, step 1)
 
 - Migration 0045 opens the `wfl` schema: a flow, its versions, and the evidence a publish needs. Instances come with the execution step; this is what they will stand on.

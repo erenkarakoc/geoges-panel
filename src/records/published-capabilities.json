@@ -128,5 +128,20 @@
     "module": "WFL",
     "kind": "event",
     "code": "workflow.published"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
+    "code": "workflow_instance.completed"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
+    "code": "workflow_instance.failed"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
+    "code": "workflow_instance.started"
   }
 ]

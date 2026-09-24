@@ -13,5 +13,19 @@ export {
   type FlowVersionStatus,
 } from "@/modules/wfl/data/flow-store";
 
+export {
+  endInstance,
+  enterStep,
+  leaveStep,
+  noteWaiting,
+  readInstance,
+  readRunLog,
+  startInstance,
+  startInstanceByHand,
+  type FlowTrigger,
+  type InstanceRow,
+  type TriggerKind,
+} from "@/modules/wfl/data/instance-store";
+
 // The module's capability catalog, read by the flow engine (TASK-0118).
 export { wflCapabilities } from "@/modules/wfl/capabilities";
