@@ -45,6 +45,11 @@
     "code": "exchange_rate.received"
   },
   {
+    "module": "WFL",
+    "kind": "event",
+    "code": "lock.overridden"
+  },
+  {
     "module": "TSK",
     "kind": "event",
     "code": "notification.created"

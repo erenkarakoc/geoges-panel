@@ -14,6 +14,7 @@ import {
   readRunnable,
   escalateApproval,
   readStepRun,
+  holdLock,
   requestApproval,
   scheduleEscalation,
   scheduleWake,
@@ -62,6 +63,14 @@ import type { SystemDb } from "@/platform/jobs/types";
  */
 const conditionLimitMs = 2000;
 
+/** A lock step in a flow that is about no record at all (REQ-WFL-029). */
+export class LockWithoutRecord extends Error {
+  constructor(stepId: string) {
+    super(`kilit adımı bir kayıt istiyor, akışın kaydı yok: ${stepId}`);
+    this.name = "LockWithoutRecord";
+  }
+}
+
 export type RunResult =
   | { state: "ended"; status: "done" | "failed"; reason?: string }
   | { state: "waiting"; stepId: string };
@@ -102,6 +111,8 @@ type StepSink = {
   wait(stepId: string, detail: unknown): Promise<void>;
   /** Opens the approval and answers with its id, or null when nothing was really opened. */
   approval(stateId: string, step: FlowStep, ownerUserId: string): Promise<string | null>;
+  /** Holds a transition shut on the record the flow is about (REQ-WFL-029). */
+  lock(step: FlowStep, transition: string, reason: string): Promise<void>;
   /** The approval's patience: after this, it moves to somebody else. */
   escalate(approvalId: string | null, at: Date, to: OwnerRule): Promise<void>;
   action(code: string, input: unknown): Promise<void>;
@@ -153,6 +164,17 @@ function writingSink(db: SystemDb, instanceId: string, relations: FlowRuntime): 
     async escalate(approvalId, at, to) {
       if (!approvalId) return;
       await scheduleEscalation(db, { approvalId, at, to });
+    },
+    async lock(step, transition, reason) {
+      const where = await readInstanceFlow(db, instanceId);
+      if (!where?.record) throw new LockWithoutRecord(step.id);
+      await holdLock(db, {
+        record: where.record,
+        transition,
+        reason,
+        instanceId,
+        stepId: step.id,
+      });
     },
     async action(code, input) {
       if (!relations.run) throw new Error(`no capability catalog is wired for ${code}`);
@@ -235,6 +257,26 @@ async function walk(
     const stateId = await sink.enter(step);
     // Null means the step limit was passed: the instance is already ended and the log says why.
     if (!stateId) return { state: "ended", status: "failed", reason: "adım sınırı" };
+
+    if (step.type === "lock") {
+      // A lock is about a record, and a flow triggered by a clock may have none: that is a
+      // definition mistake, and it stops the flow with its own name rather than silently doing
+      // nothing (REQ-WFL-029).
+      try {
+        await sink.lock(step, step.transition, step.reason);
+      } catch (error) {
+        if (!(error instanceof LockWithoutRecord)) throw error;
+        await sink.leave(stateId, "failed", "no_record");
+        await sink.end("failed", error.message, step.id);
+        return { state: "ended", status: "failed", reason: error.message };
+      }
+      await sink.leave(stateId, "done", "held", {
+        transition: step.transition,
+        reason: step.reason,
+      });
+      stepId = step.next ?? null;
+      continue;
+    }
 
     if (step.type === "notify") {
       const owner = await ownerOf(db, relations, step.owner);
@@ -393,16 +435,24 @@ export async function runEventTriggers(
   },
   relations: FlowRuntime,
 ): Promise<string[]> {
-  const keys = await flowsListeningTo(db, event.code);
+  const listening = await flowsListeningTo(db, event.code);
+  const context = { event: { code: event.code }, record: event.payload ?? {} };
 
   const started: string[] = [];
-  for (const key of keys) {
+  for (const flow of listening) {
+    // A threshold flow hears the same event as anybody else and then asks whether it is the one
+    // it was waiting for: "when a price changes by more than ten per cent" (D-103). There is no
+    // standing query behind it — the event brings the value with it.
+    if (flow.triggerType === "threshold") {
+      const test = flow.test;
+      if (!test || isWindowTest(test) || !testPasses(test as never, context)) continue;
+    }
     const trigger: FlowTrigger = {
-      flowKey: key,
+      flowKey: flow.key,
       kind: "event",
       eventId: event.id,
       record: event.record ?? undefined,
-      context: { event: { code: event.code }, record: event.payload ?? {} },
+      context,
     };
     const instanceId = await startInstance(db, trigger);
     if (!instanceId) continue;
@@ -547,6 +597,9 @@ export async function dryRun(
     async approval() {
       // Nothing: a dry run never puts anything in front of anybody.
       return null;
+    },
+    async lock(step, transition) {
+      steps.push({ stepId: step.id, type: step.type, outcome: `would hold ${transition}` });
     },
     async escalate(_approvalId, at) {
       if (entered) {

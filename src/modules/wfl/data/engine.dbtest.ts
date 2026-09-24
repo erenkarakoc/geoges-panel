@@ -22,6 +22,8 @@ import { publishVersion, recordDryRun, saveDraft } from "@/modules/wfl/data/flow
 import {
   ConditionTimeout,
   decideApproval,
+  locksOn,
+  overrideLock,
   readInstance,
   readMyApprovals,
   readRunLog,
@@ -55,6 +57,8 @@ const SLEEPY = "zz-t0147-sleepy";
 const NIGHTLY = "zz-t0147-nightly";
 const PATIENT = "zz-t0147-patient";
 const REPEATING = "zz-t0147-repeating";
+const BIG_CHANGE = "zz-t0147-bigchange";
+const HOLDING = "zz-t0147-holding";
 const EVENT = "zzw_record.submitted";
 
 let admin: pg.Client;
@@ -110,7 +114,7 @@ const unbuilt = {
   trigger: { type: "event", event: `${EVENT}_other` },
   start: "s1",
   steps: [
-    { id: "s1", type: "lock", title: "Kaydı kilitle", next: "s2" },
+    { id: "s1", type: "subflow", title: "Alt akış", next: "s2" },
     { id: "s2", type: "end" },
   ],
 };
@@ -123,6 +127,11 @@ async function publish(key: string, definition: unknown) {
 }
 
 async function cleanUp() {
+  await admin.query(
+    `delete from wfl.record_lock where instance_id in (
+       select i.id from wfl.instance i join wfl.flow f on f.id = i.flow_id
+        where f.key like 'zz-t0147-%')`,
+  );
   await admin.query(
     "delete from core.scheduled_job where idempotency_key like 'wfl.wake:%' or idempotency_key like 'wfl.escalate:%'",
   );
@@ -152,7 +161,20 @@ async function cleanUp() {
       [taskIds],
     );
   }
-  const keys = [BIG, SMALL, UNBUILT, APPROVING, TASKING, DRY, SLEEPY, NIGHTLY, PATIENT, REPEATING];
+  const keys = [
+    BIG,
+    SMALL,
+    UNBUILT,
+    APPROVING,
+    TASKING,
+    DRY,
+    SLEEPY,
+    NIGHTLY,
+    PATIENT,
+    REPEATING,
+    BIG_CHANGE,
+    HOLDING,
+  ];
   await admin.query(
     "delete from wfl.instance where flow_id in (select id from wfl.flow where key = any($1))",
     [keys],
@@ -306,12 +328,12 @@ describe("what the engine cannot do yet, it says (REQ-WFL-025)", () => {
     expect(result).toEqual({
       state: "ended",
       status: "failed",
-      reason: "motor bu adımı henüz yürütmüyor: lock",
+      reason: "motor bu adımı henüz yürütmüyor: subflow",
     });
 
     const stopped = await readInstance(as(DESIGNER), instanceId!);
     expect(stopped?.status).toBe("failed");
-    expect(stopped?.failure).toContain("lock");
+    expect(stopped?.failure).toContain("subflow");
 
     const log = await readRunLog(as(DESIGNER), instanceId!);
     expect(log.map((line) => line.kind)).toEqual(["started", "waiting", "ended"]);
@@ -721,14 +743,14 @@ describe("the dry run a publish needs (REQ-WFL-025, SPIKE-05)", () => {
         trigger: { type: "manual" },
         start: "b1",
         steps: [
-          { id: "b1", type: "lock", title: "Kaydı kilitle", next: "b2" },
+          { id: "b1", type: "subflow", title: "Alt akış", next: "b2" },
           { id: "b2", type: "end" },
         ],
       },
     });
     const report = await dryRunVersion(worker, broken, {}, relations);
     expect(report.passed).toBe(false);
-    expect(report.failure).toContain("lock");
+    expect(report.failure).toContain("subflow");
     expect(await errorOf(publishVersion(as(DESIGNER), broken))).toBe("wfl.dry_run_required");
   });
 
@@ -1115,5 +1137,172 @@ describe("a condition that looks back (REQ-WFL-008, D-100, SPIKE-06)", () => {
     const report = await dryRunVersion(worker, versionId, {}, relations);
     expect(report.passed).toBe(true);
     expect(report.steps[0]).toMatchObject({ stepId: "r1", outcome: "unknown" });
+  });
+});
+
+describe("the threshold trigger (REQ-WFL-007, D-103)", () => {
+  /** Starts only when the event says the change was bigger than ten per cent. */
+  const bigChange = {
+    trigger: {
+      type: "threshold",
+      event: `${EVENT}_price`,
+      test: { field: "record.changePercent", op: ">", value: 10 },
+    },
+    start: "b1",
+    steps: [{ id: "b1", type: "end" }],
+  };
+
+  const priceChanged = (n: number, changePercent: number) =>
+    runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_price`,
+        id: id(660 + n),
+        record: { schema: "zzw", table: "record", id: id(760 + n) },
+        payload: { changePercent },
+      },
+      relations,
+    );
+
+  it("starts nothing for an event that does not cross the threshold", async () => {
+    await publish(BIG_CHANGE, bigChange);
+    expect(await priceChanged(1, 4)).toEqual([]);
+  });
+
+  it("starts when the event crosses it, carrying what the event said", async () => {
+    const started = await priceChanged(2, 25);
+    expect(started).toHaveLength(1);
+
+    const { rows } = await admin.query(
+      "select trigger_kind, context from wfl.instance where id = $1",
+      [started[0]],
+    );
+    // The trigger kind is still `event`: a threshold flow hears an event like anybody else and
+    // then decides. What makes it a threshold is the question it asked, and the answer is the
+    // context it carries.
+    expect(rows[0].trigger_kind).toBe("event");
+    expect(rows[0].context).toMatchObject({ record: { changePercent: 25 } });
+  });
+
+  it("asks nothing of an event with nothing to measure, rather than guessing", async () => {
+    expect(await priceChanged(3, Number.NaN)).toEqual([]);
+  });
+});
+
+describe("the lock step (REQ-WFL-029, REQ-WFL-030, D-084)", () => {
+  /** Holds one transition shut and carries on; the record stays where it is. */
+  const holding = {
+    trigger: { type: "event", event: `${EVENT}_hold` },
+    start: "h1",
+    steps: [
+      {
+        id: "h1",
+        type: "lock",
+        transition: "handover.complete",
+        reason: "Zimmet kapanmadan çıkış tamamlanamaz",
+        next: "h2",
+      },
+      { id: "h2", type: "end" },
+    ],
+  };
+
+  const record = { schema: "zzw", table: "record", id: id(770) };
+  let lockId: string;
+
+  it("holds the transition and says why, then carries on", async () => {
+    await publish(HOLDING, holding);
+    const started = await runEventTriggers(
+      worker,
+      { code: `${EVENT}_hold`, id: id(670), record, payload: {} },
+      relations,
+    );
+    expect((await readInstance(as(DESIGNER), started[0]))?.status).toBe("done");
+
+    const locks = await locksOn(as(DESIGNER), record);
+    expect(locks).toHaveLength(1);
+    lockId = locks[0].id;
+    expect(locks[0].transition).toBe("handover.complete");
+    expect(locks[0].reason).toBe("Zimmet kapanmadan çıkış tamamlanamaz");
+    expect(locks[0].flowKey).toBe(HOLDING);
+  });
+
+  it("holds one lock however often the flow runs", async () => {
+    await runEventTriggers(
+      worker,
+      { code: `${EVENT}_hold`, id: id(671), record, payload: {} },
+      relations,
+    );
+    expect(await locksOn(as(DESIGNER), record)).toHaveLength(1);
+  });
+
+  it("refuses to be passed by somebody who is neither the owner layer nor the GM", async () => {
+    expect(await errorOf(overrideLock(as(BYSTANDER), lockId, "acelem var"))).toBe(
+      "wfl.override_not_allowed",
+    );
+    expect(await locksOn(as(DESIGNER), record)).toHaveLength(1);
+  });
+
+  it("refuses to be passed without a reason, even by the owner", async () => {
+    expect(await errorOf(overrideLock(as(DESIGNER), lockId, "  "))).toBe(
+      "wfl.override_reason_required",
+    );
+  });
+
+  it("is passed by the owner with a reason, and the reason is written down", async () => {
+    expect(await overrideLock(as(DESIGNER), lockId, "Zimmet elden kapatıldı")).toBe(true);
+    expect(await locksOn(as(DESIGNER), record)).toEqual([]);
+
+    const { rows: audit } = await admin.query(
+      "select payload from aud.audit_log where event_type = 'lock.overridden' and target_id = $1",
+      [lockId],
+    );
+    expect(audit).toHaveLength(1);
+    expect(audit[0].payload).toMatchObject({
+      reason: "Zimmet elden kapatıldı",
+      transition: "handover.complete",
+      flow: HOLDING,
+    });
+
+    const { rows: events } = await admin.query(
+      "select event_code from core.outbox where record_id = $1",
+      [lockId],
+    );
+    expect(events.map((e: { event_code: string }) => e.event_code)).toContain("lock.overridden");
+
+    // Passed once; a second attempt changes nothing.
+    expect(await overrideLock(as(DESIGNER), lockId, "yine")).toBe(false);
+  });
+
+  it("stops the flow that asks for a lock without a record, rather than doing nothing", async () => {
+    const versionId = await saveDraft(as(DESIGNER), {
+      key: HOLDING,
+      name: "Deneme kilit",
+      definition: { ...holding, trigger: { type: "manual" } },
+    });
+    await recordDryRun(as(DESIGNER), { versionId, passed: true, summary: {} });
+    await publishVersion(as(DESIGNER), versionId);
+
+    const instanceId = await startInstanceByHand(as(DESIGNER), { flowKey: HOLDING });
+    const result = await runInstance(worker, instanceId!, relations);
+    expect(result?.state).toBe("ended");
+    expect((await readInstance(as(DESIGNER), instanceId!))?.failure).toContain("kilit adımı");
+  });
+
+  it("says in a dry run what it would hold, and holds nothing", async () => {
+    const before = await admin.query("select count(*)::int as n from wfl.record_lock");
+    const versionId = await saveDraft(as(DESIGNER), {
+      key: HOLDING,
+      name: "Deneme kilit",
+      definition: holding,
+    });
+    const report = await dryRunVersion(worker, versionId, {}, relations);
+    const after = await admin.query("select count(*)::int as n from wfl.record_lock");
+
+    expect(report.passed).toBe(true);
+    expect(report.steps[0]).toMatchObject({
+      stepId: "h1",
+      outcome: "would hold handover.complete",
+    });
+    expect(after.rows[0].n).toBe(before.rows[0].n);
   });
 });

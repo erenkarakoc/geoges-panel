@@ -237,15 +237,29 @@ export async function clockFlows(
  * The flows whose published definition listens to this event. Asking the definitions themselves
  * is what lets a flow start listening the moment it is published (REQ-WFL-007).
  */
-export async function flowsListeningTo(db: SystemDb, eventCode: string): Promise<string[]> {
-  const { rows } = await sql<{ key: string }>`
-    select f.key
+export type ListeningFlow = {
+  key: string;
+  /** `event` starts on the event alone; `threshold` starts only when its test passes. */
+  triggerType: "event" | "threshold";
+  /** The threshold's test, as the definition wrote it. */
+  test: unknown;
+};
+
+export async function flowsListeningTo(db: SystemDb, eventCode: string): Promise<ListeningFlow[]> {
+  const { rows } = await sql<{ key: string; trigger_type: string; test: unknown }>`
+    select f.key,
+           v.definition -> 'trigger' ->> 'type' as trigger_type,
+           v.definition -> 'trigger' -> 'test' as test
       from wfl.flow_version v
       join wfl.flow f on f.id = v.flow_id
      where v.status = 'published' and f.disabled_at is null
-       and v.definition -> 'trigger' ->> 'type' = 'event'
+       and v.definition -> 'trigger' ->> 'type' in ('event', 'threshold')
        and v.definition -> 'trigger' ->> 'event' = ${eventCode}`.execute(db);
-  return rows.map((row) => row.key);
+  return rows.map((row) => ({
+    key: row.key,
+    triggerType: row.trigger_type === "threshold" ? "threshold" : "event",
+    test: row.test,
+  }));
 }
 
 /** Opens the approval a step waits on; the same step visit never opens two. */
@@ -490,4 +504,71 @@ export async function readInstanceFlow(
         ? { schema: row.record_schema, table: row.record_table, id: row.record_id }
         : null,
   };
+}
+
+/** Holds a transition shut for a record (REQ-WFL-029); a second call finds the lock already held. */
+export async function holdLock(
+  db: SystemDb,
+  lock: {
+    record: { schema: string; table: string; id: string };
+    transition: string;
+    reason: string;
+    instanceId?: string;
+    stepId?: string;
+  },
+): Promise<string> {
+  const { rows } = await sql<{ id: string }>`
+    select wfl.hold_lock(${lock.record.schema}, ${lock.record.table}, ${lock.record.id}::uuid,
+                         ${lock.transition}, ${lock.reason}, ${lock.instanceId ?? null}::uuid,
+                         ${lock.stepId ?? null}) as id`.execute(db);
+  return rows[0].id;
+}
+
+/** Lets go of a lock the flow itself is holding. */
+export async function releaseLock(db: SystemDb, lockId: string): Promise<boolean> {
+  const { rows } = await sql<{ done: boolean | null }>`
+    select wfl.release_lock(${lockId}::uuid) as done`.execute(db);
+  return rows[0]?.done === true;
+}
+
+/** Passing a lock: the owner layer or the general manager, with a reason (REQ-WFL-030, D-084). */
+export function overrideLock(identity: DbIdentity, lockId: string, reason: string) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{ done: boolean | null }>`
+      select wfl.override_lock(${lockId}::uuid, ${reason}) as done`.execute(db);
+    return rows[0]?.done === true;
+  });
+}
+
+export type RecordLock = {
+  id: string;
+  transition: string;
+  reason: string;
+  flowKey: string | null;
+  heldSince: Date;
+};
+
+/** What is holding a record shut, for the screen that has to explain a refusal. */
+export function locksOn(
+  identity: DbIdentity,
+  record: { schema: string; table: string; id: string },
+) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{
+      id: string;
+      transition: string;
+      reason: string;
+      flow_key: string | null;
+      held_since: Date;
+    }>`select * from wfl.locks_on(${record.schema}, ${record.table}, ${record.id}::uuid)`.execute(
+      db,
+    );
+    return rows.map((row): RecordLock => ({
+      id: row.id,
+      transition: row.transition,
+      reason: row.reason,
+      flowKey: row.flow_key,
+      heldSince: row.held_since,
+    }));
+  });
 }

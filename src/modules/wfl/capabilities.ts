@@ -41,6 +41,13 @@ export const wflCapabilities = defineCapabilities({
       dataClass: "internal",
     },
     {
+      code: "lock.overridden",
+      name: "Kilit aşıldı",
+      when: "Sahip veya GM bir kilidi aştığında",
+      carries: ["kayıt", "kilit", "aşan", "gerekçe"],
+      dataClass: "internal",
+    },
+    {
       code: "approval.decided",
       name: "Onay kararı verildi",
       when: "Onayla / reddet / düzeltmeye geri gönder seçildiğinde",

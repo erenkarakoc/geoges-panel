@@ -15,6 +15,10 @@ export {
 
 export {
   decideApproval,
+  holdLock,
+  locksOn,
+  overrideLock,
+  releaseLock,
   endInstance,
   enterStep,
   leaveStep,
@@ -27,6 +31,7 @@ export {
   type ApprovalDecision,
   type FlowTrigger,
   type InstanceRow,
+  type RecordLock,
   type WaitingApproval,
   type TriggerKind,
 } from "@/modules/wfl/data/instance-store";

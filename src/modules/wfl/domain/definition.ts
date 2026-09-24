@@ -24,7 +24,6 @@ const PLAIN_STEP_TYPES = [
   "parallel",
   "join",
   "subflow",
-  "lock",
   "end",
   "record",
   "for_each",
@@ -36,6 +35,7 @@ export const STEP_TYPES = [
   "task",
   "wait",
   "notify",
+  "lock",
   ...PLAIN_STEP_TYPES,
 ] as const;
 
@@ -49,6 +49,7 @@ export const RUNNABLE_STEP_TYPES: readonly StepType[] = [
   "task",
   "wait",
   "notify",
+  "lock",
   "end",
 ];
 
@@ -144,12 +145,21 @@ const notifyStep = baseStep.extend({
   subject: z.string().trim().min(1).max(200),
 });
 
+const lockStep = baseStep.extend({
+  type: z.literal("lock"),
+  /** The transition it holds shut; `*` when the record may not move at all (REQ-WFL-029). */
+  transition: z.string().min(1).max(60).default("*"),
+  /** What a screen shows the person who is refused: "zimmet kapanmadan çıkış tamamlanamaz". */
+  reason: z.string().trim().min(3).max(300),
+});
+
 const plainStep = baseStep.extend({ type: z.enum(PLAIN_STEP_TYPES) });
 
 export const stepSchema = z.discriminatedUnion("type", [
   conditionStep,
   approvalStep,
   taskStep,
+  lockStep,
   waitStep,
   notifyStep,
   plainStep,
