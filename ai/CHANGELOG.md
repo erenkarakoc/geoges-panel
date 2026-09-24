@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-24 — The browser tour, with the owner signed in
+
+- The bottom band is DONE. On the desktop it sits at the card's bottom with the screen's action; the scrolling area carries its measured height as padding and as scroll padding; a screen with no band keeps the slot hidden and the height at 0. At 375 px the band is at the bottom and the phone's navigation leaves the DOM, returning on a screen without one. The part that carried the most risk was exercised for real: the band's button submitted the form it does not sit inside, closing a task while the reason field stayed with the record.
+- The panel's own session works end to end. Two real rows were there to look at: "Windows · Chrome" from the browser pane and "iPhone · Safari" from the owner's own phone that morning, both with the second factor marked, a thirty-day expiry and a last-seen that moves. Every page renders behind the new guard, and the two-factor screen in its manage view shows no recovery entry, which is right — that belongs to the sign-in step.
+- Three things the tour could not reach without a fresh sign-in, which the owner did not want to make: the recovery-code entry under the code step, the ten codes shown once after an enrolment, and the lock's wording on the sign-in form. TASK-0112 stays IMPLEMENTING for exactly those.
+- A task called "Alt bant doğrulaması" was created and closed during the tour; it is sample data in the development database and can be deleted.
+
 ## 2026-09-24 — The records catch up with what is built
 
 - The setup files did not know about a key the panel now needs. `SUPABASE_SERVICE_ROLE_KEY` is in `.env.example` and `LOCAL_SETUP.md` with what it is for, which one file reads it, and what happens without it: the panel works, and only signing in with a recovery code and a manager's reset refuse. `supabase-config.ts` said the service_role key "is never read by this application", which stopped being true today and now says where it is read.
