@@ -1,18 +1,30 @@
 import { z } from "zod";
 
-import { notifyPerson } from "@/modules/tsk/data/tsk-store";
+import { notifyPerson, openFlowTask } from "@/modules/tsk/data/tsk-store";
 import { defineAction, defineCapabilities } from "@/platform/capabilities/catalog";
 
 /**
  * What TSK offers a flow (REQ-WFL-003, `docs/requirements/REQ-TSK.md` catalog).
  *
- * One action is declared, and only one, because a declaration carries the function that runs it:
- * sending a notification is something the panel can already do under the flow's own authority
- * (`tsk.notify`, granted to the worker alone). `task.open` is in the written catalog and is not
- * here yet — opening a task as the flow rather than as a person needs the system-authority path
- * that comes with the engine (TASK-0117). Declaring it before then would be a promise the code
- * cannot keep.
+ * Two actions, and both keep the promise they make. Sending a notification and opening a task both
+ * run under the flow's own authority, through functions the worker alone may call (`tsk.notify`
+ * and `tsk.open_flow_task`, migrations 0011 and 0049). `task.open` was deliberately absent until
+ * the engine had a step to call it from; a declaration carries the function that runs it, so it
+ * could not have been declared earlier without promising what the code could not do.
  */
+
+const taskInput = z.object({
+  /** The step visit the task belongs to; it is what makes the task the flow's (D-087). */
+  stepRunId: z.uuid(),
+  title: z.string().trim().min(1).max(200),
+  assigneeUserId: z.uuid(),
+  priority: z.enum(["low", "normal", "high", "critical"]).default("normal"),
+  dueAt: z.coerce.date().nullish(),
+  linkPath: z.string().startsWith("/").max(300).nullish(),
+  record: z.object({ schema: z.string().min(2), table: z.string().min(2), id: z.uuid() }).nullish(),
+  siteId: z.uuid().nullish(),
+  projectId: z.uuid().nullish(),
+});
 
 const notificationInput = z.object({
   userId: z.uuid(),
@@ -72,6 +84,15 @@ export const tskCapabilities = defineCapabilities({
     },
   ],
   actions: [
+    defineAction({
+      code: "task.open",
+      name: "Görev aç",
+      input: taskInput,
+      permission: "system",
+      onRepeat: "Aynı adım ziyareti için ikinci görev açılmaz; var olan görev döner.",
+      onFailure: "Görev açılmamış sayılır; adım yeniden denenebilir.",
+      run: (caller, input) => openFlowTask(caller.db, input),
+    }),
     defineAction({
       code: "notification.send",
       name: "Bildirim gönder",

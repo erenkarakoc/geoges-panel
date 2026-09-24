@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-24 — The task step, and the first action the engine asks somebody else to take (TASK-0117, step 5)
+
+- A flow can now open a task and wait for it. This is the first time the engine does something to the rest of the panel, and it does it the way the catalog was built for: it calls `task.open` by code. It never learns that tasks are TSK's.
+- TSK declares `task.open` today because it can finally keep the promise. The declaration carries the function that runs it, which is exactly why it was left out in TASK-0118: opening a task as the flow rather than as a person needed a door the worker may use, and that door is migration 0049.
+- The model had been waiting for this since 0011: `tsk.task` has always required a source, and a flow's task is sourced by the step run that opened it. So the migration only had to add the opener — idempotent on the step visit, so a retried delivery finds the task it already opened — and put the step run into `task.completed`'s payload, so the waiting flow recognises its own task without reading TSK's rows.
+- The tests found a real engine fault on the way. Running an instance that was sitting inside an open step tried to enter that step a second time, which is what a repeated delivery made it do. An instance inside a step is waiting on somebody, and running it again now changes nothing.
+- Eighteen database tests for the engine; 330 unit and 280 database tests in all.
+
 ## 2026-09-24 — The approval step: where a flow stops and a person decides (TASK-0117, step 4)
 
 - Migration 0048 adds the approval a flow waits on. Three outcomes and no fourth — approve, reject, send back (D-099) — and a refusal or a send-back with no reason is refused by the table itself, so no screen, action or import can leave one behind (REQ-WFL-015).

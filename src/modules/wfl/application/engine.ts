@@ -6,6 +6,7 @@ import {
   noteWaiting,
   readDecision,
   readRunnable,
+  readStepRun,
   requestApproval,
   startInstance,
   type FlowTrigger,
@@ -46,7 +47,8 @@ type Runnable = {
   id: string;
   context: Record<string, unknown>;
   definition: FlowDefinition;
-  nextStepId: string | null;
+  /** The step the instance is sitting in, when it is waiting inside one. */
+  openStepId: string | null;
 };
 
 /** The instance as the engine sees it, or null when it is not running any more. */
@@ -57,7 +59,7 @@ async function runnable(db: SystemDb, instanceId: string): Promise<Runnable | nu
     id: row.id,
     context: row.context,
     definition: parseDefinition(row.definition),
-    nextStepId: row.openStepId,
+    openStepId: row.openStepId,
   };
 }
 
@@ -87,9 +89,19 @@ export type OwnerRelations = {
   resolve: (db: SystemDb, code: string, argument: string | null) => Promise<string | null>;
 };
 
+/**
+ * What the engine is allowed to do to the rest of the panel: the catalog's actions, called by
+ * code. The engine knows no module — it knows `task.open` (D-280, TASK-0118).
+ */
+export type CapabilityActions = {
+  run: (db: SystemDb, code: string, input: unknown) => Promise<unknown>;
+};
+
+export type FlowRuntime = OwnerRelations & Partial<CapabilityActions>;
+
 async function ownerOf(
   db: SystemDb,
-  relations: OwnerRelations,
+  relations: FlowRuntime,
   owner: { type: string; userId?: string; role?: string; relation?: string; permission?: string },
 ): Promise<string | null> {
   if (owner.type === "user") return owner.userId ?? null;
@@ -107,11 +119,15 @@ async function ownerOf(
 export async function runInstance(
   db: SystemDb,
   instanceId: string,
-  relations: OwnerRelations,
+  relations: FlowRuntime,
 ): Promise<RunResult | null> {
   const instance = await runnable(db, instanceId);
   if (!instance) return null;
-  return runFrom(db, instanceId, instance.nextStepId ?? instance.definition.start, relations);
+  // Sitting inside a step means waiting on somebody: an approval, a task, a timer. Running the
+  // instance again — which a repeated delivery does — must change nothing, and re-entering the
+  // step it is already in is exactly what a flow must never do.
+  if (instance.openStepId) return { state: "waiting", stepId: instance.openStepId };
+  return runFrom(db, instanceId, instance.definition.start, relations);
 }
 
 /** The loop itself, from a step the caller chose. */
@@ -119,7 +135,7 @@ async function runFrom(
   db: SystemDb,
   instanceId: string,
   from: string | null,
-  relations: OwnerRelations,
+  relations: FlowRuntime,
 ): Promise<RunResult | null> {
   const instance = await runnable(db, instanceId);
   if (!instance) return null;
@@ -147,6 +163,31 @@ async function runFrom(
     });
     // Null means the step limit was passed: the instance is already ended and the log says why.
     if (!stateId) return { state: "ended", status: "failed", reason: "adım sınırı" };
+
+    if (step.type === "task") {
+      const owner = await ownerOf(db, relations, step.owner);
+      if (!owner) {
+        const reason = `adımın sahibi bulunamadı: ${step.id}`;
+        await leaveStep(db, { stateId, status: "failed", outcome: "no_owner" });
+        await endInstance(db, { instanceId, status: "failed", failure: reason, stepId: step.id });
+        return { state: "ended", status: "failed", reason };
+      }
+      if (!relations.run) {
+        const reason = "görev adımı için yetenek kataloğu bağlı değil";
+        await leaveStep(db, { stateId, status: "failed", outcome: "no_catalog" });
+        await endInstance(db, { instanceId, status: "failed", failure: reason, stepId: step.id });
+        return { state: "ended", status: "failed", reason };
+      }
+      // The catalog's own action, called by its code: the engine never learns that tasks are TSK's.
+      await relations.run(db, "task.open", {
+        stepRunId: stateId,
+        title: step.title ?? "Görev",
+        assigneeUserId: owner,
+        priority: step.priority,
+      });
+      await noteWaiting(db, { instanceId, stepId: step.id, detail: { waitingFor: "task" } });
+      return { state: "waiting", stepId: step.id };
+    }
 
     if (step.type === "approval") {
       const owner = await ownerOf(db, relations, step.owner);
@@ -206,7 +247,7 @@ export async function runEventTriggers(
     record?: { schema: string; table: string; id: string } | null;
     payload?: unknown;
   },
-  relations: OwnerRelations,
+  relations: FlowRuntime,
 ): Promise<string[]> {
   const keys = await flowsListeningTo(db, event.code);
 
@@ -237,7 +278,7 @@ export async function runEventTriggers(
 export async function resumeFromApproval(
   db: SystemDb,
   approvalId: string,
-  relations: OwnerRelations,
+  relations: FlowRuntime,
 ): Promise<RunResult | null> {
   const decided = await readDecision(db, approvalId);
   if (!decided) return null;
@@ -252,11 +293,36 @@ export async function resumeFromApproval(
   });
   if (!left) return null;
 
-  const step = stepOf(instance.definition, instance.nextStepId);
+  const step = stepOf(instance.definition, instance.openStepId);
   const next = step ? afterDecision(step, decided.decision) : null;
   if (!next) {
     await endInstance(db, { instanceId: decided.instanceId, status: "done" });
     return { state: "ended", status: "done" };
   }
   return runFrom(db, decided.instanceId, next, relations);
+}
+
+/**
+ * Picks the flow up when the task its step opened is closed (REQ-TSK-004, REQ-WFL-005).
+ *
+ * The step run is on the event, because the task carries it: the flow recognises its own task
+ * without reading TSK's tables. A task that belongs to no flow, or to a step somebody already
+ * closed, changes nothing.
+ */
+export async function resumeFromTask(
+  db: SystemDb,
+  stepRunId: string,
+  relations: FlowRuntime,
+): Promise<RunResult | null> {
+  const open = await readStepRun(db, stepRunId);
+  if (!open) return null;
+
+  const instance = await runnable(db, open.instanceId);
+  if (!instance) return null;
+
+  const left = await leaveStep(db, { stateId: stepRunId, status: "done", outcome: "completed" });
+  if (!left) return null;
+
+  const step = stepOf(instance.definition, open.stepId);
+  return runFrom(db, open.instanceId, step?.next ?? null, relations);
 }

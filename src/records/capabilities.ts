@@ -39,6 +39,13 @@ export function actionCapability(code: string): ActionCapability | null {
  * (D-097). The engine holds this and nothing else: it never learns that roles are IAM's.
  */
 export const ownerRelations = {
+  /** The catalog's actions, called by code; an action nobody offers is a flow that cannot run. */
+  async run(db: SystemDb, code: string, input: unknown): Promise<unknown> {
+    const action = actionCapability(code);
+    if (!action) throw new Error(`no module offers the action ${code}`);
+    return action.run({ db, userId: null }, input);
+  },
+
   async resolve(db: SystemDb, code: string, argument: string | null): Promise<string | null> {
     for (const catalog of moduleCapabilities) {
       const relation = catalog.relations.find((r) => r.code === code);

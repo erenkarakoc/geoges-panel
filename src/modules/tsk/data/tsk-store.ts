@@ -254,3 +254,33 @@ export function notifyPerson(
     .execute(db)
     .then(({ rows }) => rows[0]?.id ?? null);
 }
+
+/**
+ * Opens the task a flow's step is waiting on (TASK-0117, migration 0049). Worker-side, because a
+ * flow acts with its own authority and not with a person's (REQ-WFL-020). Idempotent on the step
+ * run: a retried delivery finds the task it already opened.
+ */
+export function openFlowTask(
+  db: SystemDb,
+  task: {
+    stepRunId: string;
+    title: string;
+    assigneeUserId: string;
+    priority?: "low" | "normal" | "high" | "critical";
+    dueAt?: Date | null;
+    linkPath?: string | null;
+    record?: { schema: string; table: string; id: string } | null;
+    siteId?: string | null;
+    projectId?: string | null;
+  },
+): Promise<string> {
+  return sql<{ id: string }>`
+    select tsk.open_flow_task(${task.stepRunId}::uuid, ${task.title},
+                              ${task.assigneeUserId}::uuid, ${task.priority ?? "normal"},
+                              ${task.dueAt ?? null}::timestamptz, ${task.linkPath ?? null},
+                              ${task.record?.schema ?? null}, ${task.record?.table ?? null},
+                              ${task.record?.id ?? null}::uuid, ${task.siteId ?? null}::uuid,
+                              ${task.projectId ?? null}::uuid) as id`
+    .execute(db)
+    .then(({ rows }) => rows[0].id);
+}

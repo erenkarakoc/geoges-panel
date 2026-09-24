@@ -1,7 +1,8 @@
 import {
   resumeFromApproval,
+  resumeFromTask,
   runEventTriggers,
-  type OwnerRelations,
+  type FlowRuntime,
 } from "@/modules/wfl/application/engine";
 import type { EventSubscriber } from "@/platform/jobs/types";
 
@@ -16,7 +17,7 @@ import type { EventSubscriber } from "@/platform/jobs/types";
  * Not replayable, and never will be: running a flow opens tasks and sends notifications, which a
  * read-model rebuild must not do twice (D-234).
  */
-export function flowEngine(relations: OwnerRelations): EventSubscriber {
+export function flowEngine(relations: FlowRuntime): EventSubscriber {
   return {
     name: "wfl.engine",
     events: [],
@@ -26,6 +27,13 @@ export function flowEngine(relations: OwnerRelations): EventSubscriber {
       // waiting on a person is resumed by the same durable delivery as everything else.
       if (event.code === "approval.decided" && event.record?.id) {
         await resumeFromApproval(db, event.record.id, relations);
+        return;
+      }
+      // A task this engine opened has been closed: the step run is on the event, so the flow
+      // recognises its own task without reading TSK's rows.
+      const stepRun = event.payload.step_run_id;
+      if (event.code === "task.completed" && typeof stepRun === "string") {
+        await resumeFromTask(db, stepRun, relations);
         return;
       }
       await runEventTriggers(

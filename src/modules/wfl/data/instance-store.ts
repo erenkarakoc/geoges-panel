@@ -316,3 +316,15 @@ export async function readDecision(
     ? { instanceId: row.instance_id, stepStateId: row.step_state_id, decision: row.decision }
     : null;
 }
+
+/** The instance and step a step visit belongs to, while that visit is still open. */
+export async function readStepRun(
+  db: SystemDb,
+  stepRunId: string,
+): Promise<{ instanceId: string; stepId: string } | null> {
+  const { rows } = await sql<{ instance_id: string; step_id: string }>`
+    select instance_id, step_id from wfl.step_state
+     where id = ${stepRunId}::uuid and status = 'running'`.execute(db);
+  const row = rows[0];
+  return row ? { instanceId: row.instance_id, stepId: row.step_id } : null;
+}

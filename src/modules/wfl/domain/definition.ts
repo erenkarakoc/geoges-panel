@@ -20,7 +20,6 @@ import { z } from "zod";
  */
 const PLAIN_STEP_TYPES = [
   "start",
-  "task",
   "wait",
   "notify",
   "escalate",
@@ -33,12 +32,18 @@ const PLAIN_STEP_TYPES = [
   "for_each",
 ] as const;
 
-export const STEP_TYPES = ["condition", "approval", ...PLAIN_STEP_TYPES] as const;
+export const STEP_TYPES = ["condition", "approval", "task", ...PLAIN_STEP_TYPES] as const;
 
 export type StepType = (typeof STEP_TYPES)[number];
 
 /** The steps the engine can take today; the rest wait for their own slice of the work. */
-export const RUNNABLE_STEP_TYPES: readonly StepType[] = ["start", "condition", "approval", "end"];
+export const RUNNABLE_STEP_TYPES: readonly StepType[] = [
+  "start",
+  "condition",
+  "approval",
+  "task",
+  "end",
+];
 
 const stepId = z
   .string()
@@ -87,9 +92,20 @@ const approvalStep = baseStep.extend({
     .default({}),
 });
 
+const taskStep = baseStep.extend({
+  type: z.literal("task"),
+  owner: ownerSchema,
+  priority: z.enum(["low", "normal", "high", "critical"]).default("normal"),
+});
+
 const plainStep = baseStep.extend({ type: z.enum(PLAIN_STEP_TYPES) });
 
-export const stepSchema = z.discriminatedUnion("type", [conditionStep, approvalStep, plainStep]);
+export const stepSchema = z.discriminatedUnion("type", [
+  conditionStep,
+  approvalStep,
+  taskStep,
+  plainStep,
+]);
 export type FlowStep = z.infer<typeof stepSchema>;
 
 export const triggerSchema = z.discriminatedUnion("type", [

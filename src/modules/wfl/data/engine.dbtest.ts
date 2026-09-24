@@ -11,7 +11,7 @@
  * is a data-layer thing to do, and the boundary rule is enforced by path (PORTS_AND_SERVICES
  * section 2).
  */
-import { Kysely, PostgresDialect } from "kysely";
+import { Kysely, PostgresDialect, sql } from "kysely";
 import pg from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
@@ -26,7 +26,8 @@ import {
   readRunLog,
   startInstanceByHand,
 } from "@/modules/wfl/data/instance-store";
-import { resumeFromApproval } from "@/modules/wfl/application/engine";
+import { resumeFromApproval, resumeFromTask } from "@/modules/wfl/application/engine";
+import { runAsUser } from "@/platform/db";
 import { readDatabaseConfig } from "@/platform/db/database-config";
 import type { SystemDb } from "@/platform/jobs/types";
 
@@ -39,6 +40,7 @@ const BIG = "zz-t0147-big";
 const SMALL = "zz-t0147-small";
 const UNBUILT = "zz-t0147-unbuilt";
 const APPROVING = "zz-t0147-approving";
+const TASKING = "zz-t0147-tasking";
 const EVENT = "zzw_record.submitted";
 
 let admin: pg.Client;
@@ -94,7 +96,7 @@ const unbuilt = {
   trigger: { type: "event", event: `${EVENT}_other` },
   start: "s1",
   steps: [
-    { id: "s1", type: "task", title: "Düzelt ve yeniden gönder", next: "s2" },
+    { id: "s1", type: "notify", title: "Haber ver", next: "s2" },
     { id: "s2", type: "end" },
   ],
 };
@@ -107,7 +109,33 @@ async function publish(key: string, definition: unknown) {
 }
 
 async function cleanUp() {
-  const keys = [BIG, SMALL, UNBUILT, APPROVING];
+  // A task is never deleted (REQ-TSK-001); a reset says so explicitly, which is how the other
+  // tests clear theirs too.
+  const { rows: tasks } = await admin.query(
+    `select t.id from tsk.task t
+       join wfl.step_state s on s.id = t.source_step_run_id
+       join wfl.instance i on i.id = s.instance_id
+       join wfl.flow f on f.id = i.flow_id
+      where f.key like 'zz-t0147-%'`,
+  );
+  const taskIds = tasks.map((row: { id: string }) => row.id);
+  if (taskIds.length) {
+    await admin.query("begin");
+    await admin.query("select set_config('aud.reset_purge', 'on', true)");
+    await admin.query("delete from tsk.notification where task_id = any($1::uuid[])", [taskIds]);
+    await admin.query("delete from tsk.task where id = any($1::uuid[])", [taskIds]);
+    await admin.query("commit");
+    await admin.query(
+      `delete from core.outbox_delivery where outbox_id in
+         (select id from core.outbox where record_schema = 'tsk' and record_id = any($1::uuid[]))`,
+      [taskIds],
+    );
+    await admin.query(
+      "delete from core.outbox where record_schema = 'tsk' and record_id = any($1::uuid[])",
+      [taskIds],
+    );
+  }
+  const keys = [BIG, SMALL, UNBUILT, APPROVING, TASKING];
   await admin.query(
     "delete from wfl.instance where flow_id in (select id from wfl.flow where key = any($1))",
     [keys],
@@ -250,12 +278,12 @@ describe("what the engine cannot do yet, it says (REQ-WFL-025)", () => {
     expect(result).toEqual({
       state: "ended",
       status: "failed",
-      reason: "motor bu adımı henüz yürütmüyor: task",
+      reason: "motor bu adımı henüz yürütmüyor: notify",
     });
 
     const stopped = await readInstance(as(DESIGNER), instanceId!);
     expect(stopped?.status).toBe("failed");
-    expect(stopped?.failure).toContain("task");
+    expect(stopped?.failure).toContain("notify");
 
     const log = await readRunLog(as(DESIGNER), instanceId!);
     expect(log.map((line) => line.kind)).toEqual(["started", "waiting", "ended"]);
@@ -451,5 +479,135 @@ describe("the approval step (REQ-WFL-012…016, D-099)", () => {
     expect(again).toHaveLength(1);
     expect(again[0].id).not.toBe(waiting.id);
     expect((await readInstance(as(DESIGNER), started[0]))?.status).toBe("running");
+  });
+});
+
+describe("the task step (REQ-WFL-005, REQ-TSK-001)", () => {
+  /** Waits on a task, and carries on when the task is closed. */
+  const tasking = {
+    trigger: { type: "event", event: `${EVENT}_task` },
+    start: "t1",
+    steps: [
+      {
+        id: "t1",
+        type: "task",
+        title: "Eksik belgeyi tamamla",
+        owner: { type: "user", userId: APPROVER },
+        priority: "high",
+        next: "t2",
+      },
+      { id: "t2", type: "end" },
+    ],
+  };
+
+  /**
+   * What the composition root gives the engine: the catalog's actions, called by code. A module's
+   * test may not import another module, so the one action these flows use is called here the way
+   * TSK's declaration calls it — through the function TSK granted the worker.
+   */
+  const runtime = {
+    ...relations,
+    run: async (db: SystemDb, code: string, input: unknown) => {
+      if (code !== "task.open") throw new Error(`unexpected action ${code}`);
+      const task = input as {
+        stepRunId: string;
+        title: string;
+        assigneeUserId: string;
+        priority: string;
+      };
+      const { rows } = await sql<{ id: string }>`
+        select tsk.open_flow_task(${task.stepRunId}::uuid, ${task.title},
+                                  ${task.assigneeUserId}::uuid, ${task.priority}) as id`.execute(
+        db,
+      );
+      return rows[0].id;
+    },
+  };
+
+  let instanceId: string;
+  let taskId: string;
+
+  it("opens the task through the catalog's action and waits for it", async () => {
+    await publish(TASKING, tasking);
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_task`,
+        id: id(620),
+        record: { schema: "zzw", table: "record", id: id(720) },
+        payload: {},
+      },
+      runtime,
+    );
+    expect(started).toHaveLength(1);
+    instanceId = started[0];
+
+    const { rows } = await admin.query(
+      `select t.id, t.title, t.assignee_user_id, t.source_type, t.priority
+         from tsk.task t join wfl.step_state s on s.id = t.source_step_run_id
+         where s.instance_id = $1`,
+      [instanceId],
+    );
+    expect(rows).toHaveLength(1);
+    taskId = rows[0].id;
+    expect(rows[0].title).toBe("Eksik belgeyi tamamla");
+    expect(rows[0].assignee_user_id).toBe(APPROVER);
+    expect(rows[0].source_type).toBe("workflow");
+    expect(rows[0].priority).toBe("high");
+
+    expect((await readInstance(as(DESIGNER), instanceId))?.status).toBe("running");
+    expect((await readRunLog(as(DESIGNER), instanceId)).at(-1)?.detail).toMatchObject({
+      waitingFor: "task",
+    });
+  });
+
+  it("opens one task however often the delivery arrives", async () => {
+    await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_task`,
+        id: id(620),
+        record: { schema: "zzw", table: "record", id: id(720) },
+        payload: {},
+      },
+      runtime,
+    );
+    const { rows } = await admin.query(
+      `select count(*)::int as n from tsk.task t join wfl.step_state s on s.id = t.source_step_run_id
+        where s.instance_id = $1`,
+      [instanceId],
+    );
+    expect(rows[0].n).toBe(1);
+  });
+
+  it("carries on when the task is closed, and says so in the log", async () => {
+    // Closed the way a person closes it, as the person it was given to.
+    await runAsUser(as(APPROVER), (db) =>
+      sql`select tsk.complete_task(${taskId}::uuid)`.execute(db),
+    );
+
+    const { rows } = await admin.query(
+      "select payload from core.outbox where event_code = 'task.completed' and record_id = $1",
+      [taskId],
+    );
+    const stepRun = rows[0].payload.step_run_id;
+    expect(stepRun).toBeTruthy();
+
+    const resumed = await resumeFromTask(worker, stepRun, runtime);
+    expect(resumed).toEqual({ state: "ended", status: "done" });
+    expect((await readInstance(as(DESIGNER), instanceId))?.status).toBe("done");
+
+    const log = await readRunLog(as(DESIGNER), instanceId);
+    expect(log.filter((line) => line.kind === "entered").map((line) => line.stepId)).toEqual([
+      "t1",
+      "t2",
+    ]);
+    expect(log.find((line) => line.stepId === "t1" && line.kind === "left")?.detail).toMatchObject({
+      outcome: "completed",
+    });
+  });
+
+  it("does nothing for a task that belongs to no flow", async () => {
+    expect(await resumeFromTask(worker, id(999), runtime)).toBeNull();
   });
 });
