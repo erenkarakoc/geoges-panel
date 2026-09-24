@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-24 — The light/dark switch moves into the account menu
+
+- The owner asked for it out of the header (D-275). It is a line in the account menu now, grouped with the phone-notification switch under "Bu cihaz", because both belong to this browser rather than to the account — and SCR-005 already lists the theme among that menu's sections.
+- The menu stays open when it is pressed, so the person sees the change they just asked for. Which way the line reads is CSS, not state: the server does not know this browser's theme, and a label rendered from it would differ between the server's HTML and the first client render.
+- The sign-in screens keep the standalone button; they have no account menu.
+- Checked in the browser: the header carries only the search, the bell and the account; the line flips the theme both ways, the menu stays open, and the label and icon follow. The browser was left on the theme it was found on.
+
 ## 2026-09-24 — The people screen on a narrower window, where its one button was
 
 - The screen was seen in a browser for the first time and the desktop was fine, but below about 1280 px the five columns scrolled sideways and what went past the edge was the reset button — the only reason the screen exists. It now shows one card per person until the row genuinely fits: measured, the cells do not wrap and want about 810 px of panel, which a 1280 px window is the first to give. Cards on the phone were already the rule (SCREEN_PATTERNS section 3); what was new was measuring where "phone" ends for this table instead of assuming the usual breakpoint.

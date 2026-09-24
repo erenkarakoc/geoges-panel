@@ -35,6 +35,7 @@ import {
   twoFactorRoute,
 } from "@/modules/iam/application/auth-routing";
 import { type PreviewRoleId, rememberPreviewRole } from "@/platform/access/preview-roles";
+import { ThemeMenuItem } from "@/platform/ui/theme/theme-toggle";
 
 type RoleSwitcher = {
   currentRoleId: PreviewRoleId;
@@ -47,7 +48,9 @@ type RoleSwitcher = {
  *
  * `deviceSwitch` is whatever this device can be told to do — today the phone-notification switch,
  * which belongs to TSK. It arrives as a node from the layout rather than as an import, because
- * TSK already reads IAM and the reverse arrow would be a cycle (MODULE_MAP).
+ * TSK already reads IAM and the reverse arrow would be a cycle (MODULE_MAP). The light/dark switch
+ * sits beside it: the owner had it taken out of the header on 2026-09-24 (D-275), and it belongs in
+ * the same group because both are settings of this browser rather than of the account.
  */
 export function UserMenu({
   email,
@@ -127,14 +130,14 @@ export function UserMenu({
             </MenuSub>
           </>
         ) : null}
-        {deviceSwitch ? (
-          <>
-            <MenuSeparator />
-            {/* Not a menu item: it carries its own state and must not close the menu when it is
-                pressed. The menu is simply where it lives now (owner 2026-09-24). */}
-            <div className="px-2 py-1.5">{deviceSwitch}</div>
-          </>
-        ) : null}
+        <MenuSeparator />
+        <MenuGroup>
+          <MenuGroupLabel>Bu cihaz</MenuGroupLabel>
+          <ThemeMenuItem />
+          {/* The push switch is not a menu item: it carries its own state and must not close the
+              menu when it is pressed. The menu is simply where it lives now (owner 2026-09-24). */}
+          {deviceSwitch ? <div className="px-2 py-1.5">{deviceSwitch}</div> : null}
+        </MenuGroup>
         <MenuSeparator />
         <MenuItem
           closeOnClick={false}

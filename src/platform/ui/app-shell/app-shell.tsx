@@ -20,7 +20,6 @@ import { AppHeader, type HeaderSeat } from "@/platform/ui/app-shell/app-header";
 import { AppSidebar } from "@/platform/ui/app-shell/app-sidebar";
 import { BottomBandOutlet, BottomBandProvider } from "@/platform/ui/app-shell/bottom-band";
 import { MobileBottomBar } from "@/platform/ui/app-shell/mobile-bottom-bar";
-import { ThemeToggle } from "@/platform/ui/theme/theme-toggle";
 
 /*
  * Layout gap: outer space above, below and to the right of the app card on desktop (owner
@@ -130,12 +129,7 @@ export async function AppShell({
             {/* Inset variant: on desktop the app sits in a bordered, rounded card of fixed height. */}
             <SidebarInset className={appCardClassName}>
               <AppHeader
-                actions={
-                  <>
-                    <ThemeToggle />
-                    {headerActions}
-                  </>
-                }
+                actions={headerActions}
                 initialSite={initialSite}
                 notifications={notifications}
                 seat={seat}
