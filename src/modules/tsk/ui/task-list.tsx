@@ -189,7 +189,7 @@ export function TaskList({
               ))}
             </ul>
 
-            <Table className="hidden md:block">
+            <Table className="hidden md:table">
               <TableHeader>
                 <TableRow>
                   <TableHead>Görev</TableHead>

@@ -57,7 +57,20 @@ export function PeopleSecurityList({ people }: { people: readonly PersonSecurity
         </FrameDescription>
       </FrameHeader>
       <FramePanel>
-        <Table>
+        {/* Cards until the row actually fits, which is wider here than the usual phone
+            breakpoint: the five columns want about 810 px of panel because the cells do not
+            wrap, and what a narrower window pushes past the edge is the reset button this
+            screen exists for. Measured: the row fits from 1280 px, so below that it is cards
+            (SCREEN_PATTERNS section 3 — rows on the desktop, cards on the phone). */}
+        <ul className="flex flex-col gap-2 xl:hidden">
+          {people.map((person) => (
+            <li key={person.id}>
+              <PersonCard person={person} />
+            </li>
+          ))}
+        </ul>
+
+        <Table className="hidden xl:table">
           <TableHeader>
             <TableRow>
               <TableHead>Kişi</TableHead>
@@ -79,6 +92,84 @@ export function PeopleSecurityList({ people }: { people: readonly PersonSecurity
 }
 
 function PersonRow({ person }: { person: PersonSecurity }) {
+  return (
+    <TableRow>
+      <TableCell>
+        <PersonName person={person} />
+      </TableCell>
+      <TableCell>
+        <SecondFactorState person={person} />
+      </TableCell>
+      <TableCell>
+        <span className="text-sm">{person.recoveryCodesLeft} adet</span>
+      </TableCell>
+      <TableCell>
+        <div className="flex flex-col text-sm">
+          <span>{person.liveSessions}</span>
+          {person.lastSeenAt ? (
+            <span className="text-xs text-muted-foreground">
+              son: {lastSeen.format(person.lastSeenAt)}
+            </span>
+          ) : null}
+        </div>
+      </TableCell>
+      <TableCell className="text-end">
+        <ResetSecondFactorButton person={person} />
+      </TableCell>
+    </TableRow>
+  );
+}
+
+function PersonCard({ person }: { person: PersonSecurity }) {
+  return (
+    <div className="flex flex-col gap-3 rounded-lg border p-3">
+      <PersonName person={person} />
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-muted-foreground">
+        <SecondFactorState person={person} />
+        <span>{person.recoveryCodesLeft} kurtarma kodu</span>
+        <span>{person.liveSessions} açık oturum</span>
+        {person.lastSeenAt ? <span>son: {lastSeen.format(person.lastSeenAt)}</span> : null}
+      </div>
+      <ResetSecondFactorButton className="self-start" person={person} />
+    </div>
+  );
+}
+
+function PersonName({ person }: { person: PersonSecurity }) {
+  return (
+    <div className="flex flex-col">
+      <span className="font-medium">{person.displayName}</span>
+      <span className="text-xs text-muted-foreground">{person.email ?? "—"}</span>
+      {person.active ? null : (
+        <Badge className="mt-1 self-start" variant="secondary">
+          Pasif
+        </Badge>
+      )}
+    </div>
+  );
+}
+
+function SecondFactorState({ person }: { person: PersonSecurity }) {
+  return person.mustSetUpSecondFactor ? (
+    <span className="flex items-center gap-1.5 text-sm max-xl:text-xs">
+      <ShieldAlertIcon aria-hidden="true" className="size-4 text-warning" />
+      Kurulum bekleniyor
+    </span>
+  ) : (
+    <span className="flex items-center gap-1.5 text-sm text-muted-foreground max-xl:text-xs">
+      <ShieldCheckIcon aria-hidden="true" className="size-4" />
+      Kurulu
+    </span>
+  );
+}
+
+function ResetSecondFactorButton({
+  className,
+  person,
+}: {
+  className?: string;
+  person: PersonSecurity;
+}) {
   const [open, setOpen] = useState(false);
   const [pending, start] = useTransition();
   const [state, setState] = useState<{ error: string | null; done: boolean }>({
@@ -103,67 +194,26 @@ function PersonRow({ person }: { person: PersonSecurity }) {
     });
 
   return (
-    <TableRow>
-      <TableCell>
-        <div className="flex flex-col">
-          <span className="font-medium">{person.displayName}</span>
-          <span className="text-xs text-muted-foreground">{person.email ?? "—"}</span>
-        </div>
-        {person.active ? null : (
-          <Badge className="mt-1" variant="secondary">
-            Pasif
-          </Badge>
-        )}
-      </TableCell>
-      <TableCell>
-        {person.mustSetUpSecondFactor ? (
-          <span className="flex items-center gap-1.5 text-sm">
-            <ShieldAlertIcon aria-hidden="true" className="size-4 text-warning" />
-            Kurulum bekleniyor
-          </span>
-        ) : (
-          <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
-            <ShieldCheckIcon aria-hidden="true" className="size-4" />
-            Kurulu
-          </span>
-        )}
-      </TableCell>
-      <TableCell>
-        <span className="text-sm">{person.recoveryCodesLeft} adet</span>
-      </TableCell>
-      <TableCell>
-        <div className="flex flex-col text-sm">
-          <span>{person.liveSessions}</span>
-          {person.lastSeenAt ? (
-            <span className="text-xs text-muted-foreground">
-              son: {lastSeen.format(person.lastSeenAt)}
-            </span>
-          ) : null}
-        </div>
-      </TableCell>
-      <TableCell className="text-end">
-        <AlertDialog onOpenChange={setOpen} open={open}>
-          <Button onClick={() => setOpen(true)} size="sm" variant="outline">
-            <KeyRoundIcon aria-hidden="true" />
-            İkinci faktörü sıfırla
+    <AlertDialog onOpenChange={setOpen} open={open}>
+      <Button className={className} onClick={() => setOpen(true)} size="sm" variant="outline">
+        <KeyRoundIcon aria-hidden="true" />
+        İkinci faktörü sıfırla
+      </Button>
+      <AlertDialogPopup>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{person.displayName} için sıfırlansın mı?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Kayıp cihazdaki kayıt silinir, kişiden yeni bir doğrulama kurması istenir ve açık
+            oturumları kapanır. İşlem denetim kaydına yazılır ve sahiplere bildirilir.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogClose render={<Button variant="ghost" />}>Vazgeç</AlertDialogClose>
+          <Button loading={pending} onClick={reset} variant="destructive">
+            Sıfırla
           </Button>
-          <AlertDialogPopup>
-            <AlertDialogHeader>
-              <AlertDialogTitle>{person.displayName} için sıfırlansın mı?</AlertDialogTitle>
-              <AlertDialogDescription>
-                Kayıp cihazdaki kayıt silinir, kişiden yeni bir doğrulama kurması istenir ve açık
-                oturumları kapanır. İşlem denetim kaydına yazılır ve sahiplere bildirilir.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogClose render={<Button variant="ghost" />}>Vazgeç</AlertDialogClose>
-              <Button loading={pending} onClick={reset} variant="destructive">
-                Sıfırla
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogPopup>
-        </AlertDialog>
-      </TableCell>
-    </TableRow>
+        </AlertDialogFooter>
+      </AlertDialogPopup>
+    </AlertDialog>
   );
 }

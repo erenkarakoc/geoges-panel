@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-24 — The people screen on a narrower window, where its one button was
+
+- The screen was seen in a browser for the first time and the desktop was fine, but below about 1280 px the five columns scrolled sideways and what went past the edge was the reset button — the only reason the screen exists. It now shows one card per person until the row genuinely fits: measured, the cells do not wrap and want about 810 px of panel, which a 1280 px window is the first to give. Cards on the phone were already the rule (SCREEN_PATTERNS section 3); what was new was measuring where "phone" ends for this table instead of assuming the usual breakpoint.
+- `hidden md:block` on a COSS table overrides its own `display: table`, so the rows laid themselves out at their natural width inside a container sized to something else. Both tables that used it say `table` now — the people list and the task list, where it was costing the columns their proportions.
+- The confirmation was opened and cancelled on a phone width: it arrives as a bottom drawer, names the person and says what the reset will do. Nothing was reset.
+
 ## 2026-09-24 — A minimal people screen, so a reset has a button
 
 - The manager's second-factor reset had nowhere to be pressed: "Kullanıcılar & Roller" has a menu entry and no screen, and Phase 02 never designed one. Offered the choice, the owner asked for a minimal screen now (D-273), so that is what this is — the people and their access, and the reset. Roles, assignments, delegation and visibility are the real screen's job and are deliberately absent; it is replaced, not extended, when that design exists.
