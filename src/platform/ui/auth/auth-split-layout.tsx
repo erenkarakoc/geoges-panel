@@ -37,8 +37,19 @@ export function AuthSplitLayout({
         <div className="relative hidden flex-1 overflow-hidden border-r border-border/60 lg:block">
           {decoration}
         </div>
-        <div className="relative flex w-full flex-col items-center justify-center overflow-y-auto px-6 py-10 lg:w-[560px] lg:px-14 xl:w-[620px]">
-          {children}
+        {/*
+         * The column scrolls; the wrapper inside it centres. A centring flex container that
+         * scrolls by itself pushes the top of tall content out of its own scroll range — the
+         * ten recovery codes hit exactly that and slid under the logo (owner, 2026-09-24).
+         * `min-h-full` keeps short screens centred and lets tall ones grow instead of overflow.
+         * The padding is symmetric on purpose: centred content does not move because of it, and
+         * tall content gets the same air above its heading as below — below `lg` enough to clear
+         * the logo in the corner (owner: the heading had too little room above it).
+         */}
+        <div className="relative w-full overflow-y-auto lg:w-[560px] xl:w-[620px]">
+          <div className="flex min-h-full flex-col items-center justify-center px-6 py-24 lg:px-14 lg:py-16">
+            {children}
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-24 — Two things the owner caught on the recovery-code screen
+
+- The recovery field's placeholder read like a real code (`A7K2M-P9XQ4`), which invites somebody to type it. It shows the shape now: `XXXXX-XXXXX`.
+- The auth column centred its content *and* scrolled by itself, which pushes the top of tall content out of its own scroll range — the ten codes hit exactly that and the heading slid under the logo. Measured before the fix: the heading started at 10 px while the logo occupied 24-71 px. The column scrolls and a wrapper inside it centres with `min-h-full`, so short screens stay centred and tall ones grow instead of overflowing. The padding is symmetric and wider, so a heading has the same air above it as below and clears the corner logo below `lg`. Measured after, at 390x520 and 390x380: the heading clears the logo by 50 px and the last element is reachable at the bottom.
+- Both were found by looking at the real screen with the owner, which is what the browser pass is for. The codes screen itself was verified without reading a single code: the checks counted ten distinct entries matching the pattern, and the database confirmed ten unused hashes and a `two_factor.enrolled` audit entry.
+
 ## 2026-09-24 — The browser tour, with the owner signed in
 
 - The bottom band is DONE. On the desktop it sits at the card's bottom with the screen's action; the scrolling area carries its measured height as padding and as scroll padding; a screen with no band keeps the slot hidden and the height at 0. At 375 px the band is at the bottom and the phone's navigation leaves the DOM, returning on a screen without one. The part that carried the most risk was exercised for real: the band's button submitted the form it does not sit inside, closing a task while the reason field stayed with the record.
