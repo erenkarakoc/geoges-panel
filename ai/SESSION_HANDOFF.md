@@ -24,7 +24,9 @@ TASK-0113's remaining acceptance waits for a real address. The owner declined a 
 
 That leaves TASK-0111, and it is the owner's own work. The setup guide said how to get the panel running and never what to do once it is, so the walk is written down: `docs/features/m1-local-acceptance.md`, eleven steps in order, each with what to do and what should be seen. It opens with a table of what is deliberately absent — module screens, the workflow designer, real search results, push on the phone — because the alternative is the owner writing up an unbuilt slice as a fault.
 
-One thing is owed on our side: `/users-roles` has not been seen in a browser. The owner is signed out after the lock test and we do not type their password, so it is the first thing to look at when they sign in — it is also step 8 of the walk.
+The owner then signed in and `/users-roles` was seen. The desktop was right and the phone was not: five columns scrolled sideways and the column pushed past the edge was the reset button the screen exists for. It shows one card per person until the row genuinely fits, and the boundary was measured rather than assumed — the cells do not wrap, so the table wants about 810 px of panel, which a 1280 px window is the first to give. The measurement also found why a table behaves oddly at all: `hidden md:block` overrides a COSS table's own `display: table`, so its rows lay out at their natural width inside a container sized to something else. The task list had the same class and now says `table` too, verified at 1100 px with closed tasks shown. The confirmation was opened and cancelled at phone width; nothing was reset.
+
+One environment note, not a panel fault: the built-in browser pane refuses to register the service worker (`/sw.js` is served, the pane rejects the registration), so push cannot be exercised there. That acceptance waits for real hosting anyway (DEF-008).
 
 Validation: 299 unit tests, lint, types, prettier and the production build; CI green on every commit of the stretch.
 
