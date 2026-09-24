@@ -4,7 +4,27 @@ Last updated: 2026-09-24
 
 CURRENT PHASE: PHASE 07 — Foundation Build
 
-## Latest continuation — the tour, the screen the reset needed, and the M1 walk
+## Latest continuation — walking the list, and what walking it found
+
+Phase 07 has no build work left that is not the owner's to answer, so the time went on looking at what is built.
+
+The owner asked for the light/dark switch out of the header; it is a line in the account menu now, grouped with the phone-notification switch under "Bu cihaz" (D-275), and the sign-in screens keep the standalone button.
+
+Then the acceptance list was walked before being handed over, and it found three things. "Revizyon Talepleri" opened "Henüz geliştirilmedi" for a screen built with TASK-0109: the entry pointed at a slug of its own while the screen lives where the inventory records it, as the approval screen's second tab. Nothing had failed, because a slug with no route is what an unbuilt module looks like, so the menu is checked against the routes on disk now. The account-security events reached the audit log with no Turkish name. And the list itself told the owner to open a "Tanımlar" screen that does not exist — ADM is service and data only — so that step is gone and the absence is stated with the others. The palette, which the list had not mentioned at all, is a step of its own now.
+
+A phone-width and dark-theme sweep over every built screen found nothing further: no page scrolls sideways, and the 44 px touch rule is met through COSS's `pointer-coarse` expansion even where a button's visible box is smaller.
+
+Two pieces of recorded debt were then dug out of CI.md, which has promised seven checks since Phase 05. `npm audit` needed nothing to arrive and runs now, strict at every level, because the tree reports zero advisories. Three others — the accessibility scan, the keyboard path and the contrast test — have had their subject for weeks and share the reason they do not exist: a browser harness that signs in, which in CI means a test account and its secrets. They are TASK-0115 and OQ-036, with the recommendation that they travel to Phase 09. The contrast test cannot be the unit test ACCESSIBILITY.md calls it, because the tokens resolve through `color-mix`, `--alpha()` and the Tailwind palette; that is recorded rather than worked around.
+
+The schema test was next, and it was measured before it was written: of the fifty shipped tables, eleven of the fourteen the register calls `business` carry no scope column and are right not to, and two carry no RLS policy on purpose. Written literally the test would fail on more than twenty tables. Nothing was written; the measurement is OQ-037, proposing the rule in the register's own terms with a declared scope source.
+
+Finally the quality gate's self-review step was run over the newest work. It held everywhere except two places, both the same fault: a validator that exists and is not applied. `resetSecondFactorAction` took the user id straight from the browser into the provider's admin call and a `::uuid` cast, and `decideRevisionSchema` had been exported and tested without a single path parsing with it. Both are fixed, the first with a domain function and its own tests. The document routes were checked for the same thing and are deliberately different: a malformed id is answered as "not found", so nothing leaks about somebody else's document.
+
+Validation across the stretch: 304 unit tests, lint, types, prettier, the production build and a clean `npm audit`; CI green on every commit.
+
+Waiting on the owner: M1 itself, OQ-036 and OQ-037.
+
+## Previous continuation — the tour, the screen the reset needed, and the M1 walk
 
 The owner signed in and the browser pass finally happened, so the two tasks that were waiting only to be looked at are DONE.
 
