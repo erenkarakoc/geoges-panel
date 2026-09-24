@@ -3,6 +3,7 @@
 ## 2026-09-24 — Self-review of the people screen: the id it is handed
 
 - The quality gate's self-review step was run over the newest work. Most of it held: the reset is refused by the permission service, by the database function and by the screen's own permission-denied state; it is audited; the owner layer is told; the screen shows counts and never content.
+- The same question was then asked of every other action that is handed an id, and the revision decision answered it the same way: `decideRevisionSchema` existed, was exported and was tested, and no path applied it — the id went from the form into the query as a string. It is parsed where the browser reaches it now, and a request that is not one gets a sentence instead of a failed cast.
 - One thing did not. `resetSecondFactorAction` took the user id straight from the browser and passed it to the provider's admin API and to a `::uuid` cast, while every other action in the panel checks an id it is handed. A hand-made request could not reset anybody — the permission check and the database stand in the way — but it could turn a typo into a five-hundred instead of a sentence. The check is a domain function now, with its own tests, and it runs before either call.
 
 ## 2026-09-24 — The mandatory trio, measured before it was enforced

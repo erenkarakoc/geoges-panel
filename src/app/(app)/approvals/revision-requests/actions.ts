@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { RevisionError } from "@/modules/aud";
+import { decideRevisionSchema, RevisionError } from "@/modules/aud";
 import type { RevisionFormState } from "@/modules/aud/ui/revision-requests";
 import { revisions } from "@/records";
 
@@ -14,9 +14,18 @@ export async function decideRevisionAction(
   _previous: RevisionFormState,
   formData: FormData,
 ): Promise<RevisionFormState> {
-  const id = String(formData.get("id") ?? "");
-  const approve = formData.get("approve") === "1";
-  const reason = String(formData.get("reason") ?? "").trim() || null;
+  // The decision's own schema, which existed and was tested but had never been applied to the
+  // path a browser uses: the id went straight into the query as a string.
+  const input = decideRevisionSchema.safeParse({
+    id: formData.get("id"),
+    approve: formData.get("approve") === "1",
+    reason: String(formData.get("reason") ?? "").trim() || undefined,
+  });
+  if (!input.success) {
+    return { error: "Talep bulunamadı; sayfayı yenileyip deneyin.", done: null };
+  }
+  const { id, approve } = input.data;
+  const reason = input.data.reason ?? null;
 
   try {
     const answer = await revisions().decide(id, approve, reason);
