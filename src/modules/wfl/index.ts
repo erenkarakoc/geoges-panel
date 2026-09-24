@@ -35,6 +35,7 @@ export {
   dryRun,
   dryRunVersion,
   resumeFromApproval,
+  resumeFromWait,
   runEventTriggers,
   runInstance,
   type DryRunReport,
@@ -43,6 +44,7 @@ export {
   type RunResult,
 } from "@/modules/wfl/application/engine";
 export { flowEngine } from "@/modules/wfl/application/engine-subscriber";
+export { flowWakeJob } from "@/modules/wfl/application/wake-job";
 export {
   parseDefinition,
   RUNNABLE_STEP_TYPES,

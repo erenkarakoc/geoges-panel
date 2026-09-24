@@ -20,8 +20,6 @@ import { z } from "zod";
  */
 const PLAIN_STEP_TYPES = [
   "start",
-  "wait",
-  "notify",
   "escalate",
   "parallel",
   "join",
@@ -32,7 +30,14 @@ const PLAIN_STEP_TYPES = [
   "for_each",
 ] as const;
 
-export const STEP_TYPES = ["condition", "approval", "task", ...PLAIN_STEP_TYPES] as const;
+export const STEP_TYPES = [
+  "condition",
+  "approval",
+  "task",
+  "wait",
+  "notify",
+  ...PLAIN_STEP_TYPES,
+] as const;
 
 export type StepType = (typeof STEP_TYPES)[number];
 
@@ -42,6 +47,8 @@ export const RUNNABLE_STEP_TYPES: readonly StepType[] = [
   "condition",
   "approval",
   "task",
+  "wait",
+  "notify",
   "end",
 ];
 
@@ -98,12 +105,29 @@ const taskStep = baseStep.extend({
   priority: z.enum(["low", "normal", "high", "critical"]).default("normal"),
 });
 
+/** How long a wait lasts: an ISO-8601 duration, as the architecture's own example writes it. */
+export const DURATION = /^P(?:\d+D(?:T(?:\d+H)?(?:\d+M)?)?|T(?:\d+H(?:\d+M)?|\d+M))$/;
+
+const waitStep = baseStep.extend({
+  type: z.literal("wait"),
+  after: z.string().regex(DURATION, "süre PT8H, PT30M ya da P2D biçiminde yazılır"),
+});
+
+const notifyStep = baseStep.extend({
+  type: z.literal("notify"),
+  owner: ownerSchema,
+  /** What the person is told; the flow's own words, not a code. */
+  subject: z.string().trim().min(1).max(200),
+});
+
 const plainStep = baseStep.extend({ type: z.enum(PLAIN_STEP_TYPES) });
 
 export const stepSchema = z.discriminatedUnion("type", [
   conditionStep,
   approvalStep,
   taskStep,
+  waitStep,
+  notifyStep,
   plainStep,
 ]);
 export type FlowStep = z.infer<typeof stepSchema>;
@@ -202,4 +226,12 @@ export function testPasses(test: z.infer<typeof testSchema>, context: unknown): 
       return left <= right;
     }
   }
+}
+
+/** An ISO-8601 duration in milliseconds; the shapes the schema allows and nothing else. */
+export function durationMs(after: string): number {
+  const days = Number(/(\d+)D/.exec(after)?.[1] ?? 0);
+  const hours = Number(/T(?:(\d+)H)?/.exec(after)?.[1] ?? 0);
+  const minutes = Number(/(\d+)M$/.exec(after)?.[1] ?? 0);
+  return ((days * 24 + hours) * 60 + minutes) * 60_000;
 }

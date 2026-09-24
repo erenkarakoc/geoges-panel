@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  durationMs,
   parseDefinition,
   RUNNABLE_STEP_TYPES,
   STEP_TYPES,
@@ -129,5 +130,44 @@ describe("the approval step's three answers (D-099)", () => {
         steps: [{ id: "a1", type: "approval" }],
       }),
     ).toThrow();
+  });
+});
+
+describe("waiting and telling (REQ-WFL-005)", () => {
+  const withStep = (step: unknown) => ({
+    trigger: { type: "manual" },
+    start: "x1",
+    steps: [step, { id: "x2", type: "end" }],
+  });
+
+  it("takes the durations the architecture writes, and refuses the rest", () => {
+    for (const after of ["PT30M", "PT8H", "P2D", "P1DT12H"]) {
+      expect(parseDefinition(withStep({ id: "x1", type: "wait", after, next: "x2" }))).toBeTruthy();
+    }
+    expect(() =>
+      parseDefinition(withStep({ id: "x1", type: "wait", after: "8 saat", next: "x2" })),
+    ).toThrow(/süre/);
+  });
+
+  it("turns a duration into the milliseconds the scheduler wants", () => {
+    expect(durationMs("PT30M")).toBe(30 * 60_000);
+    expect(durationMs("PT8H")).toBe(8 * 60 * 60_000);
+    expect(durationMs("P2D")).toBe(2 * 24 * 60 * 60_000);
+    expect(durationMs("P1DT12H")).toBe(36 * 60 * 60_000);
+  });
+
+  it("asks a notify step who it is for and what it says", () => {
+    expect(
+      parseDefinition(
+        withStep({
+          id: "x1",
+          type: "notify",
+          owner: { type: "role", role: "GM" },
+          subject: "Kayıt incelemeye alındı",
+          next: "x2",
+        }),
+      ),
+    ).toBeTruthy();
+    expect(() => parseDefinition(withStep({ id: "x1", type: "notify", next: "x2" }))).toThrow();
   });
 });

@@ -30,6 +30,7 @@ import {
   dryRunVersion,
   resumeFromApproval,
   resumeFromTask,
+  resumeFromWait,
 } from "@/modules/wfl/application/engine";
 import { runAsUser } from "@/platform/db";
 import { readDatabaseConfig } from "@/platform/db/database-config";
@@ -46,6 +47,7 @@ const UNBUILT = "zz-t0147-unbuilt";
 const APPROVING = "zz-t0147-approving";
 const TASKING = "zz-t0147-tasking";
 const DRY = "zz-t0147-dry";
+const SLEEPY = "zz-t0147-sleepy";
 const EVENT = "zzw_record.submitted";
 
 let admin: pg.Client;
@@ -101,7 +103,7 @@ const unbuilt = {
   trigger: { type: "event", event: `${EVENT}_other` },
   start: "s1",
   steps: [
-    { id: "s1", type: "notify", title: "Haber ver", next: "s2" },
+    { id: "s1", type: "lock", title: "Kaydı kilitle", next: "s2" },
     { id: "s2", type: "end" },
   ],
 };
@@ -114,6 +116,7 @@ async function publish(key: string, definition: unknown) {
 }
 
 async function cleanUp() {
+  await admin.query("delete from core.scheduled_job where idempotency_key like 'wfl.wake:%'");
   // A task is never deleted (REQ-TSK-001); a reset says so explicitly, which is how the other
   // tests clear theirs too.
   const { rows: tasks } = await admin.query(
@@ -140,7 +143,7 @@ async function cleanUp() {
       [taskIds],
     );
   }
-  const keys = [BIG, SMALL, UNBUILT, APPROVING, TASKING, DRY];
+  const keys = [BIG, SMALL, UNBUILT, APPROVING, TASKING, DRY, SLEEPY];
   await admin.query(
     "delete from wfl.instance where flow_id in (select id from wfl.flow where key = any($1))",
     [keys],
@@ -283,12 +286,12 @@ describe("what the engine cannot do yet, it says (REQ-WFL-025)", () => {
     expect(result).toEqual({
       state: "ended",
       status: "failed",
-      reason: "motor bu adımı henüz yürütmüyor: notify",
+      reason: "motor bu adımı henüz yürütmüyor: lock",
     });
 
     const stopped = await readInstance(as(DESIGNER), instanceId!);
     expect(stopped?.status).toBe("failed");
-    expect(stopped?.failure).toContain("notify");
+    expect(stopped?.failure).toContain("lock");
 
     const log = await readRunLog(as(DESIGNER), instanceId!);
     expect(log.map((line) => line.kind)).toEqual(["started", "waiting", "ended"]);
@@ -698,14 +701,14 @@ describe("the dry run a publish needs (REQ-WFL-025, SPIKE-05)", () => {
         trigger: { type: "manual" },
         start: "b1",
         steps: [
-          { id: "b1", type: "notify", title: "Haber ver", next: "b2" },
+          { id: "b1", type: "lock", title: "Kaydı kilitle", next: "b2" },
           { id: "b2", type: "end" },
         ],
       },
     });
     const report = await dryRunVersion(worker, broken, {}, relations);
     expect(report.passed).toBe(false);
-    expect(report.failure).toContain("notify");
+    expect(report.failure).toContain("lock");
     expect(await errorOf(publishVersion(as(DESIGNER), broken))).toBe("wfl.dry_run_required");
   });
 
@@ -718,5 +721,126 @@ describe("the dry run a publish needs (REQ-WFL-025, SPIKE-05)", () => {
     const report = await dryRunVersion(worker, nonsense, {}, relations);
     expect(report.passed).toBe(false);
     expect(report.ends).toBe("failed");
+  });
+});
+
+describe("waiting for a time, and telling somebody (REQ-WFL-005)", () => {
+  /** Tells the person, waits half an hour, then ends. */
+  const sleepy = {
+    trigger: { type: "event", event: `${EVENT}_sleep` },
+    start: "n1",
+    steps: [
+      {
+        id: "n1",
+        type: "notify",
+        owner: { type: "user", userId: APPROVER },
+        subject: "Kayıt incelemeye alındı",
+        next: "w1",
+      },
+      { id: "w1", type: "wait", after: "PT30M", next: "e1" },
+      { id: "e1", type: "end" },
+    ],
+  };
+
+  /** The one action these steps use, as the composition root would call it. */
+  const runtime = {
+    ...relations,
+    run: async (db: SystemDb, code: string, input: unknown) => {
+      if (code !== "notification.send") throw new Error(`unexpected action ${code}`);
+      const n = input as {
+        userId: string;
+        type: string;
+        subject: string;
+        linkPath: string;
+        sourceKey: string;
+      };
+      const { rows } = await sql<{ id: string | null }>`
+        select tsk.notify(${n.userId}::uuid, ${n.type}, ${n.subject}, ${n.linkPath},
+                          ${n.sourceKey}) as id`.execute(db);
+      return rows[0].id;
+    },
+  };
+
+  let instanceId: string;
+
+  it("sends the notice through the catalog and then goes to sleep", async () => {
+    await publish(SLEEPY, sleepy);
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_sleep`,
+        id: id(630),
+        record: { schema: "zzw", table: "record", id: id(730) },
+        payload: {},
+      },
+      runtime,
+    );
+    instanceId = started[0];
+
+    const { rows: notices } = await admin.query(
+      "select subject, user_id from tsk.notification where source_key like $1",
+      ["wfl:%"],
+    );
+    expect(notices).toHaveLength(1);
+    expect(notices[0].subject).toBe("Kayıt incelemeye alındı");
+    expect(notices[0].user_id).toBe(APPROVER);
+
+    const log = await readRunLog(as(DESIGNER), instanceId);
+    expect(log.filter((line) => line.kind === "entered").map((line) => line.stepId)).toEqual([
+      "n1",
+      "w1",
+    ]);
+    expect(log.at(-1)?.detail).toMatchObject({ waitingFor: "time" });
+    expect((await readInstance(as(DESIGNER), instanceId))?.status).toBe("running");
+  });
+
+  it("leaves the wake-up in the database, not in anybody's memory", async () => {
+    const { rows } = await admin.query(
+      `select j.job_type, j.status, j.run_at, j.payload
+         from core.scheduled_job j where j.idempotency_key like 'wfl.wake:%'`,
+    );
+    expect(rows).toHaveLength(1);
+    expect(rows[0].job_type).toBe("wfl.wake");
+    expect(rows[0].status).toBe("pending");
+    // Half an hour from now, give or take the time these assertions took.
+    const minutes = (new Date(rows[0].run_at).getTime() - Date.now()) / 60_000;
+    expect(minutes).toBeGreaterThan(25);
+    expect(minutes).toBeLessThan(31);
+  });
+
+  it("carries on when it is woken, and only once", async () => {
+    const { rows } = await admin.query(
+      "select payload from core.scheduled_job where idempotency_key like 'wfl.wake:%'",
+    );
+    const stepRunId = rows[0].payload.stepRunId;
+
+    expect(await resumeFromWait(worker, stepRunId, runtime)).toEqual({
+      state: "ended",
+      status: "done",
+    });
+    expect((await readInstance(as(DESIGNER), instanceId))?.status).toBe("done");
+
+    // A wake-up that arrives twice finds the step already left.
+    expect(await resumeFromWait(worker, stepRunId, runtime)).toBeNull();
+  });
+
+  it("says in a dry run how long it would sleep, without scheduling anything", async () => {
+    const versionId = await saveDraft(as(DESIGNER), {
+      key: SLEEPY,
+      name: "Deneme uyku",
+      definition: sleepy,
+    });
+    const before = await admin.query(
+      "select count(*)::int as n from core.scheduled_job where idempotency_key like 'wfl.wake:%'",
+    );
+    const report = await dryRunVersion(worker, versionId, {}, runtime);
+    const after = await admin.query(
+      "select count(*)::int as n from core.scheduled_job where idempotency_key like 'wfl.wake:%'",
+    );
+
+    expect(report.passed).toBe(true);
+    expect(report.steps.map((step) => step.stepId)).toEqual(["n1", "w1"]);
+    expect(report.steps.at(-1)?.outcome).toMatch(/^waiting until /);
+    expect(after.rows[0].n).toBe(before.rows[0].n);
   });
 });

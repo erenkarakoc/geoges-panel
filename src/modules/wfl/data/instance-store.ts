@@ -1,5 +1,6 @@
 import { sql } from "kysely";
 
+import { scheduleJob } from "@/platform/db/events";
 import { runAsUser, type DbIdentity } from "@/platform/db";
 import type { SystemDb } from "@/platform/jobs/types";
 
@@ -327,4 +328,23 @@ export async function readStepRun(
      where id = ${stepRunId}::uuid and status = 'running'`.execute(db);
   const row = rows[0];
   return row ? { instanceId: row.instance_id, stepId: row.step_id } : null;
+}
+
+/** The job type the engine's own wake-ups use. */
+export const WAKE_JOB = "wfl.wake";
+
+/**
+ * Asks the scheduler to wake this step when its time comes. The key is the step visit, so the
+ * same wait never schedules two wake-ups however often the step is retried.
+ */
+export async function scheduleWake(
+  db: SystemDb,
+  wake: { stepRunId: string; wakeAt: Date },
+): Promise<boolean> {
+  return scheduleJob(db, {
+    type: WAKE_JOB,
+    runAt: wake.wakeAt,
+    key: `wfl.wake:${wake.stepRunId}`,
+    payload: { stepRunId: wake.stepRunId },
+  });
 }

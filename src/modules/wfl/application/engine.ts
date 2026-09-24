@@ -9,10 +9,12 @@ import {
   readRunnable,
   readStepRun,
   requestApproval,
+  scheduleWake,
   startInstance,
   type FlowTrigger,
 } from "@/modules/wfl/data/instance-store";
 import {
+  durationMs,
   parseDefinition,
   RUNNABLE_STEP_TYPES,
   stepOf,
@@ -75,6 +77,8 @@ type StepSink = {
   wait(stepId: string, detail: unknown): Promise<void>;
   approval(stateId: string, step: FlowStep, ownerUserId: string): Promise<void>;
   action(code: string, input: unknown): Promise<void>;
+  /** Asks to be woken at a time; the dry run is never actually woken. */
+  sleep(stateId: string, wakeAt: Date): Promise<void>;
 };
 
 type Runnable = {
@@ -122,6 +126,11 @@ function writingSink(db: SystemDb, instanceId: string, relations: FlowRuntime): 
     async action(code, input) {
       if (!relations.run) throw new Error(`no capability catalog is wired for ${code}`);
       await relations.run(db, code, input);
+    },
+    async sleep(stateId, wakeAt) {
+      // The wake-up is a row in the database, so a server that restarts in the meantime still
+      // wakes the flow (WORKFLOW_ENGINE section 4).
+      await scheduleWake(db, { stepRunId: stateId, wakeAt });
     },
   };
 }
@@ -193,6 +202,35 @@ async function walk(
     const stateId = await sink.enter(step);
     // Null means the step limit was passed: the instance is already ended and the log says why.
     if (!stateId) return { state: "ended", status: "failed", reason: "adım sınırı" };
+
+    if (step.type === "notify") {
+      const owner = await ownerOf(db, relations, step.owner);
+      if (!owner) {
+        const reason = `adımın sahibi bulunamadı: ${step.id}`;
+        await sink.leave(stateId, "failed", "no_owner");
+        await sink.end("failed", reason, step.id);
+        return { state: "ended", status: "failed", reason };
+      }
+      // Notifying is an action of the catalog like any other; the engine does not write anybody's
+      // notification itself (D-280).
+      await sink.action("notification.send", {
+        userId: owner,
+        type: "workflow.notice",
+        subject: step.subject,
+        linkPath: "/today",
+        sourceKey: `wfl:${stateId}`,
+      });
+      await sink.leave(stateId, "done", "sent", { owner });
+      stepId = step.next ?? null;
+      continue;
+    }
+
+    if (step.type === "wait") {
+      const wakeAt = new Date(Date.now() + durationMs(step.after));
+      await sink.sleep(stateId, wakeAt);
+      await sink.wait(step.id, { waitingFor: "time", until: wakeAt.toISOString() });
+      return { state: "waiting", stepId: step.id };
+    }
 
     if (step.type === "approval" || step.type === "task") {
       const owner = await ownerOf(db, relations, step.owner);
@@ -433,6 +471,16 @@ export async function dryRun(
     async action() {
       // Nothing: a dry run calls no action, which is what keeps it from opening real work.
     },
+    async sleep(_stateId, wakeAt) {
+      if (entered) {
+        steps.push({
+          stepId: entered.id,
+          type: entered.type,
+          outcome: `waiting until ${wakeAt.toISOString()}`,
+        });
+      }
+      outcome.ends = "waiting";
+    },
   };
 
   const result = await walk(db, definition, definition.start, sink, context, relations);
@@ -483,4 +531,35 @@ export async function dryRunVersion(
     summary: { steps: report.steps, ends: report.ends, failure: report.failure ?? null },
   });
   return report;
+}
+
+/**
+ * Wakes a flow that was waiting for a time to pass (REQ-WFL-005, WORKFLOW_ENGINE section 4).
+ *
+ * The wake-up is a scheduled job, so a server that restarts in the meantime changes nothing; the
+ * job carries the step run, and a step somebody already left is a wake-up that does nothing.
+ */
+export async function resumeFromWait(
+  db: SystemDb,
+  stepRunId: string,
+  relations: FlowRuntime,
+): Promise<RunResult | null> {
+  const open = await readStepRun(db, stepRunId);
+  if (!open) return null;
+
+  const instance = await runnable(db, open.instanceId);
+  if (!instance) return null;
+
+  const left = await leaveStep(db, { stateId: stepRunId, status: "done", outcome: "woke" });
+  if (!left) return null;
+
+  const step = stepOf(instance.definition, open.stepId);
+  return walk(
+    db,
+    instance.definition,
+    step?.next ?? null,
+    writingSink(db, open.instanceId, relations),
+    instance.context,
+    relations,
+  );
 }

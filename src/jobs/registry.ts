@@ -11,7 +11,7 @@ import {
   securityAlerts,
   systemWatch,
 } from "@/modules/tsk";
-import { flowEngine } from "@/modules/wfl";
+import { flowEngine, flowWakeJob } from "@/modules/wfl";
 import type { JobRegistry } from "@/platform/jobs/types";
 import { sendSignal } from "@/platform/signals/hub";
 import { processMailSender } from "@/platform/mail/mail";
@@ -48,6 +48,7 @@ export const jobRegistry: JobRegistry = {
     dailyDigest(processMailSender),
     overdueAndEscalation(),
     systemWatch(),
+    flowWakeJob(ownerRelations),
     ...(searchIndex.length > 0 ? [searchRebuildJob(searchIndex)] : []),
   ],
   readModels: [],

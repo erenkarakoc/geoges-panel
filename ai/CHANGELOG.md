@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-25 — Telling somebody, and waiting for a time (TASK-0117, step 7)
+
+- Two more of the fourteen steps. A flow can now tell somebody something, and it can wait.
+- Telling is the catalog's own action: the engine calls `notification.send` and never writes anybody's notification itself. It already knew how to call an action; this is the second one it uses, and the first that does not open work.
+- Waiting leaves a **row in the scheduler**, not a timer in memory. An eight-hour wait therefore survives a restart, a deploy and a crash — the flow is woken by the worker picking up a due job, and the job carries the step visit it belongs to. The wake-up is keyed by that visit, so a retried step never schedules two, and a wake-up that arrives twice finds the step already left.
+- The dry run says how long the flow *would* sleep and schedules nothing at all, which the test asserts by counting the scheduler's rows on both sides of the run.
+- Durations are written the way the architecture's own example writes them — `PT30M`, `PT8H`, `P2D` — and the first regex refused `P2D`, which the unit tests caught before the engine ever saw one.
+
 ## 2026-09-25 — The dry run, which is the same loop (TASK-0117, step 6)
 
 - A publish has needed a passed dry run since the first migration of this task, and until today nothing produced one: the tests wrote the evidence by hand. Now the engine produces it, and the important part is *how*.
