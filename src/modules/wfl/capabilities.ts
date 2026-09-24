@@ -40,8 +40,28 @@ export const wflCapabilities = defineCapabilities({
       carries: ["akış", "sürüm", "adım", "hata"],
       dataClass: "internal",
     },
+    {
+      code: "approval.decided",
+      name: "Onay kararı verildi",
+      when: "Onayla / reddet / düzeltmeye geri gönder seçildiğinde",
+      carries: ["kayıt", "karar", "karar veren", "gerekçe"],
+      dataClass: "record",
+    },
   ],
   actions: [],
-  conditions: [],
+  conditions: [
+    {
+      code: "approval.decision",
+      name: "Onay kararı",
+      type: "choice",
+      dataClass: "internal",
+    },
+    {
+      code: "approval.waiting_hours",
+      name: "Onayın beklediği süre",
+      type: "number",
+      dataClass: "internal",
+    },
+  ],
   relations: [],
 });

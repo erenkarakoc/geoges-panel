@@ -1,5 +1,20 @@
 [
   {
+    "module": "WFL",
+    "kind": "event",
+    "code": "approval.decided"
+  },
+  {
+    "module": "WFL",
+    "kind": "condition",
+    "code": "approval.decision"
+  },
+  {
+    "module": "WFL",
+    "kind": "condition",
+    "code": "approval.waiting_hours"
+  },
+  {
     "module": "ADM",
     "kind": "condition",
     "code": "catalog_item.list"
@@ -63,6 +78,11 @@
     "module": "AUD",
     "kind": "condition",
     "code": "revision_request.waiting_days"
+  },
+  {
+    "module": "IAM",
+    "kind": "relation",
+    "code": "role.holder"
   },
   {
     "module": "IAM",

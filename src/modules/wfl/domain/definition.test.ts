@@ -20,7 +20,13 @@ const good = {
       whenTrue: "s2",
       whenFalse: "s3",
     },
-    { id: "s2", type: "approval", title: "Müdür onayı", next: "s3" },
+    {
+      id: "s2",
+      type: "approval",
+      title: "Müdür onayı",
+      owner: { type: "role", role: "GM" },
+      outcomes: { approve: "s3", reject: "s3", return: "s1" },
+    },
     { id: "s3", type: "end" },
   ],
 };
@@ -87,5 +93,41 @@ describe("what a condition decides (REQ-WFL-008)", () => {
     expect(valueAt(context, "record.amount")).toBe(1500);
     expect(valueAt(context, "record.amount.nope")).toBeUndefined();
     expect(valueAt(null, "a.b")).toBeUndefined();
+  });
+});
+
+describe("the approval step's three answers (D-099)", () => {
+  const withApproval = (outcomes: Record<string, string>) => ({
+    trigger: { type: "manual" },
+    start: "a1",
+    steps: [
+      {
+        id: "a1",
+        type: "approval",
+        owner: { type: "user", userId: "0192f0c1-0148-7000-8000-000000000001" },
+        outcomes,
+      },
+      { id: "a2", type: "end" },
+    ],
+  });
+
+  it("takes a step that names where each answer goes", () => {
+    expect(
+      parseDefinition(withApproval({ approve: "a2", reject: "a2", return: "a1" })),
+    ).toBeTruthy();
+  });
+
+  it("refuses an answer that goes nowhere real", () => {
+    expect(() => parseDefinition(withApproval({ approve: "a9" }))).toThrow(/olmayan adıma/);
+  });
+
+  it("refuses an approval with nobody to own it, because a step nobody owns waits for ever", () => {
+    expect(() =>
+      parseDefinition({
+        trigger: { type: "manual" },
+        start: "a1",
+        steps: [{ id: "a1", type: "approval" }],
+      }),
+    ).toThrow();
   });
 });

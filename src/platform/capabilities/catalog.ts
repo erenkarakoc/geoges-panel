@@ -94,11 +94,17 @@ export type ConditionFieldCapability = {
   status?: CapabilityStatus;
 };
 
-/** How a step finds its owner: `site.coordinator`, `record.submitter` … (D-097). */
+/**
+ * How a step finds its owner: `site.coordinator`, `record.submitter`, the holder of a role …
+ * (D-097). The module that knows the answer declares it and answers it, so the engine asks nobody
+ * in particular — which is what keeps the engine from reaching into IAM or any other module.
+ */
 export type OwnerRelationCapability = {
   code: string;
   name: string;
   status?: CapabilityStatus;
+  /** Who this relation points at right now, or null when it points at nobody. */
+  resolve: (caller: CapabilityCaller, argument: string | null) => Promise<string | null>;
 };
 
 export type ModuleCapabilities = {

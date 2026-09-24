@@ -222,3 +222,97 @@ export async function flowsListeningTo(db: SystemDb, eventCode: string): Promise
        and v.definition -> 'trigger' ->> 'event' = ${eventCode}`.execute(db);
   return rows.map((row) => row.key);
 }
+
+/** Opens the approval a step waits on; the same step visit never opens two. */
+export async function requestApproval(
+  db: SystemDb,
+  approval: {
+    instanceId: string;
+    stateId: string;
+    stepId: string;
+    title: string;
+    ownerUserId: string;
+  },
+): Promise<string> {
+  const { rows } = await sql<{ id: string }>`
+    select wfl.request_approval(${approval.instanceId}::uuid, ${approval.stateId}::uuid,
+                                ${approval.stepId}, ${approval.title},
+                                ${approval.ownerUserId}::uuid) as id`.execute(db);
+  return rows[0].id;
+}
+
+export type ApprovalDecision = "approve" | "reject" | "return";
+
+/**
+ * The decision, made by the person it belongs to (REQ-WFL-014). False when it was already decided;
+ * what happens next is the engine's, which hears `approval.decided` like any other event.
+ */
+export function decideApproval(
+  identity: DbIdentity,
+  approvalId: string,
+  decision: ApprovalDecision,
+  reason?: string,
+) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{ done: boolean | null }>`
+      select wfl.decide_approval(${approvalId}::uuid, ${decision},
+                                 ${reason ?? null}) as done`.execute(db);
+    return rows[0]?.done === true;
+  });
+}
+
+export type WaitingApproval = {
+  id: string;
+  instanceId: string;
+  stepId: string;
+  title: string;
+  record: { schema: string; table: string; id: string } | null;
+  createdAt: Date;
+};
+
+/** What this person is being asked to decide (REQ-WFL-012). */
+export function readMyApprovals(identity: DbIdentity) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{
+      id: string;
+      instance_id: string;
+      step_id: string;
+      title: string;
+      record_schema: string | null;
+      record_table: string | null;
+      record_id: string | null;
+      created_at: Date;
+    }>`select id, instance_id, step_id, title, record_schema, record_table, record_id, created_at
+         from wfl.approval
+        where status = 'waiting' and owner_user_id = ${identity.userId}::uuid
+        order by created_at`.execute(db);
+    return rows.map((row): WaitingApproval => ({
+      id: row.id,
+      instanceId: row.instance_id,
+      stepId: row.step_id,
+      title: row.title,
+      record:
+        row.record_schema && row.record_table && row.record_id
+          ? { schema: row.record_schema, table: row.record_table, id: row.record_id }
+          : null,
+      createdAt: row.created_at,
+    }));
+  });
+}
+
+/** One decided approval as the engine needs it when the decision comes back to it. */
+export async function readDecision(
+  db: SystemDb,
+  approvalId: string,
+): Promise<{ instanceId: string; stepStateId: string; decision: string } | null> {
+  const { rows } = await sql<{
+    instance_id: string;
+    step_state_id: string;
+    decision: string | null;
+  }>`select instance_id, step_state_id, decision from wfl.approval
+       where id = ${approvalId}::uuid and status = 'decided'`.execute(db);
+  const row = rows[0];
+  return row?.decision
+    ? { instanceId: row.instance_id, stepStateId: row.step_state_id, decision: row.decision }
+    : null;
+}

@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-24 — The approval step: where a flow stops and a person decides (TASK-0117, step 4)
+
+- Migration 0048 adds the approval a flow waits on. Three outcomes and no fourth — approve, reject, send back (D-099) — and a refusal or a send-back with no reason is refused by the table itself, so no screen, action or import can leave one behind (REQ-WFL-015).
+- The decision does not resume the flow. Deciding writes the answer and publishes `approval.decided` in one transaction; the engine hears it like any other event and moves the instance in its own. Neither half can lose the other, and a delivery arriving twice decides nothing twice: the second attempt answers false and the engine finds nothing to resume.
+- A send-back opens the same step again, which is what a back edge is for (D-099): the person is asked a second time, with a new approval, and the run log carries both visits.
+- Who a step waits on is asked of the **capability catalog**, not of IAM. The owner relation `role.holder` is declared by IAM and answered by IAM; the engine holds one resolver and never learns whose data that is — which is also what the boundary check insisted on when the first version of this reached into `iam.role_assignment` directly.
+- Fourteen database tests for the engine now, three more unit tests for the schema; 330 unit and 276 database tests in all.
+
 ## 2026-09-24 — The engine takes its first steps (TASK-0117, step 3)
 
 - A definition is now a thing with rules: the fourteen steps of the palette and nothing else, every path checked against the steps that exist, every branch of a condition named. There is no free code and no escape hatch, which is what makes "a flow cannot write the ledger" a missing ability rather than a rule somebody polices.

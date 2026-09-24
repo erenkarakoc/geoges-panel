@@ -7,6 +7,7 @@ import { iamCapabilities } from "@/modules/iam";
 import { tskCapabilities } from "@/modules/tsk";
 import { wflCapabilities } from "@/modules/wfl";
 import type { ActionCapability, ModuleCapabilities } from "@/platform/capabilities";
+import type { SystemDb } from "@/platform/jobs/types";
 
 /**
  * Every module's capability catalog, joined here and nowhere else (TASK-0118, D-280).
@@ -32,3 +33,17 @@ export function actionCapability(code: string): ActionCapability | null {
   }
   return null;
 }
+
+/**
+ * Who a flow step's owner rule points at, answered by the module that declared the relation
+ * (D-097). The engine holds this and nothing else: it never learns that roles are IAM's.
+ */
+export const ownerRelations = {
+  async resolve(db: SystemDb, code: string, argument: string | null): Promise<string | null> {
+    for (const catalog of moduleCapabilities) {
+      const relation = catalog.relations.find((r) => r.code === code);
+      if (relation) return relation.resolve({ db, userId: null }, argument);
+    }
+    return null;
+  },
+};

@@ -1,3 +1,4 @@
+import { readRoleHolder } from "@/modules/iam/data/account-security-store";
 import { defineCapabilities } from "@/platform/capabilities/catalog";
 
 /**
@@ -31,5 +32,12 @@ export const iamCapabilities = defineCapabilities({
       dataClass: "internal",
     },
   ],
-  relations: [],
+  relations: [
+    {
+      code: "role.holder",
+      name: "Rolü taşıyan kişi",
+      resolve: (caller, roleCode) =>
+        roleCode ? readRoleHolder(caller.db, roleCode) : Promise.resolve(null),
+    },
+  ],
 });

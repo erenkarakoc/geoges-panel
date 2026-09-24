@@ -14,20 +14,29 @@ export {
 } from "@/modules/wfl/data/flow-store";
 
 export {
+  decideApproval,
   endInstance,
   enterStep,
   leaveStep,
   noteWaiting,
   readInstance,
+  readMyApprovals,
   readRunLog,
   startInstance,
   startInstanceByHand,
+  type ApprovalDecision,
   type FlowTrigger,
   type InstanceRow,
+  type WaitingApproval,
   type TriggerKind,
 } from "@/modules/wfl/data/instance-store";
 
-export { runEventTriggers, runInstance, type RunResult } from "@/modules/wfl/application/engine";
+export {
+  resumeFromApproval,
+  runEventTriggers,
+  runInstance,
+  type RunResult,
+} from "@/modules/wfl/application/engine";
 export { flowEngine } from "@/modules/wfl/application/engine-subscriber";
 export {
   parseDefinition,

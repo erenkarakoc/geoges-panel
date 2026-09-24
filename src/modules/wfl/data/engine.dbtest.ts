@@ -19,16 +19,26 @@ import { connectAdmin } from "../../../../scripts/db-admin.mjs";
 import { releaseTestPeople } from "../../../../scripts/db-test-people.mjs";
 import { runEventTriggers, runInstance } from "@/modules/wfl/application/engine";
 import { publishVersion, recordDryRun, saveDraft } from "@/modules/wfl/data/flow-store";
-import { readInstance, readRunLog, startInstanceByHand } from "@/modules/wfl/data/instance-store";
+import {
+  decideApproval,
+  readInstance,
+  readMyApprovals,
+  readRunLog,
+  startInstanceByHand,
+} from "@/modules/wfl/data/instance-store";
+import { resumeFromApproval } from "@/modules/wfl/application/engine";
 import { readDatabaseConfig } from "@/platform/db/database-config";
 import type { SystemDb } from "@/platform/jobs/types";
 
 const id = (n: number) => `0192f0c1-0147-7000-8000-${String(n).padStart(12, "0")}`;
 const DESIGNER = id(1);
-const PEOPLE = [DESIGNER];
+const APPROVER = id(2);
+const BYSTANDER = id(3);
+const PEOPLE = [DESIGNER, APPROVER, BYSTANDER];
 const BIG = "zz-t0147-big";
 const SMALL = "zz-t0147-small";
 const UNBUILT = "zz-t0147-unbuilt";
+const APPROVING = "zz-t0147-approving";
 const EVENT = "zzw_record.submitted";
 
 let admin: pg.Client;
@@ -36,6 +46,30 @@ let workerPool: pg.Pool;
 let worker: SystemDb;
 
 const as = (userId: string) => ({ userId, actingRoleId: null });
+
+const errorOf = (promise: Promise<unknown>) =>
+  promise.then(
+    () => "no error",
+    (e: { hint?: string; code?: string }) => e.hint ?? e.code ?? "no code",
+  );
+
+/**
+ * What the composition root gives the engine (`relations` in `src/records`). A module's test
+ * may not import the composition root, so this stands in for it and answers the one relation these
+ * flows use; the real wiring — IAM declaring `role.holder` — is checked where the catalogs are
+ * joined.
+ */
+const relations = {
+  resolve: async (_db: SystemDb, code: string, argument: string | null) => {
+    if (code !== "role.holder" || !argument) return null;
+    const { rows } = await admin.query(
+      `select a.user_id from iam.role_assignment a join iam.role r on r.id = a.role_id
+        where r.code = $1 order by a.starts_on, a.user_id limit 1`,
+      [argument],
+    );
+    return rows[0]?.user_id ?? null;
+  },
+};
 
 /** A flow that asks how big the record is and only then decides where to go. */
 const branching = {
@@ -55,12 +89,12 @@ const branching = {
   ],
 };
 
-/** The same shape, but its true branch needs a step the engine has not learned yet. */
+/** A flow whose first step is one the engine has not learned yet. */
 const unbuilt = {
   trigger: { type: "event", event: `${EVENT}_other` },
   start: "s1",
   steps: [
-    { id: "s1", type: "approval", title: "Koordinatör onayı", next: "s2" },
+    { id: "s1", type: "task", title: "Düzelt ve yeniden gönder", next: "s2" },
     { id: "s2", type: "end" },
   ],
 };
@@ -73,7 +107,7 @@ async function publish(key: string, definition: unknown) {
 }
 
 async function cleanUp() {
-  const keys = [BIG, SMALL, UNBUILT];
+  const keys = [BIG, SMALL, UNBUILT, APPROVING];
   await admin.query(
     "delete from wfl.instance where flow_id in (select id from wfl.flow where key = any($1))",
     [keys],
@@ -107,8 +141,9 @@ beforeAll(async () => {
 
   await admin.query(
     `insert into iam.user (id, email, display_name, auth_provider_id)
-     values ($1, 't0147@example.test', 'Deneme motor', $1)`,
-    [DESIGNER],
+     select u.id, 't0147-' || u.n || '@example.test', 'Deneme motor ' || u.n, u.id
+       from unnest($1::uuid[]) with ordinality as u(id, n)`,
+    [PEOPLE],
   );
   const { rows } = await admin.query("select id from iam.role where code = 'SAH'");
   await admin.query(
@@ -144,12 +179,16 @@ describe("a published flow starts listening (REQ-WFL-007)", () => {
   });
 
   it("runs the flow the event asks for, and takes the branch the record deserves", async () => {
-    const started = await runEventTriggers(worker, {
-      code: EVENT,
-      id: id(600),
-      record: { schema: "zzw", table: "record", id: id(700) },
-      payload: { amount: 2500 },
-    });
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: EVENT,
+        id: id(600),
+        record: { schema: "zzw", table: "record", id: id(700) },
+        payload: { amount: 2500 },
+      },
+      relations,
+    );
     expect(started).toHaveLength(1);
 
     const finished = await readInstance(as(DESIGNER), started[0]);
@@ -175,12 +214,16 @@ describe("a published flow starts listening (REQ-WFL-007)", () => {
   });
 
   it("takes the other branch for a record the condition refuses", async () => {
-    const started = await runEventTriggers(worker, {
-      code: EVENT,
-      id: id(601),
-      record: { schema: "zzw", table: "record", id: id(701) },
-      payload: { amount: 10 },
-    });
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: EVENT,
+        id: id(601),
+        record: { schema: "zzw", table: "record", id: id(701) },
+        payload: { amount: 10 },
+      },
+      relations,
+    );
     const log = await readRunLog(as(DESIGNER), started[0]);
     expect(log.filter((line) => line.kind === "entered").map((line) => line.stepId)).toEqual([
       "s1",
@@ -190,7 +233,9 @@ describe("a published flow starts listening (REQ-WFL-007)", () => {
   });
 
   it("starts nothing for an event no published flow listens to", async () => {
-    expect(await runEventTriggers(worker, { code: "zzw_record.ignored", id: id(602) })).toEqual([]);
+    expect(
+      await runEventTriggers(worker, { code: "zzw_record.ignored", id: id(602) }, relations),
+    ).toEqual([]);
   });
 });
 
@@ -201,16 +246,16 @@ describe("what the engine cannot do yet, it says (REQ-WFL-025)", () => {
       flowKey: UNBUILT,
       record: { schema: "zzw", table: "record", id: id(702) },
     });
-    const result = await runInstance(worker, instanceId!);
+    const result = await runInstance(worker, instanceId!, relations);
     expect(result).toEqual({
       state: "ended",
       status: "failed",
-      reason: "motor bu adımı henüz yürütmüyor: approval",
+      reason: "motor bu adımı henüz yürütmüyor: task",
     });
 
     const stopped = await readInstance(as(DESIGNER), instanceId!);
     expect(stopped?.status).toBe("failed");
-    expect(stopped?.failure).toContain("approval");
+    expect(stopped?.failure).toContain("task");
 
     const log = await readRunLog(as(DESIGNER), instanceId!);
     expect(log.map((line) => line.kind)).toEqual(["started", "waiting", "ended"]);
@@ -222,7 +267,7 @@ describe("what the engine cannot do yet, it says (REQ-WFL-025)", () => {
         where f.key = $1 and i.status <> 'running' limit 1`,
       [UNBUILT],
     );
-    expect(await runInstance(worker, rows[0].id)).toBeNull();
+    expect(await runInstance(worker, rows[0].id, relations)).toBeNull();
   });
 });
 
@@ -245,21 +290,29 @@ describe("the whole way round: a real event through the real outbox", () => {
     expect(delivery.map((d: { subscriber: string }) => d.subscriber)).toContain("wfl.engine");
 
     // What the worker does with that delivery, in the worker's own transaction.
-    const started = await runEventTriggers(worker, {
-      code: `${EVENT}_small`,
-      id: eventId,
-      record: { schema: "zzw", table: "record", id: id(703) },
-      payload: { amount: 5000 },
-    });
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_small`,
+        id: eventId,
+        record: { schema: "zzw", table: "record", id: id(703) },
+        payload: { amount: 5000 },
+      },
+      relations,
+    );
     expect(started).toHaveLength(1);
 
     // The same delivery arriving twice is the outbox's normal behaviour, and it changes nothing.
-    const again = await runEventTriggers(worker, {
-      code: `${EVENT}_small`,
-      id: eventId,
-      record: { schema: "zzw", table: "record", id: id(703) },
-      payload: { amount: 5000 },
-    });
+    const again = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_small`,
+        id: eventId,
+        record: { schema: "zzw", table: "record", id: id(703) },
+        payload: { amount: 5000 },
+      },
+      relations,
+    );
     expect(again).toEqual(started);
 
     const { rows: instances } = await admin.query(
@@ -277,5 +330,126 @@ describe("the whole way round: a real event through the real outbox", () => {
       [SMALL],
     );
     expect(rows[0].context).toMatchObject({ record: { amount: 5000 } });
+  });
+});
+
+describe("the approval step (REQ-WFL-012…016, D-099)", () => {
+  /** Waits on a named person, and sends each of the three answers somewhere different. */
+  const approving = {
+    trigger: { type: "event", event: `${EVENT}_approve` },
+    start: "a1",
+    steps: [
+      {
+        id: "a1",
+        type: "approval",
+        title: "Deneme onayı",
+        owner: { type: "user", userId: APPROVER },
+        outcomes: { approve: "a2", reject: "a3", return: "a1" },
+      },
+      { id: "a2", type: "end" },
+      { id: "a3", type: "end" },
+    ],
+  };
+
+  let instanceId: string;
+
+  it("stops at the approval and puts it in front of the person who must decide", async () => {
+    await publish(APPROVING, approving);
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_approve`,
+        id: id(610),
+        record: { schema: "zzw", table: "record", id: id(710) },
+        payload: { amount: 42 },
+      },
+      relations,
+    );
+    instanceId = started[0];
+
+    const running = await readInstance(as(DESIGNER), instanceId);
+    expect(running?.status).toBe("running");
+
+    const waiting = await readMyApprovals(as(APPROVER));
+    expect(waiting).toHaveLength(1);
+    expect(waiting[0].title).toBe("Deneme onayı");
+    expect(waiting[0].record).toEqual({ schema: "zzw", table: "record", id: id(710) });
+
+    // Nobody else is being asked anything.
+    expect(await readMyApprovals(as(BYSTANDER))).toEqual([]);
+    const log = await readRunLog(as(DESIGNER), instanceId);
+    expect(log.at(-1)?.kind).toBe("waiting");
+  });
+
+  it("refuses a decision from somebody it does not belong to", async () => {
+    const [waiting] = await readMyApprovals(as(APPROVER));
+    expect(await errorOf(decideApproval(as(BYSTANDER), waiting.id, "approve"))).toBe(
+      "wfl.not_your_approval",
+    );
+  });
+
+  it("refuses a refusal with no reason (REQ-WFL-015)", async () => {
+    const [waiting] = await readMyApprovals(as(APPROVER));
+    expect(await errorOf(decideApproval(as(APPROVER), waiting.id, "reject"))).toBe(
+      "wfl.reason_required",
+    );
+    expect(await errorOf(decideApproval(as(APPROVER), waiting.id, "return", "  "))).toBe(
+      "wfl.reason_required",
+    );
+  });
+
+  it("carries on down the path the answer names, once it is answered", async () => {
+    const [waiting] = await readMyApprovals(as(APPROVER));
+    expect(await decideApproval(as(APPROVER), waiting.id, "approve")).toBe(true);
+
+    // The decision is published; the engine hears it like any other event.
+    const resumed = await resumeFromApproval(worker, waiting.id, relations);
+    expect(resumed).toEqual({ state: "ended", status: "done" });
+
+    const finished = await readInstance(as(DESIGNER), instanceId);
+    expect(finished?.status).toBe("done");
+
+    const log = await readRunLog(as(DESIGNER), instanceId);
+    expect(log.filter((line) => line.kind === "entered").map((line) => line.stepId)).toEqual([
+      "a1",
+      "a2",
+    ]);
+    expect(log.find((line) => line.stepId === "a1" && line.kind === "left")?.detail).toMatchObject({
+      outcome: "approve",
+    });
+  });
+
+  it("decides once; the same decision arriving again changes nothing", async () => {
+    const { rows } = await admin.query("select id from wfl.approval where instance_id = $1", [
+      instanceId,
+    ]);
+    expect(await decideApproval(as(APPROVER), rows[0].id, "reject", "fikrim değişti")).toBe(false);
+    expect(await resumeFromApproval(worker, rows[0].id, relations)).toBeNull();
+    expect((await readInstance(as(DESIGNER), instanceId))?.status).toBe("done");
+  });
+
+  it("sends the flow back to the same step when the answer is a send-back", async () => {
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_approve`,
+        id: id(611),
+        record: { schema: "zzw", table: "record", id: id(711) },
+        payload: {},
+      },
+      relations,
+    );
+    const [waiting] = await readMyApprovals(as(APPROVER));
+    expect(await decideApproval(as(APPROVER), waiting.id, "return", "eksik belge")).toBe(true);
+    expect(await resumeFromApproval(worker, waiting.id, relations)).toEqual({
+      state: "waiting",
+      stepId: "a1",
+    });
+
+    // The same step is open again, and the person is being asked a second time.
+    const again = await readMyApprovals(as(APPROVER));
+    expect(again).toHaveLength(1);
+    expect(again[0].id).not.toBe(waiting.id);
+    expect((await readInstance(as(DESIGNER), started[0]))?.status).toBe("running");
   });
 });

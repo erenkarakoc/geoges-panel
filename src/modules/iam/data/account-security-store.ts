@@ -1,6 +1,7 @@
 import { sql } from "kysely";
 
 import { runAsUser, runSignedOut, type DbIdentity } from "@/platform/db";
+import type { SystemDb } from "@/platform/jobs/types";
 
 /** Re-exported for the application layer, which may not name the database module itself. */
 export type { DbIdentity };
@@ -206,4 +207,22 @@ export function readPeopleSecurity(identity: DbIdentity) {
       lastSeenAt: row.last_seen_at,
     }));
   });
+}
+
+/**
+ * The person holding a role today, for a flow step whose owner is a role (D-097, REQ-WFL-017).
+ * Read as the worker, because the engine has no person of its own; the oldest live assignment
+ * wins, which is the company's answer to "who is the X", not a guess about seniority.
+ */
+export async function readRoleHolder(db: SystemDb, roleCode: string): Promise<string | null> {
+  const { rows } = await sql<{ user_id: string }>`
+    select a.user_id
+      from iam.role_assignment a
+      join iam.role r on r.id = a.role_id
+     where r.code = ${roleCode}
+       and a.starts_on <= iam.today()
+       and (a.ends_on is null or a.ends_on >= iam.today())
+     order by a.starts_on, a.user_id
+     limit 1`.execute(db);
+  return rows[0]?.user_id ?? null;
 }

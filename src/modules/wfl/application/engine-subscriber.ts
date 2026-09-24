@@ -1,4 +1,8 @@
-import { runEventTriggers } from "@/modules/wfl/application/engine";
+import {
+  resumeFromApproval,
+  runEventTriggers,
+  type OwnerRelations,
+} from "@/modules/wfl/application/engine";
 import type { EventSubscriber } from "@/platform/jobs/types";
 
 /**
@@ -12,18 +16,28 @@ import type { EventSubscriber } from "@/platform/jobs/types";
  * Not replayable, and never will be: running a flow opens tasks and sends notifications, which a
  * read-model rebuild must not do twice (D-234).
  */
-export function flowEngine(): EventSubscriber {
+export function flowEngine(relations: OwnerRelations): EventSubscriber {
   return {
     name: "wfl.engine",
     events: [],
     replayable: false,
     async handle(db, event) {
-      await runEventTriggers(db, {
-        code: event.code,
-        id: event.id,
-        record: event.record,
-        payload: event.payload,
-      });
+      // Its own approvals come back here too: a decision is an event like any other, so a flow
+      // waiting on a person is resumed by the same durable delivery as everything else.
+      if (event.code === "approval.decided" && event.record?.id) {
+        await resumeFromApproval(db, event.record.id, relations);
+        return;
+      }
+      await runEventTriggers(
+        db,
+        {
+          code: event.code,
+          id: event.id,
+          record: event.record,
+          payload: event.payload,
+        },
+        relations,
+      );
     },
   };
 }

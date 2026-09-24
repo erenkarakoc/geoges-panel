@@ -21,6 +21,7 @@ import { searchRebuildJob } from "@/platform/search/rebuild";
 import { processStorage } from "@/platform/storage";
 import { createTesseractReader } from "@/platform/text-recognition/text-reader";
 import { searchIndex } from "@/records";
+import { ownerRelations } from "@/records/capabilities";
 
 const doc = docJobs(processStorage, createTesseractReader());
 
@@ -37,7 +38,7 @@ export const jobRegistry: JobRegistry = {
     exchangeRateAlarm(),
     revisionAlerts(),
     securityAlerts(),
-    flowEngine(),
+    flowEngine(ownerRelations),
     ...(searchIndex.length > 0 ? [searchIndexer(searchIndex)] : []),
   ],
   jobs: [

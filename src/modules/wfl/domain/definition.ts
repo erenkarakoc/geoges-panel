@@ -14,12 +14,12 @@ import { z } from "zod";
  */
 
 /**
- * The condition is listed on its own because it is the one step with branches, and a union that
- * can be narrowed needs the two halves kept apart.
+ * The two steps with something of their own to say — the condition with its branches, the approval
+ * with its three answers — are kept apart from the rest, because a union that can be narrowed
+ * needs its halves written out rather than filtered.
  */
 const PLAIN_STEP_TYPES = [
   "start",
-  "approval",
   "task",
   "wait",
   "notify",
@@ -33,12 +33,12 @@ const PLAIN_STEP_TYPES = [
   "for_each",
 ] as const;
 
-export const STEP_TYPES = ["condition", ...PLAIN_STEP_TYPES] as const;
+export const STEP_TYPES = ["condition", "approval", ...PLAIN_STEP_TYPES] as const;
 
 export type StepType = (typeof STEP_TYPES)[number];
 
 /** The steps the engine can take today; the rest wait for their own slice of the work. */
-export const RUNNABLE_STEP_TYPES: readonly StepType[] = ["start", "condition", "end"];
+export const RUNNABLE_STEP_TYPES: readonly StepType[] = ["start", "condition", "approval", "end"];
 
 const stepId = z
   .string()
@@ -66,9 +66,30 @@ const conditionStep = baseStep.extend({
   whenFalse: stepId.nullish(),
 });
 
+/** How a step finds the person it waits on (D-097). Only two of the four forms are read today. */
+export const ownerSchema = z.discriminatedUnion("type", [
+  z.object({ type: z.literal("user"), userId: z.uuid() }),
+  z.object({ type: z.literal("role"), role: z.string().min(2).max(40) }),
+  z.object({ type: z.literal("relation"), relation: z.string().min(2).max(60) }),
+  z.object({ type: z.literal("permission"), permission: z.string().min(2).max(60) }),
+]);
+
+const approvalStep = baseStep.extend({
+  type: z.literal("approval"),
+  owner: ownerSchema,
+  /** Where each of the three answers sends the flow (D-099); nothing means the flow ends there. */
+  outcomes: z
+    .object({
+      approve: stepId.nullish(),
+      reject: stepId.nullish(),
+      return: stepId.nullish(),
+    })
+    .default({}),
+});
+
 const plainStep = baseStep.extend({ type: z.enum(PLAIN_STEP_TYPES) });
 
-export const stepSchema = z.discriminatedUnion("type", [conditionStep, plainStep]);
+export const stepSchema = z.discriminatedUnion("type", [conditionStep, approvalStep, plainStep]);
 export type FlowStep = z.infer<typeof stepSchema>;
 
 export const triggerSchema = z.discriminatedUnion("type", [
@@ -109,6 +130,9 @@ export const definitionSchema = z
         step.next,
         step.type === "condition" ? step.whenTrue : null,
         step.type === "condition" ? step.whenFalse : null,
+        step.type === "approval" ? step.outcomes.approve : null,
+        step.type === "approval" ? step.outcomes.reject : null,
+        step.type === "approval" ? step.outcomes.return : null,
       ]) {
         if (target && !ids.has(target)) {
           ctx.addIssue({ code: "custom", message: `${step.id} olmayan adıma gidiyor: ${target}` });
