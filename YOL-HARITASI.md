@@ -1,6 +1,6 @@
 # GEOGES Panel — Yol Haritası
 
-Son güncelleme: 2026-09-23. Şu an **Faz 07 — Temel yapım** içindeyiz; aktif iş **TASK-0110 — Site geneli arama**.
+Son güncelleme: 2026-09-24. Şu an **Faz 07 — Temel yapım** içindeyiz; aktif iş **TASK-0110 — Site geneli arama**.
 
 Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının](ai/TASKS.md) ve [güncel durumun](ai/CURRENT_STATE.md) okunması kolay özetidir. Faz sırası ve kapsam için bağlayıcı kaynak `ai/MASTER_ROADMAP.md`'dir. “Tamamlandı” temel altyapının kabulünü ifade eder; sonraki fazlardaki iş ekranlarının da yapıldığı anlamına gelmez.
 
@@ -30,7 +30,7 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 16–18 numaraları, dilimler birleştirilirken kaldırıldı; atlanan iş yok. Faz 19, mevcut atıflar bozulmasın diye numarasını koruyor.
 
-**15M — Panel MCP sunucusu (2026-09-23 eklendi).** Bitmiş ürün için, panelin içinde çalışan bir MCP sunucusu: asistan panele bağlanır, sunucunun kendi yetkisi yoktur, her çağrı soruyu soran kişinin kimliğiyle aynı satır güvenliğinden geçer. Yani kanal, o kişinin ekranda görebildiğinin tam olarak aynısını görür; yetkisiz kayıt yokmuş gibi davranır. Sahip iki kararı verdi: veri bulut bir modele çıkabilir ve kapı kullanıcının kendi yetkisi dahilinde her şeye açıktır. Okuma tarafı arama, kayıt detayı, yönetim kartları ve raporlar, görevler, bildirimler, onay kuyruğu ve revizyon talepleridir; belgelerde yalnız üstveri ve panel bağlantısı döner, imzalı depolama bağlantısı asla dışarı çıkmaz. Yazma tarafı sahibin kararıyla **yalnız taslakla sınırlı**: kanal bir taslak hazırlar, kişi paneli açıp onaylayana kadar hiçbir şey yürürlüğe girmez. Görev açmak, not yazmak veya revizyon talebi başlatmak doğrudan kanaldan yapılmaz; onay, imza ve para-stok-personel kaydı da panelde kalır. Araç yüzeyi her modülün kendi kaydından toplandığı için sıra dilimlerden sonradır: bugün yapılsa yüzeyin büyük bölümü henüz yok. Açık nokta: personel verisi bulut modele geçtiğinde KVKK yurt dışına aktarım dayanağı ve İK modülünün kanalda olup olmayacağının yönetici ayarı olması.
+**15M — Panel MCP sunucusu (2026-09-23 eklendi).** Bitmiş ürün için, panelin içinde çalışan bir MCP sunucusu: asistan panele bağlanır, sunucunun kendi yetkisi yoktur, her çağrı soruyu soran kişinin kimliğiyle aynı satır güvenliğinden geçer. Yani kanal, o kişinin ekranda görebildiğinin tam olarak aynısını görür; yetkisiz kayıt yokmuş gibi davranır. Sahip iki kararı verdi: veri bulut bir modele çıkabilir ve kapı kullanıcının kendi yetkisi dahilinde her şeye açıktır. Okuma tarafı arama, kayıt detayı, yönetim kartları ve raporlar, görevler, bildirimler, onay kuyruğu ve revizyon talepleridir; belgelerde yalnız üstveri ve panel bağlantısı döner, imzalı depolama bağlantısı asla dışarı çıkmaz. Yazma tarafı sahibin kararıyla **yalnız taslakla sınırlı**: kanal bir taslak hazırlar, kişi paneli açıp onaylayana kadar hiçbir şey yürürlüğe girmez. Görev açmak, not yazmak veya revizyon talebi başlatmak doğrudan kanaldan yapılmaz; onay, imza ve para-stok-personel kaydı da panelde kalır. Araç yüzeyi her modülün kendi kaydından toplandığı için sıra dilimlerden sonradır: bugün yapılsa yüzeyin büyük bölümü henüz yok. KVKK sorusu da sahibin kararıyla kapandı (D-271): kanal kurulabilir ve **İK modülü de kanalda** olacak; her okuma yine kişinin kendi yetkisi dahilinde ve denetim kaydıyla. Gerçek personel verisi panele girmeden önceki hukuki değerlendirme (OQ-024) Faz 19 kapısı olarak yerinde duruyor.
 
 ## Faz 07 — Ayrıntılı durum
 
@@ -49,10 +49,10 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 | TASK-0107 | R2 depolama, imzalı bağlantılar, sürdürülebilir yükleme, metin tanıma ve toplu indirme | ✅ Temel altyapı tamamlandı; arşiv içerik araması Faz 15'te |
 | TASK-0108 | Görevler, görev verme formu, bildirim çekmecesi, canlı sayaç, telefon bildirimi, günlük özet ve gecikme uyarıları | ✅ Çekirdek tamamlandı; gerçek telefonda push kabulü açık, e-posta sağlayıcısı seçilene kadar özet dosyaya yazılıyor |
 | TASK-0109 | Revizyon talebi, eski/yeni karşılaştırması, gerekçeli karar, düzeltme hareketi ve bildirim bağlantısı | ✅ Çekirdek tamamlandı; iş kaydı uygulayıcıları ilgili modül dilimlerinde |
-| TASK-0110 | Site geneli arama: yetkili sonuçlar, Türkçe eşleşme, öneri, tür grupları, son açılanlar ve yeniden dizinleme | 🔨 Devam ediyor — ayrıntı aşağıda |
+| TASK-0110 | Site geneli arama: yetkili sonuçlar, Türkçe eşleşme, öneri, tür grupları, son açılanlar ve yeniden dizinleme | 🔨 Bu fazda yapılabilecek işi bitti; gerçek kayıt kaynaklarıyla kabulü Faz 09'da — ayrıntı aşağıda |
 | TASK-0113 | Ana ekrana ekleme, uygulama simgeleri, mobil dokunma alanları ve görev kartları | 🔨 Yapıldı; HTTPS üzerinden kurulum ve gerçek cihaz kabulü bekliyor |
-| TASK-0028 | Sayfaya göre eylem/kaydetme düğmeleri taşıyan sabit alt şerit | ⬜ Tasarım hazır, uygulamaya hazır |
-| TASK-0112 | Tek kullanımlık 2FA kurtarma kodları, giriş kilidi, hareketsizlik/oturum sonu ve ikinci faktör sıfırlama | ⬜ Başlamadı |
+| TASK-0028 | Sayfaya göre eylem/kaydetme düğmeleri taşıyan sabit alt şerit | 🔨 Kuruldu; görev detayı ve "Görev ver" ekranları kullanıyor. Ekranda görülmesi (masaüstü + telefon turu) bekliyor |
+| TASK-0112 | Tek kullanımlık 2FA kurtarma kodları, giriş kilidi, hareketsizlik/oturum sonu ve ikinci faktör sıfırlama | 📝 Planı yazıldı (beş adım); **onayınız bekleniyor**, sonra kuruluyor |
 | TASK-0111 — M1 | Sahibin kendi makinesinde kurulum, 2FA ile giriş ve uçtan uca kabul turu | ⬜ Faz 07'nin kapanış kabulü |
 
 “Bugün” ekranının adlandırması (TASK-0043) ve odak/erişilebilirlik düzeltmeleri (TASK-0054) de tamamlandı.
@@ -77,9 +77,11 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 | Büyük veri | **20.000 kayıtla ölçüldü (23 Eylül).** İlk ölçümde arama hedefin çok üstündeydi: yaygın bir sözcük 942 ms, iki sözcük 1.250 ms. Beş göçten sonra (0031-0035) örneklenen altı sorgunun tamamı **90-287 ms**, yani 300 ms hedefinin içinde — ağ turu dahil. Dizin kayıt başına yaklaşık 260 bayt yer tutuyor; 20.000 satırın tam bütünlük taraması 1,5-2,4 sn. Yeniden kurma maliyeti de ölçüldü: 20.000 kaydın kaynaklardan yeniden kurulması on dakikada bitmiyordu, 0036'dan sonra **29 saniye** (2.000 kayıt 4,7 sn). Açık kalan: çok sayıda kaydın paylaştığı bir sözcükte sıralama hâlâ bütün eşleşmeleri okumak zorunda ve gerçek veri şekliyle doğrulama |
 | Gerçek kaynaklarla tarayıcı kabulü | Modüller kendi dilimlerinde arama kaynağını kaydedecek; gerçek telefon klavyesiyle kabul de açık |
 
-**Arama henüz tamamlandı sayılmıyor.** Hız kapısı 20.000 kayıtta geçildi; kalanlar çoklu kapsam kararı (OQ-034), bu hacimde yeniden kurma maliyeti ve gerçek kayıtlarla tarayıcı kabulü.
+**Arama henüz tamamlandı sayılmıyor,** ama bu fazda yapılabilecek işi bitti: hız kapısı 20.000 kayıtta geçildi, yeniden kurma 29 saniyeye indi, çoklu kapsam kuruldu. Kalanlar Faz 09'a bağlı: modüller kendi arama kaynaklarını kaydedince gerçek kayıtlarla tarayıcı kabulü, ve çok büyük hacimde tek bir sözcüğü paylaşan yüz binlerce kayıtta sıralama.
 
 ### Son doğrulamalar
+
+- **Alt bant kuruldu (TASK-0028).** Ekran kendi bandını yazıyor, içerik bandın altından kayıyor ve bandın yüksekliği kadar boşluk alıyor; telefonda gezinme çubuğu bant varken çekiliyor. Görev detayının kapanış adımları ve "Görev ver" sayfasının eylemi banda taşındı. **273 birim testi**, lint, tip, biçim ve derleme geçti, CI yeşil; **ekranda görülmesi bekliyor**.
 
 - **Çoklu kapsam kuruldu (0037).** Bir kayıt hem şantiye hem proje taşıyorsa eskiden yalnız ilkine bakılıyordu; artık her yer ayrı değerlendiriliyor ve birine yetki yetiyor. Okuma anı denetimi de kovanın kendi yerine bakıyor, yoksa kaydı projesinden bulan kişiye sağlıklı dizin bozukmuş gibi görünüyordu. Dört yeni test; ikisi göç geri alındığında düşüyor. **208 veritabanı testi**, **273 birim testi**, biçim ve derleme geçti; `a8f294e` ile gönderildi, CI **35928366252 yeşil**.
 
@@ -104,11 +106,11 @@ Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının]
 
 ## Buradan sonraki sıra
 
-1. **TASK-0110:** çoklu kapsam kararını (OQ-034) uygulamak, 20.000 kayıtta yeniden kurma maliyetini ölçmek ve gerçek kayıt kaynaklarıyla tarayıcı kabulünü yapmak. Hız, sürüm ayrımı ve yardımcı tutarlılığı tamamlandı.
-2. **TASK-0028:** ekran altı işlevsel şeridi kurmak.
-3. **TASK-0112:** kalan hesap güvenliği özelliklerini kurmak.
-4. **TASK-0111 — M1:** yerel kabul turu ve Faz 07 çıkış kontrolü.
-5. **Faz 08:** iş akışı motoru ve görsel tasarımcı.
+1. **TASK-0112:** planı hazır, **onayınızı bekliyor** — kurtarma kodları, giriş kilidi, oturum ömrü ve ikinci faktör sıfırlaması.
+2. **Bekleyen iki görsel doğrulama:** alt bandın masaüstü/telefon turu ve TASK-0113'ün gerçek cihazda ana ekran + bildirim kabulü. İkisi de sizin giriş yapmanıza bağlı.
+3. **TASK-0111 — M1:** yerel kabul turu ve Faz 07 çıkış kontrolü.
+4. **Faz 08:** iş akışı motoru ve görsel tasarımcı.
+5. **Faz 09'da açılacak arama işleri:** modüller kendi kaynaklarını kaydedince gerçek kayıtlarla kabul.
 
 **Paralel kabul:** TASK-0113 mobil kurulum doğrulaması HTTPS/gerçek cihaz koşullarını bekliyor. Barındırma bağımlılığı DEF-008 olarak açık; barındırma kararı Faz 09 çıkışına bağlı.
 
