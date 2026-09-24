@@ -100,6 +100,13 @@ talking to the customer, not as pending questions.
 |---|---|---|---|
 | OQ-034 | **ANSWERED 2026-09-23 by the owner: one scope is enough.** May a person authorised for site A find a record shared by sites A and B, or must they be authorised for both? The owner chose ANY: authorisation for any one of a record's places makes it visible in search. Written as D-270. Commercial and sensitive class checks stay mandatory and are untouched by it. | The narrower reading (every scope authorised) was the alternative and was not taken. | Nothing; TASK-0110 can now build multi-scope visibility. |
 
+## Phase 08 shape — raised and answered 2026-09-24
+
+| ID | Question | Answer | Blocks |
+|---|---|---|---|
+| OQ-038 | **ANSWERED 2026-09-24 by the owner: the probe module → D-279.** How is the engine accepted while the modules whose records its default flows act on (daily site log, material issue, payment approval) belong to Phases 09–11? The roadmap's Phase 08 acceptance names those three flows running through the engine | The engine's acceptance runs end to end against a throw-away record type and capability catalog inside the repository — the shape Phase 06's spikes already used and passed with. The eight real templates ship as JSON and each is activated and accepted in the slice that owns its records | Answered; shapes TASK-0117 |
+| OQ-039 | **ANSWERED 2026-09-24 by the owner: the mechanism and the five existing modules → D-280.** Does the capability catalog (REQ-WFL-003/004) get written for IAM, ADM, AUD, DOC and TSK in Phase 08, or only defined as a mechanism that each slice fills in later? | Both the mechanism and the existing modules' real capabilities, so the contract test has teeth from the first day and the engine has real actions to call | Answered; shapes TASK-0118 |
+
 ## The mandatory trio, measured against the tables that exist — raised 2026-09-24
 
 | ID | Question | Recommendation | Blocks |
