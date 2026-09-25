@@ -15,8 +15,8 @@ insert into adm.rule (id, rule_key_id, valid_from, value, reason)
 values
   (md5('adm.rule:tsk.digest-time:2026-01-01')::uuid,
    md5('adm.rule_key:tsk.digest-time')::uuid, '2026-01-01', '"07:30"',
-   'Başlangıç ayarı: sabah 07:30 (REQ-TSK-013 örneği)'),
+   'Başlangıç ayarı: sabah 07:30'),
   (md5('adm.rule:tsk.escalation-wait-hours:2026-01-01')::uuid,
    md5('adm.rule_key:tsk.escalation-wait-hours')::uuid, '2026-01-01', '24',
-   'Başlangıç ayarı: 24 saat; eskalasyon akışı Faz 08''de bu ayarı devralır (D-263)')
+   'Başlangıç ayarı: 24 saat')
 on conflict do nothing;

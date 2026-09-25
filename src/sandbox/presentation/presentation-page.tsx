@@ -77,9 +77,8 @@ export function PresentationPage() {
       </div>
 
       <footer className={styles.footer}>
-        Kaynaklar: docs/architecture/MODULE_MAP.md, Özellik Yapısı §2, §9, §13, §45 ve kararlar
-        D-035…D-040. Bu sayfa D-052 kapsamında geliştirme sunumudur; kayıtlar değişince
-        presentation-data.ts güncellenir.
+        Bu sayfa yalnız geliştirme sırasında açılan bir sunumdur; modüller ve roller değiştikçe
+        güncellenir.
       </footer>
     </div>
   );

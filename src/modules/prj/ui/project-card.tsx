@@ -290,7 +290,7 @@ export function ProjectCard({
                 Sözleşme şartları ve yükümlülükleri, hakediş durumu ve tutarları burada görünecek.
               </EmptyDescription>
               <Badge className="mt-2" variant="outline">
-                Hakediş Finans dilimiyle (Faz 11), yükümlülükler Uyum dilimiyle (Faz 14) gelir.
+                Hakediş Finans bölümüyle, yükümlülükler Uyum bölümüyle birlikte gelecek.
               </Badge>
             </EmptyHeader>
           </Empty>

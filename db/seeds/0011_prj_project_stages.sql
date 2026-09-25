@@ -4,7 +4,7 @@
 -- stages under Tanımlar; which transitions need an approval is the flows'.
 insert into adm.catalog (id, key, name, description, allows_project_scope, allows_user_additions)
 values (md5('adm.catalog:project_stage')::uuid, 'project_stage', 'Proje aşamaları',
-        'Projenin talepten kapanışa geçtiği aşamalar (REQ-PRJ-003).', false, false)
+        'Projenin talepten kapanışa geçtiği aşamalar.', false, false)
 on conflict do nothing;
 
 insert into adm.catalog_item (id, catalog_id, code, name)

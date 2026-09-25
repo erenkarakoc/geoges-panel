@@ -18,7 +18,7 @@ export function createSupabaseSecondFactorAdmin(): SecondFactorAdmin {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !serviceRoleKey) {
     throw new Error(
-      "SUPABASE_SERVICE_ROLE_KEY is missing; removing a lost second factor needs it (TASK-0112).",
+      "SUPABASE_SERVICE_ROLE_KEY is missing; removing a lost second factor needs it.",
     );
   }
   const admin = createClient(url, serviceRoleKey, {

@@ -10,14 +10,14 @@ values
    'Giriş kilidi süresi', 'Sınır aşıldığında hesabın kilitli kalacağı süre.',
    'number', 'dakika', '{company}'),
   (md5('adm.rule_key:iam.session-days')::uuid, 'iam.session-days', 'iam',
-   'Oturum ömrü', 'Bir oturumun en çok yaşayacağı gün sayısı (D-230).',
+   'Oturum ömrü', 'Bir oturumun en çok yaşayacağı gün sayısı.',
    'number', 'gün', '{company}'),
   (md5('adm.rule_key:iam.session-idle-days')::uuid, 'iam.session-idle-days', 'iam',
-   'Hareketsizlik süresi', 'Bu kadar gün hiç kullanılmayan oturum kapanır (D-230).',
+   'Hareketsizlik süresi', 'Bu kadar gün hiç kullanılmayan oturum kapanır.',
    'number', 'gün', '{company}'),
   (md5('adm.rule_key:iam.two-factor-roles')::uuid, 'iam.two-factor-roles', 'iam',
    'İki adımlı giriş zorunlu roller',
-   'Bu rolleri taşıyan kişi ikinci adımı kurmadan panele geçemez (REQ-IAM-003).',
+   'Bu rolleri taşıyan kişi ikinci adımı kurmadan panele geçemez.',
    'json', null, '{company}')
 on conflict do nothing;
 
@@ -25,17 +25,17 @@ insert into adm.rule (id, rule_key_id, valid_from, value, reason)
 values
   (md5('adm.rule:iam.login-attempt-limit:2026-01-01')::uuid,
    md5('adm.rule_key:iam.login-attempt-limit')::uuid, '2026-01-01', '5',
-   'Başlangıç ayarı: 5 hatalı deneme (REQ-IAM-005; yöneticinin ayarı)'),
+   'Başlangıç ayarı: 5 hatalı deneme; yönetici değiştirebilir'),
   (md5('adm.rule:iam.login-lock-minutes:2026-01-01')::uuid,
    md5('adm.rule_key:iam.login-lock-minutes')::uuid, '2026-01-01', '15',
-   'Başlangıç ayarı: 15 dakika kilit (REQ-IAM-005; yöneticinin ayarı)'),
+   'Başlangıç ayarı: 15 dakika kilit; yönetici değiştirebilir'),
   (md5('adm.rule:iam.session-days:2026-01-01')::uuid,
    md5('adm.rule_key:iam.session-days')::uuid, '2026-01-01', '30',
-   'Başlangıç ayarı: 30 gün (D-230)'),
+   'Başlangıç ayarı: 30 gün'),
   (md5('adm.rule:iam.session-idle-days:2026-01-01')::uuid,
    md5('adm.rule_key:iam.session-idle-days')::uuid, '2026-01-01', '3',
-   'Başlangıç ayarı: 3 günlük hareketsizlik (D-230)'),
+   'Başlangıç ayarı: 3 günlük hareketsizlik'),
   (md5('adm.rule:iam.two-factor-roles:2026-01-01')::uuid,
    md5('adm.rule_key:iam.two-factor-roles')::uuid, '2026-01-01', '[]',
-   'Başlangıç ayarı: hiçbir rol için zorunlu değil; sahip Tanımlar''dan seçer (REQ-IAM-003)')
+   'Başlangıç ayarı: hiçbir rol için zorunlu değil; sahip Tanımlar''dan seçer')
 on conflict do nothing;

@@ -312,19 +312,19 @@ export function PartyCard({
         <TabsPanel className="pt-4" value="leads">
           <Later
             text="Bu firmadan gelen talepler ve firmayla yapılan görüşmeler tek zaman çizelgesinde burada görünecek."
-            when="Talepler ve teklifler dilimiyle (Faz 13) gelir."
+            when="Talepler ve teklifler bölümüyle birlikte gelecek."
           />
         </TabsPanel>
         <TabsPanel className="pt-4" value="scorecard">
           <Later
             text="İşverenin geçmiş işleri, teklifleri, ödeme hızı ve gecikmeleri kayıtlardan kendiliğinden hesaplanıp burada görünecek."
-            when="Talepler ve teklifler dilimiyle (Faz 13) gelir."
+            when="Talepler ve teklifler bölümüyle birlikte gelecek."
           />
         </TabsPanel>
         <TabsPanel className="pt-4" value="account">
           <Later
             text="Firmanın tek cari hesabı — alacak ve borç birbirinden düşülmüş net bakiye — burada görünecek."
-            when="Finans dilimiyle (Faz 11) gelir."
+            when="Finans bölümüyle birlikte gelecek."
           />
         </TabsPanel>
       </Tabs>

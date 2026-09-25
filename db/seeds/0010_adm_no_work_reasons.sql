@@ -3,7 +3,7 @@
 -- management adds more under Tanımlar.
 insert into adm.catalog (id, key, name, description, allows_project_scope, allows_user_additions)
 values (md5('adm.catalog:no_work_reason')::uuid, 'no_work_reason', 'Çalışma yok nedenleri',
-        'Bir iş gününde iş yapılmadığında seçilen neden (REQ-SIT-010).', false, false)
+        'Bir iş gününde iş yapılmadığında seçilen neden.', false, false)
 on conflict do nothing;
 
 insert into adm.catalog_item (id, catalog_id, code, name)

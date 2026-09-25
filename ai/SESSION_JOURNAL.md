@@ -506,3 +506,4 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-25 22:41:35Z · b13a9554 · Write · `src/app/(app)/projects/[id]/revisions/[revisionId]/actions.ts`
 - 2026-09-25 22:41:35Z · b13a9554 · Write · `src/app/(app)/projects/[id]/revisions/[revisionId]/page.tsx`
 - 2026-09-25 23:09:43Z · b13a9554 · Write · `YOL-HARITASI.md`
+- 2026-09-25 23:17:38Z · b13a9554 · Write · `src/records/zz-publish-templates.dbtest.ts`

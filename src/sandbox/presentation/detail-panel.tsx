@@ -119,10 +119,7 @@ export function DetailPanel({ selected, activeFlow, onSelect }: DetailPanelProps
                 <h3 className={styles.panelHeading}>Geçtiği iş akışları</h3>
                 <ul className={styles.panelFlows}>
                   {inFlows.map((candidate) => (
-                    <li key={candidate.id}>
-                      {candidate.title}{" "}
-                      <span className={styles.panelSource}>{candidate.section}</span>
-                    </li>
+                    <li key={candidate.id}>{candidate.title}</li>
                   ))}
                 </ul>
               </section>
@@ -138,7 +135,7 @@ export function DetailPanel({ selected, activeFlow, onSelect }: DetailPanelProps
       <aside className={`${styles.panel} ${styles.panelLeft}`}>
         <ScrollArea className={styles.panelScroll}>
           <div className={styles.panelInner}>
-            <p className={styles.panelEyebrow}>İş akışı {flow.section}</p>
+            <p className={styles.panelEyebrow}>İş akışı</p>
             <h2 className={styles.panelTitle}>{flow.title}</h2>
             <p className={styles.panelLead}>{flow.purpose}</p>
             <p className={styles.panelNote}>
@@ -201,7 +198,7 @@ export function DetailPanel({ selected, activeFlow, onSelect }: DetailPanelProps
             </ul>
             <p className={styles.panelNote}>
               Sahadaki bir kayıt koordinatör onayından geçtikten sonra bu sekiz yere kendiliğinden
-              yansır (§9, §13, D-035…D-040).
+              yansır.
             </p>
           </section>
         </div>

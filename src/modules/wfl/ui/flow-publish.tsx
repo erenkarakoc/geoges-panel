@@ -252,7 +252,7 @@ export function FlowActions({
 
             <p className="text-xs text-muted-foreground">
               Deneme şimdilik boş bir örnek kayıtla çalışır: örnek kayıt seçimi, kullanıcının kendi
-              kayıt türlerini tanımlaması ile birlikte gelir (Faz 09R).
+              kayıt türlerini tanımlaması ile birlikte gelecek.
             </p>
           </div>
         </DialogPopup>

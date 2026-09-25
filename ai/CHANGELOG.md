@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-26 — Templates published, test flows removed, planning codes out of the screens
+
+- **The two flows in the local database were removed completely** at the owner's request: "Test" (closed, a draft only) and the published copy of the material issue template, whose two runs were left by the Phase 08 acceptance test triggering it. Removing them released the engine's own subscriptions (`approval.decided`, `task.completed`) by a cleanup that was written too wide; they were restored at once, and no approval or task was waiting on them.
+- **Every template was copied, dry-run and, where it passed, published as the owner** (a one-off run, not committed). 11 are published. The other 17 do not pass their dry run yet, for two honest reasons: seven walk a list their module does not offer yet ("her şantiye", "kurum onayı gereken her iş" …), and ten give a task, a notice or an escalation to a role nobody holds — this database has one person, the owner. They publish once the modules and people exist.
+- **Process codes left the template names** ("Talep karşılama (A1.1)" → "Talep karşılama"); each such template moved one version forward so existing databases take the new name. The owner also asked that planning references be removed wherever people read them: requirement and decision numbers in the factory texts of rules, the calendar and two shared lists (seeds, and migration 0066 for rows already written), "Faz 11/13/14/09R" on the firm card, the project card and the flow publish dialog, "DEF-001" in the menu, and the section and decision codes of the development-only presentation page. Developer comments, commit messages and the `/ai` and `/docs` records keep their references: they are how the project traces a line of code to the decision behind it.
+
 ## 2026-09-26 — The roadmap, rewritten for the people who will use the panel
 
 - `YOL-HARITASI.md` was rewritten at the owner's request: current state (Phase 09, TASK-0123 halfway), the whole of Phase 09 — what the company gets when it ends, its eleven tasks, TASK-0123's five steps, the decisions and exit conditions — and every section in plain Turkish for company staff. Migration numbers, test counts, CI runs and the long build diary are gone from it; they live in these records and the changelog.

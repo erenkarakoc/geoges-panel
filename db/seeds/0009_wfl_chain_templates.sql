@@ -4,8 +4,9 @@
 -- An end-to-end process is **not** one long flow: it is a chain of short flows that trigger each
 -- other (D-104), so that changing one link leaves everything else running. These are those links,
 -- written from `docs/workflows/END_TO_END_FLOWS.md` where each one already has its trigger, its steps
--- and its default roles. The flow codes there (A1.1, A2.3 …) are kept in the summaries, because that
--- document is what somebody will read next to the designer.
+-- and its default roles. Template names carry no process codes (A1.1, A2.3 …): those are the
+-- design document's own numbering, not words the company uses (owner, 2026-09-26); each such
+-- template moved one version forward when its name lost the code.
 --
 -- Four templates from 0008 are links of a chain as well, and this seed carries their fuller version:
 -- the quote approval gains the lock and the margin condition, the progress claim its client step, the
@@ -23,9 +24,9 @@ values
   (
     md5('wfl.template:lead-intake')::uuid,
     'lead-intake',
-    'Talep karşılama (A1.1)',
+    'Talep karşılama',
     'Yeni bir talep düştüğünde satışa ön inceleme görevi açar; üç iş günü içinde kapanmazsa genel müdüre çıkar.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "event", "event": "lead.created" },
@@ -47,9 +48,9 @@ values
   (
     md5('wfl.template:project-kickoff')::uuid,
     'project-kickoff',
-    'Kazanılan işin başlatılması (A1.3)',
+    'Kazanılan işin başlatılması',
     'Proje açıldığında sözleşme ve proje bilgileri paralel yürür; ikisi de kapanınca proje aşaması teknik projeye geçer.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "event", "event": "project.created" },
@@ -93,9 +94,9 @@ values
   (
     md5('wfl.template:authority-approvals')::uuid,
     'authority-approvals',
-    'Kurum onayı takibi (A1.4)',
+    'Kurum onayı takibi',
     'Kurum onayı gereken her teknik ofis işi için dış taraf onayı alt akışı çalışır; hepsi bitince şantiyeyi açma görevi düşer ve proje mobilizasyona geçer.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "event", "event": "project.stage_changed" },
@@ -140,9 +141,9 @@ values
   (
     md5('wfl.template:monthly-progress-claim')::uuid,
     'monthly-progress-claim',
-    'Aylık hakediş hazırlığı (A1.5)',
+    'Aylık hakediş hazırlığı',
     'Her ayın 25''inde uygulama aşamasındaki her proje için hakediş taslağı açar ve kontrol görevini hakediş sorumlusuna verir.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "clock", "dailyAt": "06:00", "monthlyOn": 25 },
@@ -180,9 +181,9 @@ values
   (
     md5('wfl.template:overdue-collection')::uuid,
     'overdue-collection',
-    'Geciken tahsilat (A1.7)',
+    'Geciken tahsilat',
     'Vadesi geçen hakediş için satışa takip görevi açar; kapanmazsa genel müdüre, sonra sahibe çıkar.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "event", "event": "client_progress_payment.overdue" },
@@ -212,9 +213,9 @@ values
   (
     md5('wfl.template:cost-feedback')::uuid,
     'cost-feedback',
-    'Maliyet geri beslemesi (A1.8)',
+    'Maliyet geri beslemesi',
     'Proje tamamlandığında teklifi hazırlayana "teklif ile gerçekleşeni karşılaştır" görevi düşer.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "event", "event": "project.stage_changed" },
@@ -247,9 +248,9 @@ values
   (
     md5('wfl.template:critical-stock-request')::uuid,
     'critical-stock-request',
-    'Kritik stok → satın alma talebi (A2.1)',
+    'Kritik stok → satın alma talebi',
     'Stok kritik seviyeye yaklaştığında satın alma talebi taslağı açar ve tamamlama görevini satın almaya verir.',
-    1,
+    2,
     $json$
     {
       "trigger": {
@@ -283,9 +284,9 @@ values
   (
     md5('wfl.template:weighbridge-difference')::uuid,
     'weighbridge-difference',
-    'Fark ve fire kontrolü (A2.3)',
+    'Fark ve fire kontrolü',
     'Kantar farkı eşiği aştığında sevkiyat sorumlusuna açıklama görevi açar; fark ikinci eşiği de aşarsa yönetime bildirir.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "event", "event": "weighbridge_difference.exceeded" },
@@ -326,9 +327,9 @@ values
   (
     md5('wfl.template:daily-log-opening')::uuid,
     'daily-log-opening',
-    'Günlük kaydın açılması (A3.1)',
+    'Günlük kaydın açılması',
     'Çalışma günlerinde sabah, aktif her şantiye için günlük kayıt taslağı açar ve giriş sorumlusuna haber verir.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "clock", "dailyAt": "07:00" },
@@ -366,9 +367,9 @@ values
   (
     md5('wfl.template:missed-daily-log')::uuid,
     'missed-daily-log',
-    'Kaçırılan giriş (A3.3)',
+    'Kaçırılan giriş',
     'Günlük kaydın süresi geçtiğinde giriş sorumlusuna görev açar ve koordinatöre çıkar.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "event", "event": "daily_site_log.deadline_missed" },
@@ -401,9 +402,9 @@ values
   (
     md5('wfl.template:repeated-client-wait')::uuid,
     'repeated-client-wait',
-    'Tekrarlayan işveren beklemesi (A5.1)',
+    'Tekrarlayan işveren beklemesi',
     'Aynı şantiyede son 30 günde üçten fazla bekleme olduğunda koordinatöre ve genel müdüre haber verir.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "event", "event": "client_wait.recorded" },
@@ -433,9 +434,9 @@ values
   (
     md5('wfl.template:client-obligation-delay')::uuid,
     'client-obligation-delay',
-    'İşveren yükümlülüğü gecikmesi (A5.2)',
+    'İşveren yükümlülüğü gecikmesi',
     'Yükümlülük geciktiğinde ihtarname taslağı açar ve gönderme kararını genel müdüre bırakır.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "event", "event": "client_obligation.delayed" },
@@ -468,9 +469,9 @@ values
   (
     md5('wfl.template:decision-reminder')::uuid,
     'decision-reminder',
-    'Karar hatırlatması (A6.1)',
+    'Karar hatırlatması',
     'Her sabah, son tarihine iki gün kalan toplantı kararlarının sorumlularına hatırlatma gönderir.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "clock", "dailyAt": "08:00" },
@@ -500,9 +501,9 @@ values
   (
     md5('wfl.template:overdue-decision')::uuid,
     'overdue-decision',
-    'Geciken karar (A6.2)',
+    'Geciken karar',
     'Toplantı kararı geciktiğinde sorumlusundan toplantıyı yönetene, oradan genel müdüre çıkar.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "event", "event": "meeting_decision.overdue" },
@@ -527,9 +528,9 @@ values
   (
     md5('wfl.template:expiring-document')::uuid,
     'expiring-document',
-    'Süresi biten belge (A7.1)',
+    'Süresi biten belge',
     'Süresi yaklaşan belge, sertifika veya eğitim için sorumlusuna yenileme görevi açar; kapanmazsa kalite ve İSG sorumlusuna çıkar.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "event", "event": "document.expiring" },
@@ -559,9 +560,9 @@ values
   (
     md5('wfl.template:ohs-incident')::uuid,
     'ohs-incident',
-    'İSG olayı (A7.2)',
+    'İSG olayı',
     'İSG olayı kaydedildiğinde ciddi olanlarda yönetime kritik bildirim gider ve uygunsuzluk taslağı açılır; her olayda inceleme görevi kalite ve İSG sorumlusuna düşer.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "event", "event": "ohs_incident.recorded" },
@@ -618,9 +619,9 @@ values
   (
     md5('wfl.template:cash-shortfall')::uuid,
     'cash-shortfall',
-    'Nakit açığı (A8.1)',
+    'Nakit açığı',
     'Nakit projeksiyonunda açık göründüğünde yönetime kritik bildirim gider ve vadesi geçen her hakediş için satışa hızlandırma görevi açılır.',
-    1,
+    2,
     $json$
     {
       "trigger": { "type": "event", "event": "cash_projection.shortfall_expected" },
@@ -661,9 +662,9 @@ values
   (
     md5('wfl.template:quote-approval')::uuid,
     'quote-approval',
-    'Teklif onayı (A1.2)',
+    'Teklif onayı',
     'Onay çıkana kadar teklif gönderilemez: marj hedefin altındaysa ya da tutar eşiği aşıyorsa genel müdür onayı ister, değilse onay gerekmez. Reddedilirse hazırlayana bildirilir, düzeltmeye dönerse aynı onaya geri gelir.',
-    2,
+    3,
     $json$
     {
       "trigger": { "type": "event", "event": "quote.submitted_for_approval" },
@@ -725,9 +726,9 @@ values
   (
     md5('wfl.template:progress-claim-to-invoice')::uuid,
     'progress-claim-to-invoice',
-    'Hakediş → fatura (A1.6)',
+    'Hakediş → fatura',
     'Hazırlanan hakediş tutarına göre genel müdür ya da koordinatör onayından geçer; onaydan sonra işverene sunma, dış taraf onayı ve fatura görevleri sırayla işler. Faturayı akış kesmez, insan keser.',
-    2,
+    3,
     $json$
     {
       "trigger": { "type": "event", "event": "client_progress_payment.prepared" },
@@ -802,9 +803,9 @@ values
   (
     md5('wfl.template:purchase-request-approval')::uuid,
     'purchase-request-approval',
-    'Satın alma talebi onayı (A2.2)',
+    'Satın alma talebi onayı',
     'Tutarı eşiği aşan talep genel müdüre, aşmayan koordinatöre düşer; onaydan sonra tedarikçi karşılaştırma ve sipariş görevi satın almaya gider, düzeltmeye dönen talep aynı onaya geri gelir.',
-    2,
+    3,
     $json$
     {
       "trigger": { "type": "event", "event": "purchase_request.submitted" },
@@ -864,9 +865,9 @@ values
   (
     md5('wfl.template:material-issue-request')::uuid,
     'material-issue-request',
-    'Malzeme çıkış talebi (A2.4)',
+    'Malzeme çıkış talebi',
     'Sahadan gelen çıkış talebi koordinatörün onayına düşer; onaylanınca sevk görevi satın alma ve lojistiğe gider, düzeltmeye dönen talep aynı onaya geri gelir.',
-    2,
+    3,
     $json$
     {
       "trigger": { "type": "event", "event": "material_issue_request.submitted" },

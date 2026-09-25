@@ -429,7 +429,7 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         icon: UploadIcon,
         moduleCode: "MIG",
         requiredPermission: "mig.import.manage",
-        description: "Excel, eski panel ve Drive verilerinin aktarımı (ertelendi, DEF-001).",
+        description: "Excel, eski panel ve Drive verilerinin aktarımı (daha sonra gelecek).",
       },
     ],
   },

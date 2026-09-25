@@ -168,7 +168,6 @@ export function RolePanel({
                           <RoleIcon aria-hidden="true" className={styles.inlineIcon} />
                         ) : null}
                         {role.name}
-                        <span className={styles.panelSource}>{role.source}</span>
                       </span>
                       <span className={styles.roleNote}>{role.note}</span>
                       <span className={styles.roleMatrix}>
@@ -196,7 +195,6 @@ export function RolePanel({
                     <li key={concept.title}>
                       <span className={styles.conceptTitle}>{concept.title}</span>
                       <span className={styles.conceptText}>{concept.text}</span>
-                      <span className={styles.panelSource}>{concept.source}</span>
                     </li>
                   ))}
                 </ul>

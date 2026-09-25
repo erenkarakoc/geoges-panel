@@ -309,7 +309,6 @@ export type BusinessFlow = {
   title: string;
   /** What the flow actually accomplishes, in one sentence — a summary of its own recorded steps. */
   purpose: string;
-  section: string;
   modules: readonly string[];
   steps: readonly string[];
 };
@@ -320,7 +319,6 @@ export const businessFlows: readonly BusinessFlow[] = [
     title: "Yeni işten tahsilata",
     purpose:
       "Bir müşteri talebini sözleşmeye, üretime, hakedişe ve sonunda tahsil edilmiş paraya çevirir; tahmin edilen kârla gerçekleşeni karşılaştırarak kapanır.",
-    section: "§45.1",
     modules: ["CRM", "QTE", "CMP", "PRJ", "SIT", "FIN"],
     steps: [
       "Talep gelir",
@@ -348,7 +346,6 @@ export const businessFlows: readonly BusinessFlow[] = [
     title: "Çelik şerit: siparişten sahaya",
     purpose:
       "Projenin çelik şerit ihtiyacını siparişten fabrika işlemesine, galvanizden şantiye teslimine kadar izler; her aşamada fireyi hesaplar ve saha stoğunu güncel tutar.",
-    section: "§45.2",
     modules: ["PUR", "FAC", "INV", "SIT"],
     steps: [
       "Proje ihtiyacı",
@@ -373,7 +370,6 @@ export const businessFlows: readonly BusinessFlow[] = [
     title: "Günlük saha üretimi",
     purpose:
       "Sahadaki tek bir günlük kaydı onaydan geçirip üretim, stok, hakediş, puantaj ve performans kayıtlarına aynı anda yansıtır.",
-    section: "§45.3",
     modules: ["SIT", "WFL", "INV", "FIN", "PRF", "RPT"],
     steps: [
       "Günlük kayıt açılır",
@@ -394,7 +390,6 @@ export const businessFlows: readonly BusinessFlow[] = [
     title: "Personel çıkışı",
     purpose:
       "Ayrılan bir çalışanın zimmet, yetki, belge ve bordro işlerini tek sırada toplayıp hiçbiri atlanmadan çıkışını tamamlar.",
-    section: "§45.4",
     modules: ["HR", "EQP", "CMP"],
     steps: [
       "Ayrılacak olarak işaretlenir",
@@ -411,7 +406,6 @@ export const businessFlows: readonly BusinessFlow[] = [
     title: "İşveren gecikmesi",
     purpose:
       "İşveren kaynaklı gecikmeyi anı anına kayda geçirip fotoğraf ve tutanakla belgeler; hak talebi gerektiğinde kullanılacak kanıt dosyasını oluşturur.",
-    section: "§45.5",
     modules: ["SIT", "RPT", "CMP"],
     steps: [
       "Alan dolguya teslim",
@@ -430,7 +424,6 @@ export const businessFlows: readonly BusinessFlow[] = [
     title: "Toplantı kararından göreve",
     purpose:
       "Toplantıda alınan kararı kayda bağlar, sorumluya görev olarak düşürür ve iş bitene kadar takibini sürdürür.",
-    section: "§45.6",
     modules: ["MTG", "TSK"],
     steps: [
       "Toplantı kaydı",
@@ -449,7 +442,6 @@ export const businessFlows: readonly BusinessFlow[] = [
     title: "Kritik sertifika / İSG olayı",
     purpose:
       "Süresi dolan belgeyi veya açılan İSG olayını yakalar, sorumluya görev üretir ve kapanışını denetim kaydıyla birlikte tutar.",
-    section: "§45.7",
     modules: ["QHS", "TSK", "RPT"],
     steps: [
       "Süre yaklaşır veya olay açılır",
@@ -464,7 +456,6 @@ export const businessFlows: readonly BusinessFlow[] = [
     title: "Nakit sıkışması",
     purpose:
       "Beklenen tahsilatlarla yaklaşan ödemeleri karşılaştırıp nakit sıkışmasını önceden görür ve sorumluya aksiyon görevi açar.",
-    section: "§45.8",
     modules: ["FIN", "INT", "TSK"],
     steps: [
       "Beklenen tahsilatlar",
@@ -487,7 +478,6 @@ export const dataClasses = [
 
 export type RoleInfo = {
   name: string;
-  source: string;
   note: string;
   visibility: Record<(typeof dataClasses)[number]["id"], Visibility>;
 };
@@ -495,37 +485,31 @@ export type RoleInfo = {
 export const roles: readonly RoleInfo[] = [
   {
     name: "Sahip",
-    source: "§2.4",
     note: "Tüm şirket verisi; hiç kimse görünürlüğünü kısıtlayamaz",
     visibility: { operational: "yes", commercial: "yes", sensitive: "yes" },
   },
   {
     name: "Genel Müdür",
-    source: "§2.4",
     note: "Şirketi yönetir; sahipten veri gizleyemez",
     visibility: { operational: "open", commercial: "open", sensitive: "open" },
   },
   {
     name: "Koordinatör",
-    source: "§13, D-035",
     note: "Günlük saha kaydını onaylar veya düzeltme ister",
     visibility: { operational: "yes", commercial: "open", sensitive: "open" },
   },
   {
     name: "Saha Mühendisi / Formen",
-    source: "§2.5",
     note: "Kendi şantiyesinin üretimi, hedefi, stok ihtiyacı ve görevleri",
     visibility: { operational: "yes", commercial: "no", sensitive: "no" },
   },
   {
     name: "İSG Sorumlusu",
-    source: "§2.5",
     note: "Kazadaki çalışanın adını görür; maaş, SGK, IBAN görmez",
     visibility: { operational: "yes", commercial: "open", sensitive: "no" },
   },
   {
     name: "Taşeron Ekip Başı",
-    source: "§2.5",
     note: "Yalnız kendi çalışmasıyla ilgili operasyonel bilgi",
     visibility: { operational: "yes", commercial: "no", sensitive: "no" },
   },
@@ -537,22 +521,18 @@ export const roleConcepts = [
   {
     title: "Dinamik roller",
     text: "Roller sabit değil; yeni rol eklenir, seviyesi değiştirilir",
-    source: "§2.1",
   },
   {
     title: "Çoklu rol",
     text: "Bir kişi birden fazla role sahip olabilir, işlemi hangi rolle yaptığını seçer",
-    source: "§2.2",
   },
   {
     title: "Vekâlet",
     text: "Süreli vekil atanır; süre bitince yetki kendiliğinden kalkar",
-    source: "§2.3, D-040",
   },
   {
     title: "Görev ayrılığı",
     text: "Kritik işlemi hazırlayan aynı işlemi tek başına onaylayamaz",
-    source: "§2.6",
   },
 ];
 

@@ -611,13 +611,6 @@
   border-left: 3px solid var(--p-analysis);
 }
 
-.panelSource {
-  margin-left: 6px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--p-muted);
-}
-
 .panelSteps {
   display: flex;
   flex-direction: column;

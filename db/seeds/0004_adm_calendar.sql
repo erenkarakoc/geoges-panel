@@ -4,7 +4,7 @@
 insert into adm.working_calendar (id, scope_type, valid_from, office_start, office_end,
                                   field_start, field_end, weekend_days, salary_day, reason)
 values (md5('adm.working_calendar:company:2026-01-01')::uuid, 'company', '2026-01-01',
-        '08:00', '17:00', '08:00', '18:00', '{6,7}', 1, 'Başlangıç takvimi (REQ-ADM-010)')
+        '08:00', '17:00', '08:00', '18:00', '{6,7}', 1, 'Başlangıç takvimi')
 on conflict do nothing;
 
 insert into adm.holiday (id, holiday_on, name, is_half_day)
