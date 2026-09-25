@@ -45,7 +45,9 @@ import { readAuthSession } from "./auth-session";
 
 export class AccessDeniedError extends Error {
   constructor(readonly permission: string) {
-    super(`Bu işlem için yetkiniz yok (${permission}).`);
+    // The sentence is shown to people, so it carries no permission code; which permission was
+    // missing stays on the error for the log and for whoever is debugging.
+    super("Bu işlem için yetkiniz yok.");
     this.name = "AccessDeniedError";
   }
 }
