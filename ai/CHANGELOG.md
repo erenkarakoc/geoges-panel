@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-09-26 — The default flow templates, counted against the requirements
+
+- The owner asked whether the flow templates are complete. Against REQ-WFL-028 they are: its nine approvals and all 23 nodes of the eight end-to-end processes ship (with the external-party subflow and, since step 2 of TASK-0123, the project revision approval: 28 templates). Most of them wait for their modules' events, by design (D-279).
+- Seven default flows other requirements name were in no template and no task. By the owner's choice each is now a task in the slice that brings the events it listens to: TASK-0132 month-end payroll, TASK-0133 idle equipment, TASK-0134 overdue maintenance and inspection (Phase 12); TASK-0135 unanswered lead (Phase 13); TASK-0136 our own contract obligation coming due, TASK-0137 unanswered support request (Phase 14). The seventh, an overdue technical office item (REQ-PRJ-005), joins TASK-0123 step 4.
+- TASKS.md filed Phase 09's rows (TASK-0121…0131) under Phase 08's heading; they now have their own.
+
 ## 2026-09-26 — Revisions, walls and targets (TASK-0123, step 2)
 
 Migration 0065 and seed 0012.

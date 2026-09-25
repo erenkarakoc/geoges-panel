@@ -235,6 +235,7 @@ Görev büyük olduğu için beş adımda kurulur; her adım kendi testiyle ve c
   Teslim tarihi geçen iş sorumlusuna **görev olarak düşer**, "Dikkat"te görünür ve
   `technical_office_item.overdue` yayımlanır (her gün çalışan iş). Kurum onayı gereken işler Faz
   08'in "Kurum onayı takibi" şablonunun beklediği listeyi (`prj.authority_approvals`) besler.
+  Gecikme için bir akış şablonu da gelir: "Geciken teknik ofis işi" — sorumlusuna görev ve "Dikkat" (REQ-PRJ-005; sahip 2026-09-26).
 - **Tedarik matrisi** (REQ-PRJ-004): kalemler katalogdur (beton, demir, dolgu temini, serme ve
   sıkıştırma, yemek, konaklama, kamp/konteyner, nakliye, vinç ve operatör, kalıp/demirbaş, çelik
   şerit, sarf). Her kalem için üç seçenek: **işveren karşılar · GEOGES karşılar · işveren karşılar ve
