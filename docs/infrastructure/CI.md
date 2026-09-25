@@ -19,6 +19,8 @@ Başarısızsa commit olmaz. Commit sonrası kanca `origin/main`'e push eder.
 
 Gerçek veritabanı testleri (`npm run test:db`) `.env.local` ister; yerelde elle çalıştırılır, CI'da ise aşağıdaki geçici veritabanına karşı koşar.
 
+**Yerelde çalıştırmadan önce `next dev`'i kapatın (2026-09-25).** Geliştirme sunucusu iş kuyruğunu da çalıştırıyor (`src/instrumentation.ts`), yani outbox teslimatlarını testle yarışarak kapıyor: kendi teslimatını beklemesi gereken bir test bazen onu bulamıyor ve sallantılı görünüyor. Sunucu kapalıyken tam takım geçiyor (2026-09-25: 352 test). CI'da böyle bir sunucu olmadığı için CI bundan etkilenmiyor.
+
 ## 2. GitHub tarafı (Phase 07)
 
 **Kuruldu (TASK-0100, 2026-09-21):** `.github/workflows/ci.yml`, `main`'e her push'ta ve her pull request'te yerel kapının aynısını (`npm ci`, ardından `npm run check:commit`) Node 24 ile koşar. Tam git geçmişiyle çalışır, çünkü kayıt denetimi tarih damgalarını son commit tarihiyle karşılaştırır. Eylemler commit özetiyle sabitlenmiştir (RISK-004).
