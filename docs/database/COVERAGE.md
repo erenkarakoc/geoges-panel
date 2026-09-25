@@ -1,6 +1,6 @@
 # Veri Kapsama Denetimi
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-22
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-26
 
 Phase 04 çıkış denetimi: verisi olan her gereksinimin bir tablosu var mı, her tablonun kapsam sütunu, RLS politikası ve geçmiş kanalı var mı, adlandırma standartlara uyuyor mu. Görev: TASK-0072. Kabul ölçütü `ai/MASTER_ROADMAP.md` Phase 04'tedir.
 
@@ -15,7 +15,7 @@ Phase 04 çıkış denetimi: verisi olan her gereksinimin bir tablosu var mı, h
 | `tsk` | 5 | REQ-TSK (13) |
 | `adm` | 12 | REQ-ADM (15) |
 | `core` | 10 | Altyapı (ADR-014, ADR-017, D-247, D-259) |
-| `prj` | 7 | REQ-PRJ (11) |
+| `prj` | 9 | REQ-PRJ (11) |
 | `sit` | 17 | REQ-SIT (35) |
 | `inv` | 11 | REQ-INV (27) |
 | `pur` | 6 | REQ-PUR (11) |
@@ -34,9 +34,9 @@ Phase 04 çıkış denetimi: verisi olan her gereksinimin bir tablosu var mı, h
 | `int` | 5 | REQ-INT (14) |
 | `str` | 7 | REQ-STR (8) |
 | `cst` | 6 | REQ-WFL-035…039 |
-| **Toplam** | **222** | 438 gereksinim |
+| **Toplam** | **224** | 438 gereksinim |
 
-İlk Phase 04 belgeleri 212 tablo içeriyordu; önceki toplamın 211 yazılması sayım hatasıydı (TASK-0092). CHG-007 / D-247 üç türetilmiş arama tablosu ekledi. REQ-NFR-012 artık bu yardımcılarla birlikte core.search_row üzerinden açıkça izlenir. TASK-0102, işlemde hangi rolün seçildiğini hatırlayan `iam.user_action_role_choice` tablosunu ekledi (REQ-IAM-013, D-256). TASK-0104 olay omurgasına `core.event_subscription` ve `core.read_model`'i ekledi (D-259). TASK-0105 tarihli kuralı `wfl.rule`'dan `adm.rule`'a taşıdı ve kural anahtarı kaydını (`adm.rule_key`) ekledi (D-260). TASK-0106 kur alımının gün başına durumunu tutan `adm.exchange_rate_fetch`'i ekledi (D-261). Tasarım sayısıdır; göç uygulanmış tablo sayısı değildir.
+İlk Phase 04 belgeleri 212 tablo içeriyordu; önceki toplamın 211 yazılması sayım hatasıydı (TASK-0092). CHG-007 / D-247 üç türetilmiş arama tablosu ekledi. REQ-NFR-012 artık bu yardımcılarla birlikte core.search_row üzerinden açıkça izlenir. TASK-0102, işlemde hangi rolün seçildiğini hatırlayan `iam.user_action_role_choice` tablosunu ekledi (REQ-IAM-013, D-256). TASK-0104 olay omurgasına `core.event_subscription` ve `core.read_model`'i ekledi (D-259). TASK-0105 tarihli kuralı `wfl.rule`'dan `adm.rule`'a taşıdı ve kural anahtarı kaydını (`adm.rule_key`) ekledi (D-260). TASK-0106 kur alımının gün başına durumunu tutan `adm.exchange_rate_fetch`'i ekledi (D-261). TASK-0123 sözleşme bedelini ticari veri olarak ayrı `prj.project_contract`'a, aşama geçmişini yalnız eklenen `prj.project_stage_change`'e koydu (D-292). Tasarım sayısıdır; göç uygulanmış tablo sayısı değildir.
 
 MIG (veri aktarımı) ertelendiği için tablosu yoktur (DEF-001).
 

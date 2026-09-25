@@ -11,7 +11,7 @@ import {
 import type { SiteRoute } from "@/modules/sit/ui/site-context";
 import { formatDayLong } from "@/platform/date/day";
 
-/** Body of a sample site section until the SIT module is built. */
+/** Body of a site section until the daily site log (TASK-0127) and site screen (TASK-0128) fill it. */
 export function SiteSectionPlaceholder({ route }: { route: SiteRoute }) {
   return (
     <Empty className="flex-1">
@@ -26,8 +26,7 @@ export function SiteSectionPlaceholder({ route }: { route: SiteRoute }) {
           {formatDayLong(route.day)}. {route.site.note}.
         </EmptyDescription>
         <div className="mt-4 flex gap-2">
-          <Badge variant="outline">Örnek veri</Badge>
-          <Badge variant="outline">Henüz geliştirilmedi</Badge>
+          <Badge variant="outline">Günlük saha kaydıyla gelir</Badge>
         </div>
       </EmptyHeader>
     </Empty>

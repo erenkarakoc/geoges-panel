@@ -1,6 +1,6 @@
 # Şema — Operasyon (PRJ, SIT, INV, PUR, FAC, EQP)
 
-Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-20
+Durum: CONFIRMED (sahip, 2026-09-20) · Son güncelleme: 2026-09-26
 
 Ortak kurallar `docs/database/CONVENTIONS.md`'dedir; her tabloda `id`, izler, kapsam sütunu, RLS ve geçmiş kanalı vardır ve tekrar yazılmaz. Alan modeli ve değişmezler: `docs/domain/DOMAIN_MODEL.md`. Görev: TASK-0067.
 
@@ -8,11 +8,13 @@ Ortak kurallar `docs/database/CONVENTIONS.md`'dedir; her tabloda `id`, izler, ka
 
 | Tablo | Ne tutar | Ayırt edici sütunlar |
 |---|---|---|
-| `prj.project` | Proje kartı | `code`, `client_party_id`, `authority`, `stage`, `contract_ref`, `planned_start`, `planned_end`, `management_target_end`, `contract_value`, `currency` |
+| `prj.project` | Proje kartı | `code`, `name`, `client_party_id`, `authority`, `city`, `location`, `contract_no`, `contract_signed_on`, üç süre: `contract_start_on`/`contract_end_on`, `theoretical_end_on`, `management_target_end_on`; `coordinator_user_id`, `stage` (katalog kodu) |
+| `prj.project_contract` | Sözleşme bedeli (ticari; yetkisize satır hiç gelmez, D-292) | `project_id`, `contract_value`, `currency` |
+| `prj.project_stage_change` | Aşama geçmişi (yalnız eklenir) | `project_id`, `from_stage`, `to_stage`, `changed_at`, `changed_by_user_id` |
 | `prj.project_revision` | Onaylı hedef sürümü | `project_id`, `revision_no`, `reason`, `approved_at`, `approved_by_user_id` |
 | `prj.wall` | Duvar | `project_revision_id`, `site_id`, `code`, `length_m`, `height_m`, `area_m2` |
 | `prj.wall_target` | Duvarın panel/şerit hedefi | `wall_id`, `panel_type_id`, `strip_type_id`, `target_qty`, `target_m2`, `target_length_m` |
-| `prj.supply_responsibility` | Tedarik matrisi satırı | `project_id`, `item_id`, `responsible_party` (geoges/client/subcontractor), `valid_from` |
+| `prj.supply_responsibility` | Tedarik matrisi satırı | `project_id`, `item_id`, `responsible_party` (işveren karşılar / GEOGES karşılar / işveren karşılar ve GEOGES hakedişinden keser — REQ-PRJ-004, D-292), `valid_from` |
 | `prj.technical_office_item` | Teknik ofis işi | `project_id`, `type` (proje/statik/kurum onayı), `status`, `due_on`, `assignee_user_id` |
 | `prj.daily_target` | Günlük üretim hedefi | `project_revision_id`, `site_id`, `panel_type_id`, `qty_per_day` |
 
@@ -22,7 +24,7 @@ Hedefler **revizyona** bağlıdır: yeni revizyon eski hedefi değiştirmez, yen
 
 | Tablo | Ne tutar | Ayırt edici sütunlar |
 |---|---|---|
-| `sit.site` | Şantiye | `project_id`, `name`, `work_model` (own/subcontractor), `coordinator_user_id`, `entry_owner_user_id`, `status` |
+| `sit.site` | Şantiye (tek projeye bağlı, taşınmaz — D-138, D-292) | `project_id`, `name`, `work_model` (`in_house`/`subcontracted`), `subcontractor_party_id`, `coordinator_user_id`, `entry_owner_user_id`, `city`, `latitude`/`longitude` (hava, D-288), `status` |
 | `sit.daily_site_log` | Günün ana kaydı | `site_id`, `log_date`, `status`, `is_late_entry`, `weather`, `no_work_reason`, `submitted_at`, `submitted_by_user_id`, `approved_at`, `approved_by_user_id` |
 | `sit.casting_session` | Döküm seansı | `log_id`, `session_no`, `started_at`, `ended_at`, `heating_used` |
 | `sit.casting_entry` | Panel tipi başına döküm | `session_id`, `panel_type_id`, `qty`, `area_m2`, `over_target_reason`, `before_authority_approval` |

@@ -413,6 +413,8 @@ Biçim: `docs/requirements/README.md`.
 
 | Kod | Ad | Ne zaman | Taşıdığı alanlar | Veri sınıfı |
 |---|---|---|---|---|
+| `site.created` | Şantiye açıldı | Projede yeni şantiye açıldığında | şantiye, proje | iç |
+| `site.changed` | Şantiye kartı değişti | Şantiyenin bilgisi ya da durumu değiştiğinde | şantiye, proje, durum | iç |
 | `daily_site_log.submitted` | Günlük kayıt onaya gönderildi | Sorumlu kaydı gönderdiğinde | şantiye, tarih, gönderen, geç giriş | iç |
 | `daily_site_log.recalled` | Günlük kayıt geri çekildi | Gönderen karar öncesi geri çektiğinde | şantiye, tarih, çeken | iç |
 | `daily_site_log.approved` | Günlük kayıt onaylandı | Onay kararıyla | şantiye, tarih, üretim, tüketim, puantaj, bekleme | iç |

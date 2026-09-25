@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2026-09-26 — Projects and sites open (TASK-0123, step 1)
+
+The owner approved TASK-0123's business rules (D-292). Step 1 lays down the project card and its sites — migration 0064 (new `prj` and `sit` schemas) and seed 0011 (project stages).
+
+- **A project** carries its client (a firm with the client role), authority, location, contract number and date, a coordinator and a stage. **Its three durations are three fields** — the contract end, the theoretical end, the management target end — and none is worked out from another (PRJ-K5).
+- **The contract value is commercial and lives in a table of its own**: a person without the commercial right is not handed an empty field, the row never reaches them (D-292 rule 6).
+- **Stages are a catalog** (twelve to start, the requirement's list), using the codes Phase 08's templates already move projects to; every change is a row of the project's own stage history, which can never be rewritten, and an event.
+- **A site belongs to one project and never moves** — the database refuses the move; a wrongly opened site turns passive (D-138, D-292 rule 3). A subcontracted site names its subcontractor; a site keeps its coordinates for the day's weather (D-288).
+- **Who sees what follows the scope of a person's roles.** A project-scoped coordinator sees the project and all its sites and opens new ones there; a site engineer sees their site and the project it belongs to, not the neighbouring site and not the contract value. The layer checker learned that a project and a site are the places a scope names.
+- **Screens:** the project list (SCR-022) and card (SCR-023) with the durations, the stage and its history, and the project's sites; the contract and progress-payment tab says which slices bring it. The site list and the site's context row now read real sites — the three hard-coded samples are gone, and the pilot's sample projects and sites are in `db/samples/0003_prj_projects_sites.sql`. The menu entries for projects and sites pointed at permissions IAM never had; they now use `prj.module.view` and `sit.module.view`.
+- Projects and sites are found by the site-wide search; the contract value never enters its text.
+
 ## 2026-09-26 — The firm card, and what walking it found (TASK-0122)
 
 - **Firms have one card each** (migration 0062, `crm` schema): the tax number is unique, a firm met again in another role gets that role on its card (REQ-PUR-001), and a new name is compared with the others on its distinctive words — "İnşaat, Sanayi, Ticaret, Ltd. Şti." are left out, or every construction firm would look like every other (REQ-CRM-004). The list is at `/leads-clients/parties`, the card (SCR-083) at `/leads-clients/parties/[id]`; its process tabs say which phase brings them. Sample firms in `db/samples/0002_crm_parties.sql`.

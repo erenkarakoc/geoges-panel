@@ -1,17 +1,7 @@
 import { type Day, parseDay, todayIn } from "@/platform/date/day";
 
-/**
- * SAMPLE DATA (owner decision D-064). There is no site data yet; these three sites let the
- * context row be judged on a real-looking address. Names match the sample seats in
- * `platform/access/preview-roles.ts`. Replace with the SIT site repository.
- */
-export type SampleSite = { id: string; name: string; note: string };
-
-export const sampleSites: readonly SampleSite[] = [
-  { id: "kavakli", name: "Kavaklı Şantiyesi", note: "A ve B blok istinat duvarları" },
-  { id: "ilgaz", name: "Ilgaz Şantiyesi", note: "Karayolu şevi, işveren dolgusu bekleniyor" },
-  { id: "sariyar", name: "Sarıyar Şantiyesi", note: "Baraj yolu donatılı duvar" },
-];
+/** What the context row says about the open site: its name and the project it belongs to. */
+export type SiteSummary = { id: string; name: string; note: string };
 
 /**
  * Sections of an open site (D-055 context row). Each one is its own address (D-064):
@@ -33,19 +23,19 @@ export type SiteSection = (typeof siteSections)[number];
 /** Search parameter holding the chosen day; absent means today. */
 export const DAY_PARAM = "gun";
 
-export type SiteRoute = { site: SampleSite; section: SiteSection; day: Day; today: Day };
+export type SiteRoute = { site: SiteSummary; section: SiteSection; day: Day; today: Day };
 
 /**
  * Reads `/sites/[siteId]/[[...section]]?gun=` once, for both the page and the context row, so
- * the two can never disagree. `null` means the address does not exist.
+ * the two can never disagree. `site` is the site the address names as the person may see it
+ * (null when there is none for them); `null` back means the address does not exist.
  */
 export function resolveSiteRoute(
-  siteId: string,
+  site: SiteSummary | null,
   sectionSlugs: readonly string[] | undefined,
   dayParam: string | string[] | undefined,
   now: Date = new Date(),
 ): SiteRoute | null {
-  const site = sampleSites.find((item) => item.id === siteId);
   const slugs = sectionSlugs ?? [];
   const section =
     slugs.length <= 1 ? siteSections.find((item) => item.slug === (slugs[0] ?? "")) : undefined;

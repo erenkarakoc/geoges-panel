@@ -9,6 +9,8 @@ import {
   readParties,
   readParty,
   readPartyByTaxNo,
+  readPartyNames,
+  readPartiesWithRole,
   readSimilarParties,
   setContactStatus,
   setPartyStatus,
@@ -85,6 +87,16 @@ export async function partyCard(id: string) {
     Boolean(snapshot && canSee(snapshot, "crm", dataClass)),
   );
   return { contacts, customFields, party: found };
+}
+
+/** Firm names by id, for the records that point at a firm (reference data, no card right). */
+export async function partyNames(ids: readonly string[]) {
+  return readPartyNames(await identity(), ids);
+}
+
+/** Active firms with a role, for another record's picker (a project's client, a site's subcontractor). */
+export async function partyChoices(role: PartyRole) {
+  return readPartiesWithRole(await identity(), role);
 }
 
 /** Firms whose name looks like the typed one — shown before a new card is saved. */

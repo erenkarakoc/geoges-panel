@@ -19,6 +19,7 @@ const ownRoutes = new Set([
   "/audit-log",
   "/users-roles",
   "/leads-clients",
+  "/projects",
 ]);
 
 /** A screen of its own, either by name or because its address is not a single segment. */

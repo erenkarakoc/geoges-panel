@@ -316,9 +316,15 @@ describe("consumption recipes (REQ-ADM-004, REQ-ADM-007)", () => {
       panelTypeId: panel,
       on: "2026-07-01",
     });
-    expect(lines.map((line) => line.materialItemId).sort()).toEqual(
-      [consumable, otherConsumable].sort(),
-    );
+    // Only this test's materials: a database with the pilot's samples loaded (`npm run
+    // db:sample`) also has company-wide casting lines of its own.
+    const ours = [consumable, otherConsumable];
+    expect(
+      lines
+        .map((line) => line.materialItemId)
+        .filter((material) => ours.includes(material))
+        .sort(),
+    ).toEqual([...ours].sort());
   });
 
   it("is never rewritten: a change is a new line from a date", async () => {

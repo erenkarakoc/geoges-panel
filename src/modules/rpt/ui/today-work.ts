@@ -39,7 +39,7 @@ const ownerWork: TodayWork = {
       title: "Hedefin üstünde döküm",
       note: "Kavaklı: proje hedefinin 42 panel üstüne çıkıldı, açıklama girilmemiş",
       tone: "danger",
-      href: "/sites/kavakli/dokum",
+      href: "/sites",
     },
     {
       id: "stale-site",
@@ -85,14 +85,14 @@ const siteEngineerWork: TodayWork = {
       title: "Kayıt taslak durumda",
       note: "Döküm ve puantaj girildi; montaj, zayi ve fotoğraf eksik",
       tone: "warning",
-      href: "/sites/kavakli",
+      href: "/sites",
     },
     {
       id: "target",
       title: "Günlük hedefin gerisindesiniz",
       note: "24 / 30 panel — 6 panel eksik",
       tone: "neutral",
-      href: "/sites/kavakli/dokum",
+      href: "/sites",
     },
     {
       id: "stock",
@@ -102,7 +102,7 @@ const siteEngineerWork: TodayWork = {
       href: "/inventory",
     },
   ],
-  action: { label: "Günün kaydını aç", href: "/sites/kavakli" },
+  action: { label: "Günün kaydını aç", href: "/sites" },
   emptyText: "Bugünün kaydı onaya gönderildi.",
 };
 
@@ -115,17 +115,17 @@ const crewLeadWork: TodayWork = {
       title: "Montaj — 3. kademe",
       note: "Kavaklı, A blok duvarı",
       tone: "neutral",
-      href: "/sites/kavakli/montaj",
+      href: "/sites",
     },
     {
       id: "timesheet",
       title: "Dünkü puantaj onayınızı bekliyor",
       note: "8 kişi, 9 saat — doğru değilse bildirin",
       tone: "warning",
-      href: "/sites/kavakli/puantaj",
+      href: "/sites",
     },
   ],
-  action: { label: "Şantiyeyi aç", href: "/sites/kavakli" },
+  action: { label: "Şantiyeyi aç", href: "/sites" },
   emptyText: "Bugün için bekleyen bir iş yok.",
 };
 

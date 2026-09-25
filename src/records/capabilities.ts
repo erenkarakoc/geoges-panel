@@ -5,6 +5,8 @@ import { audCapabilities } from "@/modules/aud";
 import { crmCapabilities } from "@/modules/crm";
 import { docCapabilities } from "@/modules/doc";
 import { iamCapabilities } from "@/modules/iam";
+import { prjCapabilities } from "@/modules/prj";
+import { sitCapabilities } from "@/modules/sit";
 import { tskCapabilities } from "@/modules/tsk";
 import { wflCapabilities } from "@/modules/wfl";
 import type { ActionCapability, ModuleCapabilities } from "@/platform/capabilities";
@@ -23,6 +25,8 @@ export const moduleCapabilities: readonly ModuleCapabilities[] = [
   crmCapabilities,
   docCapabilities,
   iamCapabilities,
+  prjCapabilities,
+  sitCapabilities,
   tskCapabilities,
   wflCapabilities,
 ];

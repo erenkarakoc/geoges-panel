@@ -75,6 +75,21 @@
     "code": "party.created"
   },
   {
+    "module": "PRJ",
+    "kind": "event",
+    "code": "project.changed"
+  },
+  {
+    "module": "PRJ",
+    "kind": "event",
+    "code": "project.created"
+  },
+  {
+    "module": "PRJ",
+    "kind": "event",
+    "code": "project.stage_changed"
+  },
+  {
     "module": "AUD",
     "kind": "condition",
     "code": "revision_request.record_type"
@@ -103,6 +118,16 @@
     "module": "IAM",
     "kind": "condition",
     "code": "role_assignment.scope"
+  },
+  {
+    "module": "SIT",
+    "kind": "event",
+    "code": "site.changed"
+  },
+  {
+    "module": "SIT",
+    "kind": "event",
+    "code": "site.created"
   },
   {
     "module": "TSK",

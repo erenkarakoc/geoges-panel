@@ -12,6 +12,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { connectAdmin } from "./db-admin.mjs";
+import { SCOPE_ROOTS } from "./db-layers.mjs";
 
 let client;
 let tables;
@@ -78,7 +79,10 @@ describe("the mandatory trio (COVERAGE.md section 3, D-277)", () => {
   });
 
   it("a table that declares its own scope carries one", () => {
-    const lying = tables.filter((t) => t.scope_source === "own" && !t.carries_scope);
+    // A project and a site are the places a scope names; their own id is their scope.
+    const lying = tables.filter(
+      (t) => t.scope_source === "own" && !t.carries_scope && !SCOPE_ROOTS.includes(t.name),
+    );
     expect(names(lying)).toEqual([]);
   });
 

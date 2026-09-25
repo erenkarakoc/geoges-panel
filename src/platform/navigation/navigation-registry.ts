@@ -174,7 +174,7 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         href: "/projects",
         icon: FolderKanbanIcon,
         moduleCode: "PRJ",
-        requiredPermission: "prj.project.view",
+        requiredPermission: "prj.module.view",
         description: "Proje kartı, duvarlar, iş programı, tedarik matrisi ve teknik ofis takibi.",
       },
       {
@@ -183,7 +183,7 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         href: "/sites",
         icon: MapPinnedIcon,
         moduleCode: "SIT",
-        requiredPermission: "sit.site.view",
+        requiredPermission: "sit.module.view",
         description: "Şantiye kartları, ilerleme ve şantiye detay ekranları.",
       },
       {

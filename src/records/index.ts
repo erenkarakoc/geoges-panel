@@ -4,6 +4,12 @@ import { createRevisionService, type RevisionAppliers } from "@/modules/aud";
 import { projectPartyForSearch, scanPartiesForSearch } from "@/modules/crm";
 import { createDocumentService, type RecordResolvers } from "@/modules/doc";
 import { signInIdentity } from "@/modules/iam";
+import {
+  projectProjectForSearch,
+  readProjectNamesAsSystem,
+  scanProjectsForSearch,
+} from "@/modules/prj";
+import { siteSearch } from "@/modules/sit";
 import type { SearchRegistration } from "@/platform/search/indexer";
 import type { SearchTypeDefinition } from "@/platform/search/search";
 import { processStorage } from "@/platform/storage";
@@ -54,8 +60,11 @@ export function revisions() {
  * which of its events change it and how it looks in a result: title, second line, where it
  * opens, its scope and its data class, and the words worth searching — never a commercial or
  * sensitive field. A record type with no registration is simply not searched. Firms are the
- * first (TASK-0122).
+ * first (TASK-0122), projects and sites the next (TASK-0123). A site's second line names its
+ * project, read through PRJ's own query.
  */
+const sites = siteSearch(readProjectNamesAsSystem);
+
 export const searchIndex: readonly SearchRegistration[] = [
   {
     record: { schema: "crm", table: "party" },
@@ -63,8 +72,22 @@ export const searchIndex: readonly SearchRegistration[] = [
     project: projectPartyForSearch,
     scan: scanPartiesForSearch,
   },
+  {
+    record: { schema: "prj", table: "project" },
+    events: ["project.created", "project.changed", "project.stage_changed"],
+    project: projectProjectForSearch,
+    scan: scanProjectsForSearch,
+  },
+  {
+    record: { schema: "sit", table: "site" },
+    events: ["site.created", "site.changed"],
+    project: sites.project,
+    scan: sites.scan,
+  },
 ];
 /** Searchable record kinds and their implemented list routes, supplied by each owning slice. */
 export const searchTypes: readonly SearchTypeDefinition[] = [
+  { type: "prj.project", label: "Projeler", listPath: "/projects" },
+  { type: "sit.site", label: "Şantiyeler", listPath: "/sites" },
   { type: "crm.party", label: "Firmalar", listPath: "/leads-clients/parties" },
 ];

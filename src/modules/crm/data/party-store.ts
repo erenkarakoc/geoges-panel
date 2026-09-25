@@ -129,6 +129,30 @@ export function readParty(identity: DbIdentity, id: string) {
   });
 }
 
+/**
+ * Names of firms by id — what other records show (a project's client, a site's subcontractor).
+ * Every signed-in person reads a firm's row (0062), so this asks for no card right.
+ */
+export function readPartyNames(identity: DbIdentity, ids: readonly string[]) {
+  return runAsUser(identity, async (db: Tx) => {
+    if (ids.length === 0) return new Map<string, string>();
+    const { rows } = await sql<{ id: string; name: string }>`
+      select id, name from crm.party where id = any (${[...ids]}::uuid[])`.execute(db);
+    return new Map(rows.map((row) => [row.id, row.name]));
+  });
+}
+
+/** Active firms holding a role, by name — for another record's firm picker. */
+export function readPartiesWithRole(identity: DbIdentity, role: PartyRole) {
+  return runAsUser(identity, async (db: Tx) => {
+    const { rows } = await sql<{ id: string; name: string }>`
+      select id, name from crm.party
+       where status = 'active' and ${role}::text = any (roles)
+       order by core.fold_tr(name)`.execute(db);
+    return rows;
+  });
+}
+
 /** The firm already carrying this tax number, if there is one — "open its card instead". */
 export function readPartyByTaxNo(identity: DbIdentity, taxNo: string) {
   return runAsUser(identity, async (db: Tx) => {

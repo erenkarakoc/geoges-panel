@@ -15,6 +15,9 @@ import { join, resolve } from "node:path";
 
 import { ROOT, applicationSchemas } from "./db-admin.mjs";
 
+/** Tables whose rows are the places a role assignment's scope names (D-277). */
+export const SCOPE_ROOTS = ["prj.project", "sit.site"];
+
 export const LAYERS = ["seed", "config", "business", "system"];
 export const SEEDS_DIR = resolve(ROOT, "db/seeds");
 export const SAMPLES_DIR = resolve(ROOT, "db/samples");
@@ -194,7 +197,8 @@ export async function readLayerState(client) {
     scope: has("scope_source")
       ? {
           declared: new Map(registered.rows.map((r) => [r.name, r.scope_source])),
-          carried: new Set(scopeColumns.rows.map((r) => r.name)),
+          // A project and a site are the places a scope names, so their own id is their scope.
+          carried: new Set([...scopeColumns.rows.map((r) => r.name), ...SCOPE_ROOTS]),
         }
       : null,
     history: Object.assign(
