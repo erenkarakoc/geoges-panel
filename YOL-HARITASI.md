@@ -1,6 +1,6 @@
 # GEOGES Panel — Yol Haritası
 
-Son güncelleme: 2026-09-25. Şu an **Faz 08 — İş akışı motoru** içindeyiz; motor ve tasarımcı yapıldı, sıradaki iş Onay Merkezi ile sekiz şablon (TASK-0120). Faz 07'nin yapım işi bitti; kalan tek işi **M1 yerel kabul turu** ve o sizde — siz turları sonraya bıraktığınız için faz kapanmadan Faz 08 başladı (D-278).
+Son güncelleme: 2026-09-25. Şu an **Faz 08 — İş akışı motoru** içindeyiz; fazın dört görevinin yapımı bitti — motor, tasarımcı, Onay Merkezi ve şablonlar — ve kalan iş sizin tarayıcı turunuz. Faz 07'nin yapım işi bitti; kalan tek işi **M1 yerel kabul turu** ve o sizde — siz turları sonraya bıraktığınız için faz kapanmadan Faz 08 başladı (D-278).
 
 Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının](ai/TASKS.md) ve [güncel durumun](ai/CURRENT_STATE.md) okunması kolay özetidir. Faz sırası ve kapsam için bağlayıcı kaynak `ai/MASTER_ROADMAP.md`'dir. “Tamamlandı” temel altyapının kabulünü ifade eder; sonraki fazlardaki iş ekranlarının da yapıldığı anlamına gelmez.
 
@@ -47,7 +47,7 @@ yazıldı (D-280). Plan: `docs/features/phase-08-workflow-plan.md` (D-281, sahip
 | TASK-0118 | Yetenek kataloğu ve sözleşme testi: her modül ne yapabildiğini ilan eder, CI ilan ile kodu karşılaştırır | ✅ Tamamlandı; beş modül 25 yetenek ilan etti, test ilk koşuşunda dört gerçek ayrışma buldu |
 | TASK-0117 | Motor çekirdeği: sürümlü tanım, örnek, yürütme, tetikleyiciler, adım paleti, koşullar, kuru mod | ✅ **Tamamlandı** — dört tetikleyici, on dört adımın hepsi, iki tür koşul, motorun sınırları ve kuru mod; on iki göç (0045-0056) |
 | TASK-0119 | Görsel tasarımcı ve soru-cevap (ikisi de aynı JSON'u üretir) | ✅ **Yapımı bitti** (25 Eylül, beş adımda; plan D-283, siz onayladınız) — kalan tek iş sizin tarayıcı turunuz |
-| TASK-0120 | Onay Merkezi'nin motorun açtığı gerçek kuyruğa bağlanması ve sekiz şablonun gelmesi | ⬜ Sıradaki iş; önce kendi planını alacak (D-281) — şablonlar kendi dilimlerinde etkinleşir |
+| TASK-0120 | Onay Merkezi'nin motorun açtığı gerçek kuyruğa bağlanması ve sekiz şablonun gelmesi | ✅ **Yapımı bitti** (25 Eylül, altı adımda; plan D-285) — gerçek onay kuyruğu, 27 şablon, çalışma günlüğü, "Yeni akışlar"; fazın kabul testi üç varsayılan akışı motordan geçiriyor — kalan tek iş sizin tarayıcı turunuz |
 
 ### Motorun parçaları
 
@@ -98,6 +98,25 @@ yazıldı (D-280). Plan: `docs/features/phase-08-workflow-plan.md` (D-281, sahip
 | Başlıktaki "…" | ✅ Kopyasını çıkar (kendi taslağı olarak), akışı kapat (gerekçesiyle, silme değil), sürüm geçmişi |
 | Kutuları elle taşımak | ⬜ Bu görevin dışında bırakıldı (D-283) |
 | Tasarım içinden yeni yetki tanımlamak (REQ-WFL-021) | ⬜ Bu görevin dışında bırakıldı (D-283) |
+
+### Onay Merkezi ve şablonların parçaları (TASK-0120)
+
+| Parça | Durum |
+|---|---|
+| "Bu onay bana neden geldi" | ✅ Akışın kullandığı kural onayla birlikte duruyor; cümle bugünkü adlarla kuruluyor ("Genel Müdür rolünü taşıdığınız için sizde"), bilinmeyen ad için bile kod değil cümle |
+| Gruba düşen onay | ✅ Rolü ya da yetkiyi taşıyan herkes görür, biri cevaplar — sahip onayı tam olarak bu; kişi ayrılınca hiçbir yer elle düzeltilmez |
+| Vekâlet | ✅ Vekil, yerine baktığı kişinin onaylarını "vekâleten" etiketiyle görür (şimdilik şirket kapsamlı vekâlet; onay kaydın kapsamını taşımıyor) |
+| Onay kuyruğu (SCR-012) | ✅ Tek kayıt ekranı doldurur, kararla sıradaki açılır; üç sonuç; ret ve düzeltmede gerekçe zorunlu; daha önce düzeltmeye döndüyse son gerekçe kartta |
+| Rozet sayısı | ✅ Gerçek sayı ve üç yerde aynı: çalışma katmanı, "Bugün", Onay Merkezi |
+| Kartta kaydın zengin özeti (tutar, belge, tutarsızlık) | ⬜ Kaydın sahibi modüller gelince (Faz 09R ve dilimler); kart bugün bunu açıkça söylüyor |
+| Şablonlar | ✅ 27 şablon: dokuz bağımsız akış, dış taraf onayı alt akışı ve sekiz uçtan uca sürecin bütün zincir halkaları |
+| Kopya kuralı | ✅ Kopya geldiği şablonu ve sürümü hatırlar; şablon güncellenince kopya değişmez, rozet çıkar ve sahibine bir kez haber gider |
+| Şablona sıfırla | ✅ Yeni taslak yazar, yayındakinin üstüne yazmaz; denetim kaydına geçer |
+| Aylık saat tetikleyicisi | ✅ "Her ayın 25'i" gibi (D-286); şubat atlanmasın diye 28 ile sınırlı |
+| Çalışma günlüğü (SCR-197) | ✅ Her çalışma nerede duruyor, kimi bekliyor; açınca adımlar sırayla |
+| Yeni akışlar | ✅ Son bir haftada yayımlanan akışın gerçekten ne yaptığı, atılan adımlardan sayılarak |
+| Fazın kabul testi | ✅ Günlük saha kaydı onayı, malzeme çıkışı ve ödeme onayı şablondan kopyalanıp, denenip, yayımlanıp gerçek olayla tetikleniyor ve rolü taşıyanın kuyruğundan cevaplanıyor |
+| Diğer şablonların gerçek kayıtlarla kabulü | ⬜ Kendi dilimlerinde (D-279); altısı henüz hiçbir modülün yayımlamadığı bir listeyi bekliyor ve test bunu gerekçesiyle söylüyor |
 
 ### Son doğrulamalar
 
@@ -240,9 +259,9 @@ Fazın yapım işi bitti. Kalan üç şeyin hiçbiri kod işi değil: **M1 turu*
 
 ## Buradan sonraki sıra
 
-1. **TASK-0119 — Görsel tasarımcı** ve soru-cevap ikizi: motor çalıştığına göre kendi planını alabilir.
-2. **TASK-0120:** Onay Merkezi'nin motorun açtığı gerçek kuyruğa bağlanması ve sekiz şablonun JSON olarak gelmesi.
-3. **TASK-0111 — M1:** kontrol listesi hazır, tur sizde. Notlarınız kayda girer (düzeltme → görev, kapsam → CHG) ve Faz 07 kapanır.
+1. **Faz 08 turu (sizde):** giriş yapıp bir şablonun kopyasını alın ya da yeni akış açın, bir adımın sorularını cevaplayın, denemeyi çalıştırıp yayımlayın; sonra Onay Merkezi'nde bir onay verin ve çalışma günlüğüne bakın. TASK-0119 ve TASK-0120'nin kalite kapısı bu tur.
+2. **TASK-0111 — M1:** kontrol listesi hazır, tur sizde. Notlarınız kayda girer (düzeltme → görev, kapsam → CHG) ve Faz 07 kapanır.
+3. **Faz 09 — ilk dilim** (projeler, şantiyeler, günlük saha kaydı): soru turu ve plan önce gelir; çıkış şartı olarak pilot şantiye ve kullanıcıları sizin adlandırmanız ve barındırma kararı var (D-216, D-245).
 4. **Faz 09'da açılacak arama işleri:** modüller kendi kaynaklarını kaydedince gerçek kayıtlarla kabul, ve tek bir sözcüğü çok sayıda kaydın paylaştığı durumda sıralama.
 5. **TASK-0113'ün kalan kabulü:** barındırma geldiğinde ana ekrana kurulum ve gerçek cihazda bildirim.
 

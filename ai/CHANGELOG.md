@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-25 — Phase 08's own acceptance, run the way a person would (TASK-0120)
+
+- The roadmap asks for three default company flows — daily log approval, material issue, payment approval — to be defined and **executed through the engine**, and for the approval screen to show the engine's real queue. A database test now does exactly that: each flow is copied from the template the panel ships, dry-run by the engine, published through the same gate a person uses, triggered by the event its module will publish, and answered from the queue of whoever holds the role it addresses.
+- What it proves, case by case: a quiet day ends at the coordinator and a costly one goes on to the general manager; the amount decides whose queue a payment lands in, and the other holder never sees it as theirs; an approved material issue asks the catalog for the buyer's task — the engine writes nobody's task itself — and a refused one opens nothing; each flow remembers the template it came from.
+- The records it touches are a throw-away type, and the flows it publishes are closed and removed afterwards, with their event subscriptions taken back only where no other published flow still listens — so a development database does not keep listening to real event codes on the test's behalf.
+- TASK-0119 and TASK-0120 move to **TESTING**: built, with their quality gate being the owner's walk.
+
 ## 2026-09-25 — "signal is aborted without reason" on every page change (fix)
 
 - The owner's Chrome (153) reported an unhandled `AbortError` from the search palette on every navigation; the dev server's own log showed it on `/insights`, `/sites`, `/admin/workflows` and more, always from the same line. The cause: the palette checks whether the page just opened is a known record, and when the page changed it aborted that check — which had answered seconds earlier. Aborting a finished request stops nothing, and that Chrome version reported it as an unhandled rejection. Chrome 152 (the in-app browser) does not, which is why the tests and the pane never showed it.
