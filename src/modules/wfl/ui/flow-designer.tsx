@@ -65,6 +65,8 @@ export type DesignerFlow = {
   definition: unknown;
   /** The version being edited; the dry run and the publish are about this row. */
   versionId: string;
+  /** Whether this flow is a copy of a template, which is what makes resetting to it possible. */
+  fromTemplate?: boolean;
 };
 
 type SaveAction = (input: {
@@ -209,7 +211,7 @@ export function FlowDesigner({
             ready={valid}
             versionId={flow.versionId}
           />
-          <FlowMenu actions={menu} flowKey={flow.key} />
+          <FlowMenu actions={menu} flowKey={flow.key} fromTemplate={flow.fromTemplate} />
         </div>
       </header>
 

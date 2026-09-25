@@ -13,10 +13,11 @@ import {
 } from "@/components/ui/empty";
 import { createFlowAction } from "@/app/(app)/admin/workflows/actions";
 import { AccessDeniedError, signInIdentity, todayRoute } from "@/modules/iam";
-import { listFlows } from "@/modules/wfl";
+import { listFlows, readCopiesBehindTemplate } from "@/modules/wfl";
 import { FlowList } from "@/modules/wfl/ui/flow-list";
 import { isModuleEnabled } from "@/platform/features/features";
 import { FeatureOff } from "@/platform/ui/feature-off";
+import { ScreenTabs, WORKFLOW_TABS } from "@/platform/ui/nav/screen-tabs";
 
 export const metadata: Metadata = { title: "İş Akışları" };
 
@@ -25,7 +26,11 @@ async function load() {
   const signedIn = await signInIdentity();
   if (!signedIn) return null;
   try {
-    return await listFlows(signedIn.identity);
+    const [flows, behind] = await Promise.all([
+      listFlows(signedIn.identity),
+      readCopiesBehindTemplate(signedIn.identity),
+    ]);
+    return { behind: behind.map((one) => one.flowKey), flows };
   } catch (error) {
     if (error instanceof AccessDeniedError) return null;
     throw error;
@@ -39,8 +44,15 @@ async function load() {
 export default async function WorkflowsPage() {
   if (!isModuleEnabled("WFL")) return <FeatureOff />;
 
-  const flows = await load();
-  if (flows) return <FlowList create={createFlowAction} flows={flows} />;
+  const loaded = await load();
+  if (loaded) {
+    return (
+      <div className="flex flex-col gap-4">
+        <ScreenTabs current="/admin/workflows" label="İş akışları ekranı" tabs={WORKFLOW_TABS} />
+        <FlowList behind={loaded.behind} create={createFlowAction} flows={loaded.flows} />
+      </div>
+    );
+  }
 
   // SCREEN_STATES: a screen reached by address without permission (D-221).
   return (

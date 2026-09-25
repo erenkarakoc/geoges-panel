@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2026-09-25 — Templates, and copies that are told rather than changed (TASK-0120, steps 3-4)
+
+Migration 0059 and seed 0008.
+
+- **A template is not a flow.** The panel ships the company's default processes as templates; a flow in use is a **copy** (D-086). The copy remembers which template and which version it came from, and that is the whole point of the arrangement: a template update never reaches into a copy somebody has since changed. It gets a badge instead — "Şablonun yeni sürümü var" — and stays exactly as it was.
+- **Ten templates ship**: günlük saha kaydı onayı, ödeme onayı, revizyon talebi, stok sayımı onayı, teklif onayı, satın alma talebi, malzeme çıkış talebi, hakediş → fatura, personel çıkışı, and the external-party approval sub-flow. Their steps, roles and thresholds are the template's **defaults**, taken from `docs/workflows/END_TO_END_FLOWS.md`; changing them is what the designer is for.
+- **Every one of them is checked against the engine, not against an opinion.** A database test parses each with `definitionSchema` and then dry-runs it — the same loop a publish is checked against. Nine of the ten walk from end to end today. The tenth, personnel exit, stops where it asks for a list no module has declared yet, and the test asserts *that* with the reason: it ships now and is accepted in the slice that owns those records (D-279), which is a written fact rather than a quiet gap.
+- **"Şablona sıfırla" writes a new draft**, not a publish over what is live. Publishing needs a passed dry run of exactly the definition being published, and that rule has no exception for a reset either. The reset is written to the audit log, because "who put the flow back" is asked months later.
+- The contract test earned its keep again: the new `workflow.template_reset` event was published by the migration before it was declared, and the test refused the build until the catalog, the module's own written record and the published snapshot all agreed.
+- A flow's address can no longer collide with the flows screen's own tabs: `templates` and `new` are reserved, so a flow named "Templates" gets `templates-2` instead of shadowing a tab.
+
 ## 2026-09-25 — The approval centre, with a real queue (TASK-0120, step 2)
 
 - **One record fills the screen, and a decision opens the next** (D-070). No trip through a list between decisions, because deciding is the work.

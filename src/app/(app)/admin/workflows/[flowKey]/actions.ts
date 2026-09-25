@@ -7,6 +7,7 @@ import {
   askDryRun,
   closeFlow,
   copyFlow,
+  resetFlowToTemplate,
   flowVersions,
   lastDryRun,
   parseDefinition,
@@ -244,6 +245,29 @@ export async function closeFlowAction(input: {
     if (error instanceof AccessDeniedError) return { closed: false, error: error.message };
     const said = refusal(error);
     if (said) return { closed: false, error: said };
+    throw error;
+  }
+}
+
+/** Puts a copy back to what its template says, as a new draft (REQ-WFL-027). */
+export async function resetToTemplateAction(
+  flowKey: string,
+): Promise<{ error: string | null; reset: boolean }> {
+  const signedIn = await signInIdentity();
+  if (!signedIn) return { error: "Oturum kapalı.", reset: false };
+  try {
+    await resetFlowToTemplate(signedIn.identity, flowKey);
+    revalidatePath(`/admin/workflows/${flowKey}`);
+    return { error: null, reset: true };
+  } catch (error) {
+    if (error instanceof AccessDeniedError) return { error: error.message, reset: false };
+    const hint = (error as { hint?: string }).hint;
+    if (hint === "wfl.no_template_source") {
+      return { error: "Bu akış bir şablonun kopyası değil.", reset: false };
+    }
+    if (hint === "wfl.no_template") return { error: "Şablon bulunamadı.", reset: false };
+    const said = refusal(error);
+    if (said) return { error: said, reset: false };
     throw error;
   }
 }

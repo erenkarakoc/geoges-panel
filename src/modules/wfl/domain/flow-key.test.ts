@@ -14,6 +14,11 @@ describe("the key a new flow is filed under", () => {
     expect(flowKeyOf("Zimmet", ["zimmet", "zimmet-2"])).toBe("zimmet-3");
   });
 
+  it("never takes an address the flows screen uses for itself", () => {
+    expect(flowKeyOf("Templates")).toBe("templates-2");
+    expect(flowKeyOf("New")).toBe("new-2");
+  });
+
   it("still gives an address to a name with nothing usable in it", () => {
     expect(FLOW_KEY.test(flowKeyOf("!!!"))).toBe(true);
     expect(FLOW_KEY.test(flowKeyOf("AB"))).toBe(true);

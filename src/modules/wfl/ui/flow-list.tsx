@@ -46,9 +46,12 @@ const TRIGGER_LABELS: Record<string, string> = {
 export function FlowList({
   flows,
   create,
+  behind = [],
 }: {
   flows: readonly FlowSummary[];
   create: (name: string) => Promise<{ error: string | null; key: string | null }>;
+  /** Copies whose template has moved on; they are told, never changed (REQ-WFL-027). */
+  behind?: readonly string[];
 }) {
   if (!flows.length) {
     return (
@@ -95,6 +98,9 @@ export function FlowList({
                 <span className="font-medium">{flow.name}</span>
                 <span className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
                   <FlowState flow={flow} />
+                  {behind.includes(flow.key) ? (
+                    <Badge variant="info">Şablonun yeni sürümü var</Badge>
+                  ) : null}
                   <span>{TRIGGER_LABELS[flow.trigger ?? ""] ?? "—"}</span>
                   {flow.publishedAt ? <span>{day.format(flow.publishedAt)}</span> : null}
                 </span>
@@ -126,7 +132,12 @@ export function FlowList({
                 </TableCell>
                 <TableCell>{TRIGGER_LABELS[flow.trigger ?? ""] ?? "—"}</TableCell>
                 <TableCell>
-                  <FlowState flow={flow} />
+                  <span className="flex flex-wrap items-center gap-1.5">
+                    <FlowState flow={flow} />
+                    {behind.includes(flow.key) ? (
+                      <Badge variant="info">Şablonun yeni sürümü var</Badge>
+                    ) : null}
+                  </span>
                 </TableCell>
                 <TableCell className="tabular-nums">
                   {flow.publishedVersion ?? flow.draftVersion ?? "—"}

@@ -1,6 +1,12 @@
 "use client";
 
-import { CopyIcon, HistoryIcon, MoreHorizontalIcon, PowerOffIcon } from "lucide-react";
+import {
+  CopyIcon,
+  HistoryIcon,
+  MoreHorizontalIcon,
+  PowerOffIcon,
+  RotateCcwIcon,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
@@ -41,6 +47,8 @@ export type FlowVersionRow = { version: number; status: string; publishedAt: num
 
 export type FlowMenuActions = {
   copy: (flowKey: string) => Promise<{ error: string | null; key: string | null }>;
+  /** Only offered for a flow that came from a template (REQ-WFL-027). */
+  resetToTemplate: (flowKey: string) => Promise<{ error: string | null; reset: boolean }>;
   close: (input: { key: string; reason: string }) => Promise<{
     error: string | null;
     closed: boolean;
@@ -56,7 +64,16 @@ const STATUS: Record<string, string> = {
 
 const day = new Intl.DateTimeFormat("tr-TR", { dateStyle: "medium", timeStyle: "short" });
 
-export function FlowMenu({ flowKey, actions }: { flowKey: string; actions: FlowMenuActions }) {
+export function FlowMenu({
+  flowKey,
+  actions,
+  fromTemplate = false,
+}: {
+  flowKey: string;
+  actions: FlowMenuActions;
+  /** Whether this flow is a copy of a template; only then is resetting to it offered. */
+  fromTemplate?: boolean;
+}) {
   const router = useRouter();
   const [history, setHistory] = useState<FlowVersionRow[] | null>(null);
   const [showHistory, setShowHistory] = useState(false);
@@ -72,6 +89,14 @@ export function FlowMenu({ flowKey, actions }: { flowKey: string; actions: FlowM
       const answer = await actions.copy(flowKey);
       setResult(answer);
       if (answer.key) router.push(`/admin/workflows/${answer.key}`);
+    });
+  };
+
+  const resetToTemplate = () => {
+    start(async () => {
+      const answer = await actions.resetToTemplate(flowKey);
+      setResult(answer);
+      if (answer.reset) router.refresh();
     });
   };
 
@@ -104,6 +129,12 @@ export function FlowMenu({ flowKey, actions }: { flowKey: string; actions: FlowM
             <CopyIcon aria-hidden="true" />
             Kopyasını çıkar
           </MenuItem>
+          {fromTemplate ? (
+            <MenuItem disabled={pending} onClick={resetToTemplate}>
+              <RotateCcwIcon aria-hidden="true" />
+              Şablona sıfırla
+            </MenuItem>
+          ) : null}
           <MenuItem onClick={openHistory}>
             <HistoryIcon aria-hidden="true" />
             Sürüm geçmişi

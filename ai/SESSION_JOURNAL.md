@@ -422,3 +422,6 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-25 11:32:49Z · b13a9554 · Write · `db/migrations/0058_approval_queue_owner.sql`
 - 2026-09-25 11:34:35Z · b13a9554 · Write · `src/modules/wfl/ui/approval-queue.tsx`
 - 2026-09-25 11:35:17Z · b13a9554 · Write · `src/app/(app)/approvals/page.tsx`
+- 2026-09-25 11:53:39Z · b13a9554 · Write · `db/migrations/0059_wfl_templates.sql`
+- 2026-09-25 11:56:48Z · b13a9554 · Write · `db/seeds/0008_wfl_templates.sql`
+- 2026-09-25 11:58:13Z · b13a9554 · Write · `src/modules/wfl/data/templates.dbtest.ts`

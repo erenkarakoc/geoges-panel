@@ -162,6 +162,11 @@
   {
     "module": "WFL",
     "kind": "event",
+    "code": "workflow.template_reset"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
     "code": "workflow_instance.completed"
   },
   {

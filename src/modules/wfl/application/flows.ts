@@ -4,13 +4,16 @@ import { flowKeyOf, starterDefinition } from "@/modules/wfl/domain/flow-key";
 import {
   disableFlow,
   publishVersion,
+  readTemplates,
   readFlowForDesigner,
   readFlows,
   readLastDryRun,
   readPublishSummary,
   readVersions,
   requestDryRun,
+  resetToTemplate,
   saveDraft,
+  startFromTemplate,
   type DbIdentity,
   type FlowSummary,
 } from "@/modules/wfl/data/flow-store";
@@ -120,4 +123,36 @@ export async function closeFlow(
   const flow = await readFlowForDesigner(identity, flowKey);
   if (!flow) return false;
   return disableFlow(identity, flow.flowId, reason);
+}
+
+/** The templates the panel ships, for SCR-195's "Şablonlar" tab. */
+export function listTemplates(identity: DbIdentity) {
+  return readTemplates(identity);
+}
+
+/**
+ * A flow of your own from a template (REQ-WFL-027). The copy's name is the template's and its
+ * address is derived from that name, exactly as a new flow's is; the template it came from is
+ * remembered so a later update can announce itself.
+ */
+export async function copyOfTemplate(
+  identity: DbIdentity,
+  templateKey: string,
+): Promise<string | null> {
+  const templates = await readTemplates(identity);
+  const template = templates.find((one) => one.key === templateKey);
+  if (!template) return null;
+
+  const existing = await readFlows(identity);
+  const key = flowKeyOf(
+    template.name,
+    existing.map((flow) => flow.key),
+  );
+  await startFromTemplate(identity, { templateKey, flowKey: key, flowName: template.name });
+  return key;
+}
+
+/** Puts a copy back to what its template says, as a new draft (REQ-WFL-027). */
+export function resetFlowToTemplate(identity: DbIdentity, flowKey: string) {
+  return resetToTemplate(identity, flowKey);
 }

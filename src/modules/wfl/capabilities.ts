@@ -20,6 +20,13 @@ export const wflCapabilities = defineCapabilities({
       dataClass: "internal",
     },
     {
+      code: "workflow.template_reset",
+      name: "Akış şablona sıfırlandı",
+      when: "Bir kopya, geldiği şablonun bugünkü hâline döndürüldüğünde (yeni taslak olarak)",
+      carries: ["akış", "şablon"],
+      dataClass: "internal",
+    },
+    {
       code: "workflow_instance.started",
       name: "Akış başladı",
       when: "Bir akış örneği tetiklendiğinde",

@@ -23,7 +23,14 @@ const TURKISH: Record<string, string> = {
 /** The key's own rule, as the database writes it. */
 export const FLOW_KEY = /^[a-z][a-z0-9-]{2,60}$/;
 
+/**
+ * Addresses the flows screen uses for itself. A flow may not take one of them, or its designer would
+ * open a tab instead of the flow.
+ */
+export const RESERVED_FLOW_KEYS: readonly string[] = ["templates", "new"];
+
 export function flowKeyOf(name: string, taken: readonly string[] = []): string {
+  const reserved = [...taken, ...RESERVED_FLOW_KEYS];
   const plain = [...name.toLocaleLowerCase("tr-TR")]
     .map((letter) => TURKISH[letter] ?? letter)
     .join("")
@@ -34,11 +41,11 @@ export function flowKeyOf(name: string, taken: readonly string[] = []): string {
   // A name with nothing usable in it still gets an address; "akis" is what a flow is called here.
   const base = FLOW_KEY.test(plain) ? plain : `akis-${plain}`.replace(/-+$/, "").slice(0, 56);
   const start = FLOW_KEY.test(base) ? base : "akis";
-  if (!taken.includes(start)) return start;
+  if (!reserved.includes(start)) return start;
 
   for (let counter = 2; counter < 1000; counter += 1) {
     const candidate = `${start}-${counter}`;
-    if (!taken.includes(candidate)) return candidate;
+    if (!reserved.includes(candidate)) return candidate;
   }
   throw new Error(`no free key left for ${name}`);
 }

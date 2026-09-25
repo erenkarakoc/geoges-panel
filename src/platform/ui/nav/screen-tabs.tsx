@@ -42,3 +42,9 @@ export const APPROVAL_TABS: readonly ScreenTab[] = [
   { href: "/approvals", label: "Bekleyenler" },
   { href: "/approvals/revision-requests", label: "Revizyon talepleri" },
 ];
+
+/** The tabs of the flows screen (SCR-195); each is its own address, like the approval screen's. */
+export const WORKFLOW_TABS: readonly ScreenTab[] = [
+  { href: "/admin/workflows", label: "Akışlar" },
+  { href: "/admin/workflows/templates", label: "Şablonlar" },
+];

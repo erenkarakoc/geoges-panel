@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   closeFlowAction,
   copyFlowAction,
+  resetToTemplateAction,
   publishFlowAction,
   readDryRunAction,
   readPublishSummaryAction,
@@ -153,10 +154,12 @@ export default async function FlowDesignerPage({
         status: flow.status ?? "draft",
         definition: flow.definition,
         versionId: flow.versionId,
+        fromTemplate: Boolean(flow.sourceTemplateKey),
       }}
       menu={{
         close: closeFlowAction,
         copy: copyFlowAction,
+        resetToTemplate: resetToTemplateAction,
         versions: readVersionsAction,
       }}
       save={saveFlowDraftAction}

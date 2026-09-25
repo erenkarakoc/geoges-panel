@@ -294,11 +294,12 @@ export function readFlowForDesigner(identity: DbIdentity, flowKey: string) {
       key: string;
       name: string;
       single_instance: boolean;
+      source_template_key: string | null;
       version_id: string | null;
       version: number | null;
       status: string | null;
       definition: unknown;
-    }>`select f.id as flow_id, f.key, f.name, f.single_instance,
+    }>`select f.id as flow_id, f.key, f.name, f.single_instance, f.source_template_key,
               v.id as version_id, v.version, v.status, v.definition
          from wfl.flow f
          left join lateral (
@@ -315,10 +316,86 @@ export function readFlowForDesigner(identity: DbIdentity, flowKey: string) {
       key: row.key,
       name: row.name,
       singleInstance: row.single_instance,
+      sourceTemplateKey: row.source_template_key,
       versionId: row.version_id,
       version: row.version === null ? null : Number(row.version),
       status: row.status,
       definition: row.definition,
     };
+  });
+}
+
+export type FlowTemplate = {
+  key: string;
+  name: string;
+  summary: string | null;
+  version: number;
+  definition: unknown;
+};
+
+/** The templates the panel ships (REQ-WFL-028); readable by whoever may design a flow. */
+export function readTemplates(identity: DbIdentity) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{
+      key: string;
+      name: string;
+      summary: string | null;
+      version: number;
+      definition: unknown;
+    }>`select key, name, summary, version, definition from wfl.template
+        where is_active order by name`.execute(db);
+    return rows.map((row): FlowTemplate => ({
+      definition: row.definition,
+      key: row.key,
+      name: row.name,
+      summary: row.summary,
+      version: Number(row.version),
+    }));
+  });
+}
+
+/** Starts a flow from a template; the copy remembers which template and version it came from. */
+export function startFromTemplate(
+  identity: DbIdentity,
+  template: { templateKey: string; flowKey: string; flowName: string },
+) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{ id: string }>`
+      select wfl.use_template(${template.templateKey}, ${template.flowKey},
+                              ${template.flowName}) as id`.execute(db);
+    return rows[0].id;
+  });
+}
+
+/** Puts a copy back to what its template says, as a new draft (REQ-WFL-027). */
+export function resetToTemplate(identity: DbIdentity, flowKey: string) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{ id: string }>`
+      select wfl.reset_to_template(${flowKey}) as id`.execute(db);
+    return rows[0].id;
+  });
+}
+
+/** The copies whose template has moved on: a badge on the list and a word to whoever made them. */
+export function readCopiesBehindTemplate(identity: DbIdentity) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{
+      flow_key: string;
+      flow_name: string;
+      template_key: string;
+      template_name: string;
+      copy_version: number;
+      template_version: number;
+      owner_user_id: string | null;
+    }>`select * from wfl.copies_behind_template()`.execute(db);
+    return rows.map((row) => ({
+      flowKey: row.flow_key,
+      flowName: row.flow_name,
+      templateKey: row.template_key,
+      templateName: row.template_name,
+      copyVersion: Number(row.copy_version),
+      templateVersion: Number(row.template_version),
+      ownerUserId: row.owner_user_id,
+    }));
   });
 }
