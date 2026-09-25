@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-09-25 — The designer opens a flow and edits it (TASK-0119, step 1)
+
+- The owner approved D-283, so the designer is built the way it was planned: **one** definition object, **one** schema. The canvas arranges the steps, the panel asks each step its own questions, and both write into the same object — there is no second list of rules on the screen, so the screen cannot disagree with the engine about what a valid flow is.
+- **The layout is a pure function** (`src/modules/wfl/domain/graph.ts`, 20 tests). What the canvas draws — which box sits where, which arrow means "onay" and which means "ret", which step nothing points at — is decided without a browser and can therefore be read in a test. A step the walk never reaches is still drawn, because an orphan somebody can see is better than one they cannot.
+- **The canvas is the one custom element** (D-224): only the library's engine is used — viewport, pan, zoom, edge routing — and every box is our own component in the panel's own colours, as the presentation map already does it. `@xyflow/react` is fetched only when this screen opens (SPIKE-07 note 3), so the rest of Yönetim carries none of its weight.
+- **The keyboard notes SPIKE-07 carried are in the code, not in a comment.** The canvas is a single tab stop: arrow keys move between boxes, Enter puts the focus in the panel, Escape brings it back. The mini-map is not rendered below `lg` — not hidden with a class, not rendered — because a phone gets the full editor and the mini-map is not part of it.
+- **Error marks are the schema's own words.** Every finding `definitionSchema` reports is attached to the step whose path it names and shown on that box and in its panel; findings about the flow as a whole sit above the canvas. Saving is automatic and a moment behind the typing, and a draft the schema refuses is deliberately **not** sent: the database holds definitions to the same schema, so a save that could not succeed is better not attempted than attempted and reported.
+- Still ahead in this task, and said so rather than left to be noticed: the dry run and the publish confirmation in the header, the "+" between two boxes that adds a step, and the questions belonging to the steps that ask about owners, conditions and branches.
+
 ## 2026-09-25 — The last step, and the engine is done (TASK-0117)
 
 - The owner answered OQ-040 (D-282): a standalone escalation step **tells somebody above and the flow carries on**. It asks the owner rule who is above, opens a task for them and tells them about it — both through the catalog's actions, so the engine still writes nobody's task and nobody's notification itself — writes who it was raised to in the run log, and continues. Nothing waits on it, because a flow that stops for a warning is not a warning.

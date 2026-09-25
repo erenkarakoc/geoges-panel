@@ -31,7 +31,10 @@ describe("navigationRegistry", () => {
     // A single segment is what the placeholder page can generate; a deeper address means the
     // screen has a route of its own, which the last test in this file checks against the disk.
     const deep = allItems.filter((item) => item.href.slice(1).includes("/"));
-    expect(deep.map((item) => item.href)).toEqual(["/approvals/revision-requests"]);
+    expect(deep.map((item) => item.href)).toEqual([
+      "/admin/workflows",
+      "/approvals/revision-requests",
+    ]);
   });
 
   it("guards every item with a permission", () => {
@@ -154,6 +157,7 @@ describe("every menu entry opens something", () => {
   it("opens the screen that exists rather than a placeholder beside it", () => {
     // The built screens, by the addresses the screen inventory records for them.
     for (const href of [
+      "/admin/workflows",
       "/approvals/revision-requests",
       "/audit-log",
       "/users-roles",

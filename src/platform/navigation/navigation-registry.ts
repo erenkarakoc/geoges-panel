@@ -30,6 +30,7 @@ import {
   SlidersHorizontalIcon,
   TruckIcon,
   UploadIcon,
+  WorkflowIcon,
   UsersIcon,
   UsersRoundIcon,
 } from "lucide-react";
@@ -373,6 +374,16 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         moduleCode: "ADM",
         requiredPermission: "adm.master-data.view",
         description: "Merkezi tanımlar, kataloglar, çalışma takvimi ve döviz kurları.",
+      },
+      {
+        id: "workflows",
+        label: "İş Akışları",
+        // The screen inventory's own address (SCR-195); the designer opens inside it.
+        href: "/admin/workflows",
+        icon: WorkflowIcon,
+        moduleCode: "WFL",
+        requiredPermission: "wfl.workflow.design",
+        description: "Şirketin süreçleri: akışlar, sürümleri ve tasarımcı.",
       },
       {
         id: "users-roles",

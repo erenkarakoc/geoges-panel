@@ -402,3 +402,6 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-24 23:00:24Z · b13a9554 · Write · `db/migrations/0054_wfl_locks.sql`
 - 2026-09-24 23:27:22Z · 5c627231 · Write · `db/migrations/0055_wfl_branches.sql`
 - 2026-09-24 23:57:34Z · 5c627231 · Write · `db/migrations/0056_wfl_subflow.sql`
+- 2026-09-25 01:01:05Z · b13a9554 · Write · `src/modules/wfl/ui/flow-designer.tsx`
+- 2026-09-25 01:06:04Z · b13a9554 · Write · `src/modules/wfl/ui/flow-canvas.tsx`
+- 2026-09-25 01:07:27Z · b13a9554 · Write · `src/modules/wfl/ui/flow-designer.tsx`

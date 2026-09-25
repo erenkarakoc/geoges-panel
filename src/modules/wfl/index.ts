@@ -9,6 +9,7 @@ export {
   readVersions,
   recordDryRun,
   saveDraft,
+  type FlowSummary,
   type FlowVersion,
   type FlowVersionStatus,
 } from "@/modules/wfl/data/flow-store";
@@ -53,6 +54,7 @@ export {
   type RunResult,
 } from "@/modules/wfl/application/engine";
 export { flowEngine } from "@/modules/wfl/application/engine-subscriber";
+export { listFlows, openFlow, writeDraft } from "@/modules/wfl/application/flows";
 export { flowWakeJob } from "@/modules/wfl/application/wake-job";
 export { flowClockJob } from "@/modules/wfl/application/clock-job";
 export { flowEscalationJob } from "@/modules/wfl/application/escalation-job";
