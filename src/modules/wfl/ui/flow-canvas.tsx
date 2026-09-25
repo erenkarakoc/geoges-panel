@@ -1,6 +1,9 @@
 "use client";
 
 import {
+  BaseEdge,
+  EdgeLabelRenderer,
+  getSmoothStepPath,
   Handle,
   MiniMap,
   Position,
@@ -8,6 +11,7 @@ import {
   ReactFlowProvider,
   useReactFlow,
   type Edge,
+  type EdgeProps,
   type Node,
   type NodeProps,
 } from "@xyflow/react";
@@ -20,7 +24,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { flowCanvasId } from "@/modules/wfl/ui/flow-canvas-id";
 import { stepTypeLabel } from "@/modules/wfl/domain/graph";
-import type { FlowEdge, FlowNode } from "@/modules/wfl/domain/graph";
+import type { FlowEdge, FlowNode, Outlet } from "@/modules/wfl/domain/graph";
 
 /**
  * The flow's boxes and arrows (SCR-196, TASK-0119, D-224).
@@ -73,7 +77,58 @@ function StepNode({ data }: NodeProps) {
   );
 }
 
+type StepEdgeData = {
+  label?: string;
+  /** Opens the palette for this arrow; the new step goes between its two boxes. */
+  onInsert?: () => void;
+};
+
+/**
+ * One arrow, with the "+" the screen spec puts between two boxes (ADMINISTRATION section 3). The
+ * label and the button ride the arrow together, so a path named "ret" says what it is and can be
+ * built on in the same place.
+ */
+function StepEdge(props: EdgeProps) {
+  const { sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition } = props;
+  const [path, labelX, labelY] = getSmoothStepPath({
+    borderRadius: 12,
+    sourcePosition,
+    sourceX,
+    sourceY,
+    targetPosition,
+    targetX,
+    targetY,
+  });
+  const data = (props.data ?? {}) as StepEdgeData;
+
+  return (
+    <>
+      <BaseEdge id={props.id} path={path} style={{ stroke: "var(--border)", strokeWidth: 1.5 }} />
+      <EdgeLabelRenderer>
+        <div
+          className="pointer-events-auto absolute flex items-center gap-1"
+          style={{ transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)` }}
+        >
+          {data.label ? (
+            <span className="rounded bg-card px-1 text-xs text-muted-foreground">{data.label}</span>
+          ) : null}
+          <Button
+            aria-label="Bu okun üstüne adım ekle"
+            onClick={data.onInsert}
+            size="icon-xs"
+            type="button"
+            variant="outline"
+          >
+            <PlusIcon />
+          </Button>
+        </div>
+      </EdgeLabelRenderer>
+    </>
+  );
+}
+
 const nodeTypes = { step: StepNode };
+const edgeTypes = { step: StepEdge };
 
 export type FlowCanvasProps = {
   nodes: readonly FlowNode[];
@@ -86,6 +141,8 @@ export type FlowCanvasProps = {
   problems: Map<string, string[]>;
   /** A phone gets no mini-map (SPIKE-07 note 2). */
   miniMap?: boolean;
+  /** The "+" on an arrow: a new step goes between these two boxes. */
+  onInsert?: (from: string, outlet: Outlet) => void;
 };
 
 export function FlowCanvas(props: FlowCanvasProps) {
@@ -96,7 +153,16 @@ export function FlowCanvas(props: FlowCanvasProps) {
   );
 }
 
-function Canvas({ nodes, edges, selected, onSelect, onOpen, problems, miniMap }: FlowCanvasProps) {
+function Canvas({
+  nodes,
+  edges,
+  selected,
+  onSelect,
+  onOpen,
+  onInsert,
+  problems,
+  miniMap,
+}: FlowCanvasProps) {
   const { fitView, zoomIn, zoomOut } = useReactFlow();
 
   const drawn = useMemo<Node[]>(
@@ -127,15 +193,13 @@ function Canvas({ nodes, edges, selected, onSelect, onOpen, problems, miniMap }:
         target: edge.to,
         sourceHandle: "out",
         targetHandle: "in",
-        type: "smoothstep",
-        pathOptions: { borderRadius: 12 },
-        label: edge.label,
-        labelShowBg: true,
-        labelBgStyle: { fill: "var(--card)" },
-        labelStyle: { fill: "var(--muted-foreground)", fontSize: 11 },
-        style: { stroke: "var(--border)", strokeWidth: 1.5 },
+        type: "step",
+        data: {
+          label: edge.label,
+          onInsert: onInsert ? () => onInsert(edge.from, edge.outlet) : undefined,
+        } satisfies StepEdgeData,
       })),
-    [edges],
+    [edges, onInsert],
   );
 
   // Boxes in reading order, which is also the order the arrow keys walk.
@@ -221,6 +285,7 @@ function Canvas({ nodes, edges, selected, onSelect, onOpen, problems, miniMap }:
         disableKeyboardA11y
         edges={drawnEdges}
         edgesFocusable={false}
+        edgeTypes={edgeTypes}
         fitView
         fitViewOptions={{ padding: 0.12, maxZoom: 1 }}
         maxZoom={1.5}

@@ -10,6 +10,7 @@ import {
   readOwnerUsers,
   readPeople,
   readRememberedRole,
+  readRoles,
   recordSession,
   rememberRole,
   type DbIdentity,
@@ -153,6 +154,11 @@ async function currentIdentity(): Promise<DbIdentity> {
 /** People for pickers and filters, as far as the signed-in person may see them. */
 export async function listPeople() {
   return readPeople(await currentIdentity());
+}
+
+/** The company's roles, for a screen that lets somebody choose one (REQ-WFL-026). */
+export async function listRoles() {
+  return readRoles(await currentIdentity());
 }
 
 /**

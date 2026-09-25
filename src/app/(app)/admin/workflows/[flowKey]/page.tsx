@@ -12,24 +12,65 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { AccessDeniedError, signInIdentity, todayRoute } from "@/modules/iam";
-import { openFlow } from "@/modules/wfl";
+import {
+  AccessDeniedError,
+  listPeople,
+  listRoles,
+  signInIdentity,
+  todayRoute,
+} from "@/modules/iam";
+import { listFlows, openFlow } from "@/modules/wfl";
 import { FlowDesigner } from "@/modules/wfl/ui/flow-designer";
+import type { DesignerVocabulary } from "@/modules/wfl/ui/step-questions";
+import { moduleCapabilities } from "@/records/capabilities";
 import { isModuleEnabled } from "@/platform/features/features";
 import { FeatureOff } from "@/platform/ui/feature-off";
 
 export const metadata: Metadata = { title: "Akış tasarımcısı" };
 
 /** The flow, `null` when this person may not design flows, `undefined` when there is no such flow. */
-async function load(flowKey: string) {
-  const signedIn = await signInIdentity();
-  if (!signedIn) return null;
+/** Who is asking, in the words of the module that will be asked — routes hold no database type. */
+type Asking = Parameters<typeof listFlows>[0];
+
+async function load(identity: Asking, flowKey: string) {
   try {
-    return (await openFlow(signedIn.identity, flowKey)) ?? undefined;
+    return (await openFlow(identity, flowKey)) ?? undefined;
   } catch (error) {
     if (error instanceof AccessDeniedError) return null;
     throw error;
   }
+}
+
+/**
+ * What the designer offers to choose from (REQ-WFL-003, D-280). The events, the fields a condition
+ * may read and the owner relations come from the modules' own catalogs — the designer holds no list
+ * of its own, so an ability nobody declared simply is not on the screen. The roles, the people and
+ * the other flows come from the modules that own them, joined here because a route is where modules
+ * are joined (ADR-001).
+ */
+async function vocabularyFor(identity: Asking): Promise<DesignerVocabulary> {
+  const [roles, people, flows] = await Promise.all([
+    listRoles(),
+    listPeople(),
+    listFlows(identity),
+  ]);
+  const active = <T extends { status?: string }>(items: readonly T[]) =>
+    items.filter((item) => item.status !== "deprecated");
+
+  return {
+    events: moduleCapabilities.flatMap((catalog) =>
+      active(catalog.events).map((event) => ({ code: event.code, name: event.name })),
+    ),
+    fields: moduleCapabilities.flatMap((catalog) =>
+      active(catalog.conditions).map((field) => ({ code: field.code, name: field.name })),
+    ),
+    flows: flows.map((flow) => ({ key: flow.key, name: flow.name })),
+    people: people.map((person) => ({ id: person.id, name: person.displayName })),
+    relations: moduleCapabilities.flatMap((catalog) =>
+      active(catalog.relations).map((relation) => ({ code: relation.code, name: relation.name })),
+    ),
+    roles: roles.map((role) => ({ code: role.code, name: role.name })),
+  };
 }
 
 /** SCR-196, the designer (TASK-0119, D-283). */
@@ -39,7 +80,8 @@ export default async function FlowDesignerPage({
   if (!isModuleEnabled("WFL")) return <FeatureOff />;
 
   const { flowKey } = await params;
-  const flow = await load(flowKey);
+  const signedIn = await signInIdentity();
+  const flow = signedIn ? await load(signedIn.identity, flowKey) : null;
 
   if (flow === null) {
     return (
@@ -62,7 +104,7 @@ export default async function FlowDesignerPage({
     );
   }
 
-  if (!flow || !flow.versionId) {
+  if (!signedIn || !flow || !flow.versionId) {
     return (
       <Empty>
         <EmptyHeader>
@@ -93,6 +135,7 @@ export default async function FlowDesignerPage({
         definition: flow.definition,
       }}
       save={saveFlowDraftAction}
+      vocabulary={await vocabularyFor(signedIn.identity)}
     />
   );
 }

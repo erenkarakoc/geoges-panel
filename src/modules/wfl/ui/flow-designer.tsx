@@ -5,19 +5,33 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogDescription,
+  DialogHeader,
+  DialogPopup,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Drawer, DrawerHeader, DrawerPopup, DrawerTitle } from "@/components/ui/drawer";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { definitionSchema, STEP_TYPES, type StepType } from "@/modules/wfl/domain/definition";
 import {
-  definitionSchema,
-  type FlowDefinition,
-  type FlowStep,
-} from "@/modules/wfl/domain/definition";
-import { graphOf, stepLabel } from "@/modules/wfl/domain/graph";
+  asEditable,
+  insertAfter,
+  removeStep,
+  withStep,
+  type Draft,
+} from "@/modules/wfl/domain/edit";
+import { graphOf, stepLabel, stepTypeLabel, type Outlet } from "@/modules/wfl/domain/graph";
 import { flowCanvasId } from "@/modules/wfl/ui/flow-canvas-id";
+import {
+  StepQuestions,
+  TriggerQuestions,
+  type DesignerVocabulary,
+} from "@/modules/wfl/ui/step-questions";
 import { useActionToast } from "@/platform/ui/feedback/use-action-toast";
 
 /**
@@ -71,9 +85,21 @@ function problemsByStep(definition: unknown): { steps: Map<string, string[]>; fl
   return { steps, flow };
 }
 
-export function FlowDesigner({ flow, save }: { flow: DesignerFlow; save: SaveAction }) {
-  const [definition, setDefinition] = useState<unknown>(flow.definition);
+export function FlowDesigner({
+  flow,
+  vocabulary,
+  save,
+}: {
+  flow: DesignerFlow;
+  vocabulary: DesignerVocabulary;
+  save: SaveAction;
+}) {
+  const [draft, setDraft] = useState<Draft>(
+    () => asEditable(flow.definition) ?? { trigger: { type: "manual" }, start: "", steps: [] },
+  );
   const [selected, setSelected] = useState<string | null>(null);
+  /** Where a new step would go, while the palette is open. */
+  const [adding, setAdding] = useState<{ from: string; outlet: Outlet } | null>(null);
   const [saving, startSaving] = useTransition();
   const [state, setState] = useState<{ error: string | null; savedAt: number | null }>({
     error: null,
@@ -85,25 +111,13 @@ export function FlowDesigner({ flow, save }: { flow: DesignerFlow; save: SaveAct
 
   useActionToast(state, state.error ? { type: "error", title: state.error } : null);
 
-  const problems = useMemo(() => problemsByStep(definition), [definition]);
+  const problems = useMemo(() => problemsByStep(draft), [draft]);
   const valid = problems.steps.size === 0 && problems.flow.length === 0;
-
-  // The canvas needs a definition it can walk; a draft that does not parse is drawn from the last
-  // shape that did, so the screen never goes blank while somebody is in the middle of typing.
-  const drawable = useMemo(() => {
-    const parsed = definitionSchema.safeParse(definition);
-    return parsed.success ? (parsed.data as FlowDefinition) : null;
-  }, [definition]);
-
-  const graph = useMemo(
-    () => (drawable ? graphOf(drawable) : { nodes: [], edges: [] }),
-    [drawable],
+  const graph = useMemo(() => graphOf(draft), [draft]);
+  const step = useMemo(
+    () => draft.steps.find((one) => one.id === selected) ?? null,
+    [draft, selected],
   );
-
-  const step = useMemo(() => {
-    if (!drawable || !selected) return null;
-    return drawable.steps.find((one) => one.id === selected) ?? null;
-  }, [drawable, selected]);
 
   useEffect(() => () => (pending.current ? clearTimeout(pending.current) : undefined), []);
 
@@ -113,8 +127,8 @@ export function FlowDesigner({ flow, save }: { flow: DesignerFlow; save: SaveAct
    * is better not attempted, and the header says what is missing until it is answered.
    */
   const persist = useCallback(
-    (next: unknown) => {
-      setDefinition(next);
+    (next: Draft) => {
+      setDraft(next);
       if (pending.current) clearTimeout(pending.current);
       if (!definitionSchema.safeParse(next).success) return;
       pending.current = setTimeout(() => {
@@ -127,33 +141,37 @@ export function FlowDesigner({ flow, save }: { flow: DesignerFlow; save: SaveAct
     [flow.key, flow.name, save],
   );
 
-  /** Writes one step's change back into the definition, leaving everything else alone. */
-  const changeStep = useCallback(
-    (id: string, change: Partial<FlowStep>) => {
-      const current = definition as { steps: FlowStep[] };
-      persist({
-        ...(current as object),
-        steps: current.steps.map((one) => (one.id === id ? { ...one, ...change } : one)),
-      });
-    },
-    [definition, persist],
-  );
-
   /** Escape in the panel puts the focus back on the canvas, which is one tab stop (SPIKE-07). */
   const backToCanvas = useCallback(() => {
     document.getElementById(flowCanvasId)?.focus();
   }, []);
 
+  const addStep = (type: StepType) => {
+    if (!adding) return;
+    const { draft: next, id } = insertAfter(draft, adding.from, adding.outlet, type);
+    setAdding(null);
+    setSelected(id);
+    persist(next);
+  };
+
   const questions = step ? (
     <StepQuestions
-      onChange={(change) => changeStep(step.id, change)}
+      onChange={(change) => persist(withStep(draft, step.id, change))}
+      onRemove={() => {
+        setSelected(null);
+        persist(removeStep(draft, step.id));
+      }}
       problems={problems.steps.get(step.id) ?? []}
       step={step}
+      steps={draft.steps}
+      vocabulary={vocabulary}
     />
   ) : (
-    <p className="text-sm text-muted-foreground">
-      Bir adıma tıklayın: o adımın soruları burada açılır ve verdiğiniz cevap şemada anında görünür.
-    </p>
+    <TriggerQuestions
+      onChange={(trigger) => persist({ ...draft, trigger })}
+      trigger={draft.trigger as Record<string, unknown> | undefined}
+      vocabulary={vocabulary}
+    />
   );
 
   return (
@@ -187,13 +205,14 @@ export function FlowDesigner({ flow, save }: { flow: DesignerFlow; save: SaveAct
           edges={graph.edges}
           miniMap={!phone}
           nodes={graph.nodes}
+          onInsert={(from, outlet) => setAdding({ from, outlet })}
           onOpen={() => panel.current?.focus()}
           onSelect={setSelected}
           problems={problems.steps}
           selected={selected}
         />
 
-        {/* The phone gets the same questions in a drawer it can pull up over the full-screen canvas. */}
+        {/* The phone gets the same questions in a drawer it pulls up over the full-screen canvas. */}
         {phone ? (
           <Drawer
             onOpenChange={(open) => (open ? undefined : setSelected(null))}
@@ -228,6 +247,25 @@ export function FlowDesigner({ flow, save }: { flow: DesignerFlow; save: SaveAct
           </aside>
         )}
       </div>
+
+      {/* The palette: the fourteen steps of REQ-WFL-005 and nothing else. */}
+      <Dialog onOpenChange={(open) => (open ? undefined : setAdding(null))} open={Boolean(adding)}>
+        <DialogPopup>
+          <DialogHeader>
+            <DialogTitle>Yeni adım</DialogTitle>
+            <DialogDescription>
+              Bu okun üstüne eklenecek adımı seçin; ok, yeni adımdan sonra kaldığı yere devam eder.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid grid-cols-2 gap-2 p-4 pt-0 sm:grid-cols-3">
+            {STEP_TYPES.filter((type) => type !== "start").map((type) => (
+              <Button key={type} onClick={() => addStep(type)} variant="outline">
+                {stepTypeLabel(type)}
+              </Button>
+            ))}
+          </div>
+        </DialogPopup>
+      </Dialog>
     </div>
   );
 }
@@ -247,90 +285,5 @@ function SaveState({ saving, savedAt }: { saving: boolean; savedAt: number | nul
       <CheckIcon aria-hidden="true" className="size-3.5" />
       kaydedildi
     </span>
-  );
-}
-
-/**
- * The step's own questions (REQ-WFL-026). This turn asks what every step has — what it is called —
- * and the fields the palette's waiting, telling and blocking steps cannot do without; the rest of
- * the questions arrive with the steps they belong to.
- */
-function StepQuestions({
-  step,
-  problems,
-  onChange,
-}: {
-  step: FlowStep;
-  problems: readonly string[];
-  onChange: (change: Partial<FlowStep>) => void;
-}) {
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <h3 className="text-sm font-semibold">{stepLabel(step)}</h3>
-        <span className="text-xs text-muted-foreground">
-          {step.type} · {step.id}
-        </span>
-      </div>
-
-      {problems.length ? (
-        <ul className="flex flex-col gap-1 rounded-md border border-warning/40 bg-warning/8 p-2 text-xs">
-          {problems.map((problem) => (
-            <li key={problem}>{problem}</li>
-          ))}
-        </ul>
-      ) : null}
-
-      <Field>
-        <FieldLabel htmlFor={`title-${step.id}`}>Adımın adı</FieldLabel>
-        <Input
-          defaultValue={step.title ?? ""}
-          id={`title-${step.id}`}
-          onBlur={(event) => onChange({ title: event.currentTarget.value || undefined })}
-          placeholder="Ekranda ne yazsın?"
-        />
-        <FieldDescription>
-          Bu ad görevde, bildirimde ve çalışma günlüğünde görünür.
-        </FieldDescription>
-      </Field>
-
-      {step.type === "wait" ? (
-        <Field>
-          <FieldLabel htmlFor={`after-${step.id}`}>Ne kadar beklesin?</FieldLabel>
-          <Input
-            defaultValue={step.after}
-            id={`after-${step.id}`}
-            onBlur={(event) => onChange({ after: event.currentTarget.value } as Partial<FlowStep>)}
-            placeholder="PT8H"
-          />
-          <FieldDescription>PT30M, PT8H ya da P2D biçiminde yazılır.</FieldDescription>
-        </Field>
-      ) : null}
-
-      {step.type === "notify" || step.type === "escalate" ? (
-        <Field>
-          <FieldLabel htmlFor={`subject-${step.id}`}>Ne desin?</FieldLabel>
-          <Input
-            defaultValue={step.subject}
-            id={`subject-${step.id}`}
-            onBlur={(event) =>
-              onChange({ subject: event.currentTarget.value } as Partial<FlowStep>)
-            }
-          />
-        </Field>
-      ) : null}
-
-      {step.type === "lock" ? (
-        <Field>
-          <FieldLabel htmlFor={`reason-${step.id}`}>Neden kilitli?</FieldLabel>
-          <Input
-            defaultValue={step.reason}
-            id={`reason-${step.id}`}
-            onBlur={(event) => onChange({ reason: event.currentTarget.value } as Partial<FlowStep>)}
-          />
-          <FieldDescription>Engellenen kişiye bu cümle gösterilir.</FieldDescription>
-        </Field>
-      ) : null}
-    </div>
   );
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { parseDefinition } from "@/modules/wfl/domain/definition";
-import { graphOf, pathsOf, stepLabel } from "@/modules/wfl/domain/graph";
+import { asDraft, graphOf, pathsOf, stepLabel } from "@/modules/wfl/domain/graph";
 
 const definition = parseDefinition({
   trigger: { type: "manual" },
@@ -65,6 +65,26 @@ describe("a definition drawn as boxes and arrows (SCR-196)", () => {
     expect(graphOf(orphaned).nodes.map((node) => node.id)).toEqual(["a1", "a2"]);
   });
 
+  it("draws a draft the schema would refuse, so an unanswered step stays visible", () => {
+    const halfAnswered = asDraft({
+      start: "s1",
+      steps: [
+        { id: "s1", type: "start", next: "s2" },
+        // No owner yet: the schema refuses this definition and the canvas draws it anyway.
+        { id: "s2", type: "approval", outcomes: {} },
+      ],
+    });
+    expect(halfAnswered).not.toBeNull();
+    const { nodes, edges } = graphOf(halfAnswered!);
+    expect(nodes.map((node) => node.id)).toEqual(["s1", "s2"]);
+    expect(edges).toHaveLength(1);
+  });
+
+  it("gives up on something that is not a draft at all", () => {
+    expect(asDraft(null)).toBeNull();
+    expect(asDraft({ steps: "hayır" })).toBeNull();
+  });
+
   it("labels a box with its own words, or with what kind of step it is", () => {
     expect(stepLabel(definition.steps[1])).toBe("Müdür onayı");
     expect(stepLabel(definition.steps[2])).toBe("Bitiş");
@@ -82,9 +102,9 @@ describe("a definition drawn as boxes and arrows (SCR-196)", () => {
       ],
     });
     expect(pathsOf(parallel.steps[0])).toEqual([
-      { to: "b1", label: "dal 1" },
-      { to: "b2", label: "dal 2" },
-      { to: "j1", label: "birleşme" },
+      { to: "b1", label: "dal 1", outlet: "path:0" },
+      { to: "b2", label: "dal 2", outlet: "path:1" },
+      { to: "j1", label: "birleşme", outlet: "next" },
     ]);
   });
 });

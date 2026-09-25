@@ -405,3 +405,8 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-25 01:01:05Z · b13a9554 · Write · `src/modules/wfl/ui/flow-designer.tsx`
 - 2026-09-25 01:06:04Z · b13a9554 · Write · `src/modules/wfl/ui/flow-canvas.tsx`
 - 2026-09-25 01:07:27Z · b13a9554 · Write · `src/modules/wfl/ui/flow-designer.tsx`
+- 2026-09-25 01:14:08Z · b13a9554 · Write · `src/modules/wfl/domain/graph.ts`
+- 2026-09-25 01:14:58Z · b13a9554 · Write · `src/modules/wfl/domain/edit.ts`
+- 2026-09-25 01:15:17Z · b13a9554 · Write · `src/modules/wfl/domain/edit.test.ts`
+- 2026-09-25 01:19:38Z · b13a9554 · Write · `src/modules/wfl/ui/step-questions.tsx`
+- 2026-09-25 01:20:58Z · b13a9554 · Write · `src/modules/wfl/ui/flow-designer.tsx`

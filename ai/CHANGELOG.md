@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-25 — The designer builds a flow, and only out of what the modules offer (TASK-0119, step 2)
+
+- **A "+" on every arrow.** It opens the palette — the fourteen steps of REQ-WFL-005, no fifteenth — and the new step goes *between* the two boxes: what the arrow pointed at now follows the new step. Taking a step out of the middle leaves the flow joined up, because removing a step means "not this", not "stop here". All of it is `domain/edit.ts`: pure functions, twelve tests, no browser.
+- **Every step's own questions, and the flow's own question too.** With nothing selected the panel asks what starts the flow; with a step selected it asks what that step needs — who approves, what the condition reads, where each of an approval's three answers goes, how long a wait lasts, which flow a sub-flow runs.
+- **The choices are the modules' declarations, not the screen's lists.** The events a flow may start on, the fields a condition may read and the owner relations all come from the capability catalogs (REQ-WFL-003, D-280), so an ability nobody declared is not on the screen at all — which is the same reason a flow cannot write a ledger. The roles, the people and the other flows come from the modules that own them, joined in the route, because a route is where modules are joined.
+- IAM gained one read to make the owner question answerable: `listRoles`, the company's active roles. Any signed-in person may read the list of roles (0003) and what they may do with one is still asked where it is done.
+- **The canvas draws a draft that is not yet valid.** A step added and not yet answered is drawn, wearing the schema's complaint; a canvas that went blank the moment an answer was missing would fail exactly when the designer is needed most.
+
 ## 2026-09-25 — The designer opens a flow and edits it (TASK-0119, step 1)
 
 - The owner approved D-283, so the designer is built the way it was planned: **one** definition object, **one** schema. The canvas arranges the steps, the panel asks each step its own questions, and both write into the same object — there is no second list of rules on the screen, so the screen cannot disagree with the engine about what a valid flow is.

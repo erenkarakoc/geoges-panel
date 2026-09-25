@@ -173,6 +173,20 @@ export function readPeople(identity: DbIdentity) {
   });
 }
 
+/**
+ * The company's roles, for a screen that has to let somebody choose one — the flow designer asking
+ * who approves a step (REQ-WFL-026). Any signed-in person may read the list of roles (0003), and
+ * what they may *do* with one is asked where it is done.
+ */
+export function readRoles(identity: DbIdentity) {
+  return runAsUser(identity, async (db: Tx) => {
+    const { rows } = await sql<{ code: string; name: string; level: number }>`
+      select code, name, level from iam.role where is_active
+       order by level, name`.execute(db);
+    return rows.map((r) => ({ code: r.code, name: r.name, level: Number(r.level) }));
+  });
+}
+
 /** Everyone in the owner layer; an owner approval is done by any of them (REQ-IAM-025). */
 export function readOwnerUsers(identity: DbIdentity) {
   return runAsUser(identity, async (db: Tx) =>
