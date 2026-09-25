@@ -131,8 +131,16 @@ type StepSink = {
   ): Promise<void>;
   end(status: "done" | "failed", failure?: string, stepId?: string): Promise<void>;
   wait(stepId: string, detail: unknown): Promise<void>;
-  /** Opens the approval and answers with its id, or null when nothing was really opened. */
-  approval(stateId: string, step: FlowStep, ownerUserId: string): Promise<string | null>;
+  /**
+   * Opens the approval and answers with its id, or null when nothing was really opened. The owner is
+   * a person when the step named one and null when it addressed a group; the rule says which.
+   */
+  approval(
+    stateId: string,
+    step: FlowStep,
+    ownerUserId: string | null,
+    ownerRule: OwnerRule,
+  ): Promise<string | null>;
   /** Holds a transition shut on the record the flow is about (REQ-WFL-029). */
   lock(step: FlowStep, transition: string, reason: string): Promise<void>;
   /** Opens one run per path and answers with their ids; a dry run opens none (REQ-WFL-006). */
@@ -192,13 +200,14 @@ function writingSink(db: SystemDb, instanceId: string, relations: FlowRuntime): 
     async wait(stepId, detail) {
       await noteWaiting(db, { instanceId, stepId, detail });
     },
-    approval: (stateId, step, ownerUserId) =>
+    approval: (stateId, step, ownerUserId, ownerRule) =>
       requestApproval(db, {
         instanceId,
+        ownerRule,
+        ownerUserId,
         stateId,
         stepId: step.id,
         title: step.title ?? "Onay",
-        ownerUserId,
       }),
     async escalate(approvalId, at, to) {
       if (!approvalId) return;
@@ -592,15 +601,23 @@ async function walk(
     }
 
     if (step.type === "approval" || step.type === "task") {
-      const owner = await ownerOf(db, relations, step.owner);
-      if (!owner) {
+      // An approval addressed by role or by permission belongs to **whoever holds it** and any one
+      // of them answers (REQ-IAM-025, REQ-IAM-026): the rule travels with the approval and the
+      // database works out who may see and decide from live assignments, so somebody leaving or
+      // changing role needs no repair. A task is different — somebody has to do it — so it is still
+      // given to one person.
+      const group =
+        step.type === "approval" &&
+        (step.owner.type === "role" || step.owner.type === "permission");
+      const owner = group ? null : await ownerOf(db, relations, step.owner);
+      if (!owner && !group) {
         const reason = `${stepLabel(step)} adımının kime düşeceği bulunamadı.`;
         await sink.leave(stateId, "failed", "no_owner");
         await sink.end("failed", reason, step.id);
         return { state: "ended", status: "failed", reason };
       }
       if (step.type === "approval") {
-        const approvalId = await sink.approval(stateId, step, owner);
+        const approvalId = await sink.approval(stateId, step, owner, step.owner);
         if (step.escalation) {
           await sink.escalate(
             approvalId,
@@ -612,12 +629,13 @@ async function walk(
         await sink.action("task.open", {
           stepRunId: stateId,
           title: step.title ?? "Görev",
-          assigneeUserId: owner,
+          assigneeUserId: owner as string,
           priority: step.priority,
         });
       }
-      // The step stays open on purpose: it is what the answer will come back to.
-      await sink.wait(step.id, { waitingFor: step.type, owner });
+      // The step stays open on purpose: it is what the answer will come back to. The rule is in the
+      // log as well, because "why was this with them" is asked about finished runs too.
+      await sink.wait(step.id, { waitingFor: step.type, owner, rule: step.owner });
       return { state: "waiting", stepId: step.id };
     }
 

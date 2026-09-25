@@ -266,7 +266,13 @@ export async function flowsListeningTo(db: SystemDb, eventCode: string): Promise
   }));
 }
 
-/** Opens the approval a step waits on; the same step visit never opens two. */
+/**
+ * Opens the approval a step waits on; the same step visit never opens two.
+ *
+ * The owner is a person when the step named one, and nobody at all when the step addressed a group —
+ * a role, a permission, the owner layer. Either way the rule itself is written down: it is what the
+ * queue shows ("because you hold this role") and what the database asks when somebody answers.
+ */
 export async function requestApproval(
   db: SystemDb,
   approval: {
@@ -274,13 +280,17 @@ export async function requestApproval(
     stateId: string;
     stepId: string;
     title: string;
-    ownerUserId: string;
+    ownerUserId: string | null;
+    ownerRule: unknown;
   },
 ): Promise<string> {
   const { rows } = await sql<{ id: string }>`
     select wfl.request_approval(${approval.instanceId}::uuid, ${approval.stateId}::uuid,
                                 ${approval.stepId}, ${approval.title},
-                                ${approval.ownerUserId}::uuid) as id`.execute(db);
+                                ${approval.ownerUserId}::uuid,
+                                ${JSON.stringify(approval.ownerRule ?? {})}::jsonb) as id`.execute(
+    db,
+  );
   return rows[0].id;
 }
 
@@ -311,9 +321,27 @@ export type WaitingApproval = {
   title: string;
   record: { schema: string; table: string; id: string } | null;
   createdAt: Date;
+  /** How the step addressed it (D-097); the screen turns this into "why it is with you". */
+  ownerRule: unknown;
+  /** True when it is in this queue through a delegation rather than the person's own place. */
+  delegated: boolean;
+  /** Which flow and version opened it, so the queue can say where it came from. */
+  flowKey: string | null;
+  flowName: string | null;
+  flowVersion: number | null;
+  /** How many times this run has already been sent back for correction (REQ-WFL-016). */
+  returnedBefore: number;
+  /** What was asked for the last time it was sent back. */
+  lastReturnReason: string | null;
 };
 
-/** What this person is being asked to decide (REQ-WFL-012). */
+/**
+ * What this person is being asked to decide (REQ-WFL-012, SCR-012).
+ *
+ * One question decides what is in the queue — "is this approval mine" — and the database asks it,
+ * from live assignments, so an approval addressed to a role is in the queue of whoever holds it
+ * today and a delegate sees what the person they stand in for sees.
+ */
 export function readMyApprovals(identity: DbIdentity) {
   return runAsUser(identity, async (db) => {
     const { rows } = await sql<{
@@ -325,21 +353,41 @@ export function readMyApprovals(identity: DbIdentity) {
       record_table: string | null;
       record_id: string | null;
       created_at: Date;
-    }>`select id, instance_id, step_id, title, record_schema, record_table, record_id, created_at
-         from wfl.approval
-        where status = 'waiting' and owner_user_id = ${identity.userId}::uuid
-        order by created_at`.execute(db);
+      owner_rule: unknown;
+      delegated: boolean;
+      flow_key: string | null;
+      flow_name: string | null;
+      flow_version: number | null;
+      returned_before: number;
+      last_return_reason: string | null;
+    }>`select * from wfl.my_approvals()`.execute(db);
     return rows.map((row): WaitingApproval => ({
+      createdAt: row.created_at,
+      delegated: row.delegated,
+      flowKey: row.flow_key,
+      flowName: row.flow_name,
+      flowVersion: row.flow_version === null ? null : Number(row.flow_version),
       id: row.id,
       instanceId: row.instance_id,
-      stepId: row.step_id,
-      title: row.title,
+      lastReturnReason: row.last_return_reason,
+      ownerRule: row.owner_rule,
       record:
         row.record_schema && row.record_table && row.record_id
           ? { schema: row.record_schema, table: row.record_table, id: row.record_id }
           : null,
-      createdAt: row.created_at,
+      returnedBefore: Number(row.returned_before),
+      stepId: row.step_id,
+      title: row.title,
     }));
+  });
+}
+
+/** How many approvals are waiting on this person: the badge three places have to agree on. */
+export function readMyApprovalCount(identity: DbIdentity) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{ waiting: number }>`
+      select wfl.my_approval_count() as waiting`.execute(db);
+    return Number(rows[0]?.waiting ?? 0);
   });
 }
 

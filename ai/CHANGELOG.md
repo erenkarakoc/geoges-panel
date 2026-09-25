@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2026-09-25 — Why an approval is with you, and approvals that belong to a group (TASK-0120, step 1)
+
+Migration 0057, the first step of the approval centre (D-285).
+
+- **The rule travels with the approval.** The engine worked out who a step fell to but never wrote down *how*, which made "why is this with me" unanswerable. Now the addressing rule is stored as the definition wrote it. The sentence itself is not stored: it is composed where the names live, so a role that is renamed does not leave old approvals explaining themselves with the old name.
+- **An approval addressed by role or by permission belongs to whoever holds it** — not to one of them picked when the step ran. Any one of them answers it, which is what an owner approval has always meant (REQ-IAM-025/026). One function answers "is this mine", and the row security policy, the decision and the queue's own read all ask that one question, so a screen cannot show an approval the database would refuse to let the same person decide. Because it is asked from live assignments on every read, somebody leaving or changing role needs no repair anywhere.
+- **A delegate sees what the person they stand in for sees** (REQ-IAM-020), labelled as standing in. Only a company-wide delegation does so for now, and deliberately: an approval carries the record's address but not its scope, so a delegation limited to one site cannot be checked yet. Showing less than the delegation allows is the safe direction.
+- **The queue's read is one function** because of what it has to reach — the flow's name, the step, and whether this run was sent back before, with the reason. Those live on rows an approver has no business reading in general, so the function answers only for approvals that are already theirs.
+- **A latent bug fell out of writing a test.** `request_approval` asked `if i is null` after selecting into a record; a record whose every column came back null reads as null, so a flow started by hand about no particular record was refused as "not running". It now asks `if not found`, which is the question it meant to ask.
+
 ## 2026-09-25 — The designer speaks Turkish, not schema (TASK-0119, fix after the owner looked)
 
 The owner opened the designer and read `condition_1`, `flow_runs`, `Invalid input: expected object, received undefined` and `(REQ-WFL-014)` on the screen. Every one of those was the code's own language reaching a person, and each had its own cause:

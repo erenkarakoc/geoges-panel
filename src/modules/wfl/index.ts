@@ -29,6 +29,7 @@ export {
   leaveStep,
   noteWaiting,
   readInstance,
+  readMyApprovalCount,
   readMyApprovals,
   readRunLog,
   startInstance,

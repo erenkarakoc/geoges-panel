@@ -26,6 +26,7 @@ import {
   locksOn,
   overrideLock,
   readInstance,
+  readMyApprovalCount,
   readMyApprovals,
   readRunLog,
   startInstanceByHand,
@@ -62,6 +63,8 @@ const REPEATING = "zz-t0147-repeating";
 const BIG_CHANGE = "zz-t0147-bigchange";
 const HOLDING = "zz-t0147-holding";
 const RAISING = "zz-t0147-raising";
+const GROUPED = "zz-t0147-grouped";
+const PERSONAL = "zz-t0147-personal";
 const EVENT = "zzw_record.submitted";
 
 let admin: pg.Client;
@@ -1953,5 +1956,126 @@ describe("the escalation step (REQ-WFL-006, D-282)", () => {
     expect(report.passed).toBe(true);
     expect(report.steps.map((step) => step.stepId)).toEqual(["e1", "e2"]);
     expect(after.rows[0].n).toBe(before.rows[0].n);
+  });
+});
+
+/**
+ * Who an approval belongs to (TASK-0120, migration 0057, REQ-WFL-013, REQ-WFL-017, REQ-IAM-020,
+ * REQ-IAM-025, REQ-IAM-026).
+ *
+ * An approval addressed by role belongs to whoever holds that role — not to one of them chosen when
+ * the step ran — and any one of them answers it. A delegate sees what the person they stand in for
+ * sees. Both are the database's answers, asked from live assignments on every read, so a person
+ * leaving or changing role needs no repair anywhere.
+ */
+describe("an approval addressed to a group", () => {
+  const grouped = {
+    trigger: { type: "manual" },
+    start: "g1",
+    steps: [
+      {
+        id: "g1",
+        type: "approval",
+        title: "Yedek onaycı kararı",
+        owner: { type: "role", role: "T0147_BACKUP" },
+        outcomes: { approve: "g2", reject: "g2", return: "g1" },
+      },
+      { id: "g2", type: "end" },
+    ],
+  };
+
+  const personal = {
+    trigger: { type: "manual" },
+    start: "q1",
+    steps: [
+      {
+        id: "q1",
+        type: "approval",
+        title: "Kişiye düşen karar",
+        owner: { type: "user", userId: BYSTANDER },
+        outcomes: { approve: "q2" },
+      },
+      { id: "q2", type: "end" },
+    ],
+  };
+
+  let groupedInstance: string;
+
+  it("waits for whoever holds the role, and nobody in particular", async () => {
+    await publish(GROUPED, grouped);
+    groupedInstance = (await startInstanceByHand(as(DESIGNER), { flowKey: GROUPED }))!;
+    await runInstance(worker, groupedInstance, relations);
+
+    const { rows } = await admin.query(
+      "select owner_user_id, owner_rule from wfl.approval where instance_id = $1",
+      [groupedInstance],
+    );
+    if (!rows.length) {
+      const state = await admin.query("select status, failure from wfl.instance where id = $1", [
+        groupedInstance,
+      ]);
+      throw new Error(
+        `no approval row; instance ${groupedInstance}: ${JSON.stringify(state.rows)}`,
+      );
+    }
+    // Nobody's row: the rule is what says who, and it is asked again on every read.
+    expect(rows[0].owner_user_id).toBeNull();
+    expect(rows[0].owner_rule).toEqual({ type: "role", role: "T0147_BACKUP" });
+  });
+
+  it("is in the queue of a holder and nowhere else", async () => {
+    const holder = await readMyApprovals(as(BYSTANDER));
+    const mine = holder.find((one) => one.instanceId === groupedInstance);
+    expect(mine?.title).toBe("Yedek onaycı kararı");
+    expect(mine?.ownerRule).toEqual({ type: "role", role: "T0147_BACKUP" });
+    expect(mine?.delegated).toBe(false);
+    // The queue can say where it came from without reading the definition.
+    expect(mine?.flowKey).toBe(GROUPED);
+    expect(mine?.flowVersion).toBe(1);
+
+    const stranger = await readMyApprovals(as(APPROVER));
+    expect(stranger.some((one) => one.instanceId === groupedInstance)).toBe(false);
+  });
+
+  it("is answered by a holder, and refused to everybody else", async () => {
+    const holder = await readMyApprovals(as(BYSTANDER));
+    const mine = holder.find((one) => one.instanceId === groupedInstance);
+    expect(await errorOf(decideApproval(as(APPROVER), mine!.id, "approve"))).toBe(
+      "wfl.not_your_approval",
+    );
+    expect(await decideApproval(as(BYSTANDER), mine!.id, "approve")).toBe(true);
+  });
+
+  it("counts the same thing the list shows", async () => {
+    const list = await readMyApprovals(as(BYSTANDER));
+    expect(await readMyApprovalCount(as(BYSTANDER))).toBe(list.length);
+  });
+
+  it("lets a delegate see and answer what the person they stand in for would", async () => {
+    await publish(PERSONAL, personal);
+    const instanceId = (await startInstanceByHand(as(DESIGNER), { flowKey: PERSONAL }))!;
+    await runInstance(worker, instanceId, relations);
+
+    // Before the delegation there is nothing to see.
+    expect((await readMyApprovals(as(APPROVER))).some((one) => one.instanceId === instanceId)).toBe(
+      false,
+    );
+
+    const { rows: backup } = await admin.query(
+      "select id from iam.role where code = 'T0147_BACKUP'",
+    );
+    await admin.query(
+      `insert into iam.role_assignment (user_id, role_id, scope_type, scope_ids, starts_on, ends_on,
+                                        is_delegation, delegated_by_user_id)
+       values ($1, $2, 'company', '{}', iam.today() - 1, iam.today() + 1, true, $3)`,
+      [APPROVER, backup[0].id, BYSTANDER],
+    );
+
+    const standing = await readMyApprovals(as(APPROVER));
+    const theirs = standing.find((one) => one.instanceId === instanceId);
+    expect(theirs?.title).toBe("Kişiye düşen karar");
+    // The queue says it is here through a delegation rather than through this person's own place.
+    expect(theirs?.delegated).toBe(true);
+    expect(await decideApproval(as(APPROVER), theirs!.id, "approve")).toBe(true);
   });
 });
