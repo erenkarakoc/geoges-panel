@@ -1,6 +1,6 @@
 # Faz 09 — Dilim 1 Planı: Projeler, Şantiyeler, Günlük Saha Kaydı
 
-Durum: ONAY BEKLİYOR (D-291 PROPOSED) · Tarih: 2026-09-25 · Faz: Phase 09 · Bağlı: `ai/MASTER_ROADMAP.md`,
+Durum: ONAYLANDI (D-291, sahip 2026-09-25) · Tarih: 2026-09-25 · Faz: Phase 09 · Bağlı: `ai/MASTER_ROADMAP.md`,
 `docs/requirements/REQ-PRJ.md`, `REQ-SIT.md`, `REQ-RPT.md`, `REQ-ADM.md`,
 `docs/database/SCHEMA-OPERATIONS.md`, `docs/ui-ux/screens/SCR-021-daily-site-log.md`
 
@@ -74,3 +74,42 @@ kişilerce girilir, fazla döküm açıklamasız gönderilemez, fotoğrafsız za
 kayıt koordinatörün kuyruğuna Faz 08'in akışıyla düşer, onaylanınca kilitlenir, ilerleme ve şantiye
 detayı güncellenir, resmi rapor üretilip indirilir. 375 piksel genişlikte yatay kaydırma olmadan
 girilebilir (REQ-SIT-035). Her görev kendi kalite kapısından geçer; dilimin kabulü sizin turunuzdur.
+
+## TASK-0121 — Üretim tanımları (uygulama planı, 2026-09-25)
+
+Kademe T2. Gereksinimler REQ-ADM-002…007, REQ-SIT-010, REQ-SIT-019; şema `SCHEMA-PLATFORM.md` adm bölümü.
+
+**Tablolar (göç 0061).**
+
+- `adm.panel_type` — kod, ad, en ve boy (metre), **m² en × boydan türetilir** (ADM-K2, elle girilmez),
+  projeye özel olabilir (REQ-ADM-005), silinmez pasifleşir. Komşu tip önerisi (REQ-SIT-019) "bir alt / bir
+  üst, sonra iki alt / iki üst" ister; bunu şemadaki tek `neighbour_type_id` gösteremez, bu yüzden
+  ilişki **seri + kademe** olarak tutulur: aynı serideki kademe ±1, ±2 komşudur. Şema belgesi buna göre
+  güncellenir.
+- `adm.strip_type` — kod, genişlik ve kalınlık (mm), delik sayısı, standart boylar (REQ-ADM-003).
+- **Ölçüler değişmez.** Kullanılan bir tipin eni, boyu ya da kesiti değişirse geçmiş dökümlerin m²'si de
+  değişirdi (REQ-ADM-007). Kod ve ölçüler oluşturulduktan sonra veritabanında kilitlidir; farklı ölçü
+  yeni bir tiptir, eskisi pasifleşir. Ad ve standart boylar düzenlenebilir.
+- `adm.consumption_recipe` — bir birim üretim (döküm, montaj, şerit montajı; parça, m² ya da metre
+  başına) için hangi sarf malzemeden ne kadar (REQ-ADM-004). Satırlar **tarihlidir ve hiç
+  güncellenmez**: değişiklik yeni geçerlilik satırıdır, böylece geçmiş günlerin önerisi değişmez.
+  Tek okuma noktası `adm.recipe_lines(...)`: projeye özel satır genelden, tipe özel satır "her tipten"
+  önce gelir, o güne geçerli en son satır seçilir.
+- "Çalışma yok" nedenleri (REQ-SIT-010) mevcut katalog düzeneğinde yeni bir katalogdur; varsayılan
+  nedenler fabrika verisidir. Diğer iş kalemleri mevcut `work_item` kataloğudur.
+
+**Okuma ve yazma.** Tanımları oturum açmış herkes okur; `adm.module.manage` olan değiştirir — mevcut
+ADM kuralı.
+
+**Örnek veri.** Panel ve şerit tipleri ile reçeteler şirketin kendi bilgisidir, fabrika verisi değildir;
+pilotun örnekleri `db/samples`'a gider (D-290) ve `npm run db:sample` ile yüklenir.
+
+**Ekran (SCR-190).** `/admin/master-data`: tanım gruplarının listesi; her grup liste kalıbında, ekleme
+ve düzenleme kısa formla, kullanılan kalem pasifleşir. Menüdeki eski `/master-data` adresi ve
+kayıtlarda olmayan `adm.master-data.view` yetkisi SCR-190'ın adresine ve gerçek yetkiye
+(`adm.module.view`) düzeltilir. Takvim ve kur ekranları SCR-190'ın parçasıdır ama bu görevin
+gereksinimlerinde değildir; kendi görevlerinde gelir.
+
+**Testler.** m²'nin türetildiği, ölçülerin kilitli olduğu, aynı kodun ikinci kez açılamadığı, komşu
+kademelerin bulunduğu, reçetenin tarih ve öncelik kuralı, yetkisiz yazmanın reddedildiği veritabanı
+testleri.

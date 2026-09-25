@@ -430,3 +430,7 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-25 15:45:46Z · b13a9554 · Write · `src/platform/ui/app-shell/record-search-request.ts`
 - 2026-09-25 15:49:52Z · b13a9554 · Write · `src/modules/wfl/data/acceptance.dbtest.ts`
 - 2026-09-25 16:17:05Z · b13a9554 · Write · `docs/features/phase-09-slice-1-plan.md`
+- 2026-09-25 16:22:58Z · b13a9554 · Write · `db/migrations/0061_adm_production_definitions.sql`
+- 2026-09-25 16:23:49Z · b13a9554 · Write · `src/modules/adm/domain/production.ts`
+- 2026-09-25 16:24:22Z · b13a9554 · Write · `src/modules/adm/data/production-store.ts`
+- 2026-09-25 16:25:08Z · b13a9554 · Write · `src/modules/adm/data/production.dbtest.ts`

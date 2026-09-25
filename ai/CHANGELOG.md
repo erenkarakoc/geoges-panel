@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2026-09-25 — Production definitions: panel types, strip types, recipes (TASK-0121, step 1)
+
+The owner approved Phase 09's plan (D-291). The first task lays down what the daily log's casting, installation, strip and consumption rows are built from — migration 0061 and seed 0010.
+
+- **A panel's area is computed**, never typed (ADM-K2): width times height, stored by the database.
+- **A type's code and size never move once it exists.** A casting keeps the area it was entered with, but a panel type whose width changed under it would make every report joining back to it disagree with the day it was cast. A different size is a different type; the old one turns passive. Its name may still change.
+- **Neighbours are a series and a step.** REQ-SIT-019 walks one step down or up, then two, when a type is over-cast; the schema's single "neighbour" pointer could not say that, so the design document now says what was built.
+- **A consumption recipe is dated and never rewritten.** A change is a new line from a date, so the suggestion a past day was given is the one it keeps. One function answers what applies on a day: a project's own line before the company's, a type's own line before "every type", the latest valid date among equals; a zero lets a material leave the recipe.
+- The no-work reasons of REQ-SIT-010 are a catalog with sensible defaults; management adds more.
+- The first test run caught a real mistake: one trigger function guarded both type tables, and PL/pgSQL resolves a row's fields per table, so it failed on whichever table it was not looking at. There are two now.
+
 ## 2026-09-25 — Phase 09 opens: the question round, and a plan waiting for approval
 
 - All 84 requirements the first slice builds on (PRJ, SIT, RPT, ADM) are CONFIRMED, and so are its schema and its main screen, so the question round asked only what nothing on record answers. Four questions, answered the same day:
