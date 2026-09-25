@@ -312,3 +312,29 @@ export function readCatalogItems(identity: DbIdentity, catalogKey: string) {
     return rows;
   });
 }
+
+export type CatalogInfo = {
+  key: string;
+  name: string;
+  description: string | null;
+  allowsUserAdditions: boolean;
+};
+
+/** Every shared list, for SCR-190's index and a list's own heading. */
+export function readCatalogs(identity: DbIdentity) {
+  return runAsUser(identity, async (db: Tx) => {
+    const { rows } = await sql<{
+      key: string;
+      name: string;
+      description: string | null;
+      allows_user_additions: boolean;
+    }>`select key, name, description, allows_user_additions
+         from adm.catalog order by name`.execute(db);
+    return rows.map((row): CatalogInfo => ({
+      allowsUserAdditions: row.allows_user_additions,
+      description: row.description,
+      key: row.key,
+      name: row.name,
+    }));
+  });
+}

@@ -375,10 +375,11 @@ export const navigationRegistry: readonly NavigationGroup[] = [
       {
         id: "master-data",
         label: "Tanımlar",
-        href: "/master-data",
+        // SCR-190's own address; the permission is the one IAM actually has (TASK-0121).
+        href: "/admin/master-data",
         icon: SlidersHorizontalIcon,
         moduleCode: "ADM",
-        requiredPermission: "adm.master-data.view",
+        requiredPermission: "adm.module.view",
         description: "Merkezi tanımlar, kataloglar, çalışma takvimi ve döviz kurları.",
       },
       {

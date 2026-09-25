@@ -32,6 +32,7 @@ describe("navigationRegistry", () => {
     // screen has a route of its own, which the last test in this file checks against the disk.
     const deep = allItems.filter((item) => item.href.slice(1).includes("/"));
     expect(deep.map((item) => item.href)).toEqual([
+      "/admin/master-data",
       "/admin/workflows",
       "/approvals/revision-requests",
     ]);

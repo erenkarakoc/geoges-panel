@@ -137,3 +137,21 @@ export function readCustomFields(identity: DbIdentity, table: CustomFieldTable) 
     }));
   });
 }
+
+/**
+ * Turns a catalog item passive or back (SCR-190). An item is never deleted — history still points at
+ * it — and a merged item stays passive, which the table's own check says.
+ */
+export function setCatalogItemStatus(
+  identity: DbIdentity,
+  itemId: string,
+  status: "active" | "passive",
+) {
+  return runAsUser(identity, async (db: Tx) => {
+    const { rows } = await sql<{ id: string }>`
+      update adm.catalog_item set status = ${status}
+       where id = ${itemId}::uuid
+      returning id`.execute(db);
+    return rows.length === 1;
+  });
+}

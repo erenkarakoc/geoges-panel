@@ -89,6 +89,18 @@ export const recipeLineInput = z
 
 export type RecipeLineInput = z.infer<typeof recipeLineInput>;
 
+/**
+ * A number the way a person in Türkiye types it: "1,5" and "1.5" are the same, and a stray space is
+ * nobody's mistake. Anything else is not a number, and the form says so in its own words.
+ */
+export function decimal(text: string | number | null | undefined): number {
+  if (typeof text === "number") return text;
+  const plain = String(text ?? "")
+    .replace(/\s/g, "")
+    .replace(",", ".");
+  return plain === "" ? Number.NaN : Number(plain);
+}
+
 /** A panel's area, the way the database computes it (ADM-K2) — for a form's live preview only. */
 export function panelArea(widthM: number, heightM: number): number {
   return Math.round(widthM * heightM * 10_000) / 10_000;

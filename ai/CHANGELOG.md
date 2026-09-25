@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-09-25 — Tanımlar opens: panel types, strip types, recipes and the shared lists (TASK-0121, step 2)
+
+- **SCR-190 at `/admin/master-data`**: the kinds of definitions, each opening its own list — panel types, strip types, consumption recipes, and every shared list (units, work items, consumables, expense categories, no-work reasons).
+- **Each list offers only what may change.** A panel type's code and size are fixed, so its row offers a new name or "Pasifleştir"; a strip type also takes new standard lengths; a recipe line is never edited, so the recipe screen is its own history with one action — a new line from a date.
+- **A shared list shows lookalikes before adding** (REQ-ADM-006): "Nakliye" and "Nakliye masrafı" are the same thing typed twice, and a report split between them is wrong. The person can still add it if it really is new.
+- **Numbers are read the way they are typed here**: "1,5" is one and a half. Strip lengths are separated by semicolons for exactly that reason.
+- **The menu entry was wrong twice**: it pointed at a placeholder address and at a permission IAM never had. It now opens SCR-190 under `adm.module.view`.
+- **The pilot's sample definitions** live in `db/samples` and load with `npm run db:sample` (D-290): six panel types in two series, the three strip sections REQ-ADM-003 names, six consumables and their recipe lines. They are samples on purpose — not factory data a real installation would inherit.
+
 ## 2026-09-25 — Production definitions: panel types, strip types, recipes (TASK-0121, step 1)
 
 The owner approved Phase 09's plan (D-291). The first task lays down what the daily log's casting, installation, strip and consumption rows are built from — migration 0061 and seed 0010.

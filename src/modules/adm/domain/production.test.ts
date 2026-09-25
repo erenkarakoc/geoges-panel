@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  decimal,
   panelArea,
   panelTypeInput,
   productionMessage,
@@ -12,6 +13,13 @@ describe("production definitions, as a form checks them before the database does
   it("computes a panel's area the way the database does", () => {
     expect(panelArea(1.5, 1.5)).toBe(2.25);
     expect(panelArea(1.2, 0.95)).toBe(1.14);
+  });
+
+  it("reads a number the way it is typed in Türkiye", () => {
+    expect(decimal("1,5")).toBe(1.5);
+    expect(decimal(" 2.25 ")).toBe(2.25);
+    expect(Number.isNaN(decimal(""))).toBe(true);
+    expect(Number.isNaN(decimal("bir buçuk"))).toBe(true);
   });
 
   it("computes a strip's total length from its piece length and count", () => {

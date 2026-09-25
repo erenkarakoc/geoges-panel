@@ -434,3 +434,9 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-25 16:23:49Z · b13a9554 · Write · `src/modules/adm/domain/production.ts`
 - 2026-09-25 16:24:22Z · b13a9554 · Write · `src/modules/adm/data/production-store.ts`
 - 2026-09-25 16:25:08Z · b13a9554 · Write · `src/modules/adm/data/production.dbtest.ts`
+- 2026-09-25 16:28:12Z · b13a9554 · Write · `src/modules/adm/application/production.ts`
+- 2026-09-25 16:29:27Z · b13a9554 · Write · `src/modules/adm/ui/panel-type-list.tsx`
+- 2026-09-25 16:30:55Z · b13a9554 · Write · `src/modules/adm/ui/strip-type-list.tsx`
+- 2026-09-25 16:31:56Z · b13a9554 · Write · `src/modules/adm/ui/recipe-list.tsx`
+- 2026-09-25 16:33:37Z · b13a9554 · Write · `src/modules/adm/ui/catalog-item-list.tsx`
+- 2026-09-25 16:36:11Z · b13a9554 · Write · `db/samples/0001_adm_production_definitions.sql`
