@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-25 — The last step, and the engine is done (TASK-0117)
+
+- The owner answered OQ-040 (D-282): a standalone escalation step **tells somebody above and the flow carries on**. It asks the owner rule who is above, opens a task for them and tells them about it — both through the catalog's actions, so the engine still writes nobody's task and nobody's notification itself — writes who it was raised to in the run log, and continues. Nothing waits on it, because a flow that stops for a warning is not a warning.
+- Anything that *moves* an approval stays the approval step's own work; it has escalated itself since migration 0052, and the two were worth keeping apart.
+- **TASK-0117 is done.** Four triggers (event, clock, threshold, by hand), all fourteen steps of the palette, conditions that read a field and conditions that count history, the engine's own limits, and the dry run that is the same loop with a sink that writes nothing — across twelve migrations, 0045 to 0056, each with its down file.
+- One test changed meaning rather than being deleted. It used to prove that a flow stops at a step the engine has not learned, by giving it one; there is no such step any more. The guard stays for the day a fifteenth step is added to the palette before it is built, and the test now asserts the state that makes the guard idle — every step the palette offers is one the engine can take — which is the thing that can actually change.
+
 ## 2026-09-25 — The engine's last five pieces, and the one question left (TASK-0117, steps 11-14)
 
 - **The threshold trigger.** A threshold flow hears the event like anybody else and then asks whether what it carries crosses the line — "when a price changes by more than ten per cent". There is no standing query behind it, because the event brings the value with it (D-103), and an event with nothing to measure starts nothing rather than guessing.

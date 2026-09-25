@@ -45,7 +45,7 @@ yazıldı (D-280). Plan: `docs/features/phase-08-workflow-plan.md` (D-281, sahip
 | Görev | İş ve teslim edilenler | Güncel durum / kalan |
 |---|---|---|
 | TASK-0118 | Yetenek kataloğu ve sözleşme testi: her modül ne yapabildiğini ilan eder, CI ilan ile kodu karşılaştırır | ✅ Tamamlandı; beş modül 25 yetenek ilan etti, test ilk koşuşunda dört gerçek ayrışma buldu |
-| TASK-0117 | Motor çekirdeği: sürümlü tanım, örnek, yürütme, tetikleyiciler, adım paleti, koşullar, kuru mod | 🔨 **Devam ediyor** — dört tetikleyicinin dördü ve on dört adımın on üçü teslim edildi (aşağıda); kalan tek adım eskalasyon, ne yapacağı size soruldu (OQ-040) |
+| TASK-0117 | Motor çekirdeği: sürümlü tanım, örnek, yürütme, tetikleyiciler, adım paleti, koşullar, kuru mod | ✅ **Tamamlandı** — dört tetikleyici, on dört adımın hepsi, iki tür koşul, motorun sınırları ve kuru mod; on iki göç (0045-0056) |
 | TASK-0119 | Görsel tasarımcı ve soru-cevap (ikisi de aynı JSON'u üretir) | ⬜ Motor bitince kendi planını alacak |
 | TASK-0120 | Onay Merkezi'nin motorun açtığı gerçek kuyruğa bağlanması ve sekiz şablonun gelmesi | ⬜ Motor bitince; şablonlar kendi dilimlerinde etkinleşir |
 
@@ -72,7 +72,7 @@ yazıldı (D-280). Plan: `docs/features/phase-08-workflow-plan.md` (D-281, sahip
 | Adım: her biri için | ✅ Liste, kaydın sahibi modülün yeteneği; her öğe bir dal; boş liste hata değil, uzun liste akışı durduruyor; iç içe kullanım tanımda reddediliyor |
 | Adım: alt akış | ✅ Başka bir yayımlanmış akışı çocuk olarak başlatıp bekliyor; üç kademe derinlik sınırı; yayımlanmamış akış koşuyu durduruyor |
 | Adım: kayıt oluştur / durum değiştir | ✅ Motor kendi yazmıyor, modülün aksiyonunu çağırıyor ve hangi akış/sürüm/adım sorduğunu iletiyor; defteri kesinleştirmeyi modül reddediyor, koşu modülün sözleriyle duruyor |
-| Adım: eskalasyon (ayrı adım) | ⬜ Tek kalan adım — ne yapacağı tanımlı değil (OQ-040); onay adımının kendi eskalasyonu zaten çalışıyor |
+| Adım: eskalasyon (ayrı adım) | ✅ Üste haber verip devam ediyor (D-282, sahibin cevabı): muhatabına görev ve bildirim, günlüğe kime iletildiği; hiçbir şey beklemiyor, çünkü uyarı için duran akış uyarı değildir |
 | Koşullar: alan | ✅ Kaydın verisiyle değerlendiriliyor; hangi daldan neden gidildiği günlükte |
 | Koşullar: geçmişe bakan | ✅ Sayım sorgusu, **her seferinde taze**, kendi süre sınırıyla (2 sn); sınır aşılırsa akış sessizce "hayır" demiyor, **gerekçesiyle duruyor** |
 | Kuru mod (deneme çalıştırması) | ✅ **Gerçek çalışmanın ta kendisi**: adımın yaptığı şey bir portun arkasında, deneme hiçbir şey yazmayan bir port veriyor |
@@ -203,8 +203,8 @@ Fazın yapım işi bitti. Kalan üç şeyin hiçbiri kod işi değil: **M1 turu*
 
 ## Buradan sonraki sıra
 
-1. **Motorun kalan işi (TASK-0117):** yalnız eskalasyon adımı; ne yapması gerektiği OQ-040 olarak sizde.
-2. **TASK-0119 ve TASK-0120:** görsel tasarımcı, ve Onay Merkezi'nin motorun açtığı gerçek kuyruğa bağlanması.
+1. **TASK-0119 — Görsel tasarımcı** ve soru-cevap ikizi: motor çalıştığına göre kendi planını alabilir.
+2. **TASK-0120:** Onay Merkezi'nin motorun açtığı gerçek kuyruğa bağlanması ve sekiz şablonun JSON olarak gelmesi.
 3. **TASK-0111 — M1:** kontrol listesi hazır, tur sizde. Notlarınız kayda girer (düzeltme → görev, kapsam → CHG) ve Faz 07 kapanır.
 4. **Faz 09'da açılacak arama işleri:** modüller kendi kaynaklarını kaydedince gerçek kayıtlarla kabul, ve tek bir sözcüğü çok sayıda kaydın paylaştığı durumda sıralama.
 5. **TASK-0113'ün kalan kabulü:** barındırma geldiğinde ana ekrana kurulum ve gerçek cihazda bildirim.

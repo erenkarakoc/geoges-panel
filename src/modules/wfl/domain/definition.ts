@@ -18,7 +18,7 @@ import { z } from "zod";
  * with its three answers — are kept apart from the rest, because a union that can be narrowed
  * needs its halves written out rather than filtered.
  */
-const PLAIN_STEP_TYPES = ["start", "escalate", "end"] as const;
+const PLAIN_STEP_TYPES = ["start", "end"] as const;
 
 export const STEP_TYPES = [
   "condition",
@@ -26,6 +26,7 @@ export const STEP_TYPES = [
   "task",
   "wait",
   "notify",
+  "escalate",
   "lock",
   "parallel",
   "join",
@@ -45,6 +46,7 @@ export const RUNNABLE_STEP_TYPES: readonly StepType[] = [
   "task",
   "wait",
   "notify",
+  "escalate",
   "lock",
   "parallel",
   "join",
@@ -146,6 +148,22 @@ const notifyStep = baseStep.extend({
   subject: z.string().trim().min(1).max(200),
 });
 
+/**
+ * Telling somebody above that this needs attention (REQ-WFL-006, OQ-040 → D-282).
+ *
+ * It is not the approval's own escalation, which moves an approval to the next person when its
+ * patience runs out (migration 0052). This one raises the matter and the flow carries on: the
+ * person named is given a task and told about it, the run log says it was raised, and `next`
+ * continues. Nothing waits on it, because a flow that stops for a warning is not a warning.
+ */
+const escalateStep = baseStep.extend({
+  type: z.literal("escalate"),
+  /** Who it is raised to (D-097); `relation` reaches "the owner's manager" when a module answers. */
+  to: ownerSchema,
+  /** What the person above is told, in the flow's own words. */
+  subject: z.string().trim().min(3).max(200),
+});
+
 const lockStep = baseStep.extend({
   type: z.literal("lock"),
   /** The transition it holds shut; `*` when the record may not move at all (REQ-WFL-029). */
@@ -205,6 +223,7 @@ export const stepSchema = z.discriminatedUnion("type", [
   conditionStep,
   approvalStep,
   taskStep,
+  escalateStep,
   lockStep,
   parallelStep,
   joinStep,

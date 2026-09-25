@@ -40,6 +40,7 @@ import {
   resumeFromTask,
   resumeFromWait,
 } from "@/modules/wfl/application/engine";
+import { RUNNABLE_STEP_TYPES, STEP_TYPES } from "@/modules/wfl/domain/definition";
 import { runAsUser } from "@/platform/db";
 import { readDatabaseConfig } from "@/platform/db/database-config";
 import type { SystemDb } from "@/platform/jobs/types";
@@ -51,7 +52,6 @@ const BYSTANDER = id(3);
 const PEOPLE = [DESIGNER, APPROVER, BYSTANDER];
 const BIG = "zz-t0147-big";
 const SMALL = "zz-t0147-small";
-const UNBUILT = "zz-t0147-unbuilt";
 const APPROVING = "zz-t0147-approving";
 const TASKING = "zz-t0147-tasking";
 const DRY = "zz-t0147-dry";
@@ -61,6 +61,7 @@ const PATIENT = "zz-t0147-patient";
 const REPEATING = "zz-t0147-repeating";
 const BIG_CHANGE = "zz-t0147-bigchange";
 const HOLDING = "zz-t0147-holding";
+const RAISING = "zz-t0147-raising";
 const EVENT = "zzw_record.submitted";
 
 let admin: pg.Client;
@@ -108,16 +109,6 @@ const branching = {
     },
     { id: "s3", type: "end" },
     { id: "s4", type: "end" },
-  ],
-};
-
-/** A flow whose first step is one the engine has not learned yet. */
-const unbuilt = {
-  trigger: { type: "event", event: `${EVENT}_other` },
-  start: "s1",
-  steps: [
-    { id: "s1", type: "escalate", title: "Yukarı taşı", next: "s2" },
-    { id: "s2", type: "end" },
   ],
 };
 
@@ -309,33 +300,22 @@ describe("a published flow starts listening (REQ-WFL-007)", () => {
   });
 });
 
-describe("what the engine cannot do yet, it says (REQ-WFL-025)", () => {
-  it("stops with the step's name rather than pretending to take it", async () => {
-    await publish(UNBUILT, unbuilt);
-    const instanceId = await startInstanceByHand(as(DESIGNER), {
-      flowKey: UNBUILT,
-      record: { schema: "zzw", table: "record", id: id(702) },
-    });
-    const result = await runInstance(worker, instanceId!, relations);
-    expect(result).toEqual({
-      state: "ended",
-      status: "failed",
-      reason: "motor bu adımı henüz yürütmüyor: escalate",
-    });
-
-    const stopped = await readInstance(as(DESIGNER), instanceId!);
-    expect(stopped?.status).toBe("failed");
-    expect(stopped?.failure).toContain("escalate");
-
-    const log = await readRunLog(as(DESIGNER), instanceId!);
-    expect(log.map((line) => line.kind)).toEqual(["started", "waiting", "ended"]);
+/**
+ * The engine used to stop at a step it had not learned, and these tests proved it by giving it
+ * one. As of D-282 there is no such step: every one of the palette's fourteen is implemented. The
+ * guard stays in the engine for the day a fifteenth is added to the palette before it is built —
+ * a flow must stop with that step's name rather than skip it quietly — and what is checked here is
+ * the state that makes the guard idle, because that is the thing that can change.
+ */
+describe("every step the palette offers, the engine can take", () => {
+  it("leaves nothing in the palette the engine would refuse", () => {
+    expect(STEP_TYPES.filter((type) => !RUNNABLE_STEP_TYPES.includes(type))).toEqual([]);
   });
 
   it("runs nothing for an instance that is already over", async () => {
     const { rows } = await admin.query(
       `select i.id from wfl.instance i join wfl.flow f on f.id = i.flow_id
-        where f.key = $1 and i.status <> 'running' limit 1`,
-      [UNBUILT],
+        where i.status <> 'running' and f.key like 'zz-t0147-%' limit 1`,
     );
     expect(await runInstance(worker, rows[0].id, relations)).toBeNull();
   });
@@ -725,25 +705,6 @@ describe("the dry run a publish needs (REQ-WFL-025, SPIKE-05)", () => {
   it("opens the publish once it has run, and not before", async () => {
     // The evidence above is about this very definition, so the publish is allowed.
     expect(await publishVersion(as(DESIGNER), versionId)).toBe(true);
-  });
-
-  it("fails on a step the engine cannot take, and the publish stays shut", async () => {
-    const broken = await saveDraft(as(DESIGNER), {
-      key: DRY,
-      name: "Deneme kuru",
-      definition: {
-        trigger: { type: "manual" },
-        start: "b1",
-        steps: [
-          { id: "b1", type: "escalate", title: "Yukarı taşı", next: "b2" },
-          { id: "b2", type: "end" },
-        ],
-      },
-    });
-    const report = await dryRunVersion(worker, broken, {}, relations);
-    expect(report.passed).toBe(false);
-    expect(report.failure).toContain("escalate");
-    expect(await errorOf(publishVersion(as(DESIGNER), broken))).toBe("wfl.dry_run_required");
   });
 
   it("fails on a definition that will not parse, instead of throwing", async () => {
@@ -1851,5 +1812,143 @@ describe("the record step (REQ-WFL-010, D-095, D-080)", () => {
         steps: [{ id: "r1", type: "record", action: "set_status" }],
       }),
     ).toThrow(/durum ister/);
+  });
+});
+
+describe("the escalation step (REQ-WFL-006, D-282)", () => {
+  /** Raises the matter to the person above and carries on; nothing waits on it. */
+  const raising = {
+    trigger: { type: "event", event: `${EVENT}_raise` },
+    start: "e1",
+    steps: [
+      {
+        id: "e1",
+        type: "escalate",
+        to: { type: "user", userId: BYSTANDER },
+        subject: "Şantiye kaydı üç gündür girilmedi",
+        next: "e2",
+      },
+      { id: "e2", type: "end" },
+    ],
+  };
+
+  /** Both actions this step uses, called the way the modules' declarations call them. */
+  const runtime = {
+    ...relations,
+    run: async (db: SystemDb, code: string, input: unknown) => {
+      if (code === "task.open") {
+        const task = input as {
+          stepRunId: string;
+          title: string;
+          assigneeUserId: string;
+          priority: string;
+        };
+        const { rows } = await sql<{ id: string }>`
+          select tsk.open_flow_task(${task.stepRunId}::uuid, ${task.title},
+                                    ${task.assigneeUserId}::uuid, ${task.priority}) as id`.execute(
+          db,
+        );
+        return rows[0].id;
+      }
+      if (code === "notification.send") {
+        const note = input as {
+          userId: string;
+          type: string;
+          subject: string;
+          linkPath: string;
+          sourceKey: string;
+        };
+        const { rows } = await sql<{ id: string | null }>`
+          select tsk.notify(${note.userId}::uuid, ${note.type}, ${note.subject}, ${note.linkPath},
+                            ${note.sourceKey}) as id`.execute(db);
+        return rows[0].id;
+      }
+      throw new Error(`unexpected action ${code}`);
+    },
+  };
+
+  let instanceId: string;
+
+  it("tells the person above and carries on, rather than waiting on them", async () => {
+    await publish(RAISING, raising);
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_raise`,
+        id: id(680),
+        record: { schema: "zzw", table: "record", id: id(780) },
+        payload: {},
+      },
+      runtime,
+    );
+    instanceId = started[0];
+
+    // The flow finished; raising something is not waiting for it.
+    expect((await readInstance(as(DESIGNER), instanceId))?.status).toBe("done");
+
+    const { rows: tasks } = await admin.query(
+      `select t.title, t.assignee_user_id, t.priority from tsk.task t
+         join wfl.step_state s on s.id = t.source_step_run_id
+        where s.instance_id = $1`,
+      [instanceId],
+    );
+    expect(tasks).toHaveLength(1);
+    expect(tasks[0].assignee_user_id).toBe(BYSTANDER);
+    expect(tasks[0].priority).toBe("high");
+    expect(tasks[0].title).toBe("Şantiye kaydı üç gündür girilmedi");
+
+    const { rows: notices } = await admin.query(
+      "select user_id, subject from tsk.notification where source_key like 'wfl:escalate:%'",
+    );
+    expect(notices).toHaveLength(1);
+    expect(notices[0].user_id).toBe(BYSTANDER);
+  });
+
+  it("writes in the log who it was raised to", async () => {
+    const log = await readRunLog(as(DESIGNER), instanceId);
+    const raised = log.find((line) => line.stepId === "e1" && line.kind === "left");
+    expect(raised?.detail).toMatchObject({ outcome: "raised", to: BYSTANDER });
+  });
+
+  it("stops the run when there is nobody above to tell", async () => {
+    const versionId = await saveDraft(as(DESIGNER), {
+      key: RAISING,
+      name: "Deneme eskalasyon",
+      definition: {
+        ...raising,
+        trigger: { type: "manual" },
+        steps: [
+          { ...raising.steps[0], to: { type: "role", role: "T0147_NOBODY" } },
+          { id: "e2", type: "end" },
+        ],
+      },
+    });
+    await recordDryRun(as(DESIGNER), { versionId, passed: true, summary: {} });
+    await publishVersion(as(DESIGNER), versionId);
+
+    const orphan = await startInstanceByHand(as(DESIGNER), { flowKey: RAISING });
+    await runInstance(worker, orphan!, runtime);
+    const stopped = await readInstance(as(DESIGNER), orphan!);
+    expect(stopped?.status).toBe("failed");
+    expect(stopped?.failure).toContain("eskalasyonun muhatabı");
+  });
+
+  it("says in a dry run that it would raise it, and opens nothing", async () => {
+    const before = await admin.query(
+      "select count(*)::int as n from tsk.notification where source_key like 'wfl:escalate:%'",
+    );
+    const versionId = await saveDraft(as(DESIGNER), {
+      key: RAISING,
+      name: "Deneme eskalasyon",
+      definition: raising,
+    });
+    const report = await dryRunVersion(worker, versionId, {}, runtime);
+    const after = await admin.query(
+      "select count(*)::int as n from tsk.notification where source_key like 'wfl:escalate:%'",
+    );
+
+    expect(report.passed).toBe(true);
+    expect(report.steps.map((step) => step.stepId)).toEqual(["e1", "e2"]);
+    expect(after.rows[0].n).toBe(before.rows[0].n);
   });
 });

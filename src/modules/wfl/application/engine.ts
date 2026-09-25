@@ -527,6 +527,35 @@ async function walk(
       continue;
     }
 
+    if (step.type === "escalate") {
+      // Raising something is not waiting for it (D-282): the person above is given a task and
+      // told about it, and the flow carries on. Both go through the catalog's actions, so the
+      // engine still writes nobody's task and nobody's notification itself.
+      const above = await ownerOf(db, relations, step.to);
+      if (!above) {
+        const reason = `eskalasyonun muhatabı bulunamadı: ${step.id}`;
+        await sink.leave(stateId, "failed", "no_owner");
+        await sink.end("failed", reason, step.id);
+        return { state: "ended", status: "failed", reason };
+      }
+      await sink.action("task.open", {
+        stepRunId: stateId,
+        title: step.subject,
+        assigneeUserId: above,
+        priority: "high",
+      });
+      await sink.action("notification.send", {
+        userId: above,
+        type: "workflow.escalation",
+        subject: step.subject,
+        linkPath: "/today",
+        sourceKey: `wfl:escalate:${stateId}`,
+      });
+      await sink.leave(stateId, "done", "raised", { to: above });
+      stepId = step.next ?? null;
+      continue;
+    }
+
     if (step.type === "notify") {
       const owner = await ownerOf(db, relations, step.owner);
       if (!owner) {
