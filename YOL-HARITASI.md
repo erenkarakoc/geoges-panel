@@ -45,7 +45,7 @@ yazıldı (D-280). Plan: `docs/features/phase-08-workflow-plan.md` (D-281, sahip
 | Görev | İş ve teslim edilenler | Güncel durum / kalan |
 |---|---|---|
 | TASK-0118 | Yetenek kataloğu ve sözleşme testi: her modül ne yapabildiğini ilan eder, CI ilan ile kodu karşılaştırır | ✅ Tamamlandı; beş modül 25 yetenek ilan etti, test ilk koşuşunda dört gerçek ayrışma buldu |
-| TASK-0117 | Motor çekirdeği: sürümlü tanım, örnek, yürütme, tetikleyiciler, adım paleti, koşullar, kuru mod | 🔨 **Devam ediyor** — on adım teslim edildi (aşağıda); kalan: eşik tetikleyicisi ve altı adım |
+| TASK-0117 | Motor çekirdeği: sürümlü tanım, örnek, yürütme, tetikleyiciler, adım paleti, koşullar, kuru mod | 🔨 **Devam ediyor** — dört tetikleyicinin dördü ve on dört adımın on üçü teslim edildi (aşağıda); kalan tek adım eskalasyon, ne yapacağı size soruldu (OQ-040) |
 | TASK-0119 | Görsel tasarımcı ve soru-cevap (ikisi de aynı JSON'u üretir) | ⬜ Motor bitince kendi planını alacak |
 | TASK-0120 | Onay Merkezi'nin motorun açtığı gerçek kuyruğa bağlanması ve sekiz şablonun gelmesi | ⬜ Motor bitince; şablonlar kendi dilimlerinde etkinleşir |
 
@@ -60,14 +60,19 @@ yazıldı (D-280). Plan: `docs/features/phase-08-workflow-plan.md` (D-281, sahip
 | Tetikleyici: olay | ✅ Yayımlanan akış aynı anda dinlemeye başlıyor; abonelik yayının kendisi tarafından yazılıyor; aynı teslimat ikinci koşu açmıyor |
 | Tetikleyici: saat | ✅ "Her gün 07:30" ya da "her 30 dakika"; her koşu ait olduğu **zaman dilimini** taşıyor |
 | Tetikleyici: elle | ✅ Ayrı bir kapı; tasarım yetkisi istiyor (motorunki istemiyor, çünkü motor sistemin kendisi) |
-| Tetikleyici: eşik | ⬜ Kalan iş |
+| Tetikleyici: eşik | ✅ Olayı herkes gibi duyuyor, sonra yükündeki değer eşiği geçiyor mu diye soruyor; ölçecek şeyi olmayan olay akışı başlatmıyor |
 | Adımlar: başlangıç, koşul, bitiş | ✅ |
 | Adım: onay | ✅ Üç sonuç; gerekçesiz ret/geri gönderme **tablonun kısıtıyla** reddediliyor; karar akışı kendisi yürütmüyor, olay olarak geri geliyor |
 | Adım: görev | ✅ Motor görevi kendi yazmıyor, **kataloğun aksiyonunu** çağırıyor; görev kapanınca akış devam ediyor |
 | Adım: bekleme (süre) | ✅ Bellekte zamanlayıcı değil **veritabanında satır**; sekiz saatlik bekleme yeniden başlatmayı atlatıyor |
 | Adım: bildirim | ✅ Yine kataloğun aksiyonu üzerinden |
 | Adım: eskalasyon | ✅ Onay taşınıyor (kopyalanmıyor); kime taşınacağı zamanlayıcı çaldığında hesaplanıyor; cevaplanmış onay taşınmıyor |
-| Kalan altı adım | ⬜ Paralel dal, birleşme, alt akış, kilit, kayıt oluştur/durum değiştir, her biri için |
+| Adım: kilit | ✅ Bir geçişi kapatıyor ve nedenini söylüyor; aynı akış ikinci kilidi yığmıyor; yalnız sahip ve GM gerekçeyle aşabiliyor, aşma denetim kaydına yazılıyor |
+| Adım: paralel dal + birleşme | ✅ Her yol kendi koşusu (çocuk örnek): kendi günlüğü, kendi beklemesi, kendi adım sınırı; son dal bitince ana akış devam ediyor; hata veren dal ana akışı kendi gerekçesiyle durduruyor |
+| Adım: her biri için | ✅ Liste, kaydın sahibi modülün yeteneği; her öğe bir dal; boş liste hata değil, uzun liste akışı durduruyor; iç içe kullanım tanımda reddediliyor |
+| Adım: alt akış | ✅ Başka bir yayımlanmış akışı çocuk olarak başlatıp bekliyor; üç kademe derinlik sınırı; yayımlanmamış akış koşuyu durduruyor |
+| Adım: kayıt oluştur / durum değiştir | ✅ Motor kendi yazmıyor, modülün aksiyonunu çağırıyor ve hangi akış/sürüm/adım sorduğunu iletiyor; defteri kesinleştirmeyi modül reddediyor, koşu modülün sözleriyle duruyor |
+| Adım: eskalasyon (ayrı adım) | ⬜ Tek kalan adım — ne yapacağı tanımlı değil (OQ-040); onay adımının kendi eskalasyonu zaten çalışıyor |
 | Koşullar: alan | ✅ Kaydın verisiyle değerlendiriliyor; hangi daldan neden gidildiği günlükte |
 | Koşullar: geçmişe bakan | ✅ Sayım sorgusu, **her seferinde taze**, kendi süre sınırıyla (2 sn); sınır aşılırsa akış sessizce "hayır" demiyor, **gerekçesiyle duruyor** |
 | Kuru mod (deneme çalıştırması) | ✅ **Gerçek çalışmanın ta kendisi**: adımın yaptığı şey bir portun arkasında, deneme hiçbir şey yazmayan bir port veriyor |
@@ -198,7 +203,7 @@ Fazın yapım işi bitti. Kalan üç şeyin hiçbiri kod işi değil: **M1 turu*
 
 ## Buradan sonraki sıra
 
-1. **Motorun kalan işi (TASK-0117):** eşik tetikleyicisi, yedi adım ve pencereli koşullar.
+1. **Motorun kalan işi (TASK-0117):** yalnız eskalasyon adımı; ne yapması gerektiği OQ-040 olarak sizde.
 2. **TASK-0119 ve TASK-0120:** görsel tasarımcı, ve Onay Merkezi'nin motorun açtığı gerçek kuyruğa bağlanması.
 3. **TASK-0111 — M1:** kontrol listesi hazır, tur sizde. Notlarınız kayda girer (düzeltme → görev, kapsam → CHG) ve Faz 07 kapanır.
 4. **Faz 09'da açılacak arama işleri:** modüller kendi kaynaklarını kaydedince gerçek kayıtlarla kabul, ve tek bir sözcüğü çok sayıda kaydın paylaştığı durumda sıralama.

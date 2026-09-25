@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2026-09-25 — The engine's last five pieces, and the one question left (TASK-0117, steps 11-14)
+
+- **The threshold trigger.** A threshold flow hears the event like anybody else and then asks whether what it carries crosses the line — "when a price changes by more than ten per cent". There is no standing query behind it, because the event brings the value with it (D-103), and an event with nothing to measure starts nothing rather than guessing.
+- **The dependency lock** (migration 0054). A lock does not delete a record or hide it: it stops one transition and says why, which is what a screen shows the person who is refused. Only the owner layer or the general manager may pass one, only with a reason, and the audit log keeps who passed which lock and why — a lock that can be stepped over quietly is not a lock (REQ-WFL-030, D-084).
+- **Parallel paths and the join** (migration 0055), and the shape that decides: **a branch is a child run**. It has its own log, its own waiting, its own step limit; the parent carries on when the last branch finishes. One mechanism then serves four steps — parallel, join, for-each and sub-flow — instead of four mechanisms that drift apart. A branch that fails stops the parent with the branch's own reason rather than a generic one.
+- **For each** (REQ-WFL-009): the list comes from the module that owns the records, through the catalog. One branch per item; an empty list is not a failure; a list longer than the engine allows stops the run rather than opening a thousand tasks; and a for-each inside a for-each is refused by the definition, because one level is what was agreed (D-096).
+- **Sub-flow** (migration 0056): another published flow started as a child and waited for, three levels deep at most. An unpublished flow stops the run rather than waiting for something that will never start.
+- **Create a record / change its state** (D-095): the engine writes nothing itself. It calls the owning module's action and passes which flow, version and step is asking, so a module that refuses to finalise a ledger refuses in its own words and the run stops carrying them (D-080).
+- What is left is one step, and it is a question rather than work: REQ-WFL-006 lists "escalation" as a step of its own, while an approval already escalates itself. What a standalone escalation step should do is written nowhere, so it is OQ-040 with a recommendation rather than a guess in code.
+
 ## 2026-09-25 — Conditions that look back (TASK-0117, step 10)
 
 - A condition can now count: how many times this flow has run for this record in the last thirty days, how many approvals came back. It is a counting query rather than a field, which is why it has a shape of its own and a time limit of its own.
