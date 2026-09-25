@@ -261,7 +261,7 @@ Fazın yapım işi bitti. Kalan üç şeyin hiçbiri kod işi değil: **M1 turu*
 
 1. **Faz 08 turu (sizde):** giriş yapıp bir şablonun kopyasını alın ya da yeni akış açın, bir adımın sorularını cevaplayın, denemeyi çalıştırıp yayımlayın; sonra Onay Merkezi'nde bir onay verin ve çalışma günlüğüne bakın. TASK-0119 ve TASK-0120'nin kalite kapısı bu tur.
 2. **TASK-0111 — M1:** kontrol listesi hazır, tur sizde. Notlarınız kayda girer (düzeltme → görev, kapsam → CHG) ve Faz 07 kapanır.
-3. **Faz 09 — ilk dilim** (projeler, şantiyeler, günlük saha kaydı): soru turu ve plan önce gelir; çıkış şartı olarak pilot şantiye ve kullanıcıları sizin adlandırmanız ve barındırma kararı var (D-216, D-245).
+3. **Faz 09 — ilk dilim** (projeler, şantiyeler, günlük saha kaydı): soru turu 25 Eylül'de yapıldı (D-287…D-290); plan onayınızı bekliyor (D-291, `docs/features/phase-09-slice-1-plan.md`). On bir görev: üretim tanımları, firma kartı, projeler/şantiyeler/duvarlar, personel kartı, malzeme ve lokasyonlar, varlık kartı, günlük saha kaydı, şantiye detayı ve "Niye zarardayız?", resmi günlük rapor, "Bugün"ün şantiye göstergeleri, pilot örnek verisi. Pilot tamamen örnekle (D-290); barındırma kararı fazın çıkış şartı olarak duruyor.
 4. **Faz 09'da açılacak arama işleri:** modüller kendi kaynaklarını kaydedince gerçek kayıtlarla kabul, ve tek bir sözcüğü çok sayıda kaydın paylaştığı durumda sıralama.
 5. **TASK-0113'ün kalan kabulü:** barındırma geldiğinde ana ekrana kurulum ve gerçek cihazda bildirim.
 

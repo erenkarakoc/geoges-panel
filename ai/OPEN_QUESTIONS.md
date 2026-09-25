@@ -4,6 +4,15 @@ Last updated: 2026-09-25 · Format: `OQ-NNN` · Blocking = blocks the stated pha
 
 IDs are never reused. OQ-018 and OQ-019 were never assigned (numbering gap, no missing records).
 
+## Phase 09 — slice 1 question round (ANSWERED 2026-09-25)
+
+| ID | Category | Question | Answer | Blocks |
+|---|---|---|---|---|
+| OQ-041 | Data model / integrations | The daily log's timesheet, consumption and equipment sections and the project card rest on lists owned by modules that are not built yet (personnel — HR, materials — INV, assets — EQP, firms — CRM). What happens to those sections in Phase 09? | **ANSWERED → D-287:** build the full versions of those cards, one after another, each in its own module; the daily log section arrives when its card is ready | — |
+| OQ-042 | Integrations | Which weather service fills the daily log's weather (REQ-SIT-006)? | **ANSWERED → D-288:** Open-Meteo, manual entry when it does not answer | — |
+| OQ-043 | Integrations | The official daily report can be sent to the client by e-mail (REQ-RPT-021), but no mail provider or domain is chosen (OQ-015). What ships in Phase 09? | **ANSWERED → D-289:** generate and download now, with the "sent" mark; e-mail sending comes when OQ-015 is answered | — |
+| OQ-044 | Business requirements | Phase 09's exit asks the owner to name the pilot site and pilot users (D-216). When? | **ANSWERED → D-290:** entirely with samples — the pilot site and people are sample data defined in the seed | — |
+
 ## Phase 06 — search validation
 
 | ID | Category | Question | Proposed answer | Blocks |

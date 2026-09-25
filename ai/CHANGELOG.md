@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2026-09-25 — Phase 09 opens: the question round, and a plan waiting for approval
+
+- All 84 requirements the first slice builds on (PRJ, SIT, RPT, ADM) are CONFIRMED, and so are its schema and its main screen, so the question round asked only what nothing on record answers. Four questions, answered the same day:
+  - **The cards the daily log rests on are built in full, one after another (D-287).** Personnel, materials and locations, assets and firms live in modules whose slices come later; the owner chose their full cards now over stubs or postponed sections. The line is drawn at the card: every field, data class and card rule now; payroll, stock movements, depreciation and the current account stay in their slices, and the card's tabs for them say so.
+  - Weather from Open-Meteo, typed when it does not answer (D-288).
+  - The official daily report ships as a download with a "sent" mark; e-mail sending waits for a mail provider (D-289, OQ-015).
+  - The pilot runs entirely on samples, which is how D-216's naming condition is met for this slice (D-290).
+- **The plan** (`docs/features/phase-09-slice-1-plan.md`, D-291 PROPOSED): eleven tasks, TASK-0121…TASK-0131, from the production definitions to the pilot's sample data, with the daily site log in the middle once every card it needs exists. "Niye zarardayız?" is built in this slice under its own rule — a money factor that cannot be computed yet says "hesaplanamadı", never zero.
+- Nothing is built until the plan is approved.
+
 ## 2026-09-25 — Phase 08's own acceptance, run the way a person would (TASK-0120)
 
 - The roadmap asks for three default company flows — daily log approval, material issue, payment approval — to be defined and **executed through the engine**, and for the approval screen to show the engine's real queue. A database test now does exactly that: each flow is copied from the template the panel ships, dry-run by the engine, published through the same gate a person uses, triggered by the event its module will publish, and answered from the queue of whoever holds the role it addresses.

@@ -47,6 +47,8 @@ CODE ALLOWED:        Phase 07 permits product code (ADR-007), but only after the
 
 ## LAST COMPLETED TASK
 
+2026-09-25 (latest): Phase 09 opened — its question round answered by the owner (D-287 full master cards built one after another, D-288 Open-Meteo, D-289 report as a download first, D-290 pilot entirely on samples) and its plan written (`docs/features/phase-09-slice-1-plan.md`, D-291 PROPOSED, TASK-0121…TASK-0131). No slice code until the plan is approved.
+
 2026-09-25 (later): TASK-0120 built — the approval centre's real queue, templates with their copy rules, the working log, the "Yeni akışlar" tab and the eight end-to-end chains as 27 templates; decisions D-284 (the dry run is asked of the worker), D-285 (the task's build shape) and D-286 (the monthly clock trigger). Owed: the owner's walk of the four screens.
 
 2026-09-25: TASK-0117 DONE (the engine, twelve migrations) and TASK-0119 built in five steps (the flows list, the designer's canvas and question panel, the dry run, the publish, and the header's copy/close/version history). D-282 (the escalation step), D-283 (the designer's build shape, owner-approved) and D-284 (the dry run is asked of the worker, not run in the request) recorded. Local: 355 unit tests, 337 database tests, lint, types, format, build. Owed: the owner's walk of `/admin/workflows`.
