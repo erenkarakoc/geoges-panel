@@ -10,7 +10,7 @@ import {
   findNavigationItemByHref,
   getVisibleNavigation,
   navigationRegistry,
-  workCounts,
+  noWorkCounts,
   pickNavigationItems,
   workNavigation,
 } from "@/platform/navigation/navigation-registry";
@@ -58,11 +58,10 @@ describe("workNavigation", () => {
     }
   });
 
-  it("counts badges only for entries that exist", () => {
-    const ids = new Set(workNavigation.map((item) => item.id));
-    for (const id of Object.keys(workCounts)) {
-      expect(ids.has(id)).toBe(true);
-    }
+  it("shows no badge until somebody reads the real numbers", () => {
+    // The shell is handed counts per person; platform holds none of its own, so a badge can never
+    // be a number nobody asked a module for.
+    expect(noWorkCounts).toEqual({});
   });
 });
 

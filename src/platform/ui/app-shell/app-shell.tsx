@@ -9,6 +9,7 @@ import {
   getVisibleNavigation,
   navigationRegistry,
   workNavigation,
+  type WorkCounts,
 } from "@/platform/navigation/navigation-registry";
 import {
   resolveOpenGroups,
@@ -82,6 +83,12 @@ type AppShellProps = {
   headerActions?: ReactNode;
   /** The notification bell (SCR-015), rendered by TSK. */
   notifications?: ReactNode;
+  /**
+   * What is waiting in the work layer, per entry id, read for this person by whoever renders the
+   * shell: platform may not read a module's rows, and the badge has to be the real number — the
+   * same one "Bugün" and the approval centre show (REQ-WFL-012).
+   */
+  counts?: WorkCounts;
   children: ReactNode;
 };
 
@@ -91,6 +98,7 @@ export async function AppShell({
   contextBar,
   headerActions,
   notifications,
+  counts,
   children,
 }: AppShellProps) {
   const visibleGroups = getVisibleNavigation(navigationRegistry, access, (code) =>
@@ -122,6 +130,7 @@ export async function AppShell({
             style={sidebarWidthStyle}
           >
             <AppSidebar
+              counts={counts}
               defaultOpenGroupIds={openGroupIds}
               visibleItemIds={visibleItemIds}
               visibleWorkIds={visibleWorkIds}
@@ -150,6 +159,7 @@ export async function AppShell({
               </ScrollArea>
               {/* Phones navigate from here; on desktop the rail does the same job (D-069). */}
               <MobileBottomBar
+                counts={counts}
                 primaryAction={seat.primaryAction}
                 visibleItemIds={visibleItemIds}
                 visibleWorkIds={visibleWorkIds}

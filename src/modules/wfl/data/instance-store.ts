@@ -323,6 +323,8 @@ export type WaitingApproval = {
   createdAt: Date;
   /** How the step addressed it (D-097); the screen turns this into "why it is with you". */
   ownerRule: unknown;
+  /** Whose approval it is, when it belongs to one person; null when it belongs to a group. */
+  ownerUserId: string | null;
   /** True when it is in this queue through a delegation rather than the person's own place. */
   delegated: boolean;
   /** Which flow and version opened it, so the queue can say where it came from. */
@@ -354,6 +356,7 @@ export function readMyApprovals(identity: DbIdentity) {
       record_id: string | null;
       created_at: Date;
       owner_rule: unknown;
+      owner_user_id: string | null;
       delegated: boolean;
       flow_key: string | null;
       flow_name: string | null;
@@ -371,6 +374,7 @@ export function readMyApprovals(identity: DbIdentity) {
       instanceId: row.instance_id,
       lastReturnReason: row.last_return_reason,
       ownerRule: row.owner_rule,
+      ownerUserId: row.owner_user_id,
       record:
         row.record_schema && row.record_table && row.record_id
           ? { schema: row.record_schema, table: row.record_table, id: row.record_id }

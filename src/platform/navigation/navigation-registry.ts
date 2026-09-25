@@ -135,7 +135,13 @@ export const workNavigation: readonly NavigationItem[] = [
  * permission-filtered counts; the sample numbers were removed at the owner's request (D-106).
  * A missing key shows no badge.
  */
-export const workCounts: Readonly<Record<string, number>> = {};
+export type WorkCounts = Readonly<Record<string, number>>;
+
+/**
+ * No count at all, which is what a screen shows before anybody asks the modules: the real numbers
+ * are read per person and handed to the shell, because platform may not read a module's rows.
+ */
+export const noWorkCounts: WorkCounts = {};
 
 /**
  * Module groups of the functional scope §40.1, unchanged in name and order. The rail shows one

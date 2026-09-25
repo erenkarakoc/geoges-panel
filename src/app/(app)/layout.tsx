@@ -6,6 +6,7 @@ import {
   readAuthSession,
   readPanelSession,
   resolveProtectedPageRedirect,
+  signInIdentity,
 } from "@/modules/iam";
 import { UserMenu } from "@/modules/iam/ui/user-menu";
 import { NotificationBell } from "@/modules/tsk/ui/notification-bell";
@@ -16,12 +17,23 @@ import {
   previewRoles,
   resolvePreviewRole,
 } from "@/platform/access/preview-roles";
+import { readMyApprovalCount } from "@/modules/wfl";
+import { isModuleEnabled } from "@/platform/features/features";
 import { AppShell } from "@/platform/ui/app-shell/app-shell";
 
 // Pre-IAM: a sample seat decides what the shell shows. Only development may switch seats (D-061);
 // every other environment renders the owner seat, which sees everything. Real roles and
 // permissions come from IAM (Phase 04).
 const roleSwitchingAllowed = process.env.NODE_ENV === "development";
+
+/** What is waiting in the work layer for whoever is signed in. */
+async function workCountsFor(): Promise<Record<string, number>> {
+  if (!isModuleEnabled("WFL")) return {};
+  const signedIn = await signInIdentity();
+  if (!signedIn) return {};
+  const approvals = await readMyApprovalCount(signedIn.identity);
+  return approvals > 0 ? { approvals } : {};
+}
 
 export default async function AppLayout({ children, context, modal }: LayoutProps<"/">) {
   const session = await readAuthSession();
@@ -41,9 +53,15 @@ export default async function AppLayout({ children, context, modal }: LayoutProp
     roleSwitchingAllowed,
   );
 
+  // The badge is the real number, read for this person: the work layer, "Bugün" and the approval
+  // centre all show the same one (REQ-WFL-012). Platform may not read a module's rows, so the count
+  // is asked here and handed to the shell.
+  const counts = await workCountsFor();
+
   return (
     <AppShell
       access={createPreviewRolePolicy(role)}
+      counts={counts}
       contextBar={context}
       notifications={<NotificationBell />}
       headerActions={

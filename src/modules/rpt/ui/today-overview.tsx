@@ -12,7 +12,12 @@ import {
   FramePanel,
   FrameTitle,
 } from "@/components/ui/frame";
-import { type TodayWork, type TodayWorkTone, todayWorkBySeat } from "@/modules/rpt/ui/today-work";
+import {
+  type TodayWork,
+  type TodayWorkRow,
+  type TodayWorkTone,
+  todayWorkBySeat,
+} from "@/modules/rpt/ui/today-work";
 import { type AccessPolicy, filterByPermission } from "@/platform/access/access-policy";
 import type { PreviewRole } from "@/platform/access/preview-roles";
 import { type Indicator, indicatorRegistry } from "@/platform/today/indicator-registry";
@@ -33,8 +38,15 @@ function SampleBadge() {
   );
 }
 
-/** The seat's work for today: rows that each reach their own source (§3.3). */
-function WorkBlock({ work }: { work: TodayWork }) {
+/**
+ * The seat's work for today: rows that each reach their own source (§3.3).
+ *
+ * `real` rows come from a module that really has work waiting — today that is the approval centre —
+ * and they are drawn first, above the sample rows, because a real number must not sit under made-up
+ * ones. The "örnek veri" label belongs to the sample rows alone.
+ */
+function WorkBlock({ work, real }: { work: TodayWork; real: readonly TodayWorkRow[] }) {
+  const rows = [...real, ...work.rows];
   return (
     <section aria-label={work.title} className="min-w-0">
       <Frame className="h-full">
@@ -46,8 +58,8 @@ function WorkBlock({ work }: { work: TodayWork }) {
           </div>
           <FrameDescription>{work.lead}</FrameDescription>
         </FrameHeader>
-        {work.rows.length > 0 ? (
-          work.rows.map((row) => (
+        {rows.length > 0 ? (
+          rows.map((row) => (
             <FramePanel className="p-0" key={row.id}>
               <Link
                 className="flex items-center gap-3 px-5 py-3 transition-colors hover:bg-accent/50"
@@ -114,8 +126,34 @@ function IndicatorGrid({ indicators }: { indicators: readonly Indicator[] }) {
  * a fold. Charts and the site summary were taken off this screen (owner 2026-09-17).
  * The page name is the header's `h1`, so the body starts with the date instead of a heading.
  */
-export function TodayOverview({ access, seat }: { access: AccessPolicy; seat: PreviewRole }) {
+export function TodayOverview({
+  access,
+  seat,
+  waitingApprovals = 0,
+}: {
+  access: AccessPolicy;
+  seat: PreviewRole;
+  /** How many approvals are really waiting on this person (REQ-WFL-012). */
+  waitingApprovals?: number;
+}) {
   const work = todayWorkBySeat[seat.id];
+  // The one row here that is not sample data. The number is the same one the work layer's badge and
+  // the approval centre show, because all three ask the database the same question.
+  const real: TodayWorkRow[] =
+    waitingApprovals > 0
+      ? [
+          {
+            href: "/approvals",
+            id: "waiting-approvals",
+            note:
+              waitingApprovals === 1
+                ? "Bir kayıt kararınızı bekliyor"
+                : `${waitingApprovals} kayıt kararınızı bekliyor`,
+            title: "Onayınızı bekleyen kayıt",
+            tone: "warning",
+          },
+        ]
+      : [];
   const indicators = filterByPermission(indicatorRegistry, access);
   const criticalIndicators = indicators.filter((indicator) => indicator.critical);
   const otherIndicators = indicators.filter((indicator) => !indicator.critical);
@@ -129,7 +167,7 @@ export function TodayOverview({ access, seat }: { access: AccessPolicy; seat: Pr
 
       {/* Work and figures share the width from `lg` up, half and half (owner 2026-09-17). */}
       <div className="grid gap-4 lg:grid-cols-2">
-        <WorkBlock work={work} />
+        <WorkBlock real={real} work={work} />
 
         {criticalIndicators.length > 0 ? (
           <section aria-label="Kilit göstergeler" className="flex min-w-0 flex-col gap-3">

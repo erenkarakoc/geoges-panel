@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-25 — The approval centre, with a real queue (TASK-0120, step 2)
+
+- **One record fills the screen, and a decision opens the next** (D-070). No trip through a list between decisions, because deciding is the work.
+- **Every approval says why it is with this person**, in that person's own words: "Genel Müdür rolünü taşıdığınız için sizde", "Şantiyenin sorumlusu olduğunuz için sizde", "Ayşe Yılmaz adına vekâleten sizde". The sentence is written from the rule the flow used and the names the panel knows **today**, so a renamed role does not leave old approvals explaining themselves with the old name — and a name the panel does not know falls back to a sentence, never to a code.
+- **Three outcomes, and a reason that cannot be skipped**: rejecting and sending back open a window that will not submit without one, which is also what the table refuses — so the screen says earlier what the database would say later. A run that has been sent back before says so, with the last reason on the card.
+- **The badge is the real number, in three places at once** (REQ-WFL-012). The work layer's count was a static empty map; the shell now takes counts as a prop, the layout reads them for whoever is signed in, and "Bugün" asks the same question — so the two numbers cannot disagree. That row is also the first real row on "Bugün": it is drawn above the sample ones and carries no "örnek veri" label, because it is not one.
+- What the card cannot show yet is said on the card: a record whose own screen does not exist yet reads "Bu kaydın ekranı henüz yok" rather than offering a link into nothing. Amounts, documents and inconsistencies arrive with the modules that own the records.
+
 ## 2026-09-25 — Why an approval is with you, and approvals that belong to a group (TASK-0120, step 1)
 
 Migration 0057, the first step of the approval centre (D-285).

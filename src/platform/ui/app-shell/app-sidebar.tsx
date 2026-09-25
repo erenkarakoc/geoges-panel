@@ -32,9 +32,10 @@ import {
 } from "@/components/ui/sidebar";
 import {
   navigationRegistry,
+  noWorkCounts,
   pickNavigationItems,
-  workCounts,
   workNavigation,
+  type WorkCounts,
 } from "@/platform/navigation/navigation-registry";
 import { rememberOpenGroups } from "@/platform/navigation/sidebar-group-preference";
 import { SidebarDragRail } from "@/platform/ui/app-shell/sidebar-drag-rail";
@@ -70,10 +71,13 @@ export function AppSidebar({
   visibleItemIds,
   visibleWorkIds,
   defaultOpenGroupIds,
+  counts = noWorkCounts,
 }: {
   visibleItemIds: readonly string[];
   visibleWorkIds: readonly string[];
   defaultOpenGroupIds: readonly string[];
+  /** What is waiting, per work entry; the shell reads the numbers and hands them down. */
+  counts?: WorkCounts;
 }) {
   const pathname = usePathname();
   const { setOpenMobile, state, isMobile } = useSidebar();
@@ -165,7 +169,7 @@ export function AppSidebar({
               <SidebarMenu>
                 {workItems.map((item) => {
                   const isActive = pathname === item.href;
-                  const count = workCounts[item.id];
+                  const count = counts[item.id];
                   return (
                     <SidebarMenuItem key={item.id}>
                       <SidebarMenuButton

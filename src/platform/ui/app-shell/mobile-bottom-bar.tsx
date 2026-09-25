@@ -19,9 +19,10 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   navigationRegistry,
+  noWorkCounts,
   pickNavigationItems,
-  workCounts,
   workNavigation,
+  type WorkCounts,
 } from "@/platform/navigation/navigation-registry";
 import { matchesSearch } from "@/platform/navigation/search-text";
 import { useBottomBandShown } from "@/platform/ui/app-shell/bottom-band";
@@ -41,10 +42,13 @@ export function MobileBottomBar({
   visibleItemIds,
   visibleWorkIds,
   primaryAction,
+  counts = noWorkCounts,
 }: {
   visibleItemIds: readonly string[];
   visibleWorkIds: readonly string[];
   primaryAction: string;
+  /** What is waiting, per work entry; the shell reads the numbers and hands them down. */
+  counts?: WorkCounts;
 }) {
   const pathname = usePathname();
   const bandShown = useBottomBandShown();
@@ -74,7 +78,7 @@ export function MobileBottomBar({
 
   const renderItem = (item: (typeof workItems)[number]) => {
     const isActive = pathname === item.href;
-    const count = workCounts[item.id];
+    const count = counts[item.id];
     return (
       <Link
         aria-current={isActive ? "page" : undefined}

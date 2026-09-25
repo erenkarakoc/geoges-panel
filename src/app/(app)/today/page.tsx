@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { signInIdentity } from "@/modules/iam";
 import { TodayOverview } from "@/modules/rpt/ui/today-overview";
 import { appState } from "@/modules/tsk";
+import { readMyApprovalCount } from "@/modules/wfl";
 import { InstallPrompt } from "@/modules/tsk/ui/install-prompt";
 import {
   createPreviewRolePolicy,
@@ -25,12 +26,19 @@ export default async function TodayPage() {
     cookieStore.get(PREVIEW_ROLE_COOKIE)?.value,
     roleSwitchingAllowed,
   );
-  const signedIn = isModuleEnabled("TSK") ? await signInIdentity() : null;
+  const signedIn = await signInIdentity();
+  // The same question the work layer's badge asks, so the two numbers cannot disagree.
+  const waiting =
+    signedIn && isModuleEnabled("WFL") ? await readMyApprovalCount(signedIn.identity) : 0;
 
   return (
     <>
-      {signedIn ? <InstallPrompt state={await appState()} /> : null}
-      <TodayOverview access={createPreviewRolePolicy(role)} seat={role} />
+      {signedIn && isModuleEnabled("TSK") ? <InstallPrompt state={await appState()} /> : null}
+      <TodayOverview
+        access={createPreviewRolePolicy(role)}
+        seat={role}
+        waitingApprovals={waiting}
+      />
     </>
   );
 }
