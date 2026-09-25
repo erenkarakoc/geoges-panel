@@ -4,7 +4,20 @@ Last updated: 2026-09-25
 
 CURRENT PHASE: PHASE 07 — Foundation Build (its acceptance walks postponed, D-278) → PHASE 08 Workflow Engine
 
-## Latest continuation — Phase 08's four tasks are built; what is left is the owner's own walk
+## Latest continuation — TASK-0122, the firm card, is built (Phase 09 slice 1, step 2)
+
+Written on the owner's Windows machine and committed there as `129166a` (the pre-commit gate first refused it for Prettier on `party-card.tsx` and `party-list.tsx`; fixed and recommitted). CI 36172765624 is green, including the database job's apply → test → full rollback → reapply → test. What exists: migration 0062 (`crm.party`, `crm.party_contact`, the unique tax number, the similar-name function, the search projection), the `crm` module's domain, store, application and capabilities, the list at `/leads-clients/parties` and the card (SCR-083) at `/leads-clients/parties/[id]`, and `db/samples/0002_crm_parties.sql`. The plan is in `docs/features/phase-09-slice-1-plan.md` under "TASK-0122".
+
+**Seen in the browser:** the list with the samples, and "Firma ekle" finding similar firms — the warning sat at the bottom of the form out of sight and was moved above it, next to the title field.
+
+**What the next session owes.**
+
+- Finish the browser pass: a second card with the same tax number must be refused with the link to the existing card (both the list's form and the card's edit form carry `existingId`). The rule itself is proved by `party.dbtest.ts` and the application asks before inserting.
+- The owner's walk of the list and the card, then TASK-0122 can be DONE.
+- Next in the plan: TASK-0123 (projects and sites), which needs TASK-0121 and TASK-0122.
+- Environment notes: on Windows, `vitest` can fail to start its workers when memory runs out (`spawn UNKNOWN`, exit 3221225773) — stop `next dev` first or run with `--maxWorkers=2`; nothing was wrong with the tests. In a cloud checkout, `npm run records` reports false stale stamps until `git fetch --unshallow`, because a shallow clone has no file history.
+
+## Earlier continuation — Phase 08's four tasks are built; what is left is the owner's own walk
 
 TASK-0118 (the capability catalog), TASK-0117 (the engine), TASK-0119 (the designer) and TASK-0120
 (the approval centre and the templates) are all built. Migrations 0045-0060, seeds 0008-0009. Local:
