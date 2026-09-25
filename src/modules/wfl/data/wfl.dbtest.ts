@@ -16,9 +16,12 @@ import { releaseTestPeople } from "../../../../scripts/db-test-people.mjs";
 import {
   disableFlow,
   publishVersion,
+  readLastDryRun,
   readPublished,
+  readPublishSummary,
   readVersions,
   recordDryRun,
+  requestDryRun,
   saveDraft,
 } from "@/modules/wfl/data/flow-store";
 
@@ -28,6 +31,9 @@ const OUTSIDER = id(2);
 const PEOPLE = [DESIGNER, OUTSIDER];
 const ROLES = ["T0117_OUTSIDER"];
 const KEY = "zz-t0117-approval";
+/** The designer's own flow, so asking for dry runs does not disturb the publish rules above. */
+const DESIGNER_KEY = "zz-t0119-designer";
+const KEYS = [KEY, DESIGNER_KEY];
 
 let admin: pg.Client;
 const as = (userId: string) => ({ userId, actingRoleId: null });
@@ -48,16 +54,26 @@ async function cleanUp() {
   // Publishing a flow writes what the engine listens to (migration 0047); the test takes its own
   // subscriptions back, so a development database does not keep hearing test events.
   await admin.query("delete from core.event_subscription where event_code like 'zz.%'");
+  // What the designer asked the worker to dry run, before the versions it names are gone.
+  await admin.query(
+    `delete from core.scheduled_job
+      where job_type = 'wfl.dry_run'
+        and payload->>'versionId' in (
+          select v.id::text from wfl.flow_version v
+            join wfl.flow f on f.id = v.flow_id where f.key = any($1))`,
+    [KEYS],
+  );
   await admin.query(
     `delete from wfl.dry_run where flow_version_id in (
-       select v.id from wfl.flow_version v join wfl.flow f on f.id = v.flow_id where f.key = $1)`,
-    [KEY],
+       select v.id from wfl.flow_version v join wfl.flow f on f.id = v.flow_id
+        where f.key = any($1))`,
+    [KEYS],
   );
   await admin.query(
-    "delete from wfl.flow_version where flow_id in (select id from wfl.flow where key = $1)",
-    [KEY],
+    "delete from wfl.flow_version where flow_id in (select id from wfl.flow where key = any($1))",
+    [KEYS],
   );
-  await admin.query("delete from wfl.flow where key = $1", [KEY]);
+  await admin.query("delete from wfl.flow where key = any($1)", [KEYS]);
   await releaseTestPeople(admin, PEOPLE);
   await admin.query("delete from iam.role_assignment where user_id = any($1::uuid[])", [PEOPLE]);
   await admin.query("delete from iam.user where id = any($1::uuid[])", [PEOPLE]);
@@ -230,5 +246,84 @@ describe("somebody who may not design flows", () => {
 
   it("cannot publish one", async () => {
     expect(await errorOf(publishVersion(as(OUTSIDER), draftId))).toBe("wfl.design_permission");
+  });
+});
+
+/**
+ * What the designer does with the engine's evidence (TASK-0119, D-284). The dry run itself runs on
+ * the worker, so what is proved here is the asking and the reading: one question per definition, an
+ * answer that says whether it is still about this definition, and nothing at all for somebody who
+ * may not design flows.
+ */
+describe("the designer asking for a dry run", () => {
+  let versionId: string;
+
+  const theirs = (title: string) => ({
+    key: DESIGNER_KEY,
+    trigger: { type: "manual" },
+    start: "s1",
+    steps: [{ id: "s1", type: "approval", title, owner: { type: "role", role: "SAH" } }],
+  });
+
+  it("asks the worker once for the same definition, and again for a changed one", async () => {
+    versionId = await saveDraft(as(DESIGNER), {
+      key: DESIGNER_KEY,
+      name: "Tasarımcı deneme akışı",
+      definition: theirs("İlk hâli"),
+    });
+
+    const first = await requestDryRun(as(DESIGNER), versionId);
+    expect(first?.asked).toBe(true);
+    // The same definition is the same question; the key is the version and its content hash.
+    expect((await requestDryRun(as(DESIGNER), versionId))?.asked).toBe(false);
+
+    const { rows } = await admin.query(
+      `select payload from core.scheduled_job
+        where job_type = 'wfl.dry_run' and payload->>'versionId' = $1`,
+      [versionId],
+    );
+    expect(rows).toHaveLength(1);
+
+    await saveDraft(as(DESIGNER), {
+      key: DESIGNER_KEY,
+      name: "Tasarımcı deneme akışı",
+      definition: theirs("Değişmiş hâli"),
+    });
+    const afterChange = await requestDryRun(as(DESIGNER), versionId);
+    expect(afterChange?.asked).toBe(true);
+    expect(afterChange?.hash).not.toBe(first?.hash);
+  });
+
+  it("reads the last answer and says whether it is still about this definition", async () => {
+    await recordDryRun(as(DESIGNER), {
+      versionId,
+      passed: true,
+      summary: { ends: "done", steps: [{ stepId: "s1", type: "approval", outcome: "waiting" }] },
+    });
+    const fresh = await readLastDryRun(as(DESIGNER), versionId);
+    expect(fresh?.passed).toBe(true);
+    expect(fresh?.current).toBe(true);
+
+    await saveDraft(as(DESIGNER), {
+      key: DESIGNER_KEY,
+      name: "Tasarımcı deneme akışı",
+      definition: theirs("Bir daha değişti"),
+    });
+    const stale = await readLastDryRun(as(DESIGNER), versionId);
+    expect(stale?.current).toBe(false);
+  });
+
+  it("summarises what a publish would mean", async () => {
+    const summary = await readPublishSummary(as(DESIGNER), versionId);
+    expect(summary?.version).toBe(1);
+    // Nothing is live yet, so nothing carries on with an older version.
+    expect(summary?.liveVersion).toBeNull();
+    expect(summary?.runningOnLive).toBe(0);
+  });
+
+  it("answers nothing to somebody who may not design flows", async () => {
+    expect(await requestDryRun(as(OUTSIDER), versionId)).toBeNull();
+    expect(await readLastDryRun(as(OUTSIDER), versionId)).toBeNull();
+    expect(await readPublishSummary(as(OUTSIDER), versionId)).toBeNull();
   });
 });

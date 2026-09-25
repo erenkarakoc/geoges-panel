@@ -3,7 +3,14 @@
 import { revalidatePath } from "next/cache";
 
 import { AccessDeniedError, signInIdentity } from "@/modules/iam";
-import { parseDefinition, writeDraft } from "@/modules/wfl";
+import {
+  askDryRun,
+  lastDryRun,
+  parseDefinition,
+  publishFlow,
+  publishSummary,
+  writeDraft,
+} from "@/modules/wfl";
 
 /**
  * Saving what the designer has on screen (TASK-0119, SCR-196).
@@ -38,4 +45,141 @@ export async function saveFlowDraftAction(input: {
 
   revalidatePath(`/admin/workflows/${input.key}`);
   return { error: null, savedAt: Date.now() };
+}
+
+/** What a refusal from the database means in Turkish; anything else is a fault, not an answer. */
+function refusal(error: unknown): string | null {
+  const hint = (error as { hint?: string }).hint;
+  if (hint === "wfl.design_permission") return "Akış tasarlama yetkiniz yok.";
+  if (hint === "wfl.dry_run_required") {
+    return "Bu tanım deneme çalıştırmasından geçmedi; önce denemeyi çalıştırın.";
+  }
+  if (hint === "wfl.not_a_draft") return "Yayımlanmış bir sürüm yeniden yayımlanmaz.";
+  if (hint === "wfl.no_version") return "Böyle bir akış sürümü yok.";
+  return null;
+}
+
+export type DryRunState = {
+  error: string | null;
+  /** Whether a run has been asked for and is not answered yet. */
+  waiting: boolean;
+  passed: boolean | null;
+  /** Whether the answer is about the definition as it stands now. */
+  current: boolean;
+  steps: { stepId: string; type: string; outcome: string; owner?: string | null }[];
+  ends: string | null;
+  failure: string | null;
+  at: number | null;
+};
+
+const NOTHING: DryRunState = {
+  at: null,
+  current: false,
+  ends: null,
+  error: null,
+  failure: null,
+  passed: null,
+  steps: [],
+  waiting: false,
+};
+
+type Summary = {
+  steps?: { stepId: string; type: string; outcome: string; owner?: string | null }[];
+  ends?: string;
+  failure?: string | null;
+};
+
+function evidenceState(
+  evidence: {
+    passed: boolean;
+    current: boolean;
+    summary: unknown;
+    createdAt: Date;
+  } | null,
+): DryRunState {
+  if (!evidence) return { ...NOTHING, waiting: true };
+  const summary = (evidence.summary ?? {}) as Summary;
+  return {
+    at: evidence.createdAt.getTime(),
+    current: evidence.current,
+    ends: summary.ends ?? null,
+    error: null,
+    failure: summary.failure ?? null,
+    passed: evidence.passed,
+    steps: summary.steps ?? [],
+    waiting: !evidence.current,
+  };
+}
+
+/**
+ * Asks for a dry run (REQ-WFL-025). The worker runs the engine, so this returns what is known now
+ * and the screen asks again in a moment — a dry run is the engine's own loop and the engine does
+ * not run inside a request (D-284).
+ */
+export async function runDryRunAction(versionId: string): Promise<DryRunState> {
+  const signedIn = await signInIdentity();
+  if (!signedIn) return { ...NOTHING, error: "Oturum kapalı." };
+  try {
+    const asked = await askDryRun(signedIn.identity, versionId);
+    if (!asked) return { ...NOTHING, error: "Akış tasarlama yetkiniz yok." };
+    return evidenceState(asked.evidence);
+  } catch (error) {
+    if (error instanceof AccessDeniedError) return { ...NOTHING, error: error.message };
+    const said = refusal(error);
+    if (said) return { ...NOTHING, error: said };
+    throw error;
+  }
+}
+
+/** What the dry run found, for the screen that is waiting for the worker to answer. */
+export async function readDryRunAction(versionId: string): Promise<DryRunState> {
+  const signedIn = await signInIdentity();
+  if (!signedIn) return { ...NOTHING, error: "Oturum kapalı." };
+  return evidenceState(await lastDryRun(signedIn.identity, versionId));
+}
+
+export type PublishSummary = {
+  error: string | null;
+  version: number | null;
+  liveVersion: number | null;
+  runningOnLive: number;
+};
+
+/** What the confirmation window summarises before a publish (REQ-WFL-023, REQ-WFL-024). */
+export async function readPublishSummaryAction(versionId: string): Promise<PublishSummary> {
+  const signedIn = await signInIdentity();
+  if (!signedIn) {
+    return { error: "Oturum kapalı.", liveVersion: null, runningOnLive: 0, version: null };
+  }
+  const summary = await publishSummary(signedIn.identity, versionId);
+  if (!summary) {
+    return {
+      error: "Böyle bir akış sürümü yok.",
+      liveVersion: null,
+      runningOnLive: 0,
+      version: null,
+    };
+  }
+  return { error: null, ...summary };
+}
+
+export type PublishResult = { error: string | null; published: boolean };
+
+/** Publishes the draft; the database refuses it without a passed dry run of this definition. */
+export async function publishFlowAction(input: {
+  key: string;
+  versionId: string;
+}): Promise<PublishResult> {
+  const signedIn = await signInIdentity();
+  if (!signedIn) return { error: "Oturum kapalı.", published: false };
+  try {
+    const published = await publishFlow(signedIn.identity, input.versionId);
+    revalidatePath(`/admin/workflows/${input.key}`);
+    return { error: null, published };
+  } catch (error) {
+    if (error instanceof AccessDeniedError) return { error: error.message, published: false };
+    const said = refusal(error);
+    if (said) return { error: said, published: false };
+    throw error;
+  }
 }

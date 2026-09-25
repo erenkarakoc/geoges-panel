@@ -1,6 +1,7 @@
 import { sql } from "kysely";
 
 import { runAsUser, type DbIdentity } from "@/platform/db";
+import { scheduleJob } from "@/platform/db/events";
 import type { SystemDb } from "@/platform/jobs/types";
 
 /** Re-exported for the application layer, which may not name the database module itself. */
@@ -182,6 +183,106 @@ export function readFlows(identity: DbIdentity) {
       publishedAt: row.published_at,
       disabledAt: row.disabled_at,
     }));
+  });
+}
+
+/** The job type the designer's dry run is run by; the engine only runs on the worker (D-284). */
+export const DRY_RUN_JOB = "wfl.dry_run";
+
+export type DryRunEvidence = {
+  id: string;
+  passed: boolean;
+  /** Whether this evidence is of the definition as it stands now (content hash, migration 0045). */
+  current: boolean;
+  summary: unknown;
+  createdAt: Date;
+};
+
+/**
+ * Asks for a dry run of this version (REQ-WFL-025, D-284).
+ *
+ * The engine runs on the worker's connection and request code never holds one, so the designer does
+ * not run the dry run itself: it asks, the worker runs it within a tick or two, and the evidence
+ * row is what the screen then reads. The key is the version and its content hash, so pressing the
+ * button twice on the same definition asks for one run, and a changed definition is a new question.
+ */
+export async function requestDryRun(
+  identity: DbIdentity,
+  versionId: string,
+  context: Record<string, unknown> = {},
+): Promise<{ asked: boolean; hash: string } | null> {
+  return runAsUser(identity, async (db) => {
+    // Reading the version at all needs the design permission (migration 0045), so this is the
+    // permission check as well as the lookup: without it there is nothing to schedule for.
+    const { rows } = await sql<{ content_hash: string }>`
+      select content_hash from wfl.flow_version where id = ${versionId}::uuid`.execute(db);
+    const hash = rows[0]?.content_hash;
+    if (!hash) return null;
+
+    const asked = await scheduleJob(db, {
+      type: DRY_RUN_JOB,
+      runAt: new Date(),
+      key: `${DRY_RUN_JOB}:${versionId}:${hash}`,
+      payload: { versionId, context },
+    });
+    return { asked, hash };
+  });
+}
+
+/** What the last dry run of this version found, and whether it was of the definition as it is. */
+export function readLastDryRun(identity: DbIdentity, versionId: string) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{
+      id: string;
+      passed: boolean;
+      summary: unknown;
+      created_at: Date;
+      current: boolean;
+    }>`select r.id, r.passed, r.summary, r.ran_at as created_at,
+              (r.content_hash = v.content_hash) as current
+         from wfl.dry_run r
+         join wfl.flow_version v on v.id = r.flow_version_id
+        where r.flow_version_id = ${versionId}::uuid
+        order by r.ran_at desc
+        limit 1`.execute(db);
+    const row = rows[0];
+    if (!row) return null;
+    return {
+      id: row.id,
+      passed: row.passed,
+      current: row.current,
+      summary: row.summary,
+      createdAt: row.created_at,
+    } satisfies DryRunEvidence;
+  });
+}
+
+/**
+ * What the publish confirmation has to say before anybody presses it (REQ-WFL-023, REQ-WFL-024):
+ * which version is live today and how many runs would carry on with it. A running instance is bound
+ * to the version it started on and stays there, which is the sentence the dialog has to show.
+ */
+export function readPublishSummary(identity: DbIdentity, versionId: string) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{
+      version: number;
+      live_version: number | null;
+      live_running: string | null;
+    }>`select v.version,
+              live.version as live_version,
+              (select pg_catalog.count(*) from wfl.instance i
+                where i.flow_version_id = live.id and i.status = 'running') as live_running
+         from wfl.flow_version v
+         left join wfl.flow_version live
+                on live.flow_id = v.flow_id and live.status = 'published'
+        where v.id = ${versionId}::uuid`.execute(db);
+    const row = rows[0];
+    if (!row) return null;
+    return {
+      version: Number(row.version),
+      liveVersion: row.live_version === null ? null : Number(row.live_version),
+      runningOnLive: Number(row.live_running ?? 0),
+    };
   });
 }
 

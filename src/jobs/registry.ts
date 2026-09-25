@@ -11,7 +11,13 @@ import {
   securityAlerts,
   systemWatch,
 } from "@/modules/tsk";
-import { flowClockJob, flowEngine, flowEscalationJob, flowWakeJob } from "@/modules/wfl";
+import {
+  flowClockJob,
+  flowDryRunJob,
+  flowEngine,
+  flowEscalationJob,
+  flowWakeJob,
+} from "@/modules/wfl";
 import type { JobRegistry } from "@/platform/jobs/types";
 import { sendSignal } from "@/platform/signals/hub";
 import { processMailSender } from "@/platform/mail/mail";
@@ -50,6 +56,7 @@ export const jobRegistry: JobRegistry = {
     systemWatch(),
     flowWakeJob(ownerRelations),
     flowClockJob(ownerRelations),
+    flowDryRunJob(ownerRelations),
     flowEscalationJob(ownerRelations),
     ...(searchIndex.length > 0 ? [searchRebuildJob(searchIndex)] : []),
   ],

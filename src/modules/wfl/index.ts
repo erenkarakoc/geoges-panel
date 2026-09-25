@@ -5,10 +5,14 @@
 export {
   disableFlow,
   publishVersion,
+  readLastDryRun,
   readPublished,
+  readPublishSummary,
   readVersions,
   recordDryRun,
+  requestDryRun,
   saveDraft,
+  type DryRunEvidence,
   type FlowSummary,
   type FlowVersion,
   type FlowVersionStatus,
@@ -54,9 +58,18 @@ export {
   type RunResult,
 } from "@/modules/wfl/application/engine";
 export { flowEngine } from "@/modules/wfl/application/engine-subscriber";
-export { listFlows, openFlow, writeDraft } from "@/modules/wfl/application/flows";
+export {
+  askDryRun,
+  lastDryRun,
+  listFlows,
+  openFlow,
+  publishFlow,
+  publishSummary,
+  writeDraft,
+} from "@/modules/wfl/application/flows";
 export { flowWakeJob } from "@/modules/wfl/application/wake-job";
 export { flowClockJob } from "@/modules/wfl/application/clock-job";
+export { flowDryRunJob } from "@/modules/wfl/application/dry-run-job";
 export { flowEscalationJob } from "@/modules/wfl/application/escalation-job";
 export {
   countPasses,

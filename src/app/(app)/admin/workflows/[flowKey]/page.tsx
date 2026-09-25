@@ -2,7 +2,13 @@ import { LockIcon, WorkflowIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { saveFlowDraftAction } from "@/app/(app)/admin/workflows/[flowKey]/actions";
+import {
+  publishFlowAction,
+  readDryRunAction,
+  readPublishSummaryAction,
+  runDryRunAction,
+  saveFlowDraftAction,
+} from "@/app/(app)/admin/workflows/[flowKey]/actions";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -127,12 +133,20 @@ export default async function FlowDesignerPage({
 
   return (
     <FlowDesigner
+      actions={{
+        publish: publishFlowAction,
+        publishSummary: readPublishSummaryAction,
+        readDryRun: readDryRunAction,
+        runDryRun: runDryRunAction,
+      }}
+      dryRun={await readDryRunAction(flow.versionId)}
       flow={{
         key: flow.key,
         name: flow.name,
         version: flow.version ?? 1,
         status: flow.status ?? "draft",
         definition: flow.definition,
+        versionId: flow.versionId,
       }}
       save={saveFlowDraftAction}
       vocabulary={await vocabularyFor(signedIn.identity)}

@@ -1,8 +1,12 @@
 import "server-only";
 
 import {
+  publishVersion,
   readFlowForDesigner,
   readFlows,
+  readLastDryRun,
+  readPublishSummary,
+  requestDryRun,
   saveDraft,
   type DbIdentity,
   type FlowSummary,
@@ -33,4 +37,30 @@ export function writeDraft(
   flow: { key: string; name: string; definition: unknown; singleInstance?: boolean },
 ): Promise<string> {
   return saveDraft(identity, flow);
+}
+
+/**
+ * Asks for a dry run and says what is known now (REQ-WFL-025, D-284). The worker runs it, so what
+ * comes back is either the evidence that already exists for this definition or nothing yet, and the
+ * screen watches for it.
+ */
+export async function askDryRun(identity: DbIdentity, versionId: string) {
+  const asked = await requestDryRun(identity, versionId);
+  if (!asked) return null;
+  return { ...asked, evidence: await readLastDryRun(identity, versionId) };
+}
+
+/** What the last dry run of this version found, for a screen that is waiting for one. */
+export function lastDryRun(identity: DbIdentity, versionId: string) {
+  return readLastDryRun(identity, versionId);
+}
+
+/** What the publish confirmation says before it is pressed (REQ-WFL-023, REQ-WFL-024). */
+export function publishSummary(identity: DbIdentity, versionId: string) {
+  return readPublishSummary(identity, versionId);
+}
+
+/** Publishes the draft. The database refuses it without a passed dry run of this definition. */
+export function publishFlow(identity: DbIdentity, versionId: string) {
+  return publishVersion(identity, versionId);
 }

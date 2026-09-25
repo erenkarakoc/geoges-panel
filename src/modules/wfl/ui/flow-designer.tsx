@@ -27,6 +27,7 @@ import {
 } from "@/modules/wfl/domain/edit";
 import { graphOf, stepLabel, stepTypeLabel, type Outlet } from "@/modules/wfl/domain/graph";
 import { flowCanvasId } from "@/modules/wfl/ui/flow-canvas-id";
+import { FlowActions, type DesignerActions, type DryRunState } from "@/modules/wfl/ui/flow-publish";
 import {
   StepQuestions,
   TriggerQuestions,
@@ -60,6 +61,8 @@ export type DesignerFlow = {
   version: number;
   status: string;
   definition: unknown;
+  /** The version being edited; the dry run and the publish are about this row. */
+  versionId: string;
 };
 
 type SaveAction = (input: {
@@ -89,10 +92,15 @@ export function FlowDesigner({
   flow,
   vocabulary,
   save,
+  actions,
+  dryRun,
 }: {
   flow: DesignerFlow;
   vocabulary: DesignerVocabulary;
   save: SaveAction;
+  actions: DesignerActions;
+  /** What the last dry run of this version found, read on the server before the screen opened. */
+  dryRun: DryRunState;
 }) {
   const [draft, setDraft] = useState<Draft>(
     () => asEditable(flow.definition) ?? { trigger: { type: "manual" }, start: "", steps: [] },
@@ -101,6 +109,8 @@ export function FlowDesigner({
   /** Where a new step would go, while the palette is open. */
   const [adding, setAdding] = useState<{ from: string; outlet: Outlet } | null>(null);
   const [saving, startSaving] = useTransition();
+  /** Edits the database has not been told about yet; neither a dry run nor a publish is about them. */
+  const [dirty, setDirty] = useState(false);
   const [state, setState] = useState<{ error: string | null; savedAt: number | null }>({
     error: null,
     savedAt: null,
@@ -129,12 +139,14 @@ export function FlowDesigner({
   const persist = useCallback(
     (next: Draft) => {
       setDraft(next);
+      setDirty(true);
       if (pending.current) clearTimeout(pending.current);
       if (!definitionSchema.safeParse(next).success) return;
       pending.current = setTimeout(() => {
         startSaving(async () => {
           const answer = await save({ key: flow.key, name: flow.name, definition: next });
           setState(answer);
+          if (!answer.error) setDirty(false);
         });
       }, 700);
     },
@@ -191,6 +203,15 @@ export function FlowDesigner({
               Eksik var
             </Badge>
           )}
+          <FlowActions
+            actions={actions}
+            dirty={dirty || saving}
+            flowKey={flow.key}
+            initial={dryRun}
+            published={flow.status === "published"}
+            ready={valid}
+            versionId={flow.versionId}
+          />
         </div>
       </header>
 

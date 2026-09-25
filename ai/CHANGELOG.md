@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-25 — The dry run and the publish, from the designer (TASK-0119, step 3)
+
+- **The dry run is asked for, not run inside the request** (D-284). The dry run is the engine's own loop with a sink that writes nothing, and the engine runs on the worker's connection; request code never holds one, and handing it one to save a second of waiting would quietly undo that rule. So the screen schedules the question, keyed by the version and its content hash, and watches for the evidence row the database already binds to that hash. Pressing the button twice on the same definition asks one question; a changed definition is a new one.
+- **The report says what the run did and what it did not do.** Every step in order, what each one answered, who it would fall to — and, in the same window, that no record, task, approval or notification was created. It also says the sample record is empty until the owner can define record types (Faz 09R): an honest gap is better than a screen implying a record was chosen.
+- **The publish asks first** (REQ-WFL-024): which version goes live, which one moves to history, how many runs carry on where they started, and that the publish is written to the audit log and announced. The button is offered only when a passed dry run of *this* definition exists — which the database refuses to publish without anyway, so the screen is saying earlier what the database would say later.
+- Four database tests cover the new reads: one question per definition, an answer that knows whether it has gone stale, a publish summary, and nothing at all for somebody without the design permission.
+
 ## 2026-09-25 — The designer builds a flow, and only out of what the modules offer (TASK-0119, step 2)
 
 - **A "+" on every arrow.** It opens the palette — the fourteen steps of REQ-WFL-005, no fifteenth — and the new step goes *between* the two boxes: what the arrow pointed at now follows the new step. Taking a step out of the middle leaves the flow joined up, because removing a step means "not this", not "stop here". All of it is `domain/edit.ts`: pure functions, twelve tests, no browser.
