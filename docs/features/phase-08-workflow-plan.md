@@ -110,3 +110,77 @@ parçasıdır. Deneme kayıt türü test malzemesidir; ekran olarak gelmez.
 Motor, Faz 07 temelinin sahibi tarafından kullanılarak doğrulanmadığı bir zeminde kurulacak
 (D-278). M1 turundan çıkacak bir düzeltme temelde değişiklik isterse, üstünde motor dururken
 yapılacak. Bu, sahibin bilerek aldığı karardır ve burada yazılı olması riskin kaybolmaması içindir.
+
+## TASK-0119 — Görsel tasarımcı ve soru-cevap ikizi (uygulama planı, 2026-09-25)
+
+Karar: D-283 (ONAY BEKLİYOR). Tasarım kaynağı `docs/ui-ux/ADMINISTRATION.md` bölüm 2-3 (SCR-195,
+SCR-196), ölçüm kaynağı SPIKE-07, kurallar REQ-WFL-019, 023-026 ve D-085.
+
+**Neden şimdi yapılabilir.** Motor bitti (TASK-0117): tanım şeması, taslak/yayın kuralları, kuru mod
+ve çalışma günlüğü duruyor. Tasarımcının üreteceği şey zaten var olan `FlowDefinition`; bu plan onu
+**ekranda kurmanın** planı, yeni bir model icat etmenin değil.
+
+### 1. İki editör, tek JSON (REQ-WFL-026, D-085)
+
+Şema alanı ile yan paneldeki sorular **aynı tanımı** düzenler. Panel bir adımın alanlarını sorar
+("Kim onaylasın?", "Onaylanmazsa ne olsun?"), şema adımların **sırasını ve dallarını** kurar; ikisi
+de tek bir `FlowDefinition` nesnesine yazar ve biri diğerinin yazdığını açabilir. Doğrulama tek
+yerdedir: `definitionSchema`. Ekranın kendi kontrol listesi yoktur — ikinci bir doğrulayıcı, kuru
+modun ikinci bir değerlendiricisi ne ise odur.
+
+### 2. Kütüphane ve yükleme
+
+`@xyflow/react` (MIT, SPIKE-07 ile ölçüldü: 40 adımda p95 12,3 ms/kare, ~88 KB gzip). **Yalnız
+tasarımcı rotası** açıldığında indirilir (SPIKE-07 not 3); Yönetim sayfasının diğer bölümleri bu
+yükü taşımaz. Kutular, paneller, menüler ve formlar COSS bileşenleridir; özel olan yalnız şema
+alanının kendisidir (D-224, ADR-009 — sahip onayladı).
+
+### 3. Ekranlar
+
+- **SCR-195 — İş akışları listesi** (`/admin/workflows`), bu görevde **asgari**: ad, tetik, durum,
+  sürüm, son yayın ve "Yeni akış". Şablonlar ve "yeni akışlar" sekmeleri TASK-0120'nin işi.
+- **SCR-196 — Tasarımcı** (`/admin/workflows/[key]`), tam sayfa: başlık (ad, sürüm, durum rozeti,
+  "Deneme çalıştır", "Yayımla"), şema, yan panel, hata işaretleri.
+
+### 4. Taslağın nerede durduğu
+
+Çalışma kopyası tarayıcıda, kaynak veritabanındadır: her düzenleme `wfl.save_draft` ile açık taslağı
+**değiştirir** (yeni sürüm açmaz — motor zaten böyle kurulu). Kaydetme gecikmeli ve otomatiktir;
+başlıkta "kaydedildi / kaydediliyor" durumu görünür. Yayımlanmış bir sürüm düzenlenemez; düzenlemeye
+başlamak yeni bir taslak açar.
+
+### 5. Hatalar, deneme ve yayın
+
+- **Hata işaretleri** `definitionSchema`'nın kendi bulgularından gelir; her bulgu bir adıma bağlanır
+  (yol bilgisi zaten şemada var). Hata varken deneme çalıştırılamaz (ADMINISTRATION bölüm 3).
+- **Deneme** var olan `dryRunVersion`'ı çağırır: örnek kayıt seçilir, sonuç adım adım yolu, her
+  adımın kime düşeceğini ve koşulların gerçek veriyle cevabını gösterir. Deneme hiçbir şey yazmaz.
+- **Yayın** onay penceresiyle: bu sürümde ne değişti, yürüyen kaç örnek eski sürümle devam edecek,
+  sahibe bildirim gideceği. Sonra `publishVersion`; denemesiz yayını zaten veritabanı reddediyor.
+
+### 6. Klavye ve telefon (SPIKE-07'nin taşıdığı notlar)
+
+Şema **tek Tab durağıdır**; içinde ok tuşlarıyla kutular arasında gezilir, Enter adımın panelini
+açar, Escape şemaya döner. Telefonda tam düzenleme vardır: şema tam ekran, panel alttan çekmece,
+mini harita kapalı gelir.
+
+### 7. Yetki
+
+Tasarımcıyı yalnız `wfl.workflow.design` olan açar (REQ-WFL-019); bu yetki zaten yalnız tam
+görünürlüklü rollere verilebiliyor ve bunu 0003 zorluyor. Yetkisiz kişi standart "bu ekranı görme
+yetkiniz yok" halini görür.
+
+### 8. Bu görevde bilerek olmayanlar
+
+- Şablonlar, "yeni akışlar" sekmesi ve Onay Merkezi'nin gerçek kuyruğu — TASK-0120.
+- Çalışma günlüğü ekranı (SCR-197) — kendi görevinde; motorun günlüğü zaten yazılı.
+- Tasarımcı içinden yeni yetki tipi ve rol tanımlama (D-098, D-101) — IAM'in kendi ekranıyla gelir.
+- Sürükleyerek kutu taşıma ve kenar çizme kütüphanenin hazır yetenekleridir; ölçülmedi (SPIKE-07'nin
+  yazdığı sınır) ve ilk turda yalnız "+" ile ekleme ve panelden bağlama kullanılacaktır.
+
+### 9. Kabul
+
+Bir akış baştan sona **tasarımcıdan** kurulabilir: adımlar eklenir, sorular cevaplanır, hata
+işaretleri düzelir, deneme çalıştırılır ve yayımlanır; ardından gerçek bir olay o akışı başlatır ve
+çalışma günlüğü tasarımcıdaki yolu gösterir. Erişilebilirlik: şema tek Tab durağı, ok tuşlarıyla
+gezinme, açık ve koyu temada okunabilirlik. Telefonda 375 px'te yatay kaydırma yok.
