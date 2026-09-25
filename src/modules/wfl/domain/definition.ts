@@ -248,6 +248,12 @@ export const triggerSchema = z.discriminatedUnion("type", [
       .regex(/^\d{2}:\d{2}$/, "günlük saat SS:DD biçiminde yazılır")
       .optional(),
     everyMinutes: z.number().int().min(5).max(1440).optional(),
+    /**
+     * The day of the month a monthly flow runs on, with `dailyAt` saying the hour. Capped at 28 so
+     * that "the 30th" cannot quietly skip February — a monthly flow that misses a month is worse
+     * than one that runs a couple of days earlier (REQ-WFL-028, A1.5).
+     */
+    monthlyOn: z.number().int().min(1).max(28).optional(),
   }),
   z.object({
     type: z.literal("threshold"),
@@ -281,6 +287,14 @@ export const definitionSchema = z
         ctx.addIssue({
           code: "custom",
           message: "saat tetikleyicisi ya günlük bir saat ya da bir dakika aralığı ister",
+        });
+      }
+      // A monthly flow still needs to know the hour, and an interval has nothing to do with a day
+      // of the month.
+      if (definition.trigger.monthlyOn && !daily) {
+        ctx.addIssue({
+          code: "custom",
+          message: "aylık tetikleyici ayın gününü ve saatini birlikte ister",
         });
       }
     }

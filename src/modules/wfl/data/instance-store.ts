@@ -216,16 +216,23 @@ export async function readRunnable(db: SystemDb, instanceId: string): Promise<Ru
 }
 
 /** Every published flow the clock drives, with what its trigger says. */
-export async function clockFlows(
-  db: SystemDb,
-): Promise<{ key: string; dailyAt: string | null; everyMinutes: number | null }[]> {
+export async function clockFlows(db: SystemDb): Promise<
+  {
+    key: string;
+    dailyAt: string | null;
+    everyMinutes: number | null;
+    monthlyOn: number | null;
+  }[]
+> {
   const { rows } = await sql<{
     key: string;
     daily_at: string | null;
     every_minutes: number | null;
+    monthly_on: number | null;
   }>`select f.key,
             v.definition -> 'trigger' ->> 'dailyAt' as daily_at,
-            (v.definition -> 'trigger' ->> 'everyMinutes')::int as every_minutes
+            (v.definition -> 'trigger' ->> 'everyMinutes')::int as every_minutes,
+            (v.definition -> 'trigger' ->> 'monthlyOn')::int as monthly_on
        from wfl.flow_version v
        join wfl.flow f on f.id = v.flow_id
       where v.status = 'published' and f.disabled_at is null
@@ -234,6 +241,7 @@ export async function clockFlows(
     key: row.key,
     dailyAt: row.daily_at,
     everyMinutes: row.every_minutes === null ? null : Number(row.every_minutes),
+    monthlyOn: row.monthly_on === null ? null : Number(row.monthly_on),
   }));
 }
 

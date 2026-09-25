@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-09-25 — The eight end-to-end processes, as chains of short flows (TASK-0120, step 6)
+
+Seed 0009. **TASK-0120's template work is finished:** 27 templates ship, and every chain link of `docs/workflows/END_TO_END_FLOWS.md` has one.
+
+- **A process is not one long flow.** Each of the eight is a chain of short flows that trigger each other (D-104), so changing one link leaves the rest running. The links are written from the document that already worked them out step by step, and their codes (A1.1, A2.3 …) stay in the summaries, because that document is what somebody will read next to the designer.
+- **Four templates from 0008 moved to their fuller form** (version 2): the quote approval gained its lock and margin condition, the progress claim its client-approval step, the purchase request and the material issue their return paths. Copies already made were not touched — the version bump announced itself, which is exactly the rule it exercises.
+- **The clock trigger learned "the Nth of each month"** (D-286). Writing A1.5 — the monthly progress claim — found a gap between the requirement and the vocabulary: a clock trigger could only say "every day at" or "every N minutes". The vocabulary grew rather than the template apologising: `monthlyOn` with a month-shaped slot, so a second round on the 25th starts nothing, and the designer offers it as a choice. Capped at 28, because "the 30th" would skip February.
+- **The database test now asserts the whole set**: every template parses with the engine's schema, every chain link of all eight processes is present, and each one either walks end to end in the dry run or is named — with its reason — as waiting for a module's list (six of them, all for-each steps whose lists no module publishes yet).
+
 ## 2026-09-25 — The working log, the new flows, and a template that tells once (TASK-0120, step 5)
 
 - **A template that moves on says so, once** (migration 0060). The table itself announces a version bump and a subscriber turns that into a notification for each copy that is now behind — one word per copy per version, not a nightly reminder of the same news. A change that is not a new version is nobody's news, and the test proves both halves.

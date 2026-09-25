@@ -125,6 +125,13 @@ afterAll(async () => {
  * run yet" stays a written fact with a reason rather than a test nobody wrote.
  */
 const AWAITING_A_MODULE: Record<string, string> = {
+  // Every one of these asks a module for a list of records — "this project's authority approvals",
+  // "the sites that are active today" — and no module publishes a list yet (REQ-WFL-009).
+  "authority-approvals": "listesi bu panelde tanımlı değil",
+  "cash-shortfall": "listesi bu panelde tanımlı değil",
+  "daily-log-opening": "listesi bu panelde tanımlı değil",
+  "decision-reminder": "listesi bu panelde tanımlı değil",
+  "monthly-progress-claim": "listesi bu panelde tanımlı değil",
   "personnel-exit": "listesi bu panelde tanımlı değil",
 };
 
@@ -144,6 +151,40 @@ describe("the templates the panel ships", () => {
       "stock-count-approval",
     ]) {
       expect(keys).toContain(expected);
+    }
+  });
+
+  it("ships a link for every one of the eight end-to-end processes (REQ-WFL-011, D-104)", async () => {
+    const keys = (await readTemplates(as(DESIGNER))).map((one) => one.key);
+    // One template per chain link of `docs/workflows/END_TO_END_FLOWS.md`. A process is a chain of
+    // short flows, so what is checked here is that every link ships — not that one long flow does.
+    for (const [process, links] of Object.entries({
+      "1 yeni işten tahsilata": [
+        "lead-intake",
+        "quote-approval",
+        "project-kickoff",
+        "authority-approvals",
+        "monthly-progress-claim",
+        "progress-claim-to-invoice",
+        "overdue-collection",
+        "cost-feedback",
+      ],
+      "2 siparişten sahada kullanıma": [
+        "critical-stock-request",
+        "purchase-request-approval",
+        "weighbridge-difference",
+        "material-issue-request",
+      ],
+      "3 günlük saha üretimi": ["daily-log-opening", "daily-site-log-approval", "missed-daily-log"],
+      "4 personel çıkışı": ["personnel-exit"],
+      "5 işveren gecikmesi": ["repeated-client-wait", "client-obligation-delay"],
+      "6 toplantı kararı": ["decision-reminder", "overdue-decision"],
+      "7 sertifika ve İSG": ["expiring-document", "ohs-incident"],
+      "8 nakit sıkışması": ["cash-shortfall"],
+    })) {
+      for (const link of links) {
+        expect(keys, `${process}: ${link}`).toContain(link);
+      }
     }
   });
 

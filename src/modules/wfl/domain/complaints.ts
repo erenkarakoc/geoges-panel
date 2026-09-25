@@ -62,6 +62,7 @@ const FLOW_FIELDS: Record<string, string> = {
   "trigger.dailyAt": "Günlük saat 09:00 gibi yazılmalı.",
   "trigger.event": "Hangi olayla başlayacağı seçilmedi.",
   "trigger.everyMinutes": "Kaç dakikada bir çalışacağı 5 ile 1440 arasında olmalı.",
+  "trigger.monthlyOn": "Ayın kaçında çalışacağı 1 ile 28 arasında olmalı.",
   "trigger.test": "Eşiğin neye bakacağı belirlenmedi.",
   "trigger.test.field": "Hangi alanın eşiği aşacağı seçilmedi.",
   "trigger.test.value": "Hangi değerin aşılacağı girilmedi.",
@@ -81,6 +82,9 @@ function customSentence(message: string, names: Map<string, string>): string {
   }
   if (message.startsWith("saat tetikleyicisi")) {
     return "Saatle başlayan akış ya günlük bir saat ya da bir dakika aralığı ister; ikisi birden olmaz.";
+  }
+  if (message.startsWith("aylık tetikleyici")) {
+    return "Aylık çalışan akış hem ayın gününü hem saatini ister.";
   }
   if (message.startsWith("kayıt oluştur adımı tür ister")) {
     const name = named(message);

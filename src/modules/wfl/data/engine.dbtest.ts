@@ -861,6 +861,17 @@ describe("the flows the clock starts (REQ-WFL-007)", () => {
     expect(clockSlot({ dailyAt: null, everyMinutes: null }, noon)).toBeNull();
   });
 
+  it("names one slot a month for a monthly flow, and none on the other days", () => {
+    const monthly = { dailyAt: "06:00", everyMinutes: null, monthlyOn: 25 };
+    // The 25th, after six in the morning: this month's slot.
+    expect(clockSlot(monthly, new Date("2026-09-25T09:00:00Z"))).toBe("2026-09/2026-09-25@06:00");
+    // The same day earlier than its hour, and any other day: nothing to start.
+    expect(clockSlot(monthly, new Date("2026-09-25T02:00:00Z"))).toBeNull();
+    expect(clockSlot(monthly, new Date("2026-09-24T09:00:00Z"))).toBeNull();
+    // Next month is a slot of its own, so the flow runs again then and only then.
+    expect(clockSlot(monthly, new Date("2026-10-25T09:00:00Z"))).toBe("2026-10/2026-10-25@06:00");
+  });
+
   it("starts the flow whose moment has come, once for that slot", async () => {
     await publish(NIGHTLY, nightly);
     const now = new Date();

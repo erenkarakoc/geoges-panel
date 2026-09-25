@@ -1156,11 +1156,19 @@ export async function resumeFromWait(
  * after a restart.
  */
 export function clockSlot(
-  trigger: { dailyAt: string | null; everyMinutes: number | null },
+  trigger: { dailyAt: string | null; everyMinutes: number | null; monthlyOn?: number | null },
   now: Date,
 ): string | null {
   const day = istanbulDay(now);
   const minutes = istanbulMinutes(now);
+  if (trigger.monthlyOn && trigger.dailyAt) {
+    // A month is a slot of its own: "the 25th at 06:00" belongs to that month and to no other, so a
+    // round that runs again the same afternoon finds the slot taken and starts nothing.
+    if (Number(day.slice(8, 10)) !== trigger.monthlyOn) return null;
+    return minutes >= minutesOf(trigger.dailyAt)
+      ? `${day.slice(0, 7)}/${day}@${trigger.dailyAt}`
+      : null;
+  }
   if (trigger.dailyAt) {
     return minutes >= minutesOf(trigger.dailyAt) ? `${day}@${trigger.dailyAt}` : null;
   }

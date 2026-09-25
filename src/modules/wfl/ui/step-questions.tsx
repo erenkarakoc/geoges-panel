@@ -724,6 +724,11 @@ function ParallelQuestion({
   );
 }
 
+const CLOCK_KINDS: Item[] = [
+  { value: "daily", label: "Her gün" },
+  { value: "monthly", label: "Her ayın belirli bir günü" },
+];
+
 const TRIGGER_KINDS: Item[] = [
   { value: "event", label: "Bir şey olduğunda" },
   { value: "clock", label: "Saatle" },
@@ -814,22 +819,58 @@ export function TriggerQuestions({
       ) : null}
 
       {kind === "clock" ? (
-        <Field>
-          <FieldLabel htmlFor="daily-at">Her gün saat kaçta?</FieldLabel>
-          <Input
-            defaultValue={String(trigger?.dailyAt ?? "09:00")}
-            id="daily-at"
-            onBlur={(event) =>
+        <>
+          <Choice
+            items={CLOCK_KINDS}
+            label="Ne sıklıkla?"
+            onChange={(value) =>
               onChange({
                 type: "clock",
-                dailyAt: event.currentTarget.value,
+                dailyAt: String(trigger?.dailyAt ?? "09:00"),
                 everyMinutes: undefined,
+                monthlyOn: value === "monthly" ? Number(trigger?.monthlyOn ?? 25) : undefined,
               })
             }
-            placeholder="09:00"
+            value={trigger?.monthlyOn ? "monthly" : "daily"}
           />
-          <FieldDescription>Saat ve dakika olarak yazılır, örneğin 07:30.</FieldDescription>
-        </Field>
+          {trigger?.monthlyOn ? (
+            <Field>
+              <FieldLabel htmlFor="monthly-on">Ayın kaçında?</FieldLabel>
+              <Input
+                defaultValue={String(trigger.monthlyOn)}
+                id="monthly-on"
+                inputMode="numeric"
+                onBlur={(event) =>
+                  onChange({
+                    ...trigger,
+                    type: "clock",
+                    monthlyOn: Number(event.currentTarget.value),
+                  })
+                }
+              />
+              <FieldDescription>
+                1 ile 28 arası; 28 sınırı, kısa şubatta ayın atlanmaması için.
+              </FieldDescription>
+            </Field>
+          ) : null}
+          <Field>
+            <FieldLabel htmlFor="daily-at">Saat kaçta?</FieldLabel>
+            <Input
+              defaultValue={String(trigger?.dailyAt ?? "09:00")}
+              id="daily-at"
+              onBlur={(event) =>
+                onChange({
+                  ...trigger,
+                  type: "clock",
+                  dailyAt: event.currentTarget.value,
+                  everyMinutes: undefined,
+                })
+              }
+              placeholder="09:00"
+            />
+            <FieldDescription>Saat ve dakika olarak yazılır, örneğin 07:30.</FieldDescription>
+          </Field>
+        </>
       ) : null}
     </div>
   );
