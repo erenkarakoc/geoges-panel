@@ -258,7 +258,7 @@ Görev büyük olduğu için beş adımda kurulur; her adım kendi testiyle ve c
 - Örnek veri (D-290): iki örnek proje, dört şantiye, duvarlar ve bir onaylı revizyon; kapsamlı pilot
   verisi TASK-0131'de.
 
-### Onaya sunulan iş kuralları
+### Onaya sunulan iş kuralları — ONAYLANDI (D-292, sahip 2026-09-26)
 
 1. Taslak revizyon bir önceki onaylı revizyonun kopyasıyla başlar; onaylanınca **onay tarihinden**
    itibaren geçerli olur (geriye dönük geçerlilik yok — fazla döküm gizlenemesin diye).
