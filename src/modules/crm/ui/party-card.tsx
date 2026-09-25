@@ -170,9 +170,12 @@ export function PartyCard({
       </header>
 
       <Tabs defaultValue="details">
-        <div className="overflow-x-auto">
+        <div className="[scrollbar-width:none] overflow-x-auto overflow-y-hidden [&::-webkit-scrollbar]:hidden">
           {/* 44 px on a phone, the thumb target the bottom bar and header use (DESIGN_SYSTEM_RULES
-              §4.1 row 17a); the strip scrolls sideways there and the half-shown last tab says so. */}
+              §4.1 row 17a); the strip scrolls sideways there and the half-shown last tab says so.
+              A sideways scroll turns the vertical axis into `auto` too, and the underline sits a
+              pixel below the list, so the vertical axis is pinned and the scrollbar hidden — the
+              context bar's fix (context-bar.tsx). */}
           <TabsList className="max-md:[&>button]:h-11" variant="underline">
             <TabsTab value="details">Bilgiler</TabsTab>
             <TabsTab value="people">Kişiler ({contacts.length})</TabsTab>
