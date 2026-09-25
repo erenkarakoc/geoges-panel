@@ -490,19 +490,25 @@ export async function readInstanceFlow(
   instanceId: string,
 ): Promise<{
   flowId: string;
+  flowKey: string;
+  version: number;
   record: { schema: string; table: string; id: string } | null;
 } | null> {
   const { rows } = await sql<{
     flow_id: string;
+    flow_key: string;
+    version: number;
     record_schema: string | null;
     record_table: string | null;
     record_id: string | null;
-  }>`select flow_id, record_schema, record_table, record_id from wfl.instance
+  }>`select flow_id, flow_key, version, record_schema, record_table, record_id from wfl.instance
        where id = ${instanceId}::uuid`.execute(db);
   const row = rows[0];
   if (!row) return null;
   return {
     flowId: row.flow_id,
+    flowKey: row.flow_key,
+    version: Number(row.version),
     record:
       row.record_schema && row.record_table && row.record_id
         ? { schema: row.record_schema, table: row.record_table, id: row.record_id }

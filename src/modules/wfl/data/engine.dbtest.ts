@@ -116,7 +116,7 @@ const unbuilt = {
   trigger: { type: "event", event: `${EVENT}_other` },
   start: "s1",
   steps: [
-    { id: "s1", type: "record", title: "Kayıt oluştur", next: "s2" },
+    { id: "s1", type: "escalate", title: "Yukarı taşı", next: "s2" },
     { id: "s2", type: "end" },
   ],
 };
@@ -320,12 +320,12 @@ describe("what the engine cannot do yet, it says (REQ-WFL-025)", () => {
     expect(result).toEqual({
       state: "ended",
       status: "failed",
-      reason: "motor bu adımı henüz yürütmüyor: record",
+      reason: "motor bu adımı henüz yürütmüyor: escalate",
     });
 
     const stopped = await readInstance(as(DESIGNER), instanceId!);
     expect(stopped?.status).toBe("failed");
-    expect(stopped?.failure).toContain("record");
+    expect(stopped?.failure).toContain("escalate");
 
     const log = await readRunLog(as(DESIGNER), instanceId!);
     expect(log.map((line) => line.kind)).toEqual(["started", "waiting", "ended"]);
@@ -735,14 +735,14 @@ describe("the dry run a publish needs (REQ-WFL-025, SPIKE-05)", () => {
         trigger: { type: "manual" },
         start: "b1",
         steps: [
-          { id: "b1", type: "record", title: "Kayıt oluştur", next: "b2" },
+          { id: "b1", type: "escalate", title: "Yukarı taşı", next: "b2" },
           { id: "b2", type: "end" },
         ],
       },
     });
     const report = await dryRunVersion(worker, broken, {}, relations);
     expect(report.passed).toBe(false);
-    expect(report.failure).toContain("record");
+    expect(report.failure).toContain("escalate");
     expect(await errorOf(publishVersion(as(DESIGNER), broken))).toBe("wfl.dry_run_required");
   });
 
@@ -1741,5 +1741,115 @@ describe("a flow inside a flow (REQ-WFL-011, REQ-WFL-018)", () => {
     const instance = await readInstance(as(DESIGNER), started[0]);
     expect(instance?.status).toBe("failed");
     expect(instance?.failure).toContain("alt akış başlatılamadı");
+  });
+});
+
+describe("the record step (REQ-WFL-010, D-095, D-080)", () => {
+  const MAKING = "zz-t0147-making";
+  const CLOSING = "zz-t0147-closing";
+
+  const making = {
+    trigger: { type: "event", event: `${EVENT}_make` },
+    start: "m1",
+    steps: [
+      {
+        id: "m1",
+        type: "record",
+        action: "create",
+        recordType: "zzw.checklist",
+        values: { title: "Çıkış kontrol listesi" },
+        next: "m2",
+      },
+      { id: "m2", type: "end" },
+    ],
+  };
+
+  const closing = {
+    trigger: { type: "event", event: `${EVENT}_close` },
+    start: "c1",
+    steps: [
+      { id: "c1", type: "record", action: "set_status", status: "kesinlesti", next: "c2" },
+      { id: "c2", type: "end" },
+    ],
+  };
+
+  /** The module the engine never knows about: it writes the draft and refuses to finalise. */
+  let asked: { code: string; input: Record<string, unknown> }[] = [];
+  const runtime = {
+    ...relations,
+    run: async (_db: SystemDb, code: string, input: unknown) => {
+      asked.push({ code, input: input as Record<string, unknown> });
+      if (code === "record.set_status" && (input as { status?: string }).status === "kesinlesti") {
+        throw new Error("defter yazan kayıt akışla kesinleştirilemez");
+      }
+      return { id: "zzw-checklist-1", status: "draft" };
+    },
+  };
+
+  it("makes the draft and carries what wrote it into the module's hands", async () => {
+    asked = [];
+    await publish(MAKING, making);
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_make`,
+        id: id(710),
+        record: { schema: "zzw", table: "record", id: id(810) },
+        payload: {},
+      },
+      runtime,
+    );
+    expect((await readInstance(as(DESIGNER), started[0]))?.status).toBe("done");
+
+    expect(asked).toHaveLength(1);
+    expect(asked[0].code).toBe("record.create");
+    expect(asked[0].input).toMatchObject({
+      recordType: "zzw.checklist",
+      values: { title: "Çıkış kontrol listesi" },
+      record: { schema: "zzw", table: "record", id: id(810) },
+      // What the new record's own history has to show (REQ-WFL-010).
+      flow: { key: MAKING, version: 1, stepId: "m1" },
+    });
+
+    const log = await readRunLog(as(DESIGNER), started[0]);
+    expect(log.find((line) => line.stepId === "m1" && line.kind === "left")?.detail).toMatchObject({
+      outcome: "create",
+      written: { id: "zzw-checklist-1", status: "draft" },
+    });
+  });
+
+  it("stops with the module's own words when it refuses to finalise a ledger", async () => {
+    asked = [];
+    await publish(CLOSING, closing);
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_close`,
+        id: id(711),
+        record: { schema: "zzw", table: "record", id: id(811) },
+        payload: {},
+      },
+      runtime,
+    );
+    const instance = await readInstance(as(DESIGNER), started[0]);
+    expect(instance?.status).toBe("failed");
+    expect(instance?.failure).toContain("defter yazan kayıt akışla kesinleştirilemez");
+  });
+
+  it("refuses a definition that asks to create without saying what", () => {
+    expect(() =>
+      parseDefinition({
+        trigger: { type: "manual" },
+        start: "r1",
+        steps: [{ id: "r1", type: "record", action: "create" }],
+      }),
+    ).toThrow(/tür ister/);
+    expect(() =>
+      parseDefinition({
+        trigger: { type: "manual" },
+        start: "r1",
+        steps: [{ id: "r1", type: "record", action: "set_status" }],
+      }),
+    ).toThrow(/durum ister/);
   });
 });

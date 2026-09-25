@@ -150,7 +150,7 @@ type StepSink = {
   ): Promise<string[]>;
   /** The approval's patience: after this, it moves to somebody else. */
   escalate(approvalId: string | null, at: Date, to: OwnerRule): Promise<void>;
-  action(code: string, input: unknown): Promise<void>;
+  action(code: string, input: unknown): Promise<unknown>;
   /** Asks to be woken at a time; the dry run is never actually woken. */
   sleep(stateId: string, wakeAt: Date): Promise<void>;
 };
@@ -253,7 +253,7 @@ function writingSink(db: SystemDb, instanceId: string, relations: FlowRuntime): 
     },
     async action(code, input) {
       if (!relations.run) throw new Error(`no capability catalog is wired for ${code}`);
-      await relations.run(db, code, input);
+      return relations.run(db, code, input);
     },
     async sleep(stateId, wakeAt) {
       // The wake-up is a row in the database, so a server that restarts in the meantime still
@@ -386,6 +386,45 @@ async function walk(
       await sink.wait(step.id, { waitingFor: "branches", opened: opened.length });
       for (const childId of opened) await runBranch(db, childId, relations);
       return { state: "waiting", stepId: step.id };
+    }
+
+    if (step.type === "record") {
+      // The flow may make a draft record and may move a record to another state, and never
+      // finalises a ledger (REQ-WFL-010, D-080): the module that owns the record refuses that
+      // last one, and the engine reports the refusal rather than carrying on as if it had worked.
+      const code = step.action === "create" ? "record.create" : "record.set_status";
+      if (!instanceId) {
+        await sink.leave(stateId, "done", `would ${code}`, {
+          recordType: step.recordType,
+          status: step.status,
+        });
+        stepId = step.next ?? null;
+        continue;
+      }
+      const where = await readInstanceFlow(db, instanceId);
+      try {
+        const written = await sink.action(code, {
+          stepRunId: stateId,
+          recordType: step.recordType ?? null,
+          status: step.status ?? null,
+          values: step.values ?? {},
+          record: where?.record ?? null,
+          // What the record's own history has to show: which flow, which version, which step.
+          flow: { key: where?.flowKey ?? null, version: where?.version ?? null, stepId: step.id },
+        });
+        await sink.leave(stateId, "done", step.action, {
+          recordType: step.recordType,
+          status: step.status,
+          written,
+        });
+      } catch (error) {
+        const reason = `${code} yapılamadı: ${(error as Error).message}`;
+        await sink.leave(stateId, "failed", "refused", { recordType: step.recordType });
+        await sink.end("failed", reason, step.id);
+        return { state: "ended", status: "failed", reason };
+      }
+      stepId = step.next ?? null;
+      continue;
     }
 
     if (step.type === "subflow") {
@@ -933,6 +972,7 @@ export async function dryRun(
     },
     async action() {
       // Nothing: a dry run calls no action, which is what keeps it from opening real work.
+      return null;
     },
     async sleep(_stateId, wakeAt) {
       if (entered) {

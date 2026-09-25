@@ -18,7 +18,7 @@ import { z } from "zod";
  * with its three answers — are kept apart from the rest, because a union that can be narrowed
  * needs its halves written out rather than filtered.
  */
-const PLAIN_STEP_TYPES = ["start", "escalate", "end", "record"] as const;
+const PLAIN_STEP_TYPES = ["start", "escalate", "end"] as const;
 
 export const STEP_TYPES = [
   "condition",
@@ -31,6 +31,7 @@ export const STEP_TYPES = [
   "join",
   "for_each",
   "subflow",
+  "record",
   ...PLAIN_STEP_TYPES,
 ] as const;
 
@@ -49,6 +50,7 @@ export const RUNNABLE_STEP_TYPES: readonly StepType[] = [
   "join",
   "for_each",
   "subflow",
+  "record",
   "end",
 ];
 
@@ -169,6 +171,21 @@ const subflowStep = baseStep.extend({
   flow: z.string().min(1).max(80),
 });
 
+const recordStep = baseStep.extend({
+  type: z.literal("record"),
+  /** Making a draft record, or moving one to another state (REQ-WFL-010, D-095). */
+  action: z.enum(["create", "set_status"]),
+  /** Which kind of record; the module that owns it publishes the action that writes it. */
+  recordType: z
+    .string()
+    .regex(/^[a-z_]+\.[a-z_0-9]+$/, "kayıt türü modul.kayit biçiminde yazılır")
+    .optional(),
+  /** The state the record moves to; a flow may never move one into a finalised state (D-080). */
+  status: z.string().trim().min(1).max(40).optional(),
+  /** Fixed values the new record carries; the flow's own words, not a query. */
+  values: z.record(z.string(), z.unknown()).optional(),
+});
+
 const forEachStep = baseStep.extend({
   type: z.literal("for_each"),
   /** The list the owning module publishes, read for the record the flow is about (REQ-WFL-009). */
@@ -193,6 +210,7 @@ export const stepSchema = z.discriminatedUnion("type", [
   joinStep,
   forEachStep,
   subflowStep,
+  recordStep,
   waitStep,
   notifyStep,
   plainStep,
@@ -250,6 +268,17 @@ export const definitionSchema = z
     if (!ids.has(definition.start)) {
       ctx.addIssue({ code: "custom", message: `başlangıç adımı yok: ${definition.start}` });
     }
+    // What the record step needs depends on what it is doing (REQ-WFL-010).
+    for (const step of definition.steps) {
+      if (step.type !== "record") continue;
+      if (step.action === "create" && !step.recordType) {
+        ctx.addIssue({ code: "custom", message: `kayıt oluştur adımı tür ister: ${step.id}` });
+      }
+      if (step.action === "set_status" && !step.status) {
+        ctx.addIssue({ code: "custom", message: `durum değiştir adımı durum ister: ${step.id}` });
+      }
+    }
+
     // A "her biri için" inside another one is refused (REQ-WFL-009): one level is what a person
     // can picture, and what the engine's branch depth is written for.
     const byId = new Map(definition.steps.map((step) => [step.id, step]));
