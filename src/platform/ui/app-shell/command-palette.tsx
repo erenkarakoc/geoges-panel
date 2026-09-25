@@ -161,13 +161,14 @@ export function CommandPalette({
 
   return (
     <CommandDialog onOpenChange={setOpen} open={open}>
-      {/* Wide in the middle of the header, and the same box on a phone (owner 2026-09-23): same
-          height as on desktop, only the keyboard shortcut steps aside since a phone has no
-          Ctrl+K. The tap target still reaches 44 px through COSS's coarse-pointer overlay. */}
+      {/* Wide in the middle of the header, and the same box on a phone (owner 2026-09-23); only
+          the keyboard shortcut steps aside since a phone has no Ctrl+K. On a phone the box is
+          44 px tall like the buttons beside it (owner 2026-09-25, DESIGN_SYSTEM_RULES §4.1 row
+          17a); desktop keeps COSS's size. */}
       <CommandDialogTrigger
         render={
           <Button
-            className="w-full max-w-md min-w-0 justify-start text-muted-foreground"
+            className="w-full max-w-md min-w-0 justify-start text-muted-foreground max-md:h-11"
             variant="outline"
           />
         }
