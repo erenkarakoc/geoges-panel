@@ -254,6 +254,7 @@ export function CommandPalette({
                     <CommandCollection>
                       {(item: PaletteItem) => (
                         <CommandItem
+                          className="gap-2"
                           key={item.value}
                           onClick={() => handleItemClick(item)}
                           value={item.value}

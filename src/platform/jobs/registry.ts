@@ -1,6 +1,8 @@
 import type { JobRegistry } from "./types";
 
-const NAME = /^[a-z]{2,3}\.[a-z0-9_.-]+$/;
+// A module's three-letter code, or `core` for the platform's own workers (the search index keeps
+// its records up to date for every module, so it belongs to none of them).
+const NAME = /^([a-z]{2,3}|core)\.[a-z0-9_.-]+$/;
 
 /**
  * Refuses a registry the worker could not run safely: duplicate or malformed names, a subscriber

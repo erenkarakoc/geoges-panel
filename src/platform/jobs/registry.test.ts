@@ -52,6 +52,20 @@ describe("job registry", () => {
     );
   });
 
+  it("takes the platform's own workers under core, the name the search index has always had", () => {
+    expect(() =>
+      validateRegistry(
+        registry({
+          subscribers: [subscriber("core.search-index", ["party.created"])],
+          jobs: [{ type: "core.search-rebuild", run: noop }],
+        }),
+      ),
+    ).not.toThrow();
+    expect(() => validateRegistry(registry({ jobs: [{ type: "cores.x", run: noop }] }))).toThrow(
+      /name must be/,
+    );
+  });
+
   it("takes a subscriber whose subscriptions are written in the database, when it says so", () => {
     // The flow engine hears whatever the published definitions listen to, which nothing in code
     // can know (REQ-WFL-007). Saying it outright is what keeps an empty list from meaning both
