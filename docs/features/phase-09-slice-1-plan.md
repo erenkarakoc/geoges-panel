@@ -245,6 +245,8 @@ Görev büyük olduğu için beş adımda kurulur; her adım kendi testiyle ve c
 
 ### Adım 5 — Akışla bağlantı, arama, örnekler
 
+_Not (2026-09-26): aşağıdaki "kaydın durumunu değiştir" karşılığı revizyon onayı ona bağlı olduğu için Adım 2'de kuruldu._
+
 - Akışın "kaydın durumunu değiştir" adımı (REQ-WFL-010) bugün hiçbir modülde karşılık bulmuyor. Kayıt
   türüne göre sahibi modüle yönlendiren tek bir karşılık kurulur (belge ve revizyon kayıtlarındaki
   düzenle aynı biçimde); ilk kullananları proje aşaması ve proje revizyonudur. Böylece "Kazanılan

@@ -2,7 +2,15 @@
 
 import { revalidatePath } from "next/cache";
 
-import { changeContract, changeProject, money, moveProjectStage } from "@/modules/prj";
+import {
+  changeContract,
+  changeProject,
+  markWall,
+  money,
+  moveProjectStage,
+  openRevision,
+  type WallStatus,
+} from "@/modules/prj";
 import type { ContractFormValue, ProjectFormValue } from "@/modules/prj/ui/project-form";
 import { changeSite, changeSiteStatus, openSite } from "@/modules/sit";
 import type { SiteFormValue } from "@/modules/sit/ui/project-sites";
@@ -49,4 +57,12 @@ export async function setSiteStatusAction(
   status: "active" | "passive",
 ) {
   return refreshed(projectId, await changeSiteStatus(siteId, status));
+}
+
+export async function openRevisionAction(projectId: string, reason: string) {
+  return refreshed(projectId, await openRevision(projectId, reason));
+}
+
+export async function markWallAction(projectId: string, wallId: string, status: WallStatus) {
+  return refreshed(projectId, await markWall(wallId, status));
 }

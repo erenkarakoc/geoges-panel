@@ -17,6 +17,39 @@ export {
   type ProjectResult,
 } from "./application/projects";
 export {
+  currentTargets,
+  dropTarget,
+  dropWall,
+  markWall,
+  mayEditRevisions,
+  mayMarkWalls,
+  openRevision,
+  projectRevisions,
+  putTarget,
+  putWall,
+  reviseWall,
+  revisionView,
+  sendRevision,
+  takeBackRevision,
+  targetChoices,
+  type RevisionResult,
+} from "./application/revisions";
+export {
+  REVISION_STATUS_LABELS,
+  TARGET_KIND_LABELS,
+  WALL_STATUS_LABELS,
+  WALL_STATUSES,
+} from "./domain/revision";
+export type {
+  DiffLine,
+  Revision,
+  RevisionStatus,
+  RevisionWall,
+  TargetKind,
+  WallStatus,
+  WallTarget,
+} from "./data/revision-store";
+export {
   CURRENCIES,
   money,
   targetEndDate,
@@ -24,6 +57,11 @@ export {
   type ProjectInput,
 } from "./domain/project";
 export type { Project, ProjectContract, ProjectRow, StageChange } from "./data/project-store";
+
+// For the flow's record step (REQ-WFL-010), wired in src/records, and for the daily site log's
+// over-casting rule (TASK-0127), inside its own transaction.
+export { setProjectStageAsSystem } from "./data/project-store";
+export { readPanelTargets, setRevisionStatusAsSystem } from "./data/revision-store";
 
 // Site-wide search (TASK-0110) and other modules' search lines, registered in src/records.
 export {

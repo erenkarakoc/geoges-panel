@@ -47,7 +47,7 @@ export async function assignTaskAction(
 }
 
 const stepSchema = z.object({
-  taskId: z.uuid(),
+  taskId: z.guid(),
   step: z.enum(["complete", "approve", "reopen"]),
   reason: z.string().max(1000).optional(),
 });

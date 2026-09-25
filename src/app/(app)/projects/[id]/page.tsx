@@ -5,15 +5,27 @@ import {
   changeContractAction,
   changeProjectAction,
   changeSiteAction,
+  markWallAction,
   moveStageAction,
+  openRevisionAction,
   openSiteAction,
   setSiteStatusAction,
 } from "@/app/(app)/projects/[id]/actions";
 import { partyChoices, partyNames } from "@/modules/crm";
 import { listPeople } from "@/modules/iam";
-import { mayOpenProjects, projectCard } from "@/modules/prj";
+import {
+  currentTargets,
+  mayEditRevisions,
+  mayMarkWalls,
+  mayOpenProjects,
+  projectCard,
+  projectRevisions,
+  targetChoices,
+} from "@/modules/prj";
 import { ProjectCard } from "@/modules/prj/ui/project-card";
+import { ProjectTargets } from "@/modules/prj/ui/project-targets";
 import { ProjectsDenied } from "@/modules/prj/ui/projects-denied";
+import { RevisionList } from "@/modules/prj/ui/revision-list";
 import { listSites } from "@/modules/sit";
 import { ProjectSites } from "@/modules/sit/ui/project-sites";
 import { isModuleEnabled } from "@/platform/features/features";
@@ -24,8 +36,8 @@ export const metadata: Metadata = { title: "Proje detayı" };
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
- * SCR-023 — the project card (TASK-0123 step 1). PRJ may not read SIT (MODULE_MAP: SIT → PRJ),
- * so the page composes the card with its sites.
+ * SCR-023 — the project card (TASK-0123 steps 1–2). PRJ may not read SIT (MODULE_MAP: SIT →
+ * PRJ), so the page composes the card with its sites and hands the walls their site names.
  */
 export default async function ProjectPage({ params }: PageProps<"/projects/[id]">) {
   if (!isModuleEnabled("PRJ")) return <FeatureOff />;
@@ -37,12 +49,28 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[id]"
   if (!card) notFound();
 
   const managesAnything = card.canManage || card.canManageSites;
-  const [sites, people, clients, subcontractors] = await Promise.all([
+  const [
+    sites,
+    people,
+    clients,
+    subcontractors,
+    current,
+    revisions,
+    targetTypes,
+    canEdit,
+    canMark,
+  ] = await Promise.all([
     listSites({ projectId: id }),
     listPeople(),
     card.canManage ? partyChoices("client") : Promise.resolve([]),
     card.canManageSites ? partyChoices("subcontractor") : Promise.resolve([]),
+    currentTargets(id),
+    projectRevisions(id),
+    targetChoices(id),
+    mayEditRevisions(id),
+    mayMarkWalls(id),
   ]);
+  const siteNames = Object.fromEntries(sites.map((one) => [one.id, one.name]));
   const clientName = card.project.clientPartyId
     ? ((await partyNames([card.project.clientPartyId])).get(card.project.clientPartyId) ?? null)
     : null;
@@ -75,6 +103,23 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[id]"
       project={card.project}
       stageChoices={card.stageChoices}
       stages={card.stages}
+      revisions={
+        <RevisionList
+          canEdit={canEdit}
+          open={openRevisionAction.bind(null, id)}
+          projectId={id}
+          revisions={revisions}
+        />
+      }
+      targets={
+        <ProjectTargets
+          canMark={canMark}
+          current={current}
+          markWall={markWallAction.bind(null, id)}
+          names={targetTypes.names}
+          siteNames={siteNames}
+        />
+      }
       sites={
         <ProjectSites
           actions={{

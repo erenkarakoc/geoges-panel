@@ -11,9 +11,10 @@ Ortak kurallar `docs/database/CONVENTIONS.md`'dedir; her tabloda `id`, izler, ka
 | `prj.project` | Proje kartı | `code`, `name`, `client_party_id`, `authority`, `city`, `location`, `contract_no`, `contract_signed_on`, üç süre: `contract_start_on`/`contract_end_on`, `theoretical_end_on`, `management_target_end_on`; `coordinator_user_id`, `stage` (katalog kodu) |
 | `prj.project_contract` | Sözleşme bedeli (ticari; yetkisize satır hiç gelmez, D-292) | `project_id`, `contract_value`, `currency` |
 | `prj.project_stage_change` | Aşama geçmişi (yalnız eklenir) | `project_id`, `from_stage`, `to_stage`, `changed_at`, `changed_by_user_id` |
-| `prj.project_revision` | Onaylı hedef sürümü | `project_id`, `revision_no`, `reason`, `approved_at`, `approved_by_user_id` |
-| `prj.wall` | Duvar | `project_revision_id`, `site_id`, `code`, `length_m`, `height_m`, `area_m2` |
-| `prj.wall_target` | Duvarın panel/şerit hedefi | `wall_id`, `panel_type_id`, `strip_type_id`, `target_qty`, `target_m2`, `target_length_m` |
+| `prj.project_revision` | Hedefleri taşıyan revizyon (taslak → onayda → onaylı; yalnız akış onaylar, onay gününden geçerli, sonra değişmez — D-136, D-292) | `project_id`, `revision_no`, `status`, `reason`, `based_on_revision_id`, `valid_from`, `submitted_at`, `approved_at` |
+| `prj.wall` | Duvar (revizyonlar boyunca aynı duvar; projenin kendi şantiyesinde — PRJ-K4) | `project_id`, `site_id`, `code`, `name`, `status` |
+| `prj.revision_wall` | Bir revizyonun duvar hakkında söyledikleri | `revision_id`, `wall_id`, `length_m`, `height_m` |
+| `prj.wall_target` | Revizyonun duvar hedefi (panel adedi; şerit tipi ve boyuna göre metraj; diğer iş kalemi) | `revision_id`, `wall_id`, `kind`, `panel_type_id`, `strip_type_id`, `strip_length_m`, `work_item_id`, `qty`, `length_m` |
 | `prj.supply_responsibility` | Tedarik matrisi satırı | `project_id`, `item_id`, `responsible_party` (işveren karşılar / GEOGES karşılar / işveren karşılar ve GEOGES hakedişinden keser — REQ-PRJ-004, D-292), `valid_from` |
 | `prj.technical_office_item` | Teknik ofis işi | `project_id`, `type` (proje/statik/kurum onayı), `status`, `due_on`, `assignee_user_id` |
 | `prj.daily_target` | Günlük üretim hedefi | `project_revision_id`, `site_id`, `panel_type_id`, `qty_per_day` |

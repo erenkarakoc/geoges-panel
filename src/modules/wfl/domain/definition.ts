@@ -104,7 +104,7 @@ const conditionStep = baseStep.extend({
 
 /** How a step finds the person it waits on (D-097). Only two of the four forms are read today. */
 export const ownerSchema = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("user"), userId: z.uuid() }),
+  z.object({ type: z.literal("user"), userId: z.guid() }),
   z.object({ type: z.literal("role"), role: z.string().min(2).max(40) }),
   z.object({ type: z.literal("relation"), relation: z.string().min(2).max(60) }),
   z.object({ type: z.literal("permission"), permission: z.string().min(2).max(60) }),

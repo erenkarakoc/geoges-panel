@@ -41,3 +41,54 @@ select md5('sample:site:' || s.key)::uuid, md5('sample:project:' || s.project)::
     ('sariyar', 'ankara', 'Sarıyar Şantiyesi', 'in_house', null, 'Ankara', 40.03800, 31.41800))
        as s(key, project, name, model, subcontractor, city, latitude, longitude)
 on conflict do nothing;
+
+-- Rev.0 of the Kastamonu project: two walls on Kavaklı, one on Ilgaz, with panel and strip
+-- targets from the sample definitions of 0001. It is written as a draft and approved in place, the
+-- way the flow would (the approval sets its valid-from day to the day the samples are loaded).
+insert into prj.project_revision (id, project_id, revision_no, reason)
+values (md5('sample:revision:kastamonu:0')::uuid, md5('sample:project:kastamonu')::uuid, 0,
+        'Örnek ilk hedefler (pilot)')
+on conflict do nothing;
+
+insert into prj.wall (id, project_id, site_id, code, name)
+select md5('sample:wall:' || w.code)::uuid, md5('sample:project:kastamonu')::uuid,
+       md5('sample:site:' || w.site)::uuid, w.code, w.name
+  from (values ('K-D1', 'kavakli', 'Kavaklı Duvar 1 Sağ'),
+               ('K-D2', 'kavakli', 'Kavaklı Duvar 2 Sol'),
+               ('I-D1', 'ilgaz', 'Ilgaz Şev Duvarı')) as w(code, site, name)
+on conflict do nothing;
+
+insert into prj.revision_wall (id, revision_id, project_id, wall_id, length_m, height_m)
+select md5('sample:revision_wall:' || w.code)::uuid, md5('sample:revision:kastamonu:0')::uuid,
+       md5('sample:project:kastamonu')::uuid, md5('sample:wall:' || w.code)::uuid, w.len, w.h
+  from (values ('K-D1', 180.0, 6.0), ('K-D2', 95.0, 4.5), ('I-D1', 240.0, 7.5)) as w(code, len, h)
+ where exists (select from prj.project_revision r
+                where r.id = md5('sample:revision:kastamonu:0')::uuid and r.status = 'draft')
+on conflict do nothing;
+
+insert into prj.wall_target (id, revision_id, wall_id, kind, panel_type_id, strip_type_id,
+                             strip_length_m, qty, length_m)
+select md5('sample:wall_target:' || t.key)::uuid, md5('sample:revision:kastamonu:0')::uuid,
+       md5('sample:wall:' || t.wall)::uuid, t.kind,
+       case when t.kind = 'panel' then md5('sample:panel_type:' || t.type)::uuid end,
+       case when t.kind = 'strip' then md5('sample:strip_type:' || t.type)::uuid end,
+       t.strip_length, t.qty, t.length
+  from (values ('kd1-p150', 'K-D1', 'panel', 'P-150', null::numeric, 420::numeric, null::numeric),
+               ('kd1-p100', 'K-D1', 'panel', 'P-100', null, 60, null),
+               ('kd1-t100', 'K-D1', 'panel', 'T-100', null, 120, null),
+               ('kd1-s50x4', 'K-D1', 'strip', '50x4', 6, null, 7560),
+               ('kd2-p150', 'K-D2', 'panel', 'P-150', null, 170, null),
+               ('kd2-t075', 'K-D2', 'panel', 'T-075', null, 64, null),
+               ('kd2-s40x4', 'K-D2', 'strip', '40x4', 4.5, null, 2880),
+               ('id1-p150', 'I-D1', 'panel', 'P-150', null, 760, null),
+               ('id1-p125', 'I-D1', 'panel', 'P-125', null, 40, null),
+               ('id1-s50x5', 'I-D1', 'strip', '50x5', 9, null, 14400))
+       as t(key, wall, kind, type, strip_length, qty, length)
+ where exists (select from prj.project_revision r
+                where r.id = md5('sample:revision:kastamonu:0')::uuid and r.status = 'draft')
+on conflict do nothing;
+
+update prj.project_revision set status = 'submitted'
+ where id = md5('sample:revision:kastamonu:0')::uuid and status = 'draft';
+update prj.project_revision set status = 'approved'
+ where id = md5('sample:revision:kastamonu:0')::uuid and status = 'submitted';

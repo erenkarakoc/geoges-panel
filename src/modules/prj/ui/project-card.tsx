@@ -32,8 +32,9 @@ import { useActionToast } from "@/platform/ui/feedback/use-action-toast";
 
 /**
  * Proje detayı (SCR-023, TASK-0123 step 1): the card, the three durations side by side, the stage
- * and its history, and the project's sites (handed in by the page, which may compose SIT's part).
- * Walls, revisions, the technical office and the supply matrix join as their steps land; the
+ * and its history, the project's sites (handed in by the page, which may compose SIT's part), the
+ * walls and targets of the revision valid today and the revisions themselves. The technical
+ * office and the supply matrix join as their steps land; the
  * contract and progress payment tabs say which slice brings them (D-287).
  */
 
@@ -74,6 +75,8 @@ export function ProjectCard({
   clients,
   people,
   sites,
+  targets,
+  revisions,
   actions,
 }: {
   project: Project;
@@ -90,6 +93,10 @@ export function ProjectCard({
   people: readonly Choice[];
   /** The Şantiyeler tab's content, composed by the page from SIT. */
   sites: ReactNode;
+  /** Duvarlar ve hedefler: what the revision valid today says (step 2). */
+  targets: ReactNode;
+  /** Revizyonlar: the project's revisions (step 2). */
+  revisions: ReactNode;
   actions: ProjectCardActions;
 }) {
   const router = useRouter();
@@ -190,6 +197,8 @@ export function ProjectCard({
           <TabsList className="max-md:[&>button]:h-11" variant="underline">
             <TabsTab value="details">Bilgiler</TabsTab>
             <TabsTab value="sites">Şantiyeler</TabsTab>
+            <TabsTab value="targets">Duvarlar ve hedefler</TabsTab>
+            <TabsTab value="revisions">Revizyonlar</TabsTab>
             <TabsTab value="stages">Aşama geçmişi</TabsTab>
             <TabsTab value="contract">Sözleşme ve hakediş</TabsTab>
           </TabsList>
@@ -241,6 +250,14 @@ export function ProjectCard({
 
         <TabsPanel className="pt-4" value="sites">
           {sites}
+        </TabsPanel>
+
+        <TabsPanel className="pt-4" value="targets">
+          {targets}
+        </TabsPanel>
+
+        <TabsPanel className="pt-4" value="revisions">
+          {revisions}
         </TabsPanel>
 
         <TabsPanel className="pt-4" value="stages">

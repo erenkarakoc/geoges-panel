@@ -149,6 +149,7 @@ Biçim: `docs/requirements/README.md`.
 | `project.created` | Proje oluştu | Proje kaydı açıldığında | proje, işveren, koordinatör | iç |
 | `project.stage_changed` | Proje aşaması değişti | Aşama geçişinde | proje, eski aşama, yeni aşama | iç |
 | `project.changed` | Proje kartı değişti | Kartın bilgisi değiştiğinde (aşama dışında) | proje | iç |
+| `project_revision.submitted` | Proje revizyonu onaya gönderildi | Teknik ofis taslak revizyonu onaya gönderdiğinde | proje, revizyon, neden | iç |
 | `project_revision.approved` | Proje revizyonu onaylandı | Yeni hedefler geçerli olduğunda | proje, revizyon, fark | iç |
 | `wall.completed` | Duvar tamamlandı | Duvar durumu "tamamlandı" olduğunda | proje, duvar | iç |
 | `technical_office_item.overdue` | Teknik ofis işi gecikti | Teslim tarihi geçtiğinde | proje, iş, sorumlu | iç |

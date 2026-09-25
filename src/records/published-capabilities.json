@@ -90,6 +90,16 @@
     "code": "project.stage_changed"
   },
   {
+    "module": "PRJ",
+    "kind": "event",
+    "code": "project_revision.approved"
+  },
+  {
+    "module": "PRJ",
+    "kind": "event",
+    "code": "project_revision.submitted"
+  },
+  {
     "module": "AUD",
     "kind": "condition",
     "code": "revision_request.record_type"
@@ -188,6 +198,11 @@
     "module": "IAM",
     "kind": "condition",
     "code": "user.roles"
+  },
+  {
+    "module": "PRJ",
+    "kind": "event",
+    "code": "wall.completed"
   },
   {
     "module": "WFL",

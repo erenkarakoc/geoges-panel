@@ -59,7 +59,7 @@ const optionalDate = (what: string) =>
 const optionalId = z
   .string()
   .transform((value) => value || null)
-  .refine((value) => value === null || z.uuid().safeParse(value).success, {
+  .refine((value) => value === null || z.guid().safeParse(value).success, {
     message: "Seçim geçersiz.",
   })
   .nullish();

@@ -164,7 +164,7 @@ export const assignTaskSchema = z.object({
     .min(1, "Görevin başlığını yazın.")
     .max(200, "Başlık en çok 200 karakter olabilir."),
   description: z.string().trim().max(4000, "Açıklama en çok 4000 karakter olabilir.").optional(),
-  assigneeId: z.uuid("Sorumlu kişiyi seçin."),
+  assigneeId: z.guid("Sorumlu kişiyi seçin."),
   priority: z.enum(TASK_PRIORITIES).default("normal"),
   dueOn: z
     .string()

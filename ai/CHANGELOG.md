@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2026-09-26 — Revisions, walls and targets (TASK-0123, step 2)
+
+Migration 0065 and seed 0012.
+
+- **Targets change only through a revision** (D-136). The technical office opens a draft — Rev.0 first, then each next one starting as a copy of the last approved revision's walls and targets — edits it and sends it for approval. One revision is open at a time. An approved revision is valid from its approval day, never earlier, and never changes again (D-292 rule 1); the database refuses both.
+- **Only the flow approves** (REQ-PRJ-009, D-292 rule 2). The new template "Proje revizyonu onayı" gives the general manager the decision; an approval makes the revision valid that day, a refusal or a return sends it back to draft and tells the technical office. A person writing "approved" straight into the table is refused. The template has to be copied and published in the designer (Akış Şablonları) before it runs.
+- **The flow's "change the record's status" step now reaches a module.** It had no counterpart anywhere, so the "Kazanılan işin başlatılması" and "Kurum onayı takibi" templates would have failed at that step. The composition root now sends it to the module owning the record, by record type: a project's stage and a project revision's decision are the first two. This was planned for step 5 and moved here because the revision's approval needs it.
+- **A wall is one thing across revisions** — its code, its site, how far it has got — while its size and its targets belong to each revision. It stands only on one of its own project's sites (PRJ-K4). Targets are panel pieces by type (m² from the type), strip metres by type and cut length, and other work items. **The project target is the sum of the walls** (PRJ-K2) and a past day is read against the revision valid that day. A panel or strip type made for one project is refused in another (REQ-ADM-005, database side).
+- **Screens:** the project card has "Duvarlar ve hedefler" (the revision valid today, the project total and each wall with its status) and "Revizyonlar"; SCR-024 edits a draft's walls and targets, sends and recalls it, and shows what it changes against the previous revision side by side. The pilot's Kastamonu project has an approved sample Rev.0 with three walls.
+- **Found while trying it in the browser:** forms checked ids with `z.uuid()`, which refuses the md5-derived ids seeds and samples use — the wall form said "no site chosen". It was also in the recipe, task and revision-request forms, where seeded catalog items would have been refused in real use. All now use `z.guid()`, and ESLint refuses `z.uuid()`.
+- Tests: 13 database tests for the revision rules, 2 end-to-end tests (the shipped template, published, approved and refused from the queue), 5 domain tests.
+
 ## 2026-09-26 — Projects and sites open (TASK-0123, step 1)
 
 The owner approved TASK-0123's business rules (D-292). Step 1 lays down the project card and its sites — migration 0064 (new `prj` and `sit` schemas) and seed 0011 (project stages).

@@ -97,7 +97,7 @@ export function stillCurrent(
 export const submitRevisionSchema = z.object({
   recordSchema: z.string().regex(/^[a-z]{2,3}$/),
   recordTable: z.string().regex(/^[a-z][a-z0-9_]*$/),
-  recordId: z.uuid(),
+  recordId: z.guid(),
   reason: z
     .string()
     .trim()
@@ -106,7 +106,7 @@ export const submitRevisionSchema = z.object({
 });
 
 export const decideRevisionSchema = z.object({
-  id: z.uuid(),
+  id: z.guid(),
   approve: z.boolean(),
   reason: z.string().trim().max(2000).optional(),
 });

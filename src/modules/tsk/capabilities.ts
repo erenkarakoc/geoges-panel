@@ -15,19 +15,19 @@ import { defineAction, defineCapabilities } from "@/platform/capabilities/catalo
 
 const taskInput = z.object({
   /** The step visit the task belongs to; it is what makes the task the flow's (D-087). */
-  stepRunId: z.uuid(),
+  stepRunId: z.guid(),
   title: z.string().trim().min(1).max(200),
-  assigneeUserId: z.uuid(),
+  assigneeUserId: z.guid(),
   priority: z.enum(["low", "normal", "high", "critical"]).default("normal"),
   dueAt: z.coerce.date().nullish(),
   linkPath: z.string().startsWith("/").max(300).nullish(),
-  record: z.object({ schema: z.string().min(2), table: z.string().min(2), id: z.uuid() }).nullish(),
-  siteId: z.uuid().nullish(),
-  projectId: z.uuid().nullish(),
+  record: z.object({ schema: z.string().min(2), table: z.string().min(2), id: z.guid() }).nullish(),
+  siteId: z.guid().nullish(),
+  projectId: z.guid().nullish(),
 });
 
 const notificationInput = z.object({
-  userId: z.uuid(),
+  userId: z.guid(),
   /** The notification kind, which decides the icon, the channel and the grouping. */
   type: z.string().min(3).max(60),
   subject: z.string().trim().min(1).max(200),

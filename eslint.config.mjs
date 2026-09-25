@@ -151,6 +151,9 @@ const eslintConfig = defineConfig([
       "src/modules/*/data/**",
       "src/platform/jobs/**",
       "src/platform/search/**",
+      // A real-database test at the composition root drives the engine through its own worker
+      // pool, as the modules' data-layer tests do (TASK-0123's end-to-end revision approval).
+      "src/records/**/*.dbtest.ts",
     ],
     rules: {
       "no-restricted-imports": [
@@ -191,6 +194,13 @@ const eslintConfig = defineConfig([
         "error",
         { selector: `Literal[value=${sidewaysOnly}]`, message: scrollStripMessage },
         { selector: `TemplateElement[value.raw=${sidewaysOnly}]`, message: scrollStripMessage },
+        {
+          // Seeded and sample rows carry ids derived from md5, which are not RFC version UUIDs;
+          // z.uuid() refuses them and a form says "nothing chosen" (TASK-0123, 2026-09-26).
+          selector: "CallExpression[callee.object.name='z'][callee.property.name='uuid']",
+          message:
+            "Use z.guid(): seeded and sample ids (md5-derived) are not RFC version UUIDs and z.uuid() refuses them.",
+        },
       ],
     },
   },

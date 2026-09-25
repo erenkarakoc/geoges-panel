@@ -492,3 +492,16 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-25 22:11:13Z · b13a9554 · Write · `src/app/(app)/projects/[id]/actions.ts`
 - 2026-09-25 22:11:13Z · b13a9554 · Write · `src/app/(app)/projects/[id]/page.tsx`
 - 2026-09-25 22:13:58Z · b13a9554 · Write · `db/samples/0003_prj_projects_sites.sql`
+- 2026-09-25 22:33:07Z · b13a9554 · Write · `db/migrations/0065_prj_revisions_walls_targets.sql`
+- 2026-09-25 22:34:23Z · b13a9554 · Write · `src/modules/prj/data/revision-store.ts`
+- 2026-09-25 22:35:16Z · b13a9554 · Write · `src/modules/prj/data/revision.dbtest.ts`
+- 2026-09-25 22:36:39Z · b13a9554 · Write · `db/seeds/0012_wfl_project_revision_template.sql`
+- 2026-09-25 22:37:48Z · b13a9554 · Write · `src/records/project-revision-flow.dbtest.ts`
+- 2026-09-25 22:38:51Z · b13a9554 · Write · `src/modules/prj/application/revisions.ts`
+- 2026-09-25 22:38:51Z · b13a9554 · Write · `src/modules/prj/domain/revision.ts`
+- 2026-09-25 22:39:33Z · b13a9554 · Write · `src/modules/prj/ui/target-text.ts`
+- 2026-09-25 22:39:34Z · b13a9554 · Write · `src/modules/prj/ui/project-targets.tsx`
+- 2026-09-25 22:39:53Z · b13a9554 · Write · `src/modules/prj/ui/revision-list.tsx`
+- 2026-09-25 22:40:49Z · b13a9554 · Write · `src/modules/prj/ui/revision-editor.tsx`
+- 2026-09-25 22:41:35Z · b13a9554 · Write · `src/app/(app)/projects/[id]/revisions/[revisionId]/actions.ts`
+- 2026-09-25 22:41:35Z · b13a9554 · Write · `src/app/(app)/projects/[id]/revisions/[revisionId]/page.tsx`

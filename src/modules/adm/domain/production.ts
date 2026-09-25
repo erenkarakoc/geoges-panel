@@ -68,10 +68,10 @@ export const UNITS_FOR: Record<OutputKind, readonly PerUnit[]> = {
 export const recipeLineInput = z
   .object({
     outputKind: z.enum(OUTPUT_KINDS),
-    panelTypeId: z.uuid().nullish(),
-    stripTypeId: z.uuid().nullish(),
+    panelTypeId: z.guid().nullish(),
+    stripTypeId: z.guid().nullish(),
     perUnit: z.enum(PER_UNITS),
-    materialItemId: z.uuid({ error: "Sarf malzeme seçilmeli." }),
+    materialItemId: z.guid({ error: "Sarf malzeme seçilmeli." }),
     qtyPerUnit: z.coerce
       .number({ error: "Miktar bir sayı olmalı." })
       .min(0, "Miktar eksi olamaz; kullanılmayacaksa sıfır yazılır."),

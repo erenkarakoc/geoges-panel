@@ -99,7 +99,7 @@ const optional = <T extends z.ZodType>(schema: T) =>
   z.preprocess((v) => (v === "" || v === undefined ? undefined : v), schema.optional());
 
 const filterSchema = z.object({
-  kisi: optional(z.uuid()),
+  kisi: optional(z.guid()),
   islem: optional(z.enum(groupValues)),
   kayit: optional(z.enum(tableValues)),
   baslangic: optional(z.string().regex(DAY)),
