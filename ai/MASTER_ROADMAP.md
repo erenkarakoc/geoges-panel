@@ -1,6 +1,6 @@
 # MASTER ROADMAP
 
-Status: APPROVED by owner (2026-09-15, incl. CHG-001 resolution) · Last updated: 2026-09-24
+Status: APPROVED by owner (2026-09-15, incl. CHG-001 resolution) · Last updated: 2026-09-26
 
 **This file is the single authority for the plan.** Every other record derives from it and may not contradict it:
 `ai/TASKS.md` says who does what and in which state, `ai/DECISIONS.md` + ADRs say why, `ai/CURRENT_STATE.md` says where we are right now, `ai/REQUIREMENTS.md` says what is wanted. An approved change request is written into this file **in the same session it is approved** (`ai/PROJECT_RULES.md` §9); a change request that is not in this file may not be implemented. Consistency is machine-checked by `npm run records` (`scripts/check-records.mjs`), not by memory.
@@ -24,9 +24,9 @@ Module codes: see `docs/architecture/MODULE_MAP.md`.
 | 04 | Database Architecture | Design | DONE |
 | 05 | Infrastructure, Environments & Operations Design | Design | DONE |
 | 06 | Validation Spikes | Validate | DONE |
-| 07 | Foundation Build | Build | IN_PROGRESS |
-| 08 | Workflow Engine & Visual Designer | Build | NOT_STARTED |
-| 09 | Slice 1 — Projects, Sites, Daily Log, Approvals, Cockpit | Build + Pilot | NOT_STARTED |
+| 07 | Foundation Build | Build | PARTIALLY_DONE |
+| 08 | Workflow Engine & Visual Designer | Build | PARTIALLY_DONE |
+| 09 | Slice 1 — Projects, Sites, Daily Log, Approvals, Cockpit | Build + Pilot | IN_PROGRESS |
 | 09R | Record-Type Builder (after the Slice 1 pilot, D-105) | Build + Pilot | NOT_STARTED |
 | 10 | Slice 2 — Inventory, Weighing, Purchasing, Factory | Build + Pilot | NOT_STARTED |
 | 11 | Slice 3 — Progress Payments, Finance, Period Close | Build + Pilot | NOT_STARTED |
@@ -36,6 +36,8 @@ Module codes: see `docs/architecture/MODULE_MAP.md`.
 | 15 | Slice 7 — Archive, Reporting, Performance & Bonus, Intelligence, Strategy | Build + Pilot | NOT_STARTED |
 | 15M | Panel MCP Server — product surface (after the slices, ADR-019, D-267) | Build | NOT_STARTED |
 | 19 | Production Readiness & Company-wide Rollout | Release | NOT_STARTED |
+
+**Phases 07 and 08 (2026-09-26):** both are built and neither is closed. Phase 07 owes the owner's M1 walk (TASK-0111, postponed by the owner, D-278) and the hosted parts of TASK-0113 (DEF-008); Phase 08 owes the owner's walk of the designer, the approval centre, the templates and the run log (TASK-0119, TASK-0120). They are marked PARTIALLY_DONE because only one phase can be the active one and Phase 09 is (D-291); what each still owes is listed in its own section.
 
 **Milestone M0 — early first screen (CHG-002, approved 2026-09-15) — DONE 2026-09-16, owner approved:** runs in parallel with Phase 01. Real Supabase Auth (sign-in, 2FA, password reset), new-role onboarding, app shell and empty dashboard skeleton, local only. Built as the first part of the Phase 07 foundation, not throwaway. Plan: `docs/features/m0-early-first-screen-plan.md`; tasks TASK-0022…TASK-0026.
 

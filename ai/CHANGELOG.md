@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-26 — The roadmap, rewritten for the people who will use the panel
+
+- `YOL-HARITASI.md` was rewritten at the owner's request: current state (Phase 09, TASK-0123 halfway), the whole of Phase 09 — what the company gets when it ends, its eleven tasks, TASK-0123's five steps, the decisions and exit conditions — and every section in plain Turkish for company staff. Migration numbers, test counts, CI runs and the long build diary are gone from it; they live in these records and the changelog.
+- The records caught up with where the work is: `MASTER_ROADMAP.md` showed Phases 08 and 09 as not started. Phase 09 is now the one phase IN_PROGRESS; Phases 07 and 08 are PARTIALLY_DONE, each with what it still owes (the owner's walks, the hosted part of TASK-0113). CURRENT_STATE and SESSION_HANDOFF point at Phase 09.
+
 ## 2026-09-26 — The default flow templates, counted against the requirements
 
 - The owner asked whether the flow templates are complete. Against REQ-WFL-028 they are: its nine approvals and all 23 nodes of the eight end-to-end processes ship (with the external-party subflow and, since step 2 of TASK-0123, the project revision approval: 28 templates). Most of them wait for their modules' events, by design (D-279).

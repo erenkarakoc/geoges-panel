@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-26
 
-CURRENT PHASE: PHASE 07 — Foundation Build (its acceptance walks postponed, D-278) → PHASE 08 Workflow Engine
+CURRENT PHASE: PHASE 09 — Slice 1: Projects, Sites, Daily Site Log (TASK-0123 step 3 next); Phases 07 and 08 built, owner walks owed
 
 ## Latest continuation — TASK-0122 finished on this side; TASK-0123's plan is next (2026-09-26)
 
