@@ -65,6 +65,7 @@ export {
   openFlow,
   publishFlow,
   publishSummary,
+  startFlow,
   writeDraft,
 } from "@/modules/wfl/application/flows";
 export { flowWakeJob } from "@/modules/wfl/application/wake-job";

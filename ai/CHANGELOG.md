@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-25 — A flow can now be started, not only opened (TASK-0119, step 4)
+
+- **"Yeni akış" works.** One question — what is this process called — and the flow opens in the designer as a start and an end with nothing between them: a definition the schema accepts, so the designer opens on something whole rather than on a list of complaints.
+- The address comes from the name: Turkish letters become their closest plain letters, because a key is an address and an address with "ş" in it is a nuisance for the rest of its life, and a name whose key is taken gets a number rather than overwriting a flow. Pure, and tested with the names that break it.
+
 ## 2026-09-25 — The dry run and the publish, from the designer (TASK-0119, step 3)
 
 - **The dry run is asked for, not run inside the request** (D-284). The dry run is the engine's own loop with a sink that writes nothing, and the engine runs on the worker's connection; request code never holds one, and handing it one to save a second of waiting would quietly undo that rule. So the screen schedules the question, keyed by the version and its content hash, and watches for the evidence row the database already binds to that hash. Pressing the button twice on the same definition asks one question; a changed definition is a new one.

@@ -11,6 +11,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
+import { createFlowAction } from "@/app/(app)/admin/workflows/actions";
 import { AccessDeniedError, signInIdentity, todayRoute } from "@/modules/iam";
 import { listFlows } from "@/modules/wfl";
 import { FlowList } from "@/modules/wfl/ui/flow-list";
@@ -39,7 +40,7 @@ export default async function WorkflowsPage() {
   if (!isModuleEnabled("WFL")) return <FeatureOff />;
 
   const flows = await load();
-  if (flows) return <FlowList flows={flows} />;
+  if (flows) return <FlowList create={createFlowAction} flows={flows} />;
 
   // SCREEN_STATES: a screen reached by address without permission (D-221).
   return (

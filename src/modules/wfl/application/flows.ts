@@ -1,5 +1,6 @@
 import "server-only";
 
+import { flowKeyOf, starterDefinition } from "@/modules/wfl/domain/flow-key";
 import {
   publishVersion,
   readFlowForDesigner,
@@ -63,4 +64,19 @@ export function publishSummary(identity: DbIdentity, versionId: string) {
 /** Publishes the draft. The database refuses it without a passed dry run of this definition. */
 export function publishFlow(identity: DbIdentity, versionId: string) {
   return publishVersion(identity, versionId);
+}
+
+/**
+ * Starts a flow (SCR-195). The owner types a name; the address comes from the name and the flow
+ * begins as a start and an end with nothing between them, which is a definition the schema accepts —
+ * so the designer opens on something whole rather than on an error.
+ */
+export async function startFlow(identity: DbIdentity, name: string): Promise<string> {
+  const existing = await readFlows(identity);
+  const key = flowKeyOf(
+    name,
+    existing.map((flow) => flow.key),
+  );
+  await saveDraft(identity, { key, name: name.trim(), definition: starterDefinition() });
+  return key;
 }

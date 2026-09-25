@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { PlusIcon, WorkflowIcon } from "lucide-react";
+import { WorkflowIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyContent,
@@ -27,6 +26,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { FlowSummary } from "@/modules/wfl/data/flow-store";
+import { NewFlowButton } from "@/modules/wfl/ui/new-flow-button";
 
 /**
  * The company's flows (SCR-195, TASK-0119). The minimal list the designer is reached from:
@@ -43,7 +43,13 @@ const TRIGGER_LABELS: Record<string, string> = {
   manual: "Elle",
 };
 
-export function FlowList({ flows }: { flows: readonly FlowSummary[] }) {
+export function FlowList({
+  flows,
+  create,
+}: {
+  flows: readonly FlowSummary[];
+  create: (name: string) => Promise<{ error: string | null; key: string | null }>;
+}) {
   if (!flows.length) {
     return (
       <Empty className="flex-1">
@@ -60,10 +66,7 @@ export function FlowList({ flows }: { flows: readonly FlowSummary[] }) {
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
-          <Button disabled variant="outline">
-            <PlusIcon aria-hidden="true" />
-            Yeni akış
-          </Button>
+          <NewFlowButton create={create} variant="outline" />
         </EmptyContent>
       </Empty>
     );
@@ -71,12 +74,15 @@ export function FlowList({ flows }: { flows: readonly FlowSummary[] }) {
 
   return (
     <Frame className="w-full">
-      <FrameHeader>
-        <FrameTitle>Akışlar</FrameTitle>
-        <FrameDescription>
-          Şirketin süreçleri. Bir akışı açmak tasarımcıyı açar; yayımlanmış bir sürüm düzenlenmez,
-          düzenlemeye başlamak yeni bir taslak açar.
-        </FrameDescription>
+      <FrameHeader className="flex-row items-start justify-between gap-3">
+        <div className="flex min-w-0 flex-col">
+          <FrameTitle>Akışlar</FrameTitle>
+          <FrameDescription>
+            Şirketin süreçleri. Bir akışı açmak tasarımcıyı açar; yayımlanmış bir sürüm düzenlenmez,
+            düzenlemeye başlamak yeni bir taslak açar.
+          </FrameDescription>
+        </div>
+        <NewFlowButton create={create} />
       </FrameHeader>
       <FramePanel>
         <ul className="flex flex-col gap-2 lg:hidden">
