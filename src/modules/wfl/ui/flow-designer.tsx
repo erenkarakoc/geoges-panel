@@ -27,6 +27,7 @@ import {
 } from "@/modules/wfl/domain/edit";
 import { graphOf, stepLabel, stepTypeLabel, type Outlet } from "@/modules/wfl/domain/graph";
 import { flowCanvasId } from "@/modules/wfl/ui/flow-canvas-id";
+import { FlowMenu, type FlowMenuActions } from "@/modules/wfl/ui/flow-menu";
 import { FlowActions, type DesignerActions, type DryRunState } from "@/modules/wfl/ui/flow-publish";
 import {
   StepQuestions,
@@ -93,12 +94,15 @@ export function FlowDesigner({
   vocabulary,
   save,
   actions,
+  menu,
   dryRun,
 }: {
   flow: DesignerFlow;
   vocabulary: DesignerVocabulary;
   save: SaveAction;
   actions: DesignerActions;
+  /** Copy, close and version history, behind the header's "…" (ADMINISTRATION section 3). */
+  menu: FlowMenuActions;
   /** What the last dry run of this version found, read on the server before the screen opened. */
   dryRun: DryRunState;
 }) {
@@ -212,6 +216,7 @@ export function FlowDesigner({
             ready={valid}
             versionId={flow.versionId}
           />
+          <FlowMenu actions={menu} flowKey={flow.key} />
         </div>
       </header>
 

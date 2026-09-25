@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-09-25 — The designer's "…": a copy, a closing, and what the flow has been (TASK-0119, step 5)
+
+- **A copy to work on.** It carries the definition as it stands and starts as a draft of its own, because a flow is copied in order to be changed and changing the original is exactly what the copy avoids. Its address comes from its name, like any other flow's.
+- **Closing is not deleting**, and the wording says so: nothing new starts, what is already running finishes where it is (REQ-WFL-024). The reason is asked for and kept — a flow somebody turned off without saying why is the sort of thing people argue about a year later.
+- **Version history**, with why it exists on the window: a run carries on with the version it started on, so past versions are not deleted.
+- Two more database tests: the copy is a draft of its own with the original untouched, and a closed flow keeps its versions.
+
 ## 2026-09-25 — A flow can now be started, not only opened (TASK-0119, step 4)
 
 - **"Yeni akış" works.** One question — what is this process called — and the flow opens in the designer as a start and an end with nothing between them: a definition the schema accepts, so the designer opens on something whole rather than on a list of complaints.

@@ -2,11 +2,13 @@ import "server-only";
 
 import { flowKeyOf, starterDefinition } from "@/modules/wfl/domain/flow-key";
 import {
+  disableFlow,
   publishVersion,
   readFlowForDesigner,
   readFlows,
   readLastDryRun,
   readPublishSummary,
+  readVersions,
   requestDryRun,
   saveDraft,
   type DbIdentity,
@@ -79,4 +81,43 @@ export async function startFlow(identity: DbIdentity, name: string): Promise<str
   );
   await saveDraft(identity, { key, name: name.trim(), definition: starterDefinition() });
   return key;
+}
+
+/** Every version of this flow, newest first, for the designer's version history. */
+export function flowVersions(identity: DbIdentity, flowKey: string) {
+  return readVersions(identity, flowKey);
+}
+
+/**
+ * A copy of this flow to work on (ADMINISTRATION section 3). The copy carries the definition as it
+ * stands and starts as a draft of its own: a flow is copied to be changed, and changing the original
+ * is exactly what the copy is there to avoid.
+ */
+export async function copyFlow(identity: DbIdentity, flowKey: string): Promise<string | null> {
+  const flow = await readFlowForDesigner(identity, flowKey);
+  if (!flow) return null;
+  const existing = await readFlows(identity);
+  const name = `${flow.name} kopyası`;
+  const key = flowKeyOf(
+    name,
+    existing.map((one) => one.key),
+  );
+  await saveDraft(identity, {
+    key,
+    name,
+    definition: flow.definition,
+    singleInstance: flow.singleInstance,
+  });
+  return key;
+}
+
+/** Stops the flow from starting anything new; what is already running finishes (REQ-WFL-024). */
+export async function closeFlow(
+  identity: DbIdentity,
+  flowKey: string,
+  reason: string,
+): Promise<boolean> {
+  const flow = await readFlowForDesigner(identity, flowKey);
+  if (!flow) return false;
+  return disableFlow(identity, flow.flowId, reason);
 }

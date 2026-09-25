@@ -3,9 +3,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import {
+  closeFlowAction,
+  copyFlowAction,
   publishFlowAction,
   readDryRunAction,
   readPublishSummaryAction,
+  readVersionsAction,
   runDryRunAction,
   saveFlowDraftAction,
 } from "@/app/(app)/admin/workflows/[flowKey]/actions";
@@ -147,6 +150,11 @@ export default async function FlowDesignerPage({
         status: flow.status ?? "draft",
         definition: flow.definition,
         versionId: flow.versionId,
+      }}
+      menu={{
+        close: closeFlowAction,
+        copy: copyFlowAction,
+        versions: readVersionsAction,
       }}
       save={saveFlowDraftAction}
       vocabulary={await vocabularyFor(signedIn.identity)}

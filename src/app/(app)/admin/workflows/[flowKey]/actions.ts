@@ -5,6 +5,9 @@ import { revalidatePath } from "next/cache";
 import { AccessDeniedError, signInIdentity } from "@/modules/iam";
 import {
   askDryRun,
+  closeFlow,
+  copyFlow,
+  flowVersions,
   lastDryRun,
   parseDefinition,
   publishFlow,
@@ -180,6 +183,67 @@ export async function publishFlowAction(input: {
     if (error instanceof AccessDeniedError) return { error: error.message, published: false };
     const said = refusal(error);
     if (said) return { error: said, published: false };
+    throw error;
+  }
+}
+
+/** The same answer "Yeni akış" gives: the address of the flow to open, or what went wrong. */
+type NewFlowResult = { error: string | null; key: string | null };
+
+export type FlowVersionRow = {
+  version: number;
+  status: string;
+  publishedAt: number | null;
+};
+
+/** Every version of this flow, for the designer's version history (ADMINISTRATION section 3). */
+export async function readVersionsAction(flowKey: string): Promise<FlowVersionRow[]> {
+  const signedIn = await signInIdentity();
+  if (!signedIn) return [];
+  const versions = await flowVersions(signedIn.identity, flowKey);
+  return versions.map((version) => ({
+    publishedAt: version.publishedAt ? version.publishedAt.getTime() : null,
+    status: version.status,
+    version: version.version,
+  }));
+}
+
+/** A copy to work on; the copy is a draft of its own and the original is left alone. */
+export async function copyFlowAction(flowKey: string): Promise<NewFlowResult> {
+  const signedIn = await signInIdentity();
+  if (!signedIn) return { error: "Oturum kapalı.", key: null };
+  try {
+    const key = await copyFlow(signedIn.identity, flowKey);
+    if (!key) return { error: "Böyle bir akış yok.", key: null };
+    revalidatePath("/admin/workflows");
+    return { error: null, key };
+  } catch (error) {
+    if (error instanceof AccessDeniedError) return { error: error.message, key: null };
+    const said = refusal(error);
+    if (said) return { error: said, key: null };
+    throw error;
+  }
+}
+
+/** Closes the flow: nothing new starts, what is running finishes (REQ-WFL-024). */
+export async function closeFlowAction(input: {
+  key: string;
+  reason: string;
+}): Promise<{ error: string | null; closed: boolean }> {
+  const signedIn = await signInIdentity();
+  if (!signedIn) return { closed: false, error: "Oturum kapalı." };
+  if (input.reason.trim().length < 3) {
+    return { closed: false, error: "Kapatma sebebi en az üç harf olmalı." };
+  }
+  try {
+    const closed = await closeFlow(signedIn.identity, input.key, input.reason.trim());
+    revalidatePath(`/admin/workflows/${input.key}`);
+    revalidatePath("/admin/workflows");
+    return { closed, error: closed ? null : "Böyle bir akış yok." };
+  } catch (error) {
+    if (error instanceof AccessDeniedError) return { closed: false, error: error.message };
+    const said = refusal(error);
+    if (said) return { closed: false, error: said };
     throw error;
   }
 }

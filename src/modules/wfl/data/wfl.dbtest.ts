@@ -13,10 +13,12 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { connectAdmin } from "../../../../scripts/db-admin.mjs";
 import { releaseTestPeople } from "../../../../scripts/db-test-people.mjs";
+import { closeFlow, copyFlow } from "@/modules/wfl/application/flows";
 import {
   disableFlow,
   publishVersion,
   readLastDryRun,
+  readFlowForDesigner,
   readPublished,
   readPublishSummary,
   readVersions,
@@ -33,7 +35,9 @@ const ROLES = ["T0117_OUTSIDER"];
 const KEY = "zz-t0117-approval";
 /** The designer's own flow, so asking for dry runs does not disturb the publish rules above. */
 const DESIGNER_KEY = "zz-t0119-designer";
-const KEYS = [KEY, DESIGNER_KEY];
+/** Its name is what a copy's key is derived from, so the copy is cleaned up by the same pattern. */
+const DESIGNER_NAME = "zz t0119 tasarımcı";
+const KEY_PATTERN = "zz-t011%";
 
 let admin: pg.Client;
 const as = (userId: string) => ({ userId, actingRoleId: null });
@@ -60,20 +64,20 @@ async function cleanUp() {
       where job_type = 'wfl.dry_run'
         and payload->>'versionId' in (
           select v.id::text from wfl.flow_version v
-            join wfl.flow f on f.id = v.flow_id where f.key = any($1))`,
-    [KEYS],
+            join wfl.flow f on f.id = v.flow_id where f.key like $1)`,
+    [KEY_PATTERN],
   );
   await admin.query(
     `delete from wfl.dry_run where flow_version_id in (
        select v.id from wfl.flow_version v join wfl.flow f on f.id = v.flow_id
-        where f.key = any($1))`,
-    [KEYS],
+        where f.key like $1)`,
+    [KEY_PATTERN],
   );
   await admin.query(
-    "delete from wfl.flow_version where flow_id in (select id from wfl.flow where key = any($1))",
-    [KEYS],
+    "delete from wfl.flow_version where flow_id in (select id from wfl.flow where key like $1)",
+    [KEY_PATTERN],
   );
-  await admin.query("delete from wfl.flow where key = any($1)", [KEYS]);
+  await admin.query("delete from wfl.flow where key like $1", [KEY_PATTERN]);
   await releaseTestPeople(admin, PEOPLE);
   await admin.query("delete from iam.role_assignment where user_id = any($1::uuid[])", [PEOPLE]);
   await admin.query("delete from iam.user where id = any($1::uuid[])", [PEOPLE]);
@@ -268,7 +272,7 @@ describe("the designer asking for a dry run", () => {
   it("asks the worker once for the same definition, and again for a changed one", async () => {
     versionId = await saveDraft(as(DESIGNER), {
       key: DESIGNER_KEY,
-      name: "Tasarımcı deneme akışı",
+      name: DESIGNER_NAME,
       definition: theirs("İlk hâli"),
     });
 
@@ -286,7 +290,7 @@ describe("the designer asking for a dry run", () => {
 
     await saveDraft(as(DESIGNER), {
       key: DESIGNER_KEY,
-      name: "Tasarımcı deneme akışı",
+      name: DESIGNER_NAME,
       definition: theirs("Değişmiş hâli"),
     });
     const afterChange = await requestDryRun(as(DESIGNER), versionId);
@@ -306,7 +310,7 @@ describe("the designer asking for a dry run", () => {
 
     await saveDraft(as(DESIGNER), {
       key: DESIGNER_KEY,
-      name: "Tasarımcı deneme akışı",
+      name: DESIGNER_NAME,
       definition: theirs("Bir daha değişti"),
     });
     const stale = await readLastDryRun(as(DESIGNER), versionId);
@@ -319,6 +323,32 @@ describe("the designer asking for a dry run", () => {
     // Nothing is live yet, so nothing carries on with an older version.
     expect(summary?.liveVersion).toBeNull();
     expect(summary?.runningOnLive).toBe(0);
+  });
+
+  it("copies the flow into a draft of its own, leaving the original alone", async () => {
+    const copyKey = await copyFlow(as(DESIGNER), DESIGNER_KEY);
+    expect(copyKey).toBe("zz-t0119-tasarimci-kopyasi");
+
+    const copy = await readFlowForDesigner(as(DESIGNER), copyKey!);
+    expect(copy?.name).toBe(`${DESIGNER_NAME} kopyası`);
+    // The copy carries the definition as it stands and starts as a draft of its own.
+    expect(copy?.status).toBe("draft");
+    expect(copy?.version).toBe(1);
+    expect((copy?.definition as { steps: { title: string }[] }).steps[0].title).toBe(
+      "Bir daha değişti",
+    );
+    expect((await readFlowForDesigner(as(DESIGNER), DESIGNER_KEY))?.name).toBe(DESIGNER_NAME);
+  });
+
+  it("closes the flow with a reason, and keeps its versions", async () => {
+    expect(await closeFlow(as(DESIGNER), DESIGNER_KEY, "deneme kapanışı")).toBe(true);
+    const { rows } = await admin.query(
+      "select disabled_at, disabled_reason from wfl.flow where key = $1",
+      [DESIGNER_KEY],
+    );
+    expect(rows[0].disabled_at).not.toBeNull();
+    expect(rows[0].disabled_reason).toBe("deneme kapanışı");
+    expect(await readVersions(as(DESIGNER), DESIGNER_KEY)).toHaveLength(1);
   });
 
   it("answers nothing to somebody who may not design flows", async () => {

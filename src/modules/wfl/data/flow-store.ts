@@ -290,6 +290,7 @@ export function readPublishSummary(identity: DbIdentity, versionId: string) {
 export function readFlowForDesigner(identity: DbIdentity, flowKey: string) {
   return runAsUser(identity, async (db) => {
     const { rows } = await sql<{
+      flow_id: string;
       key: string;
       name: string;
       single_instance: boolean;
@@ -297,7 +298,7 @@ export function readFlowForDesigner(identity: DbIdentity, flowKey: string) {
       version: number | null;
       status: string | null;
       definition: unknown;
-    }>`select f.key, f.name, f.single_instance,
+    }>`select f.id as flow_id, f.key, f.name, f.single_instance,
               v.id as version_id, v.version, v.status, v.definition
          from wfl.flow f
          left join lateral (
@@ -310,6 +311,7 @@ export function readFlowForDesigner(identity: DbIdentity, flowKey: string) {
     const row = rows[0];
     if (!row) return null;
     return {
+      flowId: row.flow_id,
       key: row.key,
       name: row.name,
       singleInstance: row.single_instance,

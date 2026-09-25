@@ -60,6 +60,9 @@ export {
 export { flowEngine } from "@/modules/wfl/application/engine-subscriber";
 export {
   askDryRun,
+  closeFlow,
+  copyFlow,
+  flowVersions,
   lastDryRun,
   listFlows,
   openFlow,
