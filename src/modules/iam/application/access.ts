@@ -9,6 +9,7 @@ import {
   readManagers,
   readOwnerUsers,
   readPeople,
+  readPermissions,
   readRememberedRole,
   readRoles,
   recordSession,
@@ -159,6 +160,11 @@ export async function listPeople() {
 /** The company's roles, for a screen that lets somebody choose one (REQ-WFL-026). */
 export async function listRoles() {
   return readRoles(await currentIdentity());
+}
+
+/** The permissions the panel knows, with their own names, for a screen that offers a choice. */
+export async function listPermissions() {
+  return readPermissions(await currentIdentity());
 }
 
 /**

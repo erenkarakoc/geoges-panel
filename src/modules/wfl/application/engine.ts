@@ -36,6 +36,7 @@ import {
   type FlowDefinition,
   type FlowStep,
 } from "@/modules/wfl/domain/definition";
+import { stepLabel } from "@/modules/wfl/domain/graph";
 import type { SystemDb } from "@/platform/jobs/types";
 
 /**
@@ -323,7 +324,7 @@ async function walk(
     }
 
     if (!RUNNABLE_STEP_TYPES.includes(step.type)) {
-      const reason = `motor bu adımı henüz yürütmüyor: ${step.type}`;
+      const reason = `Bu adımı motor henüz yürütmüyor: ${stepLabel(step)}.`;
       await sink.wait(step.id, { reason });
       await sink.end("failed", reason, step.id);
       return { state: "ended", status: "failed", reason };
@@ -331,7 +332,8 @@ async function walk(
 
     const stateId = await sink.enter(step);
     // Null means the step limit was passed: the instance is already ended and the log says why.
-    if (!stateId) return { state: "ended", status: "failed", reason: "adım sınırı" };
+    if (!stateId)
+      return { state: "ended", status: "failed", reason: "Akış izin verilen adım sayısını aştı." };
 
     if (step.type === "lock") {
       // A lock is about a record, and a flow triggered by a clock may have none: that is a
@@ -377,7 +379,7 @@ async function walk(
       const opened = await sink.branch(stateId, step.paths);
       if (opened.length === 0) {
         // Nothing could be opened — the run is no longer running, or the depth limit was hit.
-        const reason = `paralel adım hiçbir dal açamadı: ${step.id}`;
+        const reason = `${stepLabel(step)} adımı tek bir dal açamadı.`;
         await sink.leave(stateId, "failed", "no_branch");
         await sink.end("failed", reason, step.id);
         return { state: "ended", status: "failed", reason };
@@ -394,10 +396,12 @@ async function walk(
       // last one, and the engine reports the refusal rather than carrying on as if it had worked.
       const code = step.action === "create" ? "record.create" : "record.set_status";
       if (!instanceId) {
-        await sink.leave(stateId, "done", `would ${code}`, {
-          recordType: step.recordType,
-          status: step.status,
-        });
+        await sink.leave(
+          stateId,
+          "done",
+          code === "record.create" ? "would_create" : "would_set_status",
+          { recordType: step.recordType, status: step.status },
+        );
         stepId = step.next ?? null;
         continue;
       }
@@ -418,7 +422,7 @@ async function walk(
           written,
         });
       } catch (error) {
-        const reason = `${code} yapılamadı: ${(error as Error).message}`;
+        const reason = `${stepLabel(step)} adımı tamamlanamadı: ${(error as Error).message}`;
         await sink.leave(stateId, "failed", "refused", { recordType: step.recordType });
         await sink.end("failed", reason, step.id);
         return { state: "ended", status: "failed", reason };
@@ -431,13 +435,13 @@ async function walk(
       if (!instanceId) {
         // A dry run names the flow it would hand the work to and walks on: what that flow does
         // is its own dry run, and the designer runs it there (REQ-WFL-025).
-        await sink.leave(stateId, "done", `would hand over to ${step.flow}`);
+        await sink.leave(stateId, "done", "would_subflow", { flow: step.flow });
         stepId = step.next ?? null;
         continue;
       }
       const childId = await sink.subflow(stateId, step.flow, context);
       if (!childId) {
-        const reason = `alt akış başlatılamadı: ${step.flow}`;
+        const reason = `${stepLabel(step)} adımının çalıştıracağı akış yayımlanmamış.`;
         await sink.leave(stateId, "failed", "no_subflow", { flow: step.flow });
         await sink.end("failed", reason, step.id);
         return { state: "ended", status: "failed", reason };
@@ -451,7 +455,7 @@ async function walk(
       // The list is the owning module's answer, read for the record the flow is about and under
       // the same time limit a looking-back condition has (REQ-WFL-009, D-222).
       if (!relations.list) {
-        const reason = `liste yeteneği bağlı değil: ${step.list}`;
+        const reason = `${stepLabel(step)} adımının listesi bu panelde tanımlı değil.`;
         await sink.leave(stateId, "failed", "no_list");
         await sink.end("failed", reason, step.id);
         return { state: "ended", status: "failed", reason };
@@ -464,7 +468,7 @@ async function walk(
           limitMs: conditionLimitMs,
         });
       } catch (error) {
-        const reason = `liste okunamadı (${step.list}): ${(error as Error).message}`;
+        const reason = `${stepLabel(step)} adımının listesi okunamadı: ${(error as Error).message}`;
         await sink.leave(stateId, "failed", "list_failed", { list: step.list });
         await sink.end("failed", reason, step.id);
         return { state: "ended", status: "failed", reason };
@@ -472,7 +476,9 @@ async function walk(
 
       if (items.length > step.limit) {
         // Doing part of the work quietly is the one answer a person cannot act on.
-        const reason = `liste adımın sınırından uzun (${items.length} > ${step.limit}): ${step.id}`;
+        const reason =
+          `${stepLabel(step)} adımının listesi izin verilenden uzun: ` +
+          `${items.length} öğe, sınır ${step.limit}.`;
         await sink.leave(stateId, "failed", "too_many", { list: step.list, items: items.length });
         await sink.end("failed", reason, step.id);
         return { state: "ended", status: "failed", reason };
@@ -509,7 +515,7 @@ async function walk(
 
       const opened = await sink.branchItems(stateId, step.body, items);
       if (opened.length === 0) {
-        const reason = `her biri için adımı hiçbir dal açamadı: ${step.id}`;
+        const reason = `${stepLabel(step)} adımı listedeki öğeler için dal açamadı.`;
         await sink.leave(stateId, "failed", "no_branch");
         await sink.end("failed", reason, step.id);
         return { state: "ended", status: "failed", reason };
@@ -533,7 +539,7 @@ async function walk(
       // engine still writes nobody's task and nobody's notification itself.
       const above = await ownerOf(db, relations, step.to);
       if (!above) {
-        const reason = `eskalasyonun muhatabı bulunamadı: ${step.id}`;
+        const reason = `${stepLabel(step)} adımında haber verilecek kişi bulunamadı.`;
         await sink.leave(stateId, "failed", "no_owner");
         await sink.end("failed", reason, step.id);
         return { state: "ended", status: "failed", reason };
@@ -559,7 +565,7 @@ async function walk(
     if (step.type === "notify") {
       const owner = await ownerOf(db, relations, step.owner);
       if (!owner) {
-        const reason = `adımın sahibi bulunamadı: ${step.id}`;
+        const reason = `${stepLabel(step)} adımının kime düşeceği bulunamadı.`;
         await sink.leave(stateId, "failed", "no_owner");
         await sink.end("failed", reason, step.id);
         return { state: "ended", status: "failed", reason };
@@ -588,7 +594,7 @@ async function walk(
     if (step.type === "approval" || step.type === "task") {
       const owner = await ownerOf(db, relations, step.owner);
       if (!owner) {
-        const reason = `adımın sahibi bulunamadı: ${step.id}`;
+        const reason = `${stepLabel(step)} adımının kime düşeceği bulunamadı.`;
         await sink.leave(stateId, "failed", "no_owner");
         await sink.end("failed", reason, step.id);
         return { state: "ended", status: "failed", reason };
@@ -718,7 +724,7 @@ async function joinParent(db: SystemDb, childId: string, relations: FlowRuntime)
   if (!waitsOnBranches) return;
 
   if (state.failed > 0) {
-    const reason = state.firstFailure ?? `bir dal hata ile durdu: ${step.id}`;
+    const reason = state.firstFailure ?? `${stepLabel(step)} adımının bir dalı tamamlanamadı.`;
     await leaveStep(
       db,
       { stateId: parent.parentStepStateId, status: "failed", outcome: "branch_failed" },
@@ -914,7 +920,14 @@ export async function resumeFromTask(
 export type DryRunStep = {
   stepId: string;
   type: string;
+  /** The engine's own word for what the step did; a screen translates it (TASK-0119). */
   outcome: string;
+  /** How the step ended, so a screen can say something sensible about a word it does not know. */
+  status: "done" | "failed" | "waiting";
+  /** What the outcome is about: an action's code, another flow's key, a transition's name. */
+  about?: string;
+  /** When the step would act, for a wait or an escalation that has not happened yet. */
+  at?: Date;
   /** Who the step would wait on, worked out for real (REQ-WFL-025). */
   owner?: string | null;
 };
@@ -957,8 +970,18 @@ export async function dryRun(
       // The engine's own limit, so a loop that would never end does not hang the dry run either.
       return counter > 500 ? null : `dry-${counter}`;
     },
-    async leave(_stateId, _status, outcome) {
-      if (entered) steps.push({ stepId: entered.id, type: entered.type, outcome });
+    async leave(_stateId, status, outcome, detail) {
+      if (!entered) return;
+      // What the outcome is *about* travels with the step's own detail; the report carries it so a
+      // screen can say "şu akışa devreder" without knowing the engine's words.
+      const said = detail as { flow?: string; recordType?: string; list?: string } | undefined;
+      steps.push({
+        about: said?.flow ?? said?.recordType ?? said?.list,
+        outcome,
+        status,
+        stepId: entered.id,
+        type: entered.type,
+      });
     },
     async end(status, why) {
       outcome.ends = status;
@@ -968,7 +991,7 @@ export async function dryRun(
       const owner = (detail as { owner?: string } | null)?.owner ?? null;
       const step = entered;
       if (step?.id === stepId && (step.type === "approval" || step.type === "task")) {
-        steps.push({ stepId, type: step.type, outcome: "waiting", owner });
+        steps.push({ stepId, type: step.type, outcome: "waiting", status: "waiting", owner });
         outcome.ends = "waiting";
       }
     },
@@ -988,14 +1011,22 @@ export async function dryRun(
       return null;
     },
     async lock(step, transition) {
-      steps.push({ stepId: step.id, type: step.type, outcome: `would hold ${transition}` });
+      steps.push({
+        about: transition,
+        outcome: "would_hold",
+        status: "done",
+        stepId: step.id,
+        type: step.type,
+      });
     },
     async escalate(_approvalId, at) {
       if (entered) {
         steps.push({
+          at,
+          outcome: "would_escalate",
+          status: "done",
           stepId: entered.id,
           type: entered.type,
-          outcome: `escalates at ${at.toISOString()}`,
         });
       }
     },
@@ -1006,9 +1037,11 @@ export async function dryRun(
     async sleep(_stateId, wakeAt) {
       if (entered) {
         steps.push({
+          at: wakeAt,
+          outcome: "would_wait",
+          status: "waiting",
           stepId: entered.id,
           type: entered.type,
-          outcome: `waiting until ${wakeAt.toISOString()}`,
         });
       }
       outcome.ends = "waiting";

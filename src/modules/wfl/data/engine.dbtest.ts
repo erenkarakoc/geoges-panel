@@ -667,8 +667,8 @@ describe("the dry run a publish needs (REQ-WFL-025, SPIKE-05)", () => {
     expect(report.passed).toBe(true);
     expect(report.ends).toBe("waiting");
     expect(report.steps).toEqual([
-      { stepId: "d1", type: "condition", outcome: "true" },
-      { stepId: "d2", type: "approval", outcome: "waiting", owner: APPROVER },
+      { stepId: "d1", type: "condition", outcome: "true", status: "done", about: undefined },
+      { stepId: "d2", type: "approval", outcome: "waiting", status: "waiting", owner: APPROVER },
     ]);
   });
 
@@ -835,7 +835,9 @@ describe("waiting for a time, and telling somebody (REQ-WFL-005)", () => {
 
     expect(report.passed).toBe(true);
     expect(report.steps.map((step) => step.stepId)).toEqual(["n1", "w1"]);
-    expect(report.steps.at(-1)?.outcome).toMatch(/^waiting until /);
+    // The report says *that* it would wait and *when*; how that reads is the screen's business.
+    expect(report.steps.at(-1)?.outcome).toBe("would_wait");
+    expect(report.steps.at(-1)?.at).toBeInstanceOf(Date);
     expect(after.rows[0].n).toBe(before.rows[0].n);
   });
 });
@@ -996,7 +998,7 @@ describe("an approval that waits too long (REQ-WFL-005, REQ-IAM-020)", () => {
     );
 
     expect(report.passed).toBe(true);
-    expect(report.steps.some((step) => step.outcome.startsWith("escalates at "))).toBe(true);
+    expect(report.steps.some((step) => step.outcome === "would_escalate" && step.at)).toBe(true);
     expect(after.rows[0].n).toBe(before.rows[0].n);
   });
 });
@@ -1253,8 +1255,9 @@ describe("the lock step (REQ-WFL-029, REQ-WFL-030, D-084)", () => {
 
     expect(report.passed).toBe(true);
     expect(report.steps[0]).toMatchObject({
+      about: "handover.complete",
+      outcome: "would_hold",
       stepId: "h1",
-      outcome: "would hold handover.complete",
     });
     expect(after.rows[0].n).toBe(before.rows[0].n);
   });
@@ -1418,7 +1421,7 @@ describe("parallel paths and the join (REQ-WFL-006, REQ-WFL-011)", () => {
     );
     const instance = await readInstance(as(DESIGNER), started[0]);
     expect(instance?.status).toBe("failed");
-    expect(instance?.failure).toContain("sahibi bulunamadı");
+    expect(instance?.failure).toContain("kime düşeceği bulunamadı");
     // The path that worked still ran: a branch is a run of its own and keeps what it did.
     expect((await branchesOf(started[0])).map((b) => b.status)).toEqual(["done", "failed"]);
   });
@@ -1563,7 +1566,7 @@ describe("the for-each step (REQ-WFL-009, D-096, D-222)", () => {
     );
     const instance = await readInstance(as(DESIGNER), started[0]);
     expect(instance?.status).toBe("failed");
-    expect(instance?.failure).toContain("sınırından uzun");
+    expect(instance?.failure).toContain("izin verilenden uzun");
     expect(await branchesOf(started[0])).toHaveLength(0);
   });
 
@@ -1701,7 +1704,7 @@ describe("a flow inside a flow (REQ-WFL-011, REQ-WFL-018)", () => {
     );
     const instance = await readInstance(as(DESIGNER), started[0]);
     expect(instance?.status).toBe("failed");
-    expect(instance?.failure).toContain("alt akış başlatılamadı");
+    expect(instance?.failure).toContain("çalıştıracağı akış yayımlanmamış");
   });
 });
 
@@ -1930,7 +1933,7 @@ describe("the escalation step (REQ-WFL-006, D-282)", () => {
     await runInstance(worker, orphan!, runtime);
     const stopped = await readInstance(as(DESIGNER), orphan!);
     expect(stopped?.status).toBe("failed");
-    expect(stopped?.failure).toContain("eskalasyonun muhatabı");
+    expect(stopped?.failure).toContain("haber verilecek kişi bulunamadı");
   });
 
   it("says in a dry run that it would raise it, and opens nothing", async () => {

@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Spinner } from "@/components/ui/spinner";
-import { stepTypeLabel } from "@/modules/wfl/domain/graph";
+import { reportEndText, reportStepText } from "@/modules/wfl/domain/report-text";
 import { useActionToast } from "@/platform/ui/feedback/use-action-toast";
 
 /**
@@ -40,7 +40,15 @@ export type DryRunState = {
   waiting: boolean;
   passed: boolean | null;
   current: boolean;
-  steps: { stepId: string; type: string; outcome: string; owner?: string | null }[];
+  steps: {
+    stepId: string;
+    type: string;
+    outcome: string;
+    status?: "done" | "failed" | "waiting";
+    about?: string;
+    at?: string | null;
+    owner?: string | null;
+  }[];
   ends: string | null;
   failure: string | null;
   at: number | null;
@@ -63,12 +71,6 @@ export type DesignerActions = {
   }>;
 };
 
-const OUTCOMES: Record<string, string> = {
-  done: "bitti",
-  failed: "durdu",
-  waiting: "bekliyor",
-};
-
 /** How long the screen keeps watching for the worker's answer before it says it gave up. */
 const WATCH_MS = 30_000;
 const WATCH_EVERY_MS = 1_200;
@@ -81,6 +83,8 @@ export function FlowActions({
   dirty,
   actions,
   initial,
+  names,
+  people,
 }: {
   flowKey: string;
   versionId: string;
@@ -92,6 +96,10 @@ export function FlowActions({
   dirty: boolean;
   actions: DesignerActions;
   initial: DryRunState;
+  /** What each step is called on this screen, so the report never shows an id. */
+  names: ReadonlyMap<string, string>;
+  /** Who is who, so "kime düşer" is a person's name rather than an account number. */
+  people: ReadonlyMap<string, string>;
 }) {
   const [dryRun, setDryRun] = useState<DryRunState>(initial);
   const [report, setReport] = useState(false);
@@ -215,13 +223,12 @@ export function FlowActions({
                       className="flex items-baseline justify-between gap-3 px-3 py-2 text-sm"
                       key={`${step.stepId}-${index}`}
                     >
-                      <span className="flex flex-col">
-                        <span className="font-medium">{stepTypeLabel(step.type)}</span>
-                        <span className="text-xs text-muted-foreground">{step.stepId}</span>
-                      </span>
+                      <span className="font-medium">{names.get(step.stepId) ?? "Adım"}</span>
                       <span className="flex flex-col items-end text-xs text-muted-foreground">
-                        <span>{step.outcome}</span>
-                        {step.owner ? <span>kime: {step.owner}</span> : null}
+                        <span>{reportStepText(step, names)}</span>
+                        {step.owner ? (
+                          <span>{people.get(step.owner) ?? "bir kişiye"} düşer</span>
+                        ) : null}
                       </span>
                     </li>
                   ))}
@@ -229,10 +236,10 @@ export function FlowActions({
               </ScrollArea>
             ) : null}
 
-            {dryRun.ends ? (
+            {reportEndText(dryRun.ends) ? (
               <p className="text-sm">
-                Sonuç: <strong>{OUTCOMES[dryRun.ends] ?? dryRun.ends}</strong>
-                {dryRun.failure ? ` · ${dryRun.failure}` : ""}
+                {reportEndText(dryRun.ends)}
+                {dryRun.failure ? ` ${dryRun.failure}` : ""}
               </p>
             ) : null}
 

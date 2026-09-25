@@ -62,7 +62,7 @@ export function NewFlowButton({
         <DialogHeader>
           <DialogTitle>Yeni akış</DialogTitle>
           <DialogDescription>
-            Akış bir start ve bir bitiş adımıyla açılır; aralarını tasarımcıda kurarsınız.
+            Akış bir başlangıç ve bir bitiş adımıyla açılır; aralarını tasarımcıda kurarsınız.
           </DialogDescription>
         </DialogHeader>
         <div className="px-4 pb-2">

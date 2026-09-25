@@ -187,6 +187,19 @@ export function readRoles(identity: DbIdentity) {
   });
 }
 
+/**
+ * The permissions this panel knows, with their own names, for a screen that lets somebody pick one —
+ * the flow designer addressing a step by permission (REQ-WFL-017). Readable by any signed-in person
+ * (0003); holding one is a different question, asked where it is used.
+ */
+export function readPermissions(identity: DbIdentity) {
+  return runAsUser(identity, async (db: Tx) => {
+    const { rows } = await sql<{ code: string; name: string }>`
+      select code, name from iam.permission where is_active order by module, name`.execute(db);
+    return rows.map((r) => ({ code: r.code, name: r.name }));
+  });
+}
+
 /** Everyone in the owner layer; an owner approval is done by any of them (REQ-IAM-025). */
 export function readOwnerUsers(identity: DbIdentity) {
   return runAsUser(identity, async (db: Tx) =>

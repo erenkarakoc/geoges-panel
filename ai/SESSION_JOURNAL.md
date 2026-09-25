@@ -413,3 +413,7 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-25 01:28:10Z · b13a9554 · Write · `src/modules/wfl/ui/flow-publish.tsx`
 - 2026-09-25 01:59:20Z · b13a9554 · Write · `src/modules/wfl/ui/new-flow-button.tsx`
 - 2026-09-25 02:02:32Z · b13a9554 · Write · `src/modules/wfl/ui/flow-menu.tsx`
+- 2026-09-25 10:47:22Z · b13a9554 · Write · `src/modules/wfl/domain/complaints.ts`
+- 2026-09-25 10:47:43Z · b13a9554 · Write · `src/modules/wfl/domain/complaints.test.ts`
+- 2026-09-25 10:51:15Z · b13a9554 · Write · `src/modules/wfl/domain/report-text.ts`
+- 2026-09-25 10:53:48Z · b13a9554 · Write · `src/modules/wfl/ui/step-questions.tsx`

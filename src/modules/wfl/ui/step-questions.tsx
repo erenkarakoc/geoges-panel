@@ -12,16 +12,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { durationToParts, partsToDuration, type DurationUnit } from "@/modules/wfl/domain/duration";
 import type { DraftStep } from "@/modules/wfl/domain/edit";
-import { stepLabel, stepTypeLabel, type DrawableStep } from "@/modules/wfl/domain/graph";
+import { stepTypeLabel, type DrawableStep } from "@/modules/wfl/domain/graph";
 
 /**
- * A step's own questions (SCR-196, REQ-WFL-026, TASK-0119).
+ * A step's own questions (SCR-196, TASK-0119).
  *
  * The panel asks; the definition is what it writes. Every choice a step offers comes from the
- * capability catalog or from the flow's own steps — never from a list written here — because what
- * a flow can do is what the modules declared and nothing else (REQ-WFL-003, D-280). A question it
- * cannot answer from a list is a plain field with the schema's own rule under it.
+ * capability catalog or from the flow's own steps — never from a list written here — because what a
+ * flow can do is what the modules declared and nothing else.
+ *
+ * Nothing on this panel is written in the code's own language: a step is called by its name and
+ * never by its id, a choice shows the name the catalog gave it and never its code, and a requirement
+ * number belongs in the records rather than on somebody's screen.
  */
 
 /** What the modules and the panel offer this designer to choose from. */
@@ -34,12 +38,64 @@ export type DesignerVocabulary = {
   relations: readonly { code: string; name: string }[];
   roles: readonly { code: string; name: string }[];
   people: readonly { id: string; name: string }[];
+  /** The permissions the panel knows, with their own names. */
+  permissions: readonly { code: string; name: string }[];
   /** The other flows, for a step that hands work to one of them. */
   flows: readonly { key: string; name: string }[];
 };
 
 /** Base UI wants a string; "nothing" has to be a value of its own. */
 const NONE = "__none__";
+
+type Item = { value: string; label: string };
+
+/**
+ * One choice. The items are handed to the select itself as well as drawn inside it, because that is
+ * what lets the closed control show the chosen thing's **name**; without them it falls back to the
+ * stored value, which is how a code ends up on a screen.
+ */
+function Choice({
+  label,
+  description,
+  items,
+  value,
+  placeholder,
+  onChange,
+  className,
+}: {
+  label?: string;
+  description?: string;
+  items: readonly Item[];
+  value: string;
+  placeholder?: string;
+  onChange: (value: string) => void;
+  className?: string;
+}) {
+  const select = (
+    <Select items={items} onValueChange={(picked) => onChange(String(picked))} value={value}>
+      <SelectTrigger className={className}>
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectPopup>
+        {items.map((item) => (
+          <SelectItem key={item.value} value={item.value}>
+            {item.label}
+          </SelectItem>
+        ))}
+      </SelectPopup>
+    </Select>
+  );
+
+  if (!label) return select;
+
+  return (
+    <Field>
+      <FieldLabel>{label}</FieldLabel>
+      {select}
+      {description ? <FieldDescription>{description}</FieldDescription> : null}
+    </Field>
+  );
+}
 
 type OwnerRule = {
   type: "user" | "role" | "relation" | "permission";
@@ -49,14 +105,14 @@ type OwnerRule = {
   permission?: string;
 };
 
-const OWNER_KINDS = [
+const OWNER_KINDS: Item[] = [
   { value: "role", label: "Rol" },
   { value: "user", label: "Kişi" },
-  { value: "relation", label: "İlişki" },
+  { value: "relation", label: "Kayıtla ilişki" },
   { value: "permission", label: "Yetki" },
 ];
 
-/** Who a step waits on (D-097): a role, a person, a relation a module answers, or a permission. */
+/** Who a step waits on: a role, a person, a relation a module answers, or a permission. */
 function OwnerQuestion({
   label,
   description,
@@ -72,91 +128,54 @@ function OwnerQuestion({
 }) {
   const kind = owner?.type ?? "role";
 
+  const choices: Record<OwnerRule["type"], { items: Item[]; value: string; placeholder: string }> =
+    {
+      permission: {
+        items: vocabulary.permissions.map((one) => ({ value: one.code, label: one.name })),
+        placeholder: "Yetki seçin",
+        value: owner?.permission ?? "",
+      },
+      relation: {
+        items: vocabulary.relations.map((one) => ({ value: one.code, label: one.name })),
+        placeholder: "İlişki seçin",
+        value: owner?.relation ?? "",
+      },
+      role: {
+        items: vocabulary.roles.map((one) => ({ value: one.code, label: one.name })),
+        placeholder: "Rol seçin",
+        value: owner?.role ?? "",
+      },
+      user: {
+        items: vocabulary.people.map((one) => ({ value: one.id, label: one.name })),
+        placeholder: "Kişi seçin",
+        value: owner?.userId ?? "",
+      },
+    };
+
+  const write = (value: string) => {
+    if (kind === "user") onChange({ type: "user", userId: value });
+    else if (kind === "role") onChange({ type: "role", role: value });
+    else if (kind === "relation") onChange({ type: "relation", relation: value });
+    else onChange({ type: "permission", permission: value });
+  };
+
   return (
     <Field>
       <FieldLabel>{label}</FieldLabel>
       <div className="flex flex-col gap-2 sm:flex-row">
-        <Select
+        <Choice
+          className="sm:w-36"
           items={OWNER_KINDS}
-          onValueChange={(value) => onChange({ type: value as OwnerRule["type"] })}
+          onChange={(value) => onChange({ type: value as OwnerRule["type"] })}
           value={kind}
-        >
-          <SelectTrigger className="sm:w-32">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectPopup>
-            {OWNER_KINDS.map((item) => (
-              <SelectItem key={item.value} value={item.value}>
-                {item.label}
-              </SelectItem>
-            ))}
-          </SelectPopup>
-        </Select>
-
-        {kind === "role" ? (
-          <Select
-            onValueChange={(value) => onChange({ type: "role", role: String(value) })}
-            value={owner?.role ?? ""}
-          >
-            <SelectTrigger className="flex-1">
-              <SelectValue placeholder="Rol seçin" />
-            </SelectTrigger>
-            <SelectPopup>
-              {vocabulary.roles.map((role) => (
-                <SelectItem key={role.code} value={role.code}>
-                  {role.name}
-                </SelectItem>
-              ))}
-            </SelectPopup>
-          </Select>
-        ) : null}
-
-        {kind === "user" ? (
-          <Select
-            onValueChange={(value) => onChange({ type: "user", userId: String(value) })}
-            value={owner?.userId ?? ""}
-          >
-            <SelectTrigger className="flex-1">
-              <SelectValue placeholder="Kişi seçin" />
-            </SelectTrigger>
-            <SelectPopup>
-              {vocabulary.people.map((person) => (
-                <SelectItem key={person.id} value={person.id}>
-                  {person.name}
-                </SelectItem>
-              ))}
-            </SelectPopup>
-          </Select>
-        ) : null}
-
-        {kind === "relation" ? (
-          <Select
-            onValueChange={(value) => onChange({ type: "relation", relation: String(value) })}
-            value={owner?.relation ?? ""}
-          >
-            <SelectTrigger className="flex-1">
-              <SelectValue placeholder="İlişki seçin" />
-            </SelectTrigger>
-            <SelectPopup>
-              {vocabulary.relations.map((relation) => (
-                <SelectItem key={relation.code} value={relation.code}>
-                  {relation.name}
-                </SelectItem>
-              ))}
-            </SelectPopup>
-          </Select>
-        ) : null}
-
-        {kind === "permission" ? (
-          <Input
-            className="flex-1"
-            defaultValue={owner?.permission ?? ""}
-            onBlur={(event) =>
-              onChange({ type: "permission", permission: event.currentTarget.value })
-            }
-            placeholder="iam.module.manage"
-          />
-        ) : null}
+        />
+        <Choice
+          className="flex-1"
+          items={choices[kind].items}
+          onChange={write}
+          placeholder={choices[kind].placeholder}
+          value={choices[kind].value}
+        />
       </div>
       {description ? <FieldDescription>{description}</FieldDescription> : null}
     </Field>
@@ -169,6 +188,7 @@ function StepPicker({
   description,
   value,
   steps,
+  names,
   exclude,
   onChange,
 }: {
@@ -176,52 +196,50 @@ function StepPicker({
   description?: string;
   value: string | null | undefined;
   steps: readonly DrawableStep[];
+  names: ReadonlyMap<string, string>;
   exclude?: string;
   onChange: (to: string | null) => void;
 }) {
+  const items: Item[] = [
+    { value: NONE, label: "Akış burada biter" },
+    ...steps
+      .filter((step) => step.id !== exclude)
+      .map((step) => ({ value: step.id, label: names.get(step.id) ?? "Adım" })),
+  ];
+
   return (
-    <Field>
-      <FieldLabel>{label}</FieldLabel>
-      <Select
-        onValueChange={(picked) => onChange(picked === NONE ? null : String(picked))}
-        value={value ?? NONE}
-      >
-        <SelectTrigger>
-          <SelectValue />
-        </SelectTrigger>
-        <SelectPopup>
-          <SelectItem value={NONE}>Akış burada biter</SelectItem>
-          {steps
-            .filter((step) => step.id !== exclude)
-            .map((step) => (
-              <SelectItem key={step.id} value={step.id}>
-                {stepLabel(step)} · {step.id}
-              </SelectItem>
-            ))}
-        </SelectPopup>
-      </Select>
-      {description ? <FieldDescription>{description}</FieldDescription> : null}
-    </Field>
+    <Choice
+      description={description}
+      items={items}
+      label={label}
+      onChange={(picked) => onChange(picked === NONE ? null : picked)}
+      value={value ?? NONE}
+    />
   );
 }
 
-const CONDITION_OPS = [
+const CONDITION_OPS: Item[] = [
   { value: "=", label: "eşittir" },
   { value: "!=", label: "eşit değildir" },
   { value: ">", label: "büyüktür" },
   { value: ">=", label: "büyük veya eşittir" },
   { value: "<", label: "küçüktür" },
   { value: "<=", label: "küçük veya eşittir" },
-  { value: "in", label: "listede" },
-  { value: "exists", label: "var" },
+  { value: "in", label: "listede var" },
+  { value: "exists", label: "doldurulmuş" },
 ];
 
-const COUNT_OF = [
+const COUNT_OF: Item[] = [
   { value: "flow_runs", label: "bu akışın çalışma sayısı" },
   { value: "returned_approvals", label: "düzeltmeye dönen onay sayısı" },
 ];
 
-/** What a condition reads: a field of the record, or how often something happened (REQ-WFL-008). */
+const LOOK_AT: Item[] = [
+  { value: "field", label: "Kaydın bir alanına" },
+  { value: "history", label: "Geçmişte kaç kez olduğuna" },
+];
+
+/** What a condition reads: a field of the record, or how often something happened. */
 function ConditionQuestion({
   step,
   vocabulary,
@@ -236,111 +254,65 @@ function ConditionQuestion({
 
   return (
     <div className="flex flex-col gap-4">
-      <Field>
-        <FieldLabel>Neye bakılsın?</FieldLabel>
-        <Select
-          onValueChange={(value) =>
-            onChange({
-              test:
-                value === "history"
-                  ? { countOf: "flow_runs", withinDays: 30, op: ">", value: 1 }
-                  : { field: vocabulary.fields[0]?.code ?? "", op: "=", value: "" },
-            })
-          }
-          value={looksBack ? "history" : "field"}
-        >
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectPopup>
-            <SelectItem value="field">Kaydın bir alanına</SelectItem>
-            <SelectItem value="history">Geçmişte kaç kez olduğuna</SelectItem>
-          </SelectPopup>
-        </Select>
-      </Field>
+      <Choice
+        items={LOOK_AT}
+        label="Neye bakılsın?"
+        onChange={(value) =>
+          onChange({
+            test:
+              value === "history"
+                ? { countOf: "flow_runs", withinDays: 30, op: ">", value: 1 }
+                : { field: vocabulary.fields[0]?.code ?? "", op: "=", value: "" },
+          })
+        }
+        value={looksBack ? "history" : "field"}
+      />
 
       {looksBack ? (
         <>
+          <Choice
+            items={COUNT_OF}
+            label="Ne sayılsın?"
+            onChange={(value) => onChange({ test: { ...test, countOf: value } })}
+            value={String(test.countOf ?? "flow_runs")}
+          />
           <Field>
-            <FieldLabel>Ne sayılsın?</FieldLabel>
-            <Select
-              onValueChange={(value) => onChange({ test: { ...test, countOf: value } })}
-              value={String(test.countOf ?? "flow_runs")}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectPopup>
-                {COUNT_OF.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
-                    {item.label}
-                  </SelectItem>
-                ))}
-              </SelectPopup>
-            </Select>
-          </Field>
-          <Field>
-            <FieldLabel htmlFor={`days-${step.id}`}>Kaç günlük geçmişe bakılsın?</FieldLabel>
+            <FieldLabel htmlFor="condition-days">Kaç günlük geçmişe bakılsın?</FieldLabel>
             <Input
               defaultValue={String(test.withinDays ?? 30)}
-              id={`days-${step.id}`}
+              id="condition-days"
               inputMode="numeric"
               onBlur={(event) =>
                 onChange({ test: { ...test, withinDays: Number(event.currentTarget.value) } })
               }
             />
-            <FieldDescription>1 ile 365 gün arası.</FieldDescription>
+            <FieldDescription>En az 1, en çok 365 gün.</FieldDescription>
           </Field>
         </>
       ) : (
-        <Field>
-          <FieldLabel>Hangi alan?</FieldLabel>
-          <Select
-            onValueChange={(value) => onChange({ test: { ...test, field: value } })}
-            value={String(test.field ?? "")}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Alan seçin" />
-            </SelectTrigger>
-            <SelectPopup>
-              {vocabulary.fields.map((field) => (
-                <SelectItem key={field.code} value={field.code}>
-                  {field.name} · {field.code}
-                </SelectItem>
-              ))}
-            </SelectPopup>
-          </Select>
-          <FieldDescription>
-            Bu liste modüllerin bildirdiği alanlardır; başka bir alan bir akışa açık değildir.
-          </FieldDescription>
-        </Field>
+        <Choice
+          description="Bu liste, modüllerin akışa açtığı alanlardır; başka bir alan bir akışa görünmez."
+          items={vocabulary.fields.map((field) => ({ value: field.code, label: field.name }))}
+          label="Hangi bilgiye?"
+          onChange={(value) => onChange({ test: { ...test, field: value } })}
+          placeholder="Bilgi seçin"
+          value={String(test.field ?? "")}
+        />
       )}
 
-      <Field>
-        <FieldLabel>Karşılaştırma</FieldLabel>
-        <Select
-          onValueChange={(value) => onChange({ test: { ...test, op: value } })}
-          value={String(test.op ?? "=")}
-        >
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectPopup>
-            {(looksBack ? CONDITION_OPS.slice(0, 6) : CONDITION_OPS).map((item) => (
-              <SelectItem key={item.value} value={item.value}>
-                {item.label}
-              </SelectItem>
-            ))}
-          </SelectPopup>
-        </Select>
-      </Field>
+      <Choice
+        items={looksBack ? CONDITION_OPS.slice(0, 6) : CONDITION_OPS}
+        label="Nasıl karşılaştırılsın?"
+        onChange={(value) => onChange({ test: { ...test, op: value } })}
+        value={String(test.op ?? "=")}
+      />
 
       {test.op === "exists" ? null : (
         <Field>
-          <FieldLabel htmlFor={`value-${step.id}`}>Hangi değerle?</FieldLabel>
+          <FieldLabel htmlFor="condition-value">Hangi değerle?</FieldLabel>
           <Input
             defaultValue={test.value === undefined || test.value === null ? "" : String(test.value)}
-            id={`value-${step.id}`}
+            id="condition-value"
             onBlur={(event) => {
               const raw = event.currentTarget.value;
               const number = Number(raw);
@@ -358,16 +330,72 @@ function ConditionQuestion({
   );
 }
 
-const PRIORITIES = [
+const DURATION_UNITS: Item[] = [
+  { value: "minute", label: "dakika" },
+  { value: "hour", label: "saat" },
+  { value: "day", label: "gün" },
+];
+
+/** How long a step waits, asked as a number and a unit rather than as a stored duration. */
+function DurationQuestion({
+  label,
+  description,
+  value,
+  onChange,
+}: {
+  label: string;
+  description?: string;
+  value: string | null | undefined;
+  onChange: (duration: string) => void;
+}) {
+  const parts = durationToParts(value);
+
+  return (
+    <Field>
+      <FieldLabel htmlFor="step-duration">{label}</FieldLabel>
+      <div className="flex gap-2">
+        <Input
+          className="flex-1"
+          defaultValue={String(parts.amount)}
+          id="step-duration"
+          inputMode="numeric"
+          key={value ?? "empty"}
+          onBlur={(event) =>
+            onChange(
+              partsToDuration({ amount: Number(event.currentTarget.value), unit: parts.unit }),
+            )
+          }
+        />
+        <Choice
+          className="w-28"
+          items={DURATION_UNITS}
+          onChange={(unit) =>
+            onChange(partsToDuration({ amount: parts.amount, unit: unit as DurationUnit }))
+          }
+          value={parts.unit}
+        />
+      </div>
+      {description ? <FieldDescription>{description}</FieldDescription> : null}
+    </Field>
+  );
+}
+
+const PRIORITIES: Item[] = [
   { value: "low", label: "Düşük" },
   { value: "normal", label: "Normal" },
   { value: "high", label: "Yüksek" },
   { value: "critical", label: "Kritik" },
 ];
 
+const RECORD_ACTIONS: Item[] = [
+  { value: "create", label: "Taslak kayıt oluştur" },
+  { value: "set_status", label: "Kaydın durumunu değiştir" },
+];
+
 export function StepQuestions({
   step,
   steps,
+  names,
   problems,
   vocabulary,
   onChange,
@@ -375,6 +403,8 @@ export function StepQuestions({
 }: {
   step: DraftStep;
   steps: readonly DrawableStep[];
+  /** What each step is called on this screen; ids never reach it. */
+  names: ReadonlyMap<string, string>;
   problems: readonly string[];
   vocabulary: DesignerVocabulary;
   onChange: (change: Record<string, unknown>) => void;
@@ -382,14 +412,15 @@ export function StepQuestions({
 }) {
   const owner = step.owner as OwnerRule | undefined;
   const outcomes = (step.outcomes ?? {}) as Record<string, string | null | undefined>;
+  const picker = (props: Omit<Parameters<typeof StepPicker>[0], "steps" | "names" | "exclude">) => (
+    <StepPicker {...props} exclude={step.id} names={names} steps={steps} />
+  );
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <h3 className="text-sm font-semibold">{stepLabel(step)}</h3>
-        <span className="text-xs text-muted-foreground">
-          {stepTypeLabel(step.type)} · {step.id}
-        </span>
+        <h3 className="text-sm font-semibold">{names.get(step.id) ?? stepTypeLabel(step.type)}</h3>
+        <span className="text-xs text-muted-foreground">{stepTypeLabel(step.type)} adımı</span>
       </div>
 
       {problems.length ? (
@@ -401,10 +432,10 @@ export function StepQuestions({
       ) : null}
 
       <Field>
-        <FieldLabel htmlFor={`title-${step.id}`}>Adımın adı</FieldLabel>
+        <FieldLabel htmlFor="step-title">Adımın adı</FieldLabel>
         <Input
           defaultValue={step.title ?? ""}
-          id={`title-${step.id}`}
+          id="step-title"
           onBlur={(event) => onChange({ title: event.currentTarget.value || undefined })}
           placeholder="Ekranda ne yazsın?"
         />
@@ -416,26 +447,22 @@ export function StepQuestions({
       {step.type === "condition" ? (
         <>
           <ConditionQuestion onChange={onChange} step={step} vocabulary={vocabulary} />
-          <StepPicker
-            exclude={step.id}
-            label="Koşul sağlanırsa"
-            onChange={(to) => onChange({ whenTrue: to })}
-            steps={steps}
-            value={step.whenTrue}
-          />
-          <StepPicker
-            exclude={step.id}
-            label="Sağlanmazsa"
-            onChange={(to) => onChange({ whenFalse: to })}
-            steps={steps}
-            value={step.whenFalse}
-          />
+          {picker({
+            label: "Koşul sağlanırsa",
+            onChange: (to) => onChange({ whenTrue: to }),
+            value: step.whenTrue,
+          })}
+          {picker({
+            label: "Sağlanmazsa",
+            onChange: (to) => onChange({ whenFalse: to }),
+            value: step.whenFalse,
+          })}
         </>
       ) : null}
 
       {step.type === "approval" || step.type === "task" || step.type === "notify" ? (
         <OwnerQuestion
-          description="Rol seçilirse o rolü taşıyan kişiye düşer; ilişki, cevabı bilen modülden sorulur."
+          description="Rol seçilirse o rolü taşıyan kişiye düşer; kayıtla ilişki, cevabı bilen modülden sorulur."
           label={step.type === "notify" ? "Kime bildirilsin?" : "Kime düşsün?"}
           onChange={(next) => onChange({ owner: next })}
           owner={owner}
@@ -446,7 +473,7 @@ export function StepQuestions({
       {step.type === "escalate" ? (
         <OwnerQuestion
           description="Bu adım bekletmez: haber verir ve akış devam eder."
-          label="Kime yükseltilsin?"
+          label="Kime haber verilsin?"
           onChange={(next) => onChange({ to: next })}
           owner={step.to as OwnerRule | undefined}
           vocabulary={vocabulary}
@@ -455,72 +482,52 @@ export function StepQuestions({
 
       {step.type === "approval" ? (
         <>
-          <StepPicker
-            exclude={step.id}
-            label="Onaylanırsa"
-            onChange={(to) => onChange({ outcomes: { ...outcomes, approve: to } })}
-            steps={steps}
-            value={outcomes.approve}
-          />
-          <StepPicker
-            exclude={step.id}
-            label="Reddedilirse"
-            onChange={(to) => onChange({ outcomes: { ...outcomes, reject: to } })}
-            steps={steps}
-            value={outcomes.reject}
-          />
-          <StepPicker
-            description="Düzeltmeye geri gönderme, akışın başına ya da herhangi bir adıma dönebilir (REQ-WFL-014)."
-            exclude={step.id}
-            label="Düzeltmeye dönerse"
-            onChange={(to) => onChange({ outcomes: { ...outcomes, return: to } })}
-            steps={steps}
-            value={outcomes.return}
-          />
+          {picker({
+            label: "Onaylanırsa",
+            onChange: (to) => onChange({ outcomes: { ...outcomes, approve: to } }),
+            value: outcomes.approve,
+          })}
+          {picker({
+            label: "Reddedilirse",
+            onChange: (to) => onChange({ outcomes: { ...outcomes, reject: to } }),
+            value: outcomes.reject,
+          })}
+          {picker({
+            description:
+              "Düzeltmeye geri gönderme, akışın başına ya da herhangi bir adıma dönebilir.",
+            label: "Düzeltmeye dönerse",
+            onChange: (to) => onChange({ outcomes: { ...outcomes, return: to } }),
+            value: outcomes.return,
+          })}
         </>
       ) : null}
 
       {step.type === "task" ? (
-        <Field>
-          <FieldLabel>Öncelik</FieldLabel>
-          <Select
-            onValueChange={(value) => onChange({ priority: value })}
-            value={String(step.priority ?? "normal")}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectPopup>
-              {PRIORITIES.map((item) => (
-                <SelectItem key={item.value} value={item.value}>
-                  {item.label}
-                </SelectItem>
-              ))}
-            </SelectPopup>
-          </Select>
-        </Field>
+        <Choice
+          items={PRIORITIES}
+          label="Öncelik"
+          onChange={(value) => onChange({ priority: value })}
+          value={String(step.priority ?? "normal")}
+        />
       ) : null}
 
       {step.type === "wait" ? (
-        <Field>
-          <FieldLabel htmlFor={`after-${step.id}`}>Ne kadar beklesin?</FieldLabel>
-          <Input
-            defaultValue={String(step.after ?? "")}
-            id={`after-${step.id}`}
-            onBlur={(event) => onChange({ after: event.currentTarget.value })}
-            placeholder="PT8H"
-          />
-          <FieldDescription>PT30M, PT8H ya da P2D biçiminde yazılır.</FieldDescription>
-        </Field>
+        <DurationQuestion
+          description="Bu süre dolduğunda akış kendiliğinden devam eder."
+          label="Ne kadar beklesin?"
+          onChange={(after) => onChange({ after })}
+          value={typeof step.after === "string" ? step.after : null}
+        />
       ) : null}
 
       {step.type === "notify" || step.type === "escalate" ? (
         <Field>
-          <FieldLabel htmlFor={`subject-${step.id}`}>Ne desin?</FieldLabel>
+          <FieldLabel htmlFor="step-subject">Ne desin?</FieldLabel>
           <Input
             defaultValue={String(step.subject ?? "")}
-            id={`subject-${step.id}`}
+            id="step-subject"
             onBlur={(event) => onChange({ subject: event.currentTarget.value })}
+            placeholder="Şantiye çıkışı onayınızı bekliyor"
           />
         </Field>
       ) : null}
@@ -528,93 +535,74 @@ export function StepQuestions({
       {step.type === "lock" ? (
         <>
           <Field>
-            <FieldLabel htmlFor={`reason-${step.id}`}>Neden kilitli?</FieldLabel>
+            <FieldLabel htmlFor="step-reason">Neden kilitli?</FieldLabel>
             <Input
               defaultValue={String(step.reason ?? "")}
-              id={`reason-${step.id}`}
+              id="step-reason"
               onBlur={(event) => onChange({ reason: event.currentTarget.value })}
+              placeholder="Zimmet kapanmadan çıkış tamamlanamaz"
             />
             <FieldDescription>Engellenen kişiye bu cümle gösterilir.</FieldDescription>
           </Field>
           <Field>
-            <FieldLabel htmlFor={`transition-${step.id}`}>Hangi geçiş kapansın?</FieldLabel>
+            <FieldLabel htmlFor="step-transition">Hangi işlem kapansın?</FieldLabel>
             <Input
               defaultValue={String(step.transition ?? "*")}
-              id={`transition-${step.id}`}
+              id="step-transition"
               onBlur={(event) => onChange({ transition: event.currentTarget.value })}
             />
             <FieldDescription>
-              `*` yazılırsa kayıt hiç hareket edemez; tek bir geçişin adı yazılırsa yalnız o
-              kapanır.
+              Yıldız işareti kalırsa kayıt hiç hareket edemez; tek bir işlemin adı yazılırsa yalnız
+              o kapanır.
             </FieldDescription>
           </Field>
         </>
       ) : null}
 
       {step.type === "subflow" ? (
-        <Field>
-          <FieldLabel>Hangi akış çalışsın?</FieldLabel>
-          <Select
-            onValueChange={(value) => onChange({ flow: value })}
-            value={String(step.flow ?? "")}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Akış seçin" />
-            </SelectTrigger>
-            <SelectPopup>
-              {vocabulary.flows.map((flow) => (
-                <SelectItem key={flow.key} value={flow.key}>
-                  {flow.name}
-                </SelectItem>
-              ))}
-            </SelectPopup>
-          </Select>
-          <FieldDescription>
-            Seçilen akış çocuk olarak çalışır ve bu adım onu bekler; yayımlanmamış bir akış
-            çalışmayı durdurur.
-          </FieldDescription>
-        </Field>
+        <Choice
+          description="Seçilen akış bu adımın altında çalışır ve adım onun bitmesini bekler; yayımlanmamış bir akış çalışmayı durdurur."
+          items={vocabulary.flows.map((flow) => ({ value: flow.key, label: flow.name }))}
+          label="Hangi akış çalışsın?"
+          onChange={(value) => onChange({ flow: value })}
+          placeholder="Akış seçin"
+          value={String(step.flow ?? "")}
+        />
       ) : null}
 
       {step.type === "record" ? (
         <>
-          <Field>
-            <FieldLabel>Ne yapılsın?</FieldLabel>
-            <Select
-              onValueChange={(value) => onChange({ action: value })}
-              value={String(step.action ?? "create")}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectPopup>
-                <SelectItem value="create">Taslak kayıt oluştur</SelectItem>
-                <SelectItem value="set_status">Kaydın durumunu değiştir</SelectItem>
-              </SelectPopup>
-            </Select>
-          </Field>
+          <Choice
+            items={RECORD_ACTIONS}
+            label="Ne yapılsın?"
+            onChange={(value) => onChange({ action: value })}
+            value={String(step.action ?? "create")}
+          />
           {step.action === "set_status" ? (
             <Field>
-              <FieldLabel htmlFor={`status-${step.id}`}>Hangi duruma?</FieldLabel>
+              <FieldLabel htmlFor="step-status">Hangi duruma taşınsın?</FieldLabel>
               <Input
                 defaultValue={String(step.status ?? "")}
-                id={`status-${step.id}`}
+                id="step-status"
                 onBlur={(event) => onChange({ status: event.currentTarget.value })}
               />
               <FieldDescription>
-                Bir akış kaydı kesinleşmiş bir duruma taşıyamaz; modül kendi diliyle reddeder.
+                Bir akış kaydı kesinleşmiş bir duruma taşıyamaz; ilgili modül bunu kendi diliyle
+                reddeder.
               </FieldDescription>
             </Field>
           ) : (
             <Field>
-              <FieldLabel htmlFor={`recordType-${step.id}`}>Hangi kayıt türü?</FieldLabel>
+              <FieldLabel htmlFor="step-record-type">Hangi kayıt oluşturulsun?</FieldLabel>
               <Input
                 defaultValue={String(step.recordType ?? "")}
-                id={`recordType-${step.id}`}
+                id="step-record-type"
                 onBlur={(event) => onChange({ recordType: event.currentTarget.value })}
-                placeholder="doc.document"
+                placeholder="Örnek: belge"
               />
-              <FieldDescription>modul.kayit biçiminde yazılır.</FieldDescription>
+              <FieldDescription>
+                Kayıt türleri panelde tanımlanabilir olduğunda bu alan bir seçim listesine dönecek.
+              </FieldDescription>
             </Field>
           )}
         </>
@@ -623,30 +611,28 @@ export function StepQuestions({
       {step.type === "for_each" ? (
         <>
           <Field>
-            <FieldLabel htmlFor={`list-${step.id}`}>Hangi liste için?</FieldLabel>
+            <FieldLabel htmlFor="step-list">Hangi liste için çalışsın?</FieldLabel>
             <Input
               defaultValue={String(step.list ?? "")}
-              id={`list-${step.id}`}
+              id="step-list"
               onBlur={(event) => onChange({ list: event.currentTarget.value })}
-              placeholder="tsk.open_tasks"
             />
             <FieldDescription>
-              Listeyi kaydın sahibi olan modül verir; modul.liste biçiminde yazılır.
+              Listeyi, kaydın sahibi olan modül verir; modüller listelerini açtığında bu alan da bir
+              seçim listesine dönecek.
             </FieldDescription>
           </Field>
-          <StepPicker
-            description="Listedeki her öğe için bu adımdan başlayan dal çalışır."
-            exclude={step.id}
-            label="Her öğe için hangi adım?"
-            onChange={(to) => onChange({ body: to })}
-            steps={steps}
-            value={step.body}
-          />
+          {picker({
+            description: "Listedeki her öğe için bu adımdan başlayan bir dal çalışır.",
+            label: "Her öğe için hangi adım?",
+            onChange: (to) => onChange({ body: to }),
+            value: step.body,
+          })}
           <Field>
-            <FieldLabel htmlFor={`limit-${step.id}`}>En çok kaç öğe?</FieldLabel>
+            <FieldLabel htmlFor="step-limit">En çok kaç öğe?</FieldLabel>
             <Input
               defaultValue={String(step.limit ?? 20)}
-              id={`limit-${step.id}`}
+              id="step-limit"
               inputMode="numeric"
               onBlur={(event) => onChange({ limit: Number(event.currentTarget.value) })}
             />
@@ -658,20 +644,18 @@ export function StepQuestions({
       ) : null}
 
       {step.type === "parallel" ? (
-        <ParallelQuestion onChange={onChange} step={step} steps={steps} />
+        <ParallelQuestion names={names} onChange={onChange} step={step} steps={steps} />
       ) : null}
 
       {/* Where the step carries on. A condition, an approval and a for-each say this in their own
           words above, so they are not asked twice. */}
-      {["condition", "approval", "end"].includes(String(step.type)) ? null : (
-        <StepPicker
-          exclude={step.id}
-          label={step.type === "parallel" ? "Dallar bitince" : "Sonra hangi adım?"}
-          onChange={(to) => onChange({ next: to })}
-          steps={steps}
-          value={step.next}
-        />
-      )}
+      {["condition", "approval", "end"].includes(String(step.type))
+        ? null
+        : picker({
+            label: step.type === "parallel" ? "Dallar bitince" : "Sonra hangi adım?",
+            onChange: (to) => onChange({ next: to }),
+            value: step.next,
+          })}
 
       {step.type === "start" ? null : (
         <Button
@@ -688,14 +672,16 @@ export function StepQuestions({
   );
 }
 
-/** The branches of a parallel step; each one is a run of its own (REQ-WFL-006). */
+/** The branches of a parallel step; each one runs on its own. */
 function ParallelQuestion({
   step,
   steps,
+  names,
   onChange,
 }: {
   step: DraftStep;
   steps: readonly DrawableStep[];
+  names: ReadonlyMap<string, string>;
   onChange: (change: Record<string, unknown>) => void;
 }) {
   const paths = (step.paths ?? []).filter((path): path is string => Boolean(path));
@@ -707,6 +693,7 @@ function ParallelQuestion({
           exclude={step.id}
           key={`${path}-${index}`}
           label={`${index + 1}. dal`}
+          names={names}
           onChange={(to) => {
             const next = [...paths];
             if (to === null) next.splice(index, 1);
@@ -731,13 +718,20 @@ function ParallelQuestion({
         Dal ekle
       </Button>
       <FieldDescription>
-        En az iki dal gerekir; her dal kendi kaydı, kendi beklemesi ve kendi adım sınırıyla çalışır.
+        En az iki dal gerekir; her dal kendi başına çalışır ve hepsi bitince akış devam eder.
       </FieldDescription>
     </div>
   );
 }
 
-/** What starts the flow (REQ-WFL-007): an event, the clock, a threshold, or a person. */
+const TRIGGER_KINDS: Item[] = [
+  { value: "event", label: "Bir şey olduğunda" },
+  { value: "clock", label: "Saatle" },
+  { value: "threshold", label: "Bir değer eşiği aştığında" },
+  { value: "manual", label: "Elle başlatıldığında" },
+];
+
+/** What starts the flow: an event, the clock, a threshold, or a person. */
 export function TriggerQuestions({
   trigger,
   vocabulary,
@@ -759,85 +753,48 @@ export function TriggerQuestions({
         </span>
       </div>
 
-      <Field>
-        <FieldLabel>Ne olunca başlasın?</FieldLabel>
-        <Select
-          onValueChange={(value) =>
-            onChange(
-              value === "clock"
-                ? { type: "clock", dailyAt: "09:00" }
-                : value === "manual"
-                  ? { type: "manual" }
-                  : {
-                      type: value,
-                      event: vocabulary.events[0]?.code ?? "",
-                      ...(value === "threshold" ? { test: { field: "", op: ">", value: 0 } } : {}),
-                    },
-            )
-          }
-          value={kind}
-        >
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectPopup>
-            <SelectItem value="event">Bir şey olduğunda</SelectItem>
-            <SelectItem value="clock">Saatle</SelectItem>
-            <SelectItem value="threshold">Bir değer eşiği aştığında</SelectItem>
-            <SelectItem value="manual">Elle başlatıldığında</SelectItem>
-          </SelectPopup>
-        </Select>
-      </Field>
+      <Choice
+        items={TRIGGER_KINDS}
+        label="Ne olunca başlasın?"
+        onChange={(value) =>
+          onChange(
+            value === "clock"
+              ? { type: "clock", dailyAt: "09:00" }
+              : value === "manual"
+                ? { type: "manual" }
+                : {
+                    type: value,
+                    event: vocabulary.events[0]?.code ?? "",
+                    ...(value === "threshold" ? { test: { field: "", op: ">", value: 0 } } : {}),
+                  },
+          )
+        }
+        value={kind}
+      />
 
       {kind === "event" || kind === "threshold" ? (
-        <Field>
-          <FieldLabel>Hangi olay?</FieldLabel>
-          <Select
-            onValueChange={(value) => onChange({ ...trigger, type: kind, event: value })}
-            value={String(trigger?.event ?? "")}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Olay seçin" />
-            </SelectTrigger>
-            <SelectPopup>
-              {vocabulary.events.map((event) => (
-                <SelectItem key={event.code} value={event.code}>
-                  {event.name} · {event.code}
-                </SelectItem>
-              ))}
-            </SelectPopup>
-          </Select>
-          <FieldDescription>
-            Bu liste modüllerin yayımladığı olaylardır; başkası bir akışı başlatamaz.
-          </FieldDescription>
-        </Field>
+        <Choice
+          description="Bu liste, modüllerin akışlara açtığı olaylardır; başka bir şey bir akışı başlatamaz."
+          items={vocabulary.events.map((event) => ({ value: event.code, label: event.name }))}
+          label="Hangi olay?"
+          onChange={(value) => onChange({ ...trigger, type: kind, event: value })}
+          placeholder="Olay seçin"
+          value={String(trigger?.event ?? "")}
+        />
       ) : null}
 
       {kind === "threshold" ? (
         <>
-          <Field>
-            <FieldLabel>Hangi alan eşiği aşsın?</FieldLabel>
-            <Select
-              onValueChange={(value) =>
-                onChange({ ...trigger, type: "threshold", test: { ...test, field: value } })
-              }
-              value={String(test.field ?? "")}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Alan seçin" />
-              </SelectTrigger>
-              <SelectPopup>
-                {vocabulary.fields.map((field) => (
-                  <SelectItem key={field.code} value={field.code}>
-                    {field.name} · {field.code}
-                  </SelectItem>
-                ))}
-              </SelectPopup>
-            </Select>
-            <FieldDescription>
-              Eşik, olayın taşıdığı değere bakar; arkada duran ayrı bir sorgu yoktur.
-            </FieldDescription>
-          </Field>
+          <Choice
+            description="Eşik, olayın taşıdığı değere bakar; arkada duran ayrı bir sorgu yoktur."
+            items={vocabulary.fields.map((field) => ({ value: field.code, label: field.name }))}
+            label="Hangi bilgi eşiği aşsın?"
+            onChange={(value) =>
+              onChange({ ...trigger, type: "threshold", test: { ...test, field: value } })
+            }
+            placeholder="Bilgi seçin"
+            value={String(test.field ?? "")}
+          />
           <Field>
             <FieldLabel htmlFor="threshold-value">Hangi değeri aşınca?</FieldLabel>
             <Input
@@ -871,7 +828,7 @@ export function TriggerQuestions({
             }
             placeholder="09:00"
           />
-          <FieldDescription>SS:DD biçiminde yazılır.</FieldDescription>
+          <FieldDescription>Saat ve dakika olarak yazılır, örneğin 07:30.</FieldDescription>
         </Field>
       ) : null}
     </div>

@@ -112,6 +112,25 @@ export function stepLabel(step: DrawableStep): string {
 }
 
 /**
+ * A name for every step that a person can read, and that tells two steps apart.
+ *
+ * Nothing on a screen says `approval_1`: an id is how the definition refers to a step, not how
+ * anybody talks about one. A step with no name of its own is called what it is — "Onay" — and when a
+ * flow has two of those they become "Onay" and "Onay 2", in the order the flow was written.
+ */
+export function stepNames(steps: readonly DrawableStep[]): Map<string, string> {
+  const used = new Map<string, number>();
+  const names = new Map<string, string>();
+  for (const step of steps) {
+    const base = stepLabel(step);
+    const seen = (used.get(base) ?? 0) + 1;
+    used.set(base, seen);
+    names.set(step.id, seen === 1 ? base : `${base} ${seen}`);
+  }
+  return names;
+}
+
+/**
  * Walks the definition from its start and gives every step a place. A step nothing points at is
  * still drawn — an orphan the designer can see is better than one it cannot.
  */
@@ -121,6 +140,9 @@ export function graphOf(definition: DrawableDefinition): { nodes: FlowNode[]; ed
   const placed = new Map<string, FlowNode>();
   const rowsUsed: number[] = [];
   const byId = new Map(definition.steps.map((step) => [step.id, step]));
+  // Two steps of the same kind are told apart by their names, so no box needs to show an id.
+  const names = stepNames(definition.steps);
+  const nameOf = (step: DrawableStep) => names.get(step.id) ?? stepLabel(step);
 
   const arrows = (step: DrawableStep) => {
     for (const path of pathsOf(step)) {
@@ -139,7 +161,7 @@ export function graphOf(definition: DrawableDefinition): { nodes: FlowNode[]; ed
     if (!step || placed.has(stepId)) return;
     const column = rowsUsed[row] ?? 0;
     rowsUsed[row] = column + 1;
-    const node: FlowNode = { id: step.id, type: step.type, title: stepLabel(step), column, row };
+    const node: FlowNode = { id: step.id, type: step.type, title: nameOf(step), column, row };
     placed.set(step.id, node);
     nodes.push(node);
     arrows(step);
@@ -153,7 +175,7 @@ export function graphOf(definition: DrawableDefinition): { nodes: FlowNode[]; ed
     if (placed.has(step.id)) continue;
     const row = rowsUsed.length;
     rowsUsed[row] = 1;
-    const node: FlowNode = { id: step.id, type: step.type, title: stepLabel(step), column: 0, row };
+    const node: FlowNode = { id: step.id, type: step.type, title: nameOf(step), column: 0, row };
     placed.set(step.id, node);
     nodes.push(node);
     arrows(step);

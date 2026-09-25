@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2026-09-25 — The designer speaks Turkish, not schema (TASK-0119, fix after the owner looked)
+
+The owner opened the designer and read `condition_1`, `flow_runs`, `Invalid input: expected object, received undefined` and `(REQ-WFL-014)` on the screen. Every one of those was the code's own language reaching a person, and each had its own cause:
+
+- **Ids.** A step was printed by its id wherever two steps had to be told apart. Now every screen calls a step what it is called: its own name, or the kind of step it is, and two of a kind become "Onay" and "Onay 2" (`stepNames`, in the domain, with its own test). No id is shown anywhere — not on a box, not in a picker, not in the dry-run report.
+- **Codes in closed selects.** COSS's select shows the *stored value* unless it is given its items, so every choice read back as a code: `flow_runs`, `role`, `PT8H`. Every select is now built by one `Choice` component that hands the items to the control as well as drawing them, so a closed select always shows a name.
+- **The schema's own words.** `definitionSchema` decides what a valid flow is and that does not change (D-283) — but its findings are written for whoever wrote the schema. A new domain module turns each one into a Turkish sentence about the step it belongs to ("Bu adımın kime düşeceği seçilmedi."), descends into a union to find what is actually missing, and its fallback is a sentence too, so an English message cannot reach a screen even for a rule added tomorrow. Nine tests, including one that asserts no sentence ever matches a code, a path or an English word.
+- **Requirement numbers.** Removed from the screens. A requirement belongs in the records; a person reading a panel has no use for its number.
+- **The engine's own refusals** are read by people too, in the run log and the dry run, so they now name the step the designer named and carry no ids or capability codes. The dry-run report stopped carrying engine words at all: each step now says how it ended and what it was about, and the screen writes the sentence — with a person's name where the engine worked out an account.
+- **The waiting time** is asked as a number and a unit (45 dakika, 8 saat, 2 gün) instead of `PT8H`; the stored form is unchanged, and one small domain module is where the two forms meet.
+- **The library's badge** in the canvas corner is off, at the owner's request. The MIT licence asks for its notice to travel with the source, which it does; the badge is how the library asks for support, not a condition of use.
+- Two permissions of IAM's own surface grew for this: `listRoles` and `listPermissions`, so "kim onaylasın" is answered from real lists rather than typed as a code.
+
 ## 2026-09-25 — The designer's "…": a copy, a closing, and what the flow has been (TASK-0119, step 5)
 
 - **A copy to work on.** It carries the definition as it stands and starts as a draft of its own, because a flow is copied in order to be changed and changing the original is exactly what the copy avoids. Its address comes from its name, like any other flow's.

@@ -17,6 +17,7 @@ import { Drawer, DrawerHeader, DrawerPopup, DrawerTitle } from "@/components/ui/
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { complaintsOf } from "@/modules/wfl/domain/complaints";
 import { definitionSchema, STEP_TYPES, type StepType } from "@/modules/wfl/domain/definition";
 import {
   asEditable,
@@ -25,7 +26,7 @@ import {
   withStep,
   type Draft,
 } from "@/modules/wfl/domain/edit";
-import { graphOf, stepLabel, stepTypeLabel, type Outlet } from "@/modules/wfl/domain/graph";
+import { graphOf, stepNames, stepTypeLabel, type Outlet } from "@/modules/wfl/domain/graph";
 import { flowCanvasId } from "@/modules/wfl/ui/flow-canvas-id";
 import { FlowMenu, type FlowMenuActions } from "@/modules/wfl/ui/flow-menu";
 import { FlowActions, type DesignerActions, type DryRunState } from "@/modules/wfl/ui/flow-publish";
@@ -72,23 +73,6 @@ type SaveAction = (input: {
   definition: unknown;
 }) => Promise<{ error: string | null; savedAt: number | null }>;
 
-/** What the schema found wrong, per step, in the schema's own words. */
-function problemsByStep(definition: unknown): { steps: Map<string, string[]>; flow: string[] } {
-  const found = definitionSchema.safeParse(definition);
-  const steps = new Map<string, string[]>();
-  const flow: string[] = [];
-  if (found.success) return { steps, flow };
-
-  const parsed = definition as { steps?: { id?: string }[] };
-  for (const issue of found.error.issues) {
-    const [first, index] = issue.path;
-    const id = first === "steps" && typeof index === "number" ? parsed.steps?.[index]?.id : null;
-    if (id) steps.set(id, [...(steps.get(id) ?? []), issue.message]);
-    else flow.push(issue.message);
-  }
-  return { steps, flow };
-}
-
 export function FlowDesigner({
   flow,
   vocabulary,
@@ -125,7 +109,13 @@ export function FlowDesigner({
 
   useActionToast(state, state.error ? { type: "error", title: state.error } : null);
 
-  const problems = useMemo(() => problemsByStep(draft), [draft]);
+  const problems = useMemo(() => complaintsOf(draft), [draft]);
+  const names = useMemo(() => stepNames(draft.steps), [draft]);
+  // Who is who, so a report says a person's name where the engine worked out an account.
+  const people = useMemo(
+    () => new Map(vocabulary.people.map((person) => [person.id, person.name])),
+    [vocabulary],
+  );
   const valid = problems.steps.size === 0 && problems.flow.length === 0;
   const graph = useMemo(() => graphOf(draft), [draft]);
   const step = useMemo(
@@ -177,6 +167,7 @@ export function FlowDesigner({
         setSelected(null);
         persist(removeStep(draft, step.id));
       }}
+      names={names}
       problems={problems.steps.get(step.id) ?? []}
       step={step}
       steps={draft.steps}
@@ -212,6 +203,8 @@ export function FlowDesigner({
             dirty={dirty || saving}
             flowKey={flow.key}
             initial={dryRun}
+            names={names}
+            people={people}
             published={flow.status === "published"}
             ready={valid}
             versionId={flow.versionId}
@@ -246,7 +239,7 @@ export function FlowDesigner({
           >
             <DrawerPopup position="bottom" showBar>
               <DrawerHeader>
-                <DrawerTitle>{step ? stepLabel(step) : "Adım"}</DrawerTitle>
+                <DrawerTitle>{step ? (names.get(step.id) ?? "Adım") : "Adım"}</DrawerTitle>
               </DrawerHeader>
               <ScrollArea className="max-h-[60svh]">
                 <div className="p-4 pt-0">{questions}</div>
@@ -274,7 +267,7 @@ export function FlowDesigner({
         )}
       </div>
 
-      {/* The palette: the fourteen steps of REQ-WFL-005 and nothing else. */}
+      {/* The palette: the fourteen steps the engine knows, and nothing else. */}
       <Dialog onOpenChange={(open) => (open ? undefined : setAdding(null))} open={Boolean(adding)}>
         <DialogPopup>
           <DialogHeader>

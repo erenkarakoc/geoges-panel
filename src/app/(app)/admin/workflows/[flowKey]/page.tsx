@@ -24,6 +24,7 @@ import {
 import {
   AccessDeniedError,
   listPeople,
+  listPermissions,
   listRoles,
   signInIdentity,
   todayRoute,
@@ -58,9 +59,10 @@ async function load(identity: Asking, flowKey: string) {
  * are joined (ADR-001).
  */
 async function vocabularyFor(identity: Asking): Promise<DesignerVocabulary> {
-  const [roles, people, flows] = await Promise.all([
+  const [roles, people, permissions, flows] = await Promise.all([
     listRoles(),
     listPeople(),
+    listPermissions(),
     listFlows(identity),
   ]);
   const active = <T extends { status?: string }>(items: readonly T[]) =>
@@ -75,6 +77,7 @@ async function vocabularyFor(identity: Asking): Promise<DesignerVocabulary> {
     ),
     flows: flows.map((flow) => ({ key: flow.key, name: flow.name })),
     people: people.map((person) => ({ id: person.id, name: person.displayName })),
+    permissions: permissions.map((one) => ({ code: one.code, name: one.name })),
     relations: moduleCapabilities.flatMap((catalog) =>
       active(catalog.relations).map((relation) => ({ code: relation.code, name: relation.name })),
     ),
@@ -101,7 +104,7 @@ export default async function FlowDesignerPage({
           </EmptyMedia>
           <EmptyTitle>Bu ekranı görme yetkiniz yok</EmptyTitle>
           <EmptyDescription>
-            Akış tasarımcısını yalnız akış tasarlama yetkisi olan roller açar (REQ-WFL-019).
+            Akış tasarımcısını yalnız akış tasarlama yetkisi olan roller açar.
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>

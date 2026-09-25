@@ -27,6 +27,7 @@ export {
   assertCan,
   chooseActingRole,
   listPeople,
+  listPermissions,
   listRoles,
   managerOf,
   noteSession,

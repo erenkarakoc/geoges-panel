@@ -297,7 +297,10 @@ function Canvas({
         nodeTypes={nodeTypes}
         onNodeClick={(_event, node) => onSelect(node.id)}
         onPaneClick={() => onSelect(null)}
-        proOptions={{ hideAttribution: false }}
+        // The library's own badge is off at the owner's request. Its MIT licence asks for the
+        // copyright notice to travel with the source, which it does in `node_modules`, and does not
+        // require a mark on the screen (the badge is how xyflow asks for support, not a condition).
+        proOptions={{ hideAttribution: true }}
         style={{ width: "100%", height: "100%" }}
       >
         {miniMap ? (
