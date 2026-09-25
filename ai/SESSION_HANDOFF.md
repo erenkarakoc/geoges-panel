@@ -2,7 +2,47 @@
 
 Last updated: 2026-09-25
 
-CURRENT PHASE: PHASE 07 — Foundation Build
+CURRENT PHASE: PHASE 07 — Foundation Build (its acceptance walks postponed, D-278) → PHASE 08 Workflow Engine
+
+## Latest continuation — the designer, built in five steps (TASK-0119)
+
+The owner approved D-283 and the designer was built the same day. What it is, in the order it was
+built:
+
+1. **The list and the route in** (SCR-195, minimal by D-283): the flows with their trigger, state,
+   version and last publish, and a way into the designer. `/admin/workflows`.
+2. **The canvas and the question panel** (SCR-196). The layout is a pure function — what the canvas
+   draws is decided in `domain/graph.ts` and read in tests without a browser — and the canvas itself
+   is the one custom element the owner approved (D-224), with only the library's engine used and the
+   library fetched solely on this route (SPIKE-07 note 3). One tab stop, arrow keys between boxes,
+   Enter into the panel, Escape back; the mini-map is not rendered below `lg` rather than hidden.
+   Error marks are `definitionSchema`'s own findings attached to the step whose path they name.
+   Saving is automatic, a moment behind the typing, and a draft the schema refuses is not sent.
+3. **Building a flow, not only reading one**: a "+" on every arrow opens the palette (the fourteen
+   steps, no fifteenth) and the new step goes between the two boxes; a step taken out of the middle
+   leaves the flow joined up. `domain/edit.ts`, pure, twelve tests. Every step's own questions, and
+   the flow's own question when nothing is selected — and every choice comes from the capability
+   catalogs rather than from a list in the screen (REQ-WFL-003, D-280). IAM gained one read for this:
+   `listRoles`.
+4. **The dry run and the publish.** The dry run is asked of the worker rather than run in the request
+   (D-284) — the engine lives on the worker's connection — and the screen watches for the evidence
+   row the database binds to the content hash. Its report says what would happen and that nothing was
+   created, and says plainly that the sample record is empty until record types arrive (Faz 09R). The
+   publish asks first, in the words REQ-WFL-024 wants: which version goes live, which moves to
+   history, how many runs carry on where they started, that it is audited and announced.
+5. **"Yeni akış", and the header's "…"**: a flow can now be started (one question, the name; the
+   address derived from it), copied into a draft of its own, closed with a reason that is kept, and
+   its version history read with the reason it exists on the window.
+
+Checks: 355 unit tests, 337 database tests, lint, types, format and production build pass; four of
+the database tests are new and cover the asking and reading of dry runs, the copy and the closing.
+One flake seen once in `tsk` push delivery and not again on a rerun — not touched by this work.
+
+**What the next session owes.** The screen has not been looked at in a browser: the dev server's
+session expired and the owner types their own password. So TASK-0119's quality gate is a walk of
+`/admin/workflows` with the owner signed in — start a flow, add a step, answer its questions, run the
+dry run, publish. After that, TASK-0120 (the approval centre's real queue and the eight templates)
+takes its own plan first, as D-281 says.
 
 ## Latest continuation — Phase 08: the capability catalog, and an engine that runs
 

@@ -1,6 +1,6 @@
 # GEOGES Panel — Yol Haritası
 
-Son güncelleme: 2026-09-25. Şu an **Faz 08 — İş akışı motoru** içindeyiz. Faz 07'nin yapım işi bitti; kalan tek işi **M1 yerel kabul turu** ve o sizde — siz turları sonraya bıraktığınız için faz kapanmadan Faz 08 başladı (D-278).
+Son güncelleme: 2026-09-25. Şu an **Faz 08 — İş akışı motoru** içindeyiz; motor ve tasarımcı yapıldı, sıradaki iş Onay Merkezi ile sekiz şablon (TASK-0120). Faz 07'nin yapım işi bitti; kalan tek işi **M1 yerel kabul turu** ve o sizde — siz turları sonraya bıraktığınız için faz kapanmadan Faz 08 başladı (D-278).
 
 Bu dosya [ana yol haritasının](ai/MASTER_ROADMAP.md), [görev kayıtlarının](ai/TASKS.md) ve [güncel durumun](ai/CURRENT_STATE.md) okunması kolay özetidir. Faz sırası ve kapsam için bağlayıcı kaynak `ai/MASTER_ROADMAP.md`'dir. “Tamamlandı” temel altyapının kabulünü ifade eder; sonraki fazlardaki iş ekranlarının da yapıldığı anlamına gelmez.
 
@@ -46,8 +46,8 @@ yazıldı (D-280). Plan: `docs/features/phase-08-workflow-plan.md` (D-281, sahip
 |---|---|---|
 | TASK-0118 | Yetenek kataloğu ve sözleşme testi: her modül ne yapabildiğini ilan eder, CI ilan ile kodu karşılaştırır | ✅ Tamamlandı; beş modül 25 yetenek ilan etti, test ilk koşuşunda dört gerçek ayrışma buldu |
 | TASK-0117 | Motor çekirdeği: sürümlü tanım, örnek, yürütme, tetikleyiciler, adım paleti, koşullar, kuru mod | ✅ **Tamamlandı** — dört tetikleyici, on dört adımın hepsi, iki tür koşul, motorun sınırları ve kuru mod; on iki göç (0045-0056) |
-| TASK-0119 | Görsel tasarımcı ve soru-cevap (ikisi de aynı JSON'u üretir) | ⬜ Motor bitince kendi planını alacak |
-| TASK-0120 | Onay Merkezi'nin motorun açtığı gerçek kuyruğa bağlanması ve sekiz şablonun gelmesi | ⬜ Motor bitince; şablonlar kendi dilimlerinde etkinleşir |
+| TASK-0119 | Görsel tasarımcı ve soru-cevap (ikisi de aynı JSON'u üretir) | ✅ **Yapımı bitti** (25 Eylül, beş adımda; plan D-283, siz onayladınız) — kalan tek iş sizin tarayıcı turunuz |
+| TASK-0120 | Onay Merkezi'nin motorun açtığı gerçek kuyruğa bağlanması ve sekiz şablonun gelmesi | ⬜ Sıradaki iş; önce kendi planını alacak (D-281) — şablonlar kendi dilimlerinde etkinleşir |
 
 ### Motorun parçaları
 
@@ -76,6 +76,28 @@ yazıldı (D-280). Plan: `docs/features/phase-08-workflow-plan.md` (D-281, sahip
 | Koşullar: alan | ✅ Kaydın verisiyle değerlendiriliyor; hangi daldan neden gidildiği günlükte |
 | Koşullar: geçmişe bakan | ✅ Sayım sorgusu, **her seferinde taze**, kendi süre sınırıyla (2 sn); sınır aşılırsa akış sessizce "hayır" demiyor, **gerekçesiyle duruyor** |
 | Kuru mod (deneme çalıştırması) | ✅ **Gerçek çalışmanın ta kendisi**: adımın yaptığı şey bir portun arkasında, deneme hiçbir şey yazmayan bir port veriyor |
+
+### Tasarımcının parçaları (TASK-0119)
+
+| Parça | Durum |
+|---|---|
+| Akış listesi (SCR-195, asgari) | ✅ Ad, tetik, durum, sürüm, son yayın; telefonda kart, masaüstünde tablo; "Yeni akış" çalışıyor |
+| Yeni akış | ✅ Tek soru — akışın adı; adresi addan türüyor (Türkçe harfler sadeleşir, alınmış adres numaralanır), akış bir başlangıç ve bir bitişle açılıyor |
+| Şema alanı (kutu-ok) | ✅ Tek özel arayüz öğesi (D-224); kütüphanenin yalnız motoru kullanılıyor, kütüphane **yalnız bu rotada** indiriliyor |
+| Yerleşim | ✅ Saf fonksiyon: şemanın ne çizeceği tarayıcı olmadan testte okunuyor; kimsenin bağlamadığı adım da çiziliyor |
+| Klavye | ✅ Şema **tek Tab durağı**; oklarla kutular, Enter panel, Escape şema (SPIKE-07'nin notu) |
+| Telefon | ✅ Tam düzenleme; panel alttan çekmece; mini harita telefonda **hiç çizilmiyor** (saklanmıyor) |
+| Adım ekleme/çıkarma | ✅ Her okun üstünde "+" ve palette on dört adım; yeni adım iki kutunun **arasına** giriyor; ortadan çıkarılan adımda akış kopmuyor |
+| Adımın soruları | ✅ On dört adımın kendi soruları; hiç adım seçilmemişken akışın kendi sorusu ("Ne olunca başlasın?") |
+| Seçenekler nereden geliyor | ✅ **Modüllerin ilanından**: olaylar, koşulun okuyabileceği alanlar ve sahiplik ilişkileri kataloğun kendisi (REQ-WFL-003, D-280); roller, kişiler ve diğer akışlar sahibi modülden |
+| Hata işaretleri | ✅ Şemanın kendi bulguları, ait olduğu adıma bağlı; ekranın ikinci bir kontrol listesi yok |
+| Kaydetme | ✅ Otomatik ve yazmanın bir adım gerisinde; şemanın reddettiği taslak **gönderilmiyor**, çünkü veritabanı da aynı şemayı tutuyor |
+| Deneme çalıştırması | ✅ İşçiden **isteniyor**, istek içinde koşulmuyor (D-284); sonuç adım adım, kime düşeceğiyle; "hiçbir şey oluşmadı" aynı pencerede yazıyor |
+| Deneme: örnek kayıt | ⬜ Boş örnekle çalışıyor; örnek kayıt seçimi kayıt türleri gelince (Faz 09R, D-105) — ekran bunu kendi söylüyor |
+| Yayın | ✅ Onay penceresi: hangi sürüm yayına, hangisi geçmişe, kaç koşu başladığı sürümle devam edecek, denetim ve bildirim; yalnız **bu tanımın** geçmiş denemesiyle açılıyor |
+| Başlıktaki "…" | ✅ Kopyasını çıkar (kendi taslağı olarak), akışı kapat (gerekçesiyle, silme değil), sürüm geçmişi |
+| Kutuları elle taşımak | ⬜ Bu görevin dışında bırakıldı (D-283) |
+| Tasarım içinden yeni yetki tanımlamak (REQ-WFL-021) | ⬜ Bu görevin dışında bırakıldı (D-283) |
 
 ### Son doğrulamalar
 
@@ -108,8 +130,23 @@ yazıldı (D-280). Plan: `docs/features/phase-08-workflow-plan.md` (D-281, sahip
   başlatmadığı için testler bunu yakalayamazdı; dev sunucusunu çalıştırıp worker'ın kuyruğu
   boşalttığını izleyerek doğruladım.
 
-Bugüne kadar: **dokuz göç** (0045-0053), **334 birim testi**, WFL'in **42 veritabanı testi** (toplam
-291+). Her adım kendi testleriyle geldi.
+- **Tasarımcı, 25 Eylül'de beş adımda kuruldu** ve her adımı kendi testleriyle geldi: yerleşim ve
+  düzenleme saf modüller (32 birim testi), denemenin istenmesi/okunması, kopya ve kapatma dört
+  veritabanı testi. Ekranın kendi kontrol listesi yok: geçerli tanım nedir sorusunu **yalnız**
+  `definitionSchema` cevaplıyor, yani ekran motorla çelişemiyor.
+
+- **Bir mimari kararı yazıya geçirdim (D-284).** Deneme çalıştırması motorun kendi döngüsü ve motor
+  işçinin bağlantısında çalışıyor; istek kodu o bağlantıyı asla tutmuyor. Bu yüzden ekran denemeyi
+  *istiyor*, işçi bir-iki saniye içinde koşuyor, ekran de kanıt satırını bekliyor. Bunun iki
+  görünen sonucu var ve ikisi de ekranda yazılı: sonuç anında değil bir-iki saniye sonra geliyor ve
+  örnek kayıt şimdilik boş.
+
+- **Tasarımcı tarayıcıda henüz gezilmedi.** Dev sunucusunun oturumu düştü ve parolayı siz
+  yazıyorsunuz; bu yüzden TASK-0119'un kalite kapısı sizin turunuz: akış aç, adım ekle, sorularını
+  cevapla, denemeyi çalıştır, yayımla.
+
+Bugüne kadar: **on iki göç** (0045-0056), **355 birim testi**, **337 veritabanı testi**. Her adım
+kendi testleriyle geldi.
 
 **Fazın bilinen riski (D-278):** motor, temelin sizin kullanımınızla doğrulanmadığı bir zeminde
 kuruluyor. M1 turundan çıkacak bir düzeltme temeli değiştirirse, üstünde motor dururken yapılacak.
