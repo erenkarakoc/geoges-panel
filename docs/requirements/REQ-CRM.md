@@ -179,6 +179,8 @@ Biçim: `docs/requirements/README.md`.
 
 | Kod | Ad | Ne zaman | Taşıdığı alanlar | Veri sınıfı |
 |---|---|---|---|---|
+| `party.created` | Firma kaydedildi | Yeni firma kartı açıldığında | firma, roller | iç |
+| `party.changed` | Firma kartı değişti | Kartın bilgisi, rolleri ya da durumu değiştiğinde | firma, roller, durum | iç |
 | `lead.created` | Talep açıldı | Talep kaydedildiğinde | firma, kaynak, ilgilenecek kişi, dönüş tarihi | iç |
 | `lead.unanswered` | Talep cevaplanmadı | Dönüş tarihi geçtiğinde | talep, ilgilenecek kişi, bekleme süresi | iç |
 | `lead.stage_changed` | Talep aşaması değişti | Aşama değiştiğinde | talep, eski ve yeni aşama | iç |

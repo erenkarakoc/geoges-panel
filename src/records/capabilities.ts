@@ -2,6 +2,7 @@ import "server-only";
 
 import { admCapabilities } from "@/modules/adm";
 import { audCapabilities } from "@/modules/aud";
+import { crmCapabilities } from "@/modules/crm";
 import { docCapabilities } from "@/modules/doc";
 import { iamCapabilities } from "@/modules/iam";
 import { tskCapabilities } from "@/modules/tsk";
@@ -19,6 +20,7 @@ import type { SystemDb } from "@/platform/jobs/types";
 export const moduleCapabilities: readonly ModuleCapabilities[] = [
   admCapabilities,
   audCapabilities,
+  crmCapabilities,
   docCapabilities,
   iamCapabilities,
   tskCapabilities,

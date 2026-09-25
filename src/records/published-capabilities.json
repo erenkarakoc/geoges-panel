@@ -65,6 +65,16 @@
     "code": "notification.send"
   },
   {
+    "module": "CRM",
+    "kind": "event",
+    "code": "party.changed"
+  },
+  {
+    "module": "CRM",
+    "kind": "event",
+    "code": "party.created"
+  },
+  {
     "module": "AUD",
     "kind": "condition",
     "code": "revision_request.record_type"

@@ -113,3 +113,55 @@ gereksinimlerinde değildir; kendi görevlerinde gelir.
 **Testler.** m²'nin türetildiği, ölçülerin kilitli olduğu, aynı kodun ikinci kez açılamadığı, komşu
 kademelerin bulunduğu, reçetenin tarih ve öncelik kuralı, yetkisiz yazmanın reddedildiği veritabanı
 testleri.
+
+## TASK-0122 — Firma kartı (uygulama planı, 2026-09-25)
+
+Kademe T2. Gereksinimler REQ-CRM-004, REQ-PUR-001, D-027, D-033, D-237, D-287; şema
+`SCHEMA-COMMERCIAL-FINANCE.md` crm bölümü; ekran SCR-083.
+
+**Tablolar (göç 0062, yeni `crm` şeması).**
+
+- `crm.party` — gerçek bir firma için **tek kayıt** (CRM-K1). Alanlar: ticari unvan, vergi numarası,
+  vergi dairesi, roller, il, adres, telefon, e-posta, not, durum (kullanımda / pasif) ve özel alanlar
+  (`custom_fields`, D-237 firmaya izin verir; mevcut `adm.check_custom_fields` denetler). Şema
+  belgesindeki anahtar sütunlara (`name`, `tax_no`, `roles[]`, `city`, `status`) kartın iletişim ve
+  fatura bilgileri eklenir; şema belgesi buna göre güncellenir.
+- **Roller:** işveren (`client`), ürün müşterisi (`customer`), tedarikçi (`supplier`), taşeron
+  (`subcontractor`), kiralayan (`lessor`). En az bir rol zorunludur. Aynı firma yeni bir rolle
+  karşılaşınca ikinci kart açılmaz, karta rol eklenir (REQ-PUR-001).
+- **İkinci kart açılmaz** iki katmanda: vergi numarası veritabanında tekildir (aynı numarayla ikinci
+  kayıt reddedilir ve mevcut kart gösterilir); ad girilirken benzer adlı firmalar önerilir
+  (REQ-CRM-004). Benzerlik, Türkçe katlanmış adın "İnşaat, Sanayi, Ticaret, Ltd, Şti, A.Ş." gibi
+  her firma adında geçen sözcükler çıkarıldıktan sonra kalan kök sözcüklerinden ve yazım
+  yakınlığından (pg_trgm) bulunur; aksi halde her "…İnşaat Ltd. Şti." birbirine benzerdi.
+- `crm.party_contact` — firmadaki kişi: ad, görev, telefon, e-posta, durum. Kişi firmadan ayrılınca
+  silinmez, pasifleşir. Yalnız iş iletişim bilgisi tutulur; hassas alan yoktur.
+- Firma silinmez; pasifleşir. Değişikliklerin hepsi geçmişe yazılır.
+
+**Okuma ve yazma.** Firma adı ve rolleri başka modüllerin kayıtlarında (proje kartının işvereni,
+şantiyenin taşeronu, varlığın kiralayanı, siparişin tedarikçisi) görünen referans bilgisidir; bu
+yüzden firma satırını oturum açmış herkes okur. Kartı ve kişileri açmak `crm.module.view` /
+`crm.module.own` ya da firma kaydeden modüllerin görme yetkisini (`pur.module.view`,
+`eqp.module.view`) ister. Firmayı kaydetmek ve değiştirmek `crm.module.manage`, `pur.module.manage`
+veya `eqp.module.manage` ister — tedarikçiyi satın alma, kiralayanı ekipman da kaydeder.
+
+**Olaylar ve arama.** `party.created` ve `party.changed` yayımlanır (REQ-CRM yetenek kataloğuna
+eklenir). Firma sitenin genel aramasında "Firmalar" grubunda çıkar — aramanın ilk gerçek kaydı; arama
+metnine unvan, vergi numarası, il ve roller girer.
+
+**Ekran.** `/leads-clients/parties` firma listesi (ara, role göre süz, yeni firma); `/leads-clients/
+parties/[id]` firma kartı (SCR-083): bilgiler, roller, kişiler, özel alanlar. Kartın süreç sekmeleri
+kendi dilimleriyle gelir ve bunu söyler: talepler ve görüşmeler, işveren karnesi (Faz 13), cari hesap
+(Faz 11). Talepler ekranı (SCR-080) Faz 13'te gelene kadar menüdeki "Talepler & Müşteriler" firma
+listesine açılır; menünün kayıtlarda olmayan `crm.lead.view` yetkisi gerçek yetkiye
+(`crm.module.view`) düzeltilir.
+
+**Özel alanlar.** Değerleri kaydederken denetlenir ve kartta görünür; özel alan tanımlama ekranı
+REQ-ADM-009'un kendi görevindedir, bu görevin kapsamında değildir.
+
+**Örnek veri.** Pilot için örnek firmalar (işveren, tedarikçi, taşeron, kiralayan) `db/samples`'a
+gider (D-290).
+
+**Testler.** Vergi numarasının tekil olduğu, rolsüz firmanın reddedildiği, benzer ad önerisinin ortak
+sözcüklere takılmadığı, yetkisiz yazmanın reddedildiği, olayların yayımlandığı ve arama projeksiyonunun
+kurulduğu veritabanı testleri; alan doğrulaması ve benzerlik anahtarı birim testleri.

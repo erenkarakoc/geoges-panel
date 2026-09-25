@@ -263,8 +263,8 @@ export const navigationRegistry: readonly NavigationGroup[] = [
         href: "/leads-clients",
         icon: HandshakeIcon,
         moduleCode: "CRM",
-        requiredPermission: "crm.lead.view",
-        description: "Gelen iş talepleri, işveren kartları ve karneleri, ihale takibi.",
+        requiredPermission: "crm.module.view",
+        description: "Firma kartları; gelen iş talepleri, işveren karneleri ve ihale takibi.",
       },
       {
         id: "quotes",
