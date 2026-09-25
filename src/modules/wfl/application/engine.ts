@@ -19,6 +19,7 @@ import {
   holdLock,
   requestApproval,
   startBranch,
+  startSubflow,
   scheduleEscalation,
   scheduleWake,
   startInstance,
@@ -135,6 +136,12 @@ type StepSink = {
   lock(step: FlowStep, transition: string, reason: string): Promise<void>;
   /** Opens one run per path and answers with their ids; a dry run opens none (REQ-WFL-006). */
   branch(stateId: string, paths: readonly string[]): Promise<string[]>;
+  /** Hands the work to another flow and answers with its run, or null (REQ-WFL-011). */
+  subflow(
+    stateId: string,
+    flowKey: string,
+    context: Record<string, unknown>,
+  ): Promise<string | null>;
   /** Opens one run per item of a list, each carrying its item (REQ-WFL-009). */
   branchItems(
     stateId: string,
@@ -222,6 +229,13 @@ function writingSink(db: SystemDb, instanceId: string, relations: FlowRuntime): 
       }
       return opened;
     },
+    subflow: (stateId, flowKey, context) =>
+      startSubflow(db, {
+        parentInstanceId: instanceId,
+        parentStepStateId: stateId,
+        flowKey,
+        context,
+      }),
     async branchItems(stateId, bodyStepId, items) {
       const opened: string[] = [];
       for (const one of items) {
@@ -371,6 +385,26 @@ async function walk(
       // The parent sits in this step until the last branch ends; the branches run on their own.
       await sink.wait(step.id, { waitingFor: "branches", opened: opened.length });
       for (const childId of opened) await runBranch(db, childId, relations);
+      return { state: "waiting", stepId: step.id };
+    }
+
+    if (step.type === "subflow") {
+      if (!instanceId) {
+        // A dry run names the flow it would hand the work to and walks on: what that flow does
+        // is its own dry run, and the designer runs it there (REQ-WFL-025).
+        await sink.leave(stateId, "done", `would hand over to ${step.flow}`);
+        stepId = step.next ?? null;
+        continue;
+      }
+      const childId = await sink.subflow(stateId, step.flow, context);
+      if (!childId) {
+        const reason = `alt akış başlatılamadı: ${step.flow}`;
+        await sink.leave(stateId, "failed", "no_subflow", { flow: step.flow });
+        await sink.end("failed", reason, step.id);
+        return { state: "ended", status: "failed", reason };
+      }
+      await sink.wait(step.id, { waitingFor: "subflow", flow: step.flow });
+      await runBranch(db, childId, relations);
       return { state: "waiting", stepId: step.id };
     }
 
@@ -609,8 +643,11 @@ async function joinParent(db: SystemDb, childId: string, relations: FlowRuntime)
   // has already moved it on, and a repeated delivery must not move it twice.
   if (!run || !run.openStepId) return;
   const step = stepOf(run.definition, run.openStepId);
-  // Both the parallel step and the "her biri için" step wait on branches the same way.
-  if (step?.type !== "parallel" && step?.type !== "for_each") return;
+  // Parallel paths, the items of a "her biri için" and a subflow all wait on children the same
+  // way; anything else means somebody has already moved the parent on.
+  const waitsOnBranches =
+    step?.type === "parallel" || step?.type === "for_each" || step?.type === "subflow";
+  if (!waitsOnBranches) return;
 
   if (state.failed > 0) {
     const reason = state.firstFailure ?? `bir dal hata ile durdu: ${step.id}`;
@@ -877,6 +914,10 @@ export async function dryRun(
     },
     async branchItems() {
       return [];
+    },
+    async subflow() {
+      // A dry run starts no other flow; the report says which one it would hand the work to.
+      return null;
     },
     async lock(step, transition) {
       steps.push({ stepId: step.id, type: step.type, outcome: `would hold ${transition}` });

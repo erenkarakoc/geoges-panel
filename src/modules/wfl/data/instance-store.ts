@@ -598,6 +598,26 @@ export async function startBranch(
   return rows[0]?.id ?? null;
 }
 
+/**
+ * Hands the work to another flow as a child of this run (REQ-WFL-011). Null when that flow is not
+ * published, is disabled, or the parent is no longer running.
+ */
+export async function startSubflow(
+  db: SystemDb,
+  child: {
+    parentInstanceId: string;
+    parentStepStateId: string;
+    flowKey: string;
+    context?: Record<string, unknown>;
+  },
+): Promise<string | null> {
+  const { rows } = await sql<{ id: string | null }>`
+    select wfl.start_subflow(${child.parentInstanceId}::uuid, ${child.parentStepStateId}::uuid,
+                             ${child.flowKey},
+                             ${JSON.stringify(child.context ?? {})}::jsonb) as id`.execute(db);
+  return rows[0]?.id ?? null;
+}
+
 export type BranchState = {
   opened: number;
   running: number;

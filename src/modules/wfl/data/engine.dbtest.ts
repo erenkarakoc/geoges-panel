@@ -116,7 +116,7 @@ const unbuilt = {
   trigger: { type: "event", event: `${EVENT}_other` },
   start: "s1",
   steps: [
-    { id: "s1", type: "subflow", title: "Alt akış", next: "s2" },
+    { id: "s1", type: "record", title: "Kayıt oluştur", next: "s2" },
     { id: "s2", type: "end" },
   ],
 };
@@ -320,12 +320,12 @@ describe("what the engine cannot do yet, it says (REQ-WFL-025)", () => {
     expect(result).toEqual({
       state: "ended",
       status: "failed",
-      reason: "motor bu adımı henüz yürütmüyor: subflow",
+      reason: "motor bu adımı henüz yürütmüyor: record",
     });
 
     const stopped = await readInstance(as(DESIGNER), instanceId!);
     expect(stopped?.status).toBe("failed");
-    expect(stopped?.failure).toContain("subflow");
+    expect(stopped?.failure).toContain("record");
 
     const log = await readRunLog(as(DESIGNER), instanceId!);
     expect(log.map((line) => line.kind)).toEqual(["started", "waiting", "ended"]);
@@ -735,14 +735,14 @@ describe("the dry run a publish needs (REQ-WFL-025, SPIKE-05)", () => {
         trigger: { type: "manual" },
         start: "b1",
         steps: [
-          { id: "b1", type: "subflow", title: "Alt akış", next: "b2" },
+          { id: "b1", type: "record", title: "Kayıt oluştur", next: "b2" },
           { id: "b2", type: "end" },
         ],
       },
     });
     const report = await dryRunVersion(worker, broken, {}, relations);
     expect(report.passed).toBe(false);
-    expect(report.failure).toContain("subflow");
+    expect(report.failure).toContain("record");
     expect(await errorOf(publishVersion(as(DESIGNER), broken))).toBe("wfl.dry_run_required");
   });
 
@@ -1619,5 +1619,127 @@ describe("the for-each step (REQ-WFL-009, D-096, D-222)", () => {
         ],
       }),
     ).toThrow(/her biri için/);
+  });
+});
+
+describe("a flow inside a flow (REQ-WFL-011, REQ-WFL-018)", () => {
+  const INNER = "zz-t0147-inner";
+  const OUTER = "zz-t0147-outer";
+
+  /** The ready-made piece: somebody of ours carries the outside party's answer back. */
+  const inner = {
+    trigger: { type: "manual" },
+    start: "i1",
+    steps: [
+      { id: "i1", type: "task", owner: { type: "user", userId: APPROVER }, title: "Cevabı al" },
+      { id: "i2", type: "end" },
+    ],
+  };
+
+  /** The process that hands that piece the work and waits for it. */
+  const outer = {
+    trigger: { type: "event", event: `${EVENT}_outer` },
+    start: "o1",
+    steps: [
+      { id: "o1", type: "subflow", flow: INNER, next: "o2" },
+      { id: "o2", type: "end" },
+    ],
+  };
+
+  const runtime = {
+    ...relations,
+    run: async (db: SystemDb, code: string, input: unknown) => {
+      if (code !== "task.open") throw new Error(`unexpected action ${code}`);
+      const t = input as {
+        stepRunId: string;
+        title: string;
+        assigneeUserId: string;
+        priority: string;
+      };
+      await sql`select tsk.open_flow_task(${t.stepRunId}::uuid, ${t.title},
+                                          ${t.assigneeUserId}::uuid, ${t.priority})`.execute(db);
+      return null;
+    },
+  };
+
+  let outerId: string;
+
+  it("starts the other flow as a child and waits inside the step", async () => {
+    await publish(INNER, inner);
+    await publish(OUTER, outer);
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_outer`,
+        id: id(700),
+        record: { schema: "zzw", table: "record", id: id(800) },
+        payload: {},
+      },
+      runtime,
+    );
+    outerId = started[0];
+
+    const { rows } = await admin.query(
+      `select flow_key, status, depth, record_id from wfl.instance where parent_instance_id = $1`,
+      [outerId],
+    );
+    expect(rows).toHaveLength(1);
+    expect(rows[0].flow_key).toBe(INNER);
+    expect(rows[0].depth).toBe(1);
+    // The child is about the same record: it is doing part of the same piece of work.
+    expect(rows[0].record_id).toBe(id(800));
+    expect(rows[0].status).toBe("running");
+    expect((await readInstance(as(DESIGNER), outerId))?.status).toBe("running");
+  });
+
+  it("carries the parent on when the inner flow ends", async () => {
+    const { rows } = await admin.query(
+      `select t.id from tsk.task t join wfl.step_state s on s.id = t.source_step_run_id
+         join wfl.instance i on i.id = s.instance_id where i.parent_instance_id = $1`,
+      [outerId],
+    );
+    await runAsUser(as(APPROVER), (db) =>
+      sql`select tsk.complete_task(${rows[0].id}::uuid)`.execute(db),
+    );
+    const { rows: done } = await admin.query(
+      "select payload from core.outbox where event_code = 'task.completed' and record_id = $1",
+      [rows[0].id],
+    );
+    await resumeFromTask(worker, done[0].payload.step_run_id, runtime);
+
+    expect((await readInstance(as(DESIGNER), outerId))?.status).toBe("done");
+    const log = await readRunLog(as(DESIGNER), outerId);
+    expect(log.filter((line) => line.kind === "entered").map((line) => line.stepId)).toEqual([
+      "o1",
+      "o2",
+    ]);
+    expect(log.find((line) => line.kind === "branch_opened")?.detail).toMatchObject({
+      subflow: INNER,
+    });
+  });
+
+  it("stops the run when the flow it hands the work to is not published", async () => {
+    const lonely = {
+      trigger: { type: "event", event: `${EVENT}_lonely` },
+      start: "l1",
+      steps: [
+        { id: "l1", type: "subflow", flow: "zz-t0147-missing", next: "l2" },
+        { id: "l2", type: "end" },
+      ],
+    };
+    await publish("zz-t0147-lonely", lonely);
+    const started = await runEventTriggers(
+      worker,
+      {
+        code: `${EVENT}_lonely`,
+        id: id(701),
+        record: { schema: "zzw", table: "record", id: id(801) },
+        payload: {},
+      },
+      runtime,
+    );
+    const instance = await readInstance(as(DESIGNER), started[0]);
+    expect(instance?.status).toBe("failed");
+    expect(instance?.failure).toContain("alt akış başlatılamadı");
   });
 });

@@ -18,7 +18,7 @@ import { z } from "zod";
  * with its three answers — are kept apart from the rest, because a union that can be narrowed
  * needs its halves written out rather than filtered.
  */
-const PLAIN_STEP_TYPES = ["start", "escalate", "subflow", "end", "record"] as const;
+const PLAIN_STEP_TYPES = ["start", "escalate", "end", "record"] as const;
 
 export const STEP_TYPES = [
   "condition",
@@ -30,6 +30,7 @@ export const STEP_TYPES = [
   "parallel",
   "join",
   "for_each",
+  "subflow",
   ...PLAIN_STEP_TYPES,
 ] as const;
 
@@ -47,6 +48,7 @@ export const RUNNABLE_STEP_TYPES: readonly StepType[] = [
   "parallel",
   "join",
   "for_each",
+  "subflow",
   "end",
 ];
 
@@ -161,6 +163,12 @@ const parallelStep = baseStep.extend({
 /** Where the paths come together again; it carries nothing of its own (REQ-WFL-006). */
 const joinStep = baseStep.extend({ type: z.literal("join") });
 
+const subflowStep = baseStep.extend({
+  type: z.literal("subflow"),
+  /** The flow this step hands the work to; it runs as a child and the step waits for it. */
+  flow: z.string().min(1).max(80),
+});
+
 const forEachStep = baseStep.extend({
   type: z.literal("for_each"),
   /** The list the owning module publishes, read for the record the flow is about (REQ-WFL-009). */
@@ -184,6 +192,7 @@ export const stepSchema = z.discriminatedUnion("type", [
   parallelStep,
   joinStep,
   forEachStep,
+  subflowStep,
   waitStep,
   notifyStep,
   plainStep,
