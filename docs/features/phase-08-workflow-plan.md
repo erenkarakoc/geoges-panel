@@ -184,3 +184,98 @@ Bir akış baştan sona **tasarımcıdan** kurulabilir: adımlar eklenir, sorula
 işaretleri düzelir, deneme çalıştırılır ve yayımlanır; ardından gerçek bir olay o akışı başlatır ve
 çalışma günlüğü tasarımcıdaki yolu gösterir. Erişilebilirlik: şema tek Tab durağı, ok tuşlarıyla
 gezinme, açık ve koyu temada okunabilirlik. Telefonda 375 px'te yatay kaydırma yok.
+
+
+## TASK-0120 — Onay Merkezi'nin gerçek kuyruğu ve şablonlar (uygulama planı, 2026-09-25)
+
+Karar: D-285 (ONAY BEKLİYOR). Gereksinimler REQ-WFL-012…018, REQ-WFL-027, REQ-WFL-028, REQ-WFL-033,
+REQ-IAM-020/025/026; ekranlar SCR-012 (Onaylar), SCR-195'in kalan iki sekmesi, SCR-197 (çalışma
+günlüğü); kararlar D-070, D-086, D-087, D-097, D-099, D-104, D-106, D-107, D-223.
+
+**Neden şimdi yapılabilir.** Motor onayları açıyor, kararı olay olarak geri alıyor ve akışı
+sürdürüyor (TASK-0117); tasarımcı bir akışı kurup yayımlıyor (TASK-0119). Eksik olan, **insanların bu
+motorla temas ettiği iki yer**: onayın önüne düştüğü ekran ve akışların şablondan gelmesi.
+
+### 1. Bu görev iki iş
+
+1. **Onay Merkezi'nin gerçek kuyruğu** (SCR-012): bugün ekran boş durumdan başka bir şey
+   göstermiyor, çünkü örnek kuyruk sahibin isteğiyle kaldırılmıştı (D-106).
+2. **Şablon mekanizması ve varsayılan akış tanımları** (REQ-WFL-027, REQ-WFL-028): şablonlar kopya
+   olarak gelir, kopya şablona sıfırlanabilir, şablonun yeni sürümü kopyayı sessizce değiştirmez.
+
+### 2. Kuyruk için eksik olan tek veri: "bu onay bana neden geldi"
+
+Motor sahibi çalışma anında hesaplıyor ama **hangi kuralla** hesapladığını yazmıyor. REQ-WFL-013 ve
+REQ-WFL-033 tam olarak bunu istiyor: "şantiye sorumlusu olduğunuz için". Göç **0057** onayın ve adım
+durumunun yanına adresleme kuralını ve onun insan diliyle cümlesini koyar; motor onayı açarken yazar.
+Bu cümle üç yerde aynı cümledir: onay kartında, görevde ve bildirimde (REQ-TSK-008).
+
+Aynı göçte ikinci bir eksik kapanır: **bir onay tek kişiye değil bir gruba da düşebilir.** Sahip
+onayı, sahip katmanındaki herkese görünür ve herhangi biri tamamlar (REQ-IAM-025, REQ-IAM-026); bugün
+`owner_user_id` tek kişi. Alan boş kalabilir hale gelir, kuralın kendisi satırda durur, satır
+güvenliği kuralı kimin görüp karar verebileceğini söyler. Vekâlet (REQ-IAM-020) aynı kapıdan geçer:
+vekil, vekâlet ettiği kişinin onaylarını kendi kuyruğunda **"vekâletle"** etiketiyle görür.
+
+### 3. Kuyruk ekranı (SCR-012)
+
+- **Tek kayıt ekranı doldurur** (D-070): karar verilince sıradaki **listeye dönmeden** açılır.
+- Kartta: işlemin özeti, kaynak akış ve adım, kayda bağlantı, bu onayın neden bu kişide olduğu, ne
+  zamandan beri beklediği, daha önce geri gönderildiyse o geçmiş (REQ-WFL-016).
+- Üç sonuç (REQ-WFL-014): onayla · düzeltmeye gönder · reddet. Son ikisinde gerekçe `Dialog` içinde
+  zorunlu (REQ-WFL-015) — tabloda da zorunlu, yani ekran erken söyler, veritabanı son söyler.
+- Boş durum bugünkü cümleyle kalır; "bu kayıt başkası tarafından karara bağlandı" hali de yazılı
+  (SCREEN_STATES).
+- **Rozet sayısı** çalışma katmanında ve "Bugün"de aynı sayı olmalı (REQ-WFL-012). `workCounts` bugün
+  boş bir sabit; kabuk sayıyı kişiye göre okuyup verecek şekilde değişir ve sayıyı WFL ile TSK söyler.
+
+**Bilerek eksik ve nedeni yazılı:** REQ-WFL-013 kartta miktar/tutar, belge ve tutarsızlık da istiyor.
+Bunlar kaydın sahibi modülden gelir ve o modüller henüz yok (kayıt türleri Faz 09R). Kart bugün
+akışın bildiği her şeyi gösterir; zenginleşmesi modüllerin kendi dilimlerinde olur ve o dilimlerin
+kabulüne yazılır.
+
+### 4. Şablonlar (REQ-WFL-027, REQ-WFL-028)
+
+Göç **0058**: şablon kaydı (anahtar, ad, sürüm, tanım) ve akışın hangi şablonun kaçıncı sürümünden
+kopyalandığı. Üç işlem:
+
+- **Kopyasını kullan:** şablonun tanımıyla yeni bir akış taslağı; bağ kaydedilir.
+- **Şablona sıfırla:** yeni bir akış **sürümü** olarak yayımlanır ve denetim kaydına yazılır — sessiz
+  bir üzerine yazma değil (REQ-WFL-027 kabul kriteri).
+- **"Yeni sürüm var":** şablon sürümü kopyanınkinden yeniyse SCR-195'te rozet ve kopyanın sahibine
+  bildirim; kopya kendiliğinden değişmez.
+
+Tanımların kendisi JSON olarak gelir (`db/seeds/`): günlük saha kaydı onayı · malzeme çıkış talebi ·
+ödeme onayı · hakediş → fatura · personel çıkışı · revizyon talebi · stok sayımı onayı · satın alma
+talebi · teklif onayı, ve sekiz uçtan uca sürecin **zincir halkaları** (D-104 — tek uzun akış değil).
+Her şablon için CI'da iki şey sınanır: tanım `definitionSchema`'dan geçer ve kuru modda baştan sona
+yürür. Gerçek kayıtlarla kabul, D-279 gereği kendi dilimlerinde.
+
+### 5. Çalışma günlüğü (SCR-197)
+
+Bu görevde, çünkü onay kartındaki "neden bende" oradan devam ediyor: liste (akış, sürüm, tetikleyen
+olay ve kayıt, durum, beklediği adım ve kişi; süzgeçler) ve detay (adımların zaman çizelgesi, her
+adımın sonucu ve kime düştüğü, hata ile duran örnekte nedeni). Yalnız akış tasarlama yetkisi olan
+görür (D-223); yetkisi olmayan kişi aynı bilgiyi görevindeki ve bildirimindeki **cümleyle** alır.
+
+### 6. Sıra
+
+1. Göç 0057 — adresleme kuralı ve cümlesi, gruba düşen onay, satır güvenliği; motor yazmaya başlar.
+2. Kuyruk ekranı, üç sonuç, gerekçe penceresi, sıradakine geçiş, rozet sayıları.
+3. Göç 0058 — şablon kaydı, kopyala / sıfırla / "yeni sürüm var".
+4. Şablon tanımları ve her biri için şema + kuru mod sınaması.
+5. SCR-195'in "Şablonlar" ve "Yeni akışlar" sekmeleri, SCR-197 çalışma günlüğü.
+
+### 7. Bu görevde bilerek olmayanlar
+
+- Kartın zengin özeti (miktar, belge, tutarsızlık): kayıt türleri gelince, o modüllerin dilimlerinde.
+- Dış taraf onayının gerçek bir dış tarafla kabulü (D-102).
+- Şablonların gerçek kayıtlarla kabulü (D-279).
+- İstisnai manuel işlem izni (REQ-WFL-031): kendi görevi, IAM tarafında.
+
+### 8. Kabul
+
+Bir onay gerçek bir akıştan düşer, kuyrukta **neden orada olduğunu söyleyerek** görünür, üç sonucu da
+verilebilir, gerekçesiz ret ve geri gönderme olmaz, karardan sonra sıradaki açılır ve rozet sayısı üç
+yerde aynıdır. Bir şablonun kopyası kurulur, değiştirilir, şablon güncellenince kopya değişmez ama
+haber verir, "şablona sıfırla" yeni bir sürüm olarak yayımlanır. Her varsayılan şablon CI'da şemadan
+ve kuru moddan geçer.
