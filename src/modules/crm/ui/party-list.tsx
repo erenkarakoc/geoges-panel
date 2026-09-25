@@ -143,7 +143,7 @@ export function PartyList({
   ];
 
   const addButton = canRegister ? (
-    <Button onClick={() => setAdding(true)}>
+    <Button className="max-md:h-11" onClick={() => setAdding(true)}>
       <PlusIcon aria-hidden="true" />
       Firma ekle
     </Button>
@@ -190,7 +190,7 @@ export function PartyList({
               onValueChange={(picked) => narrow({ role: picked === EVERY ? null : String(picked) })}
               value={role ?? EVERY}
             >
-              <SelectTrigger aria-label="Role göre süz" className="sm:w-48">
+              <SelectTrigger aria-label="Role göre süz" className="max-md:min-h-11 sm:w-48">
                 <SelectValue />
               </SelectTrigger>
               <SelectPopup>

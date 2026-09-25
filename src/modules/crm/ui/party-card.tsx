@@ -171,7 +171,9 @@ export function PartyCard({
 
       <Tabs defaultValue="details">
         <div className="overflow-x-auto">
-          <TabsList variant="underline">
+          {/* 44 px on a phone, the thumb target the bottom bar and header use (DESIGN_SYSTEM_RULES
+              §4.1 row 17a); the strip scrolls sideways there and the half-shown last tab says so. */}
+          <TabsList className="max-md:[&>button]:h-11" variant="underline">
             <TabsTab value="details">Bilgiler</TabsTab>
             <TabsTab value="people">Kişiler ({contacts.length})</TabsTab>
             <TabsTab value="leads">Talepler ve görüşmeler</TabsTab>
