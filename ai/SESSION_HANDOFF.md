@@ -1,10 +1,17 @@
 # SESSION HANDOFF
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
 CURRENT PHASE: PHASE 07 — Foundation Build (its acceptance walks postponed, D-278) → PHASE 08 Workflow Engine
 
-## Latest continuation — TASK-0122, the firm card, is built (Phase 09 slice 1, step 2)
+## Latest continuation — TASK-0122 finished on this side; TASK-0123's plan is next (2026-09-26)
+
+- The owner's findings on the firm card are fixed and pushed: phone targets (`81e0363`, `b97dabf`), the tab strip's needless vertical scrollbar (`792f7a0`) with an ESLint rule against the pattern (`ffde763`), and the search icon spacing.
+- **The dev server would not start** once firms registered with search: worker names under `core` were refused by `validateRegistry` and by `ck_event_subscription__subscriber` / `ck_outbox_delivery__subscriber`. Fixed in `b2a7cdc` (migration 0063; its down refuses while `core.` rows exist, on purpose). `src/jobs/registry.test.ts` now validates the real registry. After the subscription existed, `npm run search:rebuild` indexed the sample firms; the palette finds them.
+- The same-tax-number refusal was seen in the browser (toast plus "Kayıtlı firmanın kartını aç"); nothing else is owed on TASK-0122 but the owner's walk.
+- **Next:** TASK-0123 (projects, sites, walls…) is T1 — write its implementation plan into `docs/features/phase-09-slice-1-plan.md` and put its business rules to the owner before code.
+
+## Earlier continuation — TASK-0122, the firm card, is built (Phase 09 slice 1, step 2)
 
 Written on the owner's Windows machine and committed there as `129166a` (the pre-commit gate first refused it for Prettier on `party-card.tsx` and `party-list.tsx`; fixed and recommitted). CI 36172765624 is green, including the database job's apply → test → full rollback → reapply → test. What exists: migration 0062 (`crm.party`, `crm.party_contact`, the unique tax number, the similar-name function, the search projection), the `crm` module's domain, store, application and capabilities, the list at `/leads-clients/parties` and the card (SCR-083) at `/leads-clients/parties/[id]`, and `db/samples/0002_crm_parties.sql`. The plan is in `docs/features/phase-09-slice-1-plan.md` under "TASK-0122".
 

@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-26 — The firm card, and what walking it found (TASK-0122)
+
+- **Firms have one card each** (migration 0062, `crm` schema): the tax number is unique, a firm met again in another role gets that role on its card (REQ-PUR-001), and a new name is compared with the others on its distinctive words — "İnşaat, Sanayi, Ticaret, Ltd. Şti." are left out, or every construction firm would look like every other (REQ-CRM-004). The list is at `/leads-clients/parties`, the card (SCR-083) at `/leads-clients/parties/[id]`; its process tabs say which phase brings them. Sample firms in `db/samples/0002_crm_parties.sql`.
+- **The firm is the site-wide search's first real record type.** Registering it stopped the dev server at start: the job registry and two subscription checks held worker names to a module code, while the search index has been `core.search-index` since Phase 07 (scheduled jobs already allowed `core`). Migration 0063 gives the subscription and delivery checks the job rule, the registry accepts `core`, and a unit test now validates the real registry so this is found before a server starts. `npm run search:rebuild` indexed the six sample firms written before the subscription existed.
+- **Search results:** the document icon no longer touches the title (`gap-2`; DESIGN_SYSTEM_RULES row 22).
+- **A sideways-scrolling strip must pin its vertical axis.** The card's tab strip showed a vertical scrollbar with nothing to scroll (CSS turns `overflow-y: visible` into `auto` once the other axis scrolls; the selected tab's underline hangs one pixel below). Fixed as the context bar had been (row 15c), and an ESLint rule now refuses `overflow-x-auto` without an `overflow-y-*`. A browser scan of 23 screens at 1280 and 375 px found no other element scrolling vertically by a few pixels.
+- **Phone targets:** the header search box, "Firma ekle", the role filter and the card's tabs are 44 px on a phone; the desktop keeps COSS's sizes.
+
 ## 2026-09-25 — Tanımlar opens: panel types, strip types, recipes and the shared lists (TASK-0121, step 2)
 
 - **SCR-190 at `/admin/master-data`**: the kinds of definitions, each opening its own list — panel types, strip types, consumption recipes, and every shared list (units, work items, consumables, expense categories, no-work reasons).

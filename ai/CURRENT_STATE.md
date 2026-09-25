@@ -1,6 +1,6 @@
 # CURRENT STATE
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
 ```text
 PROJECT STATUS:              TESTING
@@ -47,7 +47,8 @@ CODE ALLOWED:        Phase 07 permits product code (ADR-007), but only after the
 
 ## LAST COMPLETED TASK
 
-2026-09-25 (latest): TASK-0122 built — the firm card (`crm.party`, migration 0062, the new `crm` schema): one card per tax number, a new role joins the existing card, similar names suggested past the words every firm name carries, contacts, custom values, events and search. Screens `/leads-clients/parties` and SCR-083; samples in `db/samples`. 396 unit tests, 12 new database tests; CI 36172765624 green (migrate, rollback, reapply). Owed: the duplicate tax number seen refused in the browser, and the owner's walk.
+2026-09-25 (latest): TASK-0122 built — the firm card (`crm.party`, migration 0062, the new `crm` schema): one card per tax number, a new role joins the existing card, similar names suggested past the words every firm name carries, contacts, custom values, events and search. Screens `/leads-clients/parties` and SCR-083; samples in `db/samples`. 396 unit tests, 12 new database tests; CI 36172765624 green (migrate, rollback, reapply). Owed: the owner's walk (the duplicate tax number was seen refused in the browser).
+2026-09-26: the owner's findings on the firm card fixed (phone targets, the tab strip's needless vertical scrollbar plus an ESLint rule against it, search icon spacing); migration 0063 lets the search index's `core.` worker register, which had stopped the dev server. Next: TASK-0123's plan (T1) for the owner's approval.
 
 2026-09-25 (earlier): Phase 09 opened — its question round answered by the owner (D-287 full master cards built one after another, D-288 Open-Meteo, D-289 report as a download first, D-290 pilot entirely on samples) and its plan written (`docs/features/phase-09-slice-1-plan.md`, D-291 PROPOSED, TASK-0121…TASK-0131). No slice code until the plan is approved.
 
