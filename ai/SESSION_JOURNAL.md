@@ -460,3 +460,6 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-25 16:59:16Z · b13a9554 · Write · `db/samples/0002_crm_parties.sql`
 - 2026-09-25 20:48:11Z · 5c627231 · Edit · `AGENTS.md`
 - 2026-09-25 21:11:04Z · 5c627231 · Edit · `src/modules/crm/ui/party-card.tsx`
+- 2026-09-25 21:16:54Z · 5c627231 · Edit · `eslint.config.mjs`
+- 2026-09-25 21:17:02Z · 5c627231 · Edit · `eslint.config.mjs`
+- 2026-09-25 21:17:15Z · 5c627231 · Edit · `eslint.config.mjs`

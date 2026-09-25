@@ -45,6 +45,12 @@ const paginationImport = {
   message:
     "Use ListPagination from @/platform/ui/list/list-pagination; COSS pagination parts carry English text.",
 };
+// A class list that scrolls sideways and says nothing about the vertical axis (DESIGN_SYSTEM_RULES
+// 4.1 row 15c).
+const sidewaysOnly =
+  "/^(?![\\s\\S]*overflow-y-(hidden|clip|auto|scroll))[\\s\\S]*overflow-x-(auto|scroll)/";
+const scrollStripMessage =
+  "A sideways-scrolling strip also needs overflow-y-hidden (and a hidden scrollbar, as in context-bar.tsx): otherwise the browser shows a vertical scrollbar for a pixel of overhang.";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -170,6 +176,21 @@ const eslintConfig = defineConfig([
             { name: "pg", message: "Use runAsUser from @/platform/db; the pool is not shared." },
           ],
         },
+      ],
+    },
+  },
+  {
+    // A sideways-scrolling strip must pin its vertical axis (owner 2026-09-26). CSS turns
+    // `overflow-y: visible` into `auto` as soon as the other axis scrolls, so a tab underline or a
+    // focus ring one pixel below the row shows a vertical scrollbar with nothing to scroll.
+    // `src/components/ui` is COSS's own code and is never edited, so it is not checked here.
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["src/components/ui/**"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        { selector: `Literal[value=${sidewaysOnly}]`, message: scrollStripMessage },
+        { selector: `TemplateElement[value.raw=${sidewaysOnly}]`, message: scrollStripMessage },
       ],
     },
   },
