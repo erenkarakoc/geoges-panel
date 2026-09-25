@@ -6,7 +6,15 @@ export type SearchAnswer = {
   failedGroups?: { type: string; label: string }[];
 };
 
-/** Debounce and cancellation belong together: even a transport ignoring abort cannot publish. */
+/**
+ * Debounce and cancellation belong together: even a transport ignoring abort cannot publish.
+ *
+ * Only a request that is still on its way is aborted. Aborting one that never started or has already
+ * finished stops nothing — and Chrome 153 reported exactly that as an unhandled "signal is aborted
+ * without reason" on every navigation, because the recent-page check of the previous page had long
+ * since answered when the page changed (2026-09-25). A superseded answer is still never published:
+ * that is the `cancelled` flag's job, not the signal's.
+ */
 export function startRecordSearch(
   query: string,
   receive: (answer: SearchAnswer) => void,
@@ -15,7 +23,12 @@ export function startRecordSearch(
   recentPaths?: readonly string[],
 ) {
   const controller = new AbortController();
+  let started = false;
+  let settled = false;
+  let cancelled = false;
+
   const timer = setTimeout(async () => {
+    started = true;
     try {
       const response = await request(
         recentPaths ? "/api/search/recent" : `/api/search?q=${encodeURIComponent(query)}`,
@@ -31,15 +44,25 @@ export function startRecordSearch(
             : {}),
         },
       );
-      if (!response.ok) throw new Error("Search unavailable");
+      if (!response.ok) {
+        // Nobody reads this body, so it is let go now rather than left for a later abort to error.
+        await response.body?.cancel().catch(() => {});
+        throw new Error("Search unavailable");
+      }
       const answer: SearchAnswer = await response.json();
-      if (!controller.signal.aborted) receive(answer);
+      if (!cancelled) receive(answer);
     } catch {
-      if (!controller.signal.aborted) failed();
+      if (!cancelled) failed();
+    } finally {
+      settled = true;
     }
   }, 200);
+
   return () => {
+    cancelled = true;
     clearTimeout(timer);
-    controller.abort();
+    if (started && !settled) {
+      controller.abort(new DOMException("Arama yenisiyle değişti.", "AbortError"));
+    }
   };
 }

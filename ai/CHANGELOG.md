@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-09-25 — "signal is aborted without reason" on every page change (fix)
+
+- The owner's Chrome (153) reported an unhandled `AbortError` from the search palette on every navigation; the dev server's own log showed it on `/insights`, `/sites`, `/admin/workflows` and more, always from the same line. The cause: the palette checks whether the page just opened is a known record, and when the page changed it aborted that check — which had answered seconds earlier. Aborting a finished request stops nothing, and that Chrome version reported it as an unhandled rejection. Chrome 152 (the in-app browser) does not, which is why the tests and the pane never showed it.
+- The fix removes the call rather than silencing the report: a request is aborted only while it is actually on its way, and then with a reason of its own. A request that was never sent or has already answered is left alone; a superseded answer is still never published, which is a flag's job, not the signal's. An error body nobody will read is released at once, so nothing is left for a later abort to error. Four new tests, one per rule.
+
 ## 2026-09-25 — The eight end-to-end processes, as chains of short flows (TASK-0120, step 6)
 
 Seed 0009. **TASK-0120's template work is finished:** 27 templates ship, and every chain link of `docs/workflows/END_TO_END_FLOWS.md` has one.

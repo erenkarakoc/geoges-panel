@@ -4,6 +4,68 @@ Last updated: 2026-09-25
 
 CURRENT PHASE: PHASE 07 — Foundation Build (its acceptance walks postponed, D-278) → PHASE 08 Workflow Engine
 
+## Latest continuation — Phase 08's four tasks are built; what is left is the owner's own walk
+
+TASK-0118 (the capability catalog), TASK-0117 (the engine), TASK-0119 (the designer) and TASK-0120
+(the approval centre and the templates) are all built. Migrations 0045-0060, seeds 0008-0009. Local:
+377 unit tests, 354 database tests, lint, types, format, production build.
+
+**The designer, after the owner looked at it.** The owner opened it and read `condition_1`,
+`flow_runs`, `Invalid input: expected object, received undefined` and a requirement number off the
+screen. Each had its own cause and each was fixed where it starts: steps are called by their names
+(`stepNames`, two of a kind become "Onay" and "Onay 2"), every select is handed its items — which is
+what makes COSS's closed select show a name instead of the value it stores — and a domain module
+turns each schema finding into a Turkish sentence, descending into unions to find what is really
+missing, with a sentence as its fallback so English cannot leak. The engine's own refusals name the
+step the designer named; the dry-run report carries how a step ended and what it was about, and the
+screen writes the words. A waiting time is asked as a number and a unit. The canvas library's badge
+is off at the owner's request (MIT wants its notice with the source, which it has; the badge is a
+request for support, not a condition). IAM's refusal stopped printing the permission code.
+
+**TASK-0120, in six steps.**
+
+1. **Migration 0057 — why an approval is with you.** The engine worked out who a step fell to without
+   writing down how, so the question could not be answered. The rule travels with the approval now;
+   the sentence is composed where the names live, so a renamed role does not leave old approvals
+   explaining themselves with the old name. The same migration lets an approval belong to a **group**
+   — whoever holds a role or a permission, any one of whom answers, which is what an owner approval
+   always meant — with one function behind the policy, the decision and the queue's read, asked from
+   live assignments. A delegate sees what the person they stand in for sees (company-wide delegations
+   only for now: an approval carries no scope yet). Writing the test found a latent bug:
+   `request_approval` asked `if i is null` where it meant `if not found`.
+2. **The queue (SCR-012) and migration 0058.** One record fills the screen and a decision opens the
+   next; three outcomes with a reason the window and the table both require; "sent back before" with
+   the last reason. The badge became the real number in three places — the work layer's counts were a
+   static empty map, the shell takes them as a prop, the layout reads them per person and "Bugün"
+   asks the same question.
+3. **Migrations 0059-0060 and seed 0008 — templates.** A flow in use is a copy; it remembers which
+   template and version it came from; a template update tells the copy instead of changing it, once,
+   from the table's own announcement. "Şablona sıfırla" writes a new draft, never a publish over what
+   is live, and is audited.
+4. **The test that matters**: every template is parsed with the engine's schema and dry-run. Those
+   that cannot finish are named with their reason — six for-each steps whose lists no module publishes
+   yet — so "it does not run yet" is a written fact.
+5. **The working log (SCR-197) and "Yeni akışlar"**: every run with where it stands and who it waits
+   on, step by step when opened, named from the version the run started on; and what a freshly
+   published flow has really done, counted from the steps taken.
+6. **Seed 0009 — the eight end-to-end processes** as chains of short flows (D-104): 17 new links plus
+   the fuller version of four that already shipped, 27 templates in all. Writing the monthly progress
+   claim found a gap and closed it (D-286): the clock trigger now understands "the Nth of each month",
+   capped at 28 so February is never skipped.
+
+**What the next session owes.**
+
+- **The owner's walk**, which is the quality gate for both TASK-0119 and TASK-0120: sign in, start a
+  flow or copy a template, answer a step's questions, run the dry run, publish, then decide an
+  approval in the queue and look at the working log. Nothing here has been seen in a browser — the dev
+  server's session expired and the owner types their own password.
+- TASK-0111 (the M1 walk) is still the owner's and still postponed (D-278).
+- A note for anybody running `npm run test:db` locally: stop `next dev` first. That server runs the
+  job worker and competes for outbox deliveries, which makes a delivery-watching test look flaky; the
+  whole suite passes with it stopped (`docs/infrastructure/CI.md`).
+- Phase 08's own remaining risk is unchanged: the engine and its screens sit on a foundation the owner
+  has not yet walked (D-278).
+
 ## Latest continuation — the designer, built in five steps (TASK-0119)
 
 The owner approved D-283 and the designer was built the same day. What it is, in the order it was
