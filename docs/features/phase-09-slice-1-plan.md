@@ -165,3 +165,115 @@ gider (D-290).
 **Testler.** Vergi numarasının tekil olduğu, rolsüz firmanın reddedildiği, benzer ad önerisinin ortak
 sözcüklere takılmadığı, yetkisiz yazmanın reddedildiği, olayların yayımlandığı ve arama projeksiyonunun
 kurulduğu veritabanı testleri; alan doğrulaması ve benzerlik anahtarı birim testleri.
+
+## TASK-0123 — Projeler, şantiyeler, duvarlar ve hedefler (uygulama planı, 2026-09-26)
+
+Kademe **T1** — iş kuralları kodlanmadan önce sahibin onayını ister (PROJECT_RULES §10).
+Gereksinimler REQ-PRJ-001…011, REQ-SIT-001'in kart kısmı, REQ-ADM-005 (projeye özel tanımlar,
+TASK-0121'den taşındı); kararlar D-136, D-137, D-138; şema `SCHEMA-OPERATIONS.md` prj ve `sit.site`.
+
+Görev büyük olduğu için beş adımda kurulur; her adım kendi testiyle ve commit'iyle biter.
+
+### Adım 1 — Proje kartı ve şantiyeler (yeni `prj` şeması; `sit.site`)
+
+- `prj.project`: kod, ad, işveren (`crm.party`, işveren rolü olan firma), kurum/idare, il ve
+  lokasyon, sözleşme numarası ve tarihi, **sözleşme bedeli ve para birimi (ticari veri — yetkisiz
+  kişiye hiç basılmaz)**, sorumlu koordinatör, aşama, özel alanlar (D-237).
+- **Üç süre ayrı ayrı girilir, biri diğerinden türetilmez** (PRJ-K5): sözleşme başlangıcı ve
+  sözleşmedeki bitiş, teorik bitiş, yönetim hedef bitişi.
+- **Aşamalar** (REQ-PRJ-003) katalogdur; başlangıç listesi gereksinimin on iki aşamasıdır. Kodları,
+  Faz 08'de kurulan akış şablonlarının zaten kullandığı adlarla aynıdır (`technical_design`,
+  `mobilisation`, `completion` …), böylece şablonlar değişmeden çalışır. Her geçiş tarih ve kişiyle
+  projenin geçmişinde durur ve `project.stage_changed` yayımlanır; geçişin onayı ve kilidi akıştadır.
+- `sit.site`: bağlı olduğu **tek proje** (PRJ-K1; sonradan başka projeye taşınamaz, veritabanı
+  reddeder), ad, iş modeli (kendi ekibimiz / taşeron; taşeronsa taşeron firma `crm.party`), sorumlu
+  koordinatör, saha mühendisi (günlük kaydı gönderen kişi), durum. Proje ve şantiye yetkiyle
+  kapsanır: koordinatör atandığı projeleri, saha mühendisi atandığı şantiyeyi görür.
+- Üst çubuktaki şantiye seçici bugün kodda yazılı üç örnek şantiyeyi gösteriyor; gerçek `sit.site`
+  kayıtlarına bağlanır.
+- Ekran: proje listesi ve proje kartı (sekmeler: bilgiler, şantiyeler, duvarlar ve hedefler,
+  revizyonlar, teknik ofis, tedarik matrisi; sözleşme ve hakediş sekmeleri kendi dilimleriyle gelir).
+
+### Adım 2 — Revizyonlar, duvarlar ve hedefler
+
+- **Hedefler yalnız revizyonla değişir** (D-136, PRJ-K3). Teknik ofis bir **taslak revizyon** açar;
+  taslak bir önceki onaylı revizyonun bütün duvar ve hedeflerinin kopyasıyla başlar, teknik ofis
+  üzerinde değişiklik yapar ve onaya gönderir. Onaylanan revizyon **onay tarihinden itibaren**
+  geçerlidir; eski revizyon silinmez, tarihiyle kalır. Onaylı revizyonun satırları veritabanında
+  kilitlidir.
+- **Onay akışla yapılır** (REQ-PRJ-009): varsayılan şablon "Proje revizyonu onayı" — onaylayan Genel
+  Müdür; yönetim bunu akış tasarımcısından değiştirir. Onaylanınca revizyon geçerli olur ve
+  `project_revision.approved` yayımlanır; reddedilirse taslağa döner.
+- `prj.wall`: revizyona bağlı duvar — kod/ad, bağlı şantiye (**yalnız kendi projesinin
+  şantiyelerinden biri**, PRJ-K4), uzunluk, yükseklik, durum (başlamadı / devam ediyor /
+  tamamlandı). `prj.wall_target`: duvar × panel tipi hedef adedi (m² panel tipinden hesaplanır),
+  duvar × şerit tipi × boy hedef metrajı, diğer iş kalemi hedefleri.
+- **Proje hedefi duvarların toplamıdır** (PRJ-K2): ayrıca girilecek alan yoktur, toplam hesaplanır.
+- **Geçmiş bir günün hedefi o gün geçerli olan revizyondan okunur**; günlük kaydın fazla döküm kuralı
+  (TASK-0127) bunu tek bir veritabanı işlevinden sorar.
+- İki revizyonun farkı panel tipi ve duvar bazında yan yana gösterilir.
+- Projeye özel panel ve şerit tipi (REQ-ADM-005): Tanımlar'daki tip bir projeye özel de eklenebilir;
+  o projenin duvarlarında seçilir, başka projede görünmez.
+
+### Adım 3 — Günlük hedefler
+
+- Şantiyenin günlük hedefleri (panel döküm adedi ve m², panel montaj adedi ve m², şerit montaj
+  metresi, diğer iş kalemleri) **seçilen süreden, kalan işten ve çalışma takviminden hesaplanır**
+  (D-137): kalan iş ÷ bitiş tarihine kadar kalan iş günü. **Tatil ve hafta sonuna hedef verilmez**
+  (Tanımlar'daki çalışma takvimi).
+- Hangi sürenin kullanılacağını şantiye için yetkili seçer; seçilmemişse yönetim hedef bitişi, o da
+  yoksa teorik bitiş, o da yoksa sözleşme bitişi kullanılır.
+- Yetkili kişi hedefi elle düzeltebilir; **hesaplanan ve düzeltilen değer birlikte** saklanır, kimin
+  ve neden düzelttiği görünür.
+- "Üretim geride kaldıkça kalan günlerin hedefi yeniden hesaplanır": bu dilimde kalan iş hedefin
+  tamamıdır; günlük kayıt (TASK-0127) onaylandıkça gerçekleşen üretim düşülür ve hesap yenilenir.
+
+### Adım 4 — Teknik ofis işleri ve tedarik matrisi
+
+- `prj.technical_office_item`: tür (proje çizimi, revizyon, statik hesap, metraj, kurum onayı,
+  hakediş desteği, teknik evrak — katalog), sorumlu, teslim tarihi, durum, **revizyon sayısı**.
+  Teslim tarihi geçen iş sorumlusuna **görev olarak düşer**, "Dikkat"te görünür ve
+  `technical_office_item.overdue` yayımlanır (her gün çalışan iş). Kurum onayı gereken işler Faz
+  08'in "Kurum onayı takibi" şablonunun beklediği listeyi (`prj.authority_approvals`) besler.
+- **Tedarik matrisi** (REQ-PRJ-004): kalemler katalogdur (beton, demir, dolgu temini, serme ve
+  sıkıştırma, yemek, konaklama, kamp/konteyner, nakliye, vinç ve operatör, kalıp/demirbaş, çelik
+  şerit, sarf). Her kalem için üç seçenek: **işveren karşılar · GEOGES karşılar · işveren karşılar ve
+  GEOGES hakedişinden keser**. Satırlar **tarihlidir, hiç güncellenmez**: değişiklik yeni geçerlilik
+  tarihli yeni satırdır, geçmiş dönemlerin maliyeti yeniden yazılmaz. Şema belgesindeki seçenekler
+  (`geoges/client/subcontractor`) onaylı gereksinimden farklıydı; gereksinimdeki üç seçenek kurulur
+  ve şema belgesi düzeltilir.
+
+### Adım 5 — Akışla bağlantı, arama, örnekler
+
+- Akışın "kaydın durumunu değiştir" adımı (REQ-WFL-010) bugün hiçbir modülde karşılık bulmuyor. Kayıt
+  türüne göre sahibi modüle yönlendiren tek bir karşılık kurulur (belge ve revizyon kayıtlarındaki
+  düzenle aynı biçimde); ilk kullananları proje aşaması ve proje revizyonudur. Böylece "Kazanılan
+  işin başlatılması" ve "Kurum onayı takibi" şablonları gerçekten çalışır.
+- Proje ve şantiye genel aramada bulunur ("Projeler ve şantiyeler"); sözleşme bedeli arama metnine
+  girmez.
+- Olaylar `project.created`, `project.stage_changed`, `project_revision.approved`, `wall.completed`,
+  `technical_office_item.overdue`; koşul alanları `project.stage`, `project.days_to_contract_end`,
+  `wall.status`, `project.contract_value` (ticari). `project.progress_percent` üretim verisi gelince
+  (TASK-0127) açılır.
+- Örnek veri (D-290): iki örnek proje, dört şantiye, duvarlar ve bir onaylı revizyon; kapsamlı pilot
+  verisi TASK-0131'de.
+
+### Onaya sunulan iş kuralları
+
+1. Taslak revizyon bir önceki onaylı revizyonun kopyasıyla başlar; onaylanınca **onay tarihinden**
+   itibaren geçerli olur (geriye dönük geçerlilik yok — fazla döküm gizlenemesin diye).
+2. Revizyonu varsayılan olarak **Genel Müdür** onaylar; akış tasarımcısından değişir.
+3. Açılmış bir şantiye başka projeye taşınamaz; yanlış açılan şantiye pasifleştirilir.
+4. Günlük hedef = kalan iş ÷ kalan iş günü; tatile hedef yok; süre seçilmemişse yönetim hedefi →
+   teorik → sözleşme bitişi sırasıyla kullanılır.
+5. Tedarik matrisi üç seçenekli ve tarihli; değişiklik geçmişi yeniden yazmaz.
+6. Sözleşme bedeli ticari veridir: ticari yetkisi olmayan kişi alanı hiç görmez (boş kutu da görmez).
+
+### Testler
+
+Veritabanı: şantiyenin ikinci projeye bağlanamadığı, duvarın başka projenin şantiyesine
+bağlanamadığı, onaylı revizyonun düzenlenemediği, proje hedefinin duvar toplamı olduğu, geçmiş bir
+günün o günkü revizyonla okunduğu, tatile hedef verilmediği, elle düzeltmenin iki değeri de sakladığı,
+tedarik matrisinin tarihli okunduğu, sözleşme bedelinin yetkisize gelmediği, olayların yayımlandığı.
+Birim: günlük hedef hesabı, süre seçimi, revizyon farkı. Akış: revizyon şablonunun onaylayıp
+revizyonu geçerli kıldığı uçtan uca test. Tarayıcı: 375 ve 1280 piksel.
