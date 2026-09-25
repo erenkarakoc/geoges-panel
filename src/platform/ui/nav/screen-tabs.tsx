@@ -47,4 +47,6 @@ export const APPROVAL_TABS: readonly ScreenTab[] = [
 export const WORKFLOW_TABS: readonly ScreenTab[] = [
   { href: "/admin/workflows", label: "Akışlar" },
   { href: "/admin/workflows/templates", label: "Şablonlar" },
+  { href: "/admin/workflows/new", label: "Yeni akışlar" },
+  { href: "/admin/workflows/runs", label: "Çalışma günlüğü" },
 ];

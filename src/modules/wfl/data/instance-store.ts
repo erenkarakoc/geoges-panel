@@ -719,3 +719,194 @@ export async function branchParent(
       }
     : null;
 }
+
+export type RunRow = {
+  id: string;
+  flowKey: string;
+  flowName: string | null;
+  version: number;
+  status: string;
+  trigger: string;
+  startedAt: Date;
+  endedAt: Date | null;
+  failure: string | null;
+  /** The step it is sitting in, when it is waiting on somebody or something. */
+  openStepId: string | null;
+  openStepType: string | null;
+  openOwnerUserId: string | null;
+  /** What the run is about, when the flow is about a record. */
+  record: { schema: string; table: string; id: string } | null;
+};
+
+/**
+ * The runs, for the working log (SCR-197, REQ-WFL-034). Whoever may design flows sees them all;
+ * anybody else sees only the runs a step of theirs is in, which is what the policy already says —
+ * so this read needs no permission of its own.
+ */
+export function readRuns(
+  identity: DbIdentity,
+  filter: { flowKey?: string | null; status?: string | null; limit?: number } = {},
+) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{
+      id: string;
+      flow_key: string;
+      flow_name: string | null;
+      version: number;
+      status: string;
+      trigger_kind: string;
+      started_at: Date;
+      ended_at: Date | null;
+      failure: string | null;
+      record_schema: string | null;
+      record_table: string | null;
+      record_id: string | null;
+      open_step_id: string | null;
+      open_step_type: string | null;
+      open_owner_user_id: string | null;
+    }>`select i.id, i.flow_key, f.name as flow_name, i.version, i.status, i.trigger_kind,
+              i.started_at, i.ended_at, i.failure,
+              i.record_schema, i.record_table, i.record_id,
+              s.step_id as open_step_id, s.step_type as open_step_type,
+              s.owner_user_id as open_owner_user_id
+         from wfl.instance i
+         left join wfl.flow f on f.id = i.flow_id
+         left join lateral (
+           select step_id, step_type, owner_user_id from wfl.step_state x
+            where x.instance_id = i.id and x.status = 'running'
+            order by x.entered_at desc limit 1
+         ) s on true
+        where (${filter.flowKey ?? null}::text is null or i.flow_key = ${filter.flowKey ?? null})
+          and (${filter.status ?? null}::text is null or i.status = ${filter.status ?? null})
+        order by i.started_at desc
+        limit ${Math.min(Math.max(filter.limit ?? 50, 1), 200)}`.execute(db);
+
+    return rows.map((row): RunRow => ({
+      endedAt: row.ended_at,
+      failure: row.failure,
+      flowKey: row.flow_key,
+      flowName: row.flow_name,
+      id: row.id,
+      openOwnerUserId: row.open_owner_user_id,
+      openStepId: row.open_step_id,
+      openStepType: row.open_step_type,
+      record:
+        row.record_schema && row.record_table && row.record_id
+          ? { schema: row.record_schema, table: row.record_table, id: row.record_id }
+          : null,
+      startedAt: row.started_at,
+      status: row.status,
+      trigger: row.trigger_kind,
+      version: Number(row.version),
+    }));
+  });
+}
+
+export type StepVisit = {
+  stepId: string;
+  stepType: string;
+  status: string;
+  outcome: string | null;
+  ownerUserId: string | null;
+  enteredAt: Date;
+  leftAt: Date | null;
+  detail: unknown;
+};
+
+/** Every step visit of one run, in order: the timeline SCR-197's detail draws. */
+export function readStepVisits(identity: DbIdentity, instanceId: string) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{
+      step_id: string;
+      step_type: string;
+      status: string;
+      outcome: string | null;
+      owner_user_id: string | null;
+      entered_at: Date;
+      left_at: Date | null;
+      detail: unknown;
+    }>`select step_id, step_type, status, outcome, owner_user_id, entered_at, left_at, detail
+         from wfl.step_state
+        where instance_id = ${instanceId}::uuid
+        order by entered_at`.execute(db);
+    return rows.map((row): StepVisit => ({
+      detail: row.detail,
+      enteredAt: row.entered_at,
+      leftAt: row.left_at,
+      outcome: row.outcome,
+      ownerUserId: row.owner_user_id,
+      status: row.status,
+      stepId: row.step_id,
+      stepType: row.step_type,
+    }));
+  });
+}
+
+export type RecentlyPublished = {
+  flowKey: string;
+  flowName: string | null;
+  version: number;
+  publishedAt: Date;
+  /** What it has done since: runs started, and what those runs opened for people. */
+  runs: number;
+  approvals: number;
+  tasks: number;
+  notices: number;
+  records: number;
+};
+
+/**
+ * Flows published in the last few days and what they have actually done (REQ-WFL-023).
+ *
+ * A new flow is watched for a week, and "watched" means something concrete: how many runs it started
+ * and how much work it put in front of people. The counts come from the step visits, so they are what
+ * happened rather than what the definition says would happen.
+ */
+export function readRecentlyPublished(identity: DbIdentity, days = 7) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{
+      flow_key: string;
+      flow_name: string | null;
+      version: number;
+      published_at: Date;
+      runs: number;
+      approvals: number;
+      tasks: number;
+      notices: number;
+      records: number;
+    }>`select f.key as flow_key, f.name as flow_name, v.version, v.published_at,
+              (select pg_catalog.count(*)::integer from wfl.instance i
+                where i.flow_version_id = v.id) as runs,
+              coalesce(counted.approvals, 0) as approvals,
+              coalesce(counted.tasks, 0) as tasks,
+              coalesce(counted.notices, 0) as notices,
+              coalesce(counted.records, 0) as records
+         from wfl.flow_version v
+         join wfl.flow f on f.id = v.flow_id
+         left join lateral (
+           select
+             pg_catalog.count(*) filter (where s.step_type = 'approval')::integer as approvals,
+             pg_catalog.count(*) filter (where s.step_type = 'task')::integer as tasks,
+             pg_catalog.count(*) filter (where s.step_type = 'notify')::integer as notices,
+             pg_catalog.count(*) filter (where s.step_type = 'record')::integer as records
+             from wfl.step_state s
+             join wfl.instance i on i.id = s.instance_id
+            where i.flow_version_id = v.id
+         ) counted on true
+        where v.published_at is not null
+          and v.published_at >= pg_catalog.now() - pg_catalog.make_interval(days => ${days})
+        order by v.published_at desc`.execute(db);
+
+    return rows.map((row): RecentlyPublished => ({
+      approvals: Number(row.approvals),
+      flowKey: row.flow_key,
+      flowName: row.flow_name,
+      notices: Number(row.notices),
+      publishedAt: row.published_at,
+      records: Number(row.records),
+      runs: Number(row.runs),
+      tasks: Number(row.tasks),
+      version: Number(row.version),
+    }));
+  });
+}

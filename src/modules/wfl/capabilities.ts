@@ -20,6 +20,13 @@ export const wflCapabilities = defineCapabilities({
       dataClass: "internal",
     },
     {
+      code: "workflow.template_updated",
+      name: "Şablon yeni sürüme geçti",
+      when: "Bir şablon yeni bir sürümle geldiğinde; kopyalarına haber verilir, kopyalar değişmez",
+      carries: ["şablon", "sürüm"],
+      dataClass: "internal",
+    },
+    {
       code: "workflow.template_reset",
       name: "Akış şablona sıfırlandı",
       when: "Bir kopya, geldiği şablonun bugünkü hâline döndürüldüğünde (yeni taslak olarak)",

@@ -474,6 +474,7 @@ Biçim: `docs/requirements/README.md`. WFL'in kendi yayımladıkları; diğer mo
 | Kod | Ad | Ne zaman | Taşıdığı alanlar | Veri sınıfı |
 |---|---|---|---|---|
 | `workflow.published` | Akış yayımlandı | Bir akış sürümü canlıya alındığında | akış, sürüm, yayımlayan | iç |
+| `workflow.template_updated` | Şablon yeni sürüme geçti | Bir şablon yeni bir sürümle geldiğinde; kopyalarına haber verilir, kopyalar değişmez | şablon, sürüm | iç |
 | `workflow.template_reset` | Akış şablona sıfırlandı | Bir kopya, geldiği şablonun bugünkü hâline döndürüldüğünde (yeni taslak olarak) | akış, şablon | iç |
 | `workflow_instance.started` | Akış başladı | Bir akış örneği tetiklendiğinde | akış, sürüm, tetikleyen olay/kayıt | iç |
 | `workflow_instance.completed` | Akış tamamlandı | Bir örnek bitiş adımına ulaştığında | akış, sürüm, sonuç | iç |

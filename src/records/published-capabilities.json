@@ -167,6 +167,11 @@
   {
     "module": "WFL",
     "kind": "event",
+    "code": "workflow.template_updated"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
     "code": "workflow_instance.completed"
   },
   {

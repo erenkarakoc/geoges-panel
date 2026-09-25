@@ -231,6 +231,30 @@ describe("a copy of a template", () => {
     expect(said).toMatchObject({ copyVersion: 1, templateKey: TEMPLATE, templateVersion: 2 });
   });
 
+  it("announces the template's new version once, so the copies' owners can be told", async () => {
+    const { rows } = await admin.query(
+      `select payload from core.outbox
+        where event_code = 'workflow.template_updated' and payload->>'template' = $1
+          and occurred_at >= $2`,
+      [TEMPLATE, startedAt],
+    );
+    // One announcement for one version bump: the news happens once and is told once.
+    expect(rows).toHaveLength(1);
+    expect(rows[0].payload.version).toBe(2);
+
+    // A change that is not a new version is nobody's news.
+    await admin.query("update wfl.template set summary = 'Aynı sürüm, yeni cümle' where key = $1", [
+      TEMPLATE,
+    ]);
+    const after = await admin.query(
+      `select count(*)::int as n from core.outbox
+        where event_code = 'workflow.template_updated' and payload->>'template' = $1
+          and occurred_at >= $2`,
+      [TEMPLATE, startedAt],
+    );
+    expect(after.rows[0].n).toBe(1);
+  });
+
   it("goes back to the template as a new draft, not over what is live", async () => {
     const versionId = await resetToTemplate(as(DESIGNER), COPY);
     expect(versionId).toBeTruthy();

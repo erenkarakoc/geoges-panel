@@ -399,3 +399,25 @@ export function readCopiesBehindTemplate(identity: DbIdentity) {
     }));
   });
 }
+
+/**
+ * The same question as `readCopiesBehindTemplate`, asked by the worker for one template. The
+ * subscriber that tells people has no person to ask as, and the answer names no record's content —
+ * only which flow is behind which template.
+ */
+export async function readCopiesBehindTemplateAsSystem(db: SystemDb, templateKey: string) {
+  const { rows } = await sql<{
+    flow_key: string;
+    flow_name: string;
+    template_version: number;
+    owner_user_id: string | null;
+  }>`select flow_key, flow_name, template_version, owner_user_id
+       from wfl.copies_behind_template()
+      where template_key = ${templateKey}`.execute(db);
+  return rows.map((row) => ({
+    flowKey: row.flow_key,
+    flowName: row.flow_name,
+    templateVersion: Number(row.template_version),
+    ownerUserId: row.owner_user_id,
+  }));
+}

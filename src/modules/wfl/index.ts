@@ -36,13 +36,19 @@ export {
   readInstance,
   readMyApprovalCount,
   readMyApprovals,
+  readRecentlyPublished,
+  readRuns,
+  readStepVisits,
   readRunLog,
   startInstance,
   startInstanceByHand,
   type ApprovalDecision,
   type FlowTrigger,
   type InstanceRow,
+  type RecentlyPublished,
   type RecordLock,
+  type RunRow,
+  type StepVisit,
   type WaitingApproval,
   type TriggerKind,
 } from "@/modules/wfl/data/instance-store";
@@ -84,6 +90,11 @@ export { flowWakeJob } from "@/modules/wfl/application/wake-job";
 export { flowClockJob } from "@/modules/wfl/application/clock-job";
 export { flowDryRunJob } from "@/modules/wfl/application/dry-run-job";
 export { flowEscalationJob } from "@/modules/wfl/application/escalation-job";
+export { flowTemplateWatch } from "@/modules/wfl/application/template-watch";
+// The pure helpers a screen needs to say things in Turkish: what a step is called, what a step
+// visit did. Routes reach them through here, like everything else a module offers.
+export { asDraft, stepNames, stepTypeLabel, type DrawableStep } from "@/modules/wfl/domain/graph";
+export { reportEndText, reportStepText } from "@/modules/wfl/domain/report-text";
 export {
   countPasses,
   isWindowTest,

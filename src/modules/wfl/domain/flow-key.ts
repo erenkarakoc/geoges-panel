@@ -27,7 +27,7 @@ export const FLOW_KEY = /^[a-z][a-z0-9-]{2,60}$/;
  * Addresses the flows screen uses for itself. A flow may not take one of them, or its designer would
  * open a tab instead of the flow.
  */
-export const RESERVED_FLOW_KEYS: readonly string[] = ["templates", "new"];
+export const RESERVED_FLOW_KEYS: readonly string[] = ["templates", "new", "runs"];
 
 export function flowKeyOf(name: string, taken: readonly string[] = []): string {
   const reserved = [...taken, ...RESERVED_FLOW_KEYS];

@@ -16,6 +16,7 @@ import {
   flowDryRunJob,
   flowEngine,
   flowEscalationJob,
+  flowTemplateWatch,
   flowWakeJob,
 } from "@/modules/wfl";
 import type { JobRegistry } from "@/platform/jobs/types";
@@ -45,6 +46,7 @@ export const jobRegistry: JobRegistry = {
     revisionAlerts(),
     securityAlerts(),
     flowEngine(ownerRelations),
+    flowTemplateWatch(ownerRelations),
     ...(searchIndex.length > 0 ? [searchIndexer(searchIndex)] : []),
   ],
   jobs: [

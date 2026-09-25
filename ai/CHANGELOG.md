@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-09-25 — The working log, the new flows, and a template that tells once (TASK-0120, step 5)
+
+- **A template that moves on says so, once** (migration 0060). The table itself announces a version bump and a subscriber turns that into a notification for each copy that is now behind — one word per copy per version, not a nightly reminder of the same news. A change that is not a new version is nobody's news, and the test proves both halves.
+- **The working log** (SCR-197): every run with how it started, where it stands, which step it is waiting in and who that step fell to; opening one shows its steps in order with what each one did. The step names come from **the version the run started on**, because a later version may call the same step something else and what this run saw is what the screen should show.
+- **"Yeni akışlar"** (REQ-WFL-023): a flow published in the last week with what it has actually done — runs started, approvals opened, tasks opened, notifications sent — counted from the steps that were really taken rather than from what the definition promises. A flow that has not run yet says so instead of showing four zeros without explanation.
+- The flows screen now has its four tabs, and their addresses are reserved so a flow can never shadow one.
+- The engine's own words stay out of these screens: a step is named the way the palette names it, a state is a Turkish word, and a step visit's outcome goes through the same translator the dry run uses.
+
 ## 2026-09-25 — Templates, and copies that are told rather than changed (TASK-0120, steps 3-4)
 
 Migration 0059 and seed 0008.
