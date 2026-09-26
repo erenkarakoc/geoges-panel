@@ -52,6 +52,11 @@ export const prjCapabilities = defineCapabilities({
     },
   ],
   actions: [],
-  conditions: [],
+  // The stage travels in the payload of `project.created` and `project.stage_changed`, which is
+  // what a condition reads. Progress, days left and the contract value are not in any payload
+  // yet, so they are declared when an event carries them.
+  conditions: [
+    { code: "project.stage", name: "Proje aşaması", type: "choice", dataClass: "internal" },
+  ],
   relations: [],
 });

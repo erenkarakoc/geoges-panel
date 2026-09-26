@@ -86,6 +86,11 @@
   },
   {
     "module": "PRJ",
+    "kind": "condition",
+    "code": "project.stage"
+  },
+  {
+    "module": "PRJ",
     "kind": "event",
     "code": "project.stage_changed"
   },
