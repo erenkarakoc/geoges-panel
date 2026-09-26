@@ -3,7 +3,8 @@ import { z } from "zod";
 /**
  * The audit log's vocabulary and filters (SCR-193, REQ-AUD-006, TASK-0103). Event codes are
  * written by the database (migration 0004) and the admin tools; the screen shows their Turkish
- * names. An unknown code is shown as it is rather than hidden.
+ * names. A code that has no name yet reads "Diğer işlem" — a raw code is never shown to a person
+ * (owner, 2026-09-26); `audit-log.test.ts` fails when a code the database writes has no name.
  */
 
 export const AUDIT_EVENT_LABELS: Readonly<Record<string, string>> = {
@@ -36,6 +37,17 @@ export const AUDIT_EVENT_LABELS: Readonly<Record<string, string>> = {
   "exchange_rate.entered": "Elle kur girildi",
   "system.dead_letter_retried": "Başarısız iş yeniden denendi",
   "workflow.published": "Akış yayımlandı",
+  "workflow.template_used": "Şablondan akış açıldı",
+  "workflow.template_reset": "Akış şablona sıfırlandı",
+  "approval.decided": "Onay kararı verildi",
+  "lock.overridden": "Kilit gerekçeyle aşıldı",
+  "revision_request.submitted": "Revizyon talebi gönderildi",
+  "revision_request.approved": "Revizyon talebi onaylandı",
+  "revision_request.rejected": "Revizyon talebi reddedildi",
+  "role_delegation.ended": "Vekâlet sona erdi",
+  "system.dead_letter": "Arka plan işi başarısız oldu",
+  "system.queue_delayed": "Arka plan işleri gecikti",
+  "read_model.rebuilt": "Rapor verisi yeniden kuruldu",
 };
 
 /** Event groups offered by the "işlem türü" filter; the value is an event code prefix. */
@@ -53,6 +65,10 @@ export const AUDIT_EVENT_GROUPS = [
   { value: "document.", label: "Belgeler" },
   { value: "exchange_rate.", label: "Döviz kurları" },
   { value: "workflow.", label: "İş akışları" },
+  { value: "approval.", label: "Onaylar" },
+  { value: "lock.", label: "Kilitler" },
+  { value: "revision_request.", label: "Revizyon talepleri" },
+  { value: "read_model.", label: "Rapor verisi" },
   { value: "system.", label: "Sistem işleri" },
 ] as const;
 
@@ -67,13 +83,19 @@ export const AUDIT_TARGET_TABLES = [
   { value: "doc.document", label: "Belge" },
   { value: "adm.exchange_rate", label: "Döviz kuru" },
   { value: "wfl.flow_version", label: "Akış sürümü" },
+  { value: "wfl.approval", label: "Onay" },
+  { value: "wfl.record_lock", label: "Kayıt kilidi" },
+  { value: "aud.revision_request", label: "Revizyon talebi" },
+  { value: "core.outbox_delivery", label: "Arka plan işi" },
+  { value: "core.scheduled_job", label: "Zamanlanmış iş" },
+  { value: "core.read_model", label: "Rapor verisi" },
   { value: "core.dead_letter", label: "Başarısız iş" },
 ] as const;
 
 export const AUDIT_PAGE_SIZE = 50;
 
 export function auditEventLabel(code: string): string {
-  return AUDIT_EVENT_LABELS[code] ?? code;
+  return AUDIT_EVENT_LABELS[code] ?? "Diğer işlem";
 }
 
 /**
@@ -88,7 +110,7 @@ export function auditActorLabel(actorUserId: string | null, actorName: string | 
 export function auditTargetLabel(schema: string | null, table: string | null): string | null {
   if (!schema || !table) return null;
   const key = `${schema}.${table}`;
-  return AUDIT_TARGET_TABLES.find((t) => t.value === key)?.label ?? key;
+  return AUDIT_TARGET_TABLES.find((t) => t.value === key)?.label ?? "Diğer kayıt";
 }
 
 const DAY = /^\d{4}-\d{2}-\d{2}$/;
