@@ -22,6 +22,7 @@ import {
   insertSupplyRow,
   readAuthorityApprovalsAsSystem,
   readOfficeAssigneeAsSystem,
+  readLateOfficeItems,
   readOfficeItems,
   setOfficeItemStatus,
 } from "./technical-office-store";
@@ -217,6 +218,29 @@ describe("technical office items (REQ-PRJ-005)", () => {
         insertOfficeItem(as(STRANGER), project, { title: "Yetkisiz iş", typeItemId: drawing }),
       ),
     ).toBe("42501");
+  });
+});
+
+describe('late items on "Bugün" (REQ-PRJ-005)', () => {
+  it("shows every late item to the office, the person their own, and a stranger nothing", async () => {
+    const late = (await insertOfficeItem(as(OFFICE), project, {
+      assigneeUserId: ENGINEER,
+      dueOn: await day(-3),
+      title: "Geciken metraj",
+      typeItemId: drawing,
+    })) as string;
+    await insertOfficeItem(as(OFFICE), project, {
+      dueOn: await day(-1),
+      title: "Sorumlusuz geciken iş",
+      typeItemId: drawing,
+    });
+    const today = await day(0);
+    const office = await readLateOfficeItems(as(OFFICE), today);
+    const mine = office.items.filter((item) => item.projectId === project);
+    expect(mine.map((item) => item.title)).toEqual(["Geciken metraj", "Sorumlusuz geciken iş"]);
+    const engineer = await readLateOfficeItems(as(ENGINEER), today);
+    expect(engineer.items.map((item) => item.id)).toEqual([late]);
+    expect((await readLateOfficeItems(as(STRANGER), today)).total).toBe(0);
   });
 });
 

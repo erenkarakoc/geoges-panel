@@ -130,11 +130,17 @@ export function TodayOverview({
   access,
   seat,
   waitingApprovals = 0,
+  attention = [],
 }: {
   access: AccessPolicy;
   seat: PreviewRole;
   /** How many approvals are really waiting on this person (REQ-WFL-012). */
   waitingApprovals?: number;
+  /**
+   * Real rows that need attention, composed by the page from the modules that own them — today
+   * the late technical office items (REQ-PRJ-005). Drawn above the sample rows, like the approvals.
+   */
+  attention?: readonly TodayWorkRow[];
 }) {
   const work = todayWorkBySeat[seat.id];
   // The one row here that is not sample data. The number is the same one the work layer's badge and
@@ -152,8 +158,9 @@ export function TodayOverview({
             title: "Onayınızı bekleyen kayıt",
             tone: "warning",
           },
+          ...attention,
         ]
-      : [];
+      : [...attention];
   const indicators = filterByPermission(indicatorRegistry, access);
   const criticalIndicators = indicators.filter((indicator) => indicator.critical);
   const otherIndicators = indicators.filter((indicator) => !indicator.critical);

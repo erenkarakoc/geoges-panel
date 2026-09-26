@@ -95,6 +95,7 @@ export {
   addSupplyRow,
   changeOfficeItem,
   countRevision,
+  lateOfficeItems,
   moveOfficeItem,
   projectOffice,
   type OfficeResult,

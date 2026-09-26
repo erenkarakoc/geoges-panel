@@ -7,6 +7,7 @@ import {
   countOfficeRevision,
   insertOfficeItem,
   insertSupplyRow,
+  readLateOfficeItems,
   readOfficeItems,
   readSupplyRows,
   setOfficeItemStatus,
@@ -19,6 +20,7 @@ import {
   supplyInput,
   type OfficeStatus,
 } from "@/modules/prj/domain/technical-office";
+import { todayIn } from "@/platform/date/day";
 
 /**
  * The technical office tab and the supply matrix tab of the project card (TASK-0123 step 4,
@@ -50,6 +52,11 @@ export async function projectOffice(projectId: string) {
     supplyItems: supplyItems.map((one) => ({ id: one.id, name: one.name, status: one.status })),
     types: types.map((one) => ({ id: one.id, name: one.name, status: one.status })),
   };
+}
+
+/** The person's late technical office items, for "Dikkat" on "Bugün" (REQ-PRJ-005). */
+export async function lateOfficeItems() {
+  return readLateOfficeItems(await identity(), todayIn());
 }
 
 export type OfficeResult = { error: string | null; id?: string | null };

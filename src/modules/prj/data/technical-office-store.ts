@@ -168,6 +168,40 @@ export function insertSupplyRow(identity: DbIdentity, projectId: string, input: 
   });
 }
 
+/**
+ * Late items the person may see — every one for whoever sees the project, their own for the person
+ * responsible — oldest due day first, for "Dikkat" on "Bugün" (REQ-PRJ-005).
+ */
+export function readLateOfficeItems(identity: DbIdentity, today: string, limit = 20) {
+  return runAsUser(identity, async (db: Tx) => {
+    const { rows } = await sql<{
+      id: string;
+      title: string;
+      project_id: string;
+      project_code: string | null;
+      due_on: string;
+      total: string;
+    }>`
+      select t.id, t.title, t.project_id, p.code as project_code, t.due_on::text,
+             count(*) over () as total
+        from prj.technical_office_item t
+        left join prj.project p on p.id = t.project_id
+       where t.status in ('open', 'in_progress') and t.due_on < ${today}::date
+       order by t.due_on, t.id
+       limit ${limit}`.execute(db);
+    return {
+      items: rows.map((row) => ({
+        dueOn: row.due_on,
+        id: row.id,
+        projectCode: row.project_code,
+        projectId: row.project_id,
+        title: row.title,
+      })),
+      total: rows.length ? Number(rows[0].total) : 0,
+    };
+  });
+}
+
 // ---------------------------------------------------------------------------------------------
 // For the flow and the worker, read as the system.
 // ---------------------------------------------------------------------------------------------
