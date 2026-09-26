@@ -38,7 +38,9 @@ select md5('sample:site:' || s.key)::uuid, md5('sample:project:' || s.project)::
     ('kavakli', 'kastamonu', 'Kavaklı Şantiyesi', 'in_house', null, 'Kastamonu', 41.37600, 33.77600),
     ('ilgaz', 'kastamonu', 'Ilgaz Şantiyesi', 'subcontracted', 'subcontractor-crew', 'Kastamonu',
      41.05000, 33.72000),
-    ('sariyar', 'ankara', 'Sarıyar Şantiyesi', 'in_house', null, 'Ankara', 40.03800, 31.41800))
+    ('sariyar', 'ankara', 'Sarıyar Şantiyesi', 'in_house', null, 'Ankara', 40.03800, 31.41800),
+    ('beypazari', 'ankara', 'Beypazarı Şantiyesi', 'subcontracted', 'subcontractor-crew', 'Ankara',
+     40.16700, 31.92100))
        as s(key, project, name, model, subcontractor, city, latitude, longitude)
 on conflict do nothing;
 

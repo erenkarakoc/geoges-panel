@@ -63,11 +63,19 @@ export const prjCapabilities = defineCapabilities({
     },
   ],
   actions: [],
-  // The stage travels in the payload of `project.created` and `project.stage_changed`, which is
-  // what a condition reads. Progress, days left and the contract value are not in any payload
-  // yet, so they are declared when an event carries them.
+  // A condition reads what the event carried. The project's events carry its stage and the days
+  // left to the contract's end (migration 0072), the wall's event its status. Progress arrives with
+  // the daily log's production (TASK-0127). The contract value is not carried on purpose: a run's
+  // context is open to whoever holds one of its steps, and the value is commercial (REQ-IAM-011).
   conditions: [
     { code: "project.stage", name: "Proje aşaması", type: "choice", dataClass: "internal" },
+    {
+      code: "project.days_to_contract_end",
+      name: "Sözleşme bitişine kalan gün",
+      type: "number",
+      dataClass: "internal",
+    },
+    { code: "wall.status", name: "Duvar durumu", type: "choice", dataClass: "internal" },
     {
       code: "technical_office_item.assignee_user_id",
       name: "Teknik ofis işinin sorumlusu",

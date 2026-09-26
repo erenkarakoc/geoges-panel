@@ -265,6 +265,8 @@ _Not (2026-09-26): aşağıdaki "kaydın durumunu değiştir" karşılığı rev
 - Örnek veri (D-290): iki örnek proje, dört şantiye, duvarlar ve bir onaylı revizyon; kapsamlı pilot
   verisi TASK-0131'de.
 
+_Kuruldu (2026-09-26): iki şablon gerçek modüllerle uçtan uca sınandı (`src/records/project-flows.dbtest.ts`); "Kurum onayı takibi" kendi mobilizasyon geçişinde yeniden başlıyordu, 3. sürümü yalnız teknik projeye geçişte başlar. `project.days_to_contract_end` ve `wall.status` olaylarla taşınıyor (migration 0072). `project.contract_value` bilerek taşınmadı: akış çalışmasının içeriğini o akışta adımı olan herkes görebilir, ticari tutar yetkisiz kişiye ulaşırdı; değeri koşul anında okuyan bir düzen gelince açılır. Arama 1. adımda kurulmuştu; örneklere dördüncü şantiye eklendi._
+
 ### Onaya sunulan iş kuralları — ONAYLANDI (D-292, sahip 2026-09-26)
 
 1. Taslak revizyon bir önceki onaylı revizyonun kopyasıyla başlar; onaylanınca **onay tarihinden**

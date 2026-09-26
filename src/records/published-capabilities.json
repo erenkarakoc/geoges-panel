@@ -82,6 +82,16 @@
   {
     "module": "PRJ",
     "kind": "event",
+    "code": "project_revision.approved"
+  },
+  {
+    "module": "PRJ",
+    "kind": "event",
+    "code": "project_revision.submitted"
+  },
+  {
+    "module": "PRJ",
+    "kind": "event",
     "code": "project.changed"
   },
   {
@@ -92,22 +102,17 @@
   {
     "module": "PRJ",
     "kind": "condition",
+    "code": "project.days_to_contract_end"
+  },
+  {
+    "module": "PRJ",
+    "kind": "condition",
     "code": "project.stage"
   },
   {
     "module": "PRJ",
     "kind": "event",
     "code": "project.stage_changed"
-  },
-  {
-    "module": "PRJ",
-    "kind": "event",
-    "code": "project_revision.approved"
-  },
-  {
-    "module": "PRJ",
-    "kind": "event",
-    "code": "project_revision.submitted"
   },
   {
     "module": "AUD",
@@ -131,13 +136,13 @@
   },
   {
     "module": "IAM",
-    "kind": "relation",
-    "code": "role.holder"
+    "kind": "condition",
+    "code": "role_assignment.scope"
   },
   {
     "module": "IAM",
-    "kind": "condition",
-    "code": "role_assignment.scope"
+    "kind": "relation",
+    "code": "role.holder"
   },
   {
     "module": "SIT",
@@ -230,19 +235,9 @@
     "code": "wall.completed"
   },
   {
-    "module": "WFL",
-    "kind": "event",
-    "code": "workflow.published"
-  },
-  {
-    "module": "WFL",
-    "kind": "event",
-    "code": "workflow.template_reset"
-  },
-  {
-    "module": "WFL",
-    "kind": "event",
-    "code": "workflow.template_updated"
+    "module": "PRJ",
+    "kind": "condition",
+    "code": "wall.status"
   },
   {
     "module": "WFL",
@@ -258,5 +253,20 @@
     "module": "WFL",
     "kind": "event",
     "code": "workflow_instance.started"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
+    "code": "workflow.published"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
+    "code": "workflow.template_reset"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
+    "code": "workflow.template_updated"
   }
 ]

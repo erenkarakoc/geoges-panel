@@ -552,3 +552,6 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-26 15:23:36Z · d9eda829 · Write · `src/sandbox/roadmap/roadmap-page.tsx`
 - 2026-09-26 15:24:23Z · d9eda829 · Write · `src/sandbox/roadmap/roadmap.module.css`
 - 2026-09-26 16:02:09Z · 242ab546 · Edit · `src/modules/iam/ui/user-menu.tsx`
+- 2026-09-26 16:04:11Z · 242ab546 · Write · `db/migrations/0072_prj_condition_fields.sql`
+- 2026-09-26 16:04:11Z · 242ab546 · Write · `db/migrations/0072_prj_condition_fields.down.sql`
+- 2026-09-26 16:05:36Z · 242ab546 · Write · `src/records/project-flows.dbtest.ts`

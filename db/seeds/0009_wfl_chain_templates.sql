@@ -8,6 +8,10 @@
 -- design document's own numbering, not words the company uses (owner, 2026-09-26); each such
 -- template moved one version forward when its name lost the code.
 --
+-- "Kurum onayı takibi" listens to every stage change, its own move to mobilisation included, so
+-- from version 3 it starts only when the project has just entered technical design; before that
+-- its own last step started it again and opened a second "open the site" task (TASK-0123 step 5).
+--
 -- Four templates from 0008 are links of a chain as well, and this seed carries their fuller version:
 -- the quote approval gains the lock and the margin condition, the progress claim its client step, the
 -- purchase request and the material issue their return paths. A copy somebody has already made is not
@@ -95,13 +99,21 @@ values
     md5('wfl.template:authority-approvals')::uuid,
     'authority-approvals',
     'Kurum onayı takibi',
-    'Kurum onayı gereken her teknik ofis işi için dış taraf onayı alt akışı çalışır; hepsi bitince şantiyeyi açma görevi düşer ve proje mobilizasyona geçer.',
-    2,
+    'Proje teknik proje aşamasına geçince, kurum onayı gereken her teknik ofis işi için dış taraf onayı alt akışı çalışır; hepsi bitince şantiyeyi açma görevi düşer ve proje mobilizasyona geçer.',
+    3,
     $json$
     {
       "trigger": { "type": "event", "event": "project.stage_changed" },
-      "start": "for_each_1",
+      "start": "condition_1",
       "steps": [
+        {
+          "id": "condition_1",
+          "type": "condition",
+          "title": "Teknik projeye mi geçti?",
+          "test": { "field": "record.stage", "op": "=", "value": "technical_design" },
+          "whenTrue": "for_each_1",
+          "whenFalse": "end_1"
+        },
         {
           "id": "for_each_1",
           "type": "for_each",

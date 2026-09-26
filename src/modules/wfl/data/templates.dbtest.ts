@@ -127,7 +127,9 @@ afterAll(async () => {
 const AWAITING_A_MODULE: Record<string, string> = {
   // Every one of these asks a module for a list of records — "this project's authority approvals",
   // "the sites that are active today" — and no module publishes a list yet (REQ-WFL-009).
-  "authority-approvals": "listesi bu panelde tanımlı değil",
+  // "authority-approvals" left this list with its third version: it now asks first whether the
+  // project has just entered technical design, and its whole walk with PRJ's own list is proved in
+  // `src/records/project-flows.dbtest.ts`.
   "cash-shortfall": "listesi bu panelde tanımlı değil",
   "daily-log-opening": "listesi bu panelde tanımlı değil",
   "decision-reminder": "listesi bu panelde tanımlı değil",
