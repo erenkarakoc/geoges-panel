@@ -29,6 +29,13 @@ export async function readIsBusinessDay(db: Db, day: string, scope: CalendarScop
   return rows[0].yes;
 }
 
+/** A day the Central Bank publishes: a weekday that is not a public holiday (D-296). */
+export async function readIsBankDay(db: Db, day: string) {
+  const { rows } = await sql<{ yes: boolean }>`
+    select adm.is_bank_day(${day}::date) as yes`.execute(db);
+  return rows[0].yes;
+}
+
 export async function readAddBusinessDays(
   db: Db,
   day: string,
@@ -136,15 +143,18 @@ export function attemptDue(state: FetchState, retryMinutes: readonly number[], n
   return now.getTime() >= state.lastAttemptAt.getTime() + wait * 60_000;
 }
 
-/** The business days whose bulletin should exist at `now`: past ones, and today after the hour. */
+/**
+ * The bank days whose bulletin should exist at `now`: past ones, and today after the hour. The
+ * bank's days, not the company's: a company working on Saturday gets no Saturday bulletin (D-296).
+ */
 async function daysToFetch(db: SystemDb, now: Date, fetchAfter: number) {
   const today = istanbulDay(now);
   const days: string[] = [];
   for (let back = CATCH_UP_DAYS; back >= 1; back--) {
     const day = addDays(today, -back);
-    if (await readIsBusinessDay(db, day)) days.push(day);
+    if (await readIsBankDay(db, day)) days.push(day);
   }
-  if (istanbulMinutes(now) >= fetchAfter && (await readIsBusinessDay(db, today))) days.push(today);
+  if (istanbulMinutes(now) >= fetchAfter && (await readIsBankDay(db, today))) days.push(today);
   return days;
 }
 
@@ -155,7 +165,7 @@ async function requireRule(db: SystemDb, key: string, on: string) {
 }
 
 /**
- * One run of the fetch. For each business day of the last week (and today after the fetch
+ * One run of the fetch. For each bank day of the last week (and today after the fetch
  * hour) whose bulletin is not stored and is due: ask the provider for that day's dated bulletin.
  * A bulletin of that day is written and announced; anything else is an attempt, and the attempt
  * after the last planned retry announces `exchange_rate.missing`, once.

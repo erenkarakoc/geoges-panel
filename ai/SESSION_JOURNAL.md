@@ -528,3 +528,10 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-26 12:51:23Z · 5c627231 · Edit · `src/modules/wfl/ui/step-questions.tsx`
 - 2026-09-26 13:00:38Z · c726963b · Write · `src/platform/geo/provinces.ts`
 - 2026-09-26 13:01:14Z · c726963b · Write · `src/platform/ui/form/province-field.tsx`
+- 2026-09-26 13:19:26Z · c726963b · Write · `db/migrations/0068_prj_daily_targets.sql`
+- 2026-09-26 13:19:26Z · c726963b · Write · `db/migrations/0068_prj_daily_targets.down.sql`
+- 2026-09-26 13:19:58Z · c726963b · Write · `src/modules/prj/domain/daily-target.ts`
+- 2026-09-26 13:20:13Z · c726963b · Write · `src/modules/prj/data/daily-target-store.ts`
+- 2026-09-26 13:21:01Z · c726963b · Write · `src/modules/prj/application/daily-targets.ts`
+- 2026-09-26 13:23:33Z · c726963b · Write · `src/modules/prj/ui/daily-targets.tsx`
+- 2026-09-26 13:25:11Z · c726963b · Write · `src/modules/prj/data/daily-target.dbtest.ts`

@@ -228,6 +228,8 @@ Görev büyük olduğu için beş adımda kurulur; her adım kendi testiyle ve c
 - "Üretim geride kaldıkça kalan günlerin hedefi yeniden hesaplanır": bu dilimde kalan iş hedefin
   tamamıdır; günlük kayıt (TASK-0127) onaylandıkça gerçekleşen üretim düşülür ve hesap yenilenir.
 
+_Kuruldu (2026-09-26): migration 0068, D-295. Hedefler şantiyenin "Gün" bölümünde görünür; geçmiş günün hedefi düzeltilmez; adet yukarı yuvarlanır._
+
 ### Adım 4 — Teknik ofis işleri ve tedarik matrisi
 
 - `prj.technical_office_item`: tür (proje çizimi, revizyon, statik hesap, metraj, kurum onayı,

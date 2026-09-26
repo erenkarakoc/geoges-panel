@@ -35,6 +35,20 @@ export {
   type RevisionResult,
 } from "./application/revisions";
 export {
+  correctDailyTarget,
+  siteDailyTargets,
+  type DailyTargetResult,
+} from "./application/daily-targets";
+export {
+  DAILY_MEASURE_LABELS,
+  TARGET_END_BASES,
+  TARGET_END_BASIS_LABELS,
+  noTargetReason,
+  type DailyMeasure,
+  type TargetEndBasis,
+} from "./domain/daily-target";
+export type { DailyTargetFrame, DailyTargetLine } from "./data/daily-target-store";
+export {
   REVISION_STATUS_LABELS,
   TARGET_KIND_LABELS,
   WALL_STATUS_LABELS,

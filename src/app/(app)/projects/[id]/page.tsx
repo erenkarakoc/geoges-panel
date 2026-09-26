@@ -20,6 +20,8 @@ import {
   mayOpenProjects,
   projectCard,
   projectRevisions,
+  TARGET_END_BASES,
+  TARGET_END_BASIS_LABELS,
   targetChoices,
 } from "@/modules/prj";
 import { ProjectCard } from "@/modules/prj/ui/project-card";
@@ -32,6 +34,13 @@ import { isModuleEnabled } from "@/platform/features/features";
 import { FeatureOff } from "@/platform/ui/feature-off";
 
 export const metadata: Metadata = { title: "Proje detayı" };
+
+const endDay = new Intl.DateTimeFormat("tr-TR", {
+  day: "numeric",
+  month: "long",
+  timeZone: "UTC",
+  year: "numeric",
+});
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -75,6 +84,15 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[id]"
     ? ((await partyNames([card.project.clientPartyId])).get(card.project.clientPartyId) ?? null)
     : null;
   const peopleNames = Object.fromEntries(people.map((p) => [p.id, p.displayName]));
+  const endOf = {
+    contract: card.project.contractEndOn,
+    management: card.project.managementTargetEndOn,
+    theoretical: card.project.theoreticalEndOn,
+  };
+  const endChoices = TARGET_END_BASES.map((basis) => ({
+    label: `${TARGET_END_BASIS_LABELS[basis]} (${endOf[basis] ? endDay.format(new Date(`${endOf[basis]}T00:00:00Z`)) : "girilmemiş"})`,
+    value: basis,
+  }));
   const choices = managesAnything
     ? people.filter((p) => p.active).map((p) => ({ label: p.displayName, value: p.id }))
     : [];
@@ -128,6 +146,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[id]"
             setStatus: setSiteStatusAction.bind(null, id),
           }}
           canManage={card.canManageSites}
+          endChoices={endChoices}
           people={choices}
           sites={sites}
           subcontractors={subcontractors.map((s) => ({ label: s.name, value: s.id }))}

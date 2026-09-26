@@ -26,6 +26,7 @@ export type Site = {
   latitude: number | null;
   longitude: number | null;
   status: "active" | "passive";
+  targetEndBasis: "management" | "theoretical" | "contract" | null;
 };
 
 type SiteDbRow = {
@@ -41,6 +42,7 @@ type SiteDbRow = {
   latitude: string | null;
   longitude: string | null;
   status: "active" | "passive";
+  target_end_basis: "management" | "theoretical" | "contract" | null;
 };
 
 const site = (row: SiteDbRow): Site => ({
@@ -55,6 +57,7 @@ const site = (row: SiteDbRow): Site => ({
   projectId: row.project_id,
   status: row.status,
   subcontractorPartyId: row.subcontractor_party_id,
+  targetEndBasis: row.target_end_basis,
   workModel: row.work_model,
 });
 
@@ -64,7 +67,7 @@ export function readSites(identity: DbIdentity, filter: { projectId?: string | n
     const { rows } = await sql<SiteDbRow>`
       select s.id, s.project_id, s.code, s.name, s.work_model, s.subcontractor_party_id,
              s.coordinator_user_id, s.entry_owner_user_id, s.city, s.latitude, s.longitude,
-             s.status
+             s.status, s.target_end_basis
         from sit.site s
        where ${filter.projectId ?? null}::uuid is null or s.project_id = ${filter.projectId ?? null}::uuid
        order by s.status, core.fold_tr(s.name)`.execute(db);
@@ -77,7 +80,7 @@ export function readSite(identity: DbIdentity, id: string) {
     const { rows } = await sql<SiteDbRow>`
       select s.id, s.project_id, s.code, s.name, s.work_model, s.subcontractor_party_id,
              s.coordinator_user_id, s.entry_owner_user_id, s.city, s.latitude, s.longitude,
-             s.status
+             s.status, s.target_end_basis
         from sit.site s
        where s.id = ${id}::uuid`.execute(db);
     return rows[0] ? site(rows[0]) : null;
@@ -88,11 +91,12 @@ export function insertSite(identity: DbIdentity, projectId: string, input: SiteI
   return runAsUser(identity, async (db: Tx) => {
     const { rows } = await sql<{ id: string }>`
       insert into sit.site (project_id, code, name, work_model, subcontractor_party_id,
-                            coordinator_user_id, entry_owner_user_id, city, latitude, longitude)
+                            coordinator_user_id, entry_owner_user_id, city, latitude, longitude,
+                            target_end_basis)
       values (${projectId}::uuid, ${input.code ?? null}, ${input.name}, ${input.workModel},
               ${input.subcontractorPartyId ?? null}::uuid, ${input.coordinatorUserId ?? null}::uuid,
               ${input.entryOwnerUserId ?? null}::uuid, ${input.city ?? null},
-              ${input.latitude ?? null}, ${input.longitude ?? null})
+              ${input.latitude ?? null}, ${input.longitude ?? null}, ${input.targetEndBasis ?? null})
       returning id`.execute(db);
     return rows[0].id;
   });
@@ -109,6 +113,7 @@ export function updateSite(identity: DbIdentity, id: string, input: SiteInput) {
              entry_owner_user_id = ${input.entryOwnerUserId ?? null}::uuid,
              city = ${input.city ?? null}, latitude = ${input.latitude ?? null},
              longitude = ${input.longitude ?? null},
+             target_end_basis = ${input.targetEndBasis ?? null},
              updated_at = now(), updated_by_user_id = ${identity.userId}::uuid
        where id = ${id}::uuid
       returning id`.execute(db);

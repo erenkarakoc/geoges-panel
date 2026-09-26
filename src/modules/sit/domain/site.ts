@@ -33,6 +33,9 @@ const coordinate = (min: number, max: number, what: string) =>
     })
     .nullish();
 
+/** Which of the project's ends the site's daily targets run to (REQ-PRJ-011, migration 0068). */
+export const TARGET_END_BASES = ["management", "theoretical", "contract"] as const;
+
 export const siteInput = z
   .object({
     name: z
@@ -53,6 +56,10 @@ export const siteInput = z
     city: optionalProvince,
     latitude: coordinate(-90, 90, "Enlem"),
     longitude: coordinate(-180, 180, "Boylam"),
+    targetEndBasis: z
+      .union([z.enum(TARGET_END_BASES), z.literal("")])
+      .transform((value) => value || null)
+      .nullish(),
   })
   .refine((value) => value.workModel !== "subcontracted" || Boolean(value.subcontractorPartyId), {
     message: "Taşeron şantiyesinde taşeron firma seçilmeli.",

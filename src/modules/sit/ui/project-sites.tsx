@@ -53,6 +53,7 @@ type SiteRow = {
   latitude: number | null;
   longitude: number | null;
   status: "active" | "passive";
+  targetEndBasis: string | null;
 };
 
 export type SiteFormValue = {
@@ -65,6 +66,7 @@ export type SiteFormValue = {
   city: string;
   latitude: string;
   longitude: string;
+  targetEndBasis: string;
 };
 
 const EMPTY_SITE: SiteFormValue = {
@@ -76,6 +78,7 @@ const EMPTY_SITE: SiteFormValue = {
   longitude: "",
   name: "",
   subcontractorPartyId: "",
+  targetEndBasis: "",
   workModel: "in_house",
 };
 
@@ -90,12 +93,15 @@ export function ProjectSites({
   canManage,
   subcontractors,
   people,
+  endChoices,
   actions,
 }: {
   sites: readonly SiteRow[];
   canManage: boolean;
   subcontractors: readonly Choice[];
   people: readonly Choice[];
+  /** The project's ends a site's daily targets may run to, each with its date. */
+  endChoices: readonly Choice[];
   actions: ProjectSitesActions;
 }) {
   const router = useRouter();
@@ -133,6 +139,7 @@ export function ProjectSites({
             longitude: site.longitude === null ? "" : String(site.longitude),
             name: site.name,
             subcontractorPartyId: site.subcontractorPartyId ?? "",
+            targetEndBasis: site.targetEndBasis ?? "",
             workModel: site.workModel,
           }
         : EMPTY_SITE,
@@ -293,6 +300,13 @@ export function ProjectSites({
               label="Saha mühendisi"
               onChange={(picked) => set({ entryOwnerUserId: picked })}
               value={form.entryOwnerUserId}
+            />
+            <ChoiceField
+              description="Günlük hedefler bu tarihe kadar kalan iş günlerine bölünür."
+              items={[{ label: "Varsayılan sıra", value: NONE }, ...endChoices]}
+              label="Günlük hedefler hangi bitişe göre?"
+              onChange={(picked) => set({ targetEndBasis: picked })}
+              value={form.targetEndBasis}
             />
             <ProvinceField id="site-city" onChange={(city) => set({ city })} value={form.city} />
             <div className="grid grid-cols-2 gap-4">

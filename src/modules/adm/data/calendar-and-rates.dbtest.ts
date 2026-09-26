@@ -92,9 +92,20 @@ afterAll(async () => {
   await admin?.end();
 });
 
+// The company's calendar is configuration and may differ in the database the tests run on (the
+// owner's makes Saturday a working day). A test that judges weekends states its own, rolled back.
+const companyWeekend = (days: string) =>
+  admin.query(
+    `insert into adm.working_calendar (scope_type, valid_from, office_start, office_end,
+                                       field_start, field_end, weekend_days, reason)
+     values ('company', '2030-01-01', '08:00', '17:00', '08:00', '18:00', $1, 'deneme')`,
+    [days],
+  );
+
 describe("business days (REQ-ADM-010…012)", () => {
   it("skips weekends and full-day holidays; a half-day eve is a working day", async () => {
     await rolledBack(async () => {
+      await companyWeekend("{6,7}");
       expect(await readIsBusinessDay(db(), "2026-03-19")).toBe(true); // Ramazan eve, half day
       expect(await readIsBusinessDay(db(), "2026-03-20")).toBe(false); // Ramazan 1st day
       expect(await readIsBusinessDay(db(), "2030-06-15")).toBe(false); // Saturday
@@ -105,6 +116,7 @@ describe("business days (REQ-ADM-010…012)", () => {
 
   it("uses a site's own calendar over the company's, from its start date", async () => {
     await rolledBack(async () => {
+      await companyWeekend("{6,7}");
       await admin.query(
         `insert into adm.working_calendar (scope_type, scope_id, valid_from, office_start, office_end,
                                            field_start, field_end, weekend_days, reason)
@@ -161,6 +173,26 @@ describe("the rate of a day (D-140, REQ-ADM-013…015)", () => {
       expect(await attempt("update adm.exchange_rate set buying_rate = 1")).toBe(
         "adm.exchange_rate_immutable",
       );
+    });
+  });
+});
+
+describe("bank days (D-296)", () => {
+  it("are the bank's weekdays, whatever the company works", async () => {
+    await rolledBack(async () => {
+      await companyWeekend("{7}");
+      expect(await readIsBusinessDay(db(), "2030-06-15")).toBe(true); // the company works Saturday
+      await admin.query(
+        `select adm.record_tcmb_rates('2030-06-14', '[{"currency":"USD","rate":48.6116}]')`,
+      );
+      // Monday still uses Friday's bulletin: there is no Saturday bulletin.
+      expect(await readRateFor(db(), "USD", "2030-06-17")).toMatchObject({
+        bulletinOn: "2030-06-14",
+      });
+      const cbrt = fakeCbrt({});
+      await receivedBefore("2030-06-15");
+      await runExchangeRateFetch(db(), cbrt.provider, at("2030-06-15T16:30:00"));
+      expect(cbrt.asked).toEqual([]);
     });
   });
 });

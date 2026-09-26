@@ -4,7 +4,15 @@ Last updated: 2026-09-26
 
 CURRENT PHASE: PHASE 09 — Slice 1: Projects, Sites, Daily Site Log (TASK-0123 step 3 next); Phases 07 and 08 built, owner walks owed
 
-## Latest continuation — the designer speaks Turkish, removal, known answers are chosen (2026-09-26)
+## Latest continuation — daily targets, Saturday at work, bank days (2026-09-26, later)
+
+- PRJ declares `project.stage` as a condition field (`3c9bb19`).
+- **TASK-0123 step 3 built:** migration 0068 and D-295 — the day's targets on the site's "Gün" section, corrections that keep the calculated value, the site form's "which end". 7 database tests and 3 unit tests; seen in the browser at desktop and 375 px (one correction saved and then removed with the append-only guard off). Future days cannot be opened from the context row's day strip, so a correction is in practice today's.
+- **The owner made Saturday a working day.** Added as a dated company calendar row in the database only (the owner said it is configuration for authorised roles, so the seed was left as it was). There is no calendar screen yet (SCR-190's calendar part is still owed), so today only the database can change it — worth raising.
+- That change broke exchange rates (a Saturday bulletin never comes); fixed by migration 0069 and D-296: rate days are bank days. The calendar tests now state their own company weekend inside their rollback. Full `npm run test:db`: 423/429 before the fix, the six failures all in `calendar-and-rates.dbtest.ts`, which now passes 9/9.
+- **Next (owner 2026-09-26):** charts wherever they fit, across the app and back over what is built, matching the app's design — to be written as a general rule first.
+
+## Earlier continuation — the designer speaks Turkish, removal, known answers are chosen (2026-09-26)
 
 - Pushed earlier this day: audit log names for every event and record type with a check that fails on a new unnamed one (`31a8549`); the designer never shows a code (`5813446`); removing a flow or a template (`2171651`, D-293, migration 0067, 7/7 database tests, tried in the browser); condition values by field kind, clock day and time pickers, and each step keeping its own text boxes (`33407b4`).
 - This commit: the province is one of the 81 on the firm, project and site forms (`src/platform/geo/provinces.ts`, `src/platform/ui/form/province-field.tsx`; the three domain schemas refuse other text); the panel type's series offers the series in use and still takes a new name. Recorded as D-294.
