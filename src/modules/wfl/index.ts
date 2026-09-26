@@ -82,7 +82,11 @@ export {
   openFlow,
   publishFlow,
   publishSummary,
+  removeFlow,
+  removeTemplate,
+  reopenFlow,
   resetFlowToTemplate,
+  restoreFlow,
   startFlow,
   writeDraft,
 } from "@/modules/wfl/application/flows";

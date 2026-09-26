@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { AccessDeniedError, signInIdentity } from "@/modules/iam";
-import { copyOfTemplate } from "@/modules/wfl";
+import { copyOfTemplate, removeTemplate } from "@/modules/wfl";
 
 /**
  * Using a template (SCR-195, REQ-WFL-027, TASK-0120). The copy is a flow of its own from the moment
@@ -28,6 +28,29 @@ export async function useTemplateAction(templateKey: string): Promise<NewFlowRes
       return { error: "Akış tasarlama yetkiniz yok.", key: null };
     }
     if (hint === "wfl.no_template") return { error: "Böyle bir şablon yok.", key: null };
+    throw error;
+  }
+}
+
+/**
+ * Takes a template off the list for good, or brings it back (D-293). A panel update does not bring
+ * a removed template back, and the flows already copied from it are not touched.
+ */
+export async function removeTemplateAction(input: {
+  key: string;
+  removed: boolean;
+}): Promise<{ error: string | null }> {
+  const signedIn = await signInIdentity();
+  if (!signedIn) return { error: "Oturum kapalı." };
+  try {
+    const done = await removeTemplate(signedIn.identity, input.key, input.removed);
+    revalidatePath("/admin/workflows/templates");
+    return { error: done ? null : "Böyle bir şablon yok." };
+  } catch (error) {
+    if (error instanceof AccessDeniedError) return { error: error.message };
+    if ((error as { hint?: string }).hint === "wfl.design_permission") {
+      return { error: "Akış tasarlama yetkiniz yok." };
+    }
     throw error;
   }
 }

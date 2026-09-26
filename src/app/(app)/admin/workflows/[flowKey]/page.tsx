@@ -10,6 +10,9 @@ import {
   readDryRunAction,
   readPublishSummaryAction,
   readVersionsAction,
+  removeFlowAction,
+  reopenFlowAction,
+  restoreFlowAction,
   runDryRunAction,
   saveFlowDraftAction,
 } from "@/app/(app)/admin/workflows/[flowKey]/actions";
@@ -162,11 +165,15 @@ export default async function FlowDesignerPage({
         definition: flow.definition,
         versionId: flow.versionId,
         fromTemplate: Boolean(flow.sourceTemplateKey),
+        state: { archived: flow.archived, closed: flow.closed, hasRun: flow.hasRun },
       }}
       menu={{
         close: closeFlowAction,
         copy: copyFlowAction,
+        remove: removeFlowAction,
+        reopen: reopenFlowAction,
         resetToTemplate: resetToTemplateAction,
+        restore: restoreFlowAction,
         versions: readVersionsAction,
       }}
       save={saveFlowDraftAction}

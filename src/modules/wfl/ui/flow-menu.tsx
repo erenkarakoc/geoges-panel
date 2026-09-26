@@ -1,11 +1,15 @@
 "use client";
 
 import {
+  ArchiveIcon,
+  ArchiveRestoreIcon,
   CopyIcon,
   HistoryIcon,
   MoreHorizontalIcon,
+  PowerIcon,
   PowerOffIcon,
   RotateCcwIcon,
+  Trash2Icon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -30,8 +34,9 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Menu, MenuItem, MenuPopup, MenuTrigger } from "@/components/ui/menu";
+import { Menu, MenuItem, MenuPopup, MenuSeparator, MenuTrigger } from "@/components/ui/menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { toastManager } from "@/components/ui/toast";
 import { useActionToast } from "@/platform/ui/feedback/use-action-toast";
 
 /**
@@ -41,6 +46,9 @@ import { useActionToast } from "@/platform/ui/feedback/use-action-toast";
  * Closing is not deleting and the wording says so: nothing new starts, what is already running
  * finishes where it is (REQ-WFL-024). The reason is asked for, because a flow somebody turned off
  * without saying why is the sort of thing people argue about a year later.
+ *
+ * Removing follows the owner's rule (D-293): a flow that never ran is deleted, one that ran is
+ * archived with its history, and the menu says which before anybody presses it.
  */
 
 export type FlowVersionRow = { version: number; status: string; publishedAt: number | null };
@@ -54,6 +62,20 @@ export type FlowMenuActions = {
     closed: boolean;
   }>;
   versions: (flowKey: string) => Promise<FlowVersionRow[]>;
+  remove: (input: { key: string; reason: string }) => Promise<{
+    error: string | null;
+    said: "deleted" | "archived" | null;
+  }>;
+  restore: (flowKey: string) => Promise<{ error: string | null }>;
+  reopen: (flowKey: string) => Promise<{ error: string | null }>;
+};
+
+/** Where the flow stands, which decides what the menu offers. */
+export type FlowMenuState = {
+  closed: boolean;
+  archived: boolean;
+  /** A flow that ran is archived rather than deleted (D-293). */
+  hasRun: boolean;
 };
 
 const STATUS: Record<string, string> = {
@@ -67,10 +89,12 @@ const day = new Intl.DateTimeFormat("tr-TR", { dateStyle: "medium", timeStyle: "
 export function FlowMenu({
   flowKey,
   actions,
+  state,
   fromTemplate = false,
 }: {
   flowKey: string;
   actions: FlowMenuActions;
+  state: FlowMenuState;
   /** Whether this flow is a copy of a template; only then is resetting to it offered. */
   fromTemplate?: boolean;
 }) {
@@ -78,6 +102,7 @@ export function FlowMenu({
   const [history, setHistory] = useState<FlowVersionRow[] | null>(null);
   const [showHistory, setShowHistory] = useState(false);
   const [closing, setClosing] = useState(false);
+  const [removing, setRemoving] = useState(false);
   const [reason, setReason] = useState("");
   const [result, setResult] = useState<{ error: string | null } | null>(null);
   const [pending, start] = useTransition();
@@ -104,6 +129,34 @@ export function FlowMenu({
     setShowHistory(true);
     setHistory(null);
     start(async () => setHistory(await actions.versions(flowKey)));
+  };
+
+  const remove = () => {
+    start(async () => {
+      const answer = await actions.remove({ key: flowKey, reason });
+      setResult(answer);
+      if (answer.said) {
+        toastManager.add({
+          type: "success",
+          title: answer.said === "deleted" ? "Akış silindi" : "Akış arşive kaldırıldı",
+        });
+      }
+      if (answer.said === "deleted") router.push("/admin/workflows");
+      if (answer.said === "archived") {
+        setRemoving(false);
+        setReason("");
+        router.refresh();
+      }
+    });
+  };
+
+  /** Restoring from the archive and reopening a closed flow ask nothing: both can be undone. */
+  const flip = (run: (key: string) => Promise<{ error: string | null }>) => {
+    start(async () => {
+      const answer = await run(flowKey);
+      setResult(answer);
+      if (!answer.error) router.refresh();
+    });
   };
 
   const close = () => {
@@ -139,10 +192,35 @@ export function FlowMenu({
             <HistoryIcon aria-hidden="true" />
             Sürüm geçmişi
           </MenuItem>
-          <MenuItem onClick={() => setClosing(true)}>
-            <PowerOffIcon aria-hidden="true" />
-            Akışı kapat
-          </MenuItem>
+          {state.archived ? (
+            <MenuItem disabled={pending} onClick={() => flip(actions.restore)}>
+              <ArchiveRestoreIcon aria-hidden="true" />
+              Arşivden geri getir
+            </MenuItem>
+          ) : state.closed ? (
+            <MenuItem disabled={pending} onClick={() => flip(actions.reopen)}>
+              <PowerIcon aria-hidden="true" />
+              Yeniden aç
+            </MenuItem>
+          ) : (
+            <MenuItem onClick={() => setClosing(true)}>
+              <PowerOffIcon aria-hidden="true" />
+              Akışı kapat
+            </MenuItem>
+          )}
+          {state.archived ? null : (
+            <>
+              <MenuSeparator />
+              <MenuItem onClick={() => setRemoving(true)} variant="destructive">
+                {state.hasRun ? (
+                  <ArchiveIcon aria-hidden="true" />
+                ) : (
+                  <Trash2Icon aria-hidden="true" />
+                )}
+                {state.hasRun ? "Arşive kaldır" : "Akışı sil"}
+              </MenuItem>
+            </>
+          )}
         </MenuPopup>
       </Menu>
 
@@ -182,6 +260,46 @@ export function FlowMenu({
           </div>
         </DialogPopup>
       </Dialog>
+
+      <AlertDialog onOpenChange={setRemoving} open={removing}>
+        <AlertDialogPopup>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {state.hasRun ? "Bu akış arşive kaldırılsın mı?" : "Bu akış silinsin mi?"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {state.hasRun
+                ? "Bu akış daha önce çalıştı. Onay kararları, görevleri ve çalışma günlüğü kayıt olduğu için silinmez: akış kapatılır ve listeden kalkar. Arşivden geri getirilebilir."
+                : "Bu akış hiç çalışmadı. Bütün sürümleriyle birlikte tamamen silinir; geri alınamaz. Silindiği ve sebebi denetim kaydında kalır."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="px-4 pb-2">
+            <Field>
+              <FieldLabel htmlFor="remove-reason">
+                {state.hasRun ? "Neden arşive kaldırılıyor?" : "Neden siliniyor?"}
+              </FieldLabel>
+              <Input
+                id="remove-reason"
+                onChange={(event) => setReason(event.currentTarget.value)}
+                placeholder={state.hasRun ? "Artık kullanılmıyor" : "Deneme için açılmıştı"}
+                value={reason}
+              />
+              <FieldDescription>Bu cümle denetim kaydında kalır.</FieldDescription>
+            </Field>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogClose render={<Button variant="ghost" />}>Vazgeç</AlertDialogClose>
+            <Button
+              disabled={reason.trim().length < 3}
+              loading={pending}
+              onClick={remove}
+              variant="destructive"
+            >
+              {state.hasRun ? "Arşive kaldır" : "Sil"}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogPopup>
+      </AlertDialog>
 
       <AlertDialog onOpenChange={setClosing} open={closing}>
         <AlertDialogPopup>

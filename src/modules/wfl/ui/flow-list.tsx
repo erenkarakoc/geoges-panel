@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { WorkflowIcon } from "lucide-react";
+import { ArchiveIcon, ArrowLeftIcon, WorkflowIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyContent,
@@ -47,12 +48,43 @@ export function FlowList({
   flows,
   create,
   behind = [],
+  archive = false,
+  archivedCount = 0,
 }: {
   flows: readonly FlowSummary[];
   create: (name: string) => Promise<{ error: string | null; key: string | null }>;
   /** Copies whose template has moved on; they are told, never changed (REQ-WFL-027). */
   behind?: readonly string[];
+  /** Whether this is the archive: flows removed after they had run (D-293). */
+  archive?: boolean;
+  /** How many flows are in the archive, for the way into it. */
+  archivedCount?: number;
 }) {
+  if (archive && !flows.length) {
+    return (
+      <Empty className="flex-1">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <ArchiveIcon aria-hidden="true" />
+          </EmptyMedia>
+          <EmptyTitle aria-level={2} role="heading">
+            Arşiv boş
+          </EmptyTitle>
+          <EmptyDescription>
+            Çalışmış bir akış kaldırıldığında buraya gelir; geçmişiyle birlikte saklanır ve geri
+            getirilebilir.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button render={<Link href="/admin/workflows" />} variant="outline">
+            <ArrowLeftIcon aria-hidden="true" />
+            Akışlara dön
+          </Button>
+        </EmptyContent>
+      </Empty>
+    );
+  }
+
   if (!flows.length) {
     return (
       <Empty className="flex-1">
@@ -70,6 +102,7 @@ export function FlowList({
         </EmptyHeader>
         <EmptyContent>
           <NewFlowButton create={create} variant="outline" />
+          {archivedCount ? <ArchiveLink count={archivedCount} /> : null}
         </EmptyContent>
       </Empty>
     );
@@ -79,13 +112,26 @@ export function FlowList({
     <Frame className="w-full">
       <FrameHeader className="flex-row items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col">
-          <FrameTitle>Akışlar</FrameTitle>
+          <FrameTitle>{archive ? "Arşivdeki akışlar" : "Akışlar"}</FrameTitle>
           <FrameDescription>
-            Şirketin süreçleri. Bir akışı açmak tasarımcıyı açar; yayımlanmış bir sürüm düzenlenmez,
-            düzenlemeye başlamak yeni bir taslak açar.
+            {archive
+              ? 'Çalıştıktan sonra kaldırılan akışlar. Onay kararları, görevleri ve çalışma günlüğü saklanır; bir akışı açıp "Arşivden geri getir" ile listeye döndürebilirsiniz.'
+              : "Şirketin süreçleri. Bir akışı açmak tasarımcıyı açar; yayımlanmış bir sürüm düzenlenmez, düzenlemeye başlamak yeni bir taslak açar."}
           </FrameDescription>
         </div>
-        <NewFlowButton create={create} />
+        <div className="flex flex-wrap items-center gap-2">
+          {archive ? (
+            <Button render={<Link href="/admin/workflows" />} variant="outline">
+              <ArrowLeftIcon aria-hidden="true" />
+              Akışlara dön
+            </Button>
+          ) : (
+            <>
+              {archivedCount ? <ArchiveLink count={archivedCount} /> : null}
+              <NewFlowButton create={create} />
+            </>
+          )}
+        </div>
       </FrameHeader>
       <FramePanel>
         <ul className="flex flex-col gap-2 lg:hidden">
@@ -152,8 +198,19 @@ export function FlowList({
   );
 }
 
-/** Published, draft, both, or turned off — the four things a flow can be right now. */
+/** The way into the archive; shown only when something is in it. */
+function ArchiveLink({ count }: { count: number }) {
+  return (
+    <Button render={<Link href="/admin/workflows?arsiv=1" />} variant="ghost">
+      <ArchiveIcon aria-hidden="true" />
+      Arşiv ({count})
+    </Button>
+  );
+}
+
+/** Published, draft, both, turned off or archived — what a flow is right now. */
 function FlowState({ flow }: { flow: FlowSummary }) {
+  if (flow.archivedAt) return <Badge variant="secondary">Arşivde</Badge>;
   if (flow.disabledAt) return <Badge variant="secondary">Kapalı</Badge>;
   if (flow.publishedVersion && flow.draftVersion) {
     return (

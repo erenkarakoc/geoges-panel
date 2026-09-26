@@ -41,15 +41,24 @@ async function load() {
  * SCR-195, the minimal list (TASK-0119, D-283): the flows and the way into the designer.
  * Templates and the "new flows" tab arrive with TASK-0120.
  */
-export default async function WorkflowsPage() {
+export default async function WorkflowsPage({ searchParams }: PageProps<"/admin/workflows">) {
   if (!isModuleEnabled("WFL")) return <FeatureOff />;
 
+  // `?arsiv=1` shows the flows that were archived after they had run (D-293).
+  const archive = (await searchParams).arsiv === "1";
   const loaded = await load();
   if (loaded) {
+    const archived = loaded.flows.filter((flow) => flow.archivedAt);
     return (
       <div className="flex flex-col gap-4">
         <ScreenTabs current="/admin/workflows" label="İş akışları ekranı" tabs={WORKFLOW_TABS} />
-        <FlowList behind={loaded.behind} create={createFlowAction} flows={loaded.flows} />
+        <FlowList
+          archive={archive}
+          archivedCount={archived.length}
+          behind={loaded.behind}
+          create={createFlowAction}
+          flows={archive ? archived : loaded.flows.filter((flow) => !flow.archivedAt)}
+        />
       </div>
     );
   }

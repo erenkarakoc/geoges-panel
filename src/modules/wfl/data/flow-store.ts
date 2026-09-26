@@ -72,6 +72,45 @@ export function disableFlow(identity: DbIdentity, flowId: string, reason: string
   });
 }
 
+/**
+ * Removes a flow (D-293, migration 0067): `deleted` when it never ran, `archived` when it had — its
+ * runs, approvals and tasks are records and stay. Null when there is no such flow in the list.
+ */
+export function removeFlow(identity: DbIdentity, flowId: string, reason: string) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{ said: "deleted" | "archived" | null }>`
+      select wfl.remove_flow(${flowId}::uuid, ${reason}) as said`.execute(db);
+    return rows[0]?.said ?? null;
+  });
+}
+
+/** Brings an archived flow back to the list, still closed. */
+export function restoreFlow(identity: DbIdentity, flowId: string) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{ done: boolean | null }>`
+      select wfl.restore_flow(${flowId}::uuid) as done`.execute(db);
+    return rows[0]?.done === true;
+  });
+}
+
+/** Opens a closed flow again; it starts on its trigger from now on. */
+export function reopenFlow(identity: DbIdentity, flowId: string) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{ done: boolean | null }>`
+      select wfl.reopen_flow(${flowId}::uuid) as done`.execute(db);
+    return rows[0]?.done === true;
+  });
+}
+
+/** Takes a template off the list, or puts it back (D-293). */
+export function setTemplateRemoved(identity: DbIdentity, templateKey: string, removed: boolean) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{ done: boolean | null }>`
+      select wfl.set_template_removed(${templateKey}, ${removed}) as done`.execute(db);
+    return rows[0]?.done === true;
+  });
+}
+
 /** Every version of one flow, newest first; empty for somebody who may not design flows. */
 export function readVersions(identity: DbIdentity, flowKey: string) {
   return runAsUser(identity, async (db) => {
@@ -144,6 +183,8 @@ export type FlowSummary = {
   publishedVersion: number | null;
   publishedAt: Date | null;
   disabledAt: Date | null;
+  /** Taken off the list after it had run (D-293); the list shows these only when asked. */
+  archivedAt: Date | null;
 };
 
 /**
@@ -162,7 +203,8 @@ export function readFlows(identity: DbIdentity) {
       published_version: number | null;
       published_at: Date | null;
       disabled_at: Date | null;
-    }>`select f.key, f.name, f.disabled_at,
+      archived_at: Date | null;
+    }>`select f.key, f.name, f.disabled_at, f.archived_at,
               draft.id as draft_id, draft.version as draft_version,
               live.id as published_id, live.version as published_version,
               live.published_at,
@@ -182,6 +224,7 @@ export function readFlows(identity: DbIdentity) {
       publishedVersion: row.published_version === null ? null : Number(row.published_version),
       publishedAt: row.published_at,
       disabledAt: row.disabled_at,
+      archivedAt: row.archived_at,
     }));
   });
 }
@@ -295,11 +338,15 @@ export function readFlowForDesigner(identity: DbIdentity, flowKey: string) {
       name: string;
       single_instance: boolean;
       source_template_key: string | null;
+      disabled_at: Date | null;
+      archived_at: Date | null;
+      has_run: boolean;
       version_id: string | null;
       version: number | null;
       status: string | null;
       definition: unknown;
     }>`select f.id as flow_id, f.key, f.name, f.single_instance, f.source_template_key,
+              f.disabled_at, f.archived_at, wfl.flow_has_run(f.id) as has_run,
               v.id as version_id, v.version, v.status, v.definition
          from wfl.flow f
          left join lateral (
@@ -317,6 +364,10 @@ export function readFlowForDesigner(identity: DbIdentity, flowKey: string) {
       name: row.name,
       singleInstance: row.single_instance,
       sourceTemplateKey: row.source_template_key,
+      closed: row.disabled_at !== null,
+      archived: row.archived_at !== null,
+      /** Whether removing it deletes it (never ran) or archives it (D-293). */
+      hasRun: row.has_run,
       versionId: row.version_id,
       version: row.version === null ? null : Number(row.version),
       status: row.status,
@@ -333,8 +384,11 @@ export type FlowTemplate = {
   definition: unknown;
 };
 
-/** The templates the panel ships (REQ-WFL-028); readable by whoever may design a flow. */
-export function readTemplates(identity: DbIdentity) {
+/**
+ * The templates the panel ships (REQ-WFL-028); readable by whoever may design a flow. The removed
+ * ones (D-293) only when asked for, for the list they are restored from.
+ */
+export function readTemplates(identity: DbIdentity, removed = false) {
   return runAsUser(identity, async (db) => {
     const { rows } = await sql<{
       key: string;
@@ -343,7 +397,7 @@ export function readTemplates(identity: DbIdentity) {
       version: number;
       definition: unknown;
     }>`select key, name, summary, version, definition from wfl.template
-        where is_active order by name`.execute(db);
+        where is_active and (removed_at is not null) = ${removed} order by name`.execute(db);
     return rows.map((row): FlowTemplate => ({
       definition: row.definition,
       key: row.key,

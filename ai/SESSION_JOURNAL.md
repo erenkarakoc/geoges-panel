@@ -520,3 +520,6 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-26 12:29:30Z · 5c627231 · Edit · `src/modules/wfl/ui/step-questions.tsx`
 - 2026-09-26 12:29:56Z · 5c627231 · Write · `src/modules/wfl/domain/choice-name.test.ts`
 - 2026-09-26 12:30:17Z · 5c627231 · Write · `src/modules/wfl/domain/choice-name.ts`
+- 2026-09-26 12:37:49Z · 5c627231 · Write · `db/migrations/0067_wfl_remove_flows_and_templates.sql`
+- 2026-09-26 12:38:03Z · 5c627231 · Write · `db/migrations/0067_wfl_remove_flows_and_templates.down.sql`
+- 2026-09-26 12:40:14Z · 5c627231 · Write · `src/modules/wfl/data/removal.dbtest.ts`

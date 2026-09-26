@@ -2,7 +2,10 @@ import { LockIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { useTemplateAction } from "@/app/(app)/admin/workflows/templates/actions";
+import {
+  removeTemplateAction,
+  useTemplateAction,
+} from "@/app/(app)/admin/workflows/templates/actions";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -13,7 +16,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { AccessDeniedError, signInIdentity, todayRoute } from "@/modules/iam";
-import { listTemplates } from "@/modules/wfl";
+import { listTemplates, type FlowTemplate } from "@/modules/wfl";
 import { TemplateList, type TemplateCard } from "@/modules/wfl/ui/template-list";
 import { isModuleEnabled } from "@/platform/features/features";
 import { FeatureOff } from "@/platform/ui/feature-off";
@@ -21,22 +24,30 @@ import { ScreenTabs, WORKFLOW_TABS } from "@/platform/ui/nav/screen-tabs";
 
 export const metadata: Metadata = { title: "Akış şablonları" };
 
-/** The templates, or `null` when this person may not design flows (REQ-WFL-019). */
-async function load(): Promise<TemplateCard[] | null> {
+const cardOf = (template: FlowTemplate): TemplateCard => ({
+  key: template.key,
+  name: template.name,
+  summary: template.summary,
+  version: template.version,
+  steps: Array.isArray((template.definition as { steps?: unknown[] })?.steps)
+    ? ((template.definition as { steps: unknown[] }).steps.length ?? 0)
+    : 0,
+});
+
+/**
+ * The templates and the ones the company removed (D-293), or `null` when this person may not
+ * design flows (REQ-WFL-019): the database answers nothing at all to them.
+ */
+async function load(): Promise<{ templates: TemplateCard[]; removed: TemplateCard[] } | null> {
   const signedIn = await signInIdentity();
   if (!signedIn) return null;
   try {
-    const templates = await listTemplates(signedIn.identity);
-    if (templates.length === 0) return null;
-    return templates.map((template) => ({
-      key: template.key,
-      name: template.name,
-      summary: template.summary,
-      version: template.version,
-      steps: Array.isArray((template.definition as { steps?: unknown[] })?.steps)
-        ? ((template.definition as { steps: unknown[] }).steps.length ?? 0)
-        : 0,
-    }));
+    const [templates, removed] = await Promise.all([
+      listTemplates(signedIn.identity),
+      listTemplates(signedIn.identity, true),
+    ]);
+    if (templates.length === 0 && removed.length === 0) return null;
+    return { templates: templates.map(cardOf), removed: removed.map(cardOf) };
   } catch (error) {
     if (error instanceof AccessDeniedError) return null;
     throw error;
@@ -47,9 +58,9 @@ async function load(): Promise<TemplateCard[] | null> {
 export default async function WorkflowTemplatesPage() {
   if (!isModuleEnabled("WFL")) return <FeatureOff />;
 
-  const templates = await load();
+  const loaded = await load();
 
-  if (!templates) {
+  if (!loaded) {
     return (
       <Empty>
         <EmptyHeader>
@@ -77,7 +88,12 @@ export default async function WorkflowTemplatesPage() {
         label="İş akışları ekranı"
         tabs={WORKFLOW_TABS}
       />
-      <TemplateList templates={templates} use={useTemplateAction} />
+      <TemplateList
+        remove={removeTemplateAction}
+        removed={loaded.removed}
+        templates={loaded.templates}
+        use={useTemplateAction}
+      />
     </div>
   );
 }

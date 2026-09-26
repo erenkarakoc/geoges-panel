@@ -29,7 +29,7 @@ import {
 import { graphOf, stepNames, stepTypeLabel, type Outlet } from "@/modules/wfl/domain/graph";
 import { recordEntityOf } from "@/modules/wfl/domain/choice-name";
 import { flowCanvasId } from "@/modules/wfl/ui/flow-canvas-id";
-import { FlowMenu, type FlowMenuActions } from "@/modules/wfl/ui/flow-menu";
+import { FlowMenu, type FlowMenuActions, type FlowMenuState } from "@/modules/wfl/ui/flow-menu";
 import { FlowActions, type DesignerActions, type DryRunState } from "@/modules/wfl/ui/flow-publish";
 import {
   StepQuestions,
@@ -68,6 +68,8 @@ export type DesignerFlow = {
   versionId: string;
   /** Whether this flow is a copy of a template, which is what makes resetting to it possible. */
   fromTemplate?: boolean;
+  /** Closed, archived, ever run: what the header's "…" offers (D-293). */
+  state: FlowMenuState;
 };
 
 type SaveAction = (input: {
@@ -222,7 +224,12 @@ export function FlowDesigner({
             ready={valid}
             versionId={flow.versionId}
           />
-          <FlowMenu actions={menu} flowKey={flow.key} fromTemplate={flow.fromTemplate} />
+          <FlowMenu
+            actions={menu}
+            flowKey={flow.key}
+            fromTemplate={flow.fromTemplate}
+            state={flow.state}
+          />
         </div>
       </header>
 

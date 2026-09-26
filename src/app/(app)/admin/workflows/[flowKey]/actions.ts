@@ -13,6 +13,9 @@ import {
   parseDefinition,
   publishFlow,
   publishSummary,
+  removeFlow,
+  reopenFlow,
+  restoreFlow,
   writeDraft,
 } from "@/modules/wfl";
 
@@ -60,6 +63,11 @@ function refusal(error: unknown): string | null {
   }
   if (hint === "wfl.not_a_draft") return "Yayımlanmış bir sürüm yeniden yayımlanmaz.";
   if (hint === "wfl.no_version") return "Böyle bir akış sürümü yok.";
+  if (hint === "wfl.reason") return "Sebep en az üç harf olmalı.";
+  if (hint === "wfl.flow_in_use") {
+    const user = (error as { detail?: string }).detail;
+    return `Bu akış "${user ?? "başka bir akış"}" içinde alt akış olarak kullanılıyor; önce oradan çıkarın.`;
+  }
   return null;
 }
 
@@ -245,6 +253,59 @@ export async function closeFlowAction(input: {
     if (error instanceof AccessDeniedError) return { closed: false, error: error.message };
     const said = refusal(error);
     if (said) return { closed: false, error: said };
+    throw error;
+  }
+}
+
+/**
+ * Removes the flow (D-293): a flow that never ran is deleted, one that ran is closed and archived
+ * with its history. The answer says which, so the screen can say it back.
+ */
+export async function removeFlowAction(input: {
+  key: string;
+  reason: string;
+}): Promise<{ error: string | null; said: "deleted" | "archived" | null }> {
+  const signedIn = await signInIdentity();
+  if (!signedIn) return { error: "Oturum kapalı.", said: null };
+  if (input.reason.trim().length < 3) return { error: "Sebep en az üç harf olmalı.", said: null };
+  try {
+    const said = await removeFlow(signedIn.identity, input.key, input.reason.trim());
+    revalidatePath("/admin/workflows");
+    return { error: said ? null : "Böyle bir akış yok ya da zaten arşivde.", said };
+  } catch (error) {
+    if (error instanceof AccessDeniedError) return { error: error.message, said: null };
+    const said = refusal(error);
+    if (said) return { error: said, said: null };
+    throw error;
+  }
+}
+
+/** Brings an archived flow back to the list, still closed (D-293). */
+export async function restoreFlowAction(flowKey: string): Promise<{ error: string | null }> {
+  return flowSwitch(flowKey, restoreFlow, "Bu akış arşivde değil.");
+}
+
+/** Opens a closed flow again; it starts on its trigger from now on. */
+export async function reopenFlowAction(flowKey: string): Promise<{ error: string | null }> {
+  return flowSwitch(flowKey, reopenFlow, "Bu akış kapalı değil ya da arşivde.");
+}
+
+async function flowSwitch(
+  flowKey: string,
+  run: (identity: Parameters<typeof restoreFlow>[0], key: string) => Promise<boolean>,
+  notDone: string,
+): Promise<{ error: string | null }> {
+  const signedIn = await signInIdentity();
+  if (!signedIn) return { error: "Oturum kapalı." };
+  try {
+    const done = await run(signedIn.identity, flowKey);
+    revalidatePath(`/admin/workflows/${flowKey}`);
+    revalidatePath("/admin/workflows");
+    return { error: done ? null : notDone };
+  } catch (error) {
+    if (error instanceof AccessDeniedError) return { error: error.message };
+    const said = refusal(error);
+    if (said) return { error: said };
     throw error;
   }
 }

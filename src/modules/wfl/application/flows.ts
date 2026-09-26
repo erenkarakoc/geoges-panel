@@ -10,9 +10,13 @@ import {
   readLastDryRun,
   readPublishSummary,
   readVersions,
+  removeFlow as removeFlowRow,
+  reopenFlow as reopenFlowRow,
   requestDryRun,
   resetToTemplate,
+  restoreFlow as restoreFlowRow,
   saveDraft,
+  setTemplateRemoved,
   startFromTemplate,
   type DbIdentity,
   type FlowSummary,
@@ -125,9 +129,36 @@ export async function closeFlow(
   return disableFlow(identity, flow.flowId, reason);
 }
 
-/** The templates the panel ships, for SCR-195's "Şablonlar" tab. */
-export function listTemplates(identity: DbIdentity) {
-  return readTemplates(identity);
+/**
+ * Removes a flow (D-293): deleted when it never ran, closed and archived when it had. Says which, or
+ * null when there is no such flow to remove.
+ */
+export async function removeFlow(identity: DbIdentity, flowKey: string, reason: string) {
+  const flow = await readFlowForDesigner(identity, flowKey);
+  if (!flow) return null;
+  return removeFlowRow(identity, flow.flowId, reason);
+}
+
+/** Brings an archived flow back to the list, still closed (D-293). */
+export async function restoreFlow(identity: DbIdentity, flowKey: string) {
+  const flow = await readFlowForDesigner(identity, flowKey);
+  return flow ? restoreFlowRow(identity, flow.flowId) : false;
+}
+
+/** Opens a closed flow again; it starts on its trigger from now on. */
+export async function reopenFlow(identity: DbIdentity, flowKey: string) {
+  const flow = await readFlowForDesigner(identity, flowKey);
+  return flow ? reopenFlowRow(identity, flow.flowId) : false;
+}
+
+/** The templates the panel ships, for SCR-195's "Şablonlar" tab; the removed ones when asked. */
+export function listTemplates(identity: DbIdentity, removed = false) {
+  return readTemplates(identity, removed);
+}
+
+/** Takes a template off the list for good, or brings it back (D-293). */
+export function removeTemplate(identity: DbIdentity, templateKey: string, removed = true) {
+  return setTemplateRemoved(identity, templateKey, removed);
 }
 
 /**
