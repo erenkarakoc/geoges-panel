@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { optionalProvince } from "@/platform/geo/provinces";
+
 /**
  * The firm card (TASK-0122, REQ-CRM-004, D-027): one record per real firm, with roles.
  *
@@ -116,7 +118,7 @@ export const partyInput = z.object({
     .array(z.enum(PARTY_ROLES))
     .min(1, "Firmanın en az bir rolü seçilmeli.")
     .transform((roles) => PARTY_ROLES.filter((role) => roles.includes(role))),
-  city: optionalText(60, "İl"),
+  city: optionalProvince,
   address: optionalText(400, "Adres"),
   phone: optionalText(40, "Telefon"),
   email,

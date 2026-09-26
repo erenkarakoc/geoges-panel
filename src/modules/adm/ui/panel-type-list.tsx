@@ -4,6 +4,14 @@ import { MoreHorizontalIcon, PlusIcon, RulerIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
+import {
+  Autocomplete,
+  AutocompleteEmpty,
+  AutocompleteInput,
+  AutocompleteItem,
+  AutocompleteList,
+  AutocompletePopup,
+} from "@/components/ui/autocomplete";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -92,6 +100,10 @@ export function PanelTypeList({
     widthM: "",
   });
   const [newName, setNewName] = useState("");
+  // Series already in use, offered so one series is not typed three ways.
+  const seriesNames = [
+    ...new Set(panels.map((panel) => panel.series).filter((series): series is string => !!series)),
+  ].sort((a, b) => a.localeCompare(b, "tr"));
 
   useActionToast(result ?? {}, result?.error ? { type: "error", title: result.error } : null);
 
@@ -292,12 +304,28 @@ export function PanelTypeList({
             </Field>
             <Field>
               <FieldLabel htmlFor="panel-series">Seri (isteğe bağlı)</FieldLabel>
-              <Input
-                id="panel-series"
-                onChange={(event) => setForm({ ...form, series: event.currentTarget.value })}
-                placeholder="Standart"
+              <Autocomplete
+                items={seriesNames}
+                onValueChange={(series: string) => setForm({ ...form, series })}
                 value={form.series}
-              />
+              >
+                <AutocompleteInput id="panel-series" placeholder="Standart" />
+                {seriesNames.length > 0 ? (
+                  <AutocompletePopup>
+                    <AutocompleteEmpty>Yeni seri olarak eklenir.</AutocompleteEmpty>
+                    <AutocompleteList>
+                      {(item: string) => (
+                        <AutocompleteItem key={item} value={item}>
+                          {item}
+                        </AutocompleteItem>
+                      )}
+                    </AutocompleteList>
+                  </AutocompletePopup>
+                ) : null}
+              </Autocomplete>
+              <FieldDescription>
+                Var olan bir seriyi seçin; yeni bir seri adı da yazılabilir.
+              </FieldDescription>
             </Field>
             <Field>
               <FieldLabel htmlFor="panel-step">Kademe</FieldLabel>

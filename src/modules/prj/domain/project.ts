@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { optionalProvince } from "@/platform/geo/provinces";
+
 /**
  * The project card (TASK-0123 step 1, REQ-PRJ-002, REQ-PRJ-003, REQ-PRJ-010, D-292).
  *
@@ -87,7 +89,7 @@ export const projectInput = z
       .max(200, "Proje adı en çok 200 karakter olabilir."),
     clientPartyId: optionalId,
     authority: optionalText(200, "Kurum / idare"),
-    city: optionalText(60, "İl"),
+    city: optionalProvince,
     location: optionalText(300, "Lokasyon"),
     contractNo: optionalText(80, "Sözleşme numarası"),
     contractSignedOn: optionalDate("Sözleşme tarihi"),

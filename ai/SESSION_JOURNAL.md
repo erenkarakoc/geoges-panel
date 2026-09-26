@@ -526,3 +526,5 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-26 12:49:42Z · 5c627231 · Write · `src/modules/wfl/domain/condition-value.ts`
 - 2026-09-26 12:50:24Z · 5c627231 · Write · `src/records/condition-values.ts`
 - 2026-09-26 12:51:23Z · 5c627231 · Edit · `src/modules/wfl/ui/step-questions.tsx`
+- 2026-09-26 13:00:38Z · c726963b · Write · `src/platform/geo/provinces.ts`
+- 2026-09-26 13:01:14Z · c726963b · Write · `src/platform/ui/form/province-field.tsx`

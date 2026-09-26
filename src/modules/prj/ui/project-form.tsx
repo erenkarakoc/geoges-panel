@@ -5,6 +5,7 @@ import { Fieldset, FieldsetLegend } from "@/components/ui/fieldset";
 import { Input } from "@/components/ui/input";
 import { CURRENCIES } from "@/modules/prj/domain/project";
 import { ChoiceField, NONE, type Choice } from "@/platform/ui/form/choice-field";
+import { ProvinceField } from "@/platform/ui/form/province-field";
 
 /**
  * The project card's fields (TASK-0123 step 1, REQ-PRJ-002, REQ-PRJ-010), shared by "new project"
@@ -97,7 +98,7 @@ export function ProjectForm({
         value={value.clientPartyId}
       />
       {text("authority", "Kurum / idare", { placeholder: "Karayolları 5. Bölge" })}
-      {text("city", "İl")}
+      <ProvinceField id={field("city")} onChange={(city) => set({ city })} value={value.city} />
       {text("location", "Lokasyon", { placeholder: "Km 12+300 – 12+850" })}
       <ChoiceField
         items={[{ label: "Seçilmedi", value: NONE }, ...people]}

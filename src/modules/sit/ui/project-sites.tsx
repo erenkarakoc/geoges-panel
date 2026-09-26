@@ -32,6 +32,7 @@ import { Menu, MenuItem, MenuPopup, MenuTrigger } from "@/components/ui/menu";
 import { WORK_MODEL_LABELS, WORK_MODELS, type WorkModel } from "@/modules/sit/domain/site";
 import { ChoiceField, NONE, type Choice } from "@/platform/ui/form/choice-field";
 import { useActionToast } from "@/platform/ui/feedback/use-action-toast";
+import { ProvinceField } from "@/platform/ui/form/province-field";
 
 /**
  * A project's sites, on the project card (TASK-0123 step 1, REQ-PRJ-001, D-138). A site is opened
@@ -293,14 +294,7 @@ export function ProjectSites({
               onChange={(picked) => set({ entryOwnerUserId: picked })}
               value={form.entryOwnerUserId}
             />
-            <Field>
-              <FieldLabel htmlFor="site-city">İl</FieldLabel>
-              <Input
-                id="site-city"
-                onChange={(event) => set({ city: event.currentTarget.value })}
-                value={form.city}
-              />
-            </Field>
+            <ProvinceField id="site-city" onChange={(city) => set({ city })} value={form.city} />
             <div className="grid grid-cols-2 gap-4">
               <Field>
                 <FieldLabel htmlFor="site-latitude">Enlem</FieldLabel>

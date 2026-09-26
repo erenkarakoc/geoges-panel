@@ -4,7 +4,15 @@ Last updated: 2026-09-26
 
 CURRENT PHASE: PHASE 09 — Slice 1: Projects, Sites, Daily Site Log (TASK-0123 step 3 next); Phases 07 and 08 built, owner walks owed
 
-## Latest continuation — TASK-0122 finished on this side; TASK-0123's plan is next (2026-09-26)
+## Latest continuation — the designer speaks Turkish, removal, known answers are chosen (2026-09-26)
+
+- Pushed earlier this day: audit log names for every event and record type with a check that fails on a new unnamed one (`31a8549`); the designer never shows a code (`5813446`); removing a flow or a template (`2171651`, D-293, migration 0067, 7/7 database tests, tried in the browser); condition values by field kind, clock day and time pickers, and each step keeping its own text boxes (`33407b4`).
+- This commit: the province is one of the 81 on the firm, project and site forms (`src/platform/geo/provinces.ts`, `src/platform/ui/form/province-field.tsx`; the three domain schemas refuse other text); the panel type's series offers the series in use and still takes a new name. Recorded as D-294.
+- **Not seen in the browser:** the step panel fix, the new condition value fields, the province and series fields. The browser pane was signed out and the password is the owner's to type.
+- **Left over from the browser scan before the step panel fix:** the "Maliyet geri beslemesi" (`cost-feedback`) flow got an unintended draft (version 2) whose "Bitiş" step is renamed "Tamamlama aşaması mı?". The live version is untouched. Deleting the draft was not permitted in that session; the owner either fixes the name in the designer or allows the draft to be deleted. The "Stok sayımı onayı" draft is from an earlier session and was left alone.
+- Next: the browser pass above once the owner signs in; then TASK-0123 step 3 (daily targets).
+
+## Earlier continuation — TASK-0122 finished on this side; TASK-0123's plan is next (2026-09-26)
 
 - The owner's findings on the firm card are fixed and pushed: phone targets (`81e0363`, `b97dabf`), the tab strip's needless vertical scrollbar (`792f7a0`) with an ESLint rule against the pattern (`ffde763`), and the search icon spacing.
 - **The dev server would not start** once firms registered with search: worker names under `core` were refused by `validateRegistry` and by `ck_event_subscription__subscriber` / `ck_outbox_delivery__subscriber`. Fixed in `b2a7cdc` (migration 0063; its down refuses while `core.` rows exist, on purpose). `src/jobs/registry.test.ts` now validates the real registry. After the subscription existed, `npm run search:rebuild` indexed the sample firms; the palette finds them.

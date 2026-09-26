@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { optionalProvince } from "@/platform/geo/provinces";
+
 /**
  * The site card (TASK-0123 step 1, REQ-SIT-001, D-138, D-292 rule 3). A site belongs to one
  * project and never moves; the database refuses the move, this only checks what is typed.
@@ -48,12 +50,7 @@ export const siteInput = z
     subcontractorPartyId: optionalId,
     coordinatorUserId: optionalId,
     entryOwnerUserId: optionalId,
-    city: z
-      .string()
-      .trim()
-      .max(60, "İl en çok 60 karakter olabilir.")
-      .transform((value) => value || null)
-      .nullish(),
+    city: optionalProvince,
     latitude: coordinate(-90, 90, "Enlem"),
     longitude: coordinate(-180, 180, "Boylam"),
   })

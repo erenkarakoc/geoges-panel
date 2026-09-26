@@ -14,6 +14,7 @@ import {
   taxNoWarning,
   type PartyRole,
 } from "@/modules/crm/domain/party";
+import { ProvinceField } from "@/platform/ui/form/province-field";
 
 /**
  * The firm card's fields (TASK-0122), shared by "new firm" and "edit card". Only the name and one
@@ -113,14 +114,7 @@ export function PartyForm({
           value={value.taxOffice}
         />
       </Field>
-      <Field>
-        <FieldLabel htmlFor={field("city")}>İl</FieldLabel>
-        <Input
-          id={field("city")}
-          onChange={(event) => set({ city: event.currentTarget.value })}
-          value={value.city}
-        />
-      </Field>
+      <ProvinceField id={field("city")} onChange={(city) => set({ city })} value={value.city} />
       <Field>
         <FieldLabel htmlFor={field("phone")}>Telefon</FieldLabel>
         <Input
