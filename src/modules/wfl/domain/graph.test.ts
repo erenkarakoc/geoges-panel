@@ -27,6 +27,17 @@ const definition = parseDefinition({
 });
 
 describe("a definition drawn as boxes and arrows (SCR-196)", () => {
+  it("tells a way back from a way on, and gives each exit its own place", () => {
+    const { edges } = graphOf(definition);
+    const of = (from: string, outlet: string) =>
+      edges.find((edge) => edge.from === from && edge.outlet === outlet);
+    // "geri" goes back up to the condition: drawn round the side, not through the boxes.
+    expect(of("s2", "return")).toMatchObject({ back: true, exit: 0, exits: 1 });
+    expect(of("s2", "approve")).toMatchObject({ back: false, exit: 0, exits: 2 });
+    expect(of("s2", "reject")).toMatchObject({ back: false, exit: 1, exits: 2 });
+    expect(of("s1", "whenTrue")?.back).toBe(false);
+  });
+
   it("places every step and names each path", () => {
     const { nodes, edges } = graphOf(definition);
     expect(nodes.map((node) => node.id).sort()).toEqual(["s1", "s2", "s3", "s4"]);

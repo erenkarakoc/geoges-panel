@@ -19,13 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { complaintsOf } from "@/modules/wfl/domain/complaints";
 import { definitionSchema, STEP_TYPES, type StepType } from "@/modules/wfl/domain/definition";
-import {
-  asEditable,
-  insertAfter,
-  removeStep,
-  withStep,
-  type Draft,
-} from "@/modules/wfl/domain/edit";
+import { asEditable, insertOn, removeStep, withStep, type Draft } from "@/modules/wfl/domain/edit";
 import { graphOf, stepNames, stepTypeLabel, type Outlet } from "@/modules/wfl/domain/graph";
 import { recordEntityOf } from "@/modules/wfl/domain/choice-name";
 import { flowCanvasId } from "@/modules/wfl/ui/flow-canvas-id";
@@ -57,6 +51,13 @@ const FlowCanvas = dynamic(
     ssr: false,
   },
 );
+
+const START_TEXTS: Record<string, string> = {
+  clock: "Saatle",
+  event: "Bir şey olduğunda",
+  manual: "Elle başlatıldığında",
+  threshold: "Bir değer eşiği aştığında",
+};
 
 export type DesignerFlow = {
   key: string;
@@ -100,7 +101,7 @@ export function FlowDesigner({
   );
   const [selected, setSelected] = useState<string | null>(null);
   /** Where a new step would go, while the palette is open. */
-  const [adding, setAdding] = useState<{ from: string; outlet: Outlet } | null>(null);
+  const [adding, setAdding] = useState<{ from: string; outlet: Outlet }[] | null>(null);
   const [saving, startSaving] = useTransition();
   /** Edits the database has not been told about yet; neither a dry run nor a publish is about them. */
   const [dirty, setDirty] = useState(false);
@@ -167,9 +168,18 @@ export function FlowDesigner({
     document.getElementById(flowCanvasId)?.focus();
   }, []);
 
+  // The start box above the first step says what starts the flow, in the words the panel uses.
+  const trigger = (draft.trigger ?? {}) as { type?: unknown; event?: unknown };
+  const startText =
+    trigger.type === "event" && typeof trigger.event === "string"
+      ? (vocabulary.events.find((one) => one.code === trigger.event)?.name ??
+        vocabulary.written[trigger.event] ??
+        "Bir şey olduğunda")
+      : (START_TEXTS[String(trigger.type ?? "manual")] ?? "Elle başlatıldığında");
+
   const addStep = (type: StepType) => {
     if (!adding) return;
-    const { draft: next, id } = insertAfter(draft, adding.from, adding.outlet, type);
+    const { draft: next, id } = insertOn(draft, adding, type);
     setAdding(null);
     setSelected(id);
     persist(next);
@@ -209,7 +219,7 @@ export function FlowDesigner({
             Sürüm {flow.version} · {flow.status === "published" ? "yayında" : "taslak"}
           </span>
         </div>
-        <div className="ms-auto flex items-center gap-2">
+        <div className="ms-auto flex flex-wrap items-center gap-2">
           <SaveState saving={saving} savedAt={state.savedAt} />
           {valid ? null : (
             <Badge variant="warning">
@@ -248,7 +258,9 @@ export function FlowDesigner({
           edges={graph.edges}
           miniMap={!phone}
           nodes={graph.nodes}
-          onInsert={(from, outlet) => setAdding({ from, outlet })}
+          onInsert={setAdding}
+          start={typeof draft.start === "string" ? draft.start : null}
+          startText={startText}
           onOpen={() => panel.current?.focus()}
           onSelect={setSelected}
           problems={problems.steps}
@@ -297,7 +309,9 @@ export function FlowDesigner({
           <DialogHeader>
             <DialogTitle>Yeni adım</DialogTitle>
             <DialogDescription>
-              Bu okun üstüne eklenecek adımı seçin; ok, yeni adımdan sonra kaldığı yere devam eder.
+              {adding && adding.length > 1
+                ? "Yeni adım, bu adıma gelen bütün yolların üstüne girer; akış yeni adımdan sonra kaldığı yere devam eder."
+                : "Bu okun üstüne eklenecek adımı seçin; ok, yeni adımdan sonra kaldığı yere devam eder."}
             </DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-2 p-4 pt-0 sm:grid-cols-3">

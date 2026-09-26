@@ -112,11 +112,26 @@ export function insertAfter(
   outlet: Outlet,
   type: StepType,
 ): { draft: Draft; id: string } {
-  const source = draft.steps.find((step) => step.id === from);
-  if (!source) return { draft, id: "" };
+  return insertOn(draft, [{ from, outlet }], type);
+}
+
+/**
+ * A new step on several arrows that meet at one box: the "+" drawn once above a box that more
+ * than one path reaches. Every one of those arrows now leads to the new step, and the new step
+ * leads on to the box — "add a step before this one", whichever way the flow arrived.
+ */
+export function insertOn(
+  draft: Draft,
+  arrows: readonly { from: string; outlet: Outlet }[],
+  type: StepType,
+): { draft: Draft; id: string } {
+  const sources = arrows
+    .map((arrow) => ({ ...arrow, step: draft.steps.find((step) => step.id === arrow.from) }))
+    .filter((arrow): arrow is typeof arrow & { step: DraftStep } => Boolean(arrow.step));
+  if (sources.length === 0) return { draft, id: "" };
 
   const id = freeStepId(draft, type);
-  const target = outletTarget(source, outlet);
+  const target = outletTarget(sources[0].step, sources[0].outlet);
   const added = blankStep(type, id);
   // A join or an end has nowhere to send the flow on to; everything else carries the old target.
   if (target && type !== "end") added.next = target;
@@ -125,7 +140,11 @@ export function insertAfter(
     draft: {
       ...draft,
       steps: [
-        ...draft.steps.map((step) => (step.id === from ? withOutlet(step, outlet, id) : step)),
+        ...draft.steps.map((step) =>
+          sources
+            .filter((arrow) => arrow.from === step.id)
+            .reduce((changed, arrow) => withOutlet(changed, arrow.outlet, id), step),
+        ),
         added,
       ],
     },

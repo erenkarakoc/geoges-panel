@@ -6,6 +6,7 @@ import {
   blankStep,
   freeStepId,
   insertAfter,
+  insertOn,
   removeStep,
   withStep,
   type Draft,
@@ -55,6 +56,23 @@ describe("editing a draft definition (SCR-196)", () => {
     const approval = next.steps.find((step) => step.id === "approval_1");
     expect(approval?.outcomes).toEqual({ approve: "end_1", reject: id });
     expect(next.steps.find((step) => step.id === id)?.next).toBe("end_1");
+  });
+
+  it("puts one step before a box several paths reach, on every one of those paths", () => {
+    const { draft: next, id } = insertOn(
+      draft(),
+      [
+        { from: "approval_1", outlet: "approve" },
+        { from: "approval_1", outlet: "reject" },
+      ],
+      "notify",
+    );
+    expect(next.steps.find((step) => step.id === "approval_1")?.outcomes).toEqual({
+      approve: id,
+      reject: id,
+    });
+    expect(next.steps.find((step) => step.id === id)?.next).toBe("end_1");
+    expect(next.steps).toHaveLength(4);
   });
 
   it("appends to a flow that is still only a start", () => {

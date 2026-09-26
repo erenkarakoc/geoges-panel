@@ -51,6 +51,14 @@ export type FlowEdge = {
   /** What this path means: the answer, the branch, or nothing in particular. */
   label?: string;
   outlet: Outlet;
+  /**
+   * An arrow back to a step at or above its source (a "geri", a loop to fix and try again). Drawn
+   * dashed, round the side of the boxes, so it never crosses the forward path.
+   */
+  back: boolean;
+  /** Which of the source's forward (or back) exits this is, and how many there are. */
+  exit: number;
+  exits: number;
 };
 
 /** Where each step sends the flow, what to call each path, and which field it left through. */
@@ -152,6 +160,9 @@ export function graphOf(definition: DrawableDefinition): { nodes: FlowNode[]; ed
         to: path.to,
         label: path.label,
         outlet: path.outlet,
+        back: false,
+        exit: 0,
+        exits: 1,
       });
     }
   };
@@ -183,7 +194,22 @@ export function graphOf(definition: DrawableDefinition): { nodes: FlowNode[]; ed
 
   // An arrow to a step that is not there would draw into nothing; the schema refuses such a
   // definition, and a draft on its way to being one is simply drawn without that arrow.
-  return { nodes, edges: edges.filter((edge) => placed.has(edge.to)) };
+  const drawn = edges.filter((edge) => placed.has(edge.to));
+  for (const edge of drawn) {
+    edge.back = placed.get(edge.to)!.row <= placed.get(edge.from)!.row;
+  }
+  // Each exit of a box gets its own place on the box's edge, so the names of two paths leaving
+  // the same box never sit on top of each other.
+  for (const node of nodes) {
+    for (const back of [false, true]) {
+      const out = drawn.filter((edge) => edge.from === node.id && edge.back === back);
+      out.forEach((edge, index) => {
+        edge.exit = index;
+        edge.exits = out.length;
+      });
+    }
+  }
+  return { nodes, edges: drawn };
 }
 
 /**
