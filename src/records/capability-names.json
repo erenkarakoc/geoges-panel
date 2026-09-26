@@ -9,7 +9,8 @@
     "module": "INT",
     "kind": "condition",
     "code": "acceleration_scenario.net_effect",
-    "name": "Senaryonun net kâr etkisi"
+    "name": "Senaryonun net kâr etkisi",
+    "type": "tutar"
   },
   {
     "module": "WFL",
@@ -21,13 +22,15 @@
     "module": "WFL",
     "kind": "condition",
     "code": "approval.decision",
-    "name": "Onay kararı"
+    "name": "Onay kararı",
+    "type": "seçim: onayla / reddet / geri gönder"
   },
   {
     "module": "WFL",
     "kind": "condition",
     "code": "approval.waiting_hours",
-    "name": "Onayın beklediği süre"
+    "name": "Onayın beklediği süre",
+    "type": "sayı (saat)"
   },
   {
     "module": "EQP",
@@ -45,19 +48,22 @@
     "module": "EQP",
     "kind": "condition",
     "code": "asset.category",
-    "name": "Varlık kategorisi"
+    "name": "Varlık kategorisi",
+    "type": "seçim"
   },
   {
     "module": "EQP",
     "kind": "condition",
     "code": "asset.days_to_inspection",
-    "name": "Kontrole kalan gün"
+    "name": "Kontrole kalan gün",
+    "type": "sayı"
   },
   {
     "module": "EQP",
     "kind": "condition",
     "code": "asset.idle_days",
-    "name": "Atıl gün sayısı"
+    "name": "Atıl gün sayısı",
+    "type": "sayı"
   },
   {
     "module": "EQP",
@@ -81,7 +87,8 @@
     "module": "EQP",
     "kind": "condition",
     "code": "asset.remaining_value",
-    "name": "Kalan değer"
+    "name": "Kalan değer",
+    "type": "tutar"
   },
   {
     "module": "EQP",
@@ -99,7 +106,8 @@
     "module": "RPT",
     "kind": "condition",
     "code": "attention_item.open_days",
-    "name": "Uyarının açık kaldığı gün"
+    "name": "Uyarının açık kaldığı gün",
+    "type": "sayı"
   },
   {
     "module": "RPT",
@@ -117,13 +125,15 @@
     "module": "RPT",
     "kind": "condition",
     "code": "attention_item.type",
-    "name": "Uyarı türü"
+    "name": "Uyarı türü",
+    "type": "seçim (REQ-RPT-007 listesi)"
   },
   {
     "module": "PRF",
     "kind": "condition",
     "code": "bonus.amount",
-    "name": "Prim tutarı"
+    "name": "Prim tutarı",
+    "type": "tutar"
   },
   {
     "module": "PRF",
@@ -147,7 +157,8 @@
     "module": "STR",
     "kind": "condition",
     "code": "budget_variance.percent",
-    "name": "Bütçe sapma yüzdesi"
+    "name": "Bütçe sapma yüzdesi",
+    "type": "sayı (%)"
   },
   {
     "module": "STR",
@@ -159,7 +170,8 @@
     "module": "FIN",
     "kind": "condition",
     "code": "cash_projection.lowest_cumulative",
-    "name": "Projeksiyondaki en düşük kümülatif nakit"
+    "name": "Projeksiyondaki en düşük kümülatif nakit",
+    "type": "tutar"
   },
   {
     "module": "FIN",
@@ -177,7 +189,8 @@
     "module": "ADM",
     "kind": "condition",
     "code": "catalog_item.list",
-    "name": "Kalemin ait olduğu liste"
+    "name": "Kalemin ait olduğu liste",
+    "type": "seçim"
   },
   {
     "module": "ADM",
@@ -195,7 +208,8 @@
     "module": "FIN",
     "kind": "condition",
     "code": "client_progress_payment.carried_over_months",
-    "name": "Devreden miktarın bekleme ayı"
+    "name": "Devreden miktarın bekleme ayı",
+    "type": "sayı"
   },
   {
     "module": "FIN",
@@ -213,7 +227,8 @@
     "module": "FIN",
     "kind": "condition",
     "code": "client_progress_payment.days_outstanding",
-    "name": "Tahsil edilmeyen gün"
+    "name": "Tahsil edilmeyen gün",
+    "type": "sayı"
   },
   {
     "module": "FIN",
@@ -225,7 +240,8 @@
     "module": "FIN",
     "kind": "condition",
     "code": "client_progress_payment.net_amount",
-    "name": "Hakediş net tutarı"
+    "name": "Hakediş net tutarı",
+    "type": "tutar"
   },
   {
     "module": "FIN",
@@ -249,13 +265,15 @@
     "module": "CRM",
     "kind": "condition",
     "code": "client_scorecard.average_payment_days",
-    "name": "Ortalama ödeme günü"
+    "name": "Ortalama ödeme günü",
+    "type": "sayı"
   },
   {
     "module": "SIT",
     "kind": "condition",
     "code": "client_wait.hours",
-    "name": "İşveren bekleme süresi"
+    "name": "İşveren bekleme süresi",
+    "type": "sayı (saat)"
   },
   {
     "module": "SIT",
@@ -273,7 +291,8 @@
     "module": "STR",
     "kind": "condition",
     "code": "company_health.status",
-    "name": "Başlık rengi"
+    "name": "Başlık rengi",
+    "type": "seçim"
   },
   {
     "module": "STR",
@@ -291,7 +310,8 @@
     "module": "CMP",
     "kind": "condition",
     "code": "contract.type",
-    "name": "Sözleşme türü"
+    "name": "Sözleşme türü",
+    "type": "seçim"
   },
   {
     "module": "QTE",
@@ -315,7 +335,8 @@
     "module": "EQP",
     "kind": "condition",
     "code": "crane_daily_log.fuel_per_hour",
-    "name": "Saat başı yakıt"
+    "name": "Saat başı yakıt",
+    "type": "sayı"
   },
   {
     "module": "HR",
@@ -333,13 +354,15 @@
     "module": "SIT",
     "kind": "condition",
     "code": "daily_site_log.cast_count",
-    "name": "Günün döküm adedi"
+    "name": "Günün döküm adedi",
+    "type": "sayı"
   },
   {
     "module": "SIT",
     "kind": "condition",
     "code": "daily_site_log.consumption_deviation_percent",
-    "name": "Sarf önerisinden sapma"
+    "name": "Sarf önerisinden sapma",
+    "type": "sayı (%)"
   },
   {
     "module": "SIT",
@@ -351,13 +374,15 @@
     "module": "SIT",
     "kind": "condition",
     "code": "daily_site_log.damaged_unit_count",
-    "name": "Günün zayi adedi"
+    "name": "Günün zayi adedi",
+    "type": "sayı"
   },
   {
     "module": "SIT",
     "kind": "condition",
     "code": "daily_site_log.date",
-    "name": "Tarih"
+    "name": "Tarih",
+    "type": "tarih"
   },
   {
     "module": "SIT",
@@ -369,13 +394,15 @@
     "module": "SIT",
     "kind": "condition",
     "code": "daily_site_log.expense_total",
-    "name": "Günün saha harcaması"
+    "name": "Günün saha harcaması",
+    "type": "tutar"
   },
   {
     "module": "SIT",
     "kind": "condition",
     "code": "daily_site_log.is_late_entry",
-    "name": "Geç girildi mi"
+    "name": "Geç girildi mi",
+    "type": "evet/hayır"
   },
   {
     "module": "SIT",
@@ -393,7 +420,8 @@
     "module": "SIT",
     "kind": "condition",
     "code": "daily_site_log.site",
-    "name": "Şantiye"
+    "name": "Şantiye",
+    "type": "şantiye"
   },
   {
     "module": "SIT",
@@ -423,7 +451,8 @@
     "module": "CMP",
     "kind": "condition",
     "code": "delay_penalty.risk_amount",
-    "name": "Ceza riski tutarı"
+    "name": "Ceza riski tutarı",
+    "type": "tutar"
   },
   {
     "module": "CMP",
@@ -435,7 +464,8 @@
     "module": "CMP",
     "kind": "condition",
     "code": "document.days_to_expiry",
-    "name": "Belgenin bitmesine kalan gün"
+    "name": "Belgenin bitmesine kalan gün",
+    "type": "sayı"
   },
   {
     "module": "CMP",
@@ -447,7 +477,8 @@
     "module": "DOC",
     "kind": "condition",
     "code": "document.type",
-    "name": "Belge türü"
+    "name": "Belge türü",
+    "type": "seçim"
   },
   {
     "module": "DOC",
@@ -465,7 +496,8 @@
     "module": "HR",
     "kind": "condition",
     "code": "employee.days_to_document_expiry",
-    "name": "Belgenin bitmesine kalan gün"
+    "name": "Belgenin bitmesine kalan gün",
+    "type": "sayı"
   },
   {
     "module": "HR",
@@ -489,7 +521,8 @@
     "module": "HR",
     "kind": "condition",
     "code": "employee.unit",
-    "name": "Personelin birimi"
+    "name": "Personelin birimi",
+    "type": "seçim"
   },
   {
     "module": "ADM",
@@ -525,13 +558,15 @@
     "module": "FAC",
     "kind": "condition",
     "code": "factory_daily_log.is_late_entry",
-    "name": "Geç girildi mi"
+    "name": "Geç girildi mi",
+    "type": "evet/hayır"
   },
   {
     "module": "FAC",
     "kind": "condition",
     "code": "factory_daily_log.process_loss_percent",
-    "name": "Günün fire oranı"
+    "name": "Günün fire oranı",
+    "type": "sayı (%)"
   },
   {
     "module": "FAC",
@@ -555,7 +590,8 @@
     "module": "FAC",
     "kind": "condition",
     "code": "factory_unit_cost.strip_per_metre",
-    "name": "İşlenmiş şerit metre maliyeti"
+    "name": "İşlenmiş şerit metre maliyeti",
+    "type": "tutar"
   },
   {
     "module": "CMP",
@@ -585,7 +621,8 @@
     "module": "CRM",
     "kind": "condition",
     "code": "lead.source",
-    "name": "Talep kaynağı"
+    "name": "Talep kaynağı",
+    "type": "seçim"
   },
   {
     "module": "CRM",
@@ -603,7 +640,8 @@
     "module": "CRM",
     "kind": "condition",
     "code": "lead.waiting_hours",
-    "name": "Cevapsız bekleme süresi"
+    "name": "Cevapsız bekleme süresi",
+    "type": "sayı (saat)"
   },
   {
     "module": "CRM",
@@ -621,7 +659,8 @@
     "module": "HR",
     "kind": "condition",
     "code": "leave_request.days",
-    "name": "İzin gün sayısı"
+    "name": "İzin gün sayısı",
+    "type": "sayı"
   },
   {
     "module": "HR",
@@ -633,7 +672,8 @@
     "module": "HR",
     "kind": "condition",
     "code": "leave_request.type",
-    "name": "İzin türü"
+    "name": "İzin türü",
+    "type": "seçim"
   },
   {
     "module": "WFL",
@@ -675,7 +715,8 @@
     "module": "MTG",
     "kind": "condition",
     "code": "meeting_decision.days_overdue",
-    "name": "Karar gecikme günü"
+    "name": "Karar gecikme günü",
+    "type": "sayı"
   },
   {
     "module": "MTG",
@@ -705,13 +746,15 @@
     "module": "QHS",
     "kind": "condition",
     "code": "nonconformity.impact_level",
-    "name": "Etki seviyesi"
+    "name": "Etki seviyesi",
+    "type": "seçim"
   },
   {
     "module": "QHS",
     "kind": "condition",
     "code": "nonconformity.is_repeat",
-    "name": "Tekrar eden mi"
+    "name": "Tekrar eden mi",
+    "type": "evet/hayır"
   },
   {
     "module": "QHS",
@@ -759,7 +802,8 @@
     "module": "CMP",
     "kind": "condition",
     "code": "obligation.days_to_due",
-    "name": "Son tarihe kalan gün"
+    "name": "Son tarihe kalan gün",
+    "type": "sayı"
   },
   {
     "module": "CMP",
@@ -777,7 +821,8 @@
     "module": "CMP",
     "kind": "condition",
     "code": "obligation.responsible_party",
-    "name": "Sorumlu taraf"
+    "name": "Sorumlu taraf",
+    "type": "seçim"
   },
   {
     "module": "HR",
@@ -807,13 +852,15 @@
     "module": "QHS",
     "kind": "condition",
     "code": "ohs_incident.severity",
-    "name": "Ciddiyet"
+    "name": "Ciddiyet",
+    "type": "seçim"
   },
   {
     "module": "QHS",
     "kind": "condition",
     "code": "ohs_incident.type",
-    "name": "Olay türü"
+    "name": "Olay türü",
+    "type": "seçim"
   },
   {
     "module": "SIT",
@@ -831,7 +878,8 @@
     "module": "FIN",
     "kind": "condition",
     "code": "party_account.balance_try",
-    "name": "Cari bakiye (TL karşılığı)"
+    "name": "Cari bakiye (TL karşılığı)",
+    "type": "tutar"
   },
   {
     "module": "CRM",
@@ -849,7 +897,8 @@
     "module": "FIN",
     "kind": "condition",
     "code": "payment.amount",
-    "name": "Ödeme tutarı"
+    "name": "Ödeme tutarı",
+    "type": "tutar"
   },
   {
     "module": "FIN",
@@ -897,7 +946,8 @@
     "module": "PRF",
     "kind": "condition",
     "code": "performance_score.band",
-    "name": "Puan bandı"
+    "name": "Puan bandı",
+    "type": "seçim"
   },
   {
     "module": "PRF",
@@ -921,7 +971,8 @@
     "module": "PRF",
     "kind": "condition",
     "code": "performance_score.value",
-    "name": "Ayın puanı"
+    "name": "Ayın puanı",
+    "type": "sayı (0–100)"
   },
   {
     "module": "FIN",
@@ -933,7 +984,8 @@
     "module": "FIN",
     "kind": "condition",
     "code": "period_close.days_open",
-    "name": "Kapanmamış dönemin gün sayısı"
+    "name": "Kapanmamış dönemin gün sayısı",
+    "type": "sayı"
   },
   {
     "module": "FIN",
@@ -975,7 +1027,8 @@
     "module": "PRJ",
     "kind": "condition",
     "code": "project.contract_value",
-    "name": "Sözleşme bedeli"
+    "name": "Sözleşme bedeli",
+    "type": "tutar"
   },
   {
     "module": "PRJ",
@@ -987,19 +1040,22 @@
     "module": "PRJ",
     "kind": "condition",
     "code": "project.days_to_contract_end",
-    "name": "Sözleşme bitişine kalan gün"
+    "name": "Sözleşme bitişine kalan gün",
+    "type": "sayı"
   },
   {
     "module": "PRJ",
     "kind": "condition",
     "code": "project.progress_percent",
-    "name": "Proje ilerlemesi"
+    "name": "Proje ilerlemesi",
+    "type": "sayı (%)"
   },
   {
     "module": "PRJ",
     "kind": "condition",
     "code": "project.stage",
-    "name": "Proje aşaması"
+    "name": "Proje aşaması",
+    "type": "seçim"
   },
   {
     "module": "PRJ",
@@ -1011,7 +1067,8 @@
     "module": "PUR",
     "kind": "condition",
     "code": "purchase_order.days_late",
-    "name": "Sipariş gecikme günü"
+    "name": "Sipariş gecikme günü",
+    "type": "sayı"
   },
   {
     "module": "PUR",
@@ -1035,7 +1092,8 @@
     "module": "PUR",
     "kind": "condition",
     "code": "purchase_request.amount",
-    "name": "Talep tutarı"
+    "name": "Talep tutarı",
+    "type": "tutar"
   },
   {
     "module": "PUR",
@@ -1059,7 +1117,8 @@
     "module": "PUR",
     "kind": "condition",
     "code": "purchase_request.urgency",
-    "name": "Aciliyet"
+    "name": "Aciliyet",
+    "type": "seçim"
   },
   {
     "module": "QHS",
@@ -1089,7 +1148,8 @@
     "module": "QTE",
     "kind": "condition",
     "code": "quote.margin_percent",
-    "name": "Tahmini kâr marjı"
+    "name": "Tahmini kâr marjı",
+    "type": "sayı (%)"
   },
   {
     "module": "QTE",
@@ -1107,13 +1167,15 @@
     "module": "QTE",
     "kind": "condition",
     "code": "quote.total_try",
-    "name": "Teklif toplamı (TL karşılığı)"
+    "name": "Teklif toplamı (TL karşılığı)",
+    "type": "tutar"
   },
   {
     "module": "QTE",
     "kind": "condition",
     "code": "quote.type",
-    "name": "Teklif türü (uygulama/ürün)"
+    "name": "Teklif türü (uygulama/ürün)",
+    "type": "seçim"
   },
   {
     "module": "QTE",
@@ -1137,13 +1199,15 @@
     "module": "INT",
     "kind": "condition",
     "code": "recommendation.severity",
-    "name": "Önem derecesi"
+    "name": "Önem derecesi",
+    "type": "seçim"
   },
   {
     "module": "INT",
     "kind": "condition",
     "code": "recommendation.type",
-    "name": "Öneri türü"
+    "name": "Öneri türü",
+    "type": "seçim"
   },
   {
     "module": "EQP",
@@ -1173,7 +1237,8 @@
     "module": "AUD",
     "kind": "condition",
     "code": "revision_request.record_type",
-    "name": "Revizyonun kayıt türü"
+    "name": "Revizyonun kayıt türü",
+    "type": "seçim"
   },
   {
     "module": "AUD",
@@ -1191,7 +1256,8 @@
     "module": "AUD",
     "kind": "condition",
     "code": "revision_request.waiting_days",
-    "name": "Bekleme günü"
+    "name": "Bekleme günü",
+    "type": "sayı"
   },
   {
     "module": "IAM",
@@ -1209,7 +1275,8 @@
     "module": "IAM",
     "kind": "condition",
     "code": "role_assignment.scope",
-    "name": "Atamanın kapsamı"
+    "name": "Atamanın kapsamı",
+    "type": "kapsam (şirket / şantiye / proje)"
   },
   {
     "module": "IAM",
@@ -1227,7 +1294,8 @@
     "module": "HR",
     "kind": "condition",
     "code": "salary_advance.amount",
-    "name": "Avans tutarı"
+    "name": "Avans tutarı",
+    "type": "tutar"
   },
   {
     "module": "HR",
@@ -1245,7 +1313,8 @@
     "module": "QTE",
     "kind": "condition",
     "code": "sales_order.days_to_delivery",
-    "name": "Teslim tarihine kalan gün"
+    "name": "Teslim tarihine kalan gün",
+    "type": "sayı"
   },
   {
     "module": "QTE",
@@ -1281,13 +1350,15 @@
     "module": "RPT",
     "kind": "condition",
     "code": "site.profit_loss",
-    "name": "Şantiye kümülatif kâr-zararı"
+    "name": "Şantiye kümülatif kâr-zararı",
+    "type": "tutar"
   },
   {
     "module": "RPT",
     "kind": "condition",
     "code": "site.progress_percent",
-    "name": "Şantiye ilerlemesi"
+    "name": "Şantiye ilerlemesi",
+    "type": "sayı (%)"
   },
   {
     "module": "INV",
@@ -1299,7 +1370,8 @@
     "module": "INV",
     "kind": "condition",
     "code": "stock_count.difference_percent",
-    "name": "Sayım farkı"
+    "name": "Sayım farkı",
+    "type": "sayı (%)"
   },
   {
     "module": "INV",
@@ -1317,7 +1389,8 @@
     "module": "INV",
     "kind": "condition",
     "code": "stock_movement.unit_cost",
-    "name": "Hareketin birim maliyeti"
+    "name": "Hareketin birim maliyeti",
+    "type": "tutar"
   },
   {
     "module": "INV",
@@ -1329,7 +1402,8 @@
     "module": "INV",
     "kind": "condition",
     "code": "stock.days_to_critical",
-    "name": "Kritik seviyeye kalan gün"
+    "name": "Kritik seviyeye kalan gün",
+    "type": "sayı"
   },
   {
     "module": "INV",
@@ -1341,7 +1415,8 @@
     "module": "INV",
     "kind": "condition",
     "code": "stock.quantity",
-    "name": "Stok miktarı"
+    "name": "Stok miktarı",
+    "type": "sayı"
   },
   {
     "module": "FIN",
@@ -1359,7 +1434,8 @@
     "module": "SUP",
     "kind": "condition",
     "code": "support_ticket.category",
-    "name": "Kategori"
+    "name": "Kategori",
+    "type": "seçim"
   },
   {
     "module": "SUP",
@@ -1371,7 +1447,8 @@
     "module": "SUP",
     "kind": "condition",
     "code": "support_ticket.priority",
-    "name": "Öncelik"
+    "name": "Öncelik",
+    "type": "seçim"
   },
   {
     "module": "SUP",
@@ -1389,7 +1466,8 @@
     "module": "SUP",
     "kind": "condition",
     "code": "support_ticket.waiting_hours",
-    "name": "Cevapsız bekleme"
+    "name": "Cevapsız bekleme",
+    "type": "sayı (saat)"
   },
   {
     "module": "TSK",
@@ -1425,19 +1503,22 @@
     "module": "TSK",
     "kind": "condition",
     "code": "task.overdue_days",
-    "name": "Gecikme günü"
+    "name": "Gecikme günü",
+    "type": "sayı"
   },
   {
     "module": "TSK",
     "kind": "condition",
     "code": "task.priority",
-    "name": "Öncelik"
+    "name": "Öncelik",
+    "type": "seçim"
   },
   {
     "module": "TSK",
     "kind": "condition",
     "code": "task.status",
-    "name": "Görev durumu"
+    "name": "Görev durumu",
+    "type": "seçim"
   },
   {
     "module": "PRJ",
@@ -1449,7 +1530,8 @@
     "module": "CRM",
     "kind": "condition",
     "code": "tender.days_to_deadline",
-    "name": "İhale son tarihine kalan gün"
+    "name": "İhale son tarihine kalan gün",
+    "type": "sayı"
   },
   {
     "module": "CRM",
@@ -1479,7 +1561,8 @@
     "module": "QHS",
     "kind": "condition",
     "code": "test_certificate.result",
-    "name": "Test sonucu"
+    "name": "Test sonucu",
+    "type": "seçim"
   },
   {
     "module": "QHS",
@@ -1497,7 +1580,8 @@
     "module": "ADM",
     "kind": "condition",
     "code": "unit_price.change_percent",
-    "name": "Fiyat değişim oranı"
+    "name": "Fiyat değişim oranı",
+    "type": "sayı (%)"
   },
   {
     "module": "ADM",
@@ -1515,19 +1599,22 @@
     "module": "IAM",
     "kind": "condition",
     "code": "user.is_owner",
-    "name": "Sahip katmanında mı"
+    "name": "Sahip katmanında mı",
+    "type": "evet/hayır"
   },
   {
     "module": "IAM",
     "kind": "condition",
     "code": "user.manager",
-    "name": "Kişinin amiri"
+    "name": "Kişinin amiri",
+    "type": "kişi"
   },
   {
     "module": "IAM",
     "kind": "condition",
     "code": "user.roles",
-    "name": "Kişinin rolleri"
+    "name": "Kişinin rolleri",
+    "type": "liste (rol)"
   },
   {
     "module": "PRJ",
@@ -1539,7 +1626,8 @@
     "module": "PRJ",
     "kind": "condition",
     "code": "wall.status",
-    "name": "Duvar durumu"
+    "name": "Duvar durumu",
+    "type": "seçim"
   },
   {
     "module": "INV",
@@ -1551,13 +1639,15 @@
     "module": "INV",
     "kind": "condition",
     "code": "weighbridge.difference_percent",
-    "name": "Kantar farkı"
+    "name": "Kantar farkı",
+    "type": "sayı (%)"
   },
   {
     "module": "WFL",
     "kind": "condition",
     "code": "workflow_instance.age_days",
-    "name": "Akış örneğinin yaşı"
+    "name": "Akış örneğinin yaşı",
+    "type": "sayı (gün)"
   },
   {
     "module": "WFL",

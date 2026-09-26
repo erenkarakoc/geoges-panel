@@ -41,6 +41,7 @@ import {
   recordStatusChoices,
   writtenCapabilityNames,
 } from "@/records/capabilities";
+import { conditionFieldShapes, conditionValueChoices } from "@/records/condition-values";
 import { isModuleEnabled } from "@/platform/features/features";
 import { FeatureOff } from "@/platform/ui/feature-off";
 
@@ -67,12 +68,13 @@ async function load(identity: Asking, flowKey: string) {
  * are joined (ADR-001).
  */
 async function vocabularyFor(identity: Asking): Promise<DesignerVocabulary> {
-  const [roles, people, permissions, flows, statuses] = await Promise.all([
+  const [roles, people, permissions, flows, statuses, valueChoices] = await Promise.all([
     listRoles(),
     listPeople(),
     listPermissions(),
     listFlows(identity),
     recordStatusChoices(),
+    conditionValueChoices(),
   ]);
   const active = <T extends { status?: string }>(items: readonly T[]) =>
     items.filter((item) => item.status !== "deprecated");
@@ -92,6 +94,11 @@ async function vocabularyFor(identity: Asking): Promise<DesignerVocabulary> {
     ),
     roles: roles.map((role) => ({ code: role.code, name: role.name })),
     statuses,
+    fieldShapes: conditionFieldShapes(),
+    valueChoices: {
+      ...valueChoices,
+      "user.roles": roles.map((role) => ({ code: role.code, name: role.name })),
+    },
     written: writtenCapabilityNames,
   };
 }

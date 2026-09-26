@@ -10,6 +10,8 @@
  * printing the code.
  */
 
+import { resolveFieldCode } from "@/modules/wfl/domain/condition-value";
+
 export type ChoiceKind =
   | "event"
   | "field"
@@ -65,31 +67,14 @@ export function unknownChoiceName(value: string, kind: ChoiceKind, context: Choi
     return name ? `${name} ${NOT_BUILT}` : UNKNOWN.recordType;
   }
   if (kind !== "event" && kind !== "field") return UNKNOWN[kind];
-  const code = written[value] ? value : recordFieldCode(value, kind, written, recordEntity);
+  const code =
+    kind === "field"
+      ? resolveFieldCode(value, (one) => Boolean(written[one]), recordEntity)
+      : written[value]
+        ? value
+        : undefined;
   if (!code) return UNKNOWN[kind];
   return built.has(code) ? written[code] : `${written[code]} ${NOT_BUILT}`;
-}
-
-/**
- * A condition's `record.difference_percent` is the trigger record's field. The event may be named
- * after a narrower thing than the record (`weighbridge_difference.exceeded` is about a weighing,
- * whose field is `weighbridge.difference_percent`), so the record's name is shortened a word at a
- * time until the requirements know the field.
- */
-function recordFieldCode(
-  value: string,
-  kind: ChoiceKind,
-  written: Readonly<Record<string, string>>,
-  recordEntity: string | undefined,
-): string | undefined {
-  if (kind !== "field" || !value.startsWith("record.") || !recordEntity) return undefined;
-  const field = value.slice("record.".length);
-  let entity = recordEntity;
-  while (entity) {
-    if (written[`${entity}.${field}`]) return `${entity}.${field}`;
-    entity = entity.includes("_") ? entity.slice(0, entity.lastIndexOf("_")) : "";
-  }
-  return undefined;
 }
 
 /** The record a trigger event is about: `daily_site_log.submitted` → `daily_site_log`. */

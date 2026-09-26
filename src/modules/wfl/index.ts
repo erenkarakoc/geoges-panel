@@ -100,6 +100,12 @@ export { flowTemplateWatch } from "@/modules/wfl/application/template-watch";
 export { asDraft, stepNames, stepTypeLabel, type DrawableStep } from "@/modules/wfl/domain/graph";
 export { reportEndText, reportStepText } from "@/modules/wfl/domain/report-text";
 export {
+  APPROVAL_DECISIONS,
+  valueShapeOf,
+  type ValueOption,
+  type ValueShape,
+} from "@/modules/wfl/domain/condition-value";
+export {
   countPasses,
   isWindowTest,
   parseDefinition,

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
- * The Turkish name of every capability the requirements define, built or not (owner 2026-09-26).
+ * The Turkish name of every capability the requirements define, built or not, and the type of each
+ * condition field (owner 2026-09-26).
  *
  * A module's code catalog (`src/modules/<m>/capabilities.ts`) holds only what is built. The flow
  * templates are written for the whole company, so they already name events and fields of modules
@@ -52,6 +53,9 @@ export function readCapabilityNames(root = ROOT) {
           kind,
           code: cells[0].replaceAll("`", "").trim(),
           name: cells[1] ?? "",
+          // A condition field's type ("seçim", "tutar", "evet/hayır" …) decides how the designer
+          // asks for the value it is compared with.
+          ...(kind === "condition" ? { type: cells[2] ?? "" } : {}),
         });
       }
     }

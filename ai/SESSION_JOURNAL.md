@@ -523,3 +523,6 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-26 12:37:49Z · 5c627231 · Write · `db/migrations/0067_wfl_remove_flows_and_templates.sql`
 - 2026-09-26 12:38:03Z · 5c627231 · Write · `db/migrations/0067_wfl_remove_flows_and_templates.down.sql`
 - 2026-09-26 12:40:14Z · 5c627231 · Write · `src/modules/wfl/data/removal.dbtest.ts`
+- 2026-09-26 12:49:42Z · 5c627231 · Write · `src/modules/wfl/domain/condition-value.ts`
+- 2026-09-26 12:50:24Z · 5c627231 · Write · `src/records/condition-values.ts`
+- 2026-09-26 12:51:23Z · 5c627231 · Edit · `src/modules/wfl/ui/step-questions.tsx`

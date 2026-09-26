@@ -13,6 +13,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { unknownChoiceName, type ChoiceKind } from "@/modules/wfl/domain/choice-name";
+import {
+  comparisonsFor,
+  resolveFieldCode,
+  YES_NO,
+  type ValueOption,
+  type ValueShape,
+} from "@/modules/wfl/domain/condition-value";
 import { durationToParts, partsToDuration, type DurationUnit } from "@/modules/wfl/domain/duration";
 import type { DraftStep } from "@/modules/wfl/domain/edit";
 import { stepTypeLabel, type DrawableStep } from "@/modules/wfl/domain/graph";
@@ -57,6 +64,10 @@ export type DesignerVocabulary = {
    * (`project` → the project stages), answered by the module that owns the record.
    */
   statuses: Readonly<Record<string, readonly { code: string; name: string }[]>>;
+  /** The kind of value each condition field holds (a choice, a number, yes/no …), by field code. */
+  fieldShapes: Readonly<Record<string, ValueShape>>;
+  /** What a choice field may be compared with, by field code, from the module owning the values. */
+  valueChoices: Readonly<Record<string, readonly ValueOption[]>>;
 };
 
 /** Base UI wants a string; "nothing" has to be a value of its own. */
@@ -129,6 +140,12 @@ type OwnerRule = {
 
 /** `*` closes every move of the record; a module's own moves join this list as it declares them. */
 const LOCK_TRANSITIONS: Item[] = [{ value: "*", label: "Kayıttaki bütün işlemler" }];
+
+/** The days a monthly clock may fall on; 28 at most, so a short February skips no month. */
+const MONTH_DAYS: Item[] = Array.from({ length: 28 }, (_, i) => ({
+  value: String(i + 1),
+  label: `${i + 1}`,
+}));
 
 const OWNER_KINDS: Item[] = [
   { value: "role", label: "Rol" },
@@ -283,6 +300,19 @@ function ConditionQuestion({
 }) {
   const test = (step.test ?? {}) as Record<string, unknown>;
   const looksBack = typeof test.countOf === "string";
+  // The field the condition reads, as the catalog knows it (`record.stage` → `project.stage`).
+  const field = looksBack
+    ? undefined
+    : resolveFieldCode(
+        String(test.field ?? ""),
+        (code) => Boolean(vocabulary.fieldShapes[code]),
+        vocabulary.recordEntity,
+      );
+  // A count is a number; a field is what its catalog says it is.
+  const shape: ValueShape = looksBack
+    ? { kind: "number" }
+    : ((field ? vocabulary.fieldShapes[field] : undefined) ?? { kind: "text" });
+  const options = field ? (vocabulary.valueChoices[field] ?? null) : null;
 
   return (
     <div className="flex flex-col gap-4">
@@ -326,7 +356,7 @@ function ConditionQuestion({
           description="Bu liste, modüllerin akışa açtığı alanlardır; başka bir alan bir akışa görünmez."
           items={vocabulary.fields.map((field) => ({ value: field.code, label: field.name }))}
           label="Hangi bilgiye?"
-          onChange={(value) => onChange({ test: { ...test, field: value } })}
+          onChange={(value) => onChange({ test: { field: value, op: "=", value: null } })}
           placeholder="Bilgi seçin"
           unknownName={unknownChoiceName(String(test.field ?? ""), "field", vocabulary)}
           value={String(test.field ?? "")}
@@ -334,32 +364,133 @@ function ConditionQuestion({
       )}
 
       <Choice
-        items={looksBack ? CONDITION_OPS.slice(0, 6) : CONDITION_OPS}
+        items={CONDITION_OPS.filter((op) => comparisonsFor(shape.kind).includes(op.value))}
         label="Nasıl karşılaştırılsın?"
         onChange={(value) => onChange({ test: { ...test, op: value } })}
+        unknownName="Bu bilgi için anlamsız bir karşılaştırma"
         value={String(test.op ?? "=")}
       />
 
       {test.op === "exists" ? null : (
-        <Field>
-          <FieldLabel htmlFor="condition-value">Hangi değerle?</FieldLabel>
-          <Input
-            defaultValue={test.value === undefined || test.value === null ? "" : String(test.value)}
-            id="condition-value"
-            onBlur={(event) => {
-              const raw = event.currentTarget.value;
-              const number = Number(raw);
-              onChange({
-                test: {
-                  ...test,
-                  value: looksBack || (raw !== "" && !Number.isNaN(number)) ? number : raw,
-                },
-              });
-            }}
-          />
-        </Field>
+        <ValueQuestion
+          key={`${String(test.field ?? test.countOf ?? "")}-${shape.kind}`}
+          onChange={(value) => onChange({ test: { ...test, value } })}
+          options={options}
+          people={vocabulary.people}
+          shape={shape}
+          value={test.value}
+        />
       )}
     </div>
+  );
+}
+
+/**
+ * "Hangi değerle?", asked the way the field's kind needs (owner 2026-09-26): a list for a choice,
+ * Evet/Hayır, a person, a date, or a number with its unit. Only free text is typed.
+ */
+function ValueQuestion({
+  shape,
+  options,
+  people,
+  value,
+  onChange,
+}: {
+  shape: ValueShape;
+  /** The values a choice may take; null when its module does not offer them yet. */
+  options: readonly ValueOption[] | null;
+  people: readonly { id: string; name: string }[];
+  value: unknown;
+  onChange: (value: unknown) => void;
+}) {
+  const stored = value === undefined || value === null ? "" : String(value);
+
+  if (shape.kind === "choice") {
+    return (
+      <Choice
+        description={
+          options?.length
+            ? undefined
+            : "Bu bilginin seçenekleri, sahibi olan modül kurulunca burada listelenir."
+        }
+        items={(options ?? []).map((one) => ({ value: one.code, label: one.name }))}
+        label="Hangi değerle?"
+        onChange={onChange}
+        placeholder={options?.length ? "Değer seçin" : "Seçenekler henüz yok"}
+        unknownName={
+          options?.length ? "Listede olmayan bir değer" : "Modülü henüz kurulmamış bir değer"
+        }
+        value={stored}
+      />
+    );
+  }
+  if (shape.kind === "boolean") {
+    return (
+      <Choice
+        items={YES_NO.map((one) => ({ value: one.code, label: one.name }))}
+        label="Hangi değerle?"
+        onChange={(picked) => onChange(picked === "true")}
+        value={stored}
+      />
+    );
+  }
+  if (shape.kind === "person") {
+    return (
+      <Choice
+        items={people.map((one) => ({ value: one.id, label: one.name }))}
+        label="Hangi kişiyle?"
+        onChange={onChange}
+        placeholder="Kişi seçin"
+        unknownName="Kaldırılmış kişi"
+        value={stored}
+      />
+    );
+  }
+  if (shape.kind === "date") {
+    return (
+      <Field>
+        <FieldLabel htmlFor="condition-value">Hangi tarihle?</FieldLabel>
+        <Input
+          defaultValue={stored}
+          id="condition-value"
+          onBlur={(event) => onChange(event.currentTarget.value)}
+          type="date"
+        />
+      </Field>
+    );
+  }
+  if (shape.kind === "number") {
+    return (
+      <Field>
+        <FieldLabel htmlFor="condition-value">Hangi değerle?</FieldLabel>
+        <Input
+          defaultValue={stored}
+          id="condition-value"
+          inputMode="decimal"
+          onBlur={(event) => {
+            const raw = event.currentTarget.value.replace(",", ".");
+            const number = Number(raw);
+            onChange(raw === "" || Number.isNaN(number) ? null : number);
+          }}
+        />
+        <FieldDescription>
+          {shape.unit ? `Sayı olarak yazın (${shape.unit}).` : "Sayı olarak yazın."}
+        </FieldDescription>
+      </Field>
+    );
+  }
+  return (
+    <Field>
+      <FieldLabel htmlFor="condition-value">Hangi değerle?</FieldLabel>
+      <Input
+        defaultValue={stored}
+        id="condition-value"
+        onBlur={(event) => onChange(event.currentTarget.value)}
+      />
+      <FieldDescription>
+        Bu bilgi serbest metindir; aynen yazıldığı gibi karşılaştırılır.
+      </FieldDescription>
+    </Field>
   );
 }
 
@@ -785,6 +916,12 @@ export function TriggerQuestions({
 }) {
   const kind = String(trigger?.type ?? "manual");
   const test = (trigger?.test ?? {}) as Record<string, unknown>;
+  const thresholdField = resolveFieldCode(
+    String(test.field ?? ""),
+    (code) => Boolean(vocabulary.fieldShapes[code]),
+    vocabulary.recordEntity,
+  );
+  const thresholdUnit = thresholdField ? vocabulary.fieldShapes[thresholdField]?.unit : undefined;
 
   return (
     <div className="flex flex-col gap-4">
@@ -830,7 +967,9 @@ export function TriggerQuestions({
         <>
           <Choice
             description="Eşik, olayın taşıdığı değere bakar; arkada duran ayrı bir sorgu yoktur."
-            items={vocabulary.fields.map((field) => ({ value: field.code, label: field.name }))}
+            items={vocabulary.fields
+              .filter((field) => vocabulary.fieldShapes[field.code]?.kind === "number")
+              .map((field) => ({ value: field.code, label: field.name }))}
             label="Hangi bilgi eşiği aşsın?"
             onChange={(value) =>
               onChange({ ...trigger, type: "threshold", test: { ...test, field: value } })
@@ -844,15 +983,22 @@ export function TriggerQuestions({
             <Input
               defaultValue={String(test.value ?? "")}
               id="threshold-value"
-              inputMode="numeric"
+              inputMode="decimal"
               onBlur={(event) =>
                 onChange({
                   ...trigger,
                   type: "threshold",
-                  test: { ...test, op: test.op ?? ">", value: Number(event.currentTarget.value) },
+                  test: {
+                    ...test,
+                    op: test.op ?? ">",
+                    value: Number(event.currentTarget.value.replace(",", ".")),
+                  },
                 })
               }
             />
+            <FieldDescription>
+              {thresholdUnit ? `Sayı olarak yazın (${thresholdUnit}).` : "Sayı olarak yazın."}
+            </FieldDescription>
           </Field>
         </>
       ) : null}
@@ -873,24 +1019,15 @@ export function TriggerQuestions({
             value={trigger?.monthlyOn ? "monthly" : "daily"}
           />
           {trigger?.monthlyOn ? (
-            <Field>
-              <FieldLabel htmlFor="monthly-on">Ayın kaçında?</FieldLabel>
-              <Input
-                defaultValue={String(trigger.monthlyOn)}
-                id="monthly-on"
-                inputMode="numeric"
-                onBlur={(event) =>
-                  onChange({
-                    ...trigger,
-                    type: "clock",
-                    monthlyOn: Number(event.currentTarget.value),
-                  })
-                }
-              />
-              <FieldDescription>
-                1 ile 28 arası; 28 sınırı, kısa şubatta ayın atlanmaması için.
-              </FieldDescription>
-            </Field>
+            <Choice
+              description="En çok 28'i seçilebilir; böylece kısa şubatta ay atlanmaz."
+              items={MONTH_DAYS}
+              label="Ayın kaçında?"
+              onChange={(value) =>
+                onChange({ ...trigger, type: "clock", monthlyOn: Number(value) })
+              }
+              value={String(trigger.monthlyOn)}
+            />
           ) : null}
           <Field>
             <FieldLabel htmlFor="daily-at">Saat kaçta?</FieldLabel>
@@ -905,9 +1042,9 @@ export function TriggerQuestions({
                   everyMinutes: undefined,
                 })
               }
-              placeholder="09:00"
+              type="time"
             />
-            <FieldDescription>Saat ve dakika olarak yazılır, örneğin 07:30.</FieldDescription>
+            <FieldDescription>Türkiye saatiyle.</FieldDescription>
           </Field>
         </>
       ) : null}

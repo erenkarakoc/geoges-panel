@@ -177,6 +177,9 @@ export function FlowDesigner({
 
   const questions = step ? (
     <StepQuestions
+      // A step's text boxes are uncontrolled: each step gets its own, or the last step's title
+      // would be shown, and saved, on the next one.
+      key={step.id}
       onChange={(change) => persist(withStep(draft, step.id, change))}
       onRemove={() => {
         setSelected(null);
@@ -190,6 +193,7 @@ export function FlowDesigner({
     />
   ) : (
     <TriggerQuestions
+      key={String((draft.trigger as { type?: unknown } | undefined)?.type ?? "manual")}
       onChange={(trigger) => persist({ ...draft, trigger })}
       trigger={draft.trigger as Record<string, unknown> | undefined}
       vocabulary={asked}
