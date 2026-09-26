@@ -1,0 +1,1598 @@
+[
+  {
+    "module": "INT",
+    "kind": "event",
+    "code": "acceleration_scenario.approved",
+    "name": "Hızlandırma senaryosu onaylandı"
+  },
+  {
+    "module": "INT",
+    "kind": "condition",
+    "code": "acceleration_scenario.net_effect",
+    "name": "Senaryonun net kâr etkisi"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
+    "code": "approval.decided",
+    "name": "Onay kararı verildi"
+  },
+  {
+    "module": "WFL",
+    "kind": "condition",
+    "code": "approval.decision",
+    "name": "Onay kararı"
+  },
+  {
+    "module": "WFL",
+    "kind": "condition",
+    "code": "approval.waiting_hours",
+    "name": "Onayın beklediği süre"
+  },
+  {
+    "module": "EQP",
+    "kind": "event",
+    "code": "asset.assigned",
+    "name": "Varlık zimmetlendi"
+  },
+  {
+    "module": "EQP",
+    "kind": "event",
+    "code": "asset.breakdown_reported",
+    "name": "Arıza bildirildi"
+  },
+  {
+    "module": "EQP",
+    "kind": "condition",
+    "code": "asset.category",
+    "name": "Varlık kategorisi"
+  },
+  {
+    "module": "EQP",
+    "kind": "condition",
+    "code": "asset.days_to_inspection",
+    "name": "Kontrole kalan gün"
+  },
+  {
+    "module": "EQP",
+    "kind": "condition",
+    "code": "asset.idle_days",
+    "name": "Atıl gün sayısı"
+  },
+  {
+    "module": "EQP",
+    "kind": "event",
+    "code": "asset.idle_threshold_reached",
+    "name": "Varlık uzun süredir atıl"
+  },
+  {
+    "module": "EQP",
+    "kind": "event",
+    "code": "asset.inspection_due",
+    "name": "Periyodik kontrol yaklaşıyor"
+  },
+  {
+    "module": "EQP",
+    "kind": "event",
+    "code": "asset.inspection_overdue",
+    "name": "Periyodik kontrol geçti"
+  },
+  {
+    "module": "EQP",
+    "kind": "condition",
+    "code": "asset.remaining_value",
+    "name": "Kalan değer"
+  },
+  {
+    "module": "EQP",
+    "kind": "event",
+    "code": "asset.transferred",
+    "name": "Varlık yer değiştirdi"
+  },
+  {
+    "module": "EQP",
+    "kind": "event",
+    "code": "asset.written_off",
+    "name": "Varlık zayi edildi"
+  },
+  {
+    "module": "RPT",
+    "kind": "condition",
+    "code": "attention_item.open_days",
+    "name": "Uyarının açık kaldığı gün"
+  },
+  {
+    "module": "RPT",
+    "kind": "event",
+    "code": "attention_item.raised",
+    "name": "Dikkat öğesi oluştu"
+  },
+  {
+    "module": "RPT",
+    "kind": "event",
+    "code": "attention_item.resolved",
+    "name": "Dikkat öğesi kapandı"
+  },
+  {
+    "module": "RPT",
+    "kind": "condition",
+    "code": "attention_item.type",
+    "name": "Uyarı türü"
+  },
+  {
+    "module": "PRF",
+    "kind": "condition",
+    "code": "bonus.amount",
+    "name": "Prim tutarı"
+  },
+  {
+    "module": "PRF",
+    "kind": "event",
+    "code": "bonus.approved",
+    "name": "Prim onaylandı"
+  },
+  {
+    "module": "PRF",
+    "kind": "event",
+    "code": "bonus.calculated",
+    "name": "Prim hesaplandı"
+  },
+  {
+    "module": "STR",
+    "kind": "event",
+    "code": "budget_variance.exceeded",
+    "name": "Bütçe sapması eşiği aştı"
+  },
+  {
+    "module": "STR",
+    "kind": "condition",
+    "code": "budget_variance.percent",
+    "name": "Bütçe sapma yüzdesi"
+  },
+  {
+    "module": "STR",
+    "kind": "event",
+    "code": "budget.approved",
+    "name": "Bütçe onaylandı"
+  },
+  {
+    "module": "FIN",
+    "kind": "condition",
+    "code": "cash_projection.lowest_cumulative",
+    "name": "Projeksiyondaki en düşük kümülatif nakit"
+  },
+  {
+    "module": "FIN",
+    "kind": "event",
+    "code": "cash_projection.shortfall_expected",
+    "name": "Nakit açığı bekleniyor"
+  },
+  {
+    "module": "ADM",
+    "kind": "event",
+    "code": "catalog_item.created",
+    "name": "Listeye yeni kalem eklendi"
+  },
+  {
+    "module": "ADM",
+    "kind": "condition",
+    "code": "catalog_item.list",
+    "name": "Kalemin ait olduğu liste"
+  },
+  {
+    "module": "ADM",
+    "kind": "event",
+    "code": "catalog_item.merged",
+    "name": "Kalemler birleştirildi"
+  },
+  {
+    "module": "CMP",
+    "kind": "event",
+    "code": "client_obligation.delayed",
+    "name": "İşveren yükümlülüğü gecikti"
+  },
+  {
+    "module": "FIN",
+    "kind": "condition",
+    "code": "client_progress_payment.carried_over_months",
+    "name": "Devreden miktarın bekleme ayı"
+  },
+  {
+    "module": "FIN",
+    "kind": "event",
+    "code": "client_progress_payment.client_approved",
+    "name": "İşveren hakedişi onayladı"
+  },
+  {
+    "module": "FIN",
+    "kind": "action",
+    "code": "client_progress_payment.create_draft",
+    "name": "Taslak hakediş hazırla"
+  },
+  {
+    "module": "FIN",
+    "kind": "condition",
+    "code": "client_progress_payment.days_outstanding",
+    "name": "Tahsil edilmeyen gün"
+  },
+  {
+    "module": "FIN",
+    "kind": "event",
+    "code": "client_progress_payment.invoiced",
+    "name": "Hakediş faturalandı"
+  },
+  {
+    "module": "FIN",
+    "kind": "condition",
+    "code": "client_progress_payment.net_amount",
+    "name": "Hakediş net tutarı"
+  },
+  {
+    "module": "FIN",
+    "kind": "event",
+    "code": "client_progress_payment.overdue",
+    "name": "Tahsilat gecikti"
+  },
+  {
+    "module": "FIN",
+    "kind": "event",
+    "code": "client_progress_payment.prepared",
+    "name": "Hakediş hazırlandı"
+  },
+  {
+    "module": "FIN",
+    "kind": "event",
+    "code": "client_progress_payment.submitted",
+    "name": "Hakediş işverene sunuldu"
+  },
+  {
+    "module": "CRM",
+    "kind": "condition",
+    "code": "client_scorecard.average_payment_days",
+    "name": "Ortalama ödeme günü"
+  },
+  {
+    "module": "SIT",
+    "kind": "condition",
+    "code": "client_wait.hours",
+    "name": "İşveren bekleme süresi"
+  },
+  {
+    "module": "SIT",
+    "kind": "event",
+    "code": "client_wait.recorded",
+    "name": "İşveren beklemesi kaydedildi"
+  },
+  {
+    "module": "FIN",
+    "kind": "event",
+    "code": "collection.recorded",
+    "name": "Tahsilat girildi"
+  },
+  {
+    "module": "STR",
+    "kind": "condition",
+    "code": "company_health.status",
+    "name": "Başlık rengi"
+  },
+  {
+    "module": "STR",
+    "kind": "event",
+    "code": "company_health.turned_red",
+    "name": "Sağlık karnesinde kırmızı"
+  },
+  {
+    "module": "CMP",
+    "kind": "event",
+    "code": "contract.signed",
+    "name": "Sözleşme kaydedildi"
+  },
+  {
+    "module": "CMP",
+    "kind": "condition",
+    "code": "contract.type",
+    "name": "Sözleşme türü"
+  },
+  {
+    "module": "QTE",
+    "kind": "event",
+    "code": "cost_feedback.deviation_exceeded",
+    "name": "Maliyet sapması eşiği aştı"
+  },
+  {
+    "module": "EQP",
+    "kind": "event",
+    "code": "crane_daily_log.approved",
+    "name": "Vinç kaydı onaylandı"
+  },
+  {
+    "module": "EQP",
+    "kind": "event",
+    "code": "crane_daily_log.fuel_anomaly",
+    "name": "Olağan dışı vinç yakıtı"
+  },
+  {
+    "module": "EQP",
+    "kind": "condition",
+    "code": "crane_daily_log.fuel_per_hour",
+    "name": "Saat başı yakıt"
+  },
+  {
+    "module": "HR",
+    "kind": "event",
+    "code": "daily_activity_report.missing",
+    "name": "Faaliyet raporu girilmedi"
+  },
+  {
+    "module": "SIT",
+    "kind": "event",
+    "code": "daily_site_log.approved",
+    "name": "Günlük kayıt onaylandı"
+  },
+  {
+    "module": "SIT",
+    "kind": "condition",
+    "code": "daily_site_log.cast_count",
+    "name": "Günün döküm adedi"
+  },
+  {
+    "module": "SIT",
+    "kind": "condition",
+    "code": "daily_site_log.consumption_deviation_percent",
+    "name": "Sarf önerisinden sapma"
+  },
+  {
+    "module": "SIT",
+    "kind": "action",
+    "code": "daily_site_log.create_draft",
+    "name": "Günün taslak kaydını aç"
+  },
+  {
+    "module": "SIT",
+    "kind": "condition",
+    "code": "daily_site_log.damaged_unit_count",
+    "name": "Günün zayi adedi"
+  },
+  {
+    "module": "SIT",
+    "kind": "condition",
+    "code": "daily_site_log.date",
+    "name": "Tarih"
+  },
+  {
+    "module": "SIT",
+    "kind": "event",
+    "code": "daily_site_log.deadline_missed",
+    "name": "Giriş süresi kaçırıldı"
+  },
+  {
+    "module": "SIT",
+    "kind": "condition",
+    "code": "daily_site_log.expense_total",
+    "name": "Günün saha harcaması"
+  },
+  {
+    "module": "SIT",
+    "kind": "condition",
+    "code": "daily_site_log.is_late_entry",
+    "name": "Geç girildi mi"
+  },
+  {
+    "module": "SIT",
+    "kind": "event",
+    "code": "daily_site_log.recalled",
+    "name": "Günlük kayıt geri çekildi"
+  },
+  {
+    "module": "SIT",
+    "kind": "event",
+    "code": "daily_site_log.returned",
+    "name": "Günlük kayıt düzeltmeye döndü"
+  },
+  {
+    "module": "SIT",
+    "kind": "condition",
+    "code": "daily_site_log.site",
+    "name": "Şantiye"
+  },
+  {
+    "module": "SIT",
+    "kind": "event",
+    "code": "daily_site_log.submitted",
+    "name": "Günlük kayıt onaya gönderildi"
+  },
+  {
+    "module": "RPT",
+    "kind": "event",
+    "code": "daily_site_report.generated",
+    "name": "Günlük saha raporu üretildi"
+  },
+  {
+    "module": "RPT",
+    "kind": "event",
+    "code": "daily_site_report.sent_to_client",
+    "name": "Günlük rapor işverene gönderildi"
+  },
+  {
+    "module": "SIT",
+    "kind": "event",
+    "code": "damaged_unit.recorded",
+    "name": "Zayi girildi"
+  },
+  {
+    "module": "CMP",
+    "kind": "condition",
+    "code": "delay_penalty.risk_amount",
+    "name": "Ceza riski tutarı"
+  },
+  {
+    "module": "CMP",
+    "kind": "event",
+    "code": "delay_penalty.risk_changed",
+    "name": "Ceza riski değişti"
+  },
+  {
+    "module": "CMP",
+    "kind": "condition",
+    "code": "document.days_to_expiry",
+    "name": "Belgenin bitmesine kalan gün"
+  },
+  {
+    "module": "CMP",
+    "kind": "event",
+    "code": "document.expiring",
+    "name": "Süreli belge bitiyor"
+  },
+  {
+    "module": "DOC",
+    "kind": "condition",
+    "code": "document.type",
+    "name": "Belge türü"
+  },
+  {
+    "module": "DOC",
+    "kind": "event",
+    "code": "document.uploaded",
+    "name": "Belge yüklendi"
+  },
+  {
+    "module": "DOC",
+    "kind": "event",
+    "code": "document.version_added",
+    "name": "Belgenin yeni sürümü"
+  },
+  {
+    "module": "HR",
+    "kind": "condition",
+    "code": "employee.days_to_document_expiry",
+    "name": "Belgenin bitmesine kalan gün"
+  },
+  {
+    "module": "HR",
+    "kind": "event",
+    "code": "employee.document_expiring",
+    "name": "Süreli belge bitiyor"
+  },
+  {
+    "module": "HR",
+    "kind": "event",
+    "code": "employee.hired",
+    "name": "Personel işe girdi"
+  },
+  {
+    "module": "HR",
+    "kind": "event",
+    "code": "employee.leaving_date_set",
+    "name": "Ayrılış tarihi girildi"
+  },
+  {
+    "module": "HR",
+    "kind": "condition",
+    "code": "employee.unit",
+    "name": "Personelin birimi"
+  },
+  {
+    "module": "ADM",
+    "kind": "event",
+    "code": "exchange_rate.missing",
+    "name": "Kur alınamadı"
+  },
+  {
+    "module": "ADM",
+    "kind": "event",
+    "code": "exchange_rate.received",
+    "name": "Kur alındı"
+  },
+  {
+    "module": "FIN",
+    "kind": "event",
+    "code": "expense.possible_duplicate",
+    "name": "Olası tekrar gider"
+  },
+  {
+    "module": "CMP",
+    "kind": "event",
+    "code": "extension_of_time.decided",
+    "name": "Süre uzatımı karara bağlandı"
+  },
+  {
+    "module": "FAC",
+    "kind": "event",
+    "code": "factory_daily_log.approved",
+    "name": "Fabrika kaydı onaylandı"
+  },
+  {
+    "module": "FAC",
+    "kind": "condition",
+    "code": "factory_daily_log.is_late_entry",
+    "name": "Geç girildi mi"
+  },
+  {
+    "module": "FAC",
+    "kind": "condition",
+    "code": "factory_daily_log.process_loss_percent",
+    "name": "Günün fire oranı"
+  },
+  {
+    "module": "FAC",
+    "kind": "event",
+    "code": "factory_daily_log.returned",
+    "name": "Fabrika kaydı düzeltmeye döndü"
+  },
+  {
+    "module": "FAC",
+    "kind": "event",
+    "code": "factory_daily_log.submitted",
+    "name": "Fabrika kaydı onaya gönderildi"
+  },
+  {
+    "module": "FAC",
+    "kind": "event",
+    "code": "factory_unit_cost.finalised",
+    "name": "Ayın birim maliyeti kesinleşti"
+  },
+  {
+    "module": "FAC",
+    "kind": "condition",
+    "code": "factory_unit_cost.strip_per_metre",
+    "name": "İşlenmiş şerit metre maliyeti"
+  },
+  {
+    "module": "CMP",
+    "kind": "event",
+    "code": "framework_agreement.expiring",
+    "name": "Çerçeve anlaşma bitiyor"
+  },
+  {
+    "module": "CMP",
+    "kind": "event",
+    "code": "guarantee.expiring",
+    "name": "Teminat süresi bitiyor"
+  },
+  {
+    "module": "CRM",
+    "kind": "event",
+    "code": "lead.created",
+    "name": "Talep açıldı"
+  },
+  {
+    "module": "CRM",
+    "kind": "event",
+    "code": "lead.lost",
+    "name": "İş kaybedildi"
+  },
+  {
+    "module": "CRM",
+    "kind": "condition",
+    "code": "lead.source",
+    "name": "Talep kaynağı"
+  },
+  {
+    "module": "CRM",
+    "kind": "event",
+    "code": "lead.stage_changed",
+    "name": "Talep aşaması değişti"
+  },
+  {
+    "module": "CRM",
+    "kind": "event",
+    "code": "lead.unanswered",
+    "name": "Talep cevaplanmadı"
+  },
+  {
+    "module": "CRM",
+    "kind": "condition",
+    "code": "lead.waiting_hours",
+    "name": "Cevapsız bekleme süresi"
+  },
+  {
+    "module": "CRM",
+    "kind": "event",
+    "code": "lead.won",
+    "name": "İş kazanıldı"
+  },
+  {
+    "module": "HR",
+    "kind": "event",
+    "code": "leave_request.approved",
+    "name": "İzin onaylandı"
+  },
+  {
+    "module": "HR",
+    "kind": "condition",
+    "code": "leave_request.days",
+    "name": "İzin gün sayısı"
+  },
+  {
+    "module": "HR",
+    "kind": "event",
+    "code": "leave_request.submitted",
+    "name": "İzin talep edildi"
+  },
+  {
+    "module": "HR",
+    "kind": "condition",
+    "code": "leave_request.type",
+    "name": "İzin türü"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
+    "code": "lock.overridden",
+    "name": "Kilit aşıldı"
+  },
+  {
+    "module": "PRF",
+    "kind": "event",
+    "code": "manual_kpi.pending",
+    "name": "Amir puanı bekleniyor"
+  },
+  {
+    "module": "INV",
+    "kind": "action",
+    "code": "material_issue_request.create_draft",
+    "name": "Taslak çıkış talebi aç"
+  },
+  {
+    "module": "INV",
+    "kind": "event",
+    "code": "material_issue_request.submitted",
+    "name": "Malzeme çıkış talebi açıldı"
+  },
+  {
+    "module": "MTG",
+    "kind": "event",
+    "code": "meeting_decision.completed",
+    "name": "Karar tamamlandı"
+  },
+  {
+    "module": "MTG",
+    "kind": "event",
+    "code": "meeting_decision.created",
+    "name": "Karar alındı"
+  },
+  {
+    "module": "MTG",
+    "kind": "condition",
+    "code": "meeting_decision.days_overdue",
+    "name": "Karar gecikme günü"
+  },
+  {
+    "module": "MTG",
+    "kind": "event",
+    "code": "meeting_decision.overdue",
+    "name": "Karar gecikti"
+  },
+  {
+    "module": "MTG",
+    "kind": "event",
+    "code": "meeting.recorded",
+    "name": "Toplantı kaydedildi"
+  },
+  {
+    "module": "QHS",
+    "kind": "event",
+    "code": "nonconformity.closed",
+    "name": "Uygunsuzluk kapandı"
+  },
+  {
+    "module": "QHS",
+    "kind": "action",
+    "code": "nonconformity.create_draft",
+    "name": "Taslak uygunsuzluk aç"
+  },
+  {
+    "module": "QHS",
+    "kind": "condition",
+    "code": "nonconformity.impact_level",
+    "name": "Etki seviyesi"
+  },
+  {
+    "module": "QHS",
+    "kind": "condition",
+    "code": "nonconformity.is_repeat",
+    "name": "Tekrar eden mi"
+  },
+  {
+    "module": "QHS",
+    "kind": "event",
+    "code": "nonconformity.opened",
+    "name": "Uygunsuzluk açıldı"
+  },
+  {
+    "module": "QHS",
+    "kind": "event",
+    "code": "nonconformity.overdue",
+    "name": "Uygunsuzluk süresi aştı"
+  },
+  {
+    "module": "CMP",
+    "kind": "action",
+    "code": "notice_letter.create_draft",
+    "name": "Bildirim yazısı taslağı üret"
+  },
+  {
+    "module": "TSK",
+    "kind": "event",
+    "code": "notification.created",
+    "name": "Bildirim oluştu"
+  },
+  {
+    "module": "TSK",
+    "kind": "event",
+    "code": "notification.read",
+    "name": "Bildirim okundu"
+  },
+  {
+    "module": "TSK",
+    "kind": "action",
+    "code": "notification.send",
+    "name": "Bildirim gönder"
+  },
+  {
+    "module": "CMP",
+    "kind": "action",
+    "code": "obligation.create",
+    "name": "Yükümlülük oluştur"
+  },
+  {
+    "module": "CMP",
+    "kind": "condition",
+    "code": "obligation.days_to_due",
+    "name": "Son tarihe kalan gün"
+  },
+  {
+    "module": "CMP",
+    "kind": "event",
+    "code": "obligation.due_soon",
+    "name": "Yükümlülük tarihi yaklaşıyor"
+  },
+  {
+    "module": "CMP",
+    "kind": "event",
+    "code": "obligation.overdue",
+    "name": "Yükümlülük gecikti"
+  },
+  {
+    "module": "CMP",
+    "kind": "condition",
+    "code": "obligation.responsible_party",
+    "name": "Sorumlu taraf"
+  },
+  {
+    "module": "HR",
+    "kind": "action",
+    "code": "offboarding_checklist.create_draft",
+    "name": "Çıkış kontrol listesini aç"
+  },
+  {
+    "module": "HR",
+    "kind": "event",
+    "code": "offboarding_checklist.overdue",
+    "name": "Çıkış listesi tamamlanmadı"
+  },
+  {
+    "module": "QHS",
+    "kind": "event",
+    "code": "ohs_checklist.item_failed",
+    "name": "Günlük İSG maddesi uygun değil"
+  },
+  {
+    "module": "QHS",
+    "kind": "event",
+    "code": "ohs_incident.recorded",
+    "name": "İSG olayı kaydedildi"
+  },
+  {
+    "module": "QHS",
+    "kind": "condition",
+    "code": "ohs_incident.severity",
+    "name": "Ciddiyet"
+  },
+  {
+    "module": "QHS",
+    "kind": "condition",
+    "code": "ohs_incident.type",
+    "name": "Olay türü"
+  },
+  {
+    "module": "SIT",
+    "kind": "event",
+    "code": "over_casting.recorded",
+    "name": "Fazla döküm girildi"
+  },
+  {
+    "module": "PUR",
+    "kind": "event",
+    "code": "over_delivery.recorded",
+    "name": "Fazla teslim geldi"
+  },
+  {
+    "module": "FIN",
+    "kind": "condition",
+    "code": "party_account.balance_try",
+    "name": "Cari bakiye (TL karşılığı)"
+  },
+  {
+    "module": "CRM",
+    "kind": "event",
+    "code": "party.changed",
+    "name": "Firma kartı değişti"
+  },
+  {
+    "module": "CRM",
+    "kind": "event",
+    "code": "party.created",
+    "name": "Firma kaydedildi"
+  },
+  {
+    "module": "FIN",
+    "kind": "condition",
+    "code": "payment.amount",
+    "name": "Ödeme tutarı"
+  },
+  {
+    "module": "FIN",
+    "kind": "event",
+    "code": "payment.approved",
+    "name": "Ödeme onaylandı"
+  },
+  {
+    "module": "FIN",
+    "kind": "event",
+    "code": "payment.completed",
+    "name": "Ödeme yapıldı"
+  },
+  {
+    "module": "FIN",
+    "kind": "event",
+    "code": "payment.submitted_for_approval",
+    "name": "Ödeme onaya sunuldu"
+  },
+  {
+    "module": "HR",
+    "kind": "event",
+    "code": "payroll.approved",
+    "name": "Bordro onaylandı"
+  },
+  {
+    "module": "HR",
+    "kind": "action",
+    "code": "payroll.create_draft",
+    "name": "Taslak bordro hazırla"
+  },
+  {
+    "module": "HR",
+    "kind": "event",
+    "code": "payroll.paid",
+    "name": "Bordro ödendi"
+  },
+  {
+    "module": "HR",
+    "kind": "event",
+    "code": "payroll.prepared",
+    "name": "Bordro hazırlandı"
+  },
+  {
+    "module": "PRF",
+    "kind": "condition",
+    "code": "performance_score.band",
+    "name": "Puan bandı"
+  },
+  {
+    "module": "PRF",
+    "kind": "event",
+    "code": "performance_score.calculated",
+    "name": "Ayın puanı hesaplandı"
+  },
+  {
+    "module": "PRF",
+    "kind": "event",
+    "code": "performance_score.critical",
+    "name": "Kritik puan"
+  },
+  {
+    "module": "PRF",
+    "kind": "event",
+    "code": "performance_score.finalised",
+    "name": "Ayın puanı kesinleşti"
+  },
+  {
+    "module": "PRF",
+    "kind": "condition",
+    "code": "performance_score.value",
+    "name": "Ayın puanı"
+  },
+  {
+    "module": "FIN",
+    "kind": "event",
+    "code": "period_close.closed",
+    "name": "Dönem kapandı"
+  },
+  {
+    "module": "FIN",
+    "kind": "condition",
+    "code": "period_close.days_open",
+    "name": "Kapanmamış dönemin gün sayısı"
+  },
+  {
+    "module": "FIN",
+    "kind": "event",
+    "code": "period_close.overdue",
+    "name": "Dönem kapanışı gecikti"
+  },
+  {
+    "module": "FIN",
+    "kind": "event",
+    "code": "period_close.reopened",
+    "name": "Dönem yeniden açıldı"
+  },
+  {
+    "module": "QHS",
+    "kind": "event",
+    "code": "ppe.issued",
+    "name": "KKD teslim edildi"
+  },
+  {
+    "module": "PRJ",
+    "kind": "event",
+    "code": "project_revision.approved",
+    "name": "Proje revizyonu onaylandı"
+  },
+  {
+    "module": "PRJ",
+    "kind": "event",
+    "code": "project_revision.submitted",
+    "name": "Proje revizyonu onaya gönderildi"
+  },
+  {
+    "module": "PRJ",
+    "kind": "event",
+    "code": "project.changed",
+    "name": "Proje kartı değişti"
+  },
+  {
+    "module": "PRJ",
+    "kind": "condition",
+    "code": "project.contract_value",
+    "name": "Sözleşme bedeli"
+  },
+  {
+    "module": "PRJ",
+    "kind": "event",
+    "code": "project.created",
+    "name": "Proje oluştu"
+  },
+  {
+    "module": "PRJ",
+    "kind": "condition",
+    "code": "project.days_to_contract_end",
+    "name": "Sözleşme bitişine kalan gün"
+  },
+  {
+    "module": "PRJ",
+    "kind": "condition",
+    "code": "project.progress_percent",
+    "name": "Proje ilerlemesi"
+  },
+  {
+    "module": "PRJ",
+    "kind": "condition",
+    "code": "project.stage",
+    "name": "Proje aşaması"
+  },
+  {
+    "module": "PRJ",
+    "kind": "event",
+    "code": "project.stage_changed",
+    "name": "Proje aşaması değişti"
+  },
+  {
+    "module": "PUR",
+    "kind": "condition",
+    "code": "purchase_order.days_late",
+    "name": "Sipariş gecikme günü"
+  },
+  {
+    "module": "PUR",
+    "kind": "event",
+    "code": "purchase_order.overdue",
+    "name": "Sipariş gecikti"
+  },
+  {
+    "module": "PUR",
+    "kind": "event",
+    "code": "purchase_order.placed",
+    "name": "Sipariş verildi"
+  },
+  {
+    "module": "PUR",
+    "kind": "event",
+    "code": "purchase_order.received",
+    "name": "Sipariş teslim alındı"
+  },
+  {
+    "module": "PUR",
+    "kind": "condition",
+    "code": "purchase_request.amount",
+    "name": "Talep tutarı"
+  },
+  {
+    "module": "PUR",
+    "kind": "event",
+    "code": "purchase_request.approved",
+    "name": "Satın alma talebi onaylandı"
+  },
+  {
+    "module": "PUR",
+    "kind": "action",
+    "code": "purchase_request.create_draft",
+    "name": "Taslak satın alma talebi aç"
+  },
+  {
+    "module": "PUR",
+    "kind": "event",
+    "code": "purchase_request.submitted",
+    "name": "Satın alma talebi açıldı"
+  },
+  {
+    "module": "PUR",
+    "kind": "condition",
+    "code": "purchase_request.urgency",
+    "name": "Aciliyet"
+  },
+  {
+    "module": "QHS",
+    "kind": "event",
+    "code": "quality_check.failed",
+    "name": "Kalite kontrolü uygun değil"
+  },
+  {
+    "module": "QTE",
+    "kind": "event",
+    "code": "quote.below_target_margin",
+    "name": "Teklif hedef marjın altında"
+  },
+  {
+    "module": "QTE",
+    "kind": "event",
+    "code": "quote.expiring",
+    "name": "Teklif geçerliliği bitiyor"
+  },
+  {
+    "module": "QTE",
+    "kind": "event",
+    "code": "quote.lost",
+    "name": "Teklif kaybedildi"
+  },
+  {
+    "module": "QTE",
+    "kind": "condition",
+    "code": "quote.margin_percent",
+    "name": "Tahmini kâr marjı"
+  },
+  {
+    "module": "QTE",
+    "kind": "event",
+    "code": "quote.sent",
+    "name": "Teklif gönderildi"
+  },
+  {
+    "module": "QTE",
+    "kind": "event",
+    "code": "quote.submitted_for_approval",
+    "name": "Teklif onaya sunuldu"
+  },
+  {
+    "module": "QTE",
+    "kind": "condition",
+    "code": "quote.total_try",
+    "name": "Teklif toplamı (TL karşılığı)"
+  },
+  {
+    "module": "QTE",
+    "kind": "condition",
+    "code": "quote.type",
+    "name": "Teklif türü (uygulama/ürün)"
+  },
+  {
+    "module": "QTE",
+    "kind": "event",
+    "code": "quote.won",
+    "name": "Teklif kazanıldı"
+  },
+  {
+    "module": "INT",
+    "kind": "event",
+    "code": "recommendation.dismissed",
+    "name": "Öneri uygulanmadı"
+  },
+  {
+    "module": "INT",
+    "kind": "event",
+    "code": "recommendation.raised",
+    "name": "Öneri oluştu"
+  },
+  {
+    "module": "INT",
+    "kind": "condition",
+    "code": "recommendation.severity",
+    "name": "Önem derecesi"
+  },
+  {
+    "module": "INT",
+    "kind": "condition",
+    "code": "recommendation.type",
+    "name": "Öneri türü"
+  },
+  {
+    "module": "EQP",
+    "kind": "event",
+    "code": "rented_asset.rental_ending",
+    "name": "Kira süresi bitiyor"
+  },
+  {
+    "module": "RPT",
+    "kind": "action",
+    "code": "report.send_to_users",
+    "name": "Raporu kullanıcılara gönder"
+  },
+  {
+    "module": "INT",
+    "kind": "event",
+    "code": "resource_transfer_suggestion.approved",
+    "name": "Transfer önerisi onaylandı"
+  },
+  {
+    "module": "AUD",
+    "kind": "event",
+    "code": "revision_request.approved",
+    "name": "Revizyon onaylandı"
+  },
+  {
+    "module": "AUD",
+    "kind": "condition",
+    "code": "revision_request.record_type",
+    "name": "Revizyonun kayıt türü"
+  },
+  {
+    "module": "AUD",
+    "kind": "event",
+    "code": "revision_request.rejected",
+    "name": "Revizyon reddedildi"
+  },
+  {
+    "module": "AUD",
+    "kind": "event",
+    "code": "revision_request.submitted",
+    "name": "Revizyon talep edildi"
+  },
+  {
+    "module": "AUD",
+    "kind": "condition",
+    "code": "revision_request.waiting_days",
+    "name": "Bekleme günü"
+  },
+  {
+    "module": "IAM",
+    "kind": "event",
+    "code": "role_assignment.created",
+    "name": "Rol atandı"
+  },
+  {
+    "module": "IAM",
+    "kind": "event",
+    "code": "role_assignment.ended",
+    "name": "Rol ataması bitti"
+  },
+  {
+    "module": "IAM",
+    "kind": "condition",
+    "code": "role_assignment.scope",
+    "name": "Atamanın kapsamı"
+  },
+  {
+    "module": "IAM",
+    "kind": "event",
+    "code": "role_delegation.ended",
+    "name": "Vekâlet bitti"
+  },
+  {
+    "module": "IAM",
+    "kind": "event",
+    "code": "role_delegation.started",
+    "name": "Vekâlet başladı"
+  },
+  {
+    "module": "HR",
+    "kind": "condition",
+    "code": "salary_advance.amount",
+    "name": "Avans tutarı"
+  },
+  {
+    "module": "HR",
+    "kind": "event",
+    "code": "salary_advance.requested",
+    "name": "Maaş avansı istendi"
+  },
+  {
+    "module": "QTE",
+    "kind": "event",
+    "code": "sales_order.created",
+    "name": "Satış siparişi açıldı"
+  },
+  {
+    "module": "QTE",
+    "kind": "condition",
+    "code": "sales_order.days_to_delivery",
+    "name": "Teslim tarihine kalan gün"
+  },
+  {
+    "module": "QTE",
+    "kind": "event",
+    "code": "sales_order.shipped",
+    "name": "Satış siparişi sevk edildi"
+  },
+  {
+    "module": "INV",
+    "kind": "event",
+    "code": "shipment.dispatched",
+    "name": "Sevkiyat çıktı"
+  },
+  {
+    "module": "INV",
+    "kind": "event",
+    "code": "shipment.received",
+    "name": "Sevkiyat teslim alındı"
+  },
+  {
+    "module": "SIT",
+    "kind": "event",
+    "code": "site.changed",
+    "name": "Şantiye kartı değişti"
+  },
+  {
+    "module": "SIT",
+    "kind": "event",
+    "code": "site.created",
+    "name": "Şantiye açıldı"
+  },
+  {
+    "module": "RPT",
+    "kind": "condition",
+    "code": "site.profit_loss",
+    "name": "Şantiye kümülatif kâr-zararı"
+  },
+  {
+    "module": "RPT",
+    "kind": "condition",
+    "code": "site.progress_percent",
+    "name": "Şantiye ilerlemesi"
+  },
+  {
+    "module": "INV",
+    "kind": "event",
+    "code": "stock_count.approved",
+    "name": "Sayım onaylandı"
+  },
+  {
+    "module": "INV",
+    "kind": "condition",
+    "code": "stock_count.difference_percent",
+    "name": "Sayım farkı"
+  },
+  {
+    "module": "INV",
+    "kind": "event",
+    "code": "stock_count.submitted",
+    "name": "Sayım onaya sunuldu"
+  },
+  {
+    "module": "INV",
+    "kind": "event",
+    "code": "stock_movement.recorded",
+    "name": "Stok hareketi kaydedildi"
+  },
+  {
+    "module": "INV",
+    "kind": "condition",
+    "code": "stock_movement.unit_cost",
+    "name": "Hareketin birim maliyeti"
+  },
+  {
+    "module": "INV",
+    "kind": "event",
+    "code": "stock.below_critical",
+    "name": "Stok kritik seviyenin altında"
+  },
+  {
+    "module": "INV",
+    "kind": "condition",
+    "code": "stock.days_to_critical",
+    "name": "Kritik seviyeye kalan gün"
+  },
+  {
+    "module": "INV",
+    "kind": "event",
+    "code": "stock.negative",
+    "name": "Stok eksiye düştü"
+  },
+  {
+    "module": "INV",
+    "kind": "condition",
+    "code": "stock.quantity",
+    "name": "Stok miktarı"
+  },
+  {
+    "module": "FIN",
+    "kind": "action",
+    "code": "subcontractor_progress_payment.create_draft",
+    "name": "Taslak taşeron hakedişi hazırla"
+  },
+  {
+    "module": "FIN",
+    "kind": "event",
+    "code": "subcontractor_progress_payment.prepared",
+    "name": "Taşeron hakedişi hazırlandı"
+  },
+  {
+    "module": "SUP",
+    "kind": "condition",
+    "code": "support_ticket.category",
+    "name": "Kategori"
+  },
+  {
+    "module": "SUP",
+    "kind": "event",
+    "code": "support_ticket.opened",
+    "name": "Destek talebi açıldı"
+  },
+  {
+    "module": "SUP",
+    "kind": "condition",
+    "code": "support_ticket.priority",
+    "name": "Öncelik"
+  },
+  {
+    "module": "SUP",
+    "kind": "event",
+    "code": "support_ticket.resolved",
+    "name": "Destek talebi çözüldü"
+  },
+  {
+    "module": "SUP",
+    "kind": "event",
+    "code": "support_ticket.unanswered",
+    "name": "Destek talebi cevapsız"
+  },
+  {
+    "module": "SUP",
+    "kind": "condition",
+    "code": "support_ticket.waiting_hours",
+    "name": "Cevapsız bekleme"
+  },
+  {
+    "module": "TSK",
+    "kind": "event",
+    "code": "task.completed",
+    "name": "Görev tamamlandı"
+  },
+  {
+    "module": "TSK",
+    "kind": "event",
+    "code": "task.created",
+    "name": "Görev oluştu"
+  },
+  {
+    "module": "TSK",
+    "kind": "event",
+    "code": "task.escalated",
+    "name": "Görev eskale oldu"
+  },
+  {
+    "module": "TSK",
+    "kind": "action",
+    "code": "task.open",
+    "name": "Görev aç"
+  },
+  {
+    "module": "TSK",
+    "kind": "event",
+    "code": "task.overdue",
+    "name": "Görev gecikti"
+  },
+  {
+    "module": "TSK",
+    "kind": "condition",
+    "code": "task.overdue_days",
+    "name": "Gecikme günü"
+  },
+  {
+    "module": "TSK",
+    "kind": "condition",
+    "code": "task.priority",
+    "name": "Öncelik"
+  },
+  {
+    "module": "TSK",
+    "kind": "condition",
+    "code": "task.status",
+    "name": "Görev durumu"
+  },
+  {
+    "module": "PRJ",
+    "kind": "event",
+    "code": "technical_office_item.overdue",
+    "name": "Teknik ofis işi gecikti"
+  },
+  {
+    "module": "CRM",
+    "kind": "condition",
+    "code": "tender.days_to_deadline",
+    "name": "İhale son tarihine kalan gün"
+  },
+  {
+    "module": "CRM",
+    "kind": "event",
+    "code": "tender.deadline_approaching",
+    "name": "İhale son tarihi yaklaşıyor"
+  },
+  {
+    "module": "CRM",
+    "kind": "event",
+    "code": "tender.missed",
+    "name": "İhale kaçırıldı"
+  },
+  {
+    "module": "QHS",
+    "kind": "event",
+    "code": "test_certificate.expiring",
+    "name": "Sertifika süresi yaklaşıyor"
+  },
+  {
+    "module": "QHS",
+    "kind": "event",
+    "code": "test_certificate.failed",
+    "name": "Test \"kaldı\" çıktı"
+  },
+  {
+    "module": "QHS",
+    "kind": "condition",
+    "code": "test_certificate.result",
+    "name": "Test sonucu"
+  },
+  {
+    "module": "QHS",
+    "kind": "event",
+    "code": "training.expiring",
+    "name": "Eğitim süresi yaklaşıyor"
+  },
+  {
+    "module": "IAM",
+    "kind": "event",
+    "code": "two_factor.reset",
+    "name": "İki adımlı doğrulama sıfırlandı"
+  },
+  {
+    "module": "ADM",
+    "kind": "condition",
+    "code": "unit_price.change_percent",
+    "name": "Fiyat değişim oranı"
+  },
+  {
+    "module": "ADM",
+    "kind": "event",
+    "code": "unit_price.changed",
+    "name": "Birim fiyat değişti"
+  },
+  {
+    "module": "IAM",
+    "kind": "event",
+    "code": "user.deactivated",
+    "name": "Hesap pasife alındı"
+  },
+  {
+    "module": "IAM",
+    "kind": "condition",
+    "code": "user.is_owner",
+    "name": "Sahip katmanında mı"
+  },
+  {
+    "module": "IAM",
+    "kind": "condition",
+    "code": "user.manager",
+    "name": "Kişinin amiri"
+  },
+  {
+    "module": "IAM",
+    "kind": "condition",
+    "code": "user.roles",
+    "name": "Kişinin rolleri"
+  },
+  {
+    "module": "PRJ",
+    "kind": "event",
+    "code": "wall.completed",
+    "name": "Duvar tamamlandı"
+  },
+  {
+    "module": "PRJ",
+    "kind": "condition",
+    "code": "wall.status",
+    "name": "Duvar durumu"
+  },
+  {
+    "module": "INV",
+    "kind": "event",
+    "code": "weighbridge_difference.exceeded",
+    "name": "Kantar farkı toleransı aştı"
+  },
+  {
+    "module": "INV",
+    "kind": "condition",
+    "code": "weighbridge.difference_percent",
+    "name": "Kantar farkı"
+  },
+  {
+    "module": "WFL",
+    "kind": "condition",
+    "code": "workflow_instance.age_days",
+    "name": "Akış örneğinin yaşı"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
+    "code": "workflow_instance.completed",
+    "name": "Akış tamamlandı"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
+    "code": "workflow_instance.failed",
+    "name": "Akış hata ile durdu"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
+    "code": "workflow_instance.started",
+    "name": "Akış başladı"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
+    "code": "workflow.published",
+    "name": "Akış yayımlandı"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
+    "code": "workflow.template_reset",
+    "name": "Akış şablona sıfırlandı"
+  },
+  {
+    "module": "WFL",
+    "kind": "event",
+    "code": "workflow.template_updated",
+    "name": "Şablon yeni sürüme geçti"
+  }
+]

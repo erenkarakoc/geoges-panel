@@ -33,7 +33,11 @@ import {
 import { listFlows, openFlow } from "@/modules/wfl";
 import { FlowDesigner } from "@/modules/wfl/ui/flow-designer";
 import type { DesignerVocabulary } from "@/modules/wfl/ui/step-questions";
-import { moduleCapabilities } from "@/records/capabilities";
+import {
+  moduleCapabilities,
+  recordStatusChoices,
+  writtenCapabilityNames,
+} from "@/records/capabilities";
 import { isModuleEnabled } from "@/platform/features/features";
 import { FeatureOff } from "@/platform/ui/feature-off";
 
@@ -60,11 +64,12 @@ async function load(identity: Asking, flowKey: string) {
  * are joined (ADR-001).
  */
 async function vocabularyFor(identity: Asking): Promise<DesignerVocabulary> {
-  const [roles, people, permissions, flows] = await Promise.all([
+  const [roles, people, permissions, flows, statuses] = await Promise.all([
     listRoles(),
     listPeople(),
     listPermissions(),
     listFlows(identity),
+    recordStatusChoices(),
   ]);
   const active = <T extends { status?: string }>(items: readonly T[]) =>
     items.filter((item) => item.status !== "deprecated");
@@ -83,6 +88,8 @@ async function vocabularyFor(identity: Asking): Promise<DesignerVocabulary> {
       active(catalog.relations).map((relation) => ({ code: relation.code, name: relation.name })),
     ),
     roles: roles.map((role) => ({ code: role.code, name: role.name })),
+    statuses,
+    written: writtenCapabilityNames,
   };
 }
 

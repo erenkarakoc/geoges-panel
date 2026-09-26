@@ -88,6 +88,16 @@ function nowPublished(): PublishedCapability[] {
     .sort((a, b) => a.code.localeCompare(b.code) || a.kind.localeCompare(b.kind));
 }
 
+describe("capability names for the screens", () => {
+  it("follow the requirements' written catalogs", async () => {
+    const { capabilityNamesText, CAPABILITY_NAMES_PATH } =
+      await import("../../scripts/capability-names.mjs");
+    const onDisk = readFileSync(CAPABILITY_NAMES_PATH, "utf8").replaceAll("\r\n", "\n");
+    // Behind the requirements: run `node scripts/capability-names.mjs` and commit the file.
+    expect(onDisk).toBe(capabilityNamesText());
+  });
+});
+
 describe("capability contract (REQ-WFL-004)", () => {
   it("declares something to check", () => {
     expect(catalogs.flatMap((c) => capabilityCodes(c)).length).toBeGreaterThan(20);

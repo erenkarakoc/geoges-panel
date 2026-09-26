@@ -163,7 +163,8 @@ export function RunLog({ runs }: { runs: readonly RunCard[] }) {
 
 function RunState({ status }: { status: string }) {
   const state = STATE[status];
-  if (!state) return <Badge variant="outline">{status}</Badge>;
+  // A state this screen has no word for is still never shown as its code (owner 2026-09-26).
+  if (!state) return <Badge variant="outline">Bilinmeyen durum</Badge>;
   return <Badge variant={state.tone === "error" ? "error" : state.tone}>{state.label}</Badge>;
 }
 

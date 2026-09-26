@@ -507,3 +507,16 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-25 22:41:35Z · b13a9554 · Write · `src/app/(app)/projects/[id]/revisions/[revisionId]/page.tsx`
 - 2026-09-25 23:09:43Z · b13a9554 · Write · `YOL-HARITASI.md`
 - 2026-09-25 23:17:38Z · b13a9554 · Write · `src/records/zz-publish-templates.dbtest.ts`
+- 2026-09-26 12:20:04Z · 5c627231 · Write · `scripts/capability-names.mjs`
+- 2026-09-26 12:21:44Z · 5c627231 · Write · `src/modules/wfl/domain/choice-name.ts`
+- 2026-09-26 12:21:44Z · 5c627231 · Write · `src/modules/wfl/domain/choice-name.test.ts`
+- 2026-09-26 12:22:20Z · 5c627231 · Edit · `src/modules/wfl/ui/step-questions.tsx`
+- 2026-09-26 12:23:39Z · 5c627231 · Edit · `src/records/capabilities.test.ts`
+- 2026-09-26 12:24:51Z · 5c627231 · Edit · `src/modules/wfl/domain/choice-name.ts`
+- 2026-09-26 12:24:51Z · 5c627231 · Edit · `src/modules/wfl/domain/choice-name.ts`
+- 2026-09-26 12:24:51Z · 5c627231 · Edit · `src/modules/wfl/domain/choice-name.test.ts`
+- 2026-09-26 12:25:48Z · 5c627231 · Edit · `src/modules/wfl/domain/choice-name.test.ts`
+- 2026-09-26 12:25:57Z · 5c627231 · Edit · `src/modules/wfl/ui/run-log.tsx`
+- 2026-09-26 12:29:30Z · 5c627231 · Edit · `src/modules/wfl/ui/step-questions.tsx`
+- 2026-09-26 12:29:56Z · 5c627231 · Write · `src/modules/wfl/domain/choice-name.test.ts`
+- 2026-09-26 12:30:17Z · 5c627231 · Write · `src/modules/wfl/domain/choice-name.ts`

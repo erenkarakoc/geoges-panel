@@ -7,12 +7,19 @@ import { audCapabilities } from "@/modules/aud";
 import { crmCapabilities } from "@/modules/crm";
 import { docCapabilities } from "@/modules/doc";
 import { iamCapabilities } from "@/modules/iam";
-import { prjCapabilities, setProjectStageAsSystem, setRevisionStatusAsSystem } from "@/modules/prj";
+import {
+  prjCapabilities,
+  projectStages,
+  REVISION_STATUS_LABELS,
+  setProjectStageAsSystem,
+  setRevisionStatusAsSystem,
+} from "@/modules/prj";
 import { sitCapabilities } from "@/modules/sit";
 import { tskCapabilities } from "@/modules/tsk";
 import { wflCapabilities } from "@/modules/wfl";
 import type { ActionCapability, ModuleCapabilities } from "@/platform/capabilities";
 import type { SystemDb } from "@/platform/jobs/types";
+import capabilityNameRows from "@/records/capability-names.json";
 
 /**
  * Every module's capability catalog, joined here and nowhere else (TASK-0118, D-280).
@@ -70,6 +77,23 @@ export const recordStatusAppliers: Readonly<Record<string, StatusApplier>> = {
   },
 };
 
+/**
+ * The states the appliers above accept, with their Turkish names, by the record's own name — the
+ * part before the dot of the events it publishes (`project.stage_changed` → `project`). The
+ * designer offers these for the step instead of asking for a code (owner 2026-09-26).
+ */
+export async function recordStatusChoices(): Promise<
+  Record<string, readonly { code: string; name: string }[]>
+> {
+  return {
+    project: await projectStages().catch(() => []),
+    project_revision: [
+      { code: "approved", name: REVISION_STATUS_LABELS.approved },
+      { code: "draft", name: REVISION_STATUS_LABELS.draft },
+    ],
+  };
+}
+
 const recordStep = z.object({
   record: z.object({ schema: z.string(), table: z.string(), id: z.string() }).nullable(),
   status: z.string().nullable(),
@@ -105,3 +129,12 @@ export const ownerRelations = {
     return null;
   },
 };
+
+/**
+ * The Turkish name of every capability the requirements define, built or not, by code
+ * (`scripts/capability-names.mjs`). A screen reads a name from here when a stored choice belongs
+ * to a module that is not built yet, so the code never reaches a person (owner 2026-09-26).
+ */
+export const writtenCapabilityNames: Readonly<Record<string, string>> = Object.fromEntries(
+  capabilityNameRows.map((row) => [row.code, row.name]),
+);

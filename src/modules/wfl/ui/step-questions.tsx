@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { unknownChoiceName, type ChoiceKind } from "@/modules/wfl/domain/choice-name";
 import { durationToParts, partsToDuration, type DurationUnit } from "@/modules/wfl/domain/duration";
 import type { DraftStep } from "@/modules/wfl/domain/edit";
 import { stepTypeLabel, type DrawableStep } from "@/modules/wfl/domain/graph";
@@ -42,6 +43,20 @@ export type DesignerVocabulary = {
   permissions: readonly { code: string; name: string }[];
   /** The other flows, for a step that hands work to one of them. */
   flows: readonly { key: string; name: string }[];
+  /**
+   * Every capability name the requirements define, built or not — what a stored choice of a module
+   * that is not built yet is called, so its code never reaches the screen.
+   */
+  written: Readonly<Record<string, string>>;
+  /** The record the flow is about (its trigger event's record), for a condition's `record.…`. */
+  recordEntity?: string;
+  /** The codes of the events and fields that are built, whose names need no "not built yet". */
+  built?: ReadonlySet<string>;
+  /**
+   * The states a flow may move a record to, by the record its trigger event is about
+   * (`project` → the project stages), answered by the module that owns the record.
+   */
+  statuses: Readonly<Record<string, readonly { code: string; name: string }[]>>;
 };
 
 /** Base UI wants a string; "nothing" has to be a value of its own. */
@@ -62,6 +77,7 @@ function Choice({
   placeholder,
   onChange,
   className,
+  unknownName = "Tanımsız seçim",
 }: {
   label?: string;
   description?: string;
@@ -70,14 +86,20 @@ function Choice({
   placeholder?: string;
   onChange: (value: string) => void;
   className?: string;
+  /** What a stored value that is not among the items is called; its code is never shown. */
+  unknownName?: string;
 }) {
+  const shown =
+    !value || items.some((item) => item.value === value)
+      ? items
+      : [...items, { value, label: unknownName }];
   const select = (
-    <Select items={items} onValueChange={(picked) => onChange(String(picked))} value={value}>
+    <Select items={shown} onValueChange={(picked) => onChange(String(picked))} value={value}>
       <SelectTrigger className={className}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectPopup>
-        {items.map((item) => (
+        {shown.map((item) => (
           <SelectItem key={item.value} value={item.value}>
             {item.label}
           </SelectItem>
@@ -105,6 +127,9 @@ type OwnerRule = {
   permission?: string;
 };
 
+/** `*` closes every move of the record; a module's own moves join this list as it declares them. */
+const LOCK_TRANSITIONS: Item[] = [{ value: "*", label: "Kayıttaki bütün işlemler" }];
+
 const OWNER_KINDS: Item[] = [
   { value: "role", label: "Rol" },
   { value: "user", label: "Kişi" },
@@ -128,29 +153,35 @@ function OwnerQuestion({
 }) {
   const kind = owner?.type ?? "role";
 
-  const choices: Record<OwnerRule["type"], { items: Item[]; value: string; placeholder: string }> =
-    {
-      permission: {
-        items: vocabulary.permissions.map((one) => ({ value: one.code, label: one.name })),
-        placeholder: "Yetki seçin",
-        value: owner?.permission ?? "",
-      },
-      relation: {
-        items: vocabulary.relations.map((one) => ({ value: one.code, label: one.name })),
-        placeholder: "İlişki seçin",
-        value: owner?.relation ?? "",
-      },
-      role: {
-        items: vocabulary.roles.map((one) => ({ value: one.code, label: one.name })),
-        placeholder: "Rol seçin",
-        value: owner?.role ?? "",
-      },
-      user: {
-        items: vocabulary.people.map((one) => ({ value: one.id, label: one.name })),
-        placeholder: "Kişi seçin",
-        value: owner?.userId ?? "",
-      },
-    };
+  const choices: Record<
+    OwnerRule["type"],
+    { items: Item[]; value: string; placeholder: string; kind: ChoiceKind }
+  > = {
+    permission: {
+      items: vocabulary.permissions.map((one) => ({ value: one.code, label: one.name })),
+      placeholder: "Yetki seçin",
+      value: owner?.permission ?? "",
+      kind: "permission",
+    },
+    relation: {
+      items: vocabulary.relations.map((one) => ({ value: one.code, label: one.name })),
+      placeholder: "İlişki seçin",
+      value: owner?.relation ?? "",
+      kind: "relation",
+    },
+    role: {
+      items: vocabulary.roles.map((one) => ({ value: one.code, label: one.name })),
+      placeholder: "Rol seçin",
+      value: owner?.role ?? "",
+      kind: "role",
+    },
+    user: {
+      items: vocabulary.people.map((one) => ({ value: one.id, label: one.name })),
+      placeholder: "Kişi seçin",
+      value: owner?.userId ?? "",
+      kind: "person",
+    },
+  };
 
   const write = (value: string) => {
     if (kind === "user") onChange({ type: "user", userId: value });
@@ -174,6 +205,7 @@ function OwnerQuestion({
           items={choices[kind].items}
           onChange={write}
           placeholder={choices[kind].placeholder}
+          unknownName={unknownChoiceName(choices[kind].value, choices[kind].kind, vocabulary)}
           value={choices[kind].value}
         />
       </div>
@@ -296,6 +328,7 @@ function ConditionQuestion({
           label="Hangi bilgiye?"
           onChange={(value) => onChange({ test: { ...test, field: value } })}
           placeholder="Bilgi seçin"
+          unknownName={unknownChoiceName(String(test.field ?? ""), "field", vocabulary)}
           value={String(test.field ?? "")}
         />
       )}
@@ -412,6 +445,11 @@ export function StepQuestions({
 }) {
   const owner = step.owner as OwnerRule | undefined;
   const outcomes = (step.outcomes ?? {}) as Record<string, string | null | undefined>;
+  // The states of the record the flow is about; none when its module is not built yet.
+  const statusItems = (vocabulary.statuses[vocabulary.recordEntity ?? ""] ?? []).map((one) => ({
+    value: one.code,
+    label: one.name,
+  }));
   const picker = (props: Omit<Parameters<typeof StepPicker>[0], "steps" | "names" | "exclude">) => (
     <StepPicker {...props} exclude={step.id} names={names} steps={steps} />
   );
@@ -544,18 +582,18 @@ export function StepQuestions({
             />
             <FieldDescription>Engellenen kişiye bu cümle gösterilir.</FieldDescription>
           </Field>
-          <Field>
-            <FieldLabel htmlFor="step-transition">Hangi işlem kapansın?</FieldLabel>
-            <Input
-              defaultValue={String(step.transition ?? "*")}
-              id="step-transition"
-              onBlur={(event) => onChange({ transition: event.currentTarget.value })}
-            />
-            <FieldDescription>
-              Yıldız işareti kalırsa kayıt hiç hareket edemez; tek bir işlemin adı yazılırsa yalnız
-              o kapanır.
-            </FieldDescription>
-          </Field>
+          <Choice
+            description="Bütün işlemler kapanırsa kayıt hiç hareket edemez. Tek bir işlemi kapatmak için işlemlerini, kaydın sahibi olan modül verir."
+            items={LOCK_TRANSITIONS}
+            label="Hangi işlem kapansın?"
+            onChange={(value) => onChange({ transition: value })}
+            unknownName={unknownChoiceName(
+              String(step.transition ?? "*"),
+              "transition",
+              vocabulary,
+            )}
+            value={String(step.transition ?? "*")}
+          />
         </>
       ) : null}
 
@@ -566,6 +604,7 @@ export function StepQuestions({
           label="Hangi akış çalışsın?"
           onChange={(value) => onChange({ flow: value })}
           placeholder="Akış seçin"
+          unknownName={unknownChoiceName(String(step.flow ?? ""), "flow", vocabulary)}
           value={String(step.flow ?? "")}
         />
       ) : null}
@@ -579,49 +618,47 @@ export function StepQuestions({
             value={String(step.action ?? "create")}
           />
           {step.action === "set_status" ? (
-            <Field>
-              <FieldLabel htmlFor="step-status">Hangi duruma taşınsın?</FieldLabel>
-              <Input
-                defaultValue={String(step.status ?? "")}
-                id="step-status"
-                onBlur={(event) => onChange({ status: event.currentTarget.value })}
-              />
-              <FieldDescription>
-                Bir akış kaydı kesinleşmiş bir duruma taşıyamaz; ilgili modül bunu kendi diliyle
-                reddeder.
-              </FieldDescription>
-            </Field>
+            <Choice
+              description="Durumları, kaydın sahibi olan modül verir. Bir akış kaydı kesinleşmiş bir duruma taşıyamaz; ilgili modül bunu kendi diliyle reddeder."
+              items={statusItems}
+              label="Hangi duruma taşınsın?"
+              onChange={(value) => onChange({ status: value })}
+              placeholder={statusItems.length ? "Durum seçin" : "Kaydın modülü henüz kurulmadı"}
+              unknownName={unknownChoiceName(String(step.status ?? ""), "status", {
+                ...vocabulary,
+                statesOffered: statusItems.length > 0,
+              })}
+              value={String(step.status ?? "")}
+            />
           ) : (
-            <Field>
-              <FieldLabel htmlFor="step-record-type">Hangi kayıt oluşturulsun?</FieldLabel>
-              <Input
-                defaultValue={String(step.recordType ?? "")}
-                id="step-record-type"
-                onBlur={(event) => onChange({ recordType: event.currentTarget.value })}
-                placeholder="Örnek: belge"
-              />
-              <FieldDescription>
-                Kayıt türleri panelde tanımlanabilir olduğunda bu alan bir seçim listesine dönecek.
-              </FieldDescription>
-            </Field>
+            <Choice
+              description="Akış yalnız taslak kayıt açar. Kayıt türlerini, onları sunan modüller verir."
+              items={[]}
+              label="Hangi kayıt oluşturulsun?"
+              onChange={(value) => onChange({ recordType: value })}
+              placeholder="Taslak açmayı sunan bir modül henüz yok"
+              unknownName={unknownChoiceName(
+                String(step.recordType ?? ""),
+                "recordType",
+                vocabulary,
+              )}
+              value={String(step.recordType ?? "")}
+            />
           )}
         </>
       ) : null}
 
       {step.type === "for_each" ? (
         <>
-          <Field>
-            <FieldLabel htmlFor="step-list">Hangi liste için çalışsın?</FieldLabel>
-            <Input
-              defaultValue={String(step.list ?? "")}
-              id="step-list"
-              onBlur={(event) => onChange({ list: event.currentTarget.value })}
-            />
-            <FieldDescription>
-              Listeyi, kaydın sahibi olan modül verir; modüller listelerini açtığında bu alan da bir
-              seçim listesine dönecek.
-            </FieldDescription>
-          </Field>
+          <Choice
+            description="Listeyi, kaydın sahibi olan modül verir; modüller listelerini açtıkça burada seçilir."
+            items={[]}
+            label="Hangi liste için çalışsın?"
+            onChange={(value) => onChange({ list: value })}
+            placeholder="Liste sunan bir modül henüz yok"
+            unknownName={unknownChoiceName(String(step.list ?? ""), "list", vocabulary)}
+            value={String(step.list ?? "")}
+          />
           {picker({
             description: "Listedeki her öğe için bu adımdan başlayan bir dal çalışır.",
             label: "Her öğe için hangi adım?",
@@ -784,6 +821,7 @@ export function TriggerQuestions({
           label="Hangi olay?"
           onChange={(value) => onChange({ ...trigger, type: kind, event: value })}
           placeholder="Olay seçin"
+          unknownName={unknownChoiceName(String(trigger?.event ?? ""), "event", vocabulary)}
           value={String(trigger?.event ?? "")}
         />
       ) : null}
@@ -798,6 +836,7 @@ export function TriggerQuestions({
               onChange({ ...trigger, type: "threshold", test: { ...test, field: value } })
             }
             placeholder="Bilgi seçin"
+            unknownName={unknownChoiceName(String(test.field ?? ""), "field", vocabulary)}
             value={String(test.field ?? "")}
           />
           <Field>

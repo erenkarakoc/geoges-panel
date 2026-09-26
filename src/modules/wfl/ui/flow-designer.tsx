@@ -27,6 +27,7 @@ import {
   type Draft,
 } from "@/modules/wfl/domain/edit";
 import { graphOf, stepNames, stepTypeLabel, type Outlet } from "@/modules/wfl/domain/graph";
+import { recordEntityOf } from "@/modules/wfl/domain/choice-name";
 import { flowCanvasId } from "@/modules/wfl/ui/flow-canvas-id";
 import { FlowMenu, type FlowMenuActions } from "@/modules/wfl/ui/flow-menu";
 import { FlowActions, type DesignerActions, type DryRunState } from "@/modules/wfl/ui/flow-publish";
@@ -118,6 +119,16 @@ export function FlowDesigner({
     () => new Map(vocabulary.people.map((person) => [person.id, person.name])),
     [vocabulary],
   );
+  // A condition's `record.…` field is read as a field of the record the trigger event is about.
+  const triggerEvent = (draft.trigger as { event?: unknown } | undefined)?.event;
+  const asked = useMemo(
+    () => ({
+      ...vocabulary,
+      recordEntity: recordEntityOf(triggerEvent),
+      built: new Set([...vocabulary.events, ...vocabulary.fields].map((one) => one.code)),
+    }),
+    [vocabulary, triggerEvent],
+  );
   const valid = problems.steps.size === 0 && problems.flow.length === 0;
   const graph = useMemo(() => graphOf(draft), [draft]);
   const step = useMemo(
@@ -173,13 +184,13 @@ export function FlowDesigner({
       problems={problems.steps.get(step.id) ?? []}
       step={step}
       steps={draft.steps}
-      vocabulary={vocabulary}
+      vocabulary={asked}
     />
   ) : (
     <TriggerQuestions
       onChange={(trigger) => persist({ ...draft, trigger })}
       trigger={draft.trigger as Record<string, unknown> | undefined}
-      vocabulary={vocabulary}
+      vocabulary={asked}
     />
   );
 
