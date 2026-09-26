@@ -4,7 +4,13 @@ Last updated: 2026-09-26
 
 CURRENT PHASE: PHASE 09 — Slice 1: Projects, Sites, Daily Site Log (TASK-0123 step 3 next); Phases 07 and 08 built, owner walks owed
 
-## Latest continuation — roadmap presentation sandbox, in progress (2026-09-26, late)
+## Latest continuation — roadmap presentation finished (2026-09-26, late)
+
+- The page the continuation below left half-way is done and pushed (`961ed63`, TASK-0138, D-299): samples, page, CSS, `/roadmap` route and the "Yol haritası sunumu" menu link (development only).
+- Browser, after the owner signed in again: 375 px with no horizontal overflow and no console error, dark and light themes, the daily target sample (590 ÷ 159 → 4; 100 ÷ 7 → 15), the flow sample fitting the phone and playing step by step. Desktop had been checked by the previous session.
+- Owed: the owner's look before the client sees it. Next product work: TASK-0123 step 5 (flow link check, search, samples). Still worth raising: there is no working-calendar screen yet.
+
+## Earlier continuation — roadmap presentation sandbox, in progress (2026-09-26, late)
 
 The owner asked for a client presentation of the roadmap as a sandbox page (D-299). The session ran out of budget half-way; this is exactly where it stands.
 
