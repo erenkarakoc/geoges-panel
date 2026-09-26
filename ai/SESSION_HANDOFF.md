@@ -8,9 +8,10 @@ CURRENT PHASE: PHASE 09 — Slice 1: Projects, Sites, Daily Site Log (TASK-0123 
 
 - Pushed earlier this day: audit log names for every event and record type with a check that fails on a new unnamed one (`31a8549`); the designer never shows a code (`5813446`); removing a flow or a template (`2171651`, D-293, migration 0067, 7/7 database tests, tried in the browser); condition values by field kind, clock day and time pickers, and each step keeping its own text boxes (`33407b4`).
 - This commit: the province is one of the 81 on the firm, project and site forms (`src/platform/geo/provinces.ts`, `src/platform/ui/form/province-field.tsx`; the three domain schemas refuse other text); the panel type's series offers the series in use and still takes a new name. Recorded as D-294.
-- **Not seen in the browser:** the step panel fix, the new condition value fields, the province and series fields. The browser pane was signed out and the password is the owner's to type.
-- **Left over from the browser scan before the step panel fix:** the "Maliyet geri beslemesi" (`cost-feedback`) flow got an unintended draft (version 2) whose "Bitiş" step is renamed "Tamamlama aşaması mı?". The live version is untouched. Deleting the draft was not permitted in that session; the owner either fixes the name in the designer or allows the draft to be deleted. The "Stok sayımı onayı" draft is from an earlier session and was left alone.
-- Next: the browser pass above once the owner signs in; then TASK-0123 step 3 (daily targets).
+- **Browser pass after the owner signed in (same day):** the province box (typing "izm" finds İzmir, the pick lands in the field), the series box ("st" offers Standart, a new name says it will be added), the condition step's value as a list ("Tamamlama"), and a fast switch between the three steps of "Maliyet geri beslemesi" — each step shows its own name, "Bitiş" shows its empty box with the placeholder, no Base UI warning, no draft written. Not seen: the clock trigger's day and time pickers (no published flow has a clock trigger; trying one means creating a flow).
+- **Found in that pass and fixed:** below 1024 px the designer's canvas drew nothing — `flex-1` gave the canvas a zero flex basis inside a column whose height is not fixed, so the drawing library's `height: 100%` resolved to zero. `flex-1` now applies only from `lg`, where the layout is a row.
+- The unintended "Maliyet geri beslemesi" draft (version 2, no dry runs, no instances) was deleted with the owner's permission; only the published version 1 remains. The "Stok sayımı onayı" draft is from an earlier session and was left alone.
+- Next: TASK-0123 step 3 (daily targets).
 
 ## Earlier continuation — TASK-0122 finished on this side; TASK-0123's plan is next (2026-09-26)
 

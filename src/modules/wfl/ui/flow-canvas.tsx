@@ -275,7 +275,7 @@ function Canvas({
   return (
     <div
       aria-label="Akış şeması: oklarla adımlar arasında gezinin, Enter adımın sorularını açar"
-      className="relative h-[60svh] min-h-80 w-full flex-1 overflow-hidden rounded-lg border bg-muted/32 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background lg:h-[70svh]"
+      className="relative h-[60svh] min-h-80 w-full overflow-hidden rounded-lg border bg-muted/32 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background lg:h-[70svh] lg:flex-1"
       id={flowCanvasId}
       onKeyDown={onKeyDown}
       role="application"
