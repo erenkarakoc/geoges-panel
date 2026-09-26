@@ -25,6 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { stepTypeLabel } from "@/modules/wfl/domain/graph";
+import { ColumnChart, type Column } from "@/platform/ui/chart/chart";
 
 /**
  * The working log (SCR-197, REQ-WFL-034, TASK-0120).
@@ -63,7 +64,16 @@ const TRIGGER: Record<string, string> = {
 
 const moment = new Intl.DateTimeFormat("tr-TR", { dateStyle: "short", timeStyle: "short" });
 
-export function RunLog({ runs }: { runs: readonly RunCard[] }) {
+export function RunLog({
+  runs,
+  days,
+  outcomes,
+}: {
+  runs: readonly RunCard[];
+  /** Runs started on each of the last days, by outcome (D-297). */
+  days: readonly Column[];
+  outcomes: readonly string[];
+}) {
   if (runs.length === 0) {
     return (
       <Empty className="flex-1">
@@ -91,6 +101,15 @@ export function RunLog({ runs }: { runs: readonly RunCard[] }) {
           Akışların çalışmaları. Bir çalışmayı açmak adım adım ne olduğunu gösterir.
         </FrameDescription>
       </FrameHeader>
+      <FramePanel>
+        <h3 className="mb-2 text-sm font-medium">Son 14 günde başlayan çalışmalar</h3>
+        <ColumnChart
+          columns={days}
+          label="Son 14 günde başlayan çalışmalar, sonuca göre"
+          series={outcomes}
+          unit="çalışma"
+        />
+      </FramePanel>
       <FramePanel>
         <ul className="flex flex-col gap-2 lg:hidden">
           {runs.map((run) => (

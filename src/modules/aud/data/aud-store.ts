@@ -38,6 +38,20 @@ export type AuditLogQuery = {
 };
 
 /** One page of the audit log and the total of the filtered list. */
+/** Events on each of the last `days` Istanbul days under the same filters (D-297). */
+export function readAuditLogPerDay(
+  identity: DbIdentity,
+  q: Pick<AuditLogQuery, "actorId" | "eventPrefix" | "targetTable">,
+  days: number,
+) {
+  return runAsUser(identity, async (db: Tx) => {
+    const { rows } = await sql<{ day: string; events: string }>`
+      select day::text, events from aud.audit_log_per_day(${q.actorId}::uuid, ${q.eventPrefix},
+                                                          ${q.targetTable}, ${days})`.execute(db);
+    return new Map(rows.map((row) => [row.day, Number(row.events)]));
+  });
+}
+
 export function readAuditLogPage(identity: DbIdentity, q: AuditLogQuery) {
   return runAsUser(identity, async (db: Tx) => {
     const { rows } = await sql<{

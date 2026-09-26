@@ -55,6 +55,7 @@ Kodu yazan model, uygulamadan sonra ayrı bir adımda ve sonucu yazılı olarak:
 10. İsimlendirme ve glossary uyumu.
 11. COSS dışında element kullanıldı mı (kullanıldıysa onay kaydı var mı)?
 12. Etkilenen diğer modüller ve dokümanlar güncellendi mi?
+13. Ekranda grafikle daha çabuk okunacak bir sayı (ilerleme, dağılım, karşılaştırma, günden güne değişim) var mı; varsa grafik eklendi mi (`docs/ui-ux/DESIGN_SYSTEM_RULES.md` §14, D-297)?
 
 ## Phase Gate biçimi
 

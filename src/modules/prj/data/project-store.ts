@@ -1,5 +1,6 @@
 import { sql } from "kysely";
 
+import { todayIn } from "@/platform/date/day";
 import { runAsUser, type DbIdentity, type DbTransaction } from "@/platform/db";
 import type { SystemDb } from "@/platform/jobs/types";
 import type { SearchProjection } from "@/platform/search/search";
@@ -21,6 +22,9 @@ export type ProjectRow = {
   city: string | null;
   stage: string;
   coordinatorUserId: string | null;
+  /** Walls of the revision valid today, and how many of them are marked completed (D-297). */
+  wallsTotal?: number;
+  wallsCompleted?: number;
 };
 
 export type Project = ProjectRow & {
@@ -101,13 +105,21 @@ export function readProjects(identity: DbIdentity, filter: { words?: string | nu
       city: string | null;
       stage: string;
       coordinator_user_id: string | null;
-    }>`select id, code, name, client_party_id, city, stage, coordinator_user_id
-         from prj.project
+      walls_total: number;
+      walls_completed: number;
+    }>`select p.id, p.code, p.name, p.client_party_id, p.city, p.stage, p.coordinator_user_id,
+              coalesce(w.total, 0)::int as walls_total, coalesce(w.completed, 0)::int as walls_completed
+         from prj.project p
+         left join lateral (
+           select count(*) as total, count(*) filter (where wl.status = 'completed') as completed
+             from prj.revision_wall rw
+             join prj.wall wl on wl.id = rw.wall_id
+            where rw.revision_id = prj.revision_on(p.id, ${todayIn()}::date)) w on true
         where ${words}::text is null
-           or core.fold_tr(code || ' ' || name || ' ' || coalesce(city, '') || ' '
-                           || coalesce(authority, ''))
+           or core.fold_tr(p.code || ' ' || p.name || ' ' || coalesce(p.city, '') || ' '
+                           || coalesce(p.authority, ''))
               like '%' || core.fold_tr(${words}::text) || '%'
-        order by upper(code)
+        order by upper(p.code)
         limit 500`.execute(db);
     return rows.map((row): ProjectRow => ({
       city: row.city,
@@ -117,6 +129,8 @@ export function readProjects(identity: DbIdentity, filter: { words?: string | nu
       id: row.id,
       name: row.name,
       stage: row.stage,
+      wallsCompleted: row.walls_completed,
+      wallsTotal: row.walls_total,
     }));
   });
 }
@@ -305,4 +319,21 @@ export async function scanProjectsForSearch(db: SystemDb, afterId: string | null
      order by id
      limit ${limit}`.execute(db);
   return rows.map((row) => ({ id: row.id, projection: projection(row) }));
+}
+
+/** Walls of each site in its project's revision valid today, and how many are completed. */
+export function readSiteWallCounts(identity: DbIdentity, siteIds: readonly string[]) {
+  return runAsUser(identity, async (db: Tx) => {
+    const { rows } = await sql<{ site_id: string; total: number; completed: number }>`
+      select wl.site_id, count(*)::int as total,
+             count(*) filter (where wl.status = 'completed')::int as completed
+        from prj.wall wl
+        join prj.revision_wall rw
+          on rw.wall_id = wl.id and rw.revision_id = prj.revision_on(wl.project_id, ${todayIn()}::date)
+       where wl.site_id = any(${[...siteIds]}::uuid[])
+       group by wl.site_id`.execute(db);
+    return new Map(
+      rows.map((row) => [row.site_id, { completed: row.completed, total: row.total }]),
+    );
+  });
 }

@@ -19,10 +19,12 @@ import {
   FrameTitle,
 } from "@/components/ui/frame";
 import { WORK_MODEL_LABELS, type WorkModel } from "@/modules/sit/domain/site";
+import { DoneMeter } from "@/platform/ui/chart/chart";
 
 /**
  * Şantiyeler (SCR-026, TASK-0123 step 1): the sites the person may see, each opening its context
- * row. The indicators of REQ-SIT-001 — progress, the day's production, waiting approvals — arrive
+ * row, with how many of its walls are completed (D-297). The other indicators of REQ-SIT-001 — the
+ * day's production, waiting approvals — arrive
  * with the site screen (TASK-0128); sites are opened from their project's card.
  */
 
@@ -33,6 +35,8 @@ type Row = {
   workModel: WorkModel;
   city: string | null;
   status: "active" | "passive";
+  wallsTotal?: number;
+  wallsCompleted?: number;
 };
 
 export function SiteList({ sites }: { sites: readonly Row[] }) {
@@ -81,6 +85,15 @@ export function SiteList({ sites }: { sites: readonly Row[] }) {
                   .join(" · ")}
               </span>
             </span>
+            {site.wallsTotal ? (
+              <DoneMeter
+                className="w-32 max-sm:w-24"
+                done={site.wallsCompleted ?? 0}
+                label="Tamamlanan duvar"
+                total={site.wallsTotal}
+                unit="duvar"
+              />
+            ) : null}
             {site.status === "passive" ? <Badge variant="secondary">Pasif</Badge> : null}
             <ChevronRightIcon aria-hidden="true" className="size-4 text-muted-foreground" />
           </Link>

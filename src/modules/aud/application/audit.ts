@@ -6,6 +6,7 @@ import {
   readHistory,
   type AuditLogEntry,
   type HistoryEntry,
+  readAuditLogPerDay,
 } from "@/modules/aud/data/aud-store";
 import {
   AUDIT_PAGE_SIZE,
@@ -13,6 +14,10 @@ import {
   type AuditLogFilters,
 } from "@/modules/aud/domain/audit-log";
 import { AccessDeniedError, assertCan, signInIdentity } from "@/modules/iam";
+import { addDays, todayIn } from "@/platform/date/day";
+
+/** The chart above the log: events of the last fourteen days (D-297). */
+const AUDIT_CHART_DAYS = 14;
 
 /**
  * The audit service (TASK-0103). Permission is asked of IAM before anything is read (PERMISSIONS
@@ -30,6 +35,8 @@ export type AuditLogPage = {
   total: number;
   page: number;
   lastPage: number;
+  /** Events on each of the last fourteen days, under the person, event and record filters. */
+  perDay: { day: string; events: number }[];
 };
 
 /** One page of the company-wide audit log (SCR-193); owner layer only (REQ-AUD-006). */
@@ -46,13 +53,20 @@ export async function readAuditLog(filters: AuditLogFilters): Promise<AuditLogPa
     offset: (filters.page - 1) * AUDIT_PAGE_SIZE,
     limit: AUDIT_PAGE_SIZE,
   };
-  const result = await readAuditLogPage(who, query);
+  const [result, perDay] = await Promise.all([
+    readAuditLogPage(who, query),
+    readAuditLogPerDay(who, query, AUDIT_CHART_DAYS),
+  ]);
   const total = result.entries.length ? result.total : await countAuditLog(who, query);
   return {
     entries: result.entries,
     total,
     page: filters.page,
     lastPage: Math.max(1, Math.ceil(total / AUDIT_PAGE_SIZE)),
+    perDay: Array.from({ length: AUDIT_CHART_DAYS }, (_, index) => {
+      const day = addDays(todayIn(), index - AUDIT_CHART_DAYS + 1);
+      return { day, events: perDay.get(day) ?? 0 };
+    }),
   };
 }
 

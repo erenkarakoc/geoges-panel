@@ -56,6 +56,8 @@ export default async function ProjectsPage({ searchParams }: PageProps<"/project
         id: p.id,
         name: p.name,
         stageName: stageName.get(p.stage) ?? p.stage,
+        wallsCompleted: p.wallsCompleted,
+        wallsTotal: p.wallsTotal,
       }))}
       words={words}
     />

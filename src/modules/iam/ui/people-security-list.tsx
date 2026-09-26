@@ -32,6 +32,8 @@ import {
 import { resetSecondFactorAction } from "@/modules/iam/application/auth-actions";
 import type { PersonSecurity } from "@/modules/iam/data/account-security-store";
 import { useActionToast } from "@/platform/ui/feedback/use-action-toast";
+import { ShareBar } from "@/platform/ui/chart/chart";
+import { SERIES } from "@/platform/ui/chart/colors";
 
 /**
  * The minimal people screen (D-273, owner 2026-09-24). It exists for one thing the panel could not
@@ -56,6 +58,29 @@ export function PeopleSecurityList({ people }: { people: readonly PersonSecurity
           yapıldığında buraya gelecek.
         </FrameDescription>
       </FrameHeader>
+      {people.some((person) => person.active) ? (
+        <FramePanel>
+          <h3 className="mb-2 text-sm font-medium">İkinci doğrulama, etkin hesaplarda</h3>
+          <ShareBar
+            label="Etkin hesaplarda ikinci doğrulamanın durumu"
+            parts={[
+              {
+                color: SERIES[0],
+                key: "set",
+                label: "Kurulu",
+                value: people.filter((p) => p.active && !p.mustSetUpSecondFactor).length,
+              },
+              {
+                color: "var(--warning)",
+                key: "waiting",
+                label: "Kurulum bekleniyor",
+                value: people.filter((p) => p.active && p.mustSetUpSecondFactor).length,
+              },
+            ]}
+            unit="kişi"
+          />
+        </FramePanel>
+      ) : null}
       <FramePanel>
         {/* Cards until the row actually fits, which is wider here than the usual phone
             breakpoint: the five columns want about 810 px of panel because the cells do not

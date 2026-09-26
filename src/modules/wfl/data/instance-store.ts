@@ -3,6 +3,7 @@ import { sql } from "kysely";
 import { scheduleJob } from "@/platform/db/events";
 import { runAsUser, type DbIdentity } from "@/platform/db";
 import type { SystemDb } from "@/platform/jobs/types";
+import { todayIn } from "@/platform/date/day";
 
 /**
  * Running flows in the database (TASK-0117, migration 0046, REQ-WFL-007, 024, 034).
@@ -751,6 +752,19 @@ export type RunRow = {
  * anybody else sees only the runs a step of theirs is in, which is what the policy already says —
  * so this read needs no permission of its own.
  */
+/** Runs started on each of the last `days` Istanbul days, by how they stand (D-297). */
+export function readRunCounts(identity: DbIdentity, days = 14) {
+  return runAsUser(identity, async (db) => {
+    const { rows } = await sql<{ day: string; status: string; n: number }>`
+      select (i.started_at at time zone 'Europe/Istanbul')::date::text as day, i.status,
+             count(*)::int as n
+        from wfl.instance i
+       where i.started_at >= (${todayIn()}::date - ${days - 1}::int)::timestamp at time zone 'Europe/Istanbul'
+       group by 1, 2`.execute(db);
+    return rows;
+  });
+}
+
 export function readRuns(
   identity: DbIdentity,
   filter: { flowKey?: string | null; status?: string | null; limit?: number } = {},

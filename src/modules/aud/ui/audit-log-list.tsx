@@ -45,6 +45,8 @@ import {
   type AuditLogFilters,
 } from "@/modules/aud/domain/audit-log";
 import { ListPagination } from "@/platform/ui/list/list-pagination";
+import { formatDayShort } from "@/platform/date/day";
+import { ColumnChart } from "@/platform/ui/chart/chart";
 
 const ROUTE = "/audit-log";
 
@@ -167,6 +169,20 @@ export function AuditLogList({
             </Button>
           </div>
         )}
+      </FramePanel>
+
+      <FramePanel>
+        <h3 className="mb-2 text-sm font-medium">Son 14 günün kayıtları</h3>
+        <ColumnChart
+          columns={data.perDay.map((one) => ({
+            key: one.day,
+            label: formatDayShort(one.day),
+            values: [one.events],
+          }))}
+          label="Son 14 günün kayıtları, güne göre"
+          series={["Kayıt"]}
+          unit="kayıt"
+        />
       </FramePanel>
 
       <FramePanel className="p-0">

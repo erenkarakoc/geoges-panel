@@ -37,6 +37,7 @@ export {
   readMyApprovalCount,
   readMyApprovals,
   readRecentlyPublished,
+  readRunCounts,
   readRuns,
   readStepVisits,
   readRunLog,

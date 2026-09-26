@@ -48,6 +48,7 @@ import { REVISION_STATUS_LABELS, TARGET_KIND_LABELS } from "@/modules/prj/domain
 import { targetAmount, targetSubject, type TargetNames } from "@/modules/prj/ui/target-text";
 import { ChoiceField, type Choice } from "@/platform/ui/form/choice-field";
 import { useActionToast } from "@/platform/ui/feedback/use-action-toast";
+import { BarList } from "@/platform/ui/chart/chart";
 
 /**
  * Proje revizyonu ve duvar hedefleri (SCR-024, TASK-0123 step 2, REQ-PRJ-006…009).
@@ -371,6 +372,26 @@ export function RevisionEditor({
             <p className="text-sm text-muted-foreground">Fark yok.</p>
           ) : (
             <>
+              {diff.some((line) => line.kind === "panel") ? (
+                <BarList
+                  className="mb-4"
+                  label="Panel hedefi farkı, duvar ve tipe göre (adet)"
+                  rows={diff
+                    .filter((line) => line.kind === "panel")
+                    .map((line, index) => ({
+                      key: String(index),
+                      label: `${wallName.get(line.wallId) ?? "Çıkarılan duvar"} · ${targetSubject(line, names)}`,
+                      valueText: revision.basedOnRevisionId
+                        ? [
+                            targetAmount(line, line.before, names),
+                            targetAmount(line, line.after, names),
+                          ]
+                        : [targetAmount(line, line.after, names)],
+                      values: revision.basedOnRevisionId ? [line.before, line.after] : [line.after],
+                    }))}
+                  series={revision.basedOnRevisionId ? ["Önceki", "Yeni"] : undefined}
+                />
+              ) : null}
               <ul className="flex flex-col gap-2 lg:hidden">
                 {diff.map((line, index) => (
                   <li className="flex flex-col gap-0.5 rounded-lg border p-3 text-sm" key={index}>

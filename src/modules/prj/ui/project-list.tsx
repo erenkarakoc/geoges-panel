@@ -49,6 +49,7 @@ import {
   type ProjectFormValue,
 } from "@/modules/prj/ui/project-form";
 import type { Choice } from "@/platform/ui/form/choice-field";
+import { DoneMeter } from "@/platform/ui/chart/chart";
 import { useActionToast } from "@/platform/ui/feedback/use-action-toast";
 
 /**
@@ -63,6 +64,8 @@ type Row = {
   clientName: string | null;
   city: string | null;
   stageName: string;
+  wallsTotal?: number;
+  wallsCompleted?: number;
 };
 
 type Result = { error: string | null; id?: string | null };
@@ -183,6 +186,15 @@ export function ProjectList({
                       <Badge className="self-start" variant="outline">
                         {project.stageName}
                       </Badge>
+                      {project.wallsTotal ? (
+                        <DoneMeter
+                          className="mt-1"
+                          done={project.wallsCompleted ?? 0}
+                          label="Tamamlanan duvar"
+                          total={project.wallsTotal}
+                          unit="duvar"
+                        />
+                      ) : null}
                     </Link>
                   </li>
                 ))}
@@ -194,7 +206,7 @@ export function ProjectList({
                     <TableHead>Proje</TableHead>
                     <TableHead>İşveren</TableHead>
                     <TableHead>İl</TableHead>
-                    <TableHead>Aşama</TableHead>
+                    <TableHead>Aşama ve duvarlar</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -209,7 +221,17 @@ export function ProjectList({
                       <TableCell>{project.clientName ?? "—"}</TableCell>
                       <TableCell>{project.city ?? "—"}</TableCell>
                       <TableCell>
-                        <Badge variant="outline">{project.stageName}</Badge>
+                        <div className="flex flex-col items-start gap-1.5">
+                          <Badge variant="outline">{project.stageName}</Badge>
+                          {project.wallsTotal ? (
+                            <DoneMeter
+                              done={project.wallsCompleted ?? 0}
+                              label="Tamamlanan duvar"
+                              total={project.wallsTotal}
+                              unit="duvar"
+                            />
+                          ) : null}
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}

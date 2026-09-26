@@ -14,6 +14,7 @@ export {
   projectCard,
   projectNames,
   projectStages,
+  siteWallProgress,
   type ProjectResult,
 } from "./application/projects";
 export {

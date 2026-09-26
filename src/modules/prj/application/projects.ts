@@ -17,6 +17,7 @@ import {
   saveContract,
   setProjectStage,
   updateProject,
+  readSiteWallCounts,
 } from "@/modules/prj/data/project-store";
 import {
   contractInput,
@@ -171,4 +172,10 @@ export async function moveProjectStage(id: string, stage: string): Promise<Proje
   const known = await projectStages();
   if (!known.some((one) => one.code === stage)) return { error: "Bu aşama tanımlı değil." };
   return attempt(async () => setProjectStage(await identity(), id, stage));
+}
+
+/** How far each site's walls have got (D-297), for the site list; the site module reads no walls. */
+export async function siteWallProgress(siteIds: readonly string[]) {
+  if (siteIds.length === 0) return new Map<string, { completed: number; total: number }>();
+  return readSiteWallCounts(await identity(), siteIds);
 }

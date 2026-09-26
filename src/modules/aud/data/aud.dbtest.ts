@@ -314,6 +314,26 @@ describe("audit log (REQ-AUD-005, REQ-AUD-006, REQ-IAM-008)", () => {
     expect(Number(rows[0].total)).toBeGreaterThanOrEqual(rows.length);
   });
 
+  it("counts the last days for the chart under the same guard and filters (D-297)", async () => {
+    const perDay = (userId: string) =>
+      as<{ day: string; events: string }>(
+        userId,
+        "select day::text, events from aud.audit_log_per_day(p_event_prefix => 'user.', p_days => 3)",
+      );
+    expect(await errorOf(perDay(VIEWER_A))).toBe("42501");
+    expect(await errorOf(perDay(FULL))).toBe("42501");
+    const rows = await perDay(OWNER);
+    expect(rows.length).toBeGreaterThan(0);
+    expect(rows.length).toBeLessThanOrEqual(3);
+    const { rows: direct } = await admin.query(
+      `select count(*)::int as n from aud.audit_log
+        where event_type like 'user.%'
+          and (occurred_at at time zone 'Europe/Istanbul')::date = iam.today()`,
+    );
+    const today = (await admin.query("select iam.today()::text as d")).rows[0].d;
+    expect(Number(rows.find((r) => r.day === today)?.events ?? 0)).toBe(direct[0].n);
+  });
+
   it("names the person an assignment event is about", async () => {
     const rows = await as<{ target_name: string | null }>(
       OWNER,

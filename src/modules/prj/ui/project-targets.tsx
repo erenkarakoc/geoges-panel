@@ -24,6 +24,8 @@ import { Menu, MenuItem, MenuPopup, MenuTrigger } from "@/components/ui/menu";
 import type { RevisionWall, WallStatus, WallTarget } from "@/modules/prj/data/revision-store";
 import { WALL_STATUS_LABELS, WALL_STATUSES } from "@/modules/prj/domain/revision";
 import { targetAmount, targetSubject, type TargetNames } from "@/modules/prj/ui/target-text";
+import { BarList, ShareBar } from "@/platform/ui/chart/chart";
+import { REST, SERIES } from "@/platform/ui/chart/colors";
 import { useActionToast } from "@/platform/ui/feedback/use-action-toast";
 
 /**
@@ -91,6 +93,38 @@ export function ProjectTargets({
     totals.set(key, { amount: (was?.amount ?? 0) + amount, label, line: target });
   }
 
+  // How far the walls have got (D-297): one hue, darker as a wall moves on, the rest quiet.
+  const byStatus = (status: WallStatus) =>
+    current.walls.filter((wall) => wall.status === status).length;
+  const wallParts = [
+    { color: SERIES[0], key: "completed", label: "Tamamlandı", value: byStatus("completed") },
+    {
+      color: `color-mix(in srgb, ${SERIES[0]} 45%, transparent)`,
+      key: "in_progress",
+      label: "Devam ediyor",
+      value: byStatus("in_progress"),
+    },
+    { color: REST, key: "not_started", label: "Başlamadı", value: byStatus("not_started") },
+  ];
+  const panelRows = [...totals.entries()]
+    .filter(([key]) => key.startsWith("p:"))
+    .map(([key, total]) => ({
+      key,
+      label: total.label,
+      valueText: [targetAmount(total.line, total.amount, names)],
+      values: [total.amount],
+    }))
+    .sort((a, b) => b.values[0] - a.values[0]);
+  const stripRows = [...totals.entries()]
+    .filter(([key]) => key.startsWith("s:"))
+    .map(([key, total]) => ({
+      key,
+      label: total.label,
+      valueText: [`${number.format(total.amount)} m`],
+      values: [total.amount],
+    }))
+    .sort((a, b) => b.values[0] - a.values[0]);
+
   const mark = (wallId: string, status: WallStatus) =>
     start(async () => {
       const said = await markWall(wallId, status);
@@ -111,24 +145,31 @@ export function ProjectTargets({
             . Duvarların toplamıdır; değişiklik yeni revizyonla yapılır.
           </FrameDescription>
         </FrameHeader>
-        <FramePanel>
-          {totals.size === 0 ? (
+        {current.walls.length > 0 ? (
+          <FramePanel>
+            <h3 className="mb-2 text-sm font-medium">
+              Duvarlar: {byStatus("completed")} / {current.walls.length} tamamlandı
+            </h3>
+            <ShareBar label="Duvarların durumu" parts={wallParts} unit="duvar" />
+          </FramePanel>
+        ) : null}
+        {totals.size === 0 ? (
+          <FramePanel>
             <p className="text-sm text-muted-foreground">Bu revizyonda hedef satırı yok.</p>
-          ) : (
-            <ul className="divide-y">
-              {[...totals.values()].map((total) => (
-                <li className="flex justify-between gap-3 py-2 text-sm" key={total.label}>
-                  <span>{total.label}</span>
-                  <span className="shrink-0 tabular-nums">
-                    {total.line.kind === "panel"
-                      ? targetAmount(total.line, total.amount, names)
-                      : `${number.format(total.amount)} m`}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </FramePanel>
+          </FramePanel>
+        ) : null}
+        {panelRows.length > 0 ? (
+          <FramePanel>
+            <h3 className="mb-3 text-sm font-medium">Panel hedefi, tipe göre</h3>
+            <BarList label="Panel hedefi, tipe göre (adet)" rows={panelRows} />
+          </FramePanel>
+        ) : null}
+        {stripRows.length > 0 ? (
+          <FramePanel>
+            <h3 className="mb-3 text-sm font-medium">Şerit hedefi, tipe göre</h3>
+            <BarList label="Şerit hedefi, tipe göre (metre)" rows={stripRows} />
+          </FramePanel>
+        ) : null}
       </Frame>
 
       {current.walls.map((wall) => {

@@ -34,6 +34,8 @@ import {
   type TaskPriority,
   type TaskSummary,
 } from "@/modules/tsk/domain/tasks";
+import { ShareBar } from "@/platform/ui/chart/chart";
+import { REST, SERIES } from "@/platform/ui/chart/colors";
 
 export const TASKS_ROUTE = "/tasks";
 export const NEW_TASK_ROUTE = "/tasks/new";
@@ -55,6 +57,15 @@ const PRIORITY_BADGE: Record<TaskPriority, "outline" | "secondary" | "warning" |
   high: "warning",
   critical: "error",
 };
+
+// How the list divides (D-297). "Gecikti" wears the error colour it wears on its badge.
+const GROUPS: { key: ReturnType<typeof taskGroup>; label: string; color: string }[] = [
+  { color: "var(--destructive)", key: "overdue", label: "Gecikti" },
+  { color: SERIES[0], key: "today", label: "Bugün" },
+  { color: SERIES[1], key: "awaiting", label: "Onay bekliyor" },
+  { color: SERIES[2], key: "upcoming", label: "İleride" },
+  { color: REST, key: "closed", label: "Kapandı" },
+];
 
 function viewHref(view: TaskView, showClosed: boolean) {
   const params = new URLSearchParams();
@@ -138,6 +149,19 @@ export function TaskList({
             {showClosed ? "Kapananları gizle" : "Kapananları göster"}
           </Button>
         </nav>
+
+        {tasks.length > 0 ? (
+          <ShareBar
+            label="Görevlerin durumu"
+            parts={GROUPS.filter((group) => group.key !== "closed" || showClosed).map((group) => ({
+              color: group.color,
+              key: group.key,
+              label: group.label,
+              value: tasks.filter((task) => taskGroup(task, now) === group.key).length,
+            }))}
+            unit="görev"
+          />
+        ) : null}
 
         {tasks.length === 0 ? (
           <Empty>
