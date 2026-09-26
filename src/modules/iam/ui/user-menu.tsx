@@ -143,8 +143,11 @@ export function UserMenu({
           <MenuGroupLabel>Bu cihaz</MenuGroupLabel>
           <ThemeMenuItem />
           {/* The push switch is not a menu item: it carries its own state and must not close the
-              menu when it is pressed. The menu is simply where it lives now (owner 2026-09-24). */}
-          {deviceSwitch ? <div className="px-2 py-1.5">{deviceSwitch}</div> : null}
+              menu when it is pressed. The menu is simply where it lives now (owner 2026-09-24).
+              Its state arrives a moment after the menu opens, sometimes as a whole sentence; `w-0
+              min-w-full` lets that sentence wrap inside the width the other items give the menu
+              instead of widening it after it opened (owner 2026-09-26). */}
+          {deviceSwitch ? <div className="w-0 min-w-full px-2 py-1.5">{deviceSwitch}</div> : null}
         </MenuGroup>
         <MenuSeparator />
         <MenuItem
