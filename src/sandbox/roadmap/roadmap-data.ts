@@ -43,8 +43,8 @@ export type Phase = {
   steps: readonly Step[];
   /** Where to try what is built; opened in a new tab. */
   tryIt?: readonly TryLink[];
-  /** A small working sample on this page. */
-  demo?: "roles" | "search" | "flow" | "target";
+  /** Small working samples on this page. */
+  demos?: readonly ("roles" | "search" | "flow" | "target")[];
   /** One technical point worth telling the client, in plain words. */
   note?: string;
 };
@@ -127,7 +127,7 @@ export const phases: readonly Phase[] = [
         what: "Son 14 günün kayıtları; kişiye ve türe göre süzün",
       },
     ],
-    demo: "roles",
+    demos: ["roles", "search"],
     note: "Yetki ekranda değil veritabanında uygulanır: görmemesi gereken bir satır, ekranda gizlenmez, ona hiç gelmez.",
   },
   {
@@ -179,7 +179,7 @@ export const phases: readonly Phase[] = [
         what: "Hangi akış ne zaman çalıştı, nerede bekliyor",
       },
     ],
-    demo: "flow",
+    demos: ["flow"],
     note: "Bir akış yayımlanmadan önce örnek bir kayıtla denenir; deneme hiçbir şey yazmaz, sadece ne olacağını gösterir.",
   },
   {
@@ -246,7 +246,7 @@ export const phases: readonly Phase[] = [
         what: "Tip ekleyin; m² kendiliğinden hesaplanır",
       },
     ],
-    demo: "target",
+    demos: ["target"],
     note: "Geçmiş yeniden yazılmaz: hedefler ve tedarik matrisi tarihli tutulur; bir değişiklik yalnız o günden sonrasını etkiler.",
   },
   {

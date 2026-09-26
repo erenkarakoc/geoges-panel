@@ -1,14 +1,527 @@
 /*
- * Roadmap presentation sandbox (D-299). Work in progress: only the illustration classes exist so
- * far; the page styles come with roadmap-page.tsx. Colours are read from the app's variables, as
- * in the structure presentation (D-052).
+ * Roadmap presentation sandbox (D-299). Every rule is scoped by CSS Modules, so nothing leaks into
+ * the app; colours, radius and fonts are read from the app's variables, as in the structure
+ * presentation (D-052), so the page follows the light and dark themes.
  */
+
+.root {
+  --r-bg: var(--background);
+  --r-surface: var(--card);
+  --r-border: var(--border);
+  --r-text: var(--foreground);
+  --r-muted: var(--muted-foreground);
+  --r-brand: var(--primary);
+  --r-radius: var(--radius);
+  --r-done: var(--success);
+  --r-partly: var(--info);
+  --r-now: var(--warning);
+  --r-next: color-mix(in srgb, var(--muted-foreground) 45%, transparent);
+
+  min-height: 100svh;
+  background: var(--r-bg);
+  color: var(--r-text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.muted {
+  color: var(--r-muted);
+  font-size: 0.9em;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+/* ---------- header ---------- */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 28px 24px 8px;
+}
+
+.headerTop {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.eyebrow {
+  color: var(--r-brand);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.lead {
+  max-width: 760px;
+  margin: 0;
+  color: var(--r-muted);
+  font-size: 18px;
+}
+
+.progress {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--r-muted) 18%, transparent);
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--r-brand);
+}
+
+.strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  min-height: 36px;
+  padding: 4px 12px 4px 4px;
+  border: 1px solid var(--r-border);
+  border-radius: 999px;
+  background: var(--r-surface);
+  color: var(--r-text);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.chip:hover {
+  border-color: var(--r-brand);
+}
+
+.chipIndex {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--r-next);
+  color: var(--r-bg);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.chip[data-status="done"] .chipIndex,
+.phaseIndex[data-status="done"],
+.legendDot[data-status="done"] {
+  background: var(--r-done);
+}
+
+.chip[data-status="partly"] .chipIndex,
+.phaseIndex[data-status="partly"],
+.legendDot[data-status="partly"] {
+  background: var(--r-partly);
+}
+
+.chip[data-status="now"] .chipIndex,
+.phaseIndex[data-status="now"],
+.legendDot[data-status="now"] {
+  background: var(--r-now);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  color: var(--r-muted);
+  font-size: 13px;
+  list-style: none;
+}
+
+.legend li {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--r-next);
+}
+
+/* ---------- phases ---------- */
+
+.phases {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.phase {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 28px;
+  border: 1px solid var(--r-border);
+  border-radius: calc(var(--r-radius) * 2);
+  background: var(--r-surface);
+  scroll-margin-top: 16px;
+}
+
+.phaseHead {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.phaseIndex {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: var(--r-next);
+  color: var(--r-bg);
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.phaseHeading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.phaseNumber {
+  color: var(--r-muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.phaseTitle {
+  margin: 0;
+  font-size: clamp(22px, 3.4vw, 30px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.phaseMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.phaseBody {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  align-items: start;
+}
+
+.phaseText {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.summary {
+  margin: 0;
+  font-size: 18px;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step,
+.stepDone {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.stepMark {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.stepMark svg {
+  width: 18px;
+  height: 18px;
+}
+
+.stepDone .stepMark {
+  color: var(--r-done);
+}
+
+.step .stepMark {
+  color: var(--r-next);
+}
+
+.phaseArt {
+  display: flex;
+  justify-content: center;
+}
+
+/* ---------- try it, note ---------- */
+
+.tryIt {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-radius: var(--r-radius);
+  background: color-mix(in srgb, var(--r-brand) 7%, transparent);
+}
+
+.tryTitle {
+  margin: 0;
+  font-weight: 700;
+}
+
+.tryList {
+  display: grid;
+  gap: 8px 16px;
+  margin: 0;
+  padding: 0;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  list-style: none;
+}
+
+.tryList li {
+  display: flex;
+  flex-direction: column;
+}
+
+.tryLink {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  color: var(--r-brand);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.tryLink:hover {
+  text-decoration: underline;
+}
+
+.tryLink svg {
+  width: 14px;
+  height: 14px;
+}
+
+.note {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px dashed var(--r-border);
+  border-radius: var(--r-radius);
+  color: var(--r-muted);
+}
+
+.note svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+  color: var(--r-now);
+}
+
+/* ---------- demos ---------- */
+
+.demos {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.demo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--r-border);
+  border-radius: var(--r-radius);
+  background: var(--r-bg);
+}
+
+.demoTitle {
+  margin: 0;
+  font-weight: 600;
+}
+
+.demoRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.roleGrid {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  list-style: none;
+}
+
+.roleCard,
+.roleCardHidden {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px;
+  border: 1px solid var(--r-border);
+  border-radius: var(--r-radius);
+  font-size: 14px;
+  transition: opacity 0.2s;
+}
+
+.roleCard {
+  background: var(--r-surface);
+}
+
+.roleCardHidden {
+  border-style: dashed;
+  opacity: 0.45;
+}
+
+.roleState {
+  color: var(--r-muted);
+  font-size: 12px;
+}
+
+.searchList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flowStage {
+  height: 360px;
+  border-radius: var(--r-radius);
+  background: var(--r-surface);
+}
+
+.box,
+.boxLit,
+.boxPassed {
+  display: flex;
+  flex-direction: column;
+  width: 170px;
+  padding: 6px 10px;
+  border: 1px solid var(--r-border);
+  border-radius: 8px;
+  background: var(--r-surface);
+  color: var(--r-text);
+  font-size: 12px;
+  transition:
+    background 0.3s,
+    border-color 0.3s;
+}
+
+.boxPassed {
+  border-color: var(--r-done);
+}
+
+.boxLit {
+  border-color: var(--r-brand);
+  background: color-mix(in srgb, var(--r-brand) 16%, var(--r-surface));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--r-brand) 25%, transparent);
+}
+
+.boxKind {
+  color: var(--r-muted);
+  font-size: 11px;
+}
+
+.boxTitle {
+  font-weight: 600;
+}
+
+.targetGrid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  align-items: end;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.targetResult {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  border-radius: var(--r-radius);
+  background: color-mix(in srgb, var(--r-brand) 10%, transparent);
+}
+
+.targetResult strong {
+  color: var(--r-brand);
+  font-size: 26px;
+}
+
+/* ---------- illustrations ---------- */
 
 .illustration {
   width: 100%;
   max-width: 220px;
   height: auto;
-  color: var(--foreground);
+  color: var(--r-text);
 }
 
 .illuGround {
@@ -26,4 +539,44 @@
 
 .accentFill {
   fill: var(--primary);
+}
+
+/* ---------- footer, small screens ---------- */
+
+.footer {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 8px 24px 40px;
+  color: var(--r-muted);
+  font-size: 13px;
+}
+
+@media (max-width: 720px) {
+  .header,
+  .phases,
+  .footer {
+    padding-inline: 16px;
+  }
+
+  .phase {
+    padding: 20px 16px;
+  }
+
+  .phaseBody {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .phaseArt {
+    order: -1;
+  }
+
+  .phaseArt svg {
+    max-width: 160px;
+  }
+
+  .phaseIndex {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
 }

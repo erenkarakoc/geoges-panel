@@ -3,6 +3,7 @@
 import {
   CompassIcon,
   LogOutIcon,
+  MapIcon,
   NetworkIcon,
   ShieldCheckIcon,
   UserIcon,
@@ -101,6 +102,13 @@ export function UserMenu({
             <MenuLinkItem render={<Link href="/presentation" />}>
               <NetworkIcon aria-hidden="true" />
               Yapı sunumu
+            </MenuLinkItem>
+          ) : null}
+          {/* Development-only roadmap presentation for the client (D-299). */}
+          {process.env.NODE_ENV === "development" ? (
+            <MenuLinkItem render={<Link href="/roadmap" />}>
+              <MapIcon aria-hidden="true" />
+              Yol haritası sunumu
             </MenuLinkItem>
           ) : null}
         </MenuGroup>
