@@ -4,7 +4,6 @@ import {
   CompassIcon,
   LogOutIcon,
   MapIcon,
-  NetworkIcon,
   ShieldCheckIcon,
   UserIcon,
   UsersIcon,
@@ -97,13 +96,6 @@ export function UserMenu({
             <CompassIcon aria-hidden="true" />
             Rol tanıtımı
           </MenuLinkItem>
-          {/* Development-only structure presentation (D-052); hidden in production builds. */}
-          {process.env.NODE_ENV === "development" ? (
-            <MenuLinkItem render={<Link href="/presentation" />}>
-              <NetworkIcon aria-hidden="true" />
-              Yapı sunumu
-            </MenuLinkItem>
-          ) : null}
           {/* Development-only roadmap presentation for the client (D-299). */}
           {process.env.NODE_ENV === "development" ? (
             <MenuLinkItem render={<Link href="/roadmap" />}>

@@ -53,8 +53,8 @@ import type { FlowEdge, FlowNode, Outlet } from "@/modules/wfl/domain/graph";
  *
  * The one custom interface element in the panel, and the owner approved it because COSS has no
  * box-and-arrow field. Only the library's engine is used — viewport, pan, zoom, edge routing — and
- * every box is our own component in the panel's own colours, exactly as the presentation map does
- * it (D-053).
+ * every box is our own component in the panel's own colours, as the structure presentation's map
+ * did before it was removed (D-053).
  *
  * The canvas is **one** tab stop (SPIKE-07): the boxes are not focusable one by one, arrow keys
  * move between them, Enter opens the selected step's questions and Escape brings the focus back

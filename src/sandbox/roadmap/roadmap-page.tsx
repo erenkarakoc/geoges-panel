@@ -20,7 +20,7 @@ import styles from "./roadmap.module.css";
 /**
  * The roadmap as a presentation for the client (D-299): every phase as a big numbered step, what
  * it means in practice, what is done, a small working sample where one exists, and where in the
- * panel to try it. Development only, like the structure presentation (D-052).
+ * panel to try it. Development only, under the sandbox rule of D-052.
  */
 
 const DEMOS = { flow: FlowDemo, roles: RolesDemo, search: SearchDemo, target: TargetDemo };
@@ -130,7 +130,7 @@ export function RoadmapPage() {
             </Button>
           </div>
         </div>
-        <h1 className={styles.title}>Yol haritası: nereden geldik, nereye gidiyoruz</h1>
+        <h1 className={styles.title}>Yol Haritası</h1>
         <p className={styles.lead}>
           Firmanın bütün işini — projeden şantiyeye, stoktan hakedişe — tek panelde toplayan
           uygulama. Aşağıda her faz büyük bir adım; bitenlerin yanında çalışan küçük örnekler ve
