@@ -47,13 +47,19 @@ const onHomeScreen = () =>
   window.matchMedia("(display-mode: standalone)").matches ||
   (navigator as { standalone?: boolean }).standalone === true;
 
-/** What this browser can do and where it stands; nothing here changes anything. */
+/**
+ * What this browser can do and where it stands; nothing here changes anything. The service worker
+ * is only looked up here and registered when the person switches notifications on: a browser that
+ * refuses service workers (the Claude desktop app's browser pane fails every registration without
+ * even requesting the script) writes that failure to the console itself, so registering on every
+ * page load left two errors on every page (StrictMode runs the effect twice in development).
+ */
 async function readState(): Promise<State> {
   if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
     return isApple() && !onHomeScreen() ? { kind: "ios-home-screen" } : { kind: "unsupported" };
   }
-  const registration = await navigator.serviceWorker.register("/sw.js");
-  const existing = await registration.pushManager.getSubscription();
+  const registration = await navigator.serviceWorker.getRegistration("/");
+  const existing = (await registration?.pushManager.getSubscription()) ?? null;
   const answer = await fetch(
     existing ? `${API}?endpoint=${encodeURIComponent(existing.endpoint)}` : API,
     { cache: "no-store" },
@@ -92,6 +98,13 @@ export function PushToggle() {
     try {
       if ((await Notification.requestPermission()) !== "granted") {
         setState({ kind: "denied" });
+        return;
+      }
+      try {
+        await navigator.serviceWorker.register("/sw.js");
+      } catch {
+        // This browser does not allow a service worker, so it cannot receive phone notifications.
+        setState({ kind: "unsupported" });
         return;
       }
       const registration = await navigator.serviceWorker.ready;
