@@ -1,3 +1,7 @@
+import {
+  readAuthorityApprovalsAsSystem,
+  readOfficeAssigneeAsSystem,
+} from "@/modules/prj/data/technical-office-store";
 import { defineCapabilities } from "@/platform/capabilities/catalog";
 
 /**
@@ -50,6 +54,13 @@ export const prjCapabilities = defineCapabilities({
       carries: ["proje", "duvar"],
       dataClass: "internal",
     },
+    {
+      code: "technical_office_item.overdue",
+      name: "Teknik ofis işi gecikti",
+      when: "Teslim tarihi geçtiğinde",
+      carries: ["proje", "iş", "sorumlu"],
+      dataClass: "internal",
+    },
   ],
   actions: [],
   // The stage travels in the payload of `project.created` and `project.stage_changed`, which is
@@ -57,6 +68,32 @@ export const prjCapabilities = defineCapabilities({
   // yet, so they are declared when an event carries them.
   conditions: [
     { code: "project.stage", name: "Proje aşaması", type: "choice", dataClass: "internal" },
+    {
+      code: "technical_office_item.assignee_user_id",
+      name: "Teknik ofis işinin sorumlusu",
+      type: "person",
+      dataClass: "internal",
+    },
   ],
-  relations: [],
+  relations: [
+    {
+      code: "technical_office_item.assignee",
+      name: "Teknik ofis işinin sorumlusu",
+      // The flow's record is the item itself (its overdue event names it).
+      resolve: (caller, _argument, record) =>
+        record && record.schema === "prj" && record.table === "technical_office_item"
+          ? readOfficeAssigneeAsSystem(caller.db, record.id)
+          : Promise.resolve(null),
+    },
+  ],
+  lists: [
+    {
+      code: "prj.authority_approvals",
+      name: "Projenin kurum onayı gereken teknik ofis işleri",
+      read: (caller, record) =>
+        record && record.schema === "prj" && record.table === "project"
+          ? readAuthorityApprovalsAsSystem(caller.db, record.id)
+          : Promise.resolve([]),
+    },
+  ],
 });

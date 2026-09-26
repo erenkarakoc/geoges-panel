@@ -17,7 +17,7 @@ import {
 import { sitCapabilities } from "@/modules/sit";
 import { tskCapabilities } from "@/modules/tsk";
 import { wflCapabilities } from "@/modules/wfl";
-import type { ActionCapability, ModuleCapabilities } from "@/platform/capabilities";
+import type { ActionCapability, ModuleCapabilities, RecordRef } from "@/platform/capabilities";
 import type { SystemDb } from "@/platform/jobs/types";
 import capabilityNameRows from "@/records/capability-names.json";
 
@@ -121,12 +121,26 @@ export const ownerRelations = {
     return action.run({ db, userId: null }, input);
   },
 
-  async resolve(db: SystemDb, code: string, argument: string | null): Promise<string | null> {
+  async resolve(
+    db: SystemDb,
+    code: string,
+    argument: string | null,
+    record: RecordRef | null = null,
+  ): Promise<string | null> {
     for (const catalog of moduleCapabilities) {
       const relation = catalog.relations.find((r) => r.code === code);
-      if (relation) return relation.resolve({ db, userId: null }, argument);
+      if (relation) return relation.resolve({ db, userId: null }, argument, record);
     }
     return null;
+  },
+
+  /** A list a "her biri için" step walks, read by the module that declared it (D-298). */
+  async list(db: SystemDb, code: string, ask: { record: RecordRef | null; limitMs: number }) {
+    for (const catalog of moduleCapabilities) {
+      const list = (catalog.lists ?? []).find((l) => l.code === code);
+      if (list) return list.read({ db, userId: null }, ask.record);
+    }
+    throw new Error("bu listeyi sunan bir modül yok");
   },
 };
 

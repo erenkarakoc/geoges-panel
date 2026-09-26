@@ -76,6 +76,11 @@
   },
   {
     "module": "PRJ",
+    "kind": "list",
+    "code": "prj.authority_approvals"
+  },
+  {
+    "module": "PRJ",
     "kind": "event",
     "code": "project.changed"
   },
@@ -183,6 +188,21 @@
     "module": "TSK",
     "kind": "condition",
     "code": "task.status"
+  },
+  {
+    "module": "PRJ",
+    "kind": "relation",
+    "code": "technical_office_item.assignee"
+  },
+  {
+    "module": "PRJ",
+    "kind": "condition",
+    "code": "technical_office_item.assignee_user_id"
+  },
+  {
+    "module": "PRJ",
+    "kind": "event",
+    "code": "technical_office_item.overdue"
   },
   {
     "module": "IAM",

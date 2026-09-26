@@ -167,3 +167,4 @@ Yok. Aşama değişikliği, genel "durum değiştir" adımıyla yapılır (REQ-W
 | `project.days_to_contract_end` | Sözleşme bitişine kalan gün | sayı | iç |
 | `project.contract_value` | Sözleşme bedeli | tutar | ticari |
 | `wall.status` | Duvar durumu | seçim | iç |
+| `technical_office_item.assignee_user_id` | Teknik ofis işinin sorumlusu | kişi | iç |

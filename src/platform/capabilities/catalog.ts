@@ -103,8 +103,32 @@ export type OwnerRelationCapability = {
   code: string;
   name: string;
   status?: CapabilityStatus;
-  /** Who this relation points at right now, or null when it points at nobody. */
-  resolve: (caller: CapabilityCaller, argument: string | null) => Promise<string | null>;
+  /**
+   * Who this relation points at right now, or null when it points at nobody. `record` is the record
+   * the flow is about, for a relation that reads it ("the item's responsible person", D-298).
+   */
+  resolve: (
+    caller: CapabilityCaller,
+    argument: string | null,
+    record: RecordRef | null,
+  ) => Promise<string | null>;
+};
+
+/** The record a flow is about, as the instance holds it. */
+export type RecordRef = { schema: string; table: string; id: string };
+
+/**
+ * A list a "her biri için" step walks (REQ-WFL-009, D-096, D-298): "the project's authority
+ * approvals". The module that owns the rows reads them, for the record the flow is about.
+ */
+export type ListCapability = {
+  code: string;
+  name: string;
+  status?: CapabilityStatus;
+  read: (
+    caller: CapabilityCaller,
+    record: RecordRef | null,
+  ) => Promise<{ id: string; label?: string; item?: Record<string, unknown> }[]>;
 };
 
 export type ModuleCapabilities = {
@@ -114,6 +138,8 @@ export type ModuleCapabilities = {
   actions: readonly ActionCapability[];
   conditions: readonly ConditionFieldCapability[];
   relations: readonly OwnerRelationCapability[];
+  /** Lists a flow may walk; a module with none leaves it out. */
+  lists?: readonly ListCapability[];
 };
 
 const MODULE = /^[A-Z]{3}$/;
@@ -132,6 +158,7 @@ export function defineCapabilities(catalog: ModuleCapabilities): ModuleCapabilit
     ...catalog.events.map((e) => e.code),
     ...catalog.actions.map((a) => a.code),
     ...catalog.conditions.map((c) => c.code),
+    ...(catalog.lists ?? []).map((l) => l.code),
   ]) {
     if (!CODE.test(code)) {
       throw new Error(`${catalog.module}: "${code}" is not a capability code`);
@@ -158,6 +185,11 @@ export function capabilityCodes(catalog: ModuleCapabilities) {
       kind: "relation" as const,
       code: r.code,
       status: status(r),
+    })),
+    ...(catalog.lists ?? []).map((l) => ({
+      kind: "list" as const,
+      code: l.code,
+      status: status(l),
     })),
   ];
 }

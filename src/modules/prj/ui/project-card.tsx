@@ -77,6 +77,8 @@ export function ProjectCard({
   sites,
   targets,
   revisions,
+  office,
+  supply,
   actions,
 }: {
   project: Project;
@@ -97,6 +99,10 @@ export function ProjectCard({
   targets: ReactNode;
   /** Revizyonlar: the project's revisions (step 2). */
   revisions: ReactNode;
+  /** Teknik ofis: the office's items on the project (step 4). */
+  office: ReactNode;
+  /** Tedarik matrisi: who provides what, from which day (step 4). */
+  supply: ReactNode;
   actions: ProjectCardActions;
 }) {
   const router = useRouter();
@@ -199,6 +205,8 @@ export function ProjectCard({
             <TabsTab value="sites">Şantiyeler</TabsTab>
             <TabsTab value="targets">Duvarlar ve hedefler</TabsTab>
             <TabsTab value="revisions">Revizyonlar</TabsTab>
+            <TabsTab value="office">Teknik ofis</TabsTab>
+            <TabsTab value="supply">Tedarik matrisi</TabsTab>
             <TabsTab value="stages">Aşama geçmişi</TabsTab>
             <TabsTab value="contract">Sözleşme ve hakediş</TabsTab>
           </TabsList>
@@ -258,6 +266,14 @@ export function ProjectCard({
 
         <TabsPanel className="pt-4" value="revisions">
           {revisions}
+        </TabsPanel>
+
+        <TabsPanel className="pt-4" value="office">
+          {office}
+        </TabsPanel>
+
+        <TabsPanel className="pt-4" value="supply">
+          {supply}
         </TabsPanel>
 
         <TabsPanel className="pt-4" value="stages">

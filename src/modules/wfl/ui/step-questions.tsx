@@ -44,6 +44,8 @@ export type DesignerVocabulary = {
   fields: readonly { code: string; name: string }[];
   /** Owner relations — "the site's coordinator" — answered by the module that knows. */
   relations: readonly { code: string; name: string }[];
+  /** Lists a "her biri için" step may walk, from every module's catalog (D-298). */
+  lists?: readonly { code: string; name: string }[];
   roles: readonly { code: string; name: string }[];
   people: readonly { id: string; name: string }[];
   /** The permissions the panel knows, with their own names. */
@@ -783,7 +785,7 @@ export function StepQuestions({
         <>
           <Choice
             description="Listeyi, kaydın sahibi olan modül verir; modüller listelerini açtıkça burada seçilir."
-            items={[]}
+            items={(vocabulary.lists ?? []).map((list) => ({ label: list.name, value: list.code }))}
             label="Hangi liste için çalışsın?"
             onChange={(value) => onChange({ list: value })}
             placeholder="Liste sunan bir modül henüz yok"

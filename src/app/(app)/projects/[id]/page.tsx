@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import {
+  addOfficeItemAction,
+  addSupplyRowAction,
+  changeOfficeItemAction,
+  countRevisionAction,
+  moveOfficeItemAction,
   changeContractAction,
   changeProjectAction,
   changeSiteAction,
@@ -19,6 +24,7 @@ import {
   mayMarkWalls,
   mayOpenProjects,
   projectCard,
+  projectOffice,
   projectRevisions,
   TARGET_END_BASES,
   TARGET_END_BASIS_LABELS,
@@ -26,6 +32,9 @@ import {
 } from "@/modules/prj";
 import { ProjectCard } from "@/modules/prj/ui/project-card";
 import { ProjectTargets } from "@/modules/prj/ui/project-targets";
+import { SupplyMatrix } from "@/modules/prj/ui/supply-matrix";
+import { TechnicalOffice } from "@/modules/prj/ui/technical-office";
+import { todayIn } from "@/platform/date/day";
 import { ProjectsDenied } from "@/modules/prj/ui/projects-denied";
 import { RevisionList } from "@/modules/prj/ui/revision-list";
 import { listSites } from "@/modules/sit";
@@ -68,6 +77,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[id]"
     targetTypes,
     canEdit,
     canMark,
+    office,
   ] = await Promise.all([
     listSites({ projectId: id }),
     listPeople(),
@@ -78,7 +88,9 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[id]"
     targetChoices(id),
     mayEditRevisions(id),
     mayMarkWalls(id),
+    projectOffice(id),
   ]);
+  const today = todayIn();
   const siteNames = Object.fromEntries(sites.map((one) => [one.id, one.name]));
   const clientName = card.project.clientPartyId
     ? ((await partyNames([card.project.clientPartyId])).get(card.project.clientPartyId) ?? null)
@@ -136,6 +148,34 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[id]"
           markWall={markWallAction.bind(null, id)}
           names={targetTypes.names}
           siteNames={siteNames}
+        />
+      }
+      office={
+        <TechnicalOffice
+          actions={{
+            add: addOfficeItemAction.bind(null, id),
+            change: changeOfficeItemAction.bind(null, id),
+            move: moveOfficeItemAction.bind(null, id),
+            revise: countRevisionAction.bind(null, id),
+          }}
+          canManage={office.canManage}
+          items={office.items}
+          me={office.me}
+          people={people
+            .filter((p) => p.active)
+            .map((p) => ({ label: p.displayName, value: p.id }))}
+          peopleNames={peopleNames}
+          today={today}
+          types={office.types}
+        />
+      }
+      supply={
+        <SupplyMatrix
+          add={addSupplyRowAction.bind(null, id)}
+          canManage={office.canManage}
+          items={office.supplyItems}
+          rows={office.supply}
+          today={today}
         />
       }
       sites={

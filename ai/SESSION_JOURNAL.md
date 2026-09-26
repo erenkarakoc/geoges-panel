@@ -538,3 +538,11 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-26 13:47:33Z · c726963b · Write · `src/platform/ui/chart/chart.tsx`
 - 2026-09-26 14:33:23Z · da15f959 · Edit · `src/modules/tsk/ui/push-toggle.tsx`
 - 2026-09-26 14:33:23Z · da15f959 · Edit · `src/modules/tsk/ui/push-toggle.tsx`
+- 2026-09-26 14:36:58Z · c726963b · Write · `db/migrations/0071_prj_technical_office_supply.sql`
+- 2026-09-26 14:36:58Z · c726963b · Write · `db/migrations/0071_prj_technical_office_supply.down.sql`
+- 2026-09-26 14:39:46Z · c726963b · Write · `src/modules/prj/domain/technical-office.ts`
+- 2026-09-26 14:40:10Z · c726963b · Write · `src/modules/prj/data/technical-office-store.ts`
+- 2026-09-26 14:42:17Z · c726963b · Write · `src/modules/prj/data/technical-office.dbtest.ts`
+- 2026-09-26 14:47:17Z · c726963b · Write · `src/modules/prj/ui/technical-office.tsx`
+- 2026-09-26 14:47:45Z · c726963b · Write · `src/modules/prj/ui/supply-matrix.tsx`
+- 2026-09-26 14:51:22Z · c726963b · Write · `src/records/technical-office-flow.dbtest.ts`

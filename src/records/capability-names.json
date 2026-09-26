@@ -1522,6 +1522,13 @@
   },
   {
     "module": "PRJ",
+    "kind": "condition",
+    "code": "technical_office_item.assignee_user_id",
+    "name": "Teknik ofis işinin sorumlusu",
+    "type": "kişi"
+  },
+  {
+    "module": "PRJ",
     "kind": "event",
     "code": "technical_office_item.overdue",
     "name": "Teknik ofis işi gecikti"

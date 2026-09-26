@@ -87,3 +87,25 @@ export {
 
 // The module's capability catalog, read by the flow engine (TASK-0118).
 export { prjCapabilities } from "@/modules/prj/capabilities";
+
+// The daily look for late technical office items (TASK-0123 step 4), registered in src/jobs.
+export { technicalOfficeOverdueJob } from "./data/technical-office-store";
+export {
+  addOfficeItem,
+  addSupplyRow,
+  changeOfficeItem,
+  countRevision,
+  moveOfficeItem,
+  projectOffice,
+  type OfficeResult,
+} from "./application/technical-office";
+export {
+  OFFICE_STATUS_LABELS,
+  OFFICE_STATUSES,
+  RESPONSIBILITIES,
+  RESPONSIBILITY_LABELS,
+  isOverdue,
+  type OfficeStatus,
+  type Responsibility,
+} from "./domain/technical-office";
+export type { OfficeItem, SupplyRow } from "./data/technical-office-store";

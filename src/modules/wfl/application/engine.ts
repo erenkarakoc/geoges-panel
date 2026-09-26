@@ -90,7 +90,13 @@ export type OwnerRule = {
 };
 
 export type OwnerRelations = {
-  resolve: (db: SystemDb, code: string, argument: string | null) => Promise<string | null>;
+  /** `record` is the record the flow is about, for a relation that reads it (D-298). */
+  resolve: (
+    db: SystemDb,
+    code: string,
+    argument: string | null,
+    record?: { schema: string; table: string; id: string } | null,
+  ) => Promise<string | null>;
 };
 
 /**
@@ -292,18 +298,21 @@ function afterDecision(step: FlowStep, decision: string): string | null {
  * asked of the owner relations the modules declare, so the engine never learns which module knows
  * about roles, sites or records.
  *
- * The two forms nothing answers yet — a relation to the record, a permission type — return null,
- * and a step with no owner stops the flow rather than waiting on nobody.
+ * A relation is handed the record the flow is about, so "the item's responsible person" can be
+ * answered by the module that owns the item (D-298). A permission type is not answered yet and
+ * returns null; a step with no owner stops the flow rather than waiting on nobody.
  */
 async function ownerOf(
   db: SystemDb,
   relations: FlowRuntime,
   owner: OwnerRule,
+  instanceId?: string,
 ): Promise<string | null> {
   if (owner.type === "user") return owner.userId ?? null;
   if (owner.type === "role") return relations.resolve(db, "role.holder", owner.role ?? null);
   if (owner.type === "relation" && owner.relation) {
-    return relations.resolve(db, owner.relation, null);
+    const where = instanceId ? await readInstanceFlow(db, instanceId) : null;
+    return relations.resolve(db, owner.relation, null, where?.record ?? null);
   }
   return null;
 }
@@ -546,7 +555,7 @@ async function walk(
       // Raising something is not waiting for it (D-282): the person above is given a task and
       // told about it, and the flow carries on. Both go through the catalog's actions, so the
       // engine still writes nobody's task and nobody's notification itself.
-      const above = await ownerOf(db, relations, step.to);
+      const above = await ownerOf(db, relations, step.to, instanceId);
       if (!above) {
         const reason = `${stepLabel(step)} adımında haber verilecek kişi bulunamadı.`;
         await sink.leave(stateId, "failed", "no_owner");
@@ -572,7 +581,7 @@ async function walk(
     }
 
     if (step.type === "notify") {
-      const owner = await ownerOf(db, relations, step.owner);
+      const owner = await ownerOf(db, relations, step.owner, instanceId);
       if (!owner) {
         const reason = `${stepLabel(step)} adımının kime düşeceği bulunamadı.`;
         await sink.leave(stateId, "failed", "no_owner");
@@ -609,7 +618,7 @@ async function walk(
       const group =
         step.type === "approval" &&
         (step.owner.type === "role" || step.owner.type === "permission");
-      const owner = group ? null : await ownerOf(db, relations, step.owner);
+      const owner = group ? null : await ownerOf(db, relations, step.owner, instanceId);
       if (!owner && !group) {
         const reason = `${stepLabel(step)} adımının kime düşeceği bulunamadı.`;
         await sink.leave(stateId, "failed", "no_owner");

@@ -92,6 +92,9 @@ async function vocabularyFor(identity: Asking): Promise<DesignerVocabulary> {
     relations: moduleCapabilities.flatMap((catalog) =>
       active(catalog.relations).map((relation) => ({ code: relation.code, name: relation.name })),
     ),
+    lists: moduleCapabilities.flatMap((catalog) =>
+      active(catalog.lists ?? []).map((list) => ({ code: list.code, name: list.name })),
+    ),
     roles: roles.map((role) => ({ code: role.code, name: role.name })),
     statuses,
     fieldShapes: conditionFieldShapes(),

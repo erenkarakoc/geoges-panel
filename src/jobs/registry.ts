@@ -1,6 +1,7 @@
 import { admJobs } from "@/modules/adm";
 import { docJobs } from "@/modules/doc";
 import { iamJobs } from "@/modules/iam";
+import { technicalOfficeOverdueJob } from "@/modules/prj";
 import {
   dailyDigest,
   exchangeRateAlarm,
@@ -52,6 +53,7 @@ export const jobRegistry: JobRegistry = {
   jobs: [
     ...iamJobs,
     ...admJobs,
+    technicalOfficeOverdueJob(),
     ...doc.jobs,
     dailyDigest(processMailSender),
     overdueAndEscalation(),

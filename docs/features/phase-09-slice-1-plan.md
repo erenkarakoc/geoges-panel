@@ -246,6 +246,8 @@ _Kuruldu (2026-09-26): migration 0068, D-295. Hedefler şantiyenin "Gün" bölü
   (`geoges/client/subcontractor`) onaylı gereksinimden farklıydı; gereksinimdeki üç seçenek kurulur
   ve şema belgesi düzeltilir.
 
+_Kuruldu (2026-09-26): migration 0071, seed 0013, D-298. Akış motoru kaydın sorumlusunu bulabiliyor ve modüllerin listelerini okuyabiliyor; "Geciken teknik ofis işi" şablonu eklendi._
+
 ### Adım 5 — Akışla bağlantı, arama, örnekler
 
 _Not (2026-09-26): aşağıdaki "kaydın durumunu değiştir" karşılığı revizyon onayı ona bağlı olduğu için Adım 2'de kuruldu._

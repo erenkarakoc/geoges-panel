@@ -9,5 +9,7 @@ export {
   type ConditionFieldCapability,
   type EventCapability,
   type ModuleCapabilities,
+  type ListCapability,
   type OwnerRelationCapability,
+  type RecordRef,
 } from "@/platform/capabilities/catalog";
