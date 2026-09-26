@@ -4,7 +4,26 @@ Last updated: 2026-09-26
 
 CURRENT PHASE: PHASE 09 — Slice 1: Projects, Sites, Daily Site Log (TASK-0123 step 3 next); Phases 07 and 08 built, owner walks owed
 
-## Latest continuation — the service-worker console error on every page (2026-09-26, later)
+## Latest continuation — roadmap presentation sandbox, in progress (2026-09-26, late)
+
+The owner asked for a client presentation of the roadmap as a sandbox page (D-299). The session ran out of budget half-way; this is exactly where it stands.
+
+**Written and committed (compiles, not routed yet):**
+- `src/sandbox/roadmap/roadmap-data.ts` — all content in Turkish: 13 phase groups (`design` 00–06 done, `foundation` 07 and `workflow` 08 "partly", `slice1` 09 "now", then 09R, 10–15, 15M, 19 "next"), each with summary, steps (done or not), `tryIt` links (href, label, what to try), `demo` key and a plain technical `note`; plus `roleCards`/`ROLE_LABELS` for the roles demo and `searchSamples` for the search demo.
+- `src/sandbox/roadmap/illustrations.tsx` — 13 hand-drawn line SVG scenes (`PhaseIllustration name=…`), coloured through CSS classes.
+- `src/sandbox/roadmap/roadmap.module.css` — only the illustration classes so far.
+
+**Still to do, in order:**
+1. `src/sandbox/roadmap/demos.tsx` (client): `RolesDemo` (three toggle buttons Sahip/Koordinatör/Saha mühendisi, show which `roleCards` each sees), `SearchDemo` (input; match `searchSamples` with Turkish letters folded: ç→c, ğ→g, ı/i/İ→i, ö→o, ş→s, ü→u, lower-case), `FlowDemo` (`@xyflow/react`, read-only: Başlar → Tutar koşulu → Genel müdür onayı / Koordinatör onayı → Tedarikçi görevi → Bitiş, with a "Adım adım oynat" button that highlights one node at a time; follow `src/sandbox/presentation/structure-map.tsx` for how the sandbox uses the library and imports its CSS), `TargetDemo` (inputs: kalan panel adedi, kalan iş günü → günlük hedef = yukarı yuvarla(kalan ÷ gün); note that holidays get no target).
+2. `src/sandbox/roadmap/roadmap-page.tsx` (client): header (title "GEOGES Panel — Yol Haritası", a short lead, a progress strip of all phases as chips coloured by status that scroll to their section, "Yalnız geliştirme" badge and "Panele dön" button as in `presentation-page.tsx`); then one section per phase: big number + title, status badge (`STATUS_LABELS`), summary, illustration, numbered steps with a done tick, the demo if any, a "Panelde deneyin" list of links with `target="_blank" rel="noreferrer"` and the "what" text, and the technical note in a quiet box. COSS `Badge`, `Button`, `Card`/`Frame` may be used (sandbox may import `src/components/ui`); everything else in the CSS Module. Must work at 375 px and in both themes.
+3. Fill `roadmap.module.css` for the page (read app variables like `presentation.module.css` does; the page scrolls, it is not a fixed-height stage).
+4. Route `src/app/(sandbox)/roadmap/page.tsx`, copied from `src/app/(sandbox)/presentation/page.tsx` (404 in production, sign-in guard), metadata title "Yol haritası".
+5. Menu link next to "Yapı sunumu" in `src/modules/iam/ui/user-menu.tsx` (development only): "Yol haritası sunumu".
+6. Check in the browser (desktop, 375 px, dark), then `npm run check:commit`, record in `ai/TASKS.md` (a new task row under the sandbox/CHG-003 family, e.g. TASK-0137 — check the next free number) and this file; commit to `main` without AI attribution.
+
+**Before this, the same day (all pushed):** TASK-0123 steps 3–4 (daily targets D-295; technical office and supply matrix D-298, with record-aware owner relations and module lists in the engine; late items on "Dikkat"), Saturday as a working day in the database only and bank days for exchange rates (D-296), charts as a general rule (D-297), the designer canvas made easier to read. Next product work after the presentation: TASK-0123 step 5 (flow link check, search, samples). Worth raising with the owner: there is no working-calendar screen yet.
+
+## Earlier continuation — the service-worker console error on every page (2026-09-26, later)
 
 - **Cause:** `PushToggle` (account menu, every page of the app layout) called `navigator.serviceWorker.register("/sw.js")` on mount. The Claude desktop app's browser pane fails every service-worker registration without requesting the script at all — proved with a bare Python server on another port, whose log never saw the fetch, and a 404 path failing with the same "An unknown error occurred when fetching the script." Chrome writes that failure to the console itself even when the promise is caught, and StrictMode runs the effect twice in development, hence two errors per page. `/sw.js` itself is fine (200, `application/javascript`, public in `src/proxy.ts`).
 - **Fix:** reading the state now only looks up an existing registration (`getRegistration`); `register("/sw.js")` happens when the person presses "Aç", and a browser that refuses it hides the switch (`unsupported`). This also matches the function's own contract ("nothing here changes anything"). A browser that already has the worker keeps it and its update checks.

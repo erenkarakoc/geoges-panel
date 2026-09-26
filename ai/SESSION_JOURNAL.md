@@ -546,3 +546,5 @@ Read the tail of this file to find out what an interrupted session actually touc
 - 2026-09-26 14:47:17Z · c726963b · Write · `src/modules/prj/ui/technical-office.tsx`
 - 2026-09-26 14:47:45Z · c726963b · Write · `src/modules/prj/ui/supply-matrix.tsx`
 - 2026-09-26 14:51:22Z · c726963b · Write · `src/records/technical-office-flow.dbtest.ts`
+- 2026-09-26 15:19:48Z · d9eda829 · Write · `src/sandbox/roadmap/roadmap-data.ts`
+- 2026-09-26 15:20:25Z · d9eda829 · Write · `src/sandbox/roadmap/illustrations.tsx`

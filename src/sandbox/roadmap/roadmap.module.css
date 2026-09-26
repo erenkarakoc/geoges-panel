@@ -1,0 +1,29 @@
+/*
+ * Roadmap presentation sandbox (D-299). Work in progress: only the illustration classes exist so
+ * far; the page styles come with roadmap-page.tsx. Colours are read from the app's variables, as
+ * in the structure presentation (D-052).
+ */
+
+.illustration {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  color: var(--foreground);
+}
+
+.illuGround {
+  fill: color-mix(in srgb, var(--muted-foreground) 14%, transparent);
+}
+
+.soft {
+  fill: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.accent {
+  color: var(--primary);
+  fill: color-mix(in srgb, var(--primary) 22%, transparent);
+}
+
+.accentFill {
+  fill: var(--primary);
+}
