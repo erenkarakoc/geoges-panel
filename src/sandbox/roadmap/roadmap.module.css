@@ -13,7 +13,6 @@
   --r-brand: var(--primary);
   --r-radius: var(--radius);
   --r-done: var(--success);
-  --r-partly: var(--info);
   --r-now: var(--warning);
   --r-next: color-mix(in srgb, var(--muted-foreground) 45%, transparent);
 
@@ -139,12 +138,6 @@
 .phaseIndex[data-status="done"],
 .legendDot[data-status="done"] {
   background: var(--r-done);
-}
-
-.chip[data-status="partly"] .chipIndex,
-.phaseIndex[data-status="partly"],
-.legendDot[data-status="partly"] {
-  background: var(--r-partly);
 }
 
 .chip[data-status="now"] .chipIndex,

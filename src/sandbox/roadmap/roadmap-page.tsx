@@ -29,7 +29,6 @@ const BADGE: Record<PhaseStatus, "success" | "info" | "warning" | "outline"> = {
   done: "success",
   next: "outline",
   now: "warning",
-  partly: "info",
 };
 
 function PhaseSection({ phase, index }: { phase: Phase; index: number }) {
@@ -157,7 +156,7 @@ export function RoadmapPage() {
           ))}
         </nav>
         <ul className={styles.legend}>
-          {(["done", "partly", "now", "next"] as const).map((status) => (
+          {(["done", "now", "next"] as const).map((status) => (
             <li key={status}>
               <span className={styles.legendDot} data-status={status} />
               {STATUS_LABELS[status]}

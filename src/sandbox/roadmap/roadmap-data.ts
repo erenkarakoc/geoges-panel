@@ -4,13 +4,12 @@
  * `ai/MASTER_ROADMAP.md`, `ai/TASKS.md` and the decisions; update it when those move.
  */
 
-export type PhaseStatus = "done" | "partly" | "now" | "next";
+export type PhaseStatus = "done" | "now" | "next";
 
 export const STATUS_LABELS: Record<PhaseStatus, string> = {
   done: "Tamamlandı",
   next: "Sırada",
   now: "Şu an yapılıyor",
-  partly: "Yapıldı, sahip incelemesi bekliyor",
 };
 
 export type Illustration =
@@ -88,7 +87,7 @@ export const phases: readonly Phase[] = [
     id: "foundation",
     number: "07",
     title: "Temel: giriş, yetki, kayıt, bildirim",
-    status: "partly",
+    status: "done",
     illustration: "foundation",
     summary:
       "Her modülün üstüne oturacağı ortak zemin: kim girer, kim neyi görür, ne değiştiğinde iz kalır, kime haber gider.",
@@ -134,7 +133,7 @@ export const phases: readonly Phase[] = [
     id: "workflow",
     number: "08",
     title: "İş akışı motoru ve tasarımcı",
-    status: "partly",
+    status: "done",
     illustration: "flow",
     summary:
       "Onay zincirleri ve otomatik işler kodla değil, kutular ve oklarla çizilir; yönetim kimin onaylayacağını kendisi değiştirir.",
